@@ -21,7 +21,7 @@ void main() {
       expect(equation.isRealEquation, true);
       expect(equation.discriminant(), Complex.fromReal(-1687));
       expect("$equation", "f(x) = -1x^3 + 5x + -9");
-      expect("${equation.toStringWithFractions()}", "f(x) = -1/1x^3 + 5/1x + -9/1");
+      expect("${equation.toStringWithFractions()}", "f(x) = -1x^3 + 5x + -9");
 
       final solutions = equation.solutions();
       expect(solutions[2].real.toStringAsFixed(12), "1.427598269660");
@@ -53,7 +53,7 @@ void main() {
       expect(equation.discriminant().real.toStringAsFixed(3), "-31299.688");
       expect(equation.discriminant().imaginary.toStringAsFixed(3), "27460.192");
       expect("$equation", "f(x) = (2 - 3i)x^3 + 1.2ix^2 + (5 - 1i)x + (-9 - 6i)");
-      expect("${equation.toStringWithFractions()}", "f(x) = (2/1 - 3/1i)x^3 + 6/5ix^2 + (5/1 - 1/1i)x + (-9/1 - 6/1i)");
+      expect("${equation.toStringWithFractions()}", "f(x) = (2 - 3i)x^3 + 6/5ix^2 + (5 - 1i)x + (-9 - 6i)");
 
       final solutions = equation.solutions();
       expect(solutions[0].real.toStringAsFixed(12), "0.348906207844");

@@ -5,10 +5,10 @@ author: Alberto Miola
 homepage: https://github.com/albertodev01/dart_equations
 
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  fraction: ^1.0.1
+  fraction: ^1.2.1
   math_expressions: ^2.0.0
 
 dev_dependencies:

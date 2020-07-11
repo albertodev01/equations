@@ -23,7 +23,7 @@ void main() {
       //expect(equation.discriminant(), Complex.fromReal(-70848));
       expect("$equation", "f(x) = 3x^4 + 6x^3 + 2x + -1");
       expect("${equation.toStringWithFractions()}",
-          "f(x) = 3/1x^4 + 6/1x^3 + 2/1x + -1/1");
+          "f(x) = 3x^4 + 6x^3 + 2x + -1");
 
       final solutions = equation.solutions();
       expect(solutions[0].real.toStringAsFixed(12), "-2.173571613806");
