@@ -38,6 +38,5 @@ void main() {
       // the root.
       expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), false);
     });
-
   });
 }

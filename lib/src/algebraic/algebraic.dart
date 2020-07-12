@@ -28,18 +28,17 @@ abstract class Algebraic {
   /// super(1, 5, 3, 2);
   /// ```
   Algebraic(List<Complex> coefficients) : _coefficients = coefficients {
-    if (!isValid)
-      throw AlgebraicException("The given equation is not valid.");
+    if (!isValid) throw AlgebraicException("The given equation is not valid.");
   }
 
   @override
-  bool operator==(Object other) {
+  bool operator ==(Object other) {
     final compare = const DeepCollectionEquality().equals;
 
     return identical(this, other) ||
-      other is Algebraic &&
-      runtimeType == other.runtimeType &&
-      compare(_coefficients, other._coefficients);
+        other is Algebraic &&
+            runtimeType == other.runtimeType &&
+            compare(_coefficients, other._coefficients);
   }
 
   @override
@@ -74,7 +73,7 @@ abstract class Algebraic {
       // Adding 'f(x) = ' at the beginning
       sb.write("f(x) = ");
 
-      for(final c in _coefficients) {
+      for (final c in _coefficients) {
         //1. If it's a coefficient 0, then skip
         if (c.isZero) {
           --power;
@@ -90,13 +89,10 @@ abstract class Algebraic {
         if (asFraction) {
           // Add parenthesis if needed
           if ((c.real != 0) && (c.imaginary != 0))
-            sb..write("(")
-              ..write(c.toStringAsFraction())
-              ..write(")");
+            sb..write("(")..write(c.toStringAsFraction())..write(")");
           else
             sb.write(c.toStringAsFraction());
-        }
-        else
+        } else
           sb.write(c.toStringWithParenthesis());
 
         //3. If it is power = 0 avoid it, we don't want x^0 (useless)
@@ -119,7 +115,7 @@ abstract class Algebraic {
     var value = Complex.zero();
     var power = _coefficients.length - 1;
 
-    for(var c in _coefficients) {
+    for (var c in _coefficients) {
       if (power != 0)
         value += (x.pow(power) * c);
       else
@@ -161,5 +157,4 @@ abstract class Algebraic {
 
   /// The degree of the polynomial
   num get degree;
-
 }

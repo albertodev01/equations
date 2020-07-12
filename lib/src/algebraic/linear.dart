@@ -7,7 +7,6 @@ import 'package:equations/src/complex.dart';
 ///
 /// This equation has exactly 1 solution, which can be real or complex.
 class Linear extends Algebraic {
-
   /// The first coefficient of the equation in the form _f(x) = ab + b_
   final Complex a;
 
@@ -39,16 +38,11 @@ class Linear extends Algebraic {
   int get degree => 1;
 
   @override
-  Algebraic derivative() => Constant(
-    a: a
-  );
+  Algebraic derivative() => Constant(a: a);
 
   @override
   Complex discriminant() => const Complex.fromReal(1);
 
   @override
-  List<Complex> solutions() => [
-    b.negate / a
-  ];
-
+  List<Complex> solutions() => [b.negate / a];
 }

@@ -10,7 +10,6 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///
 ///   - The values of _f(a)_ and _f(b)_ must have opposite signs.
 class Bisection extends NonLinear {
-
   /// The starting point of the interval
   final double a;
 
@@ -25,10 +24,9 @@ class Bisection extends NonLinear {
   ///   - [b]: the second interval in which evaluate _f(b)_
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Bisection(String function, this.a, this.b, {
-    double tolerance = 1.0e-10,
-    int maxSteps = 15
-  }) : super(function, tolerance, maxSteps);
+  Bisection(String function, this.a, this.b,
+      {double tolerance = 1.0e-10, int maxSteps = 15})
+      : super(function, tolerance, maxSteps);
 
   @override
   Future<NonlinearResults> solve() async {
@@ -60,10 +58,6 @@ class Bisection extends NonLinear {
     }
 
     return NonlinearResults(
-        guesses,
-        convergence(guesses, maxSteps),
-        efficiency(guesses, maxSteps)
-    );
+        guesses, convergence(guesses, maxSteps), efficiency(guesses, maxSteps));
   }
-
 }

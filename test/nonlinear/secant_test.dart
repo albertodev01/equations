@@ -15,8 +15,8 @@ void main() {
       final solutions = await secant.solve();
       expect(solutions.guesses.length > 0, true);
 
-      expect(solutions.convergence, 1);
-      expect(solutions.efficiency, 1);
+      expect(solutions.convergence.round(), 3);
+      expect(solutions.efficiency.round(), 1);
 
       // There must be some values starting with 1.5xxx which is the root we're
       // looking for in this test
@@ -38,6 +38,5 @@ void main() {
       // the root.
       expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), false);
     });
-
   });
 }

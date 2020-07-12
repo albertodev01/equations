@@ -5,9 +5,7 @@ import 'package:test/test.dart';
 void main() {
   group("Testing constant equations", () {
     test("Degree = 0", () {
-      final equation = Constant(
-        a: Complex(3, 7)
-      );
+      final equation = Constant(a: Complex(3, 7));
 
       expect(equation.degree, 0);
       expect(equation.derivative(), Constant(a: Complex.zero()));
@@ -24,9 +22,7 @@ void main() {
     });
 
     test("Degree not defined", () {
-      final equation = Constant(
-          a: Complex.zero()
-      );
+      final equation = Constant(a: Complex.zero());
 
       expect(equation.degree, double.negativeInfinity);
       expect(equation.isRealEquation, true);

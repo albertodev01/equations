@@ -8,7 +8,6 @@ import 'package:equations/src/complex.dart';
 /// This equation has exactly 2 roots, both real or both complex, depending
 /// on the value of the discriminant.
 class Quadratic extends Algebraic {
-
   /// The first coefficient of the equation in the form _f(x) = ax^2 + bx + c = 0_
   final Complex a;
 
@@ -46,9 +45,9 @@ class Quadratic extends Algebraic {
 
   @override
   Algebraic derivative() => Linear(
-    a: a * Complex.fromReal(2),
-    b: b,
-  );
+        a: a * Complex.fromReal(2),
+        b: b,
+      );
 
   @override
   Complex discriminant() {
@@ -66,5 +65,4 @@ class Quadratic extends Algebraic {
       (b.negate - disc.sqrt) / twoA,
     ];
   }
-
 }

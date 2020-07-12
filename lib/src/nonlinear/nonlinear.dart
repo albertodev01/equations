@@ -13,7 +13,6 @@ import 'package:math_expressions/math_expressions.dart';
 /// Each subclass of [NonLinear.solve] has to define the method s which builds
 /// the scalar succession.
 abstract class NonLinear {
-
   /// The equation to be solved
   final String _function;
 
@@ -37,17 +36,18 @@ abstract class NonLinear {
   ///  - the expression [expression] to be solved
   ///  - the accuracy [tolerance] of the root-finding algorithm
   ///  - the maximum iterations [maxSteps] the algorithm has to do
-  NonLinear(this._function, this._tolerance, this._maxSteps) :
-    _expression = Parser().parse(_function.trim()),
-    _expressionDerivative = Parser().parse(_function.trim()).derive('x');
+  NonLinear(this._function, this._tolerance, this._maxSteps)
+      : _expression = Parser().parse(_function.trim()),
+        _expressionDerivative = Parser().parse(_function.trim()).derive('x');
 
   @override
-  bool operator==(Object other) =>
-    identical(this, other) || other is NonLinear &&
-    runtimeType == other.runtimeType &&
-    _function == other._function &&
-    _tolerance == other._tolerance &&
-    _maxSteps == other._maxSteps;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NonLinear &&
+          runtimeType == other.runtimeType &&
+          _function == other._function &&
+          _tolerance == other._tolerance &&
+          _maxSteps == other._maxSteps;
 
   @override
   int get hashCode {
@@ -61,9 +61,12 @@ abstract class NonLinear {
   @override
   String toString() {
     final sb = StringBuffer()
-      ..write("Expression: ")..writeln(_function)
-      ..write("Tolerance: ")..writeln(_tolerance)
-      ..write("Maximum steps: ")..write(_maxSteps);
+      ..write("Expression: ")
+      ..writeln(_function)
+      ..write("Tolerance: ")
+      ..writeln(_tolerance)
+      ..write("Maximum steps: ")
+      ..write(_maxSteps);
 
     return sb.toString();
   }
@@ -74,8 +77,10 @@ abstract class NonLinear {
     final size = guesses.length - 1;
 
     if (size >= 3) {
-      final num = (guesses[size] - guesses[size - 1]).abs() / (guesses[size - 1] - guesses[size - 2]).abs();
-      final den = (guesses[size - 1] - guesses[size - 2]).abs() / (guesses[size - 2] - guesses[size - 3]).abs();
+      final num = (guesses[size] - guesses[size - 1]).abs() /
+          (guesses[size - 1] - guesses[size - 2]).abs();
+      final den = (guesses[size - 1] - guesses[size - 2]).abs() /
+          (guesses[size - 2] - guesses[size - 3]).abs();
 
       return math.log(num) / math.log(den);
     }
@@ -94,16 +99,14 @@ abstract class NonLinear {
 
   /// Evaluates the function on the given _x_ value
   double evaluateOn(double x) {
-    final cm = ContextModel()
-      ..bindVariable(_x, Number(x));
+    final cm = ContextModel()..bindVariable(_x, Number(x));
 
     return _expression.evaluate(EvaluationType.REAL, cm) as double;
   }
 
   /// Evaluates the derivative of the function on the given _x_ value
   double evaluateDerivativeOn(double x) {
-    final cm = ContextModel()
-      ..bindVariable(_x, Number(x));
+    final cm = ContextModel()..bindVariable(_x, Number(x));
 
     return _expressionDerivative.evaluate(EvaluationType.REAL, cm) as double;
   }

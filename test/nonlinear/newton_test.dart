@@ -1,3 +1,4 @@
+import 'package:equations/src/common/exceptions.dart';
 import 'package:equations/src/nonlinear/newton.dart';
 import 'package:test/test.dart';
 
@@ -26,5 +27,16 @@ void main() {
       expect(() => Newton("2x+cos(x)", 1), throwsA(isA<FormatException>()));
     });
 
+    test("Testing an equation with a root too far from the guess", () async {
+      final newton = Newton("2*x+cos(x)", 130);
+      final solutions = await newton.solve();
+
+      // There must not be some values starting with 1.5xxx, which is the root
+      // we're looking for in this test, because the root is far from the range.
+      //
+      // The range is far from the root: the method still works but it won't find
+      // the root.
+      expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), false);
+    });
   });
 }

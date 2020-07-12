@@ -14,10 +14,12 @@ void main() {
       );
 
       expect(equation.degree, 2);
-      expect(equation.derivative(), Linear(
-          a: Complex.fromReal(4),
-          b: Complex.fromReal(-5),
-      ));
+      expect(
+          equation.derivative(),
+          Linear(
+            a: Complex.fromReal(4),
+            b: Complex.fromReal(-5),
+          ));
       expect(equation.isRealEquation, true);
       expect(equation.discriminant(), Complex.fromReal(13));
       expect("$equation", "f(x) = 2x^2 + -5x + 1.5");
@@ -41,14 +43,16 @@ void main() {
       );
 
       expect(equation.degree, 2);
-      expect(equation.derivative(), Linear(
-          a: Complex.fromImaginaryFraction(Fraction(2, 3)),
-          b: Complex(6, 1)
-      ));
+      expect(
+          equation.derivative(),
+          Linear(
+              a: Complex.fromImaginaryFraction(Fraction(2, 3)),
+              b: Complex(6, 1)));
       expect(equation.isRealEquation, true);
       expect(equation.discriminant(), Complex(35, 12));
       expect("$equation", "f(x) = 0.3333333333333333ix^2 + (6 + 1i)x");
-      expect("${equation.toStringWithFractions()}", "f(x) = 1/3ix^2 + (6 + 1i)x");
+      expect(
+          "${equation.toStringWithFractions()}", "f(x) = 1/3ix^2 + (6 + 1i)x");
 
       final solutions = equation.solutions();
       expect(solutions[0].real.round(), 0);

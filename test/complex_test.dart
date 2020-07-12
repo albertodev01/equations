@@ -5,7 +5,6 @@ import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
 void main() {
-
   /// The hyperbolic cosine (cosh(x))
   double _cosh(num x) => (math.exp(x) + math.exp(-x)) / 2;
 
@@ -40,7 +39,7 @@ void main() {
       expect(c.real, 1);
       expect(c.imaginary, 0.5);
     });
-    
+
     test(("Polar coordinates conversions"), () {
       // From polar
       final fromPolar = Complex.fromPolar(2, 60, angleInRadians: false);
@@ -155,11 +154,12 @@ void main() {
       final value = Complex(3, -5) / Complex(-8, 13);
       final realValue = Fraction(-89, 233).toDouble();
       final imagValue = Fraction(1, 233).toDouble();
-      
+
       // Equality of a double is hard to achieve due to approximations, so I
       // prefer checking the strings with a fixed precision which works better
       expect(value.real.toStringAsFixed(12), realValue.toStringAsFixed(12));
-      expect(value.imaginary.toStringAsFixed(12), imagValue.toStringAsFixed(12));
+      expect(
+          value.imaginary.toStringAsFixed(12), imagValue.toStringAsFixed(12));
 
       final value2 = Complex.fromReal(5) / Complex.fromImaginary(-16);
 
@@ -180,7 +180,8 @@ void main() {
     });
 
     test("Modulus/magnitude/absolute value", () {
-      expect(Complex(3, 7).abs.toStringAsFixed(12), math.sqrt(58).toStringAsFixed(12));
+      expect(Complex(3, 7).abs.toStringAsFixed(12),
+          math.sqrt(58).toStringAsFixed(12));
     });
 
     test("Exponent -> e^z where z = a + bi", () {
@@ -204,10 +205,8 @@ void main() {
       final value3 = Complex.i().tan;
       expect(value3, value / value2);
       // tan(i) = tanh(1)i = (sinh(1) / cosh(1))i
-      expect(
-          value3.abs.toStringAsFixed(12), 
-          Complex.fromImaginary(_sinh(1) / _cosh(1)).abs.toStringAsFixed(12)
-      );
+      expect(value3.abs.toStringAsFixed(12),
+          Complex.fromImaginary(_sinh(1) / _cosh(1)).abs.toStringAsFixed(12));
     });
 
     test("Complex roots", () {

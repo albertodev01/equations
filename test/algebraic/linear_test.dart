@@ -13,9 +13,7 @@ void main() {
       );
 
       expect(equation.degree, 1);
-      expect(equation.derivative(), Constant(
-        a: Complex.fromReal(3))
-      );
+      expect(equation.derivative(), Constant(a: Complex.fromReal(3)));
       expect(equation.isRealEquation, true);
       expect(equation.discriminant(), Complex.fromReal(1));
       expect("$equation", "f(x) = 3x + 1.2");
@@ -36,16 +34,15 @@ void main() {
       );
 
       expect(equation.degree, 1);
-      expect(equation.derivative(), Constant(
-          a: Complex.fromImaginary(2))
-      );
+      expect(equation.derivative(), Constant(a: Complex.fromImaginary(2)));
       expect(equation.isRealEquation, false);
       expect(equation.discriminant(), Complex.fromReal(1));
       expect("$equation", "f(x) = 2ix + (1.2 - 1i)");
       expect("${equation.toStringWithFractions()}", "f(x) = 2ix + (6/5 - 1i)");
 
       final solutions = equation.solutions();
-      expect(solutions[0], Complex.fromFraction(Fraction(1, 2), Fraction(3, 5)));
+      expect(
+          solutions[0], Complex.fromFraction(Fraction(1, 2), Fraction(3, 5)));
 
       final eval = equation.realEvaluateOn(2);
       expect(eval, Complex.fromFraction(Fraction(6, 5), Fraction(3, 1)));

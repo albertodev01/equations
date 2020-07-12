@@ -14,10 +14,12 @@ void main() {
       );
 
       expect(equation.degree, 3);
-      expect(equation.derivative(), Quadratic(
-        a: Complex.fromReal(-3),
-        c: Complex.fromReal(5),
-      ));
+      expect(
+          equation.derivative(),
+          Quadratic(
+            a: Complex.fromReal(-3),
+            c: Complex.fromReal(5),
+          ));
       expect(equation.isRealEquation, true);
       expect(equation.discriminant(), Complex.fromReal(-1687));
       expect("$equation", "f(x) = -1x^3 + 5x + -9");
@@ -37,23 +39,26 @@ void main() {
 
     test("Complex equation -> (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i) = 0", () {
       final equation = Cubic(
-        a: Complex(2, -3),
-        b: Complex.fromImaginaryFraction(Fraction(6, 5)),
-        c: Complex(5, -1),
-        d: Complex(-9, -6)
-      );
+          a: Complex(2, -3),
+          b: Complex.fromImaginaryFraction(Fraction(6, 5)),
+          c: Complex(5, -1),
+          d: Complex(-9, -6));
 
       expect(equation.degree, 3);
-      expect(equation.derivative(), Quadratic(
-        a: Complex(6, -9),
-        b: Complex.fromImaginaryFraction(Fraction(12, 5)),
-        c: Complex(5, -1),
-      ));
+      expect(
+          equation.derivative(),
+          Quadratic(
+            a: Complex(6, -9),
+            b: Complex.fromImaginaryFraction(Fraction(12, 5)),
+            c: Complex(5, -1),
+          ));
       expect(equation.isRealEquation, false);
       expect(equation.discriminant().real.toStringAsFixed(3), "-31299.688");
       expect(equation.discriminant().imaginary.toStringAsFixed(3), "27460.192");
-      expect("$equation", "f(x) = (2 - 3i)x^3 + 1.2ix^2 + (5 - 1i)x + (-9 - 6i)");
-      expect("${equation.toStringWithFractions()}", "f(x) = (2 - 3i)x^3 + 6/5ix^2 + (5 - 1i)x + (-9 - 6i)");
+      expect(
+          "$equation", "f(x) = (2 - 3i)x^3 + 1.2ix^2 + (5 - 1i)x + (-9 - 6i)");
+      expect("${equation.toStringWithFractions()}",
+          "f(x) = (2 - 3i)x^3 + 6/5ix^2 + (5 - 1i)x + (-9 - 6i)");
 
       final solutions = equation.solutions();
       expect(solutions[0].real.toStringAsFixed(12), "0.348906207844");

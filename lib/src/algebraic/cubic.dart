@@ -15,7 +15,6 @@ import 'package:equations/src/complex.dart';
 ///
 /// The above cases depend on the value of the discriminant.
 class Cubic extends Algebraic {
-
   /// The first coefficient of the equation in the form
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_
   final Complex a;
@@ -60,11 +59,8 @@ class Cubic extends Algebraic {
   int get degree => 3;
 
   @override
-  Algebraic derivative() => Quadratic(
-    a: a * Complex.fromReal(3),
-    b: b * Complex.fromReal(2),
-    c: c
-  );
+  Algebraic derivative() =>
+      Quadratic(a: a * Complex.fromReal(3), b: b * Complex.fromReal(2), c: c);
 
   @override
   Complex discriminant() {
@@ -97,5 +93,4 @@ class Cubic extends Algebraic {
       constTerm * (b + (C * sigma.pow(2)) + (d0 / (C * sigma.pow(2)))),
     ];
   }
-
 }

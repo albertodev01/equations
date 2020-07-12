@@ -12,22 +12,17 @@ import 'package:equations/src/complex.dart';
 /// In the context of a polynomial in one variable, the non-zero constant
 /// function is a polynomial of degree 0.
 class Constant extends Algebraic {
-
   /// The constant coefficient
   final Complex a;
 
   /// The only coefficient of the polynomial is represented by [a].
-  Constant({
-    this.a = const Complex.fromReal(1)
-  }) : super([a]);
+  Constant({this.a = const Complex.fromReal(1)}) : super([a]);
 
   @override
   num get degree => a.isZero ? double.negativeInfinity : 0;
 
   @override
-  Algebraic derivative() => Constant(
-    a: Complex.zero()
-  );
+  Algebraic derivative() => Constant(a: Complex.zero());
 
   @override
   Complex discriminant() => Complex(double.nan, double.nan);

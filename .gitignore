@@ -29,6 +29,7 @@
 .pub-cache/
 .pub/
 .metadata
+.pubspec.lock
 build/
 
 # Android related

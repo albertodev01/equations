@@ -4,7 +4,6 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 
 /// Implements the Newton method to find the roots of a given equation.
 ///
-///
 /// **Characteristics**:
 ///
 ///   - The method is extremely powerful but it's not guaranteed to converge to a
@@ -14,7 +13,6 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   derivative evaluated at a certain value is 0 or because the initial guess
 ///   _x0_ is too far from the solution.
 class Newton extends NonLinear {
-
   /// The initial guess x<sub>0</sub>
   final double x0;
 
@@ -25,10 +23,9 @@ class Newton extends NonLinear {
   ///   - [x0]: the initial guess x<sub>0</sub>
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Newton(String function, this.x0, {
-    double tolerance = 1.0e-10,
-    int maxSteps = 15
-  }) : super(function, tolerance, maxSteps);
+  Newton(String function, this.x0,
+      {double tolerance = 1.0e-10, int maxSteps = 15})
+      : super(function, tolerance, maxSteps);
 
   @override
   Future<NonlinearResults> solve() async {
@@ -39,8 +36,7 @@ class Newton extends NonLinear {
 
     while ((diff >= tolerance) && (n < maxSteps)) {
       final der = evaluateDerivativeOn(currx0);
-      if (der == 0)
-        throw NonlinearException("Found a f'(x) = 0");
+      if (der == 0) throw NonlinearException("Found a f'(x) = 0");
 
       diff = -evaluateOn(currx0) / der;
       currx0 += diff;
@@ -51,10 +47,6 @@ class Newton extends NonLinear {
     }
 
     return NonlinearResults(
-      guesses,
-      convergence(guesses, maxSteps),
-      efficiency(guesses, maxSteps)
-    );
+        guesses, convergence(guesses, maxSteps), efficiency(guesses, maxSteps));
   }
-
 }

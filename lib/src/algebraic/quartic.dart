@@ -17,7 +17,6 @@ import 'cubic.dart';
 ///
 /// The above cases depend on the value of the discriminant.
 class Quartic extends Algebraic {
-
   /// The first coefficient of the equation in the form
   /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
   final Complex a;
@@ -72,22 +71,21 @@ class Quartic extends Algebraic {
       a: a * Complex.fromReal(4),
       b: b * Complex.fromReal(3),
       c: c * Complex.fromReal(2),
-      d: d
-  );
+      d: d);
 
   @override
   Complex discriminant() {
     final k = Complex.fromReal(256) * a * a * a * e * e * e -
-      Complex.fromReal(192) * a * a * b * d * e * e -
-      Complex.fromReal(128) * a * a * c * c * e * e +
-      Complex.fromReal(144) * a * a * c * d * d * e -
-      Complex.fromReal(27) * a * a * d * d * d * d;
+        Complex.fromReal(192) * a * a * b * d * e * e -
+        Complex.fromReal(128) * a * a * c * c * e * e +
+        Complex.fromReal(144) * a * a * c * d * d * e -
+        Complex.fromReal(27) * a * a * d * d * d * d;
 
     final p = Complex.fromReal(144) * a * b * b * c * e * e -
-      Complex.fromReal(6) * a * b * b * d * d * e -
-      Complex.fromReal(80) * a * b * c * c * d * e +
-      Complex.fromReal(18) * a * b * c * d * d * d +
-      Complex.fromReal(16) * a * c * c * c * c * e;
+        Complex.fromReal(6) * a * b * b * d * d * e -
+        Complex.fromReal(80) * a * b * c * c * d * e +
+        Complex.fromReal(18) * a * b * c * d * d * d +
+        Complex.fromReal(16) * a * c * c * c * c * e;
 
     final r = Complex.fromReal(4) * a * c * c * c * d * d -
         Complex.fromReal(27) * b * b * b * b * e * e +
@@ -106,29 +104,36 @@ class Quartic extends Algebraic {
     final Fd = d / a;
     final Fe = e / a;
 
-    final Q1 = (Fc * Fc) - (Fb * Fd * Complex.fromReal(3)) + (Fe * Complex.fromReal(12));
-    final Q2 = (Fc.pow(3) * Complex.fromReal(2)) - (Fb * Fc * Fd * Complex.fromReal(9))
-      + (Fd.pow(2) * Complex.fromReal(27)) + (Fb.pow(2) * Fe * Complex.fromReal(27))
-      - (Fc * Fe * Complex.fromReal(72));
-    final Q3 = (Fb * Fc * Complex.fromReal(8)) - (Fd * Complex.fromReal(16))
-      - (Fb.pow(3) * Complex.fromReal(2));
+    final Q1 = (Fc * Fc) -
+        (Fb * Fd * Complex.fromReal(3)) +
+        (Fe * Complex.fromReal(12));
+    final Q2 = (Fc.pow(3) * Complex.fromReal(2)) -
+        (Fb * Fc * Fd * Complex.fromReal(9)) +
+        (Fd.pow(2) * Complex.fromReal(27)) +
+        (Fb.pow(2) * Fe * Complex.fromReal(27)) -
+        (Fc * Fe * Complex.fromReal(72));
+    final Q3 = (Fb * Fc * Complex.fromReal(8)) -
+        (Fd * Complex.fromReal(16)) -
+        (Fb.pow(3) * Complex.fromReal(2));
     final Q4 = (Fb.pow(2) * Complex.fromReal(3)) - (Fc * Complex.fromReal(8));
 
     var temp = (Q2 * Q2 / Complex.fromReal(4)) - (Q1.pow(3));
-    final Q5 = (temp.sqrt + (Q2 / Complex.fromReal(2))).pow(1.0/3.0);
+    final Q5 = (temp.sqrt + (Q2 / Complex.fromReal(2))).pow(1.0 / 3.0);
     final Q6 = ((Q1 / Q5) + Q5) / Complex.fromReal(3);
     temp = (Q4 / Complex.fromReal(12)) + Q6;
     final Q7 = temp.sqrt * Complex.fromReal(2);
-    temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6))
-      - (Q6 * Complex.fromReal(4)) - (Q3 / Q7);
+    temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
+        (Q6 * Complex.fromReal(4)) -
+        (Q3 / Q7);
 
     final solutions = [
       (Fb.negate - Q7 - temp.sqrt) / Complex.fromReal(4),
       (Fb.negate - Q7 + temp.sqrt) / Complex.fromReal(4),
     ];
 
-    temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6))
-        - (Q6 * Complex.fromReal(4)) + (Q3 / Q7);
+    temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
+        (Q6 * Complex.fromReal(4)) +
+        (Q3 / Q7);
 
     solutions
       ..add((Fb.negate + Q7 - temp.sqrt) / Complex.fromReal(4))
@@ -136,5 +141,4 @@ class Quartic extends Algebraic {
 
     return solutions;
   }
-
 }

@@ -5,7 +5,6 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 
 /// Implements the Steffensen method to find the roots of a given equation.
 ///
-///
 /// **Characteristics**:
 ///
 ///   - Similar to [Newton] as they use the same approach and both have a quadratic
@@ -16,7 +15,6 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   - If _x0_ is too far from the root, the method might fail so the convergence
 ///   is not guaranteed.
 class Steffensen extends NonLinear {
-
   /// The initial guess x<sub>0</sub>
   final double x0;
 
@@ -27,10 +25,9 @@ class Steffensen extends NonLinear {
   ///   - [x0]: the initial guess x<sub>0</sub>
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Steffensen(String function, this.x0, {
-    double tolerance = 1.0e-10,
-    int maxSteps = 15
-  }) : super(function, tolerance, maxSteps);
+  Steffensen(String function, this.x0,
+      {double tolerance = 1.0e-10, int maxSteps = 15})
+      : super(function, tolerance, maxSteps);
 
   @override
   Future<NonlinearResults> solve() async {
@@ -46,15 +43,11 @@ class Steffensen extends NonLinear {
       x = x - fx / gx;
       guesses.add(x);
 
-      diff = (-fx/gx).abs();
+      diff = (-fx / gx).abs();
       ++n;
     }
 
     return NonlinearResults(
-        guesses,
-        convergence(guesses, maxSteps),
-        efficiency(guesses, maxSteps)
-    );
+        guesses, convergence(guesses, maxSteps), efficiency(guesses, maxSteps));
   }
-
 }
