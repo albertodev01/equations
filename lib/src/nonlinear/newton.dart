@@ -36,7 +36,9 @@ class Newton extends NonLinear {
 
     while ((diff >= tolerance) && (n < maxSteps)) {
       final der = evaluateDerivativeOn(currx0);
-      if (der == 0) throw NonlinearException("Found a f'(x) = 0");
+      if (der == 0) {
+        throw NonlinearException("Found a f'(x) = 0");
+      }
 
       diff = -evaluateOn(currx0) / der;
       currx0 += diff;

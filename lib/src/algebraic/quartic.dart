@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:equations/src/algebraic/algebraic.dart';
 import 'package:equations/src/complex.dart';
 
@@ -75,26 +73,28 @@ class Quartic extends Algebraic {
 
   @override
   Complex discriminant() {
-    final k = Complex.fromReal(256) * a * a * a * e * e * e -
-        Complex.fromReal(192) * a * a * b * d * e * e -
-        Complex.fromReal(128) * a * a * c * c * e * e +
-        Complex.fromReal(144) * a * a * c * d * d * e -
-        Complex.fromReal(27) * a * a * d * d * d * d;
+    final k = (b * b * c * c * d * d) -
+        (d * d * d * b * b * b * Complex.fromReal(4)) -
+        (d * d * c * c * c * a * Complex.fromReal(4)) +
+        (d * d * d * c * b * a * Complex.fromReal(18)) -
+        (d * d * d * d * a * a * Complex.fromReal(27)) +
+        (e * e * e * a * a * a * Complex.fromReal(256));
 
-    final p = Complex.fromReal(144) * a * b * b * c * e * e -
-        Complex.fromReal(6) * a * b * b * d * d * e -
-        Complex.fromReal(80) * a * b * c * c * d * e +
-        Complex.fromReal(18) * a * b * c * d * d * d +
-        Complex.fromReal(16) * a * c * c * c * c * e;
+    final p = e *
+        ((c * c * c * b * b * Complex.fromReal(-4)) +
+            (b * b * b * c * d * Complex.fromReal(18)) +
+            (c * c * c * c * a * Complex.fromReal(16)) -
+            (d * c * c * b * a * Complex.fromReal(80)) -
+            (d * d * b * b * a * Complex.fromReal(6)) +
+            (d * d * a * a * c * Complex.fromReal(144)));
 
-    final r = Complex.fromReal(4) * a * c * c * c * d * d -
-        Complex.fromReal(27) * b * b * b * b * e * e +
-        Complex.fromReal(18) * b * b * b * c * d * e -
-        Complex.fromReal(4) * b * b * b * d * d * d -
-        Complex.fromReal(4) * b * b * c * c * c * e +
-        b * b * c * c * d * d;
+    final r = (e * e) *
+        (b * b * b * b * Complex.fromReal(-27) +
+            b * b * c * a * Complex.fromReal(144) -
+            a * a * c * c * Complex.fromReal(128) -
+            d * b * a * a * Complex.fromReal(192));
 
-    return k + p - r;
+    return k + p + r;
   }
 
   @override

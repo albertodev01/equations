@@ -28,7 +28,9 @@ abstract class Algebraic {
   /// super(1, 5, 3, 2);
   /// ```
   Algebraic(List<Complex> coefficients) : _coefficients = coefficients {
-    if (!isValid) throw AlgebraicException("The given equation is not valid.");
+    if (!isValid) {
+      throw AlgebraicException("The given equation is not valid.");
+    }
   }
 
   @override
@@ -62,10 +64,11 @@ abstract class Algebraic {
     if (_coefficients.length == 1) {
       final value = _coefficients[0];
 
-      if (asFraction)
+      if (asFraction) {
         return "f(x) = ${value.toStringAsFraction()}";
-      else
+      } else {
         return "f(x) = ${value.toStringWithParenthesis()}";
+      }
     } else {
       final sb = StringBuffer();
       var power = _coefficients.length - 1;
@@ -88,19 +91,22 @@ abstract class Algebraic {
         //2. Write the complex
         if (asFraction) {
           // Add parenthesis if needed
-          if ((c.real != 0) && (c.imaginary != 0))
+          if ((c.real != 0) && (c.imaginary != 0)) {
             sb..write("(")..write(c.toStringAsFraction())..write(")");
-          else
+          } else {
             sb.write(c.toStringAsFraction());
-        } else
+          }
+        } else {
           sb.write(c.toStringWithParenthesis());
+        }
 
         //3. If it is power = 0 avoid it, we don't want x^0 (useless)
         if (power != 0) {
-          if (power == 1)
+          if (power == 1) {
             sb.write("x");
-          else
+          } else {
             sb..write("x^")..write(power);
+          }
         }
 
         --power;
@@ -116,10 +122,11 @@ abstract class Algebraic {
     var power = _coefficients.length - 1;
 
     for (var c in _coefficients) {
-      if (power != 0)
+      if (power != 0) {
         value += (x.pow(power) * c);
-      else
+      } else {
         value += c;
+      }
 
       power--;
     }

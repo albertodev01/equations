@@ -170,6 +170,38 @@ class Complex implements Comparable<Complex> {
   /// Calculates the division of two complex numbers.
   Complex operator /(Complex other) => this * other.reciprocal;
 
+  /// There is no natural linear ordering for complex numbers. In fact, any
+  /// square in an ordered field is >= 0 but in the complex field we have that
+  /// _i<sup>2</sup> = -1_.
+  ///
+  /// A possible comparison strategy involves comparing the modulus/magnitude
+  /// [abs] of the two complex number.
+  bool operator >(Complex other) => abs > other.abs;
+
+  /// There is no natural linear ordering for complex numbers. In fact, any
+  /// square in an ordered field is >= 0 but in the complex field we have that
+  /// _i<sup>2</sup> = -1_.
+  ///
+  /// A possible comparison strategy involves comparing the modulus/magnitude
+  /// [abs] of the two complex number.
+  bool operator >=(Complex other) => abs >= other.abs;
+
+  /// There is no natural linear ordering for complex numbers. In fact, any
+  /// square in an ordered field is >= 0 but in the complex field we have that
+  /// _i<sup>2</sup> = -1_.
+  ///
+  /// A possible comparison strategy involves comparing the modulus/magnitude
+  /// [abs] of the two complex number.
+  bool operator <(Complex other) => abs < other.abs;
+
+  /// There is no natural linear ordering for complex numbers. In fact, any
+  /// square in an ordered field is >= 0 but in the complex field we have that
+  /// _i<sup>2</sup> = -1_.
+  ///
+  /// A possible comparison strategy involves comparing the modulus/magnitude
+  /// [abs] of the two complex number.
+  bool operator <=(Complex other) => abs <= other.abs;
+
   /// Puts the opposite sign to the imaginary part of the complex number.
   Complex get conjugate => Complex(real, -imaginary);
 

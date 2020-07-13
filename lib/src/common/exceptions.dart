@@ -33,5 +33,5 @@ class NonlinearException implements Exception {
   const NonlinearException(this.message);
 
   @override
-  String toString() => "AlgebraicException: $message";
+  String toString() => "NonlinearException: $message";
 }

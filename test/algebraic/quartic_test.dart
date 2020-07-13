@@ -21,7 +21,7 @@ void main() {
               b: Complex.fromReal(18),
               d: Complex.fromReal(2)));
       expect(equation.isRealEquation, true);
-      //expect(equation.discriminant(), Complex.fromReal(-70848));
+      expect(equation.discriminant(), Complex.fromReal(-70848));
       expect("$equation", "f(x) = 3x^4 + 6x^3 + 2x + -1");
       expect("${equation.toStringWithFractions()}",
           "f(x) = 3x^4 + 6x^3 + 2x + -1");
@@ -45,7 +45,7 @@ void main() {
         () {
       final equation = Quartic(
           a: Complex(3, -6),
-          b: Complex.fromImaginary(2),
+          b: Complex.fromImaginary(-2),
           c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
           d: Complex.i(),
           e: Complex.fromReal(9));
@@ -58,23 +58,24 @@ void main() {
             b: Complex(0, -6),
             c: Complex.fromFraction(Fraction(1, 1), Fraction(2, 5)),
             d: Complex.i(),
-          ));
+          )
+      );
 
       //expect(equation.discriminant(), Complex.fromReal(-70848));
       expect("$equation",
-          "f(x) = (3 - 6i)x^4 + -2ix^3 + (0.5 + 0.2i)x^2 + ix + 9");
+          "f(x) = (3 - 6i)x^4 + -2ix^3 + (0.5 + 0.2i)x^2 + 1ix + 9");
       expect("${equation.toStringWithFractions()}",
-          "f(x) = (3 - 6i)x^4 + -2ix^3 + (1/2 + 1/5i)x^2 + ix + 9");
+          "f(x) = (3 - 6i)x^4 + -2ix^3 + (1/2 + 1/5i)x^2 + 1ix + 9");
 
       final solutions = equation.solutions();
       expect(solutions[0].real.toStringAsFixed(12), "-0.994433103518");
       expect(solutions[0].imaginary.toStringAsFixed(12), "0.599283348246");
       expect(solutions[1].real.toStringAsFixed(12), "-0.597306297068");
-      expect(solutions[1].imaginary.round(), "-0.909627391559");
-      expect(solutions[2].real.toStringAsFixed(12), "0.413042868757");
+      expect(solutions[1].imaginary.toStringAsFixed(12), "-0.909627391560");
+      expect(solutions[2].real.toStringAsFixed(12), "0.413042868758");
       expect(solutions[2].imaginary.toStringAsFixed(12), "0.937061578767");
-      expect(solutions[3].real.toStringAsFixed(12), "0.912029865160");
-      expect(solutions[3].imaginary.toStringAsFixed(12), "-0.493384202120");
+      expect(solutions[3].real.toStringAsFixed(12), "0.912029865161");
+      expect(solutions[3].imaginary.toStringAsFixed(12), "-0.493384202121");
 
       final eval = equation.evaluateOn(Complex(-2, 3));
       expect(eval.real.round(), 387);

@@ -43,7 +43,9 @@ class Secant extends NonLinear {
 
     while ((diff >= tolerance) && (n < maxSteps)) {
       final den = fnew - fold;
-      if (den == 0) throw NonlinearException("Denominator is zero");
+      if (den == 0) {
+        throw NonlinearException("Denominator is zero");
+      }
 
       diff = -(fnew * (x0 - xold)) / den;
       xold = x0;
