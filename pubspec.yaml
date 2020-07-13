@@ -1,6 +1,6 @@
 name: equations
-description: An equation solving library written in Dart.
-version: 1.0.0
+description: An equation solving library written in Dart. It also works with complex numbers and fractions!
+version: 1.0.1
 repository: https://github.com/albertodev01/dart_equations
 homepage: https://fluttercompletereference.com/
 

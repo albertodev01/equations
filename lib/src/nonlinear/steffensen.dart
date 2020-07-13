@@ -1,4 +1,3 @@
-import 'package:equations/src/common/exceptions.dart';
 import 'package:equations/src/common/results.dart';
 import 'package:equations/src/nonlinear/newton.dart';
 import 'package:equations/src/nonlinear/nonlinear.dart';

@@ -1,3 +1,8 @@
+## [1.0.1]
+
+  - Health suggestions fixes
+  - Changed the description of the package
+
 ## [1.0.0]
 
  - Initial release

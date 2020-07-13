@@ -225,8 +225,9 @@ class Complex implements Comparable<Complex> {
   ///
   /// It is the modulus/magnitude/absolute value of the complex number.
   double get abs {
-    if ((real != 0) || (imaginary != 0))
+    if ((real != 0) || (imaginary != 0)) {
       return math.sqrt(real * real + imaginary * imaginary);
+    }
 
     return 0;
   }
