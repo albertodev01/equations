@@ -1,3 +1,5 @@
-## [0.0.1] - 2020-07-11.
+## [1.0.0]
 
-  - Initial release
+ - Initial release
+ - Use `Algebraic` for algebraic (polynomial) equations and `Nonlinear` for nonlinear equations
+ - Easily work with complex number by using `Complex`
