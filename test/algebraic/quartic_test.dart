@@ -58,8 +58,7 @@ void main() {
             b: Complex(0, -6),
             c: Complex.fromFraction(Fraction(1, 1), Fraction(2, 5)),
             d: Complex.i(),
-          )
-      );
+          ));
 
       //expect(equation.discriminant(), Complex.fromReal(-70848));
       expect("$equation",

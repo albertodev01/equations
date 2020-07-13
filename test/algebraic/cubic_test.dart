@@ -43,7 +43,7 @@ void main() {
           b: Complex.fromImaginaryFraction(Fraction(6, 5)),
           c: Complex(5, -1),
           d: Complex(-9, -6));
-      
+
       expect(equation.degree, 3);
       expect(
           equation.derivative(),
@@ -59,7 +59,7 @@ void main() {
           "$equation", "f(x) = (2 - 3i)x^3 + 1.2ix^2 + (5 - 1i)x + (-9 - 6i)");
       expect("${equation.toStringWithFractions()}",
           "f(x) = (2 - 3i)x^3 + 6/5ix^2 + (5 - 1i)x + (-9 - 6i)");
-      
+
       final solutions = equation.solutions();
       expect(solutions[0].real.toStringAsFixed(12), "0.348906207844");
       expect(solutions[0].imaginary.toStringAsFixed(12), "-1.734303423032");

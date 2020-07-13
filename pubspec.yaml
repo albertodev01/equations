@@ -1,13 +1,14 @@
 name: equations
 description: An equation solving library written in Dart.
 version: 1.0.0
-author: Alberto Miola
-homepage: https://github.com/albertodev01/dart_equations
+repository: https://github.com/albertodev01/dart_equations
+homepage: https://fluttercompletereference.com/
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  collection: ^1.14.13
   fraction: ^1.2.1
   math_expressions: ^2.0.0
 
