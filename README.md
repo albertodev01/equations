@@ -2,6 +2,7 @@
 <img src="https://raw.githubusercontent.com/albertodev01/dart_equations/master/static/logo.png" height="92" alt="dart_equations logo" />
 </p>
 <p align="center"><em>An equation solving library written purely in Dart.</em></p>
+<p align="center"><a href="https://pub.dev/packages/equations">https://pub.dev/packages/equations</a></p>
 
 ---
 
