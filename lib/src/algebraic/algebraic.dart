@@ -127,6 +127,16 @@ abstract class Algebraic {
     return value;
   }
 
+  /// Gives access to the i-th coefficient of the polynomial.
+  Complex operator[](int i) {
+    if (!(i >= 0 && i < _coefficients.length)) {
+      throw AlgebraicException("The given index '$i' doesn't refer to a "
+          "coefficient of the polynomial.");
+    }
+
+    return _coefficients[i];
+  }
+
   /// Evaluates the polynomial on the specified real number [x].
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
