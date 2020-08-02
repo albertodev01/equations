@@ -4,7 +4,7 @@ import 'package:equations/src/system/util/matrix.dart';
 class QR implements Decomposition {
 
   @override
-  Future<List<Matrix>> decompose() async {
+  Future<List<Matrix>> decompose(Matrix matri) async {
     return [];
   }
 
