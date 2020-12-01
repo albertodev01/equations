@@ -1,23 +1,27 @@
-name: dart_equations_ci
+name: equations_ci
 
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image:  google/dart:latest
+      image: google/dart:2.12-dev
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: pub get
-    - name: Format
-      run: dartfmt --dry-run --set-exit-if-changed .
-    - name: Run tests
-      run: pub run test
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: dart pub get
+      - name: Format
+        run: dart format --set-exit-if-changed .
+      - name: Analyze
+        run: dart analyze --fatal-infos --fatal-warnings .
+      - name: Run tests
+        run: dart test --coverage=coverage && dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          min_coverage: 95
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
