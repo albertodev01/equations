@@ -1,6 +1,6 @@
 import 'package:equations/src/algebraic/algebraic.dart';
 import 'package:equations/src/algebraic/constant.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/src/complex/complex.dart';
 
 /// Concrete implementation of [Algebraic] that represents a first degree
 /// polynomial equation in the form _ax + b = 0_.

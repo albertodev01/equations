@@ -1,6 +1,7 @@
 library equations;
 
-export 'src/complex.dart';
+export 'src/complex/complex.dart';
+export 'src/complex/polar_complex.dart';
 
 export 'src/algebraic/algebraic.dart';
 export 'src/algebraic/constant.dart';

@@ -1,6 +1,6 @@
 import 'package:equations/src/algebraic/cubic.dart';
 import 'package:equations/src/algebraic/quartic.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/src/complex/complex.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 

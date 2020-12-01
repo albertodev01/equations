@@ -1,5 +1,5 @@
 import 'package:equations/src/algebraic/constant.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/src/complex/complex.dart';
 import 'package:test/test.dart';
 
 void main() {

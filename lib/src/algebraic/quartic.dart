@@ -1,5 +1,5 @@
 import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/src/complex/complex.dart';
 
 import 'cubic.dart';
 
@@ -118,17 +118,17 @@ class Quartic extends Algebraic {
     final Q4 = (Fb.pow(2) * Complex.fromReal(3)) - (Fc * Complex.fromReal(8));
 
     var temp = (Q2 * Q2 / Complex.fromReal(4)) - (Q1.pow(3));
-    final Q5 = (temp.sqrt + (Q2 / Complex.fromReal(2))).pow(1.0 / 3.0);
+    final Q5 = (temp.sqrt() + (Q2 / Complex.fromReal(2))).pow(1.0 / 3.0);
     final Q6 = ((Q1 / Q5) + Q5) / Complex.fromReal(3);
     temp = (Q4 / Complex.fromReal(12)) + Q6;
-    final Q7 = temp.sqrt * Complex.fromReal(2);
+    final Q7 = temp.sqrt() * Complex.fromReal(2);
     temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
         (Q6 * Complex.fromReal(4)) -
         (Q3 / Q7);
 
     final solutions = [
-      (Fb.negate - Q7 - temp.sqrt) / Complex.fromReal(4),
-      (Fb.negate - Q7 + temp.sqrt) / Complex.fromReal(4),
+      (Fb.negate - Q7 - temp.sqrt()) / Complex.fromReal(4),
+      (Fb.negate - Q7 + temp.sqrt()) / Complex.fromReal(4),
     ];
 
     temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
@@ -136,8 +136,8 @@ class Quartic extends Algebraic {
         (Q3 / Q7);
 
     solutions
-      ..add((Fb.negate + Q7 - temp.sqrt) / Complex.fromReal(4))
-      ..add((Fb.negate + Q7 + temp.sqrt) / Complex.fromReal(4));
+      ..add((Fb.negate + Q7 - temp.sqrt()) / Complex.fromReal(4))
+      ..add((Fb.negate + Q7 + temp.sqrt()) / Complex.fromReal(4));
 
     return solutions;
   }
