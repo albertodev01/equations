@@ -1,5 +1,4 @@
-import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/complex/complex.dart';
+import 'package:equations/equations.dart';
 
 import 'cubic.dart';
 

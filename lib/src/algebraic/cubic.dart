@@ -1,8 +1,5 @@
 import 'dart:math' as math;
-
-import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/algebraic/quadratic.dart';
-import 'package:equations/src/complex/complex.dart';
+import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] that represents a third degree
 /// polynomial equation in the form _ax^3 + bx^2 + cx + d = 0_.

@@ -1,6 +1,4 @@
-import 'package:equations/src/algebraic/constant.dart';
-import 'package:equations/src/algebraic/linear.dart';
-import 'package:equations/src/complex/complex.dart';
+import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 

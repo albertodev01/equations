@@ -1,8 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:equations/src/algebraic/constant.dart';
-import 'package:equations/src/common/exceptions.dart';
-
-import '../complex/complex.dart';
+import 'package:equations/equations.dart';
 
 /// Abstract class that represents an _algebraic equation_, also know as
 /// _polynomial equation_, which has a single variable with a maximum degree.

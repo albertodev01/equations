@@ -5,8 +5,8 @@ import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing complex numbers constructors and overrides", () {
-    test(("Normal constructor"), () {
+  group("Testing constructors", () {
+    test(("Making sure that the 'default' constructor works as expected"), () {
       final c = Complex(-2, 6);
 
       expect(c.real, -2);
@@ -164,13 +164,13 @@ void main() {
 
   group("Testing complex numbers properties", () {
     test("Conjugate", () {
-      expect(Complex(3, 7).conjugate, Complex(3, -7));
-      expect(Complex(3, -7).conjugate, Complex(3, 7));
+      expect(Complex(3, 7).conjugate(), Complex(3, -7));
+      expect(Complex(3, -7).conjugate(), Complex(3, 7));
     });
 
     test("Reciprocal", () {
-      expect(Complex(2, 1).reciprocal, Complex(0.4, -0.2));
-      expect(Complex.fromImaginary(1).conjugate, Complex.fromImaginary(-1));
+      expect(Complex(2, 1).reciprocal(), Complex(0.4, -0.2));
+      expect(Complex.fromImaginary(1).conjugate(), Complex.fromImaginary(-1));
     });
 
     test("Modulus/magnitude/absolute value", () {
@@ -216,7 +216,7 @@ void main() {
     test("Zero", () {
       final value = Complex.zero();
 
-      expect(value.abs, 0);
+      expect(value.abs(), 0);
       expect(value.isZero, true);
     });
 
