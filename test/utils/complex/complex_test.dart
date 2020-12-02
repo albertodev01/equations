@@ -6,21 +6,25 @@ import 'package:test/test.dart';
 
 void main() {
   group("Testing constructors", () {
-    test(("Making sure that the 'default' constructor works as expected"), () {
-      final c = Complex(-2, 6);
+    test(("Making sure that the default constructor works as expected"), () {
+      final complex = Complex(-2, 6);
 
-      expect(c.real, -2);
-      expect(c.imaginary, 6);
+      expect(complex.real, -2);
+      expect(complex.imaginary, 6);
     });
 
-    test(("Real numbers constructor"), () {
-      final c = Complex.fromReal(7);
+    test(
+        ("Making sure that real numbers are properly converted into complex ones."),
+        () {
+      final complex = Complex.fromReal(7.0);
 
-      expect(c.real, 7);
-      expect(c.imaginary, 0);
+      expect(complex.real, 7);
+      expect(complex.imaginary, 0);
     });
 
-    test(("Imaginary numbers constructor"), () {
+    test(
+        ("Making sure that real numbers are properly converted into complex ones"),
+        () {
       final c = Complex.fromImaginary(7);
 
       expect(c.real, 0);

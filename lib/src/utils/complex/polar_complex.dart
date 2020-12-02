@@ -17,7 +17,7 @@ class PolarComplex implements Comparable<PolarComplex> {
       {required this.r, required this.phiRadians, required this.phiDegrees});
 
   @override
-  String toString() => "r = + $r \n"
+  String toString() => "r = $r\n"
       "phi (rad) = $phiRadians\n"
       "phi (deg) = $phiDegrees";
 
@@ -47,7 +47,7 @@ class PolarComplex implements Comparable<PolarComplex> {
   @override
   int compareTo(PolarComplex other) {
     final thisValue = Complex.fromPolar(r, phiRadians);
-    final otherValue = Complex.fromPolar(r, phiRadians);
+    final otherValue = Complex.fromPolar(other.r, other.phiRadians);
 
     if (thisValue > otherValue) return 1;
     if (thisValue < otherValue) return -1;

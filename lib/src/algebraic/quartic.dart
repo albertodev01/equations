@@ -98,45 +98,45 @@ class Quartic extends Algebraic {
 
   @override
   List<Complex> solutions() {
-    final Fb = b / a;
-    final Fc = c / a;
-    final Fd = d / a;
-    final Fe = e / a;
+    final fb = b / a;
+    final fc = c / a;
+    final fd = d / a;
+    final fe = e / a;
 
-    final Q1 = (Fc * Fc) -
-        (Fb * Fd * Complex.fromReal(3)) +
-        (Fe * Complex.fromReal(12));
-    final Q2 = (Fc.pow(3) * Complex.fromReal(2)) -
-        (Fb * Fc * Fd * Complex.fromReal(9)) +
-        (Fd.pow(2) * Complex.fromReal(27)) +
-        (Fb.pow(2) * Fe * Complex.fromReal(27)) -
-        (Fc * Fe * Complex.fromReal(72));
-    final Q3 = (Fb * Fc * Complex.fromReal(8)) -
-        (Fd * Complex.fromReal(16)) -
-        (Fb.pow(3) * Complex.fromReal(2));
-    final Q4 = (Fb.pow(2) * Complex.fromReal(3)) - (Fc * Complex.fromReal(8));
+    final q1 = (fc * fc) -
+        (fb * fd * Complex.fromReal(3)) +
+        (fe * Complex.fromReal(12));
+    final q2 = (fc.pow(3) * Complex.fromReal(2)) -
+        (fb * fc * fd * Complex.fromReal(9)) +
+        (fd.pow(2) * Complex.fromReal(27)) +
+        (fb.pow(2) * fe * Complex.fromReal(27)) -
+        (fc * fe * Complex.fromReal(72));
+    final q3 = (fb * fc * Complex.fromReal(8)) -
+        (fd * Complex.fromReal(16)) -
+        (fb.pow(3) * Complex.fromReal(2));
+    final q4 = (fb.pow(2) * Complex.fromReal(3)) - (fc * Complex.fromReal(8));
 
-    var temp = (Q2 * Q2 / Complex.fromReal(4)) - (Q1.pow(3));
-    final Q5 = (temp.sqrt() + (Q2 / Complex.fromReal(2))).pow(1.0 / 3.0);
-    final Q6 = ((Q1 / Q5) + Q5) / Complex.fromReal(3);
-    temp = (Q4 / Complex.fromReal(12)) + Q6;
-    final Q7 = temp.sqrt() * Complex.fromReal(2);
-    temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
-        (Q6 * Complex.fromReal(4)) -
-        (Q3 / Q7);
+    var temp = (q2 * q2 / Complex.fromReal(4)) - (q1.pow(3));
+    final q5 = (temp.sqrt() + (q2 / Complex.fromReal(2))).pow(1.0 / 3.0);
+    final q6 = ((q1 / q5) + q5) / Complex.fromReal(3);
+    temp = (q4 / Complex.fromReal(12)) + q6;
+    final q7 = temp.sqrt() * Complex.fromReal(2);
+    temp = ((q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
+        (q6 * Complex.fromReal(4)) -
+        (q3 / q7);
 
     final solutions = [
-      (Fb.negate - Q7 - temp.sqrt()) / Complex.fromReal(4),
-      (Fb.negate - Q7 + temp.sqrt()) / Complex.fromReal(4),
+      (fb.negate - q7 - temp.sqrt()) / Complex.fromReal(4),
+      (fb.negate - q7 + temp.sqrt()) / Complex.fromReal(4),
     ];
 
-    temp = ((Q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
-        (Q6 * Complex.fromReal(4)) +
-        (Q3 / Q7);
+    temp = ((q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
+        (q6 * Complex.fromReal(4)) +
+        (q3 / q7);
 
     solutions
-      ..add((Fb.negate + Q7 - temp.sqrt()) / Complex.fromReal(4))
-      ..add((Fb.negate + Q7 + temp.sqrt()) / Complex.fromReal(4));
+      ..add((fb.negate + q7 - temp.sqrt()) / Complex.fromReal(4))
+      ..add((fb.negate + q7 + temp.sqrt()) / Complex.fromReal(4));
 
     return solutions;
   }
