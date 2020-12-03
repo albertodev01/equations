@@ -3,7 +3,8 @@ import 'package:test/test.dart';
 
 void main() {
   group("Testing the correctness of exception objects", () {
-    test("Making sure that equality comparison works for exception objects", () {
+    test("Making sure that equality comparison works for exception objects",
+        () {
       const complexException = ComplexException("Message");
       const algebraicException = AlgebraicException("Message");
 
@@ -19,8 +20,10 @@ void main() {
       expect(algebraicException == AlgebraicException("Message"), isTrue);
 
       // Checking hash codes
-      expect(complexException.hashCode, equals(ComplexException("Message").hashCode));
-      expect(algebraicException.hashCode, equals(AlgebraicException("Message").hashCode));
+      expect(complexException.hashCode,
+          equals(ComplexException("Message").hashCode));
+      expect(algebraicException.hashCode,
+          equals(AlgebraicException("Message").hashCode));
     });
 
     test("Making sure that 'FractionException' prints the correct message", () {
@@ -30,7 +33,8 @@ void main() {
       expect("$exception", equals("ComplexException: Exception message"));
     });
 
-    test("Making sure that 'MixedFractionException' prints the correct message", () {
+    test("Making sure that 'MixedFractionException' prints the correct message",
+        () {
       const exception = AlgebraicException("Exception message");
 
       expect(exception.message, "Exception message");

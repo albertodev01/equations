@@ -28,7 +28,7 @@ class Cubic extends Algebraic {
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_
   final Complex d;
 
-  /// This is an example of a cubic equation, where the coefficient with the
+  /// These are examples of cubic equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart

@@ -2,22 +2,25 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing constant equations", () {
-    test("Degree = 0", () {
+  group("Testing 'Constant' algebraic equations", () {
+    test("Making sure that a 'Constant' object is properly constructed", () {
       final equation = Constant(a: Complex(3, 7));
 
-      expect(equation.degree, 0);
-      expect(equation.derivative(), Constant(a: Complex.zero()));
-      expect(equation.solutions().length, 0);
-      expect(equation.isRealEquation, false);
-      expect("$equation", "f(x) = (3 + 7i)");
+      // Checking the fields
+      expect(equation.degree, isZero);
+      expect(equation.derivative(), equals(Constant(a: Complex.zero())));
+      expect(equation.solutions().length, isZero);
+      expect(equation.isRealEquation, isFalse);
+      expect(equation.toString(), equals("f(x) = (3 + 7i)"));
 
+      // There's NO discriminant for constant values
       final discriminant = equation.discriminant();
-      expect(discriminant.real.isNaN, true);
-      expect(discriminant.imaginary.isNaN, true);
+      expect(discriminant.real.isNaN, isTrue);
+      expect(discriminant.imaginary.isNaN, isTrue);
 
+      // Evaluation
       final eval = equation.realEvaluateOn(2);
-      expect(eval, Complex(3, 7));
+      expect(eval, equals(Complex(3, 7)));
     });
 
     test("Degree not defined", () {

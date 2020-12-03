@@ -11,7 +11,7 @@ class Linear extends Algebraic {
   /// The second coefficient of the equation in the form _f(x) = ab + b_
   final Complex b;
 
-  /// This is an example of a linear equation, where the coefficient with the
+  /// These are examples of linear equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart

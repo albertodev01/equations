@@ -1,7 +1,5 @@
 import 'package:equations/equations.dart';
 
-import 'cubic.dart';
-
 /// Concrete implementation of [Algebraic] that represents a fourth degree
 /// polynomial equation in the form _ax^4 + bx^3 + cx^2 + dx + e = 0_.
 ///
@@ -34,7 +32,7 @@ class Quartic extends Algebraic {
   /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
   final Complex e;
 
-  /// This is an example of a quartic equation, where the coefficient with the
+  /// These are examples of quartic equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart
