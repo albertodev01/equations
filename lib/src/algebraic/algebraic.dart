@@ -28,6 +28,10 @@ abstract class Algebraic {
   /// ... because the coefficient with the highest degree goes first.
   Algebraic(List<Complex> coefficients) {
     _coefficients = List<Complex>.from(coefficients);
+
+    if (!isValid) {
+      throw AlgebraicException("The given equation is not valid.");
+    }
   }
 
   @override

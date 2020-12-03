@@ -11,7 +11,13 @@ void main() {
       expect(equation.derivative(), equals(Constant(a: Complex.zero())));
       expect(equation.solutions().length, isZero);
       expect(equation.isRealEquation, isFalse);
+      expect(equation.coefficients, equals([
+        Complex(3, 7)
+      ]));
+
+      // Converting to string
       expect(equation.toString(), equals("f(x) = (3 + 7i)"));
+      expect(equation.toStringWithFractions(), equals("f(x) = 3 + 7i"));
 
       // There's NO discriminant for constant values
       final discriminant = equation.discriminant();
@@ -23,11 +29,10 @@ void main() {
       expect(eval, equals(Complex(3, 7)));
     });
 
-    test("Degree not defined", () {
+    test("Making sure that in case of zero, the degree is -inf", () {
       final equation = Constant(a: Complex.zero());
-
-      expect(equation.degree, double.negativeInfinity);
-      expect(equation.isRealEquation, true);
+      expect(equation.degree, equals(double.negativeInfinity));
+      expect(equation.isRealEquation, isTrue);
 
       final eval = equation.realEvaluateOn(6);
       expect(eval, Complex.zero());

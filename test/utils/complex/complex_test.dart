@@ -190,6 +190,14 @@ void main() {
       final fifthRoot = Complex(5, 1).nthRoot(5);
       expect(fifthRoot.real.toStringAsFixed(12), equals("1.384072376713"));
       expect(fifthRoot.imaginary.toStringAsFixed(12), equals("0.054670354363"));
+
+      final negativeRoot = Complex(5, 1).nthRoot(-2);
+      expect(negativeRoot.real.toStringAsFixed(12), equals("0.440694807915"));
+      expect(negativeRoot.imaginary.toStringAsFixed(12), equals("-0.043637385523"));
+
+      final noRoot = Complex(5, 1).nthRoot(1);
+      expect(noRoot.real, equals(5));
+      expect(noRoot.imaginary, equals(1));
     });
 
     test("Making sure that the 'power' operation properly works", () {
@@ -239,6 +247,16 @@ void main() {
       final value2 = Complex.fromReal(5) * Complex.fromImaginary(-16);
       expect(value2.real, equals(0));
       expect(value2.imaginary, equals(-80));
+    });
+
+    test("Making sure that complex objects are properly compared", () {
+      final five = Complex.fromReal(5);
+      final ten = Complex.fromReal(10);
+
+      expect(five > ten, isFalse);
+      expect(five >= ten, isFalse);
+      expect(five < ten, isTrue);
+      expect(five <= ten, isTrue);
     });
 
     test("Making sure that the quotient between two complex numbers is correct",
