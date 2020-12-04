@@ -29,6 +29,8 @@ abstract class Algebraic {
   Algebraic(List<Complex> coefficients) {
     _coefficients = List<Complex>.from(coefficients);
 
+    // Unless this is a constant value, the coefficient with the highest degree
+    // cannot be zero.
     if (!isValid) {
       throw AlgebraicException("The given equation is not valid.");
     }
@@ -36,18 +38,43 @@ abstract class Algebraic {
 
   @override
   bool operator ==(Object other) {
-    final compare = const DeepCollectionEquality().equals;
+    if (identical(this, other)) return true;
 
-    return identical(this, other) ||
-        other is Algebraic &&
-            runtimeType == other.runtimeType &&
-            compare(_coefficients, other._coefficients);
+    if (other is Algebraic) {
+      // The lengths of the coefficients must match
+      if (coefficients.length != other.coefficients.length) {
+        return false;
+      }
+
+      // Each successful comparison increases a counter by 1. If all elements are
+      // equal, then the counter will match the actual length of the coefficients
+      // list.
+      var equalsCount = 0;
+
+      for (var i = 0; i < coefficients.length; ++i) {
+        if (coefficients[i] == other.coefficients[i]) {
+          ++equalsCount;
+        }
+      }
+
+      // They must have the same runtime type AND all items must be equal.
+      return runtimeType == other.runtimeType &&
+          equalsCount == coefficients.length;
+    } else {
+      return false;
+    }
   }
 
   @override
   int get hashCode {
     var result = 17;
-    result = 37 * result + _coefficients.hashCode;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < coefficients.length; ++i) {
+      result = 37 * result + coefficients[i].hashCode;
+    }
+
     return result;
   }
 

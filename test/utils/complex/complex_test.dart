@@ -193,7 +193,8 @@ void main() {
 
       final negativeRoot = Complex(5, 1).nthRoot(-2);
       expect(negativeRoot.real.toStringAsFixed(12), equals("0.440694807915"));
-      expect(negativeRoot.imaginary.toStringAsFixed(12), equals("-0.043637385523"));
+      expect(negativeRoot.imaginary.toStringAsFixed(12),
+          equals("-0.043637385523"));
 
       final noRoot = Complex(5, 1).nthRoot(1);
       expect(noRoot.real, equals(5));

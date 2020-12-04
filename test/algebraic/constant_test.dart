@@ -6,14 +6,12 @@ void main() {
     test("Making sure that a 'Constant' object is properly constructed", () {
       final equation = Constant(a: Complex(3, 7));
 
-      // Checking the fields
+      // Checking properties
       expect(equation.degree, isZero);
       expect(equation.derivative(), equals(Constant(a: Complex.zero())));
       expect(equation.solutions().length, isZero);
       expect(equation.isRealEquation, isFalse);
-      expect(equation.coefficients, equals([
-        Complex(3, 7)
-      ]));
+      expect(equation.coefficients, equals([Complex(3, 7)]));
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = (3 + 7i)"));
@@ -36,6 +34,14 @@ void main() {
 
       final eval = equation.realEvaluateOn(6);
       expect(eval, Complex.zero());
+    });
+
+    test("Making sure that objects comparison works properly", () {
+      final fx = Constant(a: Complex.fromReal(6));
+
+      expect(fx, equals(Constant(a: Complex.fromReal(6))));
+      expect(fx == Constant(a: Complex.fromReal(6)), isTrue);
+      expect(fx.hashCode, equals(Constant(a: Complex.fromReal(6)).hashCode));
     });
   });
 }
