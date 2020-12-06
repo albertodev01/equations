@@ -1,6 +1,4 @@
-import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/algebraic/linear.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] that represents a second degree
 /// polynomial equation in the form _ax^2 + bx + c = 0_.
@@ -17,7 +15,7 @@ class Quadratic extends Algebraic {
   /// The third coefficient of the equation in the form _f(x) = ax^2 + bx + c = 0_
   final Complex c;
 
-  /// This is an example of a quadratic equation, where the coefficient with the
+  /// These are examples of quadratic equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart
@@ -61,8 +59,8 @@ class Quadratic extends Algebraic {
     final twoA = Complex.fromReal(2) * a;
 
     return <Complex>[
-      (b.negate + disc.sqrt) / twoA,
-      (b.negate - disc.sqrt) / twoA,
+      (b.negate + disc.sqrt()) / twoA,
+      (b.negate - disc.sqrt()) / twoA,
     ];
   }
 }

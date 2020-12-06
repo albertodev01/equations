@@ -1,5 +1,4 @@
-import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] which represents a constant value _a_.
 /// It can be real or complex.

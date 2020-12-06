@@ -1,6 +1,4 @@
-import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/algebraic/constant.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] that represents a first degree
 /// polynomial equation in the form _ax + b = 0_.
@@ -13,7 +11,7 @@ class Linear extends Algebraic {
   /// The second coefficient of the equation in the form _f(x) = ab + b_
   final Complex b;
 
-  /// This is an example of a linear equation, where the coefficient with the
+  /// These are examples of linear equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart

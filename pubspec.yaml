@@ -10,7 +10,6 @@ environment:
 dependencies:
   collection: ^1.15.0-nullsafety.5
   fraction: ^2.0.0-nullsafety.2
-  math_expressions: ^2.0.1
 
 dev_dependencies:
   coverage: ^0.14.2

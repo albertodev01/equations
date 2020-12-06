@@ -1,8 +1,5 @@
 import 'dart:math' as math;
-
-import 'package:equations/src/algebraic/algebraic.dart';
-import 'package:equations/src/algebraic/quadratic.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] that represents a third degree
 /// polynomial equation in the form _ax^3 + bx^2 + cx + d = 0_.
@@ -31,7 +28,7 @@ class Cubic extends Algebraic {
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_
   final Complex d;
 
-  /// This is an example of a cubic equation, where the coefficient with the
+  /// These are examples of cubic equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart
@@ -83,7 +80,7 @@ class Cubic extends Algebraic {
     final d1 = (b.pow(3) * two) -
         (a * b * c * Complex.fromReal(9)) +
         (a * a * d * Complex.fromReal(27));
-    final sqrtD = (discriminant() * a * a * Complex.fromReal(-27)).sqrt;
+    final sqrtD = (discriminant() * a * a * Complex.fromReal(-27)).sqrt();
     final C = ((d1 + sqrtD) / two).nthRoot(3);
     final constTerm = Complex.fromReal(-1) / (a * three);
 
