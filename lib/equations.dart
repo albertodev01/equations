@@ -4,10 +4,18 @@ export 'src/utils/complex/complex.dart';
 export 'src/utils/complex/polar_complex.dart';
 
 export 'src/algebraic/algebraic.dart';
-export 'src/algebraic/constant.dart';
-export 'src/algebraic/cubic.dart';
-export 'src/algebraic/quadratic.dart';
-export 'src/algebraic/quartic.dart';
-export 'src/algebraic/linear.dart';
+export 'src/algebraic/types/constant.dart';
+export 'src/algebraic/types/cubic.dart';
+export 'src/algebraic/types/quadratic.dart';
+export 'src/algebraic/types/quartic.dart';
+export 'src/algebraic/types/linear.dart';
 
-export 'src/utils/exceptions.dart';
+export 'src/nonlinear/nonlinear.dart';
+export 'src/nonlinear/types/results.dart';
+
+export 'src/utils/exceptions/exceptions.dart';
+export 'src/utils/exceptions/types/complex_exception.dart';
+export 'src/utils/exceptions/types/algebraic_exception.dart';
+export 'src/utils/exceptions/types/nonlinear_exception.dart';
+
+export 'src/utils/expression_parser.dart';
