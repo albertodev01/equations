@@ -89,13 +89,19 @@ abstract class NonLinear {
   }
 
   /// Evaluates the function on the given _x_ value
-  double evaluateOn(double x) {
-    return 0;
+  num evaluateOn(double x) {
+    const evaluator = ExpressionParser();
+    return evaluator.evaluate(function, x);
   }
 
   /// Evaluates the derivative of the function on the given _x_ value
-  double evaluateDerivativeOn(double x) {
-    return 0;
+  num evaluateDerivativeOn(double x) {
+    final h = math.pow(1.0e-15, 1 / 3) * x;
+
+    final upper = evaluateOn(x + h);
+    final lower = evaluateOn(x - h);
+
+    return (upper - lower) / (2 * h);
   }
 
   /// Returns a [NonlinearResults] object which contains the data calculated by

@@ -2,6 +2,8 @@ import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group("Testing 'Quadratic' algebraic equations", () {
     test("Making sure that a 'Quadratic' object is properly constructed", () {
@@ -36,9 +38,9 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real.toStringAsFixed(12), equals("2.151387818866"));
+      expect(solutions[0].real, MoreOrLessEquals(2.151387818866));
       expect(solutions[0].imaginary, isZero);
-      expect(solutions[1].real.toStringAsFixed(12), equals("0.348612181134"));
+      expect(solutions[1].real, MoreOrLessEquals(0.348612181134));
       expect(solutions[1].imaginary, isZero);
 
       // Evaluation

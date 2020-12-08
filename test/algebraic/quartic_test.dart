@@ -2,6 +2,8 @@ import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group("Testing 'Quartic' algebraic equations", () {
     test("Making sure that a 'Quartic' object is properly constructed", () {
@@ -38,16 +40,14 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real.toStringAsFixed(12), equals("-2.173571613806"));
+      expect(solutions[0].real, MoreOrLessEquals(-2.173571613806));
       expect(solutions[0].imaginary.round(), isZero);
-      expect(solutions[1].real.toStringAsFixed(12), equals("0.349518864775"));
+      expect(solutions[1].real, MoreOrLessEquals(0.349518864775));
       expect(solutions[1].imaginary.round(), isZero);
-      expect(solutions[2].real.toStringAsFixed(12), equals("-0.087973625484"));
-      expect(
-          solutions[2].imaginary.toStringAsFixed(12), equals("0.656527118533"));
-      expect(solutions[3].real.toStringAsFixed(12), equals("-0.087973625484"));
-      expect(solutions[3].imaginary.toStringAsFixed(12),
-          equals("-0.656527118533"));
+      expect(solutions[2].real, MoreOrLessEquals(-0.087973625484));
+      expect(solutions[2].imaginary, MoreOrLessEquals(0.656527118533));
+      expect(solutions[3].real, MoreOrLessEquals(-0.087973625484));
+      expect(solutions[3].imaginary, MoreOrLessEquals(-0.656527118533));
 
       // Evaluation
       final eval = equation.realEvaluateOn(2);
@@ -56,13 +56,13 @@ void main() {
     });
 
     test(
-        "Making sure that an exception is thrown if the coeff. of the highest degree is zero",
-        () {
-      expect(
-          () => Quartic(
-                a: Complex.zero(),
-              ),
-          throwsA(isA<AlgebraicException>()));
+        "Making sure that an exception is thrown if the coeff. of the highest"
+        " degree is zero", () {
+      expect(() {
+        Quartic(
+          a: Complex.zero(),
+        );
+      }, throwsA(isA<AlgebraicException>()));
     });
 
     test("Making sure that objects comparison works properly", () {

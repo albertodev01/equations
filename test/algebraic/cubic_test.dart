@@ -2,6 +2,8 @@ import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group("Testing 'Cubic' algebraic equations", () {
     test("Making sure that a 'Cubic' object is properly constructed", () {
@@ -37,14 +39,12 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[2].real.toStringAsFixed(12), equals("1.427598269660"));
-      expect(
-          solutions[2].imaginary.toStringAsFixed(12), equals("1.055514309999"));
-      expect(solutions[1].real.toStringAsFixed(12), equals("-2.855196539321"));
+      expect(solutions[2].real, MoreOrLessEquals(1.427598269660));
+      expect(solutions[2].imaginary, MoreOrLessEquals(1.055514309999));
+      expect(solutions[1].real, MoreOrLessEquals(-2.855196539321));
       expect(solutions[1].imaginary.round(), isZero);
-      expect(solutions[0].real.toStringAsFixed(12), equals("1.427598269660"));
-      expect(solutions[0].imaginary.toStringAsFixed(12),
-          equals("-1.055514309999"));
+      expect(solutions[0].real, MoreOrLessEquals(1.427598269660));
+      expect(solutions[0].imaginary, MoreOrLessEquals(-1.055514309999));
 
       // Evaluation
       final eval = equation.realEvaluateOn(0.5);

@@ -2,6 +2,8 @@ import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group("Testing 'Linear' algebraic equations", () {
     test("Making sure that a 'Linear' object is properly constructed", () {
@@ -28,7 +30,7 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real.toStringAsFixed(1), equals("-0.4"));
+      expect(solutions[0].real, MoreOrLessEquals(-0.4, precision: 1.0e-1));
       expect(solutions[0].imaginary, isZero);
 
       // Evaluation
