@@ -26,7 +26,7 @@ abstract class NonLinear {
   ///  - the expression [function] to be solved
   ///  - the accuracy [tolerance] of the root-finding algorithm
   ///  - the maximum iterations [maxSteps] the algorithm has to do
-  NonLinear(
+  const NonLinear(
       {required this.function,
       required this.tolerance,
       required this.maxSteps});
@@ -81,7 +81,7 @@ abstract class NonLinear {
   /// Evaluates the function on the given [x] value
   num evaluateOn(double x) {
     const evaluator = ExpressionParser();
-    return evaluator.evaluate(function, x);
+    return evaluator.evaluateOn(function, x);
   }
 
   /// Evaluates the derivative of the function on the given [x] value

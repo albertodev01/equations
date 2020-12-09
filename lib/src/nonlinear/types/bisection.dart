@@ -1,14 +1,14 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/nonlinear/nonlinear.dart';
 
-/// Implements the Bisection method to find the roots of a given equation.
+/// Implements the 'bisection' method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
-///   - The method is guaranteed to converge to a root of _f(x)_ if _f(x)_ is a
+///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval [a, b].
 ///
-///   - The values of _f(a)_ and _f(b)_ must have opposite signs.
+///   - The values of `f(a)` and `f(b)` must have opposite signs.
 class Bisection extends NonLinear {
   /// The starting point of the interval
   final double a;
@@ -20,11 +20,11 @@ class Bisection extends NonLinear {
   /// Bisection method.
   ///
   ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate _f(a)_
-  ///   - [b]: the second interval in which evaluate _f(b)_
+  ///   - [a]: the first interval in which evaluate `f(a)`
+  ///   - [b]: the second interval in which evaluate `f(b)`
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Bisection(
+  const Bisection(
       {required String function,
       required this.a,
       required this.b,

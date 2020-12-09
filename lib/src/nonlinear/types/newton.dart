@@ -6,11 +6,11 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 /// **Characteristics**:
 ///
 ///   - The method is extremely powerful but it's not guaranteed to converge to a
-/// root of _f(x)_.
+/// root of `f(x)`.
 ///
-///   - It may fail for example due to a division by zero, if the
-///   derivative evaluated at a certain value is 0 or because the initial guess
-///   _x0_ is too far from the solution.
+///   - It may fail for example due to a division by zero, if the derivative
+///   evaluated at a certain value is 0, or because the initial guess is too far
+///   from the solution.
 class Newton extends NonLinear {
   /// The initial guess x<sub>0</sub>
   final double x0;
@@ -22,7 +22,7 @@ class Newton extends NonLinear {
   ///   - [x0]: the initial guess x<sub>0</sub>
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Newton(
+  const Newton(
       {required String function,
       required this.x0,
       double tolerance = 1.0e-10,

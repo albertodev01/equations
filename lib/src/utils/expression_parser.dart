@@ -36,7 +36,7 @@ typedef _Evaluator = num Function(num value);
 class ExpressionParser {
   /// A "cached" instance of a parser to be used to evaluate expressions on a
   /// given point.
-  static late final double Function(String, double) _parser = (expression, value) {
+  static late final Parser _parser = () {
     final builder = ExpressionBuilder();
 
     // This primitive is fundamental as it recognzes real numbers from the input
@@ -55,35 +55,52 @@ class ExpressionParser {
       // Recognze the 'x' variable
       ..primitive(char('x').trim().map((_) => (num value) => value))
 
+      // Constants
+      ..primitive(char('e').trim().map((_) => (num value) => math.e))
+      ..primitive(string('pi').trim().map((_) => (num value) => math.pi))
+
       // Enable the parentheses
       ..wrapper(char('(').trim(), char(')').trim(), (_, _Evaluator a, __) => a)
 
       // Addin various mathematical operators
-      ..wrapper(string('sqrt(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.sqrt(value)))
-      ..wrapper(string('sin(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.sin(value)))
-      ..wrapper(string('cos(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.cos(value)))
-      ..wrapper(string('tan(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.tan(value)))
-      ..wrapper(string('exp(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.exp(value)))
-      ..wrapper(string('log(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.log(value)))
-      ..wrapper(string('acos(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.acos(value)))
-      ..wrapper(string('asin(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.asin(value)))
-      ..wrapper(string('atan(').trim(), char(')').trim(), (_, _Evaluator a, __) => a(math.atan(value)));
+      ..wrapper(string('sqrt(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.sqrt(value)))
+      ..wrapper(string('sin(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.sin(value)))
+      ..wrapper(string('cos(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.cos(value)))
+      ..wrapper(string('tan(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.tan(value)))
+      ..wrapper(string('exp(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.exp(value)))
+      ..wrapper(string('log(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.log(value)))
+      ..wrapper(string('acos(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.acos(value)))
+      ..wrapper(string('asin(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.asin(value)))
+      ..wrapper(string('atan(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(math.atan(value)));
 
     // Defining operations among operators.
-    builder.group()..prefix(char('-').trim(), (_, _Evaluator a) => -a(value));
+    builder.group()..prefix(char('-').trim(), (_, _Evaluator a) => (num value) =>  -a(value));
     builder.group()
-      ..right(char('^').trim(), (_Evaluator a, _, _Evaluator b) => math.pow(a(value), b(value)));
+      ..right(char('^').trim(),
+          (_Evaluator a, _, _Evaluator b) => (num value) =>  math.pow(a(value), b(value)));
     builder.group()
-      ..left(char('*').trim(), (_Evaluator a, _, _Evaluator b) => a(value) * b(value))
-      ..left(char('/').trim(), (_Evaluator a, _, _Evaluator b) => a(value) / b(value));
+      ..left(char('*').trim(),
+          (_Evaluator a, _, _Evaluator b) => (num value) => a(value) * b(value))
+      ..left(char('/').trim(),
+          (_Evaluator a, _, _Evaluator b) => (num value) => a(value) / b(value));
     builder.group()
-      ..left(char('+').trim(), (_Evaluator a, _, _Evaluator b) => a(value) + b(value))
-      ..left(char('-').trim(), (_Evaluator a, _, _Evaluator b) => a(value) - b(value));
+      ..left(char('+').trim(),
+          (_Evaluator a, _, _Evaluator b) => (num value) => a(value) + b(value))
+      ..left(char('-').trim(),
+          (_Evaluator a, _, _Evaluator b) => (num value) => a(value) - b(value));
 
     // Build the parser
-    final parser = builder.build().end();
-    return parser.parse(expression).value as double;
-  };
+    return builder.build().end();
+  }();
 
   /// Builds a new expression parser accepting strings with a single `x` variable.
   /// For example, valid expressions are:
@@ -95,7 +112,11 @@ class ExpressionParser {
   /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**.
   const ExpressionParser();
 
-  /// Evaluates the mathematical [expression] in the given [evaluationPoint].
-  double evaluate(String expression, double evaluationPoint) =>
-    _parser(expression, evaluationPoint);
+  /// Evaluates the mathematical [expression] and returns the result.
+  num evaluate(String expression) => evaluateOn(expression, 0);
+
+  /// Evaluates the mathematical [expression] and replaces the `x` variable with
+  /// the value of the given [evaluationPoint].
+  num evaluateOn(String expression, double evaluationPoint) =>
+      _parser.parse(expression).value(evaluationPoint) as num;
 }

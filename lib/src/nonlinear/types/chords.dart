@@ -1,14 +1,14 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/nonlinear/nonlinear.dart';
 
-/// Implements the Chords method to find the roots of a given equation.
+/// Implements the 'chords' method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
-///   - The method is guaranteed to converge to a root of _f(x)_ if _f(x)_ is a
+///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval [a, b].
 ///
-///   - The values of _f(a)_ and _f(b)_ must have opposite signs AND there must
+///   - The values of `f(a)` and `f(b)` must have opposite signs AND there must
 ///   be at least one root in [a, b]. These are 2 required conditions.
 class Chords extends NonLinear {
   /// The initial guess x<sub>0</sub>
@@ -21,11 +21,11 @@ class Chords extends NonLinear {
   /// Chords method.
   ///
   ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate _f(a)_
-  ///   - [b]: the second interval in which evaluate _f(b)_
+  ///   - [a]: the first interval in which evaluate `f(a)`
+  ///   - [b]: the second interval in which evaluate `f(b)`
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Chords(
+  const Chords(
       {required String function,
       required this.a,
       required this.b,
