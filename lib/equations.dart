@@ -22,6 +22,7 @@ export 'src/utils/exceptions/exceptions.dart';
 export 'src/utils/exceptions/types/complex_exception.dart';
 export 'src/utils/exceptions/types/algebraic_exception.dart';
 export 'src/utils/exceptions/types/nonlinear_exception.dart';
+export 'src/utils/exceptions/types/parser_exception.dart';
 export 'src/utils/expression_parser.dart';
 
 export 'src/utils/expression_parser.dart';

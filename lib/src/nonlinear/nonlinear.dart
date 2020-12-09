@@ -2,15 +2,15 @@ import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
 
-/// Abstract class that represents a **nonlinear** equation which can be solved
+/// Abstract class representing a **nonlinear** equation which can be solved
 /// with a particular root-finding algorithm. No complex numbers are allowed.
 ///
 /// The so called "**root-finding algorithms**" are iterative methods that start
 /// from an initial value (or a couple of values) and try to build a scalar
 /// succession that converges as much as possible to the root.
 ///
-/// Each subclass of [NonLinear.solve] has to define the method s which builds
-/// the scalar succession.
+/// Each subclass of [NonLinear] has to define the [solve] method which is required
+/// in order to build the scalar succession with a certain logic.
 abstract class NonLinear {
   /// The function f(x) for which the algorithm has to find a solution
   final String function;
@@ -50,20 +50,10 @@ abstract class NonLinear {
   }
 
   @override
-  String toString() {
-    final sb = StringBuffer()
-      ..write("Expression: ")
-      ..writeln(function)
-      ..write("Tolerance: ")
-      ..writeln(tolerance)
-      ..write("Maximum steps: ")
-      ..write(maxSteps);
-
-    return sb.toString();
-  }
+  String toString() => "f(x) = $function";
 
   /// In order to get a meaningful result, it makes sense to compute the rate of
-  /// convergence only if the algorithm made _at least_ 3 iterations.
+  /// convergence only if the algorithm made **at least** 3 iterations.
   double convergence(List<double> guesses, int steps) {
     final size = guesses.length - 1;
 
@@ -82,19 +72,19 @@ abstract class NonLinear {
   /// The efficiency is evaluated only if the convergence is not [double.nan].
   /// The formula is:
   ///
-  ///  - _efficiency = convergenceRate <sup>1 / max_steps</sup>_
+  ///  - efficiency = convergenceRate <sup>1 / max_steps</sup>
   double efficiency(List<double> guesses, int steps) {
     final c = convergence(guesses, steps);
     return math.pow(c, 1.0 / steps) as double;
   }
 
-  /// Evaluates the function on the given _x_ value
+  /// Evaluates the function on the given [x] value
   num evaluateOn(double x) {
     const evaluator = ExpressionParser();
     return evaluator.evaluate(function, x);
   }
 
-  /// Evaluates the derivative of the function on the given _x_ value
+  /// Evaluates the derivative of the function on the given [x] value
   num evaluateDerivativeOn(double x) {
     final h = math.pow(1.0e-15, 1 / 3) * x;
 
