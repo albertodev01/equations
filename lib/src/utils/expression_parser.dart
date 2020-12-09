@@ -83,20 +83,27 @@ class ExpressionParser {
           (_, _Evaluator a, __) => (num value) => a(math.atan(value)));
 
     // Defining operations among operators.
-    builder.group()..prefix(char('-').trim(), (_, _Evaluator a) => (num value) =>  -a(value));
     builder.group()
-      ..right(char('^').trim(),
-          (_Evaluator a, _, _Evaluator b) => (num value) =>  math.pow(a(value), b(value)));
+      ..prefix(char('-').trim(), (_, _Evaluator a) => (num value) => -a(value));
+    builder.group()
+      ..right(
+          char('^').trim(),
+          (_Evaluator a, _, _Evaluator b) =>
+              (num value) => math.pow(a(value), b(value)));
     builder.group()
       ..left(char('*').trim(),
           (_Evaluator a, _, _Evaluator b) => (num value) => a(value) * b(value))
-      ..left(char('/').trim(),
-          (_Evaluator a, _, _Evaluator b) => (num value) => a(value) / b(value));
+      ..left(
+          char('/').trim(),
+          (_Evaluator a, _, _Evaluator b) =>
+              (num value) => a(value) / b(value));
     builder.group()
       ..left(char('+').trim(),
           (_Evaluator a, _, _Evaluator b) => (num value) => a(value) + b(value))
-      ..left(char('-').trim(),
-          (_Evaluator a, _, _Evaluator b) => (num value) => a(value) - b(value));
+      ..left(
+          char('-').trim(),
+          (_Evaluator a, _, _Evaluator b) =>
+              (num value) => a(value) - b(value));
 
     // Build the parser
     return builder.build().end();

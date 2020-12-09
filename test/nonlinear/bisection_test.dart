@@ -1,8 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
-import '../double_approximation_matcher.dart';
-
 void main() {
   group("Testing the 'Bisection' class", () {
     test(
@@ -48,13 +46,14 @@ void main() {
 
       expect(Bisection(function: "x-2", a: 1, b: 2), equals(bisection));
       expect(Bisection(function: "x-2", a: 0, b: 2) == bisection, isTrue);
-      expect(Bisection(function: "x-2", a: 0, b: 2).hashCode, equals(bisection.hashCode));
+      expect(Bisection(function: "x-2", a: 0, b: 2).hashCode,
+          equals(bisection.hashCode));
     });
 
-    test(
+    /*test(
         "Making sure that the bisection method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
-      /*final bisection =
+      final bisection =
           Bisection(function: "x^2 - 9", a: -120, b: -122, maxSteps: 5);
       final solutions = await bisection.solve();
 
@@ -63,7 +62,7 @@ void main() {
       //
       // The range is far from the root: the method still works but it won't find
       // the root.
-      expect(solutions.guesses.last, MoreOrLessEquals(1.52, precision: 1.0e-2));*/
-    });
+      expect(solutions.guesses.last, MoreOrLessEquals(1.52, precision: 1.0e-2));
+    });*/
   });
 }
