@@ -8,8 +8,7 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () async {
-      final chords =
-          Chords(function: "x^3+2", a: -3, b: -1, maxSteps: 5);
+      final chords = Chords(function: "x^3+2", a: -3, b: -1, maxSteps: 5);
 
       expect(chords.maxSteps, equals(5));
       expect(chords.tolerance, equals(1.0e-10));
@@ -24,9 +23,6 @@ void main() {
       expect(solutions.guesses.length, isNonZero);
       //expect(solutions.convergence, 1);
       //expect(solutions.efficiency, 1);
-
-      // There must be some values starting with 1.5xxx which is the root we're
-      // looking for in this test
       expect(solutions.guesses.last, MoreOrLessEquals(-1.2, precision: 1.0e-1));
     });
 
@@ -55,11 +51,6 @@ void main() {
       final chords = Chords(function: "x^2-2", a: 10, b: 20, maxSteps: 3);
       final solutions = await chords.solve();
 
-      // There must not be some values starting with 1.5xxx, which is the root
-      // we're looking for in this test, because the root is far from the range.
-      //
-      // The range is far from the root: the method still works but it won't find
-      // the root.
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.length <= 3, isTrue);
     });

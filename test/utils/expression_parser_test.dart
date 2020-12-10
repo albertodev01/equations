@@ -22,13 +22,20 @@ void main() {
       const parser = ExpressionParser();
 
       expect(parser.evaluate("sqrt(49)"), equals(7));
-      expect(parser.evaluate("sin(pi)"), MoreOrLessEquals(0, precision: 1.0e-1));
-      expect(parser.evaluate("cos(pi)"), MoreOrLessEquals(-1, precision: 1.0e-1));
-      expect(parser.evaluate("tan(pi/4)"), MoreOrLessEquals(1, precision: 1.0e-1));
-      expect(parser.evaluate("exp(log(5))"), MoreOrLessEquals(5, precision: 1.0e-1));
-      expect(parser.evaluate("asin(1)"), MoreOrLessEquals(math.pi / 2, precision: 1.0e-1));
-      expect(parser.evaluate("acos(1)"), MoreOrLessEquals(0, precision: 1.0e-1));
-      expect(parser.evaluate("atan(pi)"), MoreOrLessEquals(1.2626, precision: 1.0e-4));
+      expect(
+          parser.evaluate("sin(pi)"), MoreOrLessEquals(0, precision: 1.0e-1));
+      expect(
+          parser.evaluate("cos(pi)"), MoreOrLessEquals(-1, precision: 1.0e-1));
+      expect(
+          parser.evaluate("tan(pi/4)"), MoreOrLessEquals(1, precision: 1.0e-1));
+      expect(parser.evaluate("exp(log(5))"),
+          MoreOrLessEquals(5, precision: 1.0e-1));
+      expect(parser.evaluate("asin(1)"),
+          MoreOrLessEquals(math.pi / 2, precision: 1.0e-1));
+      expect(
+          parser.evaluate("acos(1)"), MoreOrLessEquals(0, precision: 1.0e-1));
+      expect(parser.evaluate("atan(pi)"),
+          MoreOrLessEquals(1.2626, precision: 1.0e-4));
     });
 
     test("Making sure that 'ExpressionParser' works with the 'x' variable.",
@@ -40,10 +47,9 @@ void main() {
     });
 
     test(
-        "Making sure that 'ExpressionParser' works with the 'x' variable even"
-        "if 'x' is not present.", () {
-      const parser = ExpressionParser();
-      expect(parser.evaluateOn("6*3 + 4", 0), equals(22));
+        "Making sure that 'ExpressionParser' works with the 'x' variable "
+        "even if 'x' is not present.", () {
+      expect(const ExpressionParser().evaluateOn("6*3 + 4", 0), equals(22));
     });
   });
 }

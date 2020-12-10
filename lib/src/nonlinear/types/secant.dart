@@ -63,7 +63,7 @@ class Secant extends NonLinear {
     }
 
     return NonlinearResults(
-        guessedValues: guesses,
+        guesses: guesses,
         convergence: convergence(guesses, maxSteps),
         efficiency: efficiency(guesses, maxSteps));
   }

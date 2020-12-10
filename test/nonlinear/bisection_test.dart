@@ -24,14 +24,12 @@ void main() {
       expect(solutions.convergence, 1);
       expect(solutions.efficiency, 1);
 
-      // There must be some values starting with 1.5xxx which is the root we're
-      // looking for in this test
       expect(solutions.guesses.last, MoreOrLessEquals(1.5, precision: 1.0e-1));
     });
 
     test("Making sure that a malformed equation string throws.", () {
       expect(() async {
-        await Bisection(function: "2x - 6",a: 1, b: 8).solve();
+        await Bisection(function: "2x - 6", a: 1, b: 8).solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 
@@ -55,11 +53,6 @@ void main() {
           Bisection(function: "x^2 - 9", a: -120, b: -122, maxSteps: 4);
       final solutions = await bisection.solve();
 
-      // There must not be some values starting with 1.5xxx, which is the root
-      // we're looking for in this test, because the root is far from the range.
-      //
-      // The range is far from the root: the method still works but it won't find
-      // the root.
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.length <= 4, isTrue);
     });

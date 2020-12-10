@@ -32,13 +32,18 @@ abstract class NonLinear {
       required this.maxSteps});
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is NonLinear &&
-          runtimeType == other.runtimeType &&
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is NonLinear) {
+      return runtimeType == other.runtimeType &&
           function == other.function &&
           tolerance == other.tolerance &&
           maxSteps == other.maxSteps;
+    } else {
+      return false;
+    }
+  }
 
   @override
   int get hashCode {

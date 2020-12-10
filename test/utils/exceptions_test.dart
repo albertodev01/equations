@@ -14,7 +14,8 @@ void main() {
       expect(complexException, equals(const ComplexException("Message")));
       expect(algebraicException, equals(const AlgebraicException("Message")));
       expect(nonlinearException, equals(const NonlinearException("Message")));
-      expect(parserException, equals(const ExpressionParserException("Message")));
+      expect(
+          parserException, equals(const ExpressionParserException("Message")));
 
       // Checking types
       expect(complexException, isNot(algebraicException));
@@ -61,12 +62,14 @@ void main() {
       expect("$exception", equals("NonlinearException: Exception message"));
     });
 
-    test("Making sure that 'ExpressionParserException' prints the correct message",
+    test(
+        "Making sure that 'ExpressionParserException' prints the correct message",
         () {
       const exception = ExpressionParserException("Exception message");
 
       expect(exception.message, "Exception message");
-      expect("$exception", equals("ExpressionParserException: Exception message"));
+      expect(
+          "$exception", equals("ExpressionParserException: Exception message"));
     });
   });
 }
