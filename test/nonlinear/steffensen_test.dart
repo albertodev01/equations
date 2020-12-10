@@ -8,7 +8,7 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () async {
-      final steffensen = Steffensen(function: "exp(x)-3", x0: 1, maxSteps: 5);
+      const steffensen = Steffensen(function: "exp(x)-3", x0: 1, maxSteps: 5);
 
       expect(steffensen.maxSteps, equals(5));
       expect(steffensen.tolerance, equals(1.0e-10));
@@ -34,7 +34,7 @@ void main() {
     });
 
     test("Making sure that object comparison properly works", () {
-      final steffensen = Steffensen(function: "exp(x)-3", x0: 3);
+      const steffensen = Steffensen(function: "exp(x)-3", x0: 3);
 
       expect(Steffensen(function: "exp(x)-3", x0: 3), equals(steffensen));
       expect(Steffensen(function: "exp(x)-3", x0: 3) == steffensen, isTrue);
@@ -45,7 +45,7 @@ void main() {
     test(
         "Making sure that the steffensen method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
-      final steffensen = Steffensen(function: "x-500", x0: 1, maxSteps: 3);
+      const steffensen = Steffensen(function: "x-500", x0: 1, maxSteps: 3);
       final solutions = await steffensen.solve();
 
       expect(solutions.guesses.length, isNonZero);

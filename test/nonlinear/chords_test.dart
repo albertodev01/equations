@@ -8,7 +8,7 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () async {
-      final chords = Chords(function: "x^3+2", a: -3, b: -1, maxSteps: 5);
+      const chords = Chords(function: "x^3+2", a: -3, b: -1, maxSteps: 5);
 
       expect(chords.maxSteps, equals(5));
       expect(chords.tolerance, equals(1.0e-10));
@@ -48,7 +48,7 @@ void main() {
     test(
         "Making sure that the chords method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
-      final chords = Chords(function: "x^2-2", a: 10, b: 20, maxSteps: 3);
+      const chords = Chords(function: "x^2-2", a: 10, b: 20, maxSteps: 3);
       final solutions = await chords.solve();
 
       expect(solutions.guesses.length, isNonZero);

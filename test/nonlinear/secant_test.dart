@@ -1,0 +1,62 @@
+import 'package:equations/equations.dart';
+import 'package:test/test.dart';
+
+import '../double_approximation_matcher.dart';
+
+void main() {
+  group("Testing the 'Secant' class", () {
+    test(
+        "Making sure that the series converges when the root is in the interval.",
+        () async {
+      const secant = Secant(
+          function: "x^3-x-2", firstGuess: 1, secondGuess: 2, maxSteps: 4);
+
+      expect(secant.maxSteps, equals(4));
+      expect(secant.tolerance, equals(1.0e-10));
+      expect(secant.function, equals("x^3-x-2"));
+      expect(secant.toString(), equals("f(x) = x^3-x-2"));
+      expect(secant.firstGuess, equals(1));
+      expect(secant.secondGuess, equals(2));
+
+      // Solving the equation, making sure that the series converged
+      final solutions = await secant.solve();
+      expect(solutions.guesses.length <= 4, isTrue);
+      expect(solutions.guesses.length, isNonZero);
+
+      expect(solutions.guesses.last, MoreOrLessEquals(1.5, precision: 1.0e-1));
+    });
+
+    test("Making sure that a malformed equation string throws.", () {
+      expect(() async {
+        await Secant(function: "xsin(x)", firstGuess: 0, secondGuess: 2)
+            .solve();
+      }, throwsA(isA<ExpressionParserException>()));
+    });
+
+    test("Making sure that object comparison properly works", () {
+      const secant = Secant(
+        function: "x-2",
+        firstGuess: -1,
+        secondGuess: 2,
+      );
+
+      expect(Secant(function: "x-2", firstGuess: 1, secondGuess: 2),
+          equals(secant));
+      expect(Secant(function: "x-2", firstGuess: 0, secondGuess: 2) == secant,
+          isTrue);
+      expect(Secant(function: "x-2", firstGuess: 0, secondGuess: 2).hashCode,
+          equals(secant.hashCode));
+    });
+
+    test(
+        "Making sure that the secant method still works when the root is "
+        "not in the interval but the actual solution is not found", () async {
+      const secant = Secant(
+          function: "x^2-8", firstGuess: -180, secondGuess: -190, maxSteps: 4);
+      final solutions = await secant.solve();
+
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.guesses.length <= 4, isTrue);
+    });
+  });
+}

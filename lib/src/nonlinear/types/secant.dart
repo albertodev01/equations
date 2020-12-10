@@ -24,7 +24,7 @@ class Secant extends NonLinear {
   ///   - [secondGuess]: the second interval in which evaluate _f(b)_
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  Secant(
+  const Secant(
       {required String function,
       required this.firstGuess,
       required this.secondGuess,

@@ -8,7 +8,7 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () async {
-      final bisection = Bisection(function: "x^3-x-2", a: 1, b: 2, maxSteps: 4);
+      const bisection = Bisection(function: "x^3-x-2", a: 1, b: 2, maxSteps: 4);
 
       expect(bisection.maxSteps, equals(4));
       expect(bisection.tolerance, equals(1.0e-10));
@@ -49,7 +49,7 @@ void main() {
     test(
         "Making sure that the bisection method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
-      final bisection =
+      const bisection =
           Bisection(function: "x^2 - 9", a: -120, b: -122, maxSteps: 4);
       final solutions = await bisection.solve();
 

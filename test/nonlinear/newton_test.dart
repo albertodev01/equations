@@ -8,7 +8,7 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () async {
-      final newtwon = Newton(function: "sqrt(x) - 2", x0: 3, maxSteps: 6);
+      const newtwon = Newton(function: "sqrt(x) - 2", x0: 3, maxSteps: 6);
 
       expect(newtwon.maxSteps, equals(6));
       expect(newtwon.tolerance, equals(1.0e-10));
@@ -33,7 +33,7 @@ void main() {
     });
 
     test("Making sure that object comparison properly works", () {
-      final newton = Newton(function: "x-1", x0: 3);
+      const newton = Newton(function: "x-1", x0: 3);
 
       expect(Newton(function: "x-1", x0: 3), equals(newton));
       expect(Newton(function: "x-1", x0: 3) == newton, isTrue);
@@ -43,7 +43,7 @@ void main() {
     test(
         "Making sure that the newton method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
-      final newton = Newton(function: "x-500", x0: 2, maxSteps: 3);
+      const newton = Newton(function: "x-500", x0: 2, maxSteps: 3);
       final solutions = await newton.solve();
 
       expect(solutions.guesses.length, isNonZero);
