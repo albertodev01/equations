@@ -48,6 +48,23 @@ void main() {
           equals(secant.hashCode));
     });
 
+    test("Making sure that derivatives evaluated on 0 return NaN.", () async {
+      const secant = Secant(function: "x", firstGuess: 0, secondGuess: 0);
+
+      // The derivative on 0 is 'NaN'
+      expect(secant.evaluateDerivativeOn(0).isNaN, isTrue);
+
+      // Making sure that the method actually throws
+      expect(() async => await secant.solve(), throwsA(isA<Exception>()));
+
+      // Checking the error message
+      try {
+        await secant.solve();
+      } on NonlinearException catch (e) {
+        expect(e.message, contains("Invalid denominator encountered."));
+      }
+    });
+
     test(
         "Making sure that the secant method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
