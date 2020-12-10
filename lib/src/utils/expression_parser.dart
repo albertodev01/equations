@@ -62,25 +62,25 @@ class ExpressionParser {
       // Enable the parentheses
       ..wrapper(char('(').trim(), char(')').trim(), (_, _Evaluator a, __) => a)
 
-      // Addin various mathematical operators
+      // Adding various mathematical operators
       ..wrapper(string('sqrt(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.sqrt(value)))
+          (_, _Evaluator a, __) => (num value) => math.sqrt(a(value)))
       ..wrapper(string('sin(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.sin(value)))
+          (_, _Evaluator a, __) => (num value) => math.sin(a(value)))
       ..wrapper(string('cos(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.cos(value)))
+          (_, _Evaluator a, __) => (num value) => math.cos(a(value)))
       ..wrapper(string('tan(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.tan(value)))
+          (_, _Evaluator a, __) => (num value) => math.tan(a(value)))
       ..wrapper(string('exp(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.exp(value)))
+          (_, _Evaluator a, __) => (num value) => math.exp(a(value)))
       ..wrapper(string('log(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.log(value)))
+          (_, _Evaluator a, __) => (num value) => math.log(a(value)))
       ..wrapper(string('acos(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.acos(value)))
+          (_, _Evaluator a, __) => (num value) => math.acos(a(value)))
       ..wrapper(string('asin(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.asin(value)))
+          (_, _Evaluator a, __) => (num value) => math.asin(a(value)))
       ..wrapper(string('atan(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => a(math.atan(value)));
+          (_, _Evaluator a, __) => (num value) => math.atan(a(value)));
 
     // Defining operations among operators.
     builder.group()
@@ -124,6 +124,13 @@ class ExpressionParser {
 
   /// Evaluates the mathematical [expression] and replaces the `x` variable with
   /// the value of the given [evaluationPoint].
-  num evaluateOn(String expression, double evaluationPoint) =>
-      _parser.parse(expression).value(evaluationPoint) as num;
+  num evaluateOn(String expression, double evaluationPoint) {
+    if (!_parser.accept(expression)) {
+      throw const ExpressionParserException("The given expression cannot be "
+          "parsed! Make sure that all operators are supported. Make also sure "
+          "that the product of two values explicitly has the '*' symbol.");
+    }
+
+    return _parser.parse(expression).value(evaluationPoint) as num;
+  }
 }

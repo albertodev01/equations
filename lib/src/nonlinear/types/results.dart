@@ -18,22 +18,22 @@ class NonlinearResults {
   /// [guessedValues] is the scalar succession built by the algorithm, [convergence]
   /// represents the rate of convergence and [efficiency] is the efficiency of the
   /// algorithm expressed as _p = convergence <sup>1 / max_steps</sup>_.
-  NonlinearResults(
-      {required List<double> guessedValues,
-      required this.convergence,
-      required this.efficiency})
-      : guesses = List<double>.unmodifiable(guessedValues);
+  NonlinearResults({
+    required List<double> guessedValues,
+    required this.convergence,
+    required this.efficiency}
+  ) : guesses = List<double>.unmodifiable(guessedValues);
 
   @override
   bool operator ==(Object other) {
     final compare = const ListEquality<double>().equals;
 
     return identical(this, other) ||
-        other is NonlinearResults &&
-            runtimeType == other.runtimeType &&
-            compare(guesses, other.guesses) &&
-            convergence == other.convergence &&
-            efficiency == other.efficiency;
+      other is NonlinearResults &&
+        runtimeType == other.runtimeType &&
+        compare(guesses, other.guesses) &&
+        convergence == other.convergence &&
+        efficiency == other.efficiency;
   }
 
   @override

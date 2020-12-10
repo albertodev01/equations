@@ -41,7 +41,7 @@ class Bisection extends NonLinear {
     var pB = b;
     var fa = evaluateOn(pA);
 
-    while ((amp >= tolerance) & (n < maxSteps)) {
+    while ((amp >= tolerance) && (n < maxSteps - 1)) {
       ++n;
       amp = (pB - pA).abs();
       var x0 = pA + amp * 0.5;

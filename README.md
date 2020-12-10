@@ -1,18 +1,24 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/albertodev01/dart_equations/master/static/logo.png" height="92" alt="dart_equations logo" />
+<img src="https://raw.githubusercontent.com/albertodev01/equations/6f15adbc96445c88ca02c7b85f4ae2b51f88e949/assets/equations_logo.svg" height="92" alt="dart_equations logo" />
 </p>
-<p align="center"><em>An equation solving library written purely in Dart.</em></p>
-<p align="center"><a href="https://pub.dev/packages/equations">https://pub.dev/packages/equations</a></p>
+<p align="center">An equation solving library written purely in Dart</p>
+<p align="center">
+    <a href="https://codecov.io/gh/albertodev01/equations"><img src="https://codecov.io/gh/albertodev01/equations/branch/master/graph/badge.svg?token=OQFZFHPD3S"/></a>
+    <a href="https://github.com/albertodev01/equations/actions"><img src="https://github.com/albertodev01/equations/workflows/equations_ci/badge.svg" alt="CI status" /></a>
+    <a href="https://github.com/albertodev01/equations/stargazers"><img src="https://img.shields.io/github/stars/albertodev01/equations.svg?style=flat&logo=github&colorB=blue&label=stars" alt="Stars count on GitHub" /></a>
+  <a href="https://pub.dev/packages/equations"><img src="https://img.shields.io/pub/v/equations.svg?style=flat&logo=github&colorB=blue" alt="Stars count on GitHub" /></a>
+</p>
 
 ---
 
-Thanks to `dart_equations` you're able to easily solve polynomial (algebraic) and nonlinear equations with ease. It's been written in Dart and it has no dependency on any framework: it can be directly used with Flutter for web, desktop and mobile. Here's a summary of the contents of the package:
+Thanks to `equations` you're able to solve polynomial and nonlinear equations with ease. It's been written in "pure" Dart, meaning that it has no dependency on any framework. It can be used with Flutter for web, desktop and mobile. Here's a summary of the contents of the package:
 
-  - subclasses of `Algebraic` can be used to solve algebraic/polynomial equations;
-  - subclasses of `Nonlinear` can be used to solve nonlinear equations;
-  - `Complex` is used to easily handle complex number along with many useful methods
+  - `Algebraic` and all of its subtypes, which can be used to solve algebraic equations (also known as polynomial equations);
+  - `Nonlinear` and all of its subtypes, which can be used to solve nonlinear equations;
+  - `Complex`, which is used to easily handle complex numbers;
+  - `Fraction`, from the [fraction](https://pub.dev/packages/fraction) package which helps you working with fractions.
 
-This package also depends on [fraction](https://pub.dev/packages/fraction) in order to easily work with fractions.
+This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe!
 
 # Algebraic equations
 
@@ -44,7 +50,7 @@ final discr = equation.discriminant(); // -31299.688 + 27460.192i
 // f(x) = (2 - 3i)x^3 + 1.2ix^2 + (5 - 1i)x + (-9 - 6i)
 print("$equation");
 // f(x) = (2 - 3i)x^3 + 6/5ix^2 + (5 - 1i)x + (-9 - 6i)
-print("${equation.toStringWithFractions()}");
+print(equation.toStringWithFractions());
 
 /*
  * Prints the roots of the equation:
@@ -53,9 +59,12 @@ print("${equation.toStringWithFractions()}");
  *  x2 = -1.083892638909 + 0.961044482775
  *  x3 = 1.011909507988 + 0.588643555642
  * */
-for (final root in equation.solutions()) print(root);
+for (final root in equation.solutions()) {
   print(root);
+}
 ```
+
+There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). If you wish to solve a polynomial whose degree is 5 (or higher), consider using a root-finding algorithm (see the [# Nonlinear equations] paragraph) or the Laguerre method.
 
 # Nonlinear equations
 
