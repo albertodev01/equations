@@ -39,7 +39,7 @@ class Newton extends NonLinear {
     while ((diff >= tolerance) && (n < maxSteps)) {
       final der = evaluateDerivativeOn(currx0);
 
-      if (der == 0) {
+      if ((der == 0) || (der.isNaN)) {
         throw NonlinearException("Couldn't evaluate f'($currx0)");
       }
 

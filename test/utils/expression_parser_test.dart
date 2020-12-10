@@ -49,7 +49,7 @@ void main() {
     test(
         "Making sure that 'ExpressionParser' works with the 'x' variable "
         "even if 'x' is not present.", () {
-      expect(const ExpressionParser().evaluateOn("6*3 + 4", 0), equals(22));
+      expect(ExpressionParser().evaluateOn("6*3 + 4", 0), equals(22));
     });
   });
 }

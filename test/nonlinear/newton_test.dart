@@ -40,6 +40,23 @@ void main() {
       expect(Newton(function: "x-1", x0: 3).hashCode, equals(newton.hashCode));
     });
 
+    test("Making sure that derivatives evaluated on 0 return NaN.", () async {
+      const newton = Newton(function: "x", x0: 0);
+
+      // The derivative on 0 is 'NaN'
+      expect(newton.evaluateDerivativeOn(0).isNaN, isTrue);
+
+      // Making sure that the method actually throws
+      expect(() async => await newton.solve(), throwsA(isA<Exception>()));
+
+      // Checking the error message
+      try {
+        await newton.solve();
+      } on NonlinearException catch (e) {
+        expect(e.message, equals("Couldn't evaluate f'(0.0)"));
+      }
+    });
+
     test(
         "Making sure that the newton method still works when the root is "
         "not in the interval but the actual solution is not found", () async {
