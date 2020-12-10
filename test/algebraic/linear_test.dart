@@ -2,6 +2,8 @@ import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group("Testing 'Linear' algebraic equations", () {
     test("Making sure that a 'Linear' object is properly constructed", () {
@@ -28,12 +30,28 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real.toStringAsFixed(1), equals("-0.4"));
+      expect(solutions[0].real, MoreOrLessEquals(-0.4, precision: 1.0e-1));
       expect(solutions[0].imaginary, isZero);
 
       // Evaluation
       expect(equation.realEvaluateOn(1), equals(Complex.fromReal(4.2)));
       expect(equation.evaluateOn(Complex(1, -3)), equals(Complex(4.2, -9)));
+    });
+
+    test(
+        "Making sure that a 'Linear' object is properly printed with fractions",
+        () {
+      // The equation
+      final equation = Linear(
+        a: Complex(4, 7),
+        b: Complex(5, 1),
+      );
+
+      // Its string representation
+      final equationStr = "f(x) = (4 + 7i)x + (5 + 1i)";
+
+      // Making sure it's properly printed
+      expect(equation.toStringWithFractions(), equals(equationStr));
     });
 
     test(
