@@ -39,6 +39,22 @@ void main() {
     });
 
     test(
+        "Making sure that a 'Linear' object is properly printed with fractions",
+        () {
+      // The equation
+      final equation = Linear(
+        a: Complex(4, 7),
+        b: Complex(5, 1),
+      );
+
+      // Its string representation
+      final equationStr = "f(x) = (4 + 7i)x + (5 + 1i)";
+
+      // Making sure it's properly printed
+      expect(equation.toStringWithFractions(), equals(equationStr));
+    });
+
+    test(
         "Making sure that an exception is thrown if the coeff. of the highest degree is zero",
         () {
       expect(
