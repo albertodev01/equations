@@ -157,4 +157,21 @@ class Quartic extends Algebraic {
 
     return solutions;
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Quartic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+    Complex? d,
+    Complex? e,
+  }) =>
+      Quartic(
+        a: a ?? this.a,
+        b: b ?? this.b,
+        c: c ?? this.c,
+        d: d ?? this.d,
+        e: e ?? this.e,
+      );
 }

@@ -55,5 +55,16 @@ void main() {
       expect(fx == Constant(a: Complex.fromReal(6)), isTrue);
       expect(fx.hashCode, equals(Constant(a: Complex.fromReal(6)).hashCode));
     });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final constant = Constant.realEquation(a: 7);
+
+      // Objects equality
+      expect(constant, equals(constant.copyWith()));
+      expect(constant, equals(constant.copyWith(a: Complex(7, 0))));
+
+      // Objects inequality
+      expect(constant == constant.copyWith(a: Complex.fromReal(-7)), isFalse);
+    });
   });
 }

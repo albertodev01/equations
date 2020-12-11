@@ -13,6 +13,7 @@ import 'package:equations/equations.dart';
 /// This class stores the list of coefficients starting from the one with the
 /// **highest** degree.
 abstract class Algebraic {
+  /// An unmodifiable list with the coefficients of the polynomial.
   late final List<Complex> coefficients;
 
   /// Creates a new algebraic equation by taking the coefficients of the

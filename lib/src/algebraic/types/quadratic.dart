@@ -78,4 +78,17 @@ class Quadratic extends Algebraic {
       (b.negate - disc.sqrt()) / twoA,
     ];
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Quadratic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+  }) =>
+      Quadratic(
+        a: a ?? this.a,
+        b: b ?? this.b,
+        c: c ?? this.c,
+      );
 }

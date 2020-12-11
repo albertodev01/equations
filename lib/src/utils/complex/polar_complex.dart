@@ -1,17 +1,18 @@
 import 'package:equations/equations.dart';
 
-/// Object returned by a [Complex] which represents the number in polar coordinates
+/// Object returned by a [Complex] which represents the number in polar
+/// coordinates.
 class PolarComplex implements Comparable<PolarComplex> {
-  /// The absolute value/modulus of the complex number
+  /// The absolute value/modulus of the complex number.
   final double r;
 
-  /// The angle phi expressed in radians
+  /// The angle phi expressed in radians.
   final double phiRadians;
 
-  /// The angle phi expressed in degrees
+  /// The angle phi expressed in degrees.
   final double phiDegrees;
 
-  /// The angle [r] is required both in radians ([phiRadians]) and degrees
+  /// The angle [r] is required both in radians ([phiRadians]) and degrees.
   /// ([phiDegrees]).
   const PolarComplex(
       {required this.r, required this.phiRadians, required this.phiDegrees});
@@ -53,4 +54,17 @@ class PolarComplex implements Comparable<PolarComplex> {
     if (thisValue < otherValue) return -1;
     return 0;
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  PolarComplex copyWith({
+    double? r,
+    double? phiRadians,
+    double? phiDegrees,
+  }) =>
+      PolarComplex(
+        r: r ?? this.r,
+        phiDegrees: phiDegrees ?? this.phiDegrees,
+        phiRadians: phiRadians ?? this.phiRadians,
+      );
 }

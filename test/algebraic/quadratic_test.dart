@@ -69,7 +69,7 @@ void main() {
 
     test(
         "Making sure that a correct 'Quadratic' instance is created from a "
-            "list of 'double' (real) values", () {
+        "list of 'double' (real) values", () {
       final quadratic = Quadratic.realEquation(a: -3, b: 2, c: 1);
 
       expect(quadratic.a, equals(Complex.fromReal(-3)));
@@ -86,6 +86,24 @@ void main() {
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
       expect(fx.hashCode, equals(otherFx.hashCode));
+    });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final quadratic =
+          Quadratic(a: Complex.i(), b: Complex(6, -1), c: Complex.i());
+
+      // Objects equality
+      expect(quadratic, equals(quadratic.copyWith()));
+      expect(
+          quadratic,
+          equals(quadratic.copyWith(
+            a: Complex.i(),
+            b: Complex(6, -1),
+            c: Complex.i(),
+          )));
+
+      // Objects inequality
+      expect(quadratic == quadratic.copyWith(b: Complex.zero()), isFalse);
     });
   });
 }

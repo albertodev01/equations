@@ -40,5 +40,17 @@ void main() {
       expect(polar.compareTo(polar), equals(0));
       expect(polar2.compareTo(polar2), equals(0));
     });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final polarComplex = PolarComplex(r: 9, phiRadians: 1, phiDegrees: 2);
+
+      // Objects equality
+      expect(polarComplex, equals(polarComplex.copyWith()));
+      expect(polarComplex,
+          equals(polarComplex.copyWith(r: 9, phiRadians: 1, phiDegrees: 2)));
+
+      // Objects inequality
+      expect(polarComplex == polarComplex.copyWith(r: 0), isFalse);
+    });
   });
 }

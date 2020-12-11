@@ -56,4 +56,15 @@ class Linear extends Algebraic {
 
   @override
   List<Complex> solutions() => [b.negate / a];
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Linear copyWith({
+    Complex? a,
+    Complex? b,
+  }) =>
+      Linear(
+        a: a ?? this.a,
+        b: b ?? this.b,
+      );
 }

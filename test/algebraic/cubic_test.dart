@@ -96,5 +96,17 @@ void main() {
       expect(fx == otherFx, isTrue);
       expect(fx.hashCode, equals(otherFx.hashCode));
     });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final cubic = Cubic.realEquation(a: 7, c: 13);
+
+      // Objects equality
+      expect(cubic, equals(cubic.copyWith()));
+      expect(
+          cubic, equals(cubic.copyWith(a: Complex(7, 0), c: Complex(13, 0))));
+
+      // Objects inequality
+      expect(cubic == cubic.copyWith(b: Complex.fromReal(7)), isFalse);
+    });
   });
 }

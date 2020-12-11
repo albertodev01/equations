@@ -7,9 +7,7 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing 'Quartic' algebraic equations", () {
     test("Making sure that a 'Quartic' object is properly constructed", () {
-      final equation = Quartic.realEquation(
-        a: 3, b: 6, d: 2, e: -1
-      );
+      final equation = Quartic.realEquation(a: 3, b: 6, d: 2, e: -1);
 
       // Checking properties
       expect(equation.degree, equals(4));
@@ -89,6 +87,25 @@ void main() {
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
       expect(fx.hashCode, equals(otherFx.hashCode));
+    });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final quartic = Quartic.realEquation(c: 5, d: -6);
+
+      // Objects equality
+      expect(quartic, equals(quartic.copyWith()));
+      expect(
+          quartic,
+          equals(quartic.copyWith(
+            a: Complex.fromReal(1),
+            b: Complex.zero(),
+            c: Complex.fromReal(5),
+            d: Complex.fromReal(-6),
+            e: Complex.zero(),
+          )));
+
+      // Objects inequality
+      expect(quartic == quartic.copyWith(c: Complex.zero()), isFalse);
     });
   });
 }

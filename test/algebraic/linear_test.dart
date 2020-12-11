@@ -86,5 +86,17 @@ void main() {
       expect(fx.hashCode,
           equals(Linear(a: Complex(2, 3), b: Complex.i()).hashCode));
     });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final linear = Linear(a: Complex.i(), b: Complex(-3, 8));
+
+      // Objects equality
+      expect(linear, equals(linear.copyWith()));
+      expect(
+          linear, equals(linear.copyWith(a: Complex.i(), b: Complex(-3, 8))));
+
+      // Objects inequality
+      expect(linear == linear.copyWith(b: Complex.zero()), isFalse);
+    });
   });
 }

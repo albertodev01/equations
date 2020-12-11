@@ -35,4 +35,8 @@ class Constant extends Algebraic {
 
   @override
   List<Complex> solutions() => [];
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Constant copyWith({Complex? a}) => Constant(a: a ?? this.a);
 }

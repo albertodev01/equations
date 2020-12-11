@@ -107,4 +107,19 @@ class Cubic extends Algebraic {
       constTerm * (b + (C * sigma.pow(2)) + (d0 / (C * sigma.pow(2)))),
     ];
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Cubic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+    Complex? d,
+  }) =>
+      Cubic(
+        a: a ?? this.a,
+        b: b ?? this.b,
+        c: c ?? this.c,
+        d: d ?? this.d,
+      );
 }

@@ -132,6 +132,17 @@ void main() {
       expect(Complex(3, 7).compareTo(Complex(2, 1)), equals(1));
       expect(Complex(3, 5).compareTo(Complex(3, 5)), equals(0));
     });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final complex = Complex(8, -11);
+
+      // Objects equality
+      expect(complex, equals(complex.copyWith()));
+      expect(complex, equals(complex.copyWith(real: 8, imaginary: -11)));
+
+      // Objects inequality
+      expect(complex == complex.copyWith(real: 1), isFalse);
+    });
   });
 
   group("Testing the API of the Complex class", () {
