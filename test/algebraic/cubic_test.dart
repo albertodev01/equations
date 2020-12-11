@@ -32,6 +32,13 @@ void main() {
             Complex.fromReal(-9),
           ]));
 
+      // Making sure that coefficients can be accessed via index
+      expect(equation[0], equals(Complex.fromReal(-1)));
+      expect(equation[1], equals(Complex.zero()));
+      expect(equation[2], equals(Complex.fromReal(5)));
+      expect(equation[3], equals(Complex.fromReal(-9)));
+      expect(() => equation[-1], throwsA(isA<RangeError>()));
+
       // Converting to string
       expect(equation.toString(), equals("f(x) = -1x^3 + 5x + -9"));
       expect(
@@ -49,6 +56,17 @@ void main() {
       // Evaluation
       final eval = equation.realEvaluateOn(0.5);
       expect(eval, Complex.fromRealFraction(Fraction(-53, 8)));
+    });
+
+    test(
+        "Making sure that a correct 'Cubic' instance is created from a list "
+        "of 'double' (real) values", () {
+      final cubic = Cubic.realEquation(a: 5, b: 1, c: -6);
+
+      expect(cubic.a, equals(Complex.fromReal(5)));
+      expect(cubic.b, equals(Complex.fromReal(1)));
+      expect(cubic.c, equals(Complex.fromReal(-6)));
+      expect(cubic.d, equals(Complex.zero()));
     });
 
     test(

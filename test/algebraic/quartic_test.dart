@@ -7,11 +7,9 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing 'Quartic' algebraic equations", () {
     test("Making sure that a 'Quartic' object is properly constructed", () {
-      final equation = Quartic(
-          a: Complex.fromReal(3),
-          b: Complex.fromReal(6),
-          d: Complex.fromReal(2),
-          e: Complex.fromReal(-1));
+      final equation = Quartic.realEquation(
+        a: 3, b: 6, d: 2, e: -1
+      );
 
       // Checking properties
       expect(equation.degree, equals(4));
@@ -32,6 +30,14 @@ void main() {
             Complex.fromReal(2),
             Complex.fromReal(-1),
           ]));
+
+      // Making sure that coefficients can be accessed via index
+      expect(equation[0], equals(Complex.fromReal(3)));
+      expect(equation[1], equals(Complex.fromReal(6)));
+      expect(equation[2], equals(Complex.zero()));
+      expect(equation[3], equals(Complex.fromReal(2)));
+      expect(equation[4], equals(Complex.fromReal(-1)));
+      expect(() => equation[-1], throwsA(isA<RangeError>()));
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = 3x^4 + 6x^3 + 2x + -1"));

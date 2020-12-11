@@ -27,10 +27,23 @@ class Linear extends Algebraic {
   ///   b: Complex.fromReal(6),
   /// );
   /// ```
+  ///
+  /// Use this constructor if you have complex coefficients. If no [Complex]
+  /// values are required, then consider using [Linear.realEquation()] for a
+  /// less verbose syntax.
   Linear({
     this.a = const Complex.fromReal(1),
     this.b = const Complex.zero(),
   }) : super([a, b]);
+
+  /// The only coefficient of the polynomial is represented by a [double]
+  /// (real) number [a].
+  Linear.realEquation({
+    double a = 1,
+    double b = 0,
+  })  : a = Complex.fromReal(a),
+        b = Complex.fromReal(b),
+        super.realEquation([a, b]);
 
   @override
   int get degree => 1;

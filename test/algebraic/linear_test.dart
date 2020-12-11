@@ -24,6 +24,11 @@ void main() {
             Complex.fromRealFraction(Fraction(6, 5)),
           ]));
 
+      // Making sure that coefficients can be accessed via index
+      expect(equation[0], equals(Complex.fromReal(3)));
+      expect(equation[1], equals(Complex.fromRealFraction(Fraction(6, 5))));
+      expect(() => equation[-1], throwsA(isA<RangeError>()));
+
       // Converting to string
       expect(equation.toString(), equals("f(x) = 3x + 1.2"));
       expect(equation.toStringWithFractions(), equals("f(x) = 3x + 6/5"));
@@ -52,6 +57,15 @@ void main() {
 
       // Making sure it's properly printed
       expect(equation.toStringWithFractions(), equals(equationStr));
+    });
+
+    test(
+        "Making sure that a correct 'Linear' instance is created from a "
+        "list of 'double' (real) values", () {
+      final linear = Linear.realEquation(a: 5, b: 1);
+
+      expect(linear.a, equals(Complex.fromReal(5)));
+      expect(linear.b, equals(Complex.fromReal(1)));
     });
 
     test(
