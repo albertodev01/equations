@@ -67,6 +67,10 @@ void main() {
       expect(cubic.b, equals(Complex.fromReal(1)));
       expect(cubic.c, equals(Complex.fromReal(-6)));
       expect(cubic.d, equals(Complex.zero()));
+
+      // There must be an exception is the first coeff. is zero
+      expect(
+          () => Cubic.realEquation(a: 0), throwsA(isA<AlgebraicException>()));
     });
 
     test(

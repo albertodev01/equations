@@ -69,6 +69,19 @@ void main() {
       }, throwsA(isA<AlgebraicException>()));
     });
 
+    test(
+        "Making sure that a correct 'Quadratic' instance is created from a "
+        "list of 'double' (real) values", () {
+      final quartic = Quartic.realEquation(a: -3, d: 8);
+
+      expect(quartic.a, equals(Complex.fromReal(-3)));
+      expect(quartic.d, equals(Complex.fromReal(8)));
+
+      // There must be an exception is the first coeff. is zero
+      expect(
+          () => Quartic.realEquation(a: 0), throwsA(isA<AlgebraicException>()));
+    });
+
     test("Making sure that objects comparison works properly", () {
       final fx = Quartic(
           a: Complex(3, -6),

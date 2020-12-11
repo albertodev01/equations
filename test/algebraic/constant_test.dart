@@ -35,7 +35,6 @@ void main() {
         "Making sure that a correct 'Constant' instance is created from a "
         "list of 'double' (real) values", () {
       final constant = Constant.realEquation(a: 5);
-
       expect(constant.a, equals(Complex.fromReal(5)));
     });
 

@@ -66,6 +66,10 @@ void main() {
 
       expect(linear.a, equals(Complex.fromReal(5)));
       expect(linear.b, equals(Complex.fromReal(1)));
+
+      // There must be an exception is the first coeff. is zero
+      expect(
+          () => Linear.realEquation(a: 0), throwsA(isA<AlgebraicException>()));
     });
 
     test(

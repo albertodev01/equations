@@ -75,6 +75,10 @@ void main() {
       expect(quadratic.a, equals(Complex.fromReal(-3)));
       expect(quadratic.b, equals(Complex.fromReal(2)));
       expect(quadratic.c, equals(Complex.fromReal(1)));
+
+      // There must be an exception is the first coeff. is zero
+      expect(() => Quadratic.realEquation(a: 0),
+          throwsA(isA<AlgebraicException>()));
     });
 
     test("Making sure that objects comparison works properly", () {
