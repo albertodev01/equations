@@ -42,7 +42,7 @@ class Chords extends NonLinear {
         (evaluateOn(b) - evaluateOn(a));
     var diff = evaluateOn(x0).abs();
 
-    while ((diff >= tolerance) && (n < maxSteps - 1)) {
+    while ((diff >= tolerance) && (n <= maxSteps)) {
       var fa = evaluateOn(a);
       var fx = evaluateOn(x0);
 

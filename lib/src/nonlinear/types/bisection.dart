@@ -35,13 +35,13 @@ class Bisection extends NonLinear {
   @override
   Future<NonlinearResults> solve() async {
     var amp = tolerance + 1;
-    var n = -1;
+    var n = 1;
     var guesses = <double>[];
     var pA = a;
     var pB = b;
     var fa = evaluateOn(pA);
 
-    while ((amp >= tolerance) && (n < maxSteps - 1)) {
+    while ((amp >= tolerance) && (n <= maxSteps)) {
       ++n;
       amp = (pB - pA).abs();
       var x0 = pA + amp * 0.5;

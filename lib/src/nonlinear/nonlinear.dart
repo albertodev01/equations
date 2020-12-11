@@ -7,7 +7,14 @@ import 'package:equations/equations.dart';
 ///
 /// The so called "**root-finding algorithms**" are iterative methods that start
 /// from an initial value (or a couple of values) and try to build a scalar
-/// succession that converges as much as possible to the root.
+/// succession that converges as much as possible to the root. The algorithms
+/// implemented by this package are:
+///
+///   - [Bisection]
+///   - [Chords]
+///   - [Newton]
+///   - [Secant]
+///   - [Steffensen]
 ///
 /// Each subclass of [NonLinear] has to define the [solve] method which is required
 /// in order to build the scalar succession with a certain logic.
@@ -58,17 +65,18 @@ abstract class NonLinear {
   String toString() => "f(x) = $function";
 
   /// In order to get a meaningful result, it makes sense to compute the rate of
-  /// convergence only if the algorithm made **at least** 3 iterations.
+  /// convergence only if the algorithm made **at least** 3 [steps] (iterations).
+  ///
+  /// If [steps] is 2 or lower, `nan` is returned.
   double convergence(List<double> guesses, int steps) {
     final size = guesses.length - 1;
 
     if (size >= 3) {
-      final num = (guesses[size] - guesses[size - 1]).abs() /
+      final numerator = (guesses[size] - guesses[size - 1]).abs() /
           (guesses[size - 1] - guesses[size - 2]).abs();
-      final den = (guesses[size - 1] - guesses[size - 2]).abs() /
+      final denominator = (guesses[size - 1] - guesses[size - 2]).abs() /
           (guesses[size - 2] - guesses[size - 3]).abs();
-
-      return math.log(num) / math.log(den);
+      return math.log(numerator) / math.log(denominator);
     }
 
     return double.nan;
