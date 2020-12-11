@@ -68,17 +68,15 @@ There's a formula for polynomials up to the fourth degree, as explained by [Galo
 
 # Nonlinear equations
 
-Use one of the following classes, representing a root-finding algorithm, to find the roots of an equation. Only real numbers are allowed.
+Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package supports the following root finding methods:
 
-| Method name  |
-|:------------:|
-| `Bisection`  |
-| `Chords`     |
-| `Newton`     |
-| `Secant`     |
-| `Steffensen` |
+ - Bisection
+ - Chords
+ - Netwon
+ - Secant
+ - Steffensen
 
-Expressions are parsed using [math_expressions](https://pub.dev/packages/math_expressions), a very nice library that supports most of mathematical operators such as sine, cosine, tangent, logarithm and so on. Here's a simple example of how you can find the roots of an equation:
+Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, table and well tested grammar parser. Here's a simple example of how you can find the roots of an equation:
 
 ```dart
 final newton = Newton("2*x+cos(x)", -1, maxSteps: 5);
@@ -91,7 +89,7 @@ final guess = newton.x0; // -1
 final solutions = await newton.solve();
 
 final convergence = solutions.convergence.round(); // 2
-final solutions = solutions.efficiency.round() // 1
+final solutions = solutions.efficiency.round(); // 1
 
 /*
  * The getter `solutions.guesses` returns the list of values computed by the algorithm
@@ -102,5 +100,6 @@ final solutions = solutions.efficiency.round() // 1
  * -0.4501836112948736
  * -0.45018361129487355
  */
-final guesses = solutions.guesses;
+final List<double> guesses = solutions.guesses;
 ```
+
