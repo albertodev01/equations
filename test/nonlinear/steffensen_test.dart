@@ -20,8 +20,8 @@ void main() {
       final solutions = await steffensen.solve();
       expect(solutions.guesses.length <= 5, isTrue);
       expect(solutions.guesses.length, isNonZero);
-      //expect(solutions.convergence, MoreOrLessEquals(2, precision: 1.0e-1));
-      //expect(solutions.efficiency, MoreOrLessEquals(2, precision: 1.0e-1));
+      expect(solutions.convergence, MoreOrLessEquals(2, precision: 1.0e-1));
+      expect(solutions.efficiency, MoreOrLessEquals(1.15, precision: 1.0e-2));
 
       expect(
           solutions.guesses.last, MoreOrLessEquals(1.098, precision: 1.0e-3));

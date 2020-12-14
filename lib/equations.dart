@@ -13,6 +13,7 @@ export 'src/algebraic/types/linear.dart';
 export 'src/nonlinear/nonlinear.dart';
 export 'src/nonlinear/types/results.dart';
 export 'src/nonlinear/types/bisection.dart';
+export 'src/nonlinear/types/brent.dart';
 export 'src/nonlinear/types/chords.dart';
 export 'src/nonlinear/types/newton.dart';
 export 'src/nonlinear/types/secant.dart';

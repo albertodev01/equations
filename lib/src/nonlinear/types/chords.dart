@@ -11,10 +11,10 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   - The values of `f(a)` and `f(b)` must have opposite signs AND there must
 ///   be at least one root in [a, b]. These are 2 required conditions.
 class Chords extends NonLinear {
-  /// The initial guess x<sub>0</sub>
+  /// The starting point of the interval
   final double a;
 
-  /// The function f(x) for which a root has to be find
+  /// The ending point of the interval
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the
