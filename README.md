@@ -24,7 +24,7 @@ This package is meant to be used with Dart 2.12 or higher because the code is en
 
 Use one of the following classes to find the roots of a specific type of polynomial. You can use complex numbers and fractions.
 
-| Solver name |                                  Equation                                 |       Field       |
+| Solver name |                                  Equation                                 |    Params field   |
 |:-----------:|:-------------------------------------------------------------------------:|:-----------------:|
 | `Constant`  | <em>f(x) = a</em>                                                         | a ∈ C             |
 | `Linear`    | <em>f(x) = ax + b</em>                                                    | a, b ∈ C          |
@@ -70,13 +70,16 @@ There's a formula for polynomials up to the fourth degree, as explained by [Galo
 
 Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package supports the following root finding methods:
 
- - Bisection
- - Chords
- - Netwon
- - Secant
- - Steffensen
+| Solver name  | Params field      |
+|:------------:|:-----------------:|
+| `Bisection`  | a, b ∈ R          |
+| `Chords`     | a, b ∈ R          |
+| `Netwon`     | x<sub>0</sub> ∈ R |
+| `Secant`     | a, b ∈ R          |
+| `Steffensen` | x<sub>0</sub> ∈ R |
+| `Brent`      | a, b ∈ R          |
 
-Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, table and well tested grammar parser. Here's a simple example of how you can find the roots of an equation:
+Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only work with real numbers. Here's a simple example of how you can find the roots of an equation:
 
 ```dart
 final newton = Newton("2*x+cos(x)", -1, maxSteps: 5);
@@ -103,3 +106,4 @@ final solutions = solutions.efficiency.round(); // 1
 final List<double> guesses = solutions.guesses;
 ```
 
+Note that certain algorithms don't guarantee the convergence to a root so read the documentation carefully before choosing the method.
