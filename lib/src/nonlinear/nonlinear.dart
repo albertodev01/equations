@@ -15,24 +15,25 @@ import 'package:equations/equations.dart';
 ///   - [Newton]
 ///   - [Secant]
 ///   - [Steffensen]
+///   - [Brent]
 ///
 /// Each subclass of [NonLinear] has to define the [solve] method which is required
 /// in order to build the scalar succession with a certain logic.
 abstract class NonLinear {
-  /// The function f(x) for which the algorithm has to find a solution
+  /// The function f(x) for which the algorithm has to find a solution.
   final String function;
 
-  /// The accuracy of the algorithm
+  /// The accuracy of the algorithm.
   final double tolerance;
 
-  /// The maximum steps to be made by the algorithm
+  /// The maximum steps to be made by the algorithm.
   final int maxSteps;
 
   /// Creates a new instance of a nonlinear equation solver which asks for:
   ///
-  ///  - the expression [function] to be solved
-  ///  - the accuracy [tolerance] of the root-finding algorithm
-  ///  - the maximum iterations [maxSteps] the algorithm has to do
+  ///  - the expression [function] to be solved;
+  ///  - the accuracy [tolerance] of the root-finding algorithm;
+  ///  - the maximum iterations [maxSteps] the algorithm has to do.
   const NonLinear(
       {required this.function,
       required this.tolerance,
