@@ -21,13 +21,13 @@ export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
 export 'src/nonlinear/utils/results.dart';
 
+export 'src/system/system.dart';
+
 export 'src/utils/exceptions/exceptions.dart';
 export 'src/utils/exceptions/types/complex_exception.dart';
 export 'src/utils/exceptions/types/algebraic_exception.dart';
 export 'src/utils/exceptions/types/nonlinear_exception.dart';
 export 'src/utils/exceptions/types/parser_exception.dart';
-export 'src/utils/expression_parser.dart';
-
 export 'src/utils/expression_parser.dart';
 
 export 'package:fraction/fraction.dart';
