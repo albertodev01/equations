@@ -1,14 +1,16 @@
 import 'package:equations/equations.dart';
 
-/// TODO
+/// Utility class internally used by [Laguerre] to hold the results of horner
+/// polynomial evaluation.
 class HornerResult {
-  /// TODO
+  /// The list of evaluated coefficients.
   final List<Complex> polynomial;
 
-  /// TODO
+  /// The "distance" from the root being seeked.
   final Complex value;
 
-  /// TODO
+  /// Requires list of newly evaluated coefficients ([polynomial]) and the
+  /// estimated "distance" from the root ([value]).
   const HornerResult(this.polynomial, this.value);
 
   @override

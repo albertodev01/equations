@@ -89,6 +89,49 @@ class Laguerre extends Algebraic {
   }) : super.realEquation(coefficients);
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is Laguerre) {
+      // The lengths of the coefficients must match
+      if (coefficients.length != other.coefficients.length) {
+        return false;
+      }
+
+      // Each successful comparison increases a counter by 1. If all elements are
+      // equal, then the counter will match the actual length of the coefficients
+      // list.
+      var equalsCount = 0;
+
+      for (var i = 0; i < coefficients.length; ++i) {
+        if (coefficients[i] == other.coefficients[i]) {
+          ++equalsCount;
+        }
+      }
+
+      // They must have the same runtime type AND all items must be equal.
+      return runtimeType == other.runtimeType &&
+          equalsCount == coefficients.length &&
+          initialGuess == other.initialGuess &&
+          precision == other.precision &&
+          maxSteps == other.maxSteps;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = 37 * result + initialGuess.hashCode;
+    result = 37 * result + precision.hashCode;
+    result = 37 * result + maxSteps.hashCode;
+
+    return result;
+  }
+
+  @override
   int get degree => coefficients.length - 1;
 
   @override
@@ -97,22 +140,22 @@ class Laguerre extends Algebraic {
     // the possibility to return a more convenient object
     switch (coefficients.length) {
       case 1:
-        return Constant(a: coefficients[0]);
+        return Constant(a: coefficients[0]).derivative();
       case 2:
-        return Linear(a: coefficients[0], b: coefficients[1]);
+        return Linear(a: coefficients[0], b: coefficients[1]).derivative();
       case 3:
         return Quadratic(
           a: coefficients[0],
           b: coefficients[1],
           c: coefficients[2],
-        );
+        ).derivative();
       case 4:
         return Cubic(
           a: coefficients[0],
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
-        );
+        ).derivative();
       case 5:
         return Quartic(
           a: coefficients[0],
@@ -120,7 +163,7 @@ class Laguerre extends Algebraic {
           c: coefficients[2],
           d: coefficients[3],
           e: coefficients[4],
-        );
+        ).derivative();
       default:
         return Laguerre(
             coefficients: _derivativeOf(coefficients),
@@ -238,6 +281,25 @@ class Laguerre extends Algebraic {
   /// numbers.
   int _compareTo(Complex x, Complex y) {
     final diff = x.abs() - y.abs();
+
+    // -1 if x < y
+    // +1 if x > y
+    //  0 if x = y
     return diff < -precision ? -1 : (diff > precision ? 1 : 0);
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Laguerre copyWith({
+    List<Complex>? coefficients,
+    Complex? initialGuess,
+    double? precision,
+    int? maxSteps,
+  }) =>
+      Laguerre(
+        coefficients: coefficients ?? this.coefficients.map((e) => e).toList(),
+        initialGuess: initialGuess ?? this.initialGuess,
+        precision: precision ?? this.precision,
+        maxSteps: maxSteps ?? this.maxSteps,
+      );
 }

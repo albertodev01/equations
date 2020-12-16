@@ -203,7 +203,8 @@ abstract class Algebraic {
   /// Determines whether the polynomial is real or not.
   ///
   /// If at least one coefficient is complex, then the polynomial is complex.
-  bool get isRealEquation => coefficients.any((value) => value.imaginary == 0);
+  bool get isRealEquation =>
+      coefficients.every((value) => value.imaginary == 0);
 
   /// A polynomial equation is **valid** if the coefficient associated to the
   /// variable of highest degree is different from zero. In other words, the
