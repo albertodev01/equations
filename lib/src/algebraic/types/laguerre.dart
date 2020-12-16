@@ -182,7 +182,7 @@ class Laguerre extends Algebraic {
   }
 
   @override
-  Complex discriminant() => const Complex.fromReal(1);
+  Complex discriminant() => const Complex.zero();
 
   @override
   List<Complex> solutions() {
