@@ -1,41 +1,55 @@
-import 'package:equations/src/nonlinear/steffensen.dart';
+import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
-  group("Testing the 'Steffensen method'", () {
-    test("Testing a valid equation", () async {
-      final steffensen = Steffensen("2*x+cos(x)", -1, maxSteps: 5);
+  group("Testing the 'Steffensen' class", () {
+    test(
+        "Making sure that the series converges when the root is in the interval.",
+        () async {
+      const steffensen = Steffensen(function: "exp(x)-3", x0: 1, maxSteps: 5);
 
-      expect(steffensen.maxSteps, 5);
-      expect(steffensen.tolerance, 1.0e-10);
-      expect(steffensen.function, "2*x+cos(x)");
-      expect(steffensen.x0, -1);
+      expect(steffensen.maxSteps, equals(5));
+      expect(steffensen.tolerance, equals(1.0e-10));
+      expect(steffensen.function, equals("exp(x)-3"));
+      expect(steffensen.toString(), equals("f(x) = exp(x)-3"));
+      expect(steffensen.x0, equals(1));
 
+      // Solving the equation, making sure that the series converged
       final solutions = await steffensen.solve();
-      expect(solutions.guesses.length > 0, true);
+      expect(solutions.guesses.length <= 5, isTrue);
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.convergence, MoreOrLessEquals(2, precision: 1.0e-1));
+      expect(solutions.efficiency, MoreOrLessEquals(1.15, precision: 1.0e-2));
 
-      // Newton is known to have a quadratic convergence so the value should
-      // always be close to 2
-      expect(solutions.convergence.round(), 2);
-      expect(solutions.efficiency.round(), 1);
-
-      expect(solutions.guesses.last.toStringAsFixed(2).contains("-0.45"), true);
+      expect(
+          solutions.guesses.last, MoreOrLessEquals(1.098, precision: 1.0e-3));
     });
 
-    test("Testing an invalid equation", () async {
-      expect(() => Steffensen("2x+cos(x)", 1), throwsA(isA<FormatException>()));
+    test("Making sure that a malformed equation string throws.", () {
+      expect(() async {
+        await Steffensen(function: "exp x - 3", x0: 1).solve();
+      }, throwsA(isA<ExpressionParserException>()));
     });
 
-    test("Testing an equation with a root too far from the guess", () async {
-      final steffensen = Steffensen("2*x+cos(x)", 130);
+    test("Making sure that object comparison properly works", () {
+      const steffensen = Steffensen(function: "exp(x)-3", x0: 3);
+
+      expect(Steffensen(function: "exp(x)-3", x0: 3), equals(steffensen));
+      expect(Steffensen(function: "exp(x)-3", x0: 3) == steffensen, isTrue);
+      expect(Steffensen(function: "exp(x)-3", x0: 3).hashCode,
+          equals(steffensen.hashCode));
+    });
+
+    test(
+        "Making sure that the steffensen method still works when the root is "
+        "not in the interval but the actual solution is not found", () async {
+      const steffensen = Steffensen(function: "x-500", x0: 1, maxSteps: 3);
       final solutions = await steffensen.solve();
 
-      // There must not be some values starting with 1.5xxx, which is the root
-      // we're looking for in this test, because the root is far from the range.
-      //
-      // The range is far from the root: the method still works but it won't find
-      // the root.
-      expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), false);
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.guesses.length <= 3, isTrue);
     });
   });
 }

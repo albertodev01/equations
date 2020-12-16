@@ -1,42 +1,81 @@
-import 'package:equations/src/nonlinear/secant.dart';
+import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
-  group("Testing the 'Secant method'", () {
-    test("Testing a valid equation", () async {
-      final secant = Secant("x^3-x-2", 1, 2, maxSteps: 5);
+  group("Testing the 'Secant' class", () {
+    test(
+        "Making sure that the series converges when the root is in the interval.",
+        () async {
+      const secant = Secant(
+          function: "x^3-x-2", firstGuess: 1, secondGuess: 2, maxSteps: 10);
 
-      expect(secant.maxSteps, 5);
-      expect(secant.tolerance, 1.0e-10);
-      expect(secant.function, "x^3-x-2");
-      expect(secant.firstGuess, 1);
-      expect(secant.secondGuess, 2);
+      expect(secant.maxSteps, equals(10));
+      expect(secant.tolerance, equals(1.0e-10));
+      expect(secant.function, equals("x^3-x-2"));
+      expect(secant.toString(), equals("f(x) = x^3-x-2"));
+      expect(secant.firstGuess, equals(1));
+      expect(secant.secondGuess, equals(2));
 
+      // Solving the equation, making sure that the series converged
       final solutions = await secant.solve();
-      expect(solutions.guesses.length > 0, true);
+      expect(solutions.guesses.length <= 10, isTrue);
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.convergence, MoreOrLessEquals(1.61, precision: 1.0e-2));
+      expect(solutions.efficiency, MoreOrLessEquals(1.04, precision: 1.0e-2));
 
-      expect(solutions.convergence.round(), 3);
-      expect(solutions.efficiency.round(), 1);
-
-      // There must be some values starting with 1.5xxx which is the root we're
-      // looking for in this test
-      expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), true);
+      expect(solutions.guesses.last, MoreOrLessEquals(1.5, precision: 1.0e-1));
     });
 
-    test("Testing an invalid equation", () async {
-      expect(() => Secant("2x2", 1, 3), throwsA(isA<FormatException>()));
+    test("Making sure that a malformed equation string throws.", () {
+      expect(() async {
+        await Secant(function: "xsin(x)", firstGuess: 0, secondGuess: 2)
+            .solve();
+      }, throwsA(isA<ExpressionParserException>()));
     });
 
-    test("Testing an equation with no roots in the given interval", () async {
-      final secant = Secant("x^3-x-2", -120, -122, maxSteps: 5);
+    test("Making sure that object comparison properly works", () {
+      const secant = Secant(
+        function: "x-2",
+        firstGuess: -1,
+        secondGuess: 2,
+      );
+
+      expect(Secant(function: "x-2", firstGuess: 1, secondGuess: 2),
+          equals(secant));
+      expect(Secant(function: "x-2", firstGuess: 0, secondGuess: 2) == secant,
+          isTrue);
+      expect(Secant(function: "x-2", firstGuess: 0, secondGuess: 2).hashCode,
+          equals(secant.hashCode));
+    });
+
+    test("Making sure that derivatives evaluated on 0 return NaN.", () async {
+      const secant = Secant(function: "x", firstGuess: 0, secondGuess: 0);
+
+      // The derivative on 0 is 'NaN'
+      expect(secant.evaluateDerivativeOn(0).isNaN, isTrue);
+
+      // Making sure that the method actually throws
+      expect(() async => await secant.solve(), throwsA(isA<Exception>()));
+
+      // Checking the error message
+      try {
+        await secant.solve();
+      } on NonlinearException catch (e) {
+        expect(e.message, contains("Invalid denominator encountered."));
+      }
+    });
+
+    test(
+        "Making sure that the secant method still works when the root is "
+        "not in the interval but the actual solution is not found", () async {
+      const secant = Secant(
+          function: "x^2-8", firstGuess: -180, secondGuess: -190, maxSteps: 4);
       final solutions = await secant.solve();
 
-      // There must not be some values starting with 1.5xxx, which is the root
-      // we're looking for in this test, because the root is far from the range.
-      //
-      // The range is far from the root: the method still works but it won't find
-      // the root.
-      expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), false);
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.guesses.length <= 4, isTrue);
     });
   });
 }

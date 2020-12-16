@@ -1,42 +1,71 @@
-import 'package:equations/src/common/exceptions.dart';
-import 'package:equations/src/nonlinear/newton.dart';
+import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
-  group("Testing the 'Newton method'", () {
-    test("Testing a valid equation", () async {
-      final newton = Newton("2*x+cos(x)", -1, maxSteps: 5);
+  group("Testing the 'Newton' class", () {
+    test(
+        "Making sure that the series converges when the root is in the interval.",
+        () async {
+      const newtwon = Newton(function: "sqrt(x) - e^2", x0: 52, maxSteps: 6);
 
-      expect(newton.maxSteps, 5);
-      expect(newton.tolerance, 1.0e-10);
-      expect(newton.function, "2*x+cos(x)");
-      expect(newton.x0, -1);
+      expect(newtwon.x0, equals(52));
+      expect(newtwon.maxSteps, equals(6));
+      expect(newtwon.tolerance, equals(1.0e-10));
+      expect(newtwon.function, equals("sqrt(x) - e^2"));
+      expect(newtwon.toString(), equals("f(x) = sqrt(x) - e^2"));
 
-      final solutions = await newton.solve();
-      expect(solutions.guesses.length > 0, true);
+      // Solving the equation, making sure that the series converged
+      final solutions = await newtwon.solve();
+      expect(solutions.guesses.length <= 6, isTrue);
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.convergence, MoreOrLessEquals(2, precision: 1));
+      expect(solutions.efficiency, MoreOrLessEquals(1.12, precision: 1.0e-2));
 
-      // Newton is known to have a quadratic convergence so the value should
-      // always be close to 2
-      expect(solutions.convergence.round(), 2);
-      expect(solutions.efficiency.round(), 1);
-
-      expect(solutions.guesses.last.toStringAsFixed(2).contains("-0.45"), true);
+      expect(
+          solutions.guesses.last, MoreOrLessEquals(54.598, precision: 1.0e-3));
     });
 
-    test("Testing an invalid equation", () async {
-      expect(() => Newton("2x+cos(x)", 1), throwsA(isA<FormatException>()));
+    test("Making sure that a malformed equation string throws.", () {
+      expect(() async {
+        await Newton(function: "sqrt2 - 2", x0: 0).solve();
+      }, throwsA(isA<ExpressionParserException>()));
     });
 
-    test("Testing an equation with a root too far from the guess", () async {
-      final newton = Newton("2*x+cos(x)", 130);
+    test("Making sure that object comparison properly works", () {
+      const newton = Newton(function: "x-1", x0: 3);
+
+      expect(Newton(function: "x-1", x0: 3), equals(newton));
+      expect(Newton(function: "x-1", x0: 3) == newton, isTrue);
+      expect(Newton(function: "x-1", x0: 3).hashCode, equals(newton.hashCode));
+    });
+
+    test("Making sure that derivatives evaluated on 0 return NaN.", () async {
+      const newton = Newton(function: "x", x0: 0);
+
+      // The derivative on 0 is 'NaN'
+      expect(newton.evaluateDerivativeOn(0).isNaN, isTrue);
+
+      // Making sure that the method actually throws
+      expect(() async => await newton.solve(), throwsA(isA<Exception>()));
+
+      // Checking the error message
+      try {
+        await newton.solve();
+      } on NonlinearException catch (e) {
+        expect(e.message, equals("Couldn't evaluate f'(0.0)"));
+      }
+    });
+
+    test(
+        "Making sure that the newton method still works when the root is "
+        "not in the interval but the actual solution is not found", () async {
+      const newton = Newton(function: "x-500", x0: 2, maxSteps: 3);
       final solutions = await newton.solve();
 
-      // There must not be some values starting with 1.5xxx, which is the root
-      // we're looking for in this test, because the root is far from the range.
-      //
-      // The range is far from the root: the method still works but it won't find
-      // the root.
-      expect(solutions.guesses.last.toStringAsFixed(1).contains("1.5"), false);
+      expect(solutions.guesses.length, isNonZero);
+      expect(solutions.guesses.length <= 3, isTrue);
     });
   });
 }

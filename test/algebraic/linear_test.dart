@@ -1,55 +1,106 @@
-import 'package:equations/src/algebraic/constant.dart';
-import 'package:equations/src/algebraic/linear.dart';
-import 'package:equations/src/complex.dart';
+import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
-  group("Testing linear equations", () {
-    test("Real equation -> 3x + 6/5 = 0", () {
+  group("Testing 'Linear' algebraic equations", () {
+    test("Making sure that a 'Linear' object is properly constructed", () {
       final equation = Linear(
         a: Complex.fromReal(3),
         b: Complex.fromRealFraction(Fraction(6, 5)),
       );
 
-      expect(equation.degree, 1);
-      expect(equation.derivative(), Constant(a: Complex.fromReal(3)));
-      expect(equation.isRealEquation, true);
-      expect(equation.discriminant(), Complex.fromReal(1));
-      expect("$equation", "f(x) = 3x + 1.2");
-      expect("${equation.toStringWithFractions()}", "f(x) = 3x + 6/5");
+      // Checking properties
+      expect(equation.degree, equals(1));
+      expect(equation.derivative(), equals(Constant(a: Complex.fromReal(3))));
+      expect(equation.isRealEquation, isTrue);
+      expect(equation.discriminant(), equals(Complex.fromReal(1)));
+      expect(
+          equation.coefficients,
+          equals([
+            Complex.fromReal(3),
+            Complex.fromRealFraction(Fraction(6, 5)),
+          ]));
 
+      // Making sure that coefficients can be accessed via index
+      expect(equation[0], equals(Complex.fromReal(3)));
+      expect(equation[1], equals(Complex.fromRealFraction(Fraction(6, 5))));
+      expect(() => equation[-1], throwsA(isA<RangeError>()));
+
+      // Converting to string
+      expect(equation.toString(), equals("f(x) = 3x + 1.2"));
+      expect(equation.toStringWithFractions(), equals("f(x) = 3x + 6/5"));
+
+      // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real.toStringAsFixed(1), "-0.4");
-      expect(solutions[0].imaginary, 0);
+      expect(solutions[0].real, MoreOrLessEquals(-0.4, precision: 1.0e-1));
+      expect(solutions[0].imaginary, isZero);
 
-      final eval = equation.realEvaluateOn(0);
-      expect(eval, Complex.fromRealFraction(Fraction(6, 5)));
+      // Evaluation
+      expect(equation.realEvaluateOn(1), equals(Complex.fromReal(4.2)));
+      expect(equation.evaluateOn(Complex(1, -3)), equals(Complex(4.2, -9)));
     });
 
-    test("Complex equation -> 2ix + (6/5 - i) = 0", () {
+    test(
+        "Making sure that a 'Linear' object is properly printed with fractions",
+        () {
+      // The equation
       final equation = Linear(
-        a: Complex.fromImaginary(2),
-        b: Complex.fromFraction(Fraction(6, 5), Fraction.fromDouble(-1)),
+        a: Complex(4, 7),
+        b: Complex(5, 1),
       );
 
-      expect(equation.degree, 1);
-      expect(equation.derivative(), Constant(a: Complex.fromImaginary(2)));
-      expect(equation.isRealEquation, false);
-      expect(equation.discriminant(), Complex.fromReal(1));
-      expect("$equation", "f(x) = 2ix + (1.2 - 1i)");
-      expect("${equation.toStringWithFractions()}", "f(x) = 2ix + (6/5 - 1i)");
+      // Its string representation
+      final equationStr = "f(x) = (4 + 7i)x + (5 + 1i)";
 
-      final solutions = equation.solutions();
+      // Making sure it's properly printed
+      expect(equation.toStringWithFractions(), equals(equationStr));
+    });
+
+    test(
+        "Making sure that a correct 'Linear' instance is created from a "
+        "list of 'double' (real) values", () {
+      final linear = Linear.realEquation(a: 5, b: 1);
+
+      expect(linear.a, equals(Complex.fromReal(5)));
+      expect(linear.b, equals(Complex.fromReal(1)));
+
+      // There must be an exception is the first coeff. is zero
       expect(
-          solutions[0], Complex.fromFraction(Fraction(1, 2), Fraction(3, 5)));
+          () => Linear.realEquation(a: 0), throwsA(isA<AlgebraicException>()));
+    });
 
-      final eval = equation.realEvaluateOn(2);
-      expect(eval, Complex.fromFraction(Fraction(6, 5), Fraction(3, 1)));
+    test(
+        "Making sure that an exception is thrown if the coeff. of the highest degree is zero",
+        () {
+      expect(
+          () => Linear(a: Complex.zero()), throwsA(isA<AlgebraicException>()));
+    });
 
-      final eval2 = equation.evaluateOn(Complex.i());
-      expect(eval2.real, -0.8);
-      expect(eval2.imaginary.round(), -1);
+    test("Making sure that objects comparison works properly", () {
+      final fx = Linear(
+        a: Complex(2, 3),
+        b: Complex.i(),
+      );
+
+      expect(fx, equals(Linear(a: Complex(2, 3), b: Complex.i())));
+      expect(fx == Linear(a: Complex(2, 3), b: Complex.i()), isTrue);
+      expect(fx.hashCode,
+          equals(Linear(a: Complex(2, 3), b: Complex.i()).hashCode));
+    });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final linear = Linear(a: Complex.i(), b: Complex(-3, 8));
+
+      // Objects equality
+      expect(linear, equals(linear.copyWith()));
+      expect(
+          linear, equals(linear.copyWith(a: Complex.i(), b: Complex(-3, 8))));
+
+      // Objects inequality
+      expect(linear == linear.copyWith(b: Complex.zero()), isFalse);
     });
   });
 }
