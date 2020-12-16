@@ -1,9 +1,10 @@
 # 2.0.0-nullsafety.1
 
   - Added a new root-finding algorithm (`Brent` which implements the Brent's method method)
+  - Added `Laguerre` (which implements Laguerre's method for polynomials root finding)
   - Minor on various `Nonlinear` subtypes
   - Documentation fixes
-- 
+
 # 2.0.0-nullsafety.0
 
   - Package migrated to null safety (Dart 2.12).

@@ -11,7 +11,8 @@
 
 ---
 
-Thanks to `equations` you're able to solve polynomial and nonlinear equations with ease. It's been written in "pure" Dart, meaning that it has no dependency on any framework. It can be used with Flutter for web, desktop and mobile. Here's a summary of the contents of the package:
+Thanks to `equations` you're able to solve polynomial and nonlinear equations with ease. It's been written in "pure" Dart, meaning that it has no  
+dependency on any framework. It can be used with Flutter for web, desktop and mobile. Here's a summary of the contents of the package:
 
   - `Algebraic` and all of its subtypes, which can be used to solve algebraic equations (also known as polynomial equations);
   - `Nonlinear` and all of its subtypes, which can be used to solve nonlinear equations;
@@ -22,7 +23,7 @@ This package is meant to be used with Dart 2.12 or higher because the code is en
 
 # Algebraic equations
 
-Use one of the following classes to find the roots of a specific type of polynomial. You can use complex numbers and fractions.
+Use one of the following classes to find the roots of a polynomial. You can use both complex numbers and fractions as coefficients.
 
 | Solver name |                                  Equation                                 |    Params field   |
 |:-----------:|:-------------------------------------------------------------------------:|:-----------------:|
@@ -31,8 +32,21 @@ Use one of the following classes to find the roots of a specific type of polynom
 | `Quadratic` | <em>f(x) = ax<sup>2</sup> + bx + c</em>                                   | a, b, c ∈ C       |
 | `Cubic`     | <em>f(x) = ax<sup>3</sup> + bx<sup>2</sup> + cx + d</em>                  | a, b, c, d ∈ C    |
 | `Quartic`   | <em>f(x) = ax<sup>4</sup> + bx<sup>3</sup> + cx<sup>2</sup> + dx + e</em> | a, b, c, d, e ∈ C |
+| `Laguerre`  | Any polynomial P(x<sub>i</sub>) where x<sub>i</sub> are coefficients      | x<sub>i</sub> ∈ C |
 
-When solving a polynomial up to the fourth degree, prefer using one of these classes rather than guessing the roots with a root-finding algorithm (see below). Here's a simple example of how you can solve polynomial equations:
+There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of
+polynomials whose degree is 5 or higher, must be seeked using Laguerre's method or any other root-finding algorithm. For this reason, we suggest
+to go for the following approach:
+
+  - Use `Linear` to find the roots of a polynomial whose degree is 1.
+  - Use `Quadratic` to find the roots of a polynomial whose degree is 2.
+  - Use `Cubic` to find the roots of a polynomial whose degree is 3.
+  - Use `Quartic` to find the roots of a polynomial whose degree is 4.
+  - Use `Laguerre` to find the roots of a polynomial whose degree is 5 or higher.
+
+Note that `Laguerre` can be used with any polynomials, so you could use it (for example) to solve a cubic equation as well. `Laguerre` internally
+uses loops, derivatives and other mechanics that are much slower than `Quartic`, `Cubic`, `Quadratic` and `Linear` so use it only onle when really
+needed. Here's how you can solve a cubic:
 
 ```dart
 // f(x) = (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i)
@@ -64,11 +78,35 @@ for (final root in equation.solutions()) {
 }
 ```
 
-There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). If you wish to solve a polynomial whose degree is 5 (or higher), consider using a root-finding algorithm (see the [# Nonlinear equations] paragraph) or the Laguerre method.
+Alternatively, you could have used `Laguerre` to solve the same equation:
+
+```dart
+// f(x) = (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i)
+final equation = Laguerre(
+  coefficients: [
+    Complex(2, -3),
+    Complex.fromImaginaryFraction(Fraction(6, 5)),
+    Complex(5, -1),
+    Complex(-9, -6),
+  ]
+);
+
+/*
+ * Prints the roots of the equation:
+ *
+ *  x1 = 1.0119095 + 0.5886435
+ *  x2 = 0.3489062 - 1.7343034i
+ *  x3 = -1.0838926 + 0.9610444
+ * */ 
+for (final root in equation.solutions()) {
+  print(root);
+}
+```
 
 # Nonlinear equations
 
-Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package supports the following root finding methods:
+Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package  
+supports the following root finding methods:
 
 | Solver name  | Params field      |
 |:------------:|:-----------------:|
@@ -79,7 +117,8 @@ Use one of the following classes, representing a root-finding algorithm, to find
 | `Steffensen` | x<sub>0</sub> ∈ R |
 | `Brent`      | a, b ∈ R          |
 
-Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only work with real numbers. Here's a simple example of how you can find the roots of an equation:
+Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only  
+work with real numbers. Here's a simple example of how you can find the roots of an equation:
 
 ```dart
 final newton = Newton("2*x+cos(x)", -1, maxSteps: 5);
