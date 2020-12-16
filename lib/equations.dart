@@ -13,13 +13,13 @@ export 'src/algebraic/types/laguerre.dart';
 export 'src/algebraic/utils/horner_results.dart';
 
 export 'src/nonlinear/nonlinear.dart';
-export 'src/nonlinear/types/results.dart';
 export 'src/nonlinear/types/bisection.dart';
 export 'src/nonlinear/types/brent.dart';
 export 'src/nonlinear/types/chords.dart';
 export 'src/nonlinear/types/newton.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
+export 'src/nonlinear/utils/results.dart';
 
 export 'src/utils/exceptions/exceptions.dart';
 export 'src/utils/exceptions/types/complex_exception.dart';

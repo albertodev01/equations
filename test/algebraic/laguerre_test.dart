@@ -71,9 +71,30 @@ void main() {
           throwsA(isA<AlgebraicException>()));
     });
 
+    test("Making sure that various derivatives are properly computed.", () {
+      final polynomialDegree6 =
+          Laguerre.realEquation(coefficients: [1, 2, 3, 4, 5, 6, 7]);
+      final polynomialDegree5 =
+          Laguerre.realEquation(coefficients: [1, 2, 3, 4, 5, 6]);
+      final polynomialDegree4 =
+          Laguerre.realEquation(coefficients: [1, 2, 3, 4, 5]);
+      final polynomialDegree3 =
+          Laguerre.realEquation(coefficients: [1, 2, 3, 4]);
+      final polynomialDegree2 = Laguerre.realEquation(coefficients: [1, 2, 3]);
+      final polynomialDegree1 = Laguerre.realEquation(coefficients: [1, 2]);
+      final polynomialDegree0 = Laguerre.realEquation(coefficients: [1]);
+
+      expect(polynomialDegree6.derivative(), isA<Laguerre>());
+      expect(polynomialDegree5.derivative(), isA<Quartic>());
+      expect(polynomialDegree4.derivative(), isA<Cubic>());
+      expect(polynomialDegree3.derivative(), isA<Quadratic>());
+      expect(polynomialDegree2.derivative(), isA<Linear>());
+      expect(polynomialDegree1.derivative(), isA<Constant>());
+      expect(polynomialDegree0.derivative(), isA<Constant>());
+    });
+
     test("Making sure that objects comparison works properly", () {
       final fx = Laguerre.realEquation(coefficients: [1, 2, 3, 4, 5]);
-
       final otherFx = Laguerre.realEquation(coefficients: [1, 2, 3, 4, 5]);
 
       expect(fx, equals(otherFx));

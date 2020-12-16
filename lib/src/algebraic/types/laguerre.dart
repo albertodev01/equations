@@ -164,6 +164,15 @@ class Laguerre extends Algebraic {
           d: coefficients[3],
           e: coefficients[4],
         ).derivative();
+      case 6:
+        final coeffs = _derivativeOf(coefficients);
+        return Quartic(
+          a: coeffs[0],
+          b: coeffs[1],
+          c: coeffs[2],
+          d: coeffs[3],
+          e: coeffs[4],
+        );
       default:
         return Laguerre(
             coefficients: _derivativeOf(coefficients),
