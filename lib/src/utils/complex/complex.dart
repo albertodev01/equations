@@ -9,13 +9,13 @@ import 'package:fraction/fraction.dart';
 /// New instances of [Complex] can be created either by using the various
 /// constructors or by using the extension method on [num].
 class Complex implements Comparable<Complex> {
-  /// The real part of the complex number
+  /// The real part of the complex number.
   final double real;
 
-  /// The imaginary part of the complex number
+  /// The imaginary part of the complex number.
   final double imaginary;
 
-  /// Creates a complex number with the given real and imaginary parts
+  /// Creates a complex number with the given real and imaginary parts.
   const Complex(double real, double imaginary)
       : real = real,
         imaginary = imaginary;
@@ -113,6 +113,14 @@ class Complex implements Comparable<Complex> {
     if (abs() < other.abs()) return -1;
     return 0;
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Complex copyWith({
+    double? real,
+    double? imaginary,
+  }) =>
+      Complex(real ?? this.real, imaginary ?? this.imaginary);
 
   @override
   String toString() => _convertToString();

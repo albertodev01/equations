@@ -44,7 +44,7 @@ class Secant extends NonLinear {
     var fnew = evaluateOn(x0);
     var diff = tolerance + 1;
 
-    while ((diff >= tolerance) && (n < maxSteps)) {
+    while ((diff >= tolerance) && (n <= maxSteps)) {
       final den = fnew - fold;
 
       if ((den == 0) || (den.isNaN)) {

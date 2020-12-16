@@ -8,22 +8,23 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () async {
-      const newtwon = Newton(function: "sqrt(x) - 2", x0: 3, maxSteps: 6);
+      const newtwon = Newton(function: "sqrt(x) - e^2", x0: 52, maxSteps: 6);
 
+      expect(newtwon.x0, equals(52));
       expect(newtwon.maxSteps, equals(6));
       expect(newtwon.tolerance, equals(1.0e-10));
-      expect(newtwon.function, equals("sqrt(x) - 2"));
-      expect(newtwon.toString(), equals("f(x) = sqrt(x) - 2"));
-      expect(newtwon.x0, equals(3));
+      expect(newtwon.function, equals("sqrt(x) - e^2"));
+      expect(newtwon.toString(), equals("f(x) = sqrt(x) - e^2"));
 
       // Solving the equation, making sure that the series converged
       final solutions = await newtwon.solve();
       expect(solutions.guesses.length <= 6, isTrue);
       expect(solutions.guesses.length, isNonZero);
-      //expect(solutions.convergence, MoreOrLessEquals(2, precision: 1.0e-1));
-      //expect(solutions.efficiency, MoreOrLessEquals(2, precision: 1.0e-1));
+      expect(solutions.convergence, MoreOrLessEquals(2, precision: 1));
+      expect(solutions.efficiency, MoreOrLessEquals(1.12, precision: 1.0e-2));
 
-      expect(solutions.guesses.last, MoreOrLessEquals(4, precision: 1.0e-0));
+      expect(
+          solutions.guesses.last, MoreOrLessEquals(54.598, precision: 1.0e-3));
     });
 
     test("Making sure that a malformed equation string throws.", () {

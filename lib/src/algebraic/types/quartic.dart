@@ -50,6 +50,10 @@ class Quartic extends Algebraic {
   ///   e: Complex.fromReal(6),
   /// );
   /// ```
+  ///
+  /// Use this constructor if you have complex coefficients. If no [Complex]
+  /// values are required, then consider using [Quartic.realEquation()] for a
+  /// less verbose syntax.
   Quartic({
     this.a = const Complex.fromReal(1),
     this.b = const Complex.zero(),
@@ -57,6 +61,21 @@ class Quartic extends Algebraic {
     this.d = const Complex.zero(),
     this.e = const Complex.zero(),
   }) : super([a, b, c, d, e]);
+
+  /// The only coefficient of the polynomial is represented by a [double]
+  /// (real) number [a].
+  Quartic.realEquation({
+    double a = 1,
+    double b = 0,
+    double c = 0,
+    double d = 0,
+    double e = 0,
+  })  : a = Complex.fromReal(a),
+        b = Complex.fromReal(b),
+        c = Complex.fromReal(c),
+        d = Complex.fromReal(d),
+        e = Complex.fromReal(e),
+        super.realEquation([a, b, c, d, e]);
 
   @override
   int get degree => 4;
@@ -138,4 +157,21 @@ class Quartic extends Algebraic {
 
     return solutions;
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Quartic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+    Complex? d,
+    Complex? e,
+  }) =>
+      Quartic(
+        a: a ?? this.a,
+        b: b ?? this.b,
+        c: c ?? this.c,
+        d: d ?? this.d,
+        e: e ?? this.e,
+      );
 }

@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] that represents a third degree
-/// polynomial equation in the form _ax^3 + bx^2 + cx + d = 0_.
+/// polynomial equation in the form `ax^3 + bx^2 + cx + d = 0`.
 ///
 /// This equation has exactly 3 solutions which can be:
 ///
@@ -45,12 +45,29 @@ class Cubic extends Algebraic {
   ///   c: Complex(-2, 6),
   /// );
   /// ```
+  ///
+  /// Use this constructor if you have complex coefficients. If no [Complex]
+  /// values are required, then consider using [Cubic.realEquation()] for a
+  /// less verbose syntax.
   Cubic({
     this.a = const Complex.fromReal(1),
     this.b = const Complex.zero(),
     this.c = const Complex.zero(),
     this.d = const Complex.zero(),
   }) : super([a, b, c, d]);
+
+  /// The only coefficient of the polynomial is represented by a [double]
+  /// (real) number [a].
+  Cubic.realEquation({
+    double a = 1,
+    double b = 0,
+    double c = 0,
+    double d = 0,
+  })  : a = Complex.fromReal(a),
+        b = Complex.fromReal(b),
+        c = Complex.fromReal(c),
+        d = Complex.fromReal(d),
+        super.realEquation([a, b, c, d]);
 
   @override
   int get degree => 3;
@@ -90,4 +107,19 @@ class Cubic extends Algebraic {
       constTerm * (b + (C * sigma.pow(2)) + (d0 / (C * sigma.pow(2)))),
     ];
   }
+
+  /// Creates a **deep** copy of this object with the given fields replaced
+  /// with the new values.
+  Cubic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+    Complex? d,
+  }) =>
+      Cubic(
+        a: a ?? this.a,
+        b: b ?? this.b,
+        c: c ?? this.c,
+        d: d ?? this.d,
+      );
 }

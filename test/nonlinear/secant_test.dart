@@ -9,9 +9,9 @@ void main() {
         "Making sure that the series converges when the root is in the interval.",
         () async {
       const secant = Secant(
-          function: "x^3-x-2", firstGuess: 1, secondGuess: 2, maxSteps: 4);
+          function: "x^3-x-2", firstGuess: 1, secondGuess: 2, maxSteps: 10);
 
-      expect(secant.maxSteps, equals(4));
+      expect(secant.maxSteps, equals(10));
       expect(secant.tolerance, equals(1.0e-10));
       expect(secant.function, equals("x^3-x-2"));
       expect(secant.toString(), equals("f(x) = x^3-x-2"));
@@ -20,8 +20,10 @@ void main() {
 
       // Solving the equation, making sure that the series converged
       final solutions = await secant.solve();
-      expect(solutions.guesses.length <= 4, isTrue);
+      expect(solutions.guesses.length <= 10, isTrue);
       expect(solutions.guesses.length, isNonZero);
+      expect(solutions.convergence, MoreOrLessEquals(1.61, precision: 1.0e-2));
+      expect(solutions.efficiency, MoreOrLessEquals(1.04, precision: 1.0e-2));
 
       expect(solutions.guesses.last, MoreOrLessEquals(1.5, precision: 1.0e-1));
     });

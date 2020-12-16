@@ -7,11 +7,7 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing 'Quartic' algebraic equations", () {
     test("Making sure that a 'Quartic' object is properly constructed", () {
-      final equation = Quartic(
-          a: Complex.fromReal(3),
-          b: Complex.fromReal(6),
-          d: Complex.fromReal(2),
-          e: Complex.fromReal(-1));
+      final equation = Quartic.realEquation(a: 3, b: 6, d: 2, e: -1);
 
       // Checking properties
       expect(equation.degree, equals(4));
@@ -32,6 +28,14 @@ void main() {
             Complex.fromReal(2),
             Complex.fromReal(-1),
           ]));
+
+      // Making sure that coefficients can be accessed via index
+      expect(equation[0], equals(Complex.fromReal(3)));
+      expect(equation[1], equals(Complex.fromReal(6)));
+      expect(equation[2], equals(Complex.zero()));
+      expect(equation[3], equals(Complex.fromReal(2)));
+      expect(equation[4], equals(Complex.fromReal(-1)));
+      expect(() => equation[-1], throwsA(isA<RangeError>()));
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = 3x^4 + 6x^3 + 2x + -1"));
@@ -65,6 +69,19 @@ void main() {
       }, throwsA(isA<AlgebraicException>()));
     });
 
+    test(
+        "Making sure that a correct 'Quadratic' instance is created from a "
+        "list of 'double' (real) values", () {
+      final quartic = Quartic.realEquation(a: -3, d: 8);
+
+      expect(quartic.a, equals(Complex.fromReal(-3)));
+      expect(quartic.d, equals(Complex.fromReal(8)));
+
+      // There must be an exception is the first coeff. is zero
+      expect(
+          () => Quartic.realEquation(a: 0), throwsA(isA<AlgebraicException>()));
+    });
+
     test("Making sure that objects comparison works properly", () {
       final fx = Quartic(
           a: Complex(3, -6),
@@ -83,6 +100,25 @@ void main() {
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
       expect(fx.hashCode, equals(otherFx.hashCode));
+    });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final quartic = Quartic.realEquation(c: 5, d: -6);
+
+      // Objects equality
+      expect(quartic, equals(quartic.copyWith()));
+      expect(
+          quartic,
+          equals(quartic.copyWith(
+            a: Complex.fromReal(1),
+            b: Complex.zero(),
+            c: Complex.fromReal(5),
+            d: Complex.fromReal(-6),
+            e: Complex.zero(),
+          )));
+
+      // Objects inequality
+      expect(quartic == quartic.copyWith(c: Complex.zero()), isFalse);
     });
   });
 }

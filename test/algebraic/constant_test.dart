@@ -13,6 +13,10 @@ void main() {
       expect(equation.isRealEquation, isFalse);
       expect(equation.coefficients, equals([Complex(3, 7)]));
 
+      // Making sure that coefficients can be accessed via index
+      expect(equation[0], equals(Complex(3, 7)));
+      expect(() => equation[-1], throwsA(isA<RangeError>()));
+
       // Converting to string
       expect(equation.toString(), equals("f(x) = (3 + 7i)"));
       expect(equation.toStringWithFractions(), equals("f(x) = 3 + 7i"));
@@ -25,6 +29,13 @@ void main() {
       // Evaluation
       final eval = equation.realEvaluateOn(2);
       expect(eval, equals(Complex(3, 7)));
+    });
+
+    test(
+        "Making sure that a correct 'Constant' instance is created from a "
+        "list of 'double' (real) values", () {
+      final constant = Constant.realEquation(a: 5);
+      expect(constant.a, equals(Complex.fromReal(5)));
     });
 
     test("Making sure that in case of zero, the degree is -inf", () {
@@ -42,6 +53,17 @@ void main() {
       expect(fx, equals(Constant(a: Complex.fromReal(6))));
       expect(fx == Constant(a: Complex.fromReal(6)), isTrue);
       expect(fx.hashCode, equals(Constant(a: Complex.fromReal(6)).hashCode));
+    });
+
+    test("Making sure that 'copyWith' clones objects correctly", () {
+      final constant = Constant.realEquation(a: 7);
+
+      // Objects equality
+      expect(constant, equals(constant.copyWith()));
+      expect(constant, equals(constant.copyWith(a: Complex(7, 0))));
+
+      // Objects inequality
+      expect(constant == constant.copyWith(a: Complex.fromReal(-7)), isFalse);
     });
   });
 }
