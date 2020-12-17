@@ -9,6 +9,8 @@ void main() {
       const algebraicException = AlgebraicException("Message");
       const nonlinearException = NonlinearException("Message");
       const parserException = ExpressionParserException("Message");
+      const matrixException = MatrixException("Message");
+      const systemException = SystemSolverException("Message");
 
       // Objects comparisons
       expect(complexException, equals(const ComplexException("Message")));
@@ -16,17 +18,23 @@ void main() {
       expect(nonlinearException, equals(const NonlinearException("Message")));
       expect(
           parserException, equals(const ExpressionParserException("Message")));
+      expect(matrixException, equals(const MatrixException("Message")));
+      expect(systemException, equals(const SystemSolverException("Message")));
 
       // Checking types
       expect(complexException, isNot(algebraicException));
       expect(algebraicException, isNot(nonlinearException));
       expect(nonlinearException, isNot(parserException));
+      expect(parserException, isNot(matrixException));
+      expect(matrixException, isNot(systemException));
 
       // Explicit boolean comparison
       expect(complexException == ComplexException("Message"), isTrue);
       expect(algebraicException == AlgebraicException("Message"), isTrue);
       expect(nonlinearException == NonlinearException("Message"), isTrue);
       expect(parserException == ExpressionParserException("Message"), isTrue);
+      expect(matrixException == MatrixException("Message"), isTrue);
+      expect(systemException == SystemSolverException("Message"), isTrue);
 
       // Checking hash codes
       expect(complexException.hashCode,
@@ -37,6 +45,10 @@ void main() {
           equals(NonlinearException("Message").hashCode));
       expect(parserException.hashCode,
           equals(ExpressionParserException("Message").hashCode));
+      expect(matrixException.hashCode,
+          equals(MatrixException("Message").hashCode));
+      expect(systemException.hashCode,
+          equals(SystemSolverException("Message").hashCode));
     });
 
     test("Making sure that 'ComplexException' prints the correct message", () {
@@ -70,6 +82,21 @@ void main() {
       expect(exception.message, "Exception message");
       expect(
           "$exception", equals("ExpressionParserException: Exception message"));
+    });
+
+    test("Making sure that 'MatrixException' prints the correct message", () {
+      const exception = MatrixException("Exception message");
+
+      expect(exception.message, "Exception message");
+      expect("$exception", equals("MatrixException: Exception message"));
+    });
+
+    test("Making sure that 'SystemSolverException' prints the correct message",
+        () {
+      const exception = SystemSolverException("Exception message");
+
+      expect(exception.message, "Exception message");
+      expect("$exception", equals("SystemSolverException: Exception message"));
     });
   });
 }

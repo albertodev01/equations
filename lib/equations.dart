@@ -30,6 +30,7 @@ export 'src/utils/exceptions/types/complex_exception.dart';
 export 'src/utils/exceptions/types/matrix_exception.dart';
 export 'src/utils/exceptions/types/nonlinear_exception.dart';
 export 'src/utils/exceptions/types/parser_exception.dart';
+export 'src/utils/exceptions/types/system_solver_exception.dart';
 export 'src/utils/expression_parser.dart';
 
 export 'package:fraction/fraction.dart';
