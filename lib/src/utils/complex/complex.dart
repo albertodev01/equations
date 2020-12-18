@@ -209,6 +209,9 @@ class Complex implements Comparable<Complex> {
   /// Calculates the division of two complex numbers.
   Complex operator /(Complex other) => this * other.reciprocal();
 
+  /// Returns the negation of this complex number.
+  Complex operator -() => negate;
+
   /// There is no natural linear ordering for complex numbers. In fact, any
   /// square in an ordered field is >= 0 but in the complex field we have that
   /// _i<sup>2</sup> = -1_.
