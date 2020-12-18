@@ -71,6 +71,99 @@ abstract class Algebraic {
     }
   }
 
+  /// Returns an [Algebraic] instance according with the number of [coefficients]
+  /// passed. In particular:
+  ///
+  ///  - if length is 1, a [Constant] object is returned;
+  ///  - if length is 2, a [Linear] object is returned;
+  ///  - if length is 3, a [Quadratic] object is returned;
+  ///  - if length is 4, a [Cubic] object is returned;
+  ///  - if length is 5, a [Quartic] object is returned;
+  ///  - if length is 6 or higher, a [Laguerre] object is returned.
+  ///
+  /// For example, if the length of [coefficients] were 3 it would mean that
+  /// you're trying to solve a quadratic equation (because a quadratic has
+  /// exactly 3 coefficients).
+  ///
+  /// ```dart
+  /// final linear = Algebraic.from(const [
+  ///   Complex(1, 3),
+  ///   Complex.i(),
+  /// ]);
+  /// ```
+  ///
+  /// In the above example, `linear` is of type [Linear] because the given
+  /// coefficients represent the `(1 + 3i)x + i = 0` equation.
+  ///
+  /// Use this method when the coefficients can be complex numbers. If there
+  /// were only real numbers, use the [Algebraic.fromReal(coefficients)] method
+  /// which is more convenient.
+  static Algebraic from(List<Complex> coefficients) {
+    switch (coefficients.length) {
+      case 1:
+        return Constant(
+          a: coefficients[0]
+        );
+      case 2:
+        return Linear(
+          a: coefficients[0],
+          b: coefficients[1]
+        );
+      case 3:
+        return Quadratic(
+          a: coefficients[0],
+          b: coefficients[1],
+          c: coefficients[2],
+        );
+      case 4:
+        return Cubic(
+          a: coefficients[0],
+          b: coefficients[1],
+          c: coefficients[2],
+          d: coefficients[3],
+        );
+      case 5:
+        return Quartic(
+          a: coefficients[0],
+          b: coefficients[1],
+          c: coefficients[2],
+          d: coefficients[3],
+          e: coefficients[4],
+        );
+      default:
+        return Laguerre(
+          coefficients: coefficients
+        );
+    }
+  }
+
+  /// Returns an [Algebraic] instance according with the number of [coefficients]
+  /// passed. In particular:
+  ///
+  ///  - if length is 1, a [Constant] object is returned;
+  ///  - if length is 2, a [Linear] object is returned;
+  ///  - if length is 3, a [Quadratic] object is returned;
+  ///  - if length is 4, a [Cubic] object is returned;
+  ///  - if length is 5, a [Quartic] object is returned;
+  ///  - if length is 6 or higher, a [Laguerre] object is returned.
+  ///
+  /// For example, if the length of [coefficients] were 3 it would mean that
+  /// you're trying to solve a quadratic equation (because a quadratic has
+  /// exactly 3 coefficients).
+  ///
+  /// ```dart
+  /// final linear = Algebraic.fromReal(const [0.5, 6]);
+  /// ```
+  ///
+  /// In the above example, `linear` is of type [Linear] because the given
+  /// coefficients represent the `0.5x + 6 = 0` equation.
+  ///
+  /// Use this method when the coefficients are all real numbers. If there
+  /// were complex numbers as well, use the [Algebraic.from(coefficients)]
+  /// instead.
+  static Algebraic fromReal(List<double> coefficients) =>
+      from(coefficients.map((value) => Complex.fromReal(value)).toList());
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

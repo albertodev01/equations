@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
-import 'package:fraction/fraction.dart';
 
 /// A Dart representation of a complex number in the form `a + bi` where `a` is
 /// the real part and `bi` is the imaginary (or complex) part.
@@ -142,10 +141,10 @@ class Complex implements Comparable<Complex> {
   /// Returns an instance of [PolarComplex] which contains the radius `r` and the
   /// angle `phi` of the complex number.
   PolarComplex toPolarCoordinates() => PolarComplex(
-        r: abs(),
-        phiRadians: phase(),
-        phiDegrees: radToDeg(phase()),
-      );
+    r: abs(),
+    phiRadians: phase(),
+    phiDegrees: radToDeg(phase()),
+  );
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions rather than

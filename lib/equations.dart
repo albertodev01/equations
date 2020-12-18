@@ -23,7 +23,10 @@ export 'src/nonlinear/utils/results.dart';
 
 export 'src/system/system.dart';
 export 'src/system/utils/matrix.dart';
+export 'src/system/utils/matrix/real_matrix.dart';
+export 'src/system/utils/matrix/complex_matrix.dart';
 
+export 'src/utils/complex/complex.dart';
 export 'src/utils/exceptions/exceptions.dart';
 export 'src/utils/exceptions/types/algebraic_exception.dart';
 export 'src/utils/exceptions/types/complex_exception.dart';

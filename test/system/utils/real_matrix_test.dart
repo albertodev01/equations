@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group("Testing the constructors of the 'Matrix' class", () {
     test("Making sure that a new matrix is initialized with 0s.", () async {
-      final matrix = Matrix(
+      final matrix = RealMatrix(
         columns: 5,
         rows: 3,
       );
@@ -25,7 +25,7 @@ void main() {
         "Making sure that an exception is thrown when the user tries to "
         "build a matrix whose row or column count is zero.", () async {
       expect(
-          () => Matrix(
+          () => RealMatrix(
                 columns: 0,
                 rows: 2,
               ),
@@ -35,7 +35,7 @@ void main() {
     test(
         "Making sure that the identity matrix is filled with 0s except for "
         "its diagonal, which must contain all 1s.", () async {
-      final matrix = Matrix(columns: 3, rows: 3, identity: true);
+      final matrix = RealMatrix(columns: 3, rows: 3, identity: true);
 
       // Checking the sizes
       expect(matrix.rowCount, equals(3));
@@ -55,15 +55,30 @@ void main() {
 
     test(
         "Making sure that an exception is thrown when the user tries to "
-        "build an identity matrix with a non-squared entry.", () async {
-      expect(() => Matrix(columns: 3, rows: 5, identity: true),
+        "build an identity matrix with a non-squared entry.", () {
+      expect(() => RealMatrix(columns: 3, rows: 5, identity: true),
           throwsA(isA<MatrixException>()));
+    });
+
+    test("Making sure that 'toString()' works as expected.", () {
+      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ]);
+
+      final expected =
+        "| 1 2 3 |"
+        "| 4 5 6 |"
+        "| 7 8 9 |";
+
+      expect(matrix.toString(), equals(expected));
     });
 
     test(
         "Making sure that a matrix is properly built from a list of lists "
         "entries.", () async {
-      final matrix = Matrix.fromData(columns: 3, rows: 3, data: const [
+      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
         [1, 2, 3],
         [4, 5, 6],
         [7, 8, 9],
@@ -88,19 +103,19 @@ void main() {
 
   group("Testing equality of 'Matrix' objects", () {
     test("Making sure that objects comparison works properly.", () async {
-      final matrix = Matrix(
+      final matrix = RealMatrix(
         columns: 2,
         rows: 2,
       );
 
       // Equality tests
-      expect(Matrix(columns: 2, rows: 2), equals(matrix));
-      expect(Matrix(columns: 2, rows: 2) == matrix, isTrue);
-      expect(Matrix(columns: 2, rows: 2).hashCode, equals(matrix.hashCode));
+      expect(RealMatrix(columns: 2, rows: 2), equals(matrix));
+      expect(RealMatrix(columns: 2, rows: 2) == matrix, isTrue);
+      expect(RealMatrix(columns: 2, rows: 2).hashCode, equals(matrix.hashCode));
 
       // Inequality tests
-      expect(Matrix(columns: 2, rows: 2, identity: true) == matrix, isFalse);
-      expect(Matrix(columns: 2, rows: 1).hashCode == matrix.hashCode, isFalse);
+      expect(RealMatrix(columns: 2, rows: 2, identity: true) == matrix, isFalse);
+      expect(RealMatrix(columns: 2, rows: 1).hashCode == matrix.hashCode, isFalse);
     });
   });
 
@@ -109,7 +124,7 @@ void main() {
     * A = |  2  6  |
     *     | -5  0  |
     * */
-    final matrixA = Matrix.fromData(columns: 2, rows: 2, data: const [
+    final matrixA = RealMatrix.fromData(columns: 2, rows: 2, data: const [
       [2, 6],
       [-5, 0]
     ]);
@@ -118,13 +133,13 @@ void main() {
     * B = | -4  1  |
     *     |  7 -3  |
     * */
-    final matrixB = Matrix.fromData(columns: 2, rows: 2, data: const [
+    final matrixB = RealMatrix.fromData(columns: 2, rows: 2, data: const [
       [-4, 1],
       [7, -3]
     ]);
 
     test("Making sure that operator+ works properly.", () async {
-      final matrixSum = Matrix.fromData(columns: 2, rows: 2, data: [
+      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-2, 7],
         [2, -3]
       ]);
@@ -132,7 +147,7 @@ void main() {
     });
 
     test("Making sure that operator- works properly.", () async {
-      final matrixSum = Matrix.fromData(columns: 2, rows: 2, data: [
+      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
         [-12, 3]
       ]);
@@ -140,7 +155,7 @@ void main() {
     });
 
     test("Making sure that operator* works properly.", () async {
-      final matrixSum = Matrix.fromData(columns: 2, rows: 2, data: [
+      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [34, -16],
         [20, -5]
       ]);
@@ -148,7 +163,7 @@ void main() {
     });
 
     test("Making sure that operator/ works properly.", () async {
-      final matrixSum = Matrix.fromData(columns: 2, rows: 2, data: [
+      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-1 / 2, 6],
         [-5 / 7, 0]
       ]);
@@ -158,14 +173,14 @@ void main() {
 
   group("Testing various operators (+, -, *, /) and the determinant.", () {
     test("Making sure that the determinant of an 1*1 matrix is correct.", () {
-      final matrix = Matrix.fromData(columns: 1, rows: 1, data: [
+      final matrix = RealMatrix.fromData(columns: 1, rows: 1, data: [
         [-5]
       ]);
       expect(matrix.determinant(), equals(-5));
     });
 
     test("Making sure that the determinant of a 2*2 matrix is correct.", () {
-      final matrix = Matrix.fromData(columns: 2, rows: 2, data: [
+      final matrix = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
         [-12, 3]
       ]);
@@ -173,7 +188,7 @@ void main() {
     });
 
     test("Making sure that the determinant of a 3*3 matrix is correct.", () {
-      final matrix = Matrix.fromData(columns: 3, rows: 3, data: [
+      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: [
         [2, -1, 0],
         [11, 0, 7],
         [6, 1, 1]
@@ -182,7 +197,7 @@ void main() {
     });
 
     test("Making sure that the determinant of a 4*4 matrix is correct.", () {
-      final matrix = Matrix.fromData(columns: 4, rows: 4, data: [
+      final matrix = RealMatrix.fromData(columns: 4, rows: 4, data: [
         [2, -1, 13, 4],
         [11, 0, 1, 7],
         [6, -4, 7, 2],
@@ -194,7 +209,7 @@ void main() {
     test(
         "Making sure that the determinant of a 5*5 (or greater) matrix is "
         "correct.", () {
-      final matrix = Matrix.fromData(columns: 5, rows: 5, data: [
+      final matrix = RealMatrix.fromData(columns: 5, rows: 5, data: [
         [2, -1, 13, 4, 1],
         [11, 0, 5, 1, 7],
         [6, -4, 7, 2, -6],

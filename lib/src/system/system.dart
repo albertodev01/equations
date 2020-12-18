@@ -12,7 +12,7 @@ import 'package:equations/equations.dart';
 /// The method [solve] returns the vector `x` of the `Ax = b` equation.
 abstract class SystemSolver {
   /// The equations of the system to be solved.
-  late final Matrix equations;
+  late final RealMatrix equations;
 
   /// The vector containing the known values of the equation.
   late final List<double> _knownValues;
@@ -32,7 +32,7 @@ abstract class SystemSolver {
     required List<double> b,
   }) {
     // Building the matrix
-    equations = Matrix.fromData(rows: size, columns: size, data: A);
+    equations = RealMatrix.fromData(rows: size, columns: size, data: A);
 
     // The matrix must be squared
     if (equations.rowCount != equations.columnCount) {
