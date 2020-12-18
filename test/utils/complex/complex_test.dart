@@ -288,5 +288,12 @@ void main() {
       expect(value2.real, equals(0));
       expect(value2.imaginary, equals(0.3125));
     });
+
+    test("Making sure that the negation works properly.", () {
+      final value = Complex(3, -5);
+
+      expect(-value, equals(Complex(-3, 5)));
+      expect(-(-value), equals(value));
+    });
   });
 }

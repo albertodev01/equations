@@ -12,7 +12,7 @@ import 'package:equations/equations.dart';
 /// The method [solve] returns the vector `x` of the `Ax = b` equation.
 abstract class SystemSolver {
   /// The equations of the system to be solved.
-  late final Matrix<double> equations;
+  late final Matrix equations;
 
   /// The vector containing the known values of the equation.
   late final List<double> _knownValues;
