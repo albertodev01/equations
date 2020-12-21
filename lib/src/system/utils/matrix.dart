@@ -216,10 +216,4 @@ abstract class Matrix<T> {
 
   /// Determines whether the matrix is square
   bool get isSquareMatrix => rowCount == columnCount;
-
-  /// Determines whether the matrix contains real numbers
-  bool get isRealMatrix => T is num;
-
-  /// Determines whether the matrix contains complex numbers
-  bool get isComplexMatrix => T is Complex;
 }

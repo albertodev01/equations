@@ -13,8 +13,6 @@ void main() {
       expect(matrix.rowCount, equals(3));
       expect(matrix.columnCount, equals(5));
       expect(matrix.isSquareMatrix, isFalse);
-      expect(matrix.isRealMatrix, isTrue);
-      expect(matrix.isComplexMatrix, isFalse);
 
       // Checking the content of the matrix
       for (var i = 0; i < matrix.rowCount; ++i) {

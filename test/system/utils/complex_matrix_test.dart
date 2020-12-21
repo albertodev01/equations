@@ -15,8 +15,6 @@ void main() {
       expect(matrix.rowCount, equals(3));
       expect(matrix.columnCount, equals(5));
       expect(matrix.isSquareMatrix, isFalse);
-      expect(matrix.isRealMatrix, isFalse);
-      expect(matrix.isComplexMatrix, isTrue);
 
       // Checking the content of the matrix
       for (var i = 0; i < matrix.rowCount; ++i) {
@@ -198,13 +196,23 @@ void main() {
       expect(matrix.determinant(), equals(Complex(-1265, -3075)));
     });
 
-    test("Making sure that the determinant of a 3*3 matrix is correct.", () {});
+    test("Making sure that the determinant of a 3*3 matrix is correct.", () {
+      final matrix = ComplexMatrix.fromData(columns: 3, rows: 3, data: const [
+        [Complex.i(), Complex(3, -8), Complex(3, -3)],
+        [Complex(4, 7), Complex.zero(), Complex(2, -6)],
+        [Complex(6, 1), Complex.zero(), Complex(5, 4)],
+      ]);
+      expect(matrix.determinant(), equals(Complex(-602, -463)));
+    });
 
-    test("Making sure that the determinant of a 4*4 matrix is correct.", () {});
-
-    test(
-        "Making sure that the determinant of a 5*5 (or greater) matrix is "
-        "correct.",
-        () {});
+    test("Making sure that the determinant of a 4*4 matrix is correct.", () {
+      final matrix = ComplexMatrix.fromData(columns: 4, rows: 4, data: const [
+        [Complex.i(), Complex(3, -8), Complex(3, -3), Complex.i()],
+        [Complex(4, 7), Complex.zero(), Complex(2, -6), Complex.zero()],
+        [Complex(6, 1), Complex.zero(), Complex(5, 4), Complex(1, 2)],
+        [Complex(3, -2), Complex(5, 2), Complex(1, 3), Complex(6, -3)],
+      ]);
+      expect(matrix.determinant(), equals(Complex(-5444, -802)));
+    });
   });
 }
