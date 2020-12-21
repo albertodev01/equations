@@ -141,10 +141,10 @@ class Complex implements Comparable<Complex> {
   /// Returns an instance of [PolarComplex] which contains the radius `r` and the
   /// angle `phi` of the complex number.
   PolarComplex toPolarCoordinates() => PolarComplex(
-    r: abs(),
-    phiRadians: phase(),
-    phiDegrees: radToDeg(phase()),
-  );
+        r: abs(),
+        phiRadians: phase(),
+        phiDegrees: radToDeg(phase()),
+      );
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions rather than
@@ -320,9 +320,14 @@ class Complex implements Comparable<Complex> {
 
   /// Calculates the square root of a complex number.
   Complex sqrt() {
+    // In case this instance were a real, positive number, then we can simplify
+    // the calculation.
+    if ((imaginary == 0) && (real > 0)) {
+      return Complex.fromReal(math.sqrt(real));
+    }
+
     var r = math.sqrt(abs());
     var theta = phase() / 2;
-
     return Complex(r * math.cos(theta), r * math.sin(theta));
   }
 

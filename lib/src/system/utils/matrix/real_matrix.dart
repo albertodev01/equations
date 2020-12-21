@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:equations/equations.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
@@ -38,12 +37,12 @@ class RealMatrix extends Matrix<double> {
     required int columns,
     bool identity = false,
   }) : super(
-    rows: rows,
-    columns: columns,
-    identity: identity,
-    defaultValue: 0,
-    identityOneValue: 1,
-  );
+          rows: rows,
+          columns: columns,
+          identity: identity,
+          defaultValue: 0,
+          identityOneValue: 1,
+        );
 
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with values from [data].
@@ -52,10 +51,10 @@ class RealMatrix extends Matrix<double> {
     required int columns,
     required List<List<double>> data,
   }) : super.fromData(
-    rows: rows,
-    columns: columns,
-    data: data,
-  );
+          rows: rows,
+          columns: columns,
+          data: data,
+        );
 
   @override
   bool operator ==(Object other) {
@@ -103,34 +102,56 @@ class RealMatrix extends Matrix<double> {
 
     return result;
   }
-  
-  /// Returns the sum of two matrices in `O(n)` complexity.
+
+  /// Returns the sum of two matrices.
   @override
   Matrix<double> operator +(Matrix<double> other) {
-    final matrix = RealMatrix(rows: rowCount, columns: columnCount);
+    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
+      throw const MatrixException("Matrices shapes mismatch! The column count "
+          "of the source matrix must match the row count of the other.");
+    }
 
     // Performing the sum
-    for (var i = 0; i < flattenData.length; ++i) {
-      matrix.flattenData[i] = flattenData[i] + other.flattenData[i];
+    final matrix = List.generate(rowCount,
+        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
+        growable: false);
+
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        matrix[i][j] = this(i, j) + other(i, j);
+      }
     }
 
-    return matrix;
+    // Building the new matrix
+    return RealMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
-  /// Returns the difference of two matrices in `O(n)` complexity.
+  /// Returns the difference of two matrices.
   @override
   Matrix<double> operator -(Matrix<double> other) {
-    final matrix = RealMatrix(rows: rowCount, columns: columnCount);
-
-    // Performing the difference
-    for (var i = 0; i < flattenData.length; ++i) {
-      matrix.flattenData[i] = flattenData[i] - other.flattenData[i];
+    if (columnCount != other.rowCount) {
+      throw const MatrixException("Matrices shapes mismatch! The column count "
+          "of the source matrix must match the row count of the other.");
     }
 
-    return matrix;
+    // Performing the difference
+    final matrix = List.generate(rowCount,
+        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
+        growable: false);
+
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        matrix[i][j] = this(i, j) - other(i, j);
+      }
+    }
+
+    // Building the new matrix
+    return RealMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
-  /// Returns the sum of two matrices in `O(n^3)` complexity.
+  /// Returns the sum of two matrices.
   @override
   Matrix<double> operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
@@ -138,7 +159,10 @@ class RealMatrix extends Matrix<double> {
           "of the source matrix must match the row count of the other.");
     }
 
-    final result = RealMatrix(rows: rowCount, columns: other.columnCount);
+    // Performing the product
+    final matrix = List.generate(rowCount,
+        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
+        growable: false);
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
@@ -147,24 +171,37 @@ class RealMatrix extends Matrix<double> {
         for (var k = 0; k < rowCount; k++) {
           sum += (this(i, k) * other(k, j));
         }
-        result.flattenData[columnCount * i + j] = sum;
+        matrix[i][j] = sum;
       }
     }
 
-    return result;
+    // Building the new matrix
+    return RealMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
   /// Returns the division of two matrices in `O(n)` complexity.
   @override
   Matrix<double> operator /(Matrix<double> other) {
-    final matrix = RealMatrix(rows: rowCount, columns: columnCount);
-
-    // Performing the division
-    for (var i = 0; i < flattenData.length; ++i) {
-      matrix.flattenData[i] = flattenData[i] / other.flattenData[i];
+    if (columnCount != other.rowCount) {
+      throw const MatrixException("Matrices shapes mismatch! The column count "
+          "of the source matrix must match the row count of the other.");
     }
 
-    return matrix;
+    // Performing the difference
+    final matrix = List.generate(rowCount,
+        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
+        growable: false);
+
+    // Performing the division
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        matrix[i][j] = this(i, j) / other(i, j);
+      }
+    }
+
+    return RealMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
   /// The determinant can only be computed if the matrix is **square**, meaning
@@ -199,18 +236,18 @@ class RealMatrix extends Matrix<double> {
 
   /// Computes the determinant of a 4x4 matrix
   double _compute4x4Determinant(RealMatrix source) {
-    final det2_01_01 =
-        source.flattenData[0] * source.flattenData[5] - source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 =
-        source.flattenData[0] * source.flattenData[6] - source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 =
-        source.flattenData[0] * source.flattenData[7] - source.flattenData[3] * source.flattenData[4];
-    final det2_01_12 =
-        source.flattenData[1] * source.flattenData[6] - source.flattenData[2] * source.flattenData[5];
-    final det2_01_13 =
-        source.flattenData[1] * source.flattenData[7] - source.flattenData[3] * source.flattenData[5];
-    final det2_01_23 =
-        source.flattenData[2] * source.flattenData[7] - source.flattenData[3] * source.flattenData[6];
+    final det2_01_01 = source.flattenData[0] * source.flattenData[5] -
+        source.flattenData[1] * source.flattenData[4];
+    final det2_01_02 = source.flattenData[0] * source.flattenData[6] -
+        source.flattenData[2] * source.flattenData[4];
+    final det2_01_03 = source.flattenData[0] * source.flattenData[7] -
+        source.flattenData[3] * source.flattenData[4];
+    final det2_01_12 = source.flattenData[1] * source.flattenData[6] -
+        source.flattenData[2] * source.flattenData[5];
+    final det2_01_13 = source.flattenData[1] * source.flattenData[7] -
+        source.flattenData[3] * source.flattenData[5];
+    final det2_01_23 = source.flattenData[2] * source.flattenData[7] -
+        source.flattenData[3] * source.flattenData[6];
 
     final det3_201_012 = source.flattenData[8] * det2_01_12 -
         source.flattenData[9] * det2_01_02 +
@@ -261,9 +298,12 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Computing the determinant for 5x5 matrices and bigger
-    final tempMatrix =
-    RealMatrix(rows: source.rowCount - 1, columns: source.columnCount - 1);
     var det = 0.0;
+    final tempMatrix = List.generate(
+        source.rowCount - 1,
+        (_) =>
+            List.generate(source.columnCount - 1, (_) => 0.0, growable: false),
+        growable: false);
 
     for (var x = 0; x < source.rowCount; ++x) {
       var subI = 0;
@@ -273,13 +313,16 @@ class RealMatrix extends Matrix<double> {
           if (j == x) {
             continue;
           }
-          tempMatrix.flattenData[(source.columnCount - 1) * subI + subJ] = this(i, j);
+          tempMatrix[subI][subJ] = this(i, j);
           subJ++;
         }
         subI++;
       }
 
-      det = det + (pow(-1, x) * source(0, x) * _computeDeterminant(tempMatrix));
+      final matrix = RealMatrix.fromData(
+          rows: rowCount - 1, columns: columnCount - 1, data: tempMatrix);
+
+      det = det + (pow(-1, x) * source(0, x) * _computeDeterminant(matrix));
     }
 
     return det;

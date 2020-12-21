@@ -14,7 +14,8 @@ void main() {
       expect(results.value, equals(Complex(2, 6)));
     });
 
-    test(("Making sure that HornerResult can be properly compared."), () {
+    test(("Making sure that HornerResult instances can be properly compared."),
+        () {
       const results2 = HornerResult(
           [Complex(2, 5), Complex.i(), Complex.fromImaginary(4)],
           Complex(2, 6));

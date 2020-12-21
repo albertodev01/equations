@@ -8,7 +8,7 @@ import 'package:equations/equations.dart';
 ///   - f(x) = 5
 ///   - f(x) = 3 + 6i
 ///
-/// In the context of a polynomial in one variable, the non-zero constant
+/// In the context of a polynomial with one variable, the non-zero constant
 /// function is a polynomial of degree 0.
 class Constant extends Algebraic {
   /// The constant coefficient

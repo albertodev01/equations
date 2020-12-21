@@ -31,9 +31,22 @@ typedef _Evaluator = num Function(num value);
 ///   - asin() (arc sine of `x`)
 ///   - atan() (arc tangent of `x`)
 ///
-/// An exception of type [ExpressionParserException] is thrown in case the string
-/// being parsed is malformed.
+/// An exception of type [ExpressionParserException] is thrown in case the
+/// string being parsed is malformed. This parser is also able to recognize some
+/// constants:
+///
+///  - pi (pi, the ratio of the circumference on the diameter)
+///  - e (Euler's number)
+///  - sqrt2 (the square root of 2)
+///  - sqrt3 (the square root of 3)
+///  - G (Gauss constant)
 class ExpressionParser {
+  /// Gauss constant
+  static const _g = 0.8346268416740;
+
+  /// Square root of 3
+  static const _sqrt3 = 1.7320508075688;
+
   /// A "cached" instance of a parser to be used to evaluate expressions on a
   /// given point.
   static late final Parser _parser = () {
@@ -58,6 +71,9 @@ class ExpressionParser {
       // Constants
       ..primitive(char('e').trim().map((_) => (num value) => math.e))
       ..primitive(string('pi').trim().map((_) => (num value) => math.pi))
+      ..primitive(string('sqrt2').trim().map((_) => (num value) => math.sqrt2))
+      ..primitive(string('sqrt3').trim().map((_) => (num value) => _sqrt3))
+      ..primitive(string('G').trim().map((_) => (num value) => _g))
 
       // Enable the parentheses
       ..wrapper(char('(').trim(), char(')').trim(), (_, _Evaluator a, __) => a)

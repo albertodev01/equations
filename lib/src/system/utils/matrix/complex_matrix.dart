@@ -38,12 +38,12 @@ class ComplexMatrix extends Matrix<Complex> {
     required int columns,
     bool identity = false,
   }) : super(
-    rows: rows,
-    columns: columns,
-    identity: identity,
-    defaultValue: Complex.zero(),
-    identityOneValue: Complex.fromReal(1),
-  );
+          rows: rows,
+          columns: columns,
+          identity: identity,
+          defaultValue: Complex.zero(),
+          identityOneValue: Complex.fromReal(1),
+        );
 
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with values from [data].
@@ -52,10 +52,10 @@ class ComplexMatrix extends Matrix<Complex> {
     required int columns,
     required List<List<Complex>> data,
   }) : super.fromData(
-    rows: rows,
-    columns: columns,
-    data: data,
-  );
+          rows: rows,
+          columns: columns,
+          data: data,
+        );
 
   @override
   bool operator ==(Object other) {
@@ -199,18 +199,18 @@ class ComplexMatrix extends Matrix<Complex> {
 
   /// Computes the determinant of a 4x4 matrix
   Complex _compute4x4Determinant(ComplexMatrix source) {
-    final det2_01_01 =
-        source.flattenData[0] * source.flattenData[5] - source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 =
-        source.flattenData[0] * source.flattenData[6] - source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 =
-        source.flattenData[0] * source.flattenData[7] - source.flattenData[3] * source.flattenData[4];
-    final det2_01_12 =
-        source.flattenData[1] * source.flattenData[6] - source.flattenData[2] * source.flattenData[5];
-    final det2_01_13 =
-        source.flattenData[1] * source.flattenData[7] - source.flattenData[3] * source.flattenData[5];
-    final det2_01_23 =
-        source.flattenData[2] * source.flattenData[7] - source.flattenData[3] * source.flattenData[6];
+    final det2_01_01 = source.flattenData[0] * source.flattenData[5] -
+        source.flattenData[1] * source.flattenData[4];
+    final det2_01_02 = source.flattenData[0] * source.flattenData[6] -
+        source.flattenData[2] * source.flattenData[4];
+    final det2_01_03 = source.flattenData[0] * source.flattenData[7] -
+        source.flattenData[3] * source.flattenData[4];
+    final det2_01_12 = source.flattenData[1] * source.flattenData[6] -
+        source.flattenData[2] * source.flattenData[5];
+    final det2_01_13 = source.flattenData[1] * source.flattenData[7] -
+        source.flattenData[3] * source.flattenData[5];
+    final det2_01_23 = source.flattenData[2] * source.flattenData[7] -
+        source.flattenData[3] * source.flattenData[6];
 
     final det3_201_012 = source.flattenData[8] * det2_01_12 -
         source.flattenData[9] * det2_01_02 +
@@ -262,9 +262,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Computing the determinant for 5x5 matrices and bigger
     final tempMatrix = ComplexMatrix(
-      rows: source.rowCount - 1,
-      columns: source.columnCount - 1
-    );
+        rows: source.rowCount - 1, columns: source.columnCount - 1);
     var det = Complex.zero();
 
     for (var x = 0; x < source.rowCount; ++x) {
@@ -275,7 +273,8 @@ class ComplexMatrix extends Matrix<Complex> {
           if (j == x) {
             continue;
           }
-          tempMatrix.flattenData[(source.columnCount - 1) * subI + subJ] = this(i, j);
+          tempMatrix.flattenData[(source.columnCount - 1) * subI + subJ] =
+              this(i, j);
           subJ++;
         }
         subI++;

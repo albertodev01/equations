@@ -129,11 +129,28 @@ abstract class Matrix<T> {
   String toString() {
     final buffer = StringBuffer();
 
-    for(var i = 0; i < rowCount; ++i) {
-      for(var j = 0; j < columnCount; ++j) {
-        buffer..write(this(i, j))..write(" ");
+    // Printing the matrix in the following format:
+    // [1, 2, 3]
+    // [4, 5, 6]
+    for (var i = 0; i < rowCount; ++i) {
+      // Leading opening [
+      buffer.write("[");
+
+      for (var j = 0; j < columnCount; ++j) {
+        buffer.write(this(i, j));
+
+        // Adding a comma only between two values
+        if (j < columnCount - 1) {
+          buffer.write(", ");
+        }
       }
-      buffer.write("\n");
+
+      // Ending closing ]
+      if (i < rowCount - 1) {
+        buffer.writeln("]");
+      } else {
+        buffer.write("]");
+      }
     }
 
     return buffer.toString();
@@ -177,16 +194,16 @@ abstract class Matrix<T> {
   /// In the above example, you're accessing the [double] at position `(3, 2)`.
   T itemAt(int row, int col) => this(row, col);
 
-  /// Returns the sum of two matrices in `O(n)` complexity.
+  /// Returns the sum of two matrices.
   Matrix<T> operator +(Matrix<T> other);
 
-  /// Returns the difference of two matrices in `O(n)` complexity.
+  /// Returns the difference of two matrices.
   Matrix<T> operator -(Matrix<T> other);
 
-  /// Returns the sum of two matrices in `O(n^3)` complexity.
+  /// Returns the sum of two matrices.
   Matrix<T> operator *(Matrix<T> other);
 
-  /// Returns the division of two matrices in `O(n)` complexity.
+  /// Returns the division of two matrices.
   Matrix<T> operator /(Matrix<T> other);
 
   /// The determinant can only be computed if the matrix is **square**, meaning

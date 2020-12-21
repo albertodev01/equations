@@ -184,10 +184,14 @@ class Laguerre extends Algebraic {
 
   @override
   Complex discriminant() {
-    final sylvester = SylvesterMatrix(
-      coefficients: coefficients
-    );
+    // Say that P(x) is the polynomial represented by this instance and
+    // P'(x) is the derivative of P. In order to calculate the discriminant of
+    // a polynomial, we need to first compute the resultant Res(A, A') which
+    // is equivalent to the determinant of the Sylvester matrix.
+    final sylvester = SylvesterMatrix(coefficients: coefficients);
 
+    // Computes Res(A, A') and then determines the sign according with the
+    // degree of the polynomial.
     return sylvester.polynomialDiscriminant();
   }
 

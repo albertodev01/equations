@@ -98,17 +98,12 @@ abstract class Algebraic {
   /// Use this method when the coefficients can be complex numbers. If there
   /// were only real numbers, use the [Algebraic.fromReal(coefficients)] method
   /// which is more convenient.
-  static Algebraic from(List<Complex> coefficients) {
+  factory Algebraic.from(List<Complex> coefficients) {
     switch (coefficients.length) {
       case 1:
-        return Constant(
-          a: coefficients[0]
-        );
+        return Constant(a: coefficients[0]);
       case 2:
-        return Linear(
-          a: coefficients[0],
-          b: coefficients[1]
-        );
+        return Linear(a: coefficients[0], b: coefficients[1]);
       case 3:
         return Quadratic(
           a: coefficients[0],
@@ -131,9 +126,7 @@ abstract class Algebraic {
           e: coefficients[4],
         );
       default:
-        return Laguerre(
-          coefficients: coefficients
-        );
+        return Laguerre(coefficients: coefficients);
     }
   }
 
@@ -161,8 +154,8 @@ abstract class Algebraic {
   /// Use this method when the coefficients are all real numbers. If there
   /// were complex numbers as well, use the [Algebraic.from(coefficients)]
   /// instead.
-  static Algebraic fromReal(List<double> coefficients) =>
-      from(coefficients.map((value) => Complex.fromReal(value)).toList());
+  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
+      coefficients.map((value) => Complex.fromReal(value)).toList());
 
   @override
   bool operator ==(Object other) {

@@ -67,11 +67,7 @@ void main() {
         [7, 8, 9],
       ]);
 
-      final expected =
-        "| 1 2 3 |"
-        "| 4 5 6 |"
-        "| 7 8 9 |";
-
+      final expected = "[1.0, 2.0, 3.0]\n[4.0, 5.0, 6.0]\n[7.0, 8.0, 9.0]";
       expect(matrix.toString(), equals(expected));
     });
 
@@ -114,8 +110,10 @@ void main() {
       expect(RealMatrix(columns: 2, rows: 2).hashCode, equals(matrix.hashCode));
 
       // Inequality tests
-      expect(RealMatrix(columns: 2, rows: 2, identity: true) == matrix, isFalse);
-      expect(RealMatrix(columns: 2, rows: 1).hashCode == matrix.hashCode, isFalse);
+      expect(
+          RealMatrix(columns: 2, rows: 2, identity: true) == matrix, isFalse);
+      expect(
+          RealMatrix(columns: 2, rows: 1).hashCode == matrix.hashCode, isFalse);
     });
   });
 
