@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing the constructors of the 'Matrix' class", () {
+  group("Testing the constructors of the 'RealMatrix' class", () {
     test("Making sure that a new matrix is initialized with 0s.", () async {
       final matrix = RealMatrix(
         columns: 5,
@@ -12,11 +12,15 @@ void main() {
       // Checking the sizes
       expect(matrix.rowCount, equals(3));
       expect(matrix.columnCount, equals(5));
+      expect(matrix.isSquareMatrix, isFalse);
+      expect(matrix.isRealMatrix, isTrue);
+      expect(matrix.isComplexMatrix, isFalse);
 
       // Checking the content of the matrix
       for (var i = 0; i < matrix.rowCount; ++i) {
         for (var j = 0; j < matrix.columnCount; ++j) {
           expect(matrix(i, j), isZero);
+          expect(matrix(i, j), equals(matrix.itemAt(i, j)));
         }
       }
     });
@@ -49,6 +53,7 @@ void main() {
           } else {
             expect(matrix(i, j), isZero);
           }
+          expect(matrix(i, j), equals(matrix.itemAt(i, j)));
         }
       }
     });
@@ -97,7 +102,7 @@ void main() {
     });
   });
 
-  group("Testing equality of 'Matrix' objects", () {
+  group("Testing equality of 'RealMatrix' objects", () {
     test("Making sure that objects comparison works properly.", () async {
       final matrix = RealMatrix(
         columns: 2,
@@ -145,31 +150,31 @@ void main() {
     });
 
     test("Making sure that operator- works properly.", () async {
-      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
+      final matrixSub = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
         [-12, 3]
       ]);
-      expect(matrixA - matrixB, equals(matrixSum));
+      expect(matrixA - matrixB, equals(matrixSub));
     });
 
     test("Making sure that operator* works properly.", () async {
-      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
+      final matrixMul = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [34, -16],
         [20, -5]
       ]);
-      expect(matrixA * matrixB, equals(matrixSum));
+      expect(matrixA * matrixB, equals(matrixMul));
     });
 
     test("Making sure that operator/ works properly.", () async {
-      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
+      final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-1 / 2, 6],
         [-5 / 7, 0]
       ]);
-      expect(matrixA / matrixB, equals(matrixSum));
+      expect(matrixA / matrixB, equals(matrixDiv));
     });
   });
 
-  group("Testing various operators (+, -, *, /) and the determinant.", () {
+  group("Testing the computation of the determinant.", () {
     test("Making sure that the determinant of an 1*1 matrix is correct.", () {
       final matrix = RealMatrix.fromData(columns: 1, rows: 1, data: [
         [-5]

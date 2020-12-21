@@ -1,8 +1,7 @@
 import 'dart:math';
-
 import 'package:equations/equations.dart';
 
-/// A simple Dart implementation of an `m x n` matrix whose data type is [Complex].
+/// A simple Dart implementation of an `m x n` matrix whose data type is [double].
 ///
 /// ```dart
 /// final matrix = ComplexMatrix(
@@ -104,33 +103,59 @@ class ComplexMatrix extends Matrix<Complex> {
     return result;
   }
 
-  /// Returns the sum of two matrices in `O(n)` complexity.
+  /// Returns the sum of two matrices.
   @override
   Matrix<Complex> operator +(Matrix<Complex> other) {
-    final matrix = ComplexMatrix(rows: rowCount, columns: columnCount);
+    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
+      throw const MatrixException("Matrices shapes mismatch! The column count "
+          "of the source matrix must match the row count of the other.");
+    }
 
     // Performing the sum
-    for (var i = 0; i < flattenData.length; ++i) {
-      matrix.flattenData[i] = flattenData[i] + other.flattenData[i];
+    final matrix = List.generate(
+        rowCount,
+        (_) =>
+            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+        growable: false);
+
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        matrix[i][j] = this(i, j) + other(i, j);
+      }
     }
 
-    return matrix;
+    // Building the new matrix
+    return ComplexMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
-  /// Returns the difference of two matrices in `O(n)` complexity.
+  /// Returns the difference of two matrices.
   @override
   Matrix<Complex> operator -(Matrix<Complex> other) {
-    final matrix = ComplexMatrix(rows: rowCount, columns: columnCount);
-
-    // Performing the difference
-    for (var i = 0; i < flattenData.length; ++i) {
-      matrix.flattenData[i] = flattenData[i] - other.flattenData[i];
+    if (columnCount != other.rowCount) {
+      throw const MatrixException("Matrices shapes mismatch! The column count "
+          "of the source matrix must match the row count of the other.");
     }
 
-    return matrix;
+    // Performing the difference
+    final matrix = List.generate(
+        rowCount,
+        (_) =>
+            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+        growable: false);
+
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        matrix[i][j] = this(i, j) - other(i, j);
+      }
+    }
+
+    // Building the new matrix
+    return ComplexMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
-  /// Returns the sum of two matrices in `O(n^3)` complexity.
+  /// Returns the sum of two matrices.
   @override
   Matrix<Complex> operator *(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
@@ -138,7 +163,12 @@ class ComplexMatrix extends Matrix<Complex> {
           "of the source matrix must match the row count of the other.");
     }
 
-    final result = ComplexMatrix(rows: rowCount, columns: other.columnCount);
+    // Performing the product
+    final matrix = List.generate(
+        rowCount,
+        (_) =>
+            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+        growable: false);
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
@@ -147,24 +177,39 @@ class ComplexMatrix extends Matrix<Complex> {
         for (var k = 0; k < rowCount; k++) {
           sum += (this(i, k) * other(k, j));
         }
-        result.flattenData[columnCount * i + j] = sum;
+        matrix[i][j] = sum;
       }
     }
 
-    return result;
+    // Building the new matrix
+    return ComplexMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
   /// Returns the division of two matrices in `O(n)` complexity.
   @override
   Matrix<Complex> operator /(Matrix<Complex> other) {
-    final matrix = ComplexMatrix(rows: rowCount, columns: columnCount);
-
-    // Performing the division
-    for (var i = 0; i < flattenData.length; ++i) {
-      matrix.flattenData[i] = flattenData[i] / other.flattenData[i];
+    if (columnCount != other.rowCount) {
+      throw const MatrixException("Matrices shapes mismatch! The column count "
+          "of the source matrix must match the row count of the other.");
     }
 
-    return matrix;
+    // Performing the difference
+    final matrix = List.generate(
+        rowCount,
+        (_) =>
+            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+        growable: false);
+
+    // Performing the division
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        matrix[i][j] = this(i, j) / other(i, j);
+      }
+    }
+
+    return ComplexMatrix.fromData(
+        rows: rowCount, columns: columnCount, data: matrix);
   }
 
   /// The determinant can only be computed if the matrix is **square**, meaning
@@ -261,9 +306,12 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Computing the determinant for 5x5 matrices and bigger
-    final tempMatrix = ComplexMatrix(
-        rows: source.rowCount - 1, columns: source.columnCount - 1);
     var det = Complex.zero();
+    final tempMatrix = List.generate(
+        source.rowCount - 1,
+        (_) => List.generate(source.columnCount - 1, (_) => Complex.zero(),
+            growable: false),
+        growable: false);
 
     for (var x = 0; x < source.rowCount; ++x) {
       var subI = 0;
@@ -273,15 +321,17 @@ class ComplexMatrix extends Matrix<Complex> {
           if (j == x) {
             continue;
           }
-          tempMatrix.flattenData[(source.columnCount - 1) * subI + subJ] =
-              this(i, j);
+          tempMatrix[subI][subJ] = this(i, j);
           subJ++;
         }
         subI++;
       }
 
+      final matrix = ComplexMatrix.fromData(
+          rows: rowCount - 1, columns: columnCount - 1, data: tempMatrix);
+
       final sign = Complex.fromReal(pow(-1, x) as double);
-      det = det + (sign * source(0, x) * _computeDeterminant(tempMatrix));
+      det = det + (sign * source(0, x) * _computeDeterminant(matrix));
     }
 
     return det;
