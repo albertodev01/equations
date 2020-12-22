@@ -283,5 +283,21 @@ void main() {
       expect(lu[0], equals(L));
       expect(lu[1], equals(U));
     });
+
+    test(
+        "Making sure that LU factorization throws an exception if the "
+        "source matrix is not square.", () {
+      final matrix = ComplexMatrix.fromData(columns: 2, rows: 3, data: [
+        [Complex.fromReal(1), Complex.fromReal(2)],
+        [Complex.fromReal(4), Complex.fromReal(5)],
+        [Complex.fromReal(7), Complex.fromReal(8)],
+      ]);
+
+      try {
+        matrix.luDecomposition();
+      } catch (e) {
+        expect(e, isA<MatrixException>());
+      }
+    });
   });
 }

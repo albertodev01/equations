@@ -32,6 +32,7 @@ void main() {
       expect(gauss.equations, equals(matrix));
       expect(gauss.knownValues, orderedEquals(<double>[-5, -5, -1]));
       expect(gauss.precision, equals(1.0e-10));
+      expect(gauss.size, equals(3));
 
       // Solutions
       expect(gauss.solve(), unorderedEquals(<double>[-3, 0, 1]));
@@ -64,6 +65,7 @@ void main() {
       expect(gauss.equations, equals(matrix));
       expect(gauss.knownValues, orderedEquals(<double>[4, -8]));
       expect(gauss.precision, equals(1.0e-10));
+      expect(gauss.size, equals(2));
 
       // Solutions
       expect(gauss.solve(), unorderedEquals(<double>[6, 7]));

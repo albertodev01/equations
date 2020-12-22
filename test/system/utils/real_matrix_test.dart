@@ -247,5 +247,21 @@ void main() {
       expect(lu[0], equals(L));
       expect(lu[1], equals(U));
     });
+
+    test(
+        "Making sure that LU factorization throws an exception if the "
+        "source matrix is not square.", () {
+      final matrix = RealMatrix.fromData(columns: 2, rows: 3, data: [
+        [1, 2],
+        [3, 4],
+        [5, 6],
+      ]);
+
+      try {
+        matrix.luDecomposition();
+      } catch (e) {
+        expect(e, isA<MatrixException>());
+      }
+    });
   });
 }

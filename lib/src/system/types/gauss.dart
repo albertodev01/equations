@@ -55,16 +55,6 @@ class GaussianElimination extends SystemSolver {
     }
 
     // Back substitution
-    final solutions = List<double>.filled(n, 0);
-    for (var i = n - 1; i >= 0; --i) {
-      var sum = 0.0;
-      for (var j = i + 1; j < n; ++j) {
-        sum += A[i][j] * solutions[j];
-      }
-      solutions[i] = (b[i] - sum) / A[i][i];
-    }
-
-    // Returning the results
-    return solutions;
+    return backSubstitution(A, b);
   }
 }
