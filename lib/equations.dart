@@ -23,6 +23,7 @@ export 'src/nonlinear/types/steffensen.dart';
 export 'src/nonlinear/utils/results.dart';
 
 export 'src/system/system.dart';
+export 'src/system/types/gauss.dart';
 export 'src/system/utils/matrix.dart';
 export 'src/system/utils/matrix/real_matrix.dart';
 export 'src/system/utils/matrix/complex_matrix.dart';

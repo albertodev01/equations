@@ -156,6 +156,13 @@ abstract class Matrix<T> {
     return buffer.toString();
   }
 
+  /// Returns a modifiable view of the matrix as a `List<List<T>>` object.
+  List<List<T>> toListOfList() {
+    return List<List<T>>.generate(rowCount, (row) {
+      return List<T>.generate(columnCount, (col) => this(row, col));
+    }, growable: false);
+  }
+
   /// Use this method to retrieve the element at a given position in the matrix.
   /// For example:
   ///

@@ -1,8 +1,14 @@
+import 'package:equations/equations.dart';
 import 'package:equations/src/system/system.dart';
 
-/// TODO
+/// Implementation of the "Gaussian elimination" algorithm, also known as "row
+/// reduction", for solving a system of linear equations.
 class GaussianElimination extends SystemSolver {
-  /// TODO
+  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
+  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///
+  ///   - [equations] is the matrix containing the equations
+  ///   - [constants] is the vector with the known values
   GaussianElimination({
     required List<List<double>> equations,
     required List<double> constants,
@@ -10,6 +16,55 @@ class GaussianElimination extends SystemSolver {
 
   @override
   List<double> solve() {
-    return [];
+    final n = knownValues.length;
+    final A = equations.toListOfList();
+    final b = knownValues.map((e) => e).toList();
+
+    // Swapping rows and pivoting
+    for (var p = 0; p < n; ++p) {
+      // Finding a pivot
+      var max = p;
+      for (var i = p + 1; i < n; i++) {
+        if (A[i][p].abs() > A[max][p].abs()) {
+          max = i;
+        }
+      }
+
+      // Swapping rows
+      var temp = A[p];
+      A[p] = A[max];
+      A[max] = temp;
+      var t = b[p];
+      b[p] = b[max];
+      b[max] = t;
+
+      // Making sure the matrix is not singular
+      if (A[p][p].abs() <= precision) {
+        throw const SystemSolverException(
+            "The matrix is singular or nearly singular.");
+      }
+
+      // pivot within A and b
+      for (var i = p + 1; i < n; i++) {
+        var alpha = A[i][p] / A[p][p];
+        b[i] -= alpha * b[p];
+        for (var j = p; j < n; j++) {
+          A[i][j] -= alpha * A[p][j];
+        }
+      }
+    }
+
+    // Back substitution
+    final solutions = List<double>.filled(n, 0);
+    for (var i = n - 1; i >= 0; --i) {
+      var sum = 0.0;
+      for (var j = i + 1; j < n; ++j) {
+        sum += A[i][j] * solutions[j];
+      }
+      solutions[i] = (b[i] - sum) / A[i][i];
+    }
+
+    // Returning the results
+    return solutions;
   }
 }

@@ -17,6 +17,9 @@ abstract class SystemSolver {
   /// The vector containing the known values of the equation.
   late final List<double> _knownValues;
 
+  /// The accuracy of the algorithm.
+  final double precision;
+
   /// The vector containing the known values of the equation.
   List<double> get knownValues => UnmodifiableListView<double>(_knownValues);
 
@@ -30,6 +33,7 @@ abstract class SystemSolver {
     required int size,
     required List<List<double>> A,
     required List<double> b,
+    this.precision = 1.0e-10,
   }) {
     // Building the matrix
     equations = RealMatrix.fromData(rows: size, columns: size, data: A);
@@ -51,6 +55,9 @@ abstract class SystemSolver {
     // Copying and storing internally the list of known values
     _knownValues = b.map((value) => value).toList();
   }
+
+  /// Computes the determinant
+  double determinant() => equations.determinant();
 
   /// Solves the `Ax = b` equation and returns the `x` vector containing the
   /// solutions of the system.

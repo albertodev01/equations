@@ -56,53 +56,6 @@ class RealMatrix extends Matrix<double> {
           data: data,
         );
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    if (other is RealMatrix) {
-      // The lengths of the data lists must match
-      if (flattenData.length != other.flattenData.length) {
-        return false;
-      }
-
-      // Each successful comparison increases a counter by 1. If all elements
-      // are equal, then the counter will match the actual length of the data
-      // list.
-      var equalsCount = 0;
-
-      for (var i = 0; i < flattenData.length; ++i) {
-        if (flattenData[i] == other.flattenData[i]) {
-          ++equalsCount;
-        }
-      }
-
-      // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType &&
-          equalsCount == flattenData.length &&
-          rowCount == other.rowCount &&
-          columnCount == other.columnCount;
-    } else {
-      return false;
-    }
-  }
-
-  @override
-  int get hashCode {
-    var result = 83;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < flattenData.length; ++i) {
-      result = 37 * result + flattenData[i].hashCode;
-    }
-
-    result = 37 * result + rowCount.hashCode;
-    result = 37 * result + columnCount.hashCode;
-
-    return result;
-  }
-
   /// Returns the sum of two matrices.
   @override
   Matrix<double> operator +(Matrix<double> other) {

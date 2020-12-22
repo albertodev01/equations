@@ -214,5 +214,46 @@ void main() {
       ]);
       expect(matrix.determinant(), equals(Complex(-5444, -802)));
     });
+
+    test("Making sure that the determinant of a 5*5 matrix is correct.", () {
+      final matrix = ComplexMatrix.fromData(columns: 5, rows: 5, data: const [
+        [
+          Complex.i(),
+          Complex(3, -8),
+          Complex(3, -3),
+          Complex.i(),
+          Complex(4, -4)
+        ],
+        [
+          Complex(-4, 4),
+          Complex(2, 9),
+          Complex(4, 7),
+          Complex(-2, 5),
+          Complex(10, 2)
+        ],
+        [
+          Complex(4, 7),
+          Complex.zero(),
+          Complex(6, 7),
+          Complex(2, -6),
+          Complex.zero()
+        ],
+        [
+          Complex(6, 1),
+          Complex.i(),
+          Complex.zero(),
+          Complex(5, 4),
+          Complex(1, 2)
+        ],
+        [
+          Complex(3, -2),
+          Complex(5, 2),
+          Complex(1, 3),
+          Complex(6, -3),
+          Complex.fromReal(8)
+        ],
+      ]);
+      expect(matrix.determinant(), equals(Complex(33818, 21240)));
+    });
   });
 }
