@@ -93,8 +93,7 @@ void main() {
                 [4, 5, 6]
               ], constants: [
                 7,
-                8,
-                9
+                8
               ]),
           throwsA(isA<MatrixException>()));
     });

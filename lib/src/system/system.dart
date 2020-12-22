@@ -38,14 +38,6 @@ abstract class SystemSolver {
     // Building the matrix
     equations = RealMatrix.fromData(rows: size, columns: size, data: A);
 
-    // The matrix must be squared
-    if (equations.rowCount != equations.columnCount) {
-      throw SystemSolverException(
-          "There must be 'n' equations in 'n' variables."
-          " You currently have ${equations.rowCount} equations in "
-          "${equations.columnCount} variables.");
-    }
-
     // The vector of known values must match the size of the matrix
     if (equations.rowCount != b.length) {
       throw const SystemSolverException("The known values vector must have the "
@@ -55,6 +47,9 @@ abstract class SystemSolver {
     // Copying and storing internally the list of known values
     _knownValues = b.map((value) => value).toList();
   }
+
+  /// The dimension of the system (which is N equations in N unknowns)
+  int get size => _knownValues.length;
 
   /// Computes the determinant
   double determinant() => equations.determinant();
