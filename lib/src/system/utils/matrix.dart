@@ -163,6 +163,9 @@ abstract class Matrix<T> {
     }, growable: false);
   }
 
+  /// Determines whether the matrix is square
+  bool get isSquareMatrix => rowCount == columnCount;
+
   /// Use this method to retrieve the element at a given position in the matrix.
   /// For example:
   ///
@@ -221,6 +224,7 @@ abstract class Matrix<T> {
   /// slower.
   T determinant();
 
-  /// Determines whether the matrix is square
-  bool get isSquareMatrix => rowCount == columnCount;
+  /// Factors the matrix as the product of a lower triangular matrix `L` and
+  /// an upper triangular matrix `U`.
+  List<Matrix<T>> luDecomposition();
 }

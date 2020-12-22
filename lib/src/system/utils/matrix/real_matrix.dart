@@ -166,6 +166,60 @@ class RealMatrix extends Matrix<double> {
   @override
   double determinant() => _computeDeterminant(this);
 
+  /// Factors the matrix as the product of a lower triangular matrix `L` and
+  /// an upper triangular matrix `U`. The matrix **must** be square.
+  ///
+  /// The returned list contains `L` at index 0 and `U` at index 1.
+  @override
+  List<RealMatrix> luDecomposition() {
+    // Making sure that the matrix is squared
+    if (!isSquareMatrix) {
+      throw MatrixException(
+          "LU decomposition only works with square matrices!");
+    }
+
+    // Creating L and U matrices
+    final L = List<List<double>>.generate(rowCount, (row) {
+      return List<double>.generate(rowCount, (col) => 0);
+    }, growable: false);
+    final U = List<List<double>>.generate(rowCount, (row) {
+      return List<double>.generate(rowCount, (col) => 0);
+    }, growable: false);
+
+    // Computing L and U
+    for (var i = 0; i < rowCount; ++i) {
+      for (var k = i; k < rowCount; k++) {
+        // Summation of L(i, j) * U(j, k)
+        var sum = 0.0;
+        for (var j = 0; j < i; j++) {
+          sum += (L[i][j] * U[j][k]);
+        }
+
+        // Evaluating U(i, k)
+        U[i][k] = this(i, k) - sum;
+      }
+
+      // Lower Triangular
+      for (var k = i; k < rowCount; k++) {
+        if (i == k) {
+          L[i][i] = 1; // Diagonal as 1
+        } else {
+          // Summation of L(k, j) * U(j, i)
+          var sum = 0.0;
+          for (var j = 0; j < i; j++) sum += (L[k][j] * U[j][i]);
+
+          // Evaluating L(k, i)
+          L[k][i] = (this(k, i) - sum) / U[i][i];
+        }
+      }
+    }
+
+    return [
+      RealMatrix.fromData(rows: rowCount, columns: rowCount, data: L),
+      RealMatrix.fromData(rows: rowCount, columns: rowCount, data: U),
+    ];
+  }
+
   /// Computes the determinant of a 2x2 matrix
   double _compute2x2Determinant(RealMatrix source) {
     return source.flattenData[0] * source.flattenData[3] -

@@ -256,4 +256,32 @@ void main() {
       expect(matrix.determinant(), equals(Complex(33818, 21240)));
     });
   });
+
+  group("Testing operations on matrices.", () {
+    test("Making sure that LU factorization works correctly.", () {
+      final matrix = ComplexMatrix.fromData(columns: 3, rows: 3, data: [
+        [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
+        [Complex.fromReal(4), Complex.fromReal(5), Complex.fromReal(6)],
+        [Complex.fromReal(7), Complex.fromReal(8), Complex.fromReal(9)],
+      ]);
+
+      // Expected results
+      final L = ComplexMatrix.fromData(columns: 3, rows: 3, data: [
+        [Complex.fromReal(1), Complex.fromReal(0), Complex.fromReal(0)],
+        [Complex.fromReal(4), Complex.fromReal(1), Complex.fromReal(0)],
+        [Complex.fromReal(7), Complex.fromReal(2), Complex.fromReal(1)],
+      ]);
+      final U = ComplexMatrix.fromData(columns: 3, rows: 3, data: [
+        [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
+        [Complex.fromReal(0), Complex.fromReal(-3), Complex.fromReal(-6)],
+        [Complex.fromReal(0), Complex.fromReal(0), Complex.fromReal(0)],
+      ]);
+
+      // Checking the results
+      final lu = matrix.luDecomposition();
+
+      expect(lu[0], equals(L));
+      expect(lu[1], equals(U));
+    });
+  });
 }

@@ -120,7 +120,7 @@ void main() {
     });
   });
 
-  group("Testing operation on matrices (+, *, - and /)", () {
+  group("Testing operators on 'RealMatrix' (+, *, - and /)", () {
     /*
     * A = |  2  6  |
     *     | -5  0  |
@@ -218,6 +218,34 @@ void main() {
         [7, 0, 3, -4, 1]
       ]);
       expect(matrix.determinant(), equals(-28398));
+    });
+  });
+
+  group("Testing operations on matrices.", () {
+    test("Making sure that LU factorization works correctly.", () {
+      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ]);
+
+      // Expected results
+      final L = RealMatrix.fromData(columns: 3, rows: 3, data: [
+        [1, 0, 0],
+        [4, 1, 0],
+        [7, 2, 1],
+      ]);
+      final U = RealMatrix.fromData(columns: 3, rows: 3, data: [
+        [1, 2, 3],
+        [0, -3, -6],
+        [0, 0, 0],
+      ]);
+
+      // Checking the results
+      final lu = matrix.luDecomposition();
+
+      expect(lu[0], equals(L));
+      expect(lu[1], equals(U));
     });
   });
 }
