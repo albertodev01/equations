@@ -222,46 +222,103 @@ void main() {
   });
 
   group("Testing operations on matrices.", () {
-    test("Making sure that LU factorization works correctly.", () {
-      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-      ]);
+    test(
+        "Making sure that the LU decomposition properly works on a square "
+        "matrix of a given dimension.", () async {
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]
+        ],
+      );
 
-      // Expected results
-      final L = RealMatrix.fromData(columns: 3, rows: 3, data: [
-        [1, 0, 0],
-        [4, 1, 0],
-        [7, 2, 1],
-      ]);
-      final U = RealMatrix.fromData(columns: 3, rows: 3, data: [
-        [1, 2, 3],
-        [0, -3, -6],
-        [0, 0, 0],
-      ]);
-
-      // Checking the results
+      // Decomposition
       final lu = matrix.luDecomposition();
+      expect(lu.length, equals(2));
 
-      expect(lu[0], equals(L));
-      expect(lu[1], equals(U));
+      // Checking L
+      final L = lu[0];
+      expect(L.rowCount, equals(matrix.rowCount));
+      expect(L.columnCount, equals(matrix.columnCount));
+      expect(L.isSquareMatrix, isTrue);
+      expect(L.flattenData, orderedEquals(<double>[1, 0, 0, 4, 1, 0, 7, 2, 1]));
+
+      // Checking U
+      final U = lu[1];
+      expect(U.rowCount, equals(matrix.rowCount));
+      expect(U.columnCount, equals(matrix.columnCount));
+      expect(U.isSquareMatrix, isTrue);
+      expect(
+          U.flattenData, orderedEquals(<double>[1, 2, 3, 0, -3, -6, 0, 0, 0]));
     });
 
     test(
-        "Making sure that LU factorization throws an exception if the "
-        "source matrix is not square.", () {
-      final matrix = RealMatrix.fromData(columns: 2, rows: 3, data: [
-        [1, 2],
-        [3, 4],
-        [5, 6],
+        "Making sure that the LU decomposition properly doesn't work when "
+        "the matrix is not square.", () async {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [1, 2, 3],
+          [4, 5, 6],
+        ],
+      );
+
+      // Decomposition
+      // ignore: unnecessary_lambdas
+      expect(() => matrix.luDecomposition(), throwsA(isA<MatrixException>()));
+    });
+
+    test(
+        "Making sure that Cholesky decomposition properly works on a square "
+        "matrix of a given dimension.", () async {
+      final matrix = RealMatrix.fromData(rows: 3, columns: 3, data: const [
+        [25, 15, -5],
+        [15, 18, 0],
+        [-5, 0, 11]
       ]);
 
-      try {
-        matrix.luDecomposition();
-      } catch (e) {
-        expect(e, isA<MatrixException>());
-      }
+      // Decomposition
+      final cholesky = matrix.choleskyDecomposition();
+      expect(cholesky.length, equals(2));
+
+      // Checking L
+      final L = cholesky[0];
+      expect(
+          L.flattenData, orderedEquals(<double>[5, 0, 0, 3, 3, 0, -1, 1, 3]));
+      expect(L.rowCount, equals(matrix.rowCount));
+      expect(L.columnCount, equals(matrix.columnCount));
+      expect(L.isSquareMatrix, isTrue);
+
+      // Checking Lt
+      final transposedL = cholesky[1];
+      expect(transposedL.flattenData,
+          orderedEquals(<double>[5, 3, -1, 0, 3, 1, 0, 0, 3]));
+      expect(transposedL.rowCount, equals(matrix.rowCount));
+      expect(transposedL.columnCount, equals(matrix.columnCount));
+      expect(transposedL.isSquareMatrix, isTrue);
+    });
+
+    test(
+        "Making sure that the Cholesky decomposition properly doesn't work "
+        "when the matrix is not square.", () async {
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 2,
+        data: const [
+          [1, 2],
+          [3, 4],
+          [5, 6],
+        ],
+      );
+
+      // Decomposition
+      // ignore: unnecessary_lambdas
+      expect(() => matrix.choleskyDecomposition(),
+          throwsA(isA<MatrixException>()));
     });
   });
 }
