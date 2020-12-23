@@ -48,48 +48,50 @@ abstract class SystemSolver {
     _knownValues = b.map((value) => value).toList();
   }
 
-  /// The dimension of the system (which is N equations in N unknowns)
-  int get size => _knownValues.length;
-
   /// Back substitution is an iterative process that solves equation matrices
   /// in the form `Ux = b`, where `U` is an upper triangular matrix.
   ///
   /// In this case, [source] represents `U` and [vector] represents `b`.
-  List<double> backSubstitution(
+  static List<double> backSubstitution(
       List<List<double>> source, List<double> vector) {
     final vectorSize = vector.length;
-    final solutions = List<double>.filled(vectorSize, 0);
+    final solutions =
+        List<double>.generate(vectorSize, (_) => 0, growable: false);
 
     for (var i = vectorSize - 1; i >= 0; --i) {
-      var sum = 0.0;
+      solutions[i] = vector[i];
       for (var j = i + 1; j < vectorSize; ++j) {
-        sum += source[i][j] * solutions[j];
+        solutions[i] = solutions[i] - source[i][j] * solutions[j];
       }
-      solutions[i] = (vector[i] - sum) / source[i][i];
+      solutions[i] = solutions[i] / source[i][i];
     }
 
     return solutions;
   }
 
   /// Forward substitution is an iterative process that solves equation matrices
-  /// in the form `Lx = b`, where `U` is a lower triangular matrix.
+  /// in the form `Lx = b`, where `L` is a lower triangular matrix.
   ///
   /// In this case, [source] represents `L` and [vector] represents `b`.
-  List<double> forwardSubstitution(
+  static List<double> forwardSubstitution(
       List<List<double>> source, List<double> vector) {
     final vectorSize = vector.length;
-    final solutions = List<double>.filled(vectorSize, 0);
+    final solutions =
+        List<double>.generate(vectorSize, (_) => 0, growable: false);
 
     for (var i = 0; i < vectorSize; ++i) {
-      var sum = 0.0;
-      for (var j = 0; j < i - 1; ++j) {
-        sum += source[i][j] * solutions[j];
+      solutions[i] = vector[i];
+      for (var j = 0; j < i; ++j) {
+        solutions[i] = solutions[i] - source[i][j] * solutions[j];
       }
-      solutions[i] = (vector[i] - sum) / source[i][i];
+      solutions[i] = solutions[i] / source[i][i];
     }
 
     return solutions;
   }
+
+  /// The dimension of the system (which is N equations in N unknowns)
+  int get size => _knownValues.length;
 
   /// Computes the determinant
   double determinant() => equations.determinant();

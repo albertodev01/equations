@@ -55,6 +55,6 @@ class GaussianElimination extends SystemSolver {
     }
 
     // Back substitution
-    return backSubstitution(A, b);
+    return SystemSolver.backSubstitution(A, b);
   }
 }

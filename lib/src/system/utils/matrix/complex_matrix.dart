@@ -228,6 +228,69 @@ class ComplexMatrix extends Matrix<Complex> {
     ];
   }
 
+  /// Uses the the Cholesky decomposition algorithm to factor the matrix into
+  /// the product of a lower triangular matrix and its conjugate transpose. In
+  /// particular, this method returns the matrix `L` of the
+  ///
+  ///  - A = L x L<sup>T</sup>
+  ///
+  /// relation. The algorithm might fail in case the square root of a negative
+  /// number were encountered.
+  @override
+  List<ComplexMatrix> choleskyDecomposition() {
+    // Making sure that the matrix is squared
+    if (!isSquareMatrix) {
+      throw MatrixException(
+          "LU decomposition only works with square matrices!");
+    }
+
+    // Exit immediately because is [0,0] is a negative number, the algorithm
+    // cannot even start since the square root of a negative number in R is not
+    // allowed.
+    if (this(0, 0) <= Complex.zero()) {
+      throw const SystemSolverException("The matrix is not positive-definite.");
+    }
+
+    // Creating L and Lt matrices
+    final L = List<List<Complex>>.generate(rowCount, (row) {
+      return List<Complex>.generate(rowCount, (col) => Complex.zero());
+    }, growable: false);
+    final transpL = List<List<Complex>>.generate(rowCount, (row) {
+      return List<Complex>.generate(rowCount, (col) => Complex.zero());
+    }, growable: false);
+
+    // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j <= i; j++) {
+        var sum = Complex.zero();
+        if (j == i) {
+          for (var k = 0; k < j; k++) {
+            sum += L[j][k] * L[j][k];
+          }
+          L[j][j] = (this(i, j) - sum).sqrt();
+        } else {
+          for (var k = 0; k < j; k++) {
+            sum += L[i][k] * L[j][k];
+          }
+          L[i][j] = (this(i, j) - sum) / L[j][j];
+        }
+      }
+    }
+
+    // Computing Lt, the transposed version of L
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < rowCount; j++) {
+        transpL[i][j] = L[j][i];
+      }
+    }
+
+    return [
+      ComplexMatrix.fromData(rows: rowCount, columns: columnCount, data: L),
+      ComplexMatrix.fromData(
+          rows: rowCount, columns: columnCount, data: transpL)
+    ];
+  }
+
   /// Computes the determinant of a 2x2 matrix
   Complex _compute2x2Determinant(ComplexMatrix source) {
     return source.flattenData[0] * source.flattenData[3] -
