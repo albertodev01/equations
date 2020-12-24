@@ -126,21 +126,22 @@ class SylvesterMatrix {
       final determinant = matrixDeterminant();
 
       /*
-     * Once we got the determinant, we need to make the last calculation to also
-     * determine the sign. The formula is the following:
-     *
-     *  Disc(A) = (-1)^(n*(n-1)/2) * 1/A[n] * Res(A, A')
-     *
-     * In the above formula, 'n' is the degree of the polynomial, A(x) is the
-     * polynomial and A'(x) is the derivative of A(x).
-     *
-     * Res(A, A') is the resultant of A(x) and A'(x), which is nothing more than
-     * the determinant of the Sylvester matrix.
-     * */
+      * Once we got the determinant, we need to make the last calculation to also
+      * determine the sign. The formula is the following:
+      *
+      *  Disc(A) = (-1)^(n*(n-1)/2) * 1/A[n] * Res(A, A')
+      *
+      * In the above formula, 'n' is the degree of the polynomial, A(x) is the
+      * polynomial and A'(x) is the derivative of A(x).
+      *
+      * Res(A, A') is the resultant of A(x) and A'(x), which is nothing more than
+      * the determinant of the Sylvester matrix.
+      */
       final degree = _coefficients.length - 1;
       final sign = math.pow(-1, degree * (degree - 1) / 2) as double;
       final denominator = _coefficients[0];
 
+      // Returning the determinant with the correct sign
       return Complex.fromReal(sign) / denominator * determinant;
     }
   }

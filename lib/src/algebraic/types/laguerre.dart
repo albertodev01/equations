@@ -236,6 +236,7 @@ class Laguerre extends Algebraic {
     final p1 = _derivativeOf(poly);
     final p2 = _derivativeOf(p1);
 
+    // By default, 'maxSteps' is set to 1000 which is generally good enough
     for (var step = 0; step < maxSteps; step++) {
       final y0 = _horner(poly, x).value;
 
@@ -270,6 +271,7 @@ class Laguerre extends Algebraic {
     final n = a.length - 1;
     final b = List<Complex>.filled(max(1, n), Complex.zero());
 
+    // Horner
     for (var i = n; i > 0; --i) {
       b[i - 1] = a[i] + (i < n ? b[i] * x0 : Complex.zero());
     }

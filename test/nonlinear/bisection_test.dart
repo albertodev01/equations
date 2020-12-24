@@ -7,7 +7,7 @@ void main() {
   group("Testing the 'Bisection' class", () {
     test(
         "Making sure that the series converges when the root is in the interval.",
-        () async {
+        () {
       const bisection = Bisection(function: "x^3-x-2", a: 1, b: 2, maxSteps: 5);
 
       expect(bisection.maxSteps, equals(5));
@@ -18,7 +18,7 @@ void main() {
       expect(bisection.b, equals(2));
 
       // Solving the equation, making sure that the series converged
-      final solutions = await bisection.solve();
+      final solutions = bisection.solve();
       expect(solutions.guesses.length <= 5, isTrue);
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.convergence, MoreOrLessEquals(1, precision: 1));
@@ -28,8 +28,8 @@ void main() {
     });
 
     test("Making sure that a malformed equation string throws.", () {
-      expect(() async {
-        await Bisection(function: "2x - 6", a: 1, b: 8).solve();
+      expect(() {
+        Bisection(function: "2x - 6", a: 1, b: 8).solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 
@@ -48,10 +48,10 @@ void main() {
 
     test(
         "Making sure that the bisection method still works when the root is "
-        "not in the interval but the actual solution is not found", () async {
+        "not in the interval but the actual solution is not found", () {
       const bisection =
           Bisection(function: "x^2 - 9", a: -120, b: -122, maxSteps: 5);
-      final solutions = await bisection.solve();
+      final solutions = bisection.solve();
 
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.length <= 5, isTrue);

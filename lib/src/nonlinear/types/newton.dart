@@ -30,7 +30,31 @@ class Newton extends NonLinear {
       : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
   @override
-  Future<NonlinearResults> solve() async {
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is Newton) {
+      return runtimeType == other.runtimeType &&
+          function == other.function &&
+          tolerance == other.tolerance &&
+          maxSteps == other.maxSteps &&
+          x0 == other.x0;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = 37 * result + x0.hashCode;
+
+    return result;
+  }
+
+  @override
+  NonlinearResults solve() {
     var diff = tolerance + 1;
     var n = 0;
     var currx0 = x0;

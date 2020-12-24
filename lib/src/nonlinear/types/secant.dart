@@ -33,7 +33,33 @@ class Secant extends NonLinear {
       : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
   @override
-  Future<NonlinearResults> solve() async {
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is Secant) {
+      return runtimeType == other.runtimeType &&
+          function == other.function &&
+          tolerance == other.tolerance &&
+          maxSteps == other.maxSteps &&
+          firstGuess == other.firstGuess &&
+          secondGuess == other.secondGuess;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = 37 * result + firstGuess.hashCode;
+    result = 37 * result + secondGuess.hashCode;
+
+    return result;
+  }
+
+  @override
+  NonlinearResults solve() {
     var guesses = <double>[];
     var n = 1;
 

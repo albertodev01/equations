@@ -33,7 +33,33 @@ class Bisection extends NonLinear {
       : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
   @override
-  Future<NonlinearResults> solve() async {
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is Bisection) {
+      return runtimeType == other.runtimeType &&
+          function == other.function &&
+          tolerance == other.tolerance &&
+          maxSteps == other.maxSteps &&
+          a == other.a &&
+          b == other.b;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = 37 * result + a.hashCode;
+    result = 37 * result + b.hashCode;
+
+    return result;
+  }
+
+  @override
+  NonlinearResults solve() {
     var amp = tolerance + 1;
     var n = 1;
     var guesses = <double>[];

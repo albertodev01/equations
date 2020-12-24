@@ -7,7 +7,7 @@ void main() {
   group("Testing the 'Chords' class", () {
     test(
         "Making sure that the series converges when the root is in the interval.",
-        () async {
+        () {
       const chords =
           Chords(function: "cos(x+3)-log(x)+2", a: 0.1, b: 7, maxSteps: 5);
 
@@ -19,7 +19,7 @@ void main() {
       expect(chords.b, equals(7));
 
       // Solving the equation, making sure that the series converged
-      final solutions = await chords.solve();
+      final solutions = chords.solve();
       expect(solutions.guesses.length <= 5, isTrue);
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.last, MoreOrLessEquals(5, precision: 1));
@@ -28,8 +28,8 @@ void main() {
     });
 
     test("Making sure that a malformed equation string throws.", () {
-      expect(() async {
-        await Chords(function: "2^ - 6y", a: 2, b: 0).solve();
+      expect(() {
+        Chords(function: "2^ - 6y", a: 2, b: 0).solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 
@@ -48,9 +48,9 @@ void main() {
 
     test(
         "Making sure that the chords method still works when the root is "
-        "not in the interval but the actual solution is not found", () async {
+        "not in the interval but the actual solution is not found", () {
       const chords = Chords(function: "x^2-2", a: 10, b: 20, maxSteps: 3);
-      final solutions = await chords.solve();
+      final solutions = chords.solve();
 
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.length <= 3, isTrue);

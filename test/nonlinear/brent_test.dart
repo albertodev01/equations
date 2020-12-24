@@ -6,7 +6,7 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing the 'Brent' class", () {
     test("Making sure that the series converges when the root is bracketed.",
-        () async {
+        () {
       const brent = Brent(function: "x^3-sqrt(x+3)", a: 0, b: 2, maxSteps: 10);
 
       expect(brent.a, equals(0));
@@ -17,7 +17,7 @@ void main() {
       expect(brent.toString(), equals("f(x) = x^3-sqrt(x+3)"));
 
       // Solving the equation, making sure that the series converged
-      final solutions = await brent.solve();
+      final solutions = brent.solve();
       expect(solutions.guesses.length <= 10, isTrue);
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.convergence, MoreOrLessEquals(0, precision: 1));
@@ -27,8 +27,8 @@ void main() {
     });
 
     test("Making sure that a malformed equation string throws.", () {
-      expect(() async {
-        await Brent(function: "x^3-√(x+3)", a: 0, b: 2).solve();
+      expect(() {
+        Brent(function: "x^3-√(x+3)", a: 0, b: 2).solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 
@@ -43,7 +43,7 @@ void main() {
 
     test(
         "Making sure that an exception is thrown if the root is not bracketed "
-        "because the [a,b] range is invalid.", () async {
+        "because the [a,b] range is invalid.", () {
       final brent = Brent(function: "x^3-sqrt(x+3)", a: 3, b: 5, maxSteps: 5);
 
       // Making sure an expression of type "NonlinearException" is thrown
@@ -51,7 +51,7 @@ void main() {
 
       // Making sure the error message is correct
       try {
-        await brent.solve();
+        brent.solve();
       } on NonlinearException catch (e) {
         expect(e.message, equals("The root is not bracketed."));
       }

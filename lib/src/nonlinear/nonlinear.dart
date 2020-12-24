@@ -110,5 +110,5 @@ abstract class NonLinear {
 
   /// Returns a [NonlinearResults] object which contains the data calculated by
   /// the root-finding algorithm.
-  Future<NonlinearResults> solve();
+  NonlinearResults solve();
 }
