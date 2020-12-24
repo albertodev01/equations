@@ -4,7 +4,7 @@ import 'package:equations/equations.dart';
 /// Concrete implementation of [Algebraic] that represents a third degree
 /// polynomial equation in the form `ax^3 + bx^2 + cx + d = 0`.
 ///
-/// This equation has exactly 3 solutions which can be:
+/// This equation has exactly 3 solutions:
 ///
 ///  - 3 distinct real roots and 0 complex roots
 ///  - 3 real roots (some of them are equal) and 0 complex roots

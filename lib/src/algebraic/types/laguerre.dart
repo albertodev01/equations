@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
+import 'package:equations/src/algebraic/utils/sylvester_matrix.dart';
 
 /// Laguerre's method can be used to numerically solve polynomials in the form
 /// `P(x) = 0` where `P(x)` is a given polynomial. This method requires an initial
@@ -182,7 +183,17 @@ class Laguerre extends Algebraic {
   }
 
   @override
-  Complex discriminant() => const Complex.zero();
+  Complex discriminant() {
+    // Say that P(x) is the polynomial represented by this instance and
+    // P'(x) is the derivative of P. In order to calculate the discriminant of
+    // a polynomial, we need to first compute the resultant Res(A, A') which
+    // is equivalent to the determinant of the Sylvester matrix.
+    final sylvester = SylvesterMatrix(coefficients: coefficients);
+
+    // Computes Res(A, A') and then determines the sign according with the
+    // degree of the polynomial.
+    return sylvester.polynomialDiscriminant();
+  }
 
   @override
   List<Complex> solutions() {

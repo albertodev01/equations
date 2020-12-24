@@ -29,7 +29,7 @@ void main() {
 
     test("Making sure that a malformed equation string throws.", () {
       expect(() async {
-        await Newton(function: "sqrt2 - 2", x0: 0).solve();
+        await Newton(function: "sqrt4 - 2", x0: 0).solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 

@@ -1,3 +1,11 @@
+# 2.0.0-nullsafety.2
+
+  - Created the `RealMatrix` and `ComplexMatrix` types to work with matrix
+  - Added support for linear systems solving using Gauss, LU decomposition and Cholesky decomposition
+  - Added a new static method called `Algebraic.from()` which automatically builds a new polynomial
+    equation according with the number of coefficients.
+  - Minor documentation fixes
+
 # 2.0.0-nullsafety.1
 
   - Added a new root-finding algorithm (`Brent` which implements the Brent's method method)

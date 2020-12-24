@@ -17,7 +17,7 @@ void main() {
       expect(equation.degree, equals(2));
       expect(equation.derivative(), isA<Linear>());
       expect(equation.isRealEquation, isFalse);
-      expect(equation.discriminant(), equals(Complex.zero()));
+      expect(equation.discriminant(), Complex(1, 12));
       expect(
           equation.coefficients,
           equals([

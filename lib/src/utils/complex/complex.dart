@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
-import 'package:fraction/fraction.dart';
 
 /// A Dart representation of a complex number in the form `a + bi` where `a` is
 /// the real part and `bi` is the imaginary (or complex) part.
@@ -321,9 +320,14 @@ class Complex implements Comparable<Complex> {
 
   /// Calculates the square root of a complex number.
   Complex sqrt() {
+    // In case this instance were a real, positive number, then we can simplify
+    // the calculation.
+    if ((imaginary == 0) && (real > 0)) {
+      return Complex.fromReal(math.sqrt(real));
+    }
+
     var r = math.sqrt(abs());
     var theta = phase() / 2;
-
     return Complex(r * math.cos(theta), r * math.sin(theta));
   }
 

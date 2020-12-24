@@ -3,7 +3,7 @@ import 'package:equations/equations.dart';
 /// Concrete implementation of [Algebraic] that represents a fourth degree
 /// polynomial equation in the form _ax^4 + bx^3 + cx^2 + dx + e = 0_.
 ///
-/// This equation has exactly 4 solutions which can be:
+/// This equation has exactly 4 solutions:
 ///
 ///  - 2 distinct real roots and 2 complex conjugate roots
 ///  - 4 real roots and 0 complex roots
