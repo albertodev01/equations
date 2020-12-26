@@ -11,7 +11,7 @@
 
 ---
 
-Thanks to `equations` you're able to solve polynomial and nonlinear equations with ease. It's been written in "pure" Dart, meaning that it has no  
+Thanks to `equations` you're able to solve polynomial and nonlinear equations with ease. It's been written in "pure" Dart, meaning that it has no
 dependency on any framework. It can be used with Flutter for web, desktop and mobile. Here's a summary of the contents of the package:
 
   - `Algebraic` and all of its subtypes, which can be used to solve algebraic equations (also known as polynomial equations);
@@ -45,7 +45,7 @@ to go for the following approach:
   - Use `Laguerre` to find the roots of a polynomial whose degree is 5 or higher.
 
 Note that `Laguerre` can be used with any polynomials, so you could use it (for example) to solve a cubic equation as well. `Laguerre` internally
-uses loops, derivatives and other mechanics that are much slower than `Quartic`, `Cubic`, `Quadratic` and `Linear` so use it only onle when really
+uses loops, derivatives and other mechanics that are much slower than `Quartic`, `Cubic`, `Quadratic` and `Linear` so use it only when really
 needed. Here's how you can solve a cubic:
 
 ```dart
@@ -105,7 +105,7 @@ for (final root in equation.solutions()) {
 
 # Nonlinear equations
 
-Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package  
+Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package
 supports the following root finding methods:
 
 | Solver name  | Params field      |
@@ -117,7 +117,7 @@ supports the following root finding methods:
 | `Steffensen` | x<sub>0</sub> ∈ R |
 | `Brent`      | a, b ∈ R          |
 
-Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only  
+Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only
 work with real numbers. Here's a simple example of how you can find the roots of an equation:
 
 ```dart
