@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   group("Testing the constructors of the 'RealMatrix' class", () {
-    test("Making sure that a new matrix is initialized with 0s.", () async {
+    test("Making sure that a new matrix is initialized with 0s.", () { 
       final matrix = RealMatrix(
         columns: 5,
         rows: 3,
@@ -25,7 +25,7 @@ void main() {
 
     test(
         "Making sure that an exception is thrown when the user tries to "
-        "build a matrix whose row or column count is zero.", () async {
+        "build a matrix whose row or column count is zero.", () { 
       expect(
           () => RealMatrix(
                 columns: 0,
@@ -36,7 +36,7 @@ void main() {
 
     test(
         "Making sure that the identity matrix is filled with 0s except for "
-        "its diagonal, which must contain all 1s.", () async {
+        "its diagonal, which must contain all 1s.", () { 
       final matrix = RealMatrix(columns: 3, rows: 3, identity: true);
 
       // Checking the sizes
@@ -76,7 +76,7 @@ void main() {
 
     test(
         "Making sure that a matrix is properly built from a list of lists "
-        "entries.", () async {
+        "entries.", () { 
       final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
         [1, 2, 3],
         [4, 5, 6],
@@ -101,7 +101,7 @@ void main() {
   });
 
   group("Testing equality of 'RealMatrix' objects", () {
-    test("Making sure that objects comparison works properly.", () async {
+    test("Making sure that objects comparison works properly.", () { 
       final matrix = RealMatrix(
         columns: 2,
         rows: 2,
@@ -139,7 +139,7 @@ void main() {
       [7, -3]
     ]);
 
-    test("Making sure that operator+ works properly.", () async {
+    test("Making sure that operator+ works properly.", () { 
       final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-2, 7],
         [2, -3]
@@ -147,7 +147,7 @@ void main() {
       expect(matrixA + matrixB, equals(matrixSum));
     });
 
-    test("Making sure that operator- works properly.", () async {
+    test("Making sure that operator- works properly.", () { 
       final matrixSub = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
         [-12, 3]
@@ -155,7 +155,7 @@ void main() {
       expect(matrixA - matrixB, equals(matrixSub));
     });
 
-    test("Making sure that operator* works properly.", () async {
+    test("Making sure that operator* works properly.", () { 
       final matrixMul = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [34, -16],
         [20, -5]
@@ -163,7 +163,7 @@ void main() {
       expect(matrixA * matrixB, equals(matrixMul));
     });
 
-    test("Making sure that operator/ works properly.", () async {
+    test("Making sure that operator/ works properly.", () { 
       final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-1 / 2, 6],
         [-5 / 7, 0]
@@ -224,7 +224,7 @@ void main() {
   group("Testing operations on matrices.", () {
     test(
         "Making sure that the LU decomposition properly works on a square "
-        "matrix of a given dimension.", () async {
+        "matrix of a given dimension.", () { 
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -257,7 +257,7 @@ void main() {
 
     test(
         "Making sure that the LU decomposition properly doesn't work when "
-        "the matrix is not square.", () async {
+        "the matrix is not square.", () { 
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -274,7 +274,7 @@ void main() {
 
     test(
         "Making sure that Cholesky decomposition properly works on a square "
-        "matrix of a given dimension.", () async {
+        "matrix of a given dimension.", () { 
       final matrix = RealMatrix.fromData(rows: 3, columns: 3, data: const [
         [25, 15, -5],
         [15, 18, 0],
@@ -304,7 +304,7 @@ void main() {
 
     test(
         "Making sure that the Cholesky decomposition properly doesn't work "
-        "when the matrix is not square.", () async {
+        "when the matrix is not square.", () { 
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 2,

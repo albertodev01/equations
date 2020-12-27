@@ -48,6 +48,53 @@ abstract class SystemSolver {
     _knownValues = b.map((value) => value).toList();
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is SystemSolver) {
+      // The lengths of the coefficients must match
+      if (_knownValues.length != other._knownValues.length) {
+        return false;
+      }
+
+      // Each successful comparison increases a counter by 1. If all elements are
+      // equal, then the counter will match the actual length of the coefficients
+      // list.
+      var equalsCount = 0;
+
+      for (var i = 0; i < _knownValues.length; ++i) {
+        if (_knownValues[i] == other._knownValues[i]) {
+          ++equalsCount;
+        }
+      }
+
+      // They must have the same runtime type AND all items must be equal.
+      return runtimeType == other.runtimeType &&
+          equalsCount == _knownValues.length &&
+          equations == other.equations &&
+          precision == other.precision;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = 17;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < _knownValues.length; ++i) {
+      result = 37 * result + _knownValues[i].hashCode;
+    }
+
+    result = 37 * result + equations.hashCode;
+    result = 37 * result + precision.hashCode;
+
+    return result;
+  }
+
   /// Back substitution is an iterative process that solves equation matrices
   /// in the form `Ux = b`, where `U` is an upper triangular matrix.
   ///

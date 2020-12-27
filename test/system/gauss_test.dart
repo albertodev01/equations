@@ -5,7 +5,7 @@ void main() {
   group("Testing the 'GaussianElimination' class.", () {
     test(
         "Making sure that the gaussian elimination works properly with a "
-        "well formed matrix. Trying with a 3x3 matrix.", () async {
+        "well formed matrix. Trying with a 3x3 matrix.", () {
       final gauss = GaussianElimination(equations: const [
         [1, 2, -2],
         [2, -2, 1],
@@ -41,7 +41,7 @@ void main() {
 
     test(
         "Making sure that the gaussian elimination works properly with a "
-        "well formed matrix. Trying with a 2x2 matrix.", () async {
+        "well formed matrix. Trying with a 2x2 matrix.", () {
       final gauss = GaussianElimination(equations: const [
         [3, -2],
         [1, -2],
@@ -72,7 +72,7 @@ void main() {
       expect(gauss.determinant(), equals(-4));
     });
 
-    test("Making sure that a singular matrices throw an exception.", () async {
+    test("Making sure that a singular matrices throw an exception.", () {
       final gauss = GaussianElimination(equations: const [
         [-1, -1],
         [1, 1]
@@ -88,7 +88,7 @@ void main() {
 
     test(
         "Making sure that the matrix is squared because this method is only "
-        "able to solve systems of 'N' equations in 'N' variables.", () async {
+        "able to solve systems of 'N' equations in 'N' variables.", () {
       expect(
           () => GaussianElimination(equations: const [
                 [1, 2, 3],
@@ -102,7 +102,7 @@ void main() {
 
     test(
         "Making sure that the matrix is squared AND the dimension of the "
-        "known values vector also matches the size of the matrix.", () async {
+        "known values vector also matches the size of the matrix.", () {
       expect(
           () => GaussianElimination(equations: const [
                 [1, 2],
@@ -113,6 +113,20 @@ void main() {
                 9
               ]),
           throwsA(isA<MatrixException>()));
+    });
+
+    test("Making sure that objects comparison works properly.", () {
+      final gauss = GaussianElimination(equations: const [
+        [1, 2], [3, 4]
+      ], constants: [0, -6]);
+
+      final gauss2 = GaussianElimination(equations: const [
+        [1, 2], [3, 4]
+      ], constants: [0, -6]);
+
+      expect(gauss, equals(gauss2));
+      expect(gauss == gauss2, isTrue);
+      expect(gauss.hashCode, equals(gauss2.hashCode));
     });
   });
 }
