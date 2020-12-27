@@ -41,8 +41,8 @@ void main() {
       );
 
       expect(Chords(function: "x^2-2", a: 1, b: 2), equals(chords));
-      expect(Chords(function: "x^2-2", a: 0, b: 2) == chords, isTrue);
-      expect(Chords(function: "x^2-2", a: 0, b: 2).hashCode,
+      expect(Chords(function: "x^2-2", a: 0, b: 2) == chords, isFalse);
+      expect(Chords(function: "x^2-2", a: 1, b: 2).hashCode,
           equals(chords.hashCode));
     });
 

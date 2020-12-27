@@ -5,7 +5,7 @@ import '../../double_approximation_matcher.dart';
 
 void main() {
   group("Testing the constructors of the 'ComplexMatrix' class", () {
-    test("Making sure that a new matrix is initialized with 0s.", () { 
+    test("Making sure that a new matrix is initialized with 0s.", () {
       final matrix = ComplexMatrix(
         columns: 5,
         rows: 3,
@@ -27,7 +27,7 @@ void main() {
 
     test(
         "Making sure that an exception is thrown when the user tries to "
-        "build a matrix whose row or column count is zero.", () { 
+        "build a matrix whose row or column count is zero.", () {
       expect(
           () => ComplexMatrix(
                 columns: 0,
@@ -38,7 +38,7 @@ void main() {
 
     test(
         "Making sure that the identity matrix is filled with 0s except for "
-        "its diagonal, which must contain all 1s.", () { 
+        "its diagonal, which must contain all 1s.", () {
       final matrix = ComplexMatrix(columns: 3, rows: 3, identity: true);
 
       // Checking the sizes
@@ -77,7 +77,7 @@ void main() {
 
     test(
         "Making sure that a matrix is properly built from a list of lists "
-        "entries.", () { 
+        "entries.", () {
       final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
         [Complex(1, 2), Complex(3, 4)],
         [Complex(5, 6), Complex(7, 8)],
@@ -96,7 +96,7 @@ void main() {
   });
 
   group("Testing equality of 'ComplexMatrix' objects", () {
-    test("Making sure that objects comparison works properly.", () { 
+    test("Making sure that objects comparison works properly.", () {
       final matrix = ComplexMatrix(
         columns: 2,
         rows: 2,
@@ -135,7 +135,7 @@ void main() {
       [Complex.fromImaginary(6), Complex(1, 1)]
     ]);
 
-    test("Making sure that operator+ works properly.", () { 
+    test("Making sure that operator+ works properly.", () {
       final matrixSum =
           ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
         [Complex(5, 1), Complex(-4, -7)],
@@ -144,7 +144,7 @@ void main() {
       expect(matrixA + matrixB, equals(matrixSum));
     });
 
-    test("Making sure that operator- works properly.", () { 
+    test("Making sure that operator- works properly.", () {
       final matrixSub = ComplexMatrix.fromData(columns: 2, rows: 2, data: [
         [Complex(-5, 1), Complex(10, -9)],
         [Complex(4, 1), Complex(-1, -1)]
@@ -152,7 +152,7 @@ void main() {
       expect(matrixA - matrixB, equals(matrixSub));
     });
 
-    test("Making sure that operator* works properly.", () { 
+    test("Making sure that operator* works properly.", () {
       final matrixProd = ComplexMatrix.fromData(columns: 2, rows: 2, data: [
         [Complex(48, 23), Complex(10, -12)],
         [Complex(20, 35), Complex(-35, -45)]
@@ -160,7 +160,7 @@ void main() {
       expect(matrixA * matrixB, equals(matrixProd));
     });
 
-    test("Making sure that operator/ works properly.", () { 
+    test("Making sure that operator/ works properly.", () {
       final divResult = matrixA / matrixB;
 
       // Comparing members one by one due to machine precision issues
@@ -260,7 +260,7 @@ void main() {
   group("Testing operations on matrices.", () {
     test(
         "Making sure that the LU decomposition properly works on a square "
-        "matrix of a given dimension.", () { 
+        "matrix of a given dimension.", () {
       final matrix = ComplexMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -316,7 +316,7 @@ void main() {
 
     test(
         "Making sure that the LU decomposition properly doesn't work when "
-        "the matrix is not square.", () { 
+        "the matrix is not square.", () {
       final matrix = ComplexMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -333,7 +333,7 @@ void main() {
 
     test(
         "Making sure that Cholesky decomposition properly works on a square "
-        "matrix of a given dimension.", () { 
+        "matrix of a given dimension.", () {
       final matrix = ComplexMatrix.fromData(rows: 3, columns: 3, data: const [
         [Complex.fromReal(25), Complex.fromReal(15), Complex.fromReal(-5)],
         [Complex.fromReal(15), Complex.fromReal(18), Complex.fromReal(0)],
@@ -385,7 +385,7 @@ void main() {
 
     test(
         "Making sure that the Cholesky decomposition properly doesn't work "
-        "when the matrix is not square.", () { 
+        "when the matrix is not square.", () {
       final matrix = ComplexMatrix.fromData(
         rows: 3,
         columns: 2,

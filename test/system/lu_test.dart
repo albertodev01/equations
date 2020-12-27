@@ -41,7 +41,7 @@ void main() {
 
     test(
         "Making sure that the matrix is squared because this method is only "
-        "able to solve systems of 'N' equations in 'N' variables.", () { 
+        "able to solve systems of 'N' equations in 'N' variables.", () {
       expect(
           () => LUSolver(equations: const [
                 [7, -2, 1],
@@ -55,7 +55,7 @@ void main() {
 
     test(
         "Making sure that the matrix is squared AND the dimension of the "
-        "known values vector also matches the size of the matrix.", () { 
+        "known values vector also matches the size of the matrix.", () {
       expect(
           () => LUSolver(equations: const [
                 [

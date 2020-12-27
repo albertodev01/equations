@@ -117,12 +117,20 @@ void main() {
 
     test("Making sure that objects comparison works properly.", () {
       final gauss = GaussianElimination(equations: const [
-        [1, 2], [3, 4]
-      ], constants: [0, -6]);
+        [1, 2],
+        [3, 4]
+      ], constants: [
+        0,
+        -6
+      ]);
 
       final gauss2 = GaussianElimination(equations: const [
-        [1, 2], [3, 4]
-      ], constants: [0, -6]);
+        [1, 2],
+        [3, 4]
+      ], constants: [
+        0,
+        -6
+      ]);
 
       expect(gauss, equals(gauss2));
       expect(gauss == gauss2, isTrue);

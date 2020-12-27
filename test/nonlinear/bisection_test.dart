@@ -41,8 +41,8 @@ void main() {
       );
 
       expect(Bisection(function: "x-2", a: 1, b: 2), equals(bisection));
-      expect(Bisection(function: "x-2", a: 0, b: 2) == bisection, isTrue);
-      expect(Bisection(function: "x-2", a: 0, b: 2).hashCode,
+      expect(Bisection(function: "x-2", a: 0, b: 2) == bisection, isFalse);
+      expect(Bisection(function: "x-2", a: 1, b: 2).hashCode,
           equals(bisection.hashCode));
     });
 

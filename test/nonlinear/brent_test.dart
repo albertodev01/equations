@@ -46,8 +46,8 @@ void main() {
         "because the [a,b] range is invalid.", () {
       final brent = Brent(function: "x^3-sqrt(x+3)", a: 3, b: 5, maxSteps: 5);
 
-      // Making sure an expression of type "NonlinearException" is thrown
-      expect(brent.solve(), throwsA(isA<NonlinearException>()));
+      // ignore: unnecessary_lambdas
+      expect(() => brent.solve(), throwsA(isA<NonlinearException>()));
 
       // Making sure the error message is correct
       try {

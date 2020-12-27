@@ -26,7 +26,7 @@ abstract class NonLinear {
   /// The accuracy of the algorithm.
   final double tolerance;
 
-  /// The maximum steps to be made by the algorithm.
+  /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
 
   /// Creates a new instance of a nonlinear equation solver which asks for:

@@ -41,11 +41,11 @@ void main() {
         secondGuess: 2,
       );
 
-      expect(Secant(function: "x-2", firstGuess: 1, secondGuess: 2),
+      expect(Secant(function: "x-2", firstGuess: -1, secondGuess: 2),
           equals(secant));
       expect(Secant(function: "x-2", firstGuess: 0, secondGuess: 2) == secant,
-          isTrue);
-      expect(Secant(function: "x-2", firstGuess: 0, secondGuess: 2).hashCode,
+          isFalse);
+      expect(Secant(function: "x-2", firstGuess: -1, secondGuess: 2).hashCode,
           equals(secant.hashCode));
     });
 
