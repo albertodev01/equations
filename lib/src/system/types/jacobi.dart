@@ -44,6 +44,51 @@ class JacobiSolver extends SystemSolver {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is JacobiSolver) {
+      // The lengths of the coefficients must match
+      if (x0.length != other.x0.length) {
+        return false;
+      }
+
+      // Each successful comparison increases a counter by 1. If all elements are
+      // equal, then the counter will match the actual length of the coefficients
+      // list.
+      var equalsCount = 0;
+
+      for (var i = 0; i < x0.length; ++i) {
+        if (x0[i] == other.x0[i]) {
+          ++equalsCount;
+        }
+      }
+
+      // They must have the same runtime type AND all items must be equal.
+      return super == other &&
+          equalsCount == x0.length &&
+          maxSteps == other.maxSteps;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = super.hashCode;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < x0.length; ++i) {
+      result = 37 * result + x0[i].hashCode;
+    }
+
+    result = 37 * result + maxSteps.hashCode;
+
+    return result;
+  }
+
+  @override
   List<double> solve() {
     // Exit conditions for the method
     var k = 0;

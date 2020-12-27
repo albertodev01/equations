@@ -38,12 +38,7 @@ class Chords extends NonLinear {
     if (identical(this, other)) return true;
 
     if (other is Chords) {
-      return runtimeType == other.runtimeType &&
-          function == other.function &&
-          tolerance == other.tolerance &&
-          maxSteps == other.maxSteps &&
-          a == other.a &&
-          b == other.b;
+      return super == other && a == other.a && b == other.b;
     } else {
       return false;
     }

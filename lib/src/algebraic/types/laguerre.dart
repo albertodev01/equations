@@ -94,25 +94,7 @@ class Laguerre extends Algebraic {
     if (identical(this, other)) return true;
 
     if (other is Laguerre) {
-      // The lengths of the coefficients must match
-      if (coefficients.length != other.coefficients.length) {
-        return false;
-      }
-
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
-      var equalsCount = 0;
-
-      for (var i = 0; i < coefficients.length; ++i) {
-        if (coefficients[i] == other.coefficients[i]) {
-          ++equalsCount;
-        }
-      }
-
-      // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType &&
-          equalsCount == coefficients.length &&
+      return super == other &&
           initialGuess == other.initialGuess &&
           precision == other.precision &&
           maxSteps == other.maxSteps;

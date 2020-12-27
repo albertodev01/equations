@@ -35,11 +35,7 @@ class Steffensen extends NonLinear {
     if (identical(this, other)) return true;
 
     if (other is Steffensen) {
-      return runtimeType == other.runtimeType &&
-          function == other.function &&
-          tolerance == other.tolerance &&
-          maxSteps == other.maxSteps &&
-          x0 == other.x0;
+      return super == other && x0 == other.x0;
     } else {
       return false;
     }

@@ -37,10 +37,7 @@ class Secant extends NonLinear {
     if (identical(this, other)) return true;
 
     if (other is Secant) {
-      return runtimeType == other.runtimeType &&
-          function == other.function &&
-          tolerance == other.tolerance &&
-          maxSteps == other.maxSteps &&
+      return super == other &&
           firstGuess == other.firstGuess &&
           secondGuess == other.secondGuess;
     } else {
