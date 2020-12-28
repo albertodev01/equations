@@ -1,3 +1,11 @@
+# 2.0.0-nullsafety.3
+
+  - Added support for linear systems solving using Jacobi, Gauss-Seidel and SOR
+  - Improved comparison logic for all the classes of the package
+  - Written more tests for covegare
+  - Expanded the README.md file
+  - New examples in the `example/` folder
+
 # 2.0.0-nullsafety.2
 
   - Created the `RealMatrix` and `ComplexMatrix` types to work with matrix
