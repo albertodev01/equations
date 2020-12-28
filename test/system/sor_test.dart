@@ -83,19 +83,5 @@ void main() {
       expect(sor == sor2, isTrue);
       expect(sor.hashCode, equals(sor2.hashCode));
     });
-
-    test(
-        "Making sure that an exception is thrown when the length of the "
-        "initial vector is different from the size of the NxN matrix.", () {
-      expect(
-          () => SORSolver(equations: const [
-                [1, 2],
-                [4, 5]
-              ], constants: [
-                7,
-                8
-              ], w: 2),
-          throwsA(isA<SystemSolverException>()));
-    });
   });
 }
