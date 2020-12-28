@@ -26,7 +26,7 @@ abstract class NonLinear {
   /// The accuracy of the algorithm.
   final double tolerance;
 
-  /// The maximum steps to be made by the algorithm.
+  /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
 
   /// Creates a new instance of a nonlinear equation solver which asks for:
@@ -110,5 +110,5 @@ abstract class NonLinear {
 
   /// Returns a [NonlinearResults] object which contains the data calculated by
   /// the root-finding algorithm.
-  Future<NonlinearResults> solve();
+  NonlinearResults solve();
 }

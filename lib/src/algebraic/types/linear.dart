@@ -5,12 +5,6 @@ import 'package:equations/equations.dart';
 ///
 /// This equation has exactly 1 solution, which can be real or complex.
 class Linear extends Algebraic {
-  /// The first coefficient of the equation in the form _f(x) = ab + b_
-  final Complex a;
-
-  /// The second coefficient of the equation in the form _f(x) = ab + b_
-  final Complex b;
-
   /// These are examples of linear equations, where the coefficient with the
   /// highest degree goes first:
   ///
@@ -32,8 +26,8 @@ class Linear extends Algebraic {
   /// values are required, then consider using [Linear.realEquation()] for a
   /// less verbose syntax.
   Linear({
-    this.a = const Complex.fromReal(1),
-    this.b = const Complex.zero(),
+    Complex a = const Complex.fromReal(1),
+    Complex b = const Complex.zero(),
   }) : super([a, b]);
 
   /// The only coefficient of the polynomial is represented by a [double]
@@ -41,9 +35,7 @@ class Linear extends Algebraic {
   Linear.realEquation({
     double a = 1,
     double b = 0,
-  })  : a = Complex.fromReal(a),
-        b = Complex.fromReal(b),
-        super.realEquation([a, b]);
+  }) : super.realEquation([a, b]);
 
   @override
   int get degree => 1;
@@ -56,6 +48,12 @@ class Linear extends Algebraic {
 
   @override
   List<Complex> solutions() => [b.negate / a];
+
+  /// The first coefficient of the equation in the form _f(x) = ab + b_
+  Complex get a => coefficients[0];
+
+  /// The second coefficient of the equation in the form _f(x) = ab + b_
+  Complex get b => coefficients[1];
 
   /// Creates a **deep** copy of this object with the given fields replaced
   /// with the new values.

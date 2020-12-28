@@ -11,18 +11,13 @@ import 'package:equations/equations.dart';
 /// In the context of a polynomial with one variable, the non-zero constant
 /// function is a polynomial of degree 0.
 class Constant extends Algebraic {
-  /// The constant coefficient
-  final Complex a;
-
   /// The only coefficient of the polynomial is represented by a [Complex]
   /// number [a].
-  Constant({this.a = const Complex.fromReal(1)}) : super([a]);
+  Constant({Complex a = const Complex.fromReal(1)}) : super([a]);
 
   /// The only coefficient of the polynomial is represented by a [double]
   /// (real) number [a].
-  Constant.realEquation({double a = 1})
-      : a = Complex.fromReal(a),
-        super.realEquation([a]);
+  Constant.realEquation({double a = 1}) : super.realEquation([a]);
 
   @override
   num get degree => a.isZero ? double.negativeInfinity : 0;
@@ -35,6 +30,9 @@ class Constant extends Algebraic {
 
   @override
   List<Complex> solutions() => [];
+
+  /// The constant coefficient
+  Complex get a => coefficients[0];
 
   /// Creates a **deep** copy of this object with the given fields replaced
   /// with the new values.

@@ -7,7 +7,7 @@ void main() {
   group("Testing the 'Steffensen' class", () {
     test(
         "Making sure that the series converges when the root is in the interval.",
-        () async {
+        () {
       const steffensen = Steffensen(function: "exp(x)-3", x0: 1, maxSteps: 5);
 
       expect(steffensen.maxSteps, equals(5));
@@ -17,7 +17,7 @@ void main() {
       expect(steffensen.x0, equals(1));
 
       // Solving the equation, making sure that the series converged
-      final solutions = await steffensen.solve();
+      final solutions = steffensen.solve();
       expect(solutions.guesses.length <= 5, isTrue);
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.convergence, MoreOrLessEquals(2, precision: 1.0e-1));
@@ -28,8 +28,8 @@ void main() {
     });
 
     test("Making sure that a malformed equation string throws.", () {
-      expect(() async {
-        await Steffensen(function: "exp x - 3", x0: 1).solve();
+      expect(() {
+        Steffensen(function: "exp x - 3", x0: 1).solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 
@@ -44,9 +44,9 @@ void main() {
 
     test(
         "Making sure that the steffensen method still works when the root is "
-        "not in the interval but the actual solution is not found", () async {
+        "not in the interval but the actual solution is not found", () {
       const steffensen = Steffensen(function: "x-500", x0: 1, maxSteps: 3);
-      final solutions = await steffensen.solve();
+      final solutions = steffensen.solve();
 
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.length <= 3, isTrue);

@@ -33,6 +33,27 @@ class Brent extends NonLinear {
       int maxSteps = 15})
       : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    if (other is Brent) {
+      return super == other && a == other.a && b == other.b;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = 37 * result + a.hashCode;
+    result = 37 * result + b.hashCode;
+
+    return result;
+  }
+
   bool _condition1(double s, double a, double b) {
     final lower = (3 * a + b) / 4;
     return !((s >= lower) && (s <= b));
@@ -55,7 +76,7 @@ class Brent extends NonLinear {
   }
 
   @override
-  Future<NonlinearResults> solve() async {
+  NonlinearResults solve() {
     var guesses = <double>[];
     var n = 1;
 

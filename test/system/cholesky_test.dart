@@ -7,7 +7,7 @@ void main() {
   group("Testing the 'CholeskyDecomposition' class.", () {
     test(
         "Making sure that the CholeskySolver computes the correct results of a "
-        "system of linear equations.", () async {
+        "system of linear equations.", () {
       final choleskySolver = CholeskySolver(equations: const [
         [6, 15, 55],
         [15, 55, 255],
@@ -42,6 +42,74 @@ void main() {
           choleskySolver.knownValues, orderedEquals(<double>[76, 295, 1259]));
       expect(choleskySolver.precision, equals(1.0e-10));
       expect(choleskySolver.size, equals(3));
+    });
+
+    test(
+        "Making sure that an exception is thrown when the square root of a "
+        "negative number is found while Cholesky-decomposing the matrix.", () {
+      final solver = CholeskySolver(equations: const [
+        [-6, 15, 55],
+        [15, 55, 255],
+        [55, 225, 979]
+      ], constants: const [
+        76,
+        295,
+        1259
+      ]);
+
+      // ignore: unnecessary_lambdas
+      expect(() => solver.solve(), throwsA(isA<SystemSolverException>()));
+    });
+
+    test(
+        "Making sure that the matrix is squared because this method is only "
+        "able to solve systems of 'N' equations in 'N' variables.", () {
+      expect(
+          () => CholeskySolver(equations: const [
+                [1, 2, 3],
+                [4, 5, 6]
+              ], constants: [
+                7,
+                8
+              ]),
+          throwsA(isA<MatrixException>()));
+    });
+
+    test(
+        "Making sure that the matrix is squared AND the dimension of the "
+        "known values vector also matches the size of the matrix.", () {
+      expect(
+          () => CholeskySolver(equations: const [
+                [1, 2],
+                [4, 5]
+              ], constants: [
+                7,
+                8,
+                9
+              ]),
+          throwsA(isA<MatrixException>()));
+    });
+
+    test("Making sure that objects comparison works properly.", () {
+      final gauss = GaussianElimination(equations: const [
+        [1, 2],
+        [3, 4]
+      ], constants: [
+        0,
+        -6
+      ]);
+
+      final gauss2 = GaussianElimination(equations: const [
+        [1, 2],
+        [3, 4]
+      ], constants: [
+        0,
+        -6
+      ]);
+
+      expect(gauss, equals(gauss2));
+      expect(gauss == gauss2, isTrue);
+      expect(gauss.hashCode, equals(gauss2.hashCode));
     });
   });
 }

@@ -94,25 +94,7 @@ class Laguerre extends Algebraic {
     if (identical(this, other)) return true;
 
     if (other is Laguerre) {
-      // The lengths of the coefficients must match
-      if (coefficients.length != other.coefficients.length) {
-        return false;
-      }
-
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
-      var equalsCount = 0;
-
-      for (var i = 0; i < coefficients.length; ++i) {
-        if (coefficients[i] == other.coefficients[i]) {
-          ++equalsCount;
-        }
-      }
-
-      // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType &&
-          equalsCount == coefficients.length &&
+      return super == other &&
           initialGuess == other.initialGuess &&
           precision == other.precision &&
           maxSteps == other.maxSteps;
@@ -236,6 +218,7 @@ class Laguerre extends Algebraic {
     final p1 = _derivativeOf(poly);
     final p2 = _derivativeOf(p1);
 
+    // By default, 'maxSteps' is set to 1000 which is generally good enough
     for (var step = 0; step < maxSteps; step++) {
       final y0 = _horner(poly, x).value;
 
@@ -270,6 +253,7 @@ class Laguerre extends Algebraic {
     final n = a.length - 1;
     final b = List<Complex>.filled(max(1, n), Complex.zero());
 
+    // Horner
     for (var i = n; i > 0; --i) {
       b[i - 1] = a[i] + (i < n ? b[i] * x0 : Complex.zero());
     }

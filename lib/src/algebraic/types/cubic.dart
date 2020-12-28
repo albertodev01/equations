@@ -12,22 +12,6 @@ import 'package:equations/equations.dart';
 ///
 /// The above cases depend on the value of the discriminant.
 class Cubic extends Algebraic {
-  /// The first coefficient of the equation in the form
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
-  final Complex a;
-
-  /// The second coefficient of the equation in the form
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
-  final Complex b;
-
-  /// The third coefficient of the equation in the form
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
-  final Complex c;
-
-  /// The fourth coefficient of the equation in the form
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
-  final Complex d;
-
   /// These are examples of cubic equations, where the coefficient with the
   /// highest degree goes first:
   ///
@@ -50,10 +34,10 @@ class Cubic extends Algebraic {
   /// values are required, then consider using [Cubic.realEquation()] for a
   /// less verbose syntax.
   Cubic({
-    this.a = const Complex.fromReal(1),
-    this.b = const Complex.zero(),
-    this.c = const Complex.zero(),
-    this.d = const Complex.zero(),
+    Complex a = const Complex.fromReal(1),
+    Complex b = const Complex.zero(),
+    Complex c = const Complex.zero(),
+    Complex d = const Complex.zero(),
   }) : super([a, b, c, d]);
 
   /// The only coefficient of the polynomial is represented by a [double]
@@ -63,11 +47,7 @@ class Cubic extends Algebraic {
     double b = 0,
     double c = 0,
     double d = 0,
-  })  : a = Complex.fromReal(a),
-        b = Complex.fromReal(b),
-        c = Complex.fromReal(c),
-        d = Complex.fromReal(d),
-        super.realEquation([a, b, c, d]);
+  }) : super.realEquation([a, b, c, d]);
 
   @override
   int get degree => 3;
@@ -107,6 +87,22 @@ class Cubic extends Algebraic {
       constTerm * (b + (C * sigma.pow(2)) + (d0 / (C * sigma.pow(2)))),
     ];
   }
+
+  /// The first coefficient of the equation in the form
+  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  Complex get a => coefficients[0];
+
+  /// The second coefficient of the equation in the form
+  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  Complex get b => coefficients[1];
+
+  /// The third coefficient of the equation in the form
+  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  Complex get c => coefficients[2];
+
+  /// The fourth coefficient of the equation in the form
+  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  Complex get d => coefficients[3];
 
   /// Creates a **deep** copy of this object with the given fields replaced
   /// with the new values.
