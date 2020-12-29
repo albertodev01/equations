@@ -268,8 +268,7 @@ void main() {
       );
 
       // Decomposition
-      // ignore: unnecessary_lambdas
-      expect(() => matrix.luDecomposition(), throwsA(isA<MatrixException>()));
+      expect(matrix.luDecomposition, throwsA(isA<MatrixException>()));
     });
 
     test(
@@ -316,9 +315,7 @@ void main() {
       );
 
       // Decomposition
-      // ignore: unnecessary_lambdas
-      expect(() => matrix.choleskyDecomposition(),
-          throwsA(isA<MatrixException>()));
+      expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
     });
   });
 }

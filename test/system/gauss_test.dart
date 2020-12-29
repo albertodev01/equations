@@ -83,7 +83,7 @@ void main() {
 
       // Solutions
       expect(gauss.determinant(), equals(0));
-      //expect(() => gauss.solve(), throwsA(isA<SystemSolverException>()));
+      expect(gauss.solve, throwsA(isA<SystemSolverException>()));
     });
 
     test(

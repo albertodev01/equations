@@ -16,10 +16,11 @@ dependency on any framework. It can be used with Flutter for web, desktop and mo
 
   - `Algebraic` and all of its subtypes, which can be used to solve algebraic equations (also known as polynomial equations);
   - `Nonlinear` and all of its subtypes, which can be used to solve nonlinear equations;
+  - `SystemSolver` and all of its subtypes, which can be used to solve systems of linear equations;
   - `Complex`, which is used to easily handle complex numbers;
   - `Fraction`, from the [fraction](https://pub.dev/packages/fraction) package which helps you working with fractions.
 
-This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe!
+This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. Please don't hesitate to open a PR or file an issue if you wish to contribute to the growth of this package!
 
 # Algebraic equations
 
@@ -97,11 +98,27 @@ final equation = Laguerre(
  *  x1 = 1.0119095 + 0.5886435
  *  x2 = 0.3489062 - 1.7343034i
  *  x3 = -1.0838926 + 0.9610444
- * */ 
+ * */
 for (final root in equation.solutions()) {
   print(root);
 }
 ```
+
+As we've already pointed out, both ways are equivalent but `Laguerre` internally performs operations on matrices and calculates determinants many times so it's computationally slower than `Cubic`. Use `Laguerre` only when the degree of your polynomial is greater or equal than 5.
+
+```dart
+final quadratic = Algebraic.from(const [
+  Complex(2, -3),
+  Complex.i(),
+  Complex(1, 6)
+]);
+
+final quartic = Algebraic.fromReal(const [
+  1, -2, 3, -4, 5
+]);
+```
+
+The factory constructor `Algebraic.from()` automatically returns the best type of `Algebraic` according with the number of parameters you've passed.
 
 # Nonlinear equations
 
@@ -146,3 +163,65 @@ final List<double> guesses = solutions.guesses;
 ```
 
 Note that certain algorithms don't guarantee the convergence to a root so read the documentation carefully before choosing the method.
+
+# Systems of equations
+
+Use one of the following classes to solve systems of linear equations. Note that only real coefficients are allowed (so `double` is ok but `Complex` isn't) and you must define `N` equations in `N` variables (so a **square** matrix is needed).
+
+| Solver name           | Iterative method   |
+|:---------------------:|:------------------:|
+| `CholeskySolver`      | :x:                |
+| `GaussianElimination` | :x:                |
+| `GaussSeidelSolver`   | :heavy_check_mark: |
+| `JacobiSolver`        | :heavy_check_mark: |
+| `LUSolver`            | :x:                |
+| `SORSolver`           | :heavy_check_mark: |
+
+In any case, solvers only work with square matrices so `N` equations in `N` variables. These solvers are used to find the `x` in the `Ax = b` relation. Methods require at least the equation system matrix `A` and the vector `b` containing the unknowns. Iterative methods may require additional parameters such as an initial guess or a particular configuration value.
+
+```dart
+// Solve a system using LU decomposition
+final luSolver = LUSolver(
+  equations: const [
+    [7, -2, 1],
+    [14, -7, -3],
+    [-7, 11, 18]
+  ],
+  constants: const [12, 17, 5]
+);
+
+final solutions = luSolver.solve(); // [-1, 4, 3]
+final determinant = luSolver.determinant(); // -84.0
+```
+
+If you just want to work with matrices (operations, LU decomposition and/or Cholesky decomposition) you can consider the usage of `RealMatrix` or `ComplexMatrix` which are a real or complex representation of a matrix.
+
+```dart
+final matrixA = RealMatrix.fromData(
+  columns: 2,
+  rows: 2,
+  data: const [
+    [2, 6],
+    [-5, 0]
+  ]
+);
+
+final matrixB = RealMatrix.fromData(
+  columns: 2,
+  rows: 2,
+  data: const [
+    [-4, 1],
+    [7, -3],
+  ]
+);
+
+final sum = matrixA + matrixB;
+final sub = matrixA - matrixB;
+final mul = matrixA * matrixB;
+final div = matrixA / matrixB;
+
+final lu = matrixA.luDecomposition();
+final cholesky = matrixA.choleskyDecomposition();
+
+final det = matrixA.determinant();
+```

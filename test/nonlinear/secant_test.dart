@@ -56,7 +56,7 @@ void main() {
       expect(secant.evaluateDerivativeOn(0).isNaN, isTrue);
 
       // Making sure that the method actually throws
-      expect(() async => secant.solve(), throwsA(isA<Exception>()));
+      expect(secant.solve, throwsA(isA<Exception>()));
 
       // Checking the error message
       try {

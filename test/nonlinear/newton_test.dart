@@ -48,7 +48,7 @@ void main() {
       expect(newton.evaluateDerivativeOn(0).isNaN, isTrue);
 
       // Making sure that the method actually throws
-      expect(() async => newton.solve(), throwsA(isA<Exception>()));
+      expect(newton.solve, throwsA(isA<Exception>()));
 
       // Checking the error message
       try {

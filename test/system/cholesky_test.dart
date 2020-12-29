@@ -57,8 +57,7 @@ void main() {
         1259
       ]);
 
-      // ignore: unnecessary_lambdas
-      expect(() => solver.solve(), throwsA(isA<SystemSolverException>()));
+      expect(solver.solve, throwsA(isA<SystemSolverException>()));
     });
 
     test(
