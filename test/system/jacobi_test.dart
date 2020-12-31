@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'GaussianElimination' class.", () {
+  group("Testing the 'JacobiSolver' class.", () {
     test(
         "Making sure that the jacobi iterative method works properly with a "
         "well formed matrix.", () {
@@ -42,6 +42,25 @@ void main() {
       final solutions = jacobi.solve();
       expect(solutions[0], MoreOrLessEquals(7.11, precision: 1.0e-2));
       expect(solutions[1], MoreOrLessEquals(-3.22, precision: 1.0e-2));
+    });
+
+    test("Making sure that the string conversion works properly.", () {
+      final solver = JacobiSolver(
+        equations: const [
+          [2, 1],
+          [5, 7]
+        ],
+        constants: [11, 13],
+        x0: [1, 1],
+      );
+
+      final toString = "[2.0, 1.0]\n"
+          "[5.0, 7.0]";
+      final toStringAugmented = "[2.0, 1.0 | 11.0]\n"
+          "[5.0, 7.0 | 13.0]";
+
+      expect(solver.toString(), equals(toString));
+      expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
     test(

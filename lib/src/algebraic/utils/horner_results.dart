@@ -6,7 +6,7 @@ class HornerResult {
   /// The list of evaluated coefficients.
   final List<Complex> polynomial;
 
-  /// The "distance" from the root being seeked.
+  /// The "distance" from the desired root.
   final Complex value;
 
   /// Requires list of newly evaluated coefficients ([polynomial]) and the

@@ -39,6 +39,28 @@ void main() {
       expect(luSolver.size, equals(3));
     });
 
+    test("Making sure that the string conversion works properly.", () {
+      final solver = LUSolver(equations: const [
+        [7, -2, 1],
+        [14, -7, -3],
+        [-7, 11, 18]
+      ], constants: const [
+        12,
+        17,
+        5
+      ]);
+
+      final toString = "[7.0, -2.0, 1.0]\n"
+          "[14.0, -7.0, -3.0]\n"
+          "[-7.0, 11.0, 18.0]";
+      final toStringAugmented = "[7.0, -2.0, 1.0 | 12.0]\n"
+          "[14.0, -7.0, -3.0 | 17.0]\n"
+          "[-7.0, 11.0, 18.0 | 5.0]";
+
+      expect(solver.toString(), equals(toString));
+      expect(solver.toStringAugmented(), equals(toStringAugmented));
+    });
+
     test(
         "Making sure that the matrix is squared because this method is only "
         "able to solve systems of 'N' equations in 'N' variables.", () {
