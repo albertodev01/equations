@@ -225,3 +225,34 @@ final cholesky = matrixA.choleskyDecomposition();
 
 final det = matrixA.determinant();
 ```
+
+You can use `toString()` to print the content of the matrix but there's also the possibility to use `toStringAugmented()` which prints the augmented matrix (the matrix + one extra column with the known values vector).
+
+```dart
+final lu = LUSolver(
+  equations: const [
+    [7, -2, 1],
+    [14, -7, -3],
+    [-7, 11, 18]
+  ],
+  constants: const [12, 17, 5]
+);
+
+/*
+ * Output with 'toString':
+ *
+ * [7.0, -2.0, 1.0]
+ * [14.0, -7.0, -3.0]
+ * [-7.0, 11.0, 18.0]
+*/
+print("$lu");
+
+/*
+ * Output with 'toStringAugmented':
+ *
+ * [7.0, -2.0, 1.0 | 12.0]
+ * [14.0, -7.0, -3.0 | 17.0]
+ * [-7.0, 11.0, 18.0 | 5.0]
+*/
+print("${lu.toStringAugmented()}");
+```

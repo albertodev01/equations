@@ -2,7 +2,8 @@
 
   - Added support for linear systems solving using Jacobi, Gauss-Seidel and SOR
   - Improved comparison logic for all the classes of the package
-  - Written more tests for covegare
+  - Added the new `toStringAugmented()` method for systems which prints the augmented matrix
+  - Written more tests for coverage
   - Expanded the README.md file
   - New examples in the `example/` folder
 

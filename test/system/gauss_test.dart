@@ -39,6 +39,28 @@ void main() {
       expect(gauss.determinant(), equals(-9));
     });
 
+    test("Making sure that the string conversion works properly.", () {
+      final solver = GaussianElimination(equations: const [
+        [1, 2, -2],
+        [2, -2, 1],
+        [1, -1, 2]
+      ], constants: const [
+        -1,
+        7,
+        -7
+      ]);
+
+      final toString = "[1.0, 2.0, -2.0]\n"
+          "[2.0, -2.0, 1.0]\n"
+          "[1.0, -1.0, 2.0]";
+      final toStringAugmented = "[1.0, 2.0, -2.0 | -1.0]\n"
+          "[2.0, -2.0, 1.0 | 7.0]\n"
+          "[1.0, -1.0, 2.0 | -7.0]";
+
+      expect(solver.toString(), equals(toString));
+      expect(solver.toStringAugmented(), equals(toStringAugmented));
+    });
+
     test(
         "Making sure that the gaussian elimination works properly with a "
         "well formed matrix. Trying with a 2x2 matrix.", () {

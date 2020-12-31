@@ -95,6 +95,55 @@ abstract class SystemSolver {
     return result;
   }
 
+  @override
+  String toString() => equations.toString();
+
+  /// Prints the augmented matrix of this instance, which is the equations matrix
+  /// plus the known values vector to the right. For example, if...
+  ///
+  /// A = [1, 2]
+  ///     [4, 5]
+  /// b = [3]
+  ///     [6]
+  ///
+  /// ... then the `Ax = b` system represented by this instance is printed in
+  /// the following way:
+  ///
+  /// [1, 2 | 3]
+  /// [4, 5 | 6]
+  String toStringAugmented() {
+    final buffer = StringBuffer();
+
+    // Printing the augmented matrix in the following format:
+    // [1, 2 | 3]
+    // [4, 5 | 6]
+    for (var i = 0; i < equations.rowCount; ++i) {
+      // Leading opening [
+      buffer.write("[");
+
+      for (var j = 0; j < equations.columnCount; ++j) {
+        buffer.write(equations(i, j));
+
+        // Adding a comma only between two values
+        if (j < equations.columnCount - 1) {
+          buffer.write(", ");
+        }
+      }
+
+      // Adding the known value associated to the current equation
+      buffer..write(" | ")..write(knownValues[i]);
+
+      // Ending closing ]
+      if (i < equations.rowCount - 1) {
+        buffer.writeln("]");
+      } else {
+        buffer.write("]");
+      }
+    }
+
+    return buffer.toString();
+  }
+
   /// Back substitution is an iterative process that solves equation matrices
   /// in the form `Ux = b`, where `U` is an upper triangular matrix.
   ///

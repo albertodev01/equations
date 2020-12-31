@@ -230,12 +230,14 @@ class ComplexMatrix extends Matrix<Complex> {
 
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into
   /// the product of a lower triangular matrix and its conjugate transpose. In
-  /// particular, this method returns the matrix `L` of the
+  /// particular, this method returns the `L` and `L`<sup>T</sup> matrices of the
   ///
   ///  - A = L x L<sup>T</sup>
   ///
   /// relation. The algorithm might fail in case the square root of a negative
   /// number were encountered.
+  ///
+  /// The returned list contains `L` at index 0 and `L`<sup>T</sup> at index 1.
   @override
   List<ComplexMatrix> choleskyDecomposition() {
     // Making sure that the matrix is squared

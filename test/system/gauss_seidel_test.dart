@@ -45,6 +45,28 @@ void main() {
       expect(solutions[2], MoreOrLessEquals(-2, precision: 1.0e-2));
     });
 
+    test("Making sure that the string conversion works properly.", () {
+      final solver = GaussSeidelSolver(equations: const [
+        [3, -1, 1],
+        [-1, 3, -1],
+        [1, -1, 3]
+      ], constants: const [
+        -1,
+        7,
+        -7
+      ]);
+
+      final toString = "[3.0, -1.0, 1.0]\n"
+          "[-1.0, 3.0, -1.0]\n"
+          "[1.0, -1.0, 3.0]";
+      final toStringAugmented = "[3.0, -1.0, 1.0 | -1.0]\n"
+          "[-1.0, 3.0, -1.0 | 7.0]\n"
+          "[1.0, -1.0, 3.0 | -7.0]";
+
+      expect(solver.toString(), equals(toString));
+      expect(solver.toStringAugmented(), equals(toStringAugmented));
+    });
+
     test(
         "Making sure that the matrix is squared AND the dimension of the "
         "known values vector also matches the size of the matrix.", () {

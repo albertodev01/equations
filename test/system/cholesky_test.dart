@@ -44,6 +44,28 @@ void main() {
       expect(choleskySolver.size, equals(3));
     });
 
+    test("Making sure that the string conversion works properly.", () {
+      final solver = CholeskySolver(equations: const [
+        [-6, 15, 55],
+        [15, 55, 255],
+        [55, 225, 979]
+      ], constants: const [
+        76,
+        295,
+        1259
+      ]);
+
+      final toString = "[-6.0, 15.0, 55.0]\n"
+          "[15.0, 55.0, 255.0]\n"
+          "[55.0, 225.0, 979.0]";
+      final toStringAugmented = "[-6.0, 15.0, 55.0 | 76.0]\n"
+          "[15.0, 55.0, 255.0 | 295.0]\n"
+          "[55.0, 225.0, 979.0 | 1259.0]";
+
+      expect(solver.toString(), equals(toString));
+      expect(solver.toStringAugmented(), equals(toStringAugmented));
+    });
+
     test(
         "Making sure that an exception is thrown when the square root of a "
         "negative number is found while Cholesky-decomposing the matrix.", () {
