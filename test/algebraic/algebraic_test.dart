@@ -119,5 +119,23 @@ void main() {
         expect(equation, isA<Laguerre>());
       });
     });
+
+    group("Testing arithmetic operations on polynomials", () {
+      test("Sum of two polynomials", () {
+        final quadratic = Algebraic.fromReal([3, -2, 5]);
+        final linear = Algebraic.fromReal([4, -10]);
+
+        final sum = Algebraic.fromReal([3, 2, -5]);
+        expect(quadratic + linear, equals(sum));
+      });
+
+      test("Difference of two polynomials", () {
+        final quadratic = Algebraic.fromReal([3, -2, 1]);
+        final quartic = Algebraic.fromReal([4, 6, 5, -3, 8]);
+
+        final diff = Algebraic.fromReal([-4, -6, -2, 1, -7]);
+        expect(quadratic - quartic, equals(diff));
+      });
+    });
   });
 }

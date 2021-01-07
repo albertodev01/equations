@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:equations/equations.dart';
 
@@ -315,6 +317,126 @@ abstract class Algebraic {
   ///
   /// An exception is thrown if the index is out of the bounds.
   Complex operator [](int index) => coefficients[index];
+
+  /// The addition of two polynomials is performed by adding the corresponding
+  /// coefficients. The degrees of the two polynomials don't need to be the same
+  /// so you can sum a [Cubic] with a [Linear].
+  Algebraic operator +(Algebraic other) {
+    // Keeping track of the polynomial with the highest degree (whether it's the
+    // current instance or the other one)
+    var isThisHighest = coefficients.length > other.coefficients.length;
+
+    // The highest degree of the polynomial determines the length of the new
+    // list
+    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+
+    // The degree difference
+    final difference = (coefficients.length - other.coefficients.length).abs();
+
+    // Generating the new list of coefficients. Let's say we need to sum these
+    // two polynomials:
+    //
+    //  - 1 2 3 4 5 (a 4th degree poly)
+    //  - 1 2 3 (a 2nd degree poly)
+    //
+    // The 'generate' constructor goes from index 0 to N but coefficients are
+    // sorted from the highest degree to the lowest, so in order to correctly
+    // sum two polys the arrays should look like this:
+    //
+    //  - 1 2 3 4 5
+    //  - 0 0 1 2 3
+    //
+    // We don't want to create an intermediate list to just add leading zeroes
+    // so we will just use a 'difference' variable to simulate the leading
+    // zeroes and then we will count the indexes backwards.
+    final newCoefficients = List<Complex>.generate(maxDegree, (index) {
+      if ((difference - index) > 0) {
+        return isThisHighest ? coefficients[index] : other.coefficients[index];
+      }
+
+      if (isThisHighest) {
+        return coefficients[index] + other.coefficients[index - difference];
+      } else {
+        return coefficients[index - difference] + other.coefficients[index];
+      }
+    });
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// The difference of two polynomials is performed by subtracting the
+  /// corresponding coefficients. The degrees of the two polynomials don't need
+  /// to be the same so you can sum a [Cubic] with a [Linear].
+  Algebraic operator -(Algebraic other) {
+    // Keeping track of the polynomial with the highest degree (whether it's the
+    // current instance or the other one)
+    var isThisHighest = coefficients.length > other.coefficients.length;
+
+    // The highest degree of the polynomial determines the length of the new
+    // list
+    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+
+    // The degree difference
+    final difference = (coefficients.length - other.coefficients.length).abs();
+
+    // Generating the new list of coefficients. Let's say we need to sum these
+    // two polynomials:
+    //
+    //  - 1 2 3 4 5 (a 4th degree poly)
+    //  - 1 2 3 (a 2nd degree poly)
+    //
+    // The 'generate' constructor goes from index 0 to N but coefficients are
+    // sorted from the highest degree to the lowest, so in order to correctly
+    // sum two polys the arrays should look like this:
+    //
+    //  - 1 2 3 4 5
+    //  - 0 0 1 2 3
+    //
+    // We don't want to create an intermediate list to just add leading zeroes
+    // so we will just use a 'difference' variable to simulate the leading
+    // zeroes and then we will count the indexes backwards.
+    final newCoefficients = List<Complex>.generate(maxDegree, (index) {
+      if ((difference - index) > 0) {
+        return isThisHighest ? coefficients[index] : -other.coefficients[index];
+      }
+
+      if (isThisHighest) {
+        return coefficients[index] - other.coefficients[index - difference];
+      } else {
+        return coefficients[index - difference] - other.coefficients[index];
+      }
+    });
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// TODO
+  Algebraic operator *(Algebraic other) {
+    // The highest degree of the polynomial determines the length of the new
+    // list
+    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+
+    // Generating the new list of coefficients
+    final newCoefficients = List<Complex>.generate(maxDegree, (_) => Complex.zero());
+
+    // The product
+    for(var i = 0; i < coefficients.length; ++i) {
+      for(var j = 0; j < coefficients.length; ++j) {
+        newCoefficients[i+j] = coefficients[i] + other.coefficients[j];
+      }
+    }
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// TODO
+  Algebraic operator /(Algebraic other) {
+    // Returning a new instance
+    return Algebraic.from([]);
+  }
 
   /// The discriminant of the algebraic equation if it exists.
   Complex discriminant();
