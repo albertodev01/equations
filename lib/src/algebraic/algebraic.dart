@@ -312,119 +312,57 @@ abstract class Algebraic {
   ///   c: Complex.fromReal(5),
   /// );
   ///
-  /// final b = quadratic[1] // Complex(-6, 0)
+  /// final a = quadratic[0] // a = Complex(2, 0)
+  /// final b = quadratic[1] // b = Complex(-6, 0)
+  /// final c = quadratic[2] // c = Complex(5, 0)
   /// ```
   ///
-  /// An exception is thrown if the index is out of the bounds.
+  /// An exception is thrown if the [index] is negative or if it doesn't
+  /// correspond to a valid position.
   Complex operator [](int index) => coefficients[index];
+
+  /// Returns the coefficient of the polynomial whose degree is [degree]. For
+  /// example:
+  ///
+  /// ```dart
+  /// final quadratic = Quadratic(
+  ///   a: Complex.fromReal(2),
+  ///   b: Complex.fromReal(-6),
+  ///   c: Complex.fromReal(5),
+  /// );
+  ///
+  /// final degreeZero = quadratic.coefficient(0) // Complex(5, 0)
+  /// final degreeOne = quadratic.coefficient(1) // Complex(-6, 0)
+  /// final degreeTwo = quadratic.coefficient(2) // Complex(2, 0)
+  /// ```
+  ///
+  /// This method returns `null` if no coefficient of the given [degree] is found.
+  Complex? coefficient(int degree) {
+    // The coefficient of the given degree doesn't exist
+    if ((degree < 0) || (degree > coefficients.length - 1)) {
+      return null;
+    }
+
+    // Return the coefficient of degree 'degree'
+    return coefficients[coefficients.length - degree - 1];
+  }
 
   /// The addition of two polynomials is performed by adding the corresponding
   /// coefficients. The degrees of the two polynomials don't need to be the same
-  /// so you can sum a [Cubic] with a [Linear].
+  /// so you can sum a [Cubic] with a [Linear] for example.
   Algebraic operator +(Algebraic other) {
-    // Keeping track of the polynomial with the highest degree (whether it's the
-    // current instance or the other one)
-    var isThisHighest = coefficients.length > other.coefficients.length;
-
-    // The highest degree of the polynomial determines the length of the new
-    // list
     final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+    final newCoefficients = <Complex>[];
 
-    // The degree difference
-    final difference = (coefficients.length - other.coefficients.length).abs();
+    // The sum of two polynomials is the sum of the coefficients with the same
+    // degree
+    for (var degree = maxDegree; degree >= 0; --degree) {
+      final thisCoefficient = coefficient(degree) ?? Complex.zero();
+      final otherCoefficient = other.coefficient(degree) ?? Complex.zero();
+      final sum = thisCoefficient + otherCoefficient;
 
-    // Generating the new list of coefficients. Let's say we need to sum these
-    // two polynomials:
-    //
-    //  - 1 2 3 4 5 (a 4th degree poly)
-    //  - 1 2 3 (a 2nd degree poly)
-    //
-    // The 'generate' constructor goes from index 0 to N but coefficients are
-    // sorted from the highest degree to the lowest, so in order to correctly
-    // sum two polys the arrays should look like this:
-    //
-    //  - 1 2 3 4 5
-    //  - 0 0 1 2 3
-    //
-    // We don't want to create an intermediate list to just add leading zeroes
-    // so we will just use a 'difference' variable to simulate the leading
-    // zeroes and then we will count the indexes backwards.
-    final newCoefficients = List<Complex>.generate(maxDegree, (index) {
-      if ((difference - index) > 0) {
-        return isThisHighest ? coefficients[index] : other.coefficients[index];
-      }
-
-      if (isThisHighest) {
-        return coefficients[index] + other.coefficients[index - difference];
-      } else {
-        return coefficients[index - difference] + other.coefficients[index];
-      }
-    });
-
-    // Returning a new instance
-    return Algebraic.from(newCoefficients);
-  }
-
-  /// The difference of two polynomials is performed by subtracting the
-  /// corresponding coefficients. The degrees of the two polynomials don't need
-  /// to be the same so you can sum a [Cubic] with a [Linear].
-  Algebraic operator -(Algebraic other) {
-    // Keeping track of the polynomial with the highest degree (whether it's the
-    // current instance or the other one)
-    var isThisHighest = coefficients.length > other.coefficients.length;
-
-    // The highest degree of the polynomial determines the length of the new
-    // list
-    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
-
-    // The degree difference
-    final difference = (coefficients.length - other.coefficients.length).abs();
-
-    // Generating the new list of coefficients. Let's say we need to sum these
-    // two polynomials:
-    //
-    //  - 1 2 3 4 5 (a 4th degree poly)
-    //  - 1 2 3 (a 2nd degree poly)
-    //
-    // The 'generate' constructor goes from index 0 to N but coefficients are
-    // sorted from the highest degree to the lowest, so in order to correctly
-    // sum two polys the arrays should look like this:
-    //
-    //  - 1 2 3 4 5
-    //  - 0 0 1 2 3
-    //
-    // We don't want to create an intermediate list to just add leading zeroes
-    // so we will just use a 'difference' variable to simulate the leading
-    // zeroes and then we will count the indexes backwards.
-    final newCoefficients = List<Complex>.generate(maxDegree, (index) {
-      if ((difference - index) > 0) {
-        return isThisHighest ? coefficients[index] : -other.coefficients[index];
-      }
-
-      if (isThisHighest) {
-        return coefficients[index] - other.coefficients[index - difference];
-      } else {
-        return coefficients[index - difference] - other.coefficients[index];
-      }
-    });
-
-    // Returning a new instance
-    return Algebraic.from(newCoefficients);
-  }
-
-  /// TODO
-  Algebraic operator *(Algebraic other) {
-    // The highest degree of the polynomial determines the length of the new
-    // list
-    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
-
-    // Generating the new list of coefficients
-    final newCoefficients = List<Complex>.generate(maxDegree, (_) => Complex.zero());
-
-    // The product
-    for(var i = 0; i < coefficients.length; ++i) {
-      for(var j = 0; j < coefficients.length; ++j) {
-        newCoefficients[i+j] = coefficients[i] + other.coefficients[j];
+      if (!sum.isZero) {
+        newCoefficients.add(sum);
       }
     }
 
@@ -432,11 +370,77 @@ abstract class Algebraic {
     return Algebraic.from(newCoefficients);
   }
 
-  /// TODO
-  Algebraic operator /(Algebraic other) {
+  /// The difference of two polynomials is performed by subtracting the
+  /// corresponding coefficients. The degrees of the two polynomials don't need
+  /// to be the same so you can subtract a [Quadratic] and a [Quartic] for example.
+  Algebraic operator -(Algebraic other) {
+    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+    final newCoefficients = <Complex>[];
+
+    // The difference of two polynomials is the difference of the coefficients
+    // with the same degree
+    for (var degree = maxDegree; degree >= 0; --degree) {
+      final thisCoefficient = coefficient(degree) ?? Complex.zero();
+      final otherCoefficient = other.coefficient(degree) ?? Complex.zero();
+      final diff = thisCoefficient - otherCoefficient;
+
+      if (!diff.isZero) {
+        newCoefficients.add(diff);
+      }
+    }
+
     // Returning a new instance
-    return Algebraic.from([]);
+    return Algebraic.from(newCoefficients);
   }
+
+  /// The product of two polynomials is performed by multiplying the corresponding
+  /// coefficients of the polynomials. The degrees of the two polynomials don't
+  /// need to be the same so you can multiply a [Constant] with a [Laguerre] for
+  /// example.
+  Algebraic operator *(Algebraic other) {
+    // Generating the new list of coefficients
+    final newLength = coefficients.length + other.coefficients.length - 1;
+    final newCoefficients = List<Complex>.filled(newLength, Complex.zero());
+
+    // The product
+    for (var i = 0; i < coefficients.length; ++i) {
+      for (var j = 0; j < other.coefficients.length; ++j) {
+        newCoefficients[i + j] += coefficients[i] * other.coefficients[j];
+      }
+    }
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// When dividing a polynomial by another polynomial of the same (or lower)
+  /// degree there are 2 results:
+  ///
+  ///  - the quotient Q(x)
+  ///  - the remainder R(x)
+  ///
+  /// The list returned by this division operator contains `Q(x)` (the quotient)
+  /// at index 0 and `R(x)` at index 1.
+  List<Algebraic> operator /(Algebraic other) {
+    // The two variables to be returned by the division
+    var quotient = Algebraic.fromReal(const [0]);
+    var remainder = Algebraic.from(coefficients);
+
+    // Returning Q(x) and R(x)
+    return [quotient, remainder];
+  }
+
+  /// The 'negation' operator changes the sign of every coefficient of the
+  /// polynomial. For example:
+  ///
+  /// ```dart
+  /// final poly1 = Linear.realEquation(a: 3, b: -5);
+  /// final poly2 = -poly1; // poly2 = Linear.realEquation(a: -3, b: 5);
+  /// ```
+  ///
+  /// As you can see, in `poly2` all the coefficients have the opposite sign.
+  Algebraic operator -() =>
+      Algebraic.from(coefficients.map((coefficient) => -coefficient).toList());
 
   /// The discriminant of the algebraic equation if it exists.
   Complex discriminant();

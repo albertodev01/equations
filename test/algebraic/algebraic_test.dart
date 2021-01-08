@@ -2,7 +2,9 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing static methods of 'Algebraic'", () {
+  group(
+      "Testing the public interface of 'Algebraic' which is shared with all "
+      "of its concrete subclasses.", () {
     // Tests with complex numbers
     group("Testing the complex 'variant' of the 'from' method", () {
       test(
@@ -22,6 +24,11 @@ void main() {
           Complex(2, 0),
         ]);
         expect(equation, isA<Linear>());
+
+        expect(equation[0], Complex(1, 0));
+        expect(equation[1], Complex(2, 0));
+        expect(equation.coefficient(1), Complex(1, 0));
+        expect(equation.coefficient(0), Complex(2, 0));
       });
 
       test(
@@ -120,21 +127,41 @@ void main() {
       });
     });
 
-    group("Testing arithmetic operations on polynomials", () {
+    group("Testing arithmetic operations on polynomials with real values", () {
       test("Sum of two polynomials", () {
         final quadratic = Algebraic.fromReal([3, -2, 5]);
         final linear = Algebraic.fromReal([4, -10]);
 
-        final sum = Algebraic.fromReal([3, 2, -5]);
-        expect(quadratic + linear, equals(sum));
+        final sum = quadratic + linear;
+        final sumResult = Algebraic.fromReal([3, 2, -5]);
+
+        expect(sum, equals(sumResult));
+        expect(sum, equals(linear + quadratic));
+        expect(sum, isA<Quadratic>());
       });
 
       test("Difference of two polynomials", () {
         final quadratic = Algebraic.fromReal([3, -2, 1]);
         final quartic = Algebraic.fromReal([4, 6, 5, -3, 8]);
 
-        final diff = Algebraic.fromReal([-4, -6, -2, 1, -7]);
-        expect(quadratic - quartic, equals(diff));
+        final diff = quadratic - quartic;
+        final diffResult = Algebraic.fromReal([-4, -6, -2, 1, -7]);
+
+        expect(diff, equals(diffResult));
+        expect(quartic - quadratic, equals(-diffResult));
+        expect(diffResult, isA<Quartic>());
+      });
+
+      test("Product of two polynomials", () {
+        final linear = Algebraic.fromReal([2, -2]);
+        final cubic = Algebraic.fromReal([1, 0, -4, 5]);
+
+        final prod = linear * cubic;
+        final prodResult = Algebraic.fromReal([2, -2, -8, 18, -10]);
+
+        expect(prod, equals(prodResult));
+        expect(prod, equals(cubic * linear));
+        expect(prod, isA<Quartic>());
       });
     });
   });
