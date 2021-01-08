@@ -91,12 +91,11 @@ class SylvesterMatrix {
     }
 
     // Computing the determinant of the Sylvester matrix
-    final matrix = ComplexMatrix.fromData(
+    return ComplexMatrix.fromData(
       rows: size,
       columns: size,
       data: data,
-    );
-    return matrix.determinant();
+    ).determinant();
   }
 
   /// The discriminant of a polynomial P(x) is the determinant of the Sylvester

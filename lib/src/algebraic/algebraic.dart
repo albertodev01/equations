@@ -413,23 +413,6 @@ abstract class Algebraic {
     return Algebraic.from(newCoefficients);
   }
 
-  /// When dividing a polynomial by another polynomial of the same (or lower)
-  /// degree there are 2 results:
-  ///
-  ///  - the quotient Q(x)
-  ///  - the remainder R(x)
-  ///
-  /// The list returned by this division operator contains `Q(x)` (the quotient)
-  /// at index 0 and `R(x)` at index 1.
-  List<Algebraic> operator /(Algebraic other) {
-    // The two variables to be returned by the division
-    var quotient = Algebraic.fromReal(const [0]);
-    var remainder = Algebraic.from(coefficients);
-
-    // Returning Q(x) and R(x)
-    return [quotient, remainder];
-  }
-
   /// The 'negation' operator changes the sign of every coefficient of the
   /// polynomial. For example:
   ///
