@@ -56,6 +56,21 @@ class RealMatrix extends Matrix<double> {
           data: data,
         );
 
+  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// matrix is filled with values from [data].
+  ///
+  /// The source matrix is expressed as an array whose size must **exactly** be
+  /// `N` * `M`.
+  RealMatrix.fromFlattenedData({
+    required int rows,
+    required int columns,
+    required List<double> data,
+  }) : super.fromFlattenedData(
+          rows: rows,
+          columns: columns,
+          data: data,
+        );
+
   /// Returns the sum of two matrices.
   @override
   Matrix<double> operator +(Matrix<double> other) {
@@ -65,19 +80,23 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the sum
-    final matrix = List.generate(rowCount,
-        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
-        growable: false);
+    final flatMatrix =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final setDataAt = (int row, int col, double value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        matrix[i][j] = this(i, j) + other(i, j);
+        setDataAt(i, j, this(i, j) + other(i, j));
       }
     }
 
     // Building the new matrix
-    return RealMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    return RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// Returns the difference of two matrices.
@@ -89,19 +108,23 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the difference
-    final matrix = List.generate(rowCount,
-        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
-        growable: false);
+    final flatMatrix =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final setDataAt = (int row, int col, double value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        matrix[i][j] = this(i, j) - other(i, j);
+        setDataAt(i, j, this(i, j) - other(i, j));
       }
     }
 
     // Building the new matrix
-    return RealMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    return RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// Returns the sum of two matrices.
@@ -113,9 +136,10 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the product
-    final matrix = List.generate(rowCount,
-        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
-        growable: false);
+    final flatMatrix =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final setDataAt = (int row, int col, double value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
@@ -124,13 +148,16 @@ class RealMatrix extends Matrix<double> {
         for (var k = 0; k < rowCount; k++) {
           sum += (this(i, k) * other(k, j));
         }
-        matrix[i][j] = sum;
+        setDataAt(i, j, sum);
       }
     }
 
     // Building the new matrix
-    return RealMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    return RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// Returns the division of two matrices in `O(n)` complexity.
@@ -142,19 +169,24 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the difference
-    final matrix = List.generate(rowCount,
-        (_) => List.generate(columnCount, (_) => 0.0, growable: false),
-        growable: false);
+    final flatMatrix =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final setDataAt = (int row, int col, double value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     // Performing the division
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        matrix[i][j] = this(i, j) / other(i, j);
+        setDataAt(i, j, this(i, j) / other(i, j));
       }
     }
 
-    return RealMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    // Building the new matrix
+    return RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// The determinant can only be computed if the matrix is **square**, meaning
@@ -179,12 +211,15 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Creating L and U matrices
-    final L = List<List<double>>.generate(rowCount, (row) {
-      return List<double>.generate(rowCount, (col) => 0);
-    }, growable: false);
-    final U = List<List<double>>.generate(rowCount, (row) {
-      return List<double>.generate(rowCount, (col) => 0);
-    }, growable: false);
+    final L =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final U =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+
+    final getDataAt = (List<double> source, int row, int col) =>
+        source[columnCount * row + col];
+    final setDataAt = (List<double> source, int row, int col, double value) =>
+        source[columnCount * row + col] = value;
 
     // Computing L and U
     for (var i = 0; i < rowCount; ++i) {
@@ -192,31 +227,33 @@ class RealMatrix extends Matrix<double> {
         // Summation of L(i, j) * U(j, k)
         var sum = 0.0;
         for (var j = 0; j < i; j++) {
-          sum += (L[i][j] * U[j][k]);
+          sum += (getDataAt(L, i, j) * getDataAt(L, j, k));
         }
 
         // Evaluating U(i, k)
-        U[i][k] = this(i, k) - sum;
+        setDataAt(U, i, k, this(i, k) - sum);
       }
 
       // Lower Triangular
       for (var k = i; k < rowCount; k++) {
         if (i == k) {
-          L[i][i] = 1; // Diagonal as 1
+          setDataAt(L, i, i, 1);
         } else {
           // Summation of L(k, j) * U(j, i)
           var sum = 0.0;
-          for (var j = 0; j < i; j++) sum += (L[k][j] * U[j][i]);
+          for (var j = 0; j < i; j++) {
+            sum += (getDataAt(L, k, j) * getDataAt(U, j, i));
+          }
 
           // Evaluating L(k, i)
-          L[k][i] = (this(k, i) - sum) / U[i][i];
+          setDataAt(L, k, i, (this(k, i) - sum) / getDataAt(U, i, i));
         }
       }
     }
 
     return [
-      RealMatrix.fromData(rows: rowCount, columns: rowCount, data: L),
-      RealMatrix.fromData(rows: rowCount, columns: rowCount, data: U),
+      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: L),
+      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: U),
     ];
   }
 

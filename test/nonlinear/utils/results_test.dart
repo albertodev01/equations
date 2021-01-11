@@ -4,7 +4,10 @@ import 'package:test/test.dart';
 void main() {
   group("Testing the behaviors of the NonlinearResults class.", () {
     const results = NonlinearResults(
-        guesses: [1.0, 2.0, 3.0], convergence: 10.0, efficiency: -7.0);
+      guesses: [1.0, 2.0, 3.0],
+      convergence: 10.0,
+      efficiency: -7.0,
+    );
 
     test(("Making that NonlinearResults values are properly constructed."), () {
       expect(results.guesses, orderedEquals(<double>[1.0, 2.0, 3.0]));
@@ -24,22 +27,28 @@ void main() {
 
     test("Making sure that NonlinearResults can be properly compared.", () {
       const results2 = NonlinearResults(
-          guesses: [1.0, 2.0, 3.0], convergence: 10.0, efficiency: -7.0);
+        guesses: [1.0, 2.0, 3.0],
+        convergence: 10.0,
+        efficiency: -7.0,
+      );
 
       expect(results2 == results, isTrue);
       expect(
           results ==
               NonlinearResults(
-                  guesses: [1.0, 2.0, 3.0],
-                  convergence: 10.0,
-                  efficiency: -7.0),
+                guesses: [1.0, 2.0, 3.0],
+                convergence: 10.0,
+                efficiency: -7.0,
+              ),
           isTrue);
 
       expect(
           results.hashCode,
           equals(NonlinearResults(
-                  guesses: [1.0, 2.0, 3.0], convergence: 10.0, efficiency: -7.0)
-              .hashCode));
+            guesses: [1.0, 2.0, 3.0],
+            convergence: 10.0,
+            efficiency: -7.0,
+          ).hashCode));
     });
   });
 }

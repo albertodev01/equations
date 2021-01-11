@@ -28,6 +28,10 @@ void main() {
       expect(equation[0], equals(Complex.fromReal(3)));
       expect(equation[1], equals(Complex.fromRealFraction(Fraction(6, 5))));
       expect(() => equation[-1], throwsA(isA<RangeError>()));
+      expect(equation.coefficient(1), equals(Complex.fromReal(3)));
+      expect(equation.coefficient(0),
+          equals(Complex.fromRealFraction(Fraction(6, 5))));
+      expect(equation.coefficient(2), isNull);
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = 3x + 1.2"));

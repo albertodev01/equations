@@ -57,13 +57,6 @@ void main() {
 
       // Making sure that the method actually throws
       expect(secant.solve, throwsA(isA<Exception>()));
-
-      // Checking the error message
-      try {
-        secant.solve();
-      } on NonlinearException catch (e) {
-        expect(e.message, contains("Invalid denominator encountered."));
-      }
     });
 
     test(

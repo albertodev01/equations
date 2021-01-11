@@ -25,13 +25,13 @@ class Chords extends NonLinear {
   ///   - [b]: the second interval in which evaluate `f(b)`
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  const Chords(
-      {required String function,
-      required this.a,
-      required this.b,
-      double tolerance = 1.0e-10,
-      int maxSteps = 15})
-      : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
+  const Chords({
+    required String function,
+    required this.a,
+    required this.b,
+    double tolerance = 1.0e-10,
+    int maxSteps = 15,
+  }) : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
   @override
   bool operator ==(Object other) {
@@ -80,8 +80,9 @@ class Chords extends NonLinear {
     }
 
     return NonlinearResults(
-        guesses: guesses,
-        convergence: convergence(guesses, maxSteps),
-        efficiency: efficiency(guesses, maxSteps));
+      guesses: guesses,
+      convergence: convergence(guesses, maxSteps),
+      efficiency: efficiency(guesses, maxSteps),
+    );
   }
 }

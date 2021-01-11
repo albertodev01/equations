@@ -56,6 +56,21 @@ class ComplexMatrix extends Matrix<Complex> {
           data: data,
         );
 
+  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// matrix is filled with values from [data].
+  ///
+  /// The source matrix is expressed as an array whose size must **exactly** be
+  /// `N` * `M`.
+  ComplexMatrix.fromFlattenedData({
+    required int rows,
+    required int columns,
+    required List<Complex> data,
+  }) : super.fromFlattenedData(
+          rows: rows,
+          columns: columns,
+          data: data,
+        );
+
   /// Returns the sum of two matrices.
   @override
   Matrix<Complex> operator +(Matrix<Complex> other) {

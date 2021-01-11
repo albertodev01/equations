@@ -14,7 +14,8 @@ class SylvesterMatrix {
 
   /// The constructor requires complex [coefficients] for the polynomial P(x).
   SylvesterMatrix({required List<Complex> coefficients})
-      : _coefficients = UnmodifiableListView(coefficients);
+      : _coefficients =
+            UnmodifiableListView(coefficients.map((c) => c).toList());
 
   /// The constructor requires real [coefficients] for the polynomial P(x).
   SylvesterMatrix.fromReal({required List<double> coefficients})
@@ -71,30 +72,28 @@ class SylvesterMatrix {
     var pos = 0;
 
     // Building the matrix with FIXED length lists (optimization)
-    final data = List<List<Complex>>.generate(
-        size,
-        (index) => List<Complex>.generate(size, (_) => Complex.zero(),
-            growable: false),
-        growable: false);
+    final flatData = List<Complex>.generate(size * size, (_) => Complex.zero());
+    final setDataAt =
+        (int row, int col, Complex value) => flatData[size * row + col] = value;
 
     // Iterating over the coefficients and placing them in the matrix
     for (var i = 0; i < size - _coefficients.length + 1; ++i) {
       for (var j = 0; j < _coefficients.length; ++j) {
-        data[i][j + i] = _coefficients[j];
+        setDataAt(i, j + i, _coefficients[j]);
       }
     }
     for (var i = size - _coefficients.length + 1; i < size; ++i) {
       for (var j = 0; j < derivative.length; ++j) {
-        data[i][j + pos] = derivative[j];
+        setDataAt(i, j + pos, derivative[j]);
       }
       ++pos;
     }
 
     // Computing the determinant of the Sylvester matrix
-    return ComplexMatrix.fromData(
+    return ComplexMatrix.fromFlattenedData(
       rows: size,
       columns: size,
-      data: data,
+      data: flatData,
     ).determinant();
   }
 
@@ -113,8 +112,7 @@ class SylvesterMatrix {
   /// - With `optimize = true`, the Sylvester matrix and its determinant are
   /// always computed regardless the degree of the polynomial.
   ///
-  /// You should
-  /// keep the default value of [optimize].
+  /// You should keep the default value of [optimize].
   Complex polynomialDiscriminant({bool optimize = true}) {
     // In case the optimization flag were 'true' and the degree of the
     // polynomial is <= 4, then go for the easy way.

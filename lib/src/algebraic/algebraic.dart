@@ -39,7 +39,10 @@ abstract class Algebraic {
   /// the [Algebraic.realEquation(coefficients)] constructor which is more
   /// convenient.
   Algebraic(List<Complex> coefficients) {
-    this.coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
+    // Making a deep copy but there's no need to call 'copyWith' on the complex
+    // coefficients because 'Complex' is an immutable type.
+    this.coefficients =
+        UnmodifiableListView(coefficients.map((c) => c).toList());
 
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -64,7 +67,7 @@ abstract class Algebraic {
   /// were complex numbers as well, use the [Algebraic(coefficients)] constructor.
   Algebraic.realEquation(List<double> coefficients) {
     this.coefficients = UnmodifiableListView(
-        coefficients.map((value) => Complex.fromReal(value)).toList());
+        coefficients.map((c) => Complex.fromReal(c)).toList());
 
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -156,8 +159,8 @@ abstract class Algebraic {
   /// Use this method when the coefficients are all real numbers. If there
   /// were complex numbers as well, use the [Algebraic.from(coefficients)]
   /// instead.
-  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
-      coefficients.map((value) => Complex.fromReal(value)).toList());
+  factory Algebraic.fromReal(List<double> coefficients) =>
+      Algebraic.from(coefficients.map((c) => Complex.fromReal(c)).toList());
 
   @override
   bool operator ==(Object other) {
@@ -291,8 +294,7 @@ abstract class Algebraic {
   /// Determines whether the polynomial is real or not.
   ///
   /// If at least one coefficient is complex, then the polynomial is complex.
-  bool get isRealEquation =>
-      coefficients.every((value) => value.imaginary == 0);
+  bool get isRealEquation => coefficients.every((c) => c.imaginary == 0);
 
   /// A polynomial equation is **valid** if the coefficient associated to the
   /// variable of highest degree is different from zero. In other words, the
@@ -422,8 +424,10 @@ abstract class Algebraic {
   /// ```
   ///
   /// As you can see, in `poly2` all the coefficients have the opposite sign.
-  Algebraic operator -() =>
-      Algebraic.from(coefficients.map((coefficient) => -coefficient).toList());
+  Algebraic operator -() {
+    final newList = coefficients.map((c) => -c).toList();
+    return Algebraic.from(newList);
+  }
 
   /// The discriminant of the algebraic equation if it exists.
   Complex discriminant();

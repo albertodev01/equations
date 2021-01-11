@@ -49,13 +49,6 @@ void main() {
 
       // Making sure that the method actually throws
       expect(newton.solve, throwsA(isA<Exception>()));
-
-      // Checking the error message
-      try {
-        newton.solve();
-      } on NonlinearException catch (e) {
-        expect(e.message, equals("Couldn't evaluate f'(0.0)"));
-      }
     });
 
     test(

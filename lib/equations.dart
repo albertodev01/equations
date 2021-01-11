@@ -18,6 +18,7 @@ export 'src/nonlinear/types/bisection.dart';
 export 'src/nonlinear/types/brent.dart';
 export 'src/nonlinear/types/chords.dart';
 export 'src/nonlinear/types/newton.dart';
+export 'src/nonlinear/types/regula_falsi.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
 export 'src/nonlinear/utils/results.dart';

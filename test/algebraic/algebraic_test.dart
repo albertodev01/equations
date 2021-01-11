@@ -128,6 +128,79 @@ void main() {
     });
 
     group("Testing arithmetic operations on polynomials with real values", () {
+      // Tests with complex numbers
+      test("Sum of two polynomials", () {
+        final complex1 = Algebraic.from(
+            [Complex(-3, 10), Complex.i(), Complex.fromImaginary(6)]);
+        final complex2 = Algebraic.fromReal([1, 5]);
+
+        final sum = complex1 + complex2;
+        final sumResult = Algebraic.from([
+          Complex(-3, 10),
+          Complex(1, 1),
+          Complex(5, 6),
+        ]);
+
+        expect(sum, equals(sumResult));
+        expect(sum, equals(complex2 + complex1));
+        expect(sum, isA<Quadratic>());
+      });
+
+      test("Difference of two polynomials", () {
+        final complex1 = Algebraic.from([
+          Complex(-4, -7),
+          Complex(2, 3),
+          Complex.zero(),
+        ]);
+        final complex2 = Algebraic.from([
+          Complex(3, 6),
+          -Complex.i(),
+          Complex(7, -8),
+          Complex(1, -3),
+          Complex(5, 6),
+        ]);
+
+        final diff = complex1 - complex2;
+        final diffResult = Algebraic.from([
+          Complex(-3, -6),
+          Complex.i(),
+          Complex(-11, 1),
+          Complex(1, 6),
+          -Complex(5, 6),
+        ]);
+
+        expect(diff, equals(diffResult));
+        expect(complex2 - complex1, equals(-diffResult));
+        expect(diffResult, isA<Quartic>());
+      });
+
+      test("Product of two polynomials", () {
+        final complex1 = Algebraic.from([
+          Complex.fromImaginaryFraction(Fraction(6, 2)),
+          -Complex.i(),
+        ]);
+        final complex2 = Algebraic.from([
+          Complex(4, 2),
+          Complex.fromImaginary(19),
+          Complex(9, -16),
+          Complex(-2, 3),
+        ]);
+
+        final prod = complex1 * complex2;
+        final prodResult = Algebraic.from([
+          Complex(-6, 12),
+          Complex(-55, -4),
+          Complex(67, 27),
+          Complex(-25, -15),
+          Complex(3, 2),
+        ]);
+
+        expect(prod, equals(prodResult));
+        expect(prod, equals(complex2 * complex1));
+        expect(prod, isA<Quartic>());
+      });
+
+      // Tests with real numbers
       test("Sum of two polynomials", () {
         final quadratic = Algebraic.fromReal([3, -2, 5]);
         final linear = Algebraic.fromReal([4, -10]);

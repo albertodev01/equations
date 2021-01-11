@@ -202,7 +202,7 @@ class Laguerre extends Algebraic {
 
     // Safety check to avoid 'RangeError'
     if (polyQ.length >= 2) {
-      roots.add(polyQ[0].negate / polyQ[1]);
+      roots.add(-polyQ[0] / polyQ[1]);
     }
 
     return roots;
