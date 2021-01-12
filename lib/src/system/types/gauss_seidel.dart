@@ -52,7 +52,10 @@ class GaussSeidelSolver extends SystemSolver {
   List<double> solve() {
     // When 'w = 1', the SOR method simplifies to the Gauss-Seidel method.
     final sor = SORSolver(
-        equations: equations.toListOfList(), constants: knownValues, w: 1);
+      equations: equations.toListOfList(),
+      constants: knownValues,
+      w: 1,
+    );
 
     return sor.solve();
   }

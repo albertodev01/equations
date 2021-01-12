@@ -8,10 +8,16 @@ void main() {
     test(
         "Making sure that the series converges when the root is in the interval.",
         () {
-      const regula = RegulaFalsi(function: "x^3-x-2", a: 1, b: 2, maxSteps: 5);
+      const regula = RegulaFalsi(
+        function: "x^3-x-2",
+        a: 1,
+        b: 2,
+        maxSteps: 5,
+        tolerance: 1.0e-15,
+      );
 
       expect(regula.maxSteps, equals(5));
-      expect(regula.tolerance, equals(1.0e-10));
+      expect(regula.tolerance, equals(1.0e-15));
       expect(regula.function, equals("x^3-x-2"));
       expect(regula.toString(), equals("f(x) = x^3-x-2"));
       expect(regula.a, equals(1));
@@ -48,7 +54,7 @@ void main() {
 
     test("Making sure that the method throws if the root is not bracketed", () {
       const regula = RegulaFalsi(function: "x - 2", a: 50, b: 70);
-      expect(regula.solve(), throwsA(isA<NonlinearException>()));
+      expect(regula.solve, throwsA(isA<NonlinearException>()));
     });
   });
 }

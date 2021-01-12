@@ -80,21 +80,24 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Performing the sum
-    final matrix = List.generate(
-        rowCount,
-        (_) =>
-            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+    final flatMatrix = List.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
         growable: false);
+    final setDataAt = (int row, int col, Complex value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        matrix[i][j] = this(i, j) + other(i, j);
+        setDataAt(i, j, this(i, j) + other(i, j));
       }
     }
 
     // Building the new matrix
-    return ComplexMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    return ComplexMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// Returns the difference of two matrices.
@@ -106,21 +109,24 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Performing the difference
-    final matrix = List.generate(
-        rowCount,
-        (_) =>
-            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+    final flatMatrix = List.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
         growable: false);
+    final setDataAt = (int row, int col, Complex value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        matrix[i][j] = this(i, j) - other(i, j);
+        setDataAt(i, j, this(i, j) - other(i, j));
       }
     }
 
     // Building the new matrix
-    return ComplexMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    return ComplexMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// Returns the sum of two matrices.
@@ -132,11 +138,11 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Performing the product
-    final matrix = List.generate(
-        rowCount,
-        (_) =>
-            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+    final flatMatrix = List.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
         growable: false);
+    final setDataAt = (int row, int col, Complex value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
@@ -145,13 +151,16 @@ class ComplexMatrix extends Matrix<Complex> {
         for (var k = 0; k < rowCount; k++) {
           sum += (this(i, k) * other(k, j));
         }
-        matrix[i][j] = sum;
+        setDataAt(i, j, sum);
       }
     }
 
     // Building the new matrix
-    return ComplexMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    return ComplexMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// Returns the division of two matrices in `O(n)` complexity.
@@ -162,22 +171,26 @@ class ComplexMatrix extends Matrix<Complex> {
           "of the source matrix must match the row count of the other.");
     }
 
-    // Performing the difference
-    final matrix = List.generate(
-        rowCount,
-        (_) =>
-            List.generate(columnCount, (_) => Complex.zero(), growable: false),
+    // Performing the division
+    final flatMatrix = List.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
         growable: false);
+    final setDataAt = (int row, int col, Complex value) =>
+        flatMatrix[columnCount * row + col] = value;
 
     // Performing the division
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        matrix[i][j] = this(i, j) / other(i, j);
+        setDataAt(i, j, this(i, j) / other(i, j));
       }
     }
 
-    return ComplexMatrix.fromData(
-        rows: rowCount, columns: columnCount, data: matrix);
+    // Building the new matrix
+    return ComplexMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: flatMatrix,
+    );
   }
 
   /// The determinant can only be computed if the matrix is **square**, meaning
@@ -202,12 +215,17 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Creating L and U matrices
-    final L = List<List<Complex>>.generate(rowCount, (row) {
-      return List<Complex>.generate(rowCount, (col) => Complex.zero());
-    }, growable: false);
-    final U = List<List<Complex>>.generate(rowCount, (row) {
-      return List<Complex>.generate(rowCount, (col) => Complex.zero());
-    }, growable: false);
+    final L = List<Complex>.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
+        growable: false);
+    final U = List<Complex>.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
+        growable: false);
+
+    final getDataAt = (List<Complex> source, int row, int col) =>
+        source[columnCount * row + col];
+    final setDataAt = (List<Complex> source, int row, int col, Complex value) =>
+        source[columnCount * row + col] = value;
 
     // Computing L and U
     for (var i = 0; i < rowCount; ++i) {
@@ -215,31 +233,41 @@ class ComplexMatrix extends Matrix<Complex> {
         // Summation of L(i, j) * U(j, k)
         var sum = Complex.zero();
         for (var j = 0; j < i; j++) {
-          sum += (L[i][j] * U[j][k]);
+          sum += (getDataAt(L, i, j) * getDataAt(U, j, k));
         }
 
         // Evaluating U(i, k)
-        U[i][k] = this(i, k) - sum;
+        setDataAt(U, i, k, this(i, k) - sum);
       }
 
       // Lower Triangular
       for (var k = i; k < rowCount; k++) {
         if (i == k) {
-          L[i][i] = Complex.fromReal(1); // Diagonal as 1
+          setDataAt(L, i, i, Complex.fromReal(1));
         } else {
           // Summation of L(k, j) * U(j, i)
           var sum = Complex.zero();
-          for (var j = 0; j < i; j++) sum += (L[k][j] * U[j][i]);
+          for (var j = 0; j < i; j++) {
+            sum += (getDataAt(L, k, j) * getDataAt(U, j, i));
+          }
 
           // Evaluating L(k, i)
-          L[k][i] = (this(k, i) - sum) / U[i][i];
+          setDataAt(L, k, i, (this(k, i) - sum) / getDataAt(U, i, i));
         }
       }
     }
 
     return [
-      ComplexMatrix.fromData(rows: rowCount, columns: rowCount, data: L),
-      ComplexMatrix.fromData(rows: rowCount, columns: rowCount, data: U),
+      ComplexMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: rowCount,
+        data: L,
+      ),
+      ComplexMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: rowCount,
+        data: U,
+      ),
     ];
   }
 
@@ -269,12 +297,17 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Creating L and Lt matrices
-    final L = List<List<Complex>>.generate(rowCount, (row) {
-      return List<Complex>.generate(rowCount, (col) => Complex.zero());
-    }, growable: false);
-    final transpL = List<List<Complex>>.generate(rowCount, (row) {
-      return List<Complex>.generate(rowCount, (col) => Complex.zero());
-    }, growable: false);
+    final L = List<Complex>.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
+        growable: false);
+    final transpL = List<Complex>.generate(
+        rowCount * columnCount, (_) => Complex.zero(),
+        growable: false);
+
+    final getDataAt = (List<Complex> source, int row, int col) =>
+        source[columnCount * row + col];
+    final setDataAt = (List<Complex> source, int row, int col, Complex value) =>
+        source[columnCount * row + col] = value;
 
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i++) {
@@ -282,14 +315,14 @@ class ComplexMatrix extends Matrix<Complex> {
         var sum = Complex.zero();
         if (j == i) {
           for (var k = 0; k < j; k++) {
-            sum += L[j][k] * L[j][k];
+            sum += getDataAt(L, j, k) * getDataAt(L, j, k);
           }
-          L[j][j] = (this(i, j) - sum).sqrt();
+          setDataAt(L, j, j, (this(i, j) - sum).sqrt());
         } else {
           for (var k = 0; k < j; k++) {
-            sum += L[i][k] * L[j][k];
+            sum += getDataAt(L, i, k) * getDataAt(L, j, k);
           }
-          L[i][j] = (this(i, j) - sum) / L[j][j];
+          setDataAt(L, i, j, (this(i, j) - sum) / getDataAt(L, j, j));
         }
       }
     }
@@ -297,14 +330,21 @@ class ComplexMatrix extends Matrix<Complex> {
     // Computing Lt, the transposed version of L
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < rowCount; j++) {
-        transpL[i][j] = L[j][i];
+        setDataAt(transpL, i, j, getDataAt(L, j, i));
       }
     }
 
     return [
-      ComplexMatrix.fromData(rows: rowCount, columns: columnCount, data: L),
-      ComplexMatrix.fromData(
-          rows: rowCount, columns: columnCount, data: transpL)
+      ComplexMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: columnCount,
+        data: L,
+      ),
+      ComplexMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: columnCount,
+        data: transpL,
+      )
     ];
   }
 

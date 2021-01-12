@@ -168,7 +168,7 @@ class RealMatrix extends Matrix<double> {
           "of the source matrix must match the row count of the other.");
     }
 
-    // Performing the difference
+    // Performing the division
     final flatMatrix =
         List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
     final setDataAt = (int row, int col, double value) =>
@@ -211,10 +211,10 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Creating L and U matrices
-    final L =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
-    final U =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final L = List<double>.generate(rowCount * columnCount, (_) => 0.0,
+        growable: false);
+    final U = List<double>.generate(rowCount * columnCount, (_) => 0.0,
+        growable: false);
 
     final getDataAt = (List<double> source, int row, int col) =>
         source[columnCount * row + col];
@@ -227,7 +227,7 @@ class RealMatrix extends Matrix<double> {
         // Summation of L(i, j) * U(j, k)
         var sum = 0.0;
         for (var j = 0; j < i; j++) {
-          sum += (getDataAt(L, i, j) * getDataAt(L, j, k));
+          sum += (getDataAt(L, i, j) * getDataAt(U, j, k));
         }
 
         // Evaluating U(i, k)
@@ -252,8 +252,16 @@ class RealMatrix extends Matrix<double> {
     }
 
     return [
-      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: L),
-      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: U),
+      RealMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: rowCount,
+        data: L,
+      ),
+      RealMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: rowCount,
+        data: U,
+      ),
     ];
   }
 
@@ -283,12 +291,15 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Creating L and Lt matrices
-    final L = List<List<double>>.generate(rowCount, (row) {
-      return List<double>.generate(rowCount, (col) => 0);
-    }, growable: false);
-    final transpL = List<List<double>>.generate(rowCount, (row) {
-      return List<double>.generate(rowCount, (col) => 0);
-    }, growable: false);
+    final L =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final transpL =
+        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+
+    final getDataAt = (List<double> source, int row, int col) =>
+        source[columnCount * row + col];
+    final setDataAt = (List<double> source, int row, int col, double value) =>
+        source[columnCount * row + col] = value;
 
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i++) {
@@ -296,14 +307,14 @@ class RealMatrix extends Matrix<double> {
         var sum = 0.0;
         if (j == i) {
           for (var k = 0; k < j; k++) {
-            sum += L[j][k] * L[j][k];
+            sum += getDataAt(L, j, k) * getDataAt(L, j, k);
           }
-          L[j][j] = sqrt(this(i, j) - sum);
+          setDataAt(L, j, j, sqrt(this(i, j) - sum));
         } else {
           for (var k = 0; k < j; k++) {
-            sum += L[i][k] * L[j][k];
+            sum += getDataAt(L, i, k) * getDataAt(L, j, k);
           }
-          L[i][j] = (this(i, j) - sum) / L[j][j];
+          setDataAt(L, i, j, (this(i, j) - sum) / getDataAt(L, j, j));
         }
       }
     }
@@ -311,13 +322,21 @@ class RealMatrix extends Matrix<double> {
     // Computing Lt, the transposed version of L
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < rowCount; j++) {
-        transpL[i][j] = L[j][i];
+        setDataAt(transpL, i, j, getDataAt(L, j, i));
       }
     }
 
     return [
-      RealMatrix.fromData(rows: rowCount, columns: columnCount, data: L),
-      RealMatrix.fromData(rows: rowCount, columns: columnCount, data: transpL)
+      RealMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: columnCount,
+        data: L,
+      ),
+      RealMatrix.fromFlattenedData(
+        rows: rowCount,
+        columns: columnCount,
+        data: transpL,
+      )
     ];
   }
 
@@ -376,6 +395,10 @@ class RealMatrix extends Matrix<double> {
         det3_201_012 * source.flattenData[15];
   }
 
+  double _computeSquareDeterminant(RealMatrix source) {
+    return 0.0;
+  }
+
   /// Recursively computes the determinant of a matrix. In case of 1x1, 2x2,
   /// 3x3 and 4x4 matrices, the calculations are "manually" done.
   double _computeDeterminant(RealMatrix source) {
@@ -405,7 +428,14 @@ class RealMatrix extends Matrix<double> {
       return _compute4x4Determinant(source);
     }
 
-    // Computing the determinant for 5x5 matrices and bigger
+    // For efficiency, the determinant of square matrices whose size is 5x5 (or
+    // bigger) can be computed using decompositions such as LU or QR.
+    /*if (source.isSquareMatrix) {
+      return _computeSquareDeterminant(source);
+    }*/
+
+    // 'Standard' determinant algorithm, which is the default option when the
+    // matrix is NOT square
     var det = 0.0;
     final tempMatrix = List.generate(
         source.rowCount - 1,

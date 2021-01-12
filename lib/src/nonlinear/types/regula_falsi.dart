@@ -59,7 +59,7 @@ class RegulaFalsi extends NonLinear {
   @override
   NonlinearResults solve() {
     // Exit immediately if the root is not bracketed
-    if (evaluateOn(a) * evaluateOn(a) >= 0) {
+    if (evaluateOn(a) * evaluateOn(b) >= 0) {
       throw NonlinearException("The root is not bracketed in [$a, $b]");
     }
 
@@ -94,8 +94,7 @@ class RegulaFalsi extends NonLinear {
       // Add the root to the list
       guesses.add(c);
 
-      toleranceCheck =
-          (tempA - tempB).abs() < tolerance * (tempA + tempB).abs();
+      toleranceCheck = fc.abs() > tolerance;
       ++n;
     }
 

@@ -48,6 +48,33 @@ abstract class SystemSolver {
     _knownValues = b.map((value) => value).toList();
   }
 
+  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
+  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///
+  ///   - [size] is the total number of equations
+  ///   - [A] is the "flattened" representation of a matrix containing the
+  ///   equations
+  ///   - [b] is the vector with the known values
+  SystemSolver.fromFlattenedData({
+    required int size,
+    required List<double> A,
+    required List<double> b,
+    this.precision = 1.0e-10,
+  }) {
+    // Building the matrix
+    equations =
+        RealMatrix.fromFlattenedData(rows: size, columns: size, data: A);
+
+    // The vector of known values must match the size of the matrix
+    if (equations.rowCount != b.length) {
+      throw const SystemSolverException("The known values vector must have the "
+          "same size as the matrix.");
+    }
+
+    // Copying and storing internally the list of known values
+    _knownValues = b.map((value) => value).toList();
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -149,14 +176,15 @@ abstract class SystemSolver {
   ///
   /// In this case, [source] represents `U` and [vector] represents `b`.
   static List<double> backSubstitution(
-      List<List<double>> source, List<double> vector) {
-    final vectorSize = vector.length;
-    final solutions =
-        List<double>.generate(vectorSize, (_) => 0, growable: false);
+    List<List<double>> source,
+    List<double> vector,
+  ) {
+    final size = vector.length;
+    final solutions = List<double>.generate(size, (_) => 0, growable: false);
 
-    for (var i = vectorSize - 1; i >= 0; --i) {
+    for (var i = size - 1; i >= 0; --i) {
       solutions[i] = vector[i];
-      for (var j = i + 1; j < vectorSize; ++j) {
+      for (var j = i + 1; j < size; ++j) {
         solutions[i] = solutions[i] - source[i][j] * solutions[j];
       }
       solutions[i] = solutions[i] / source[i][i];
@@ -170,12 +198,13 @@ abstract class SystemSolver {
   ///
   /// In this case, [source] represents `L` and [vector] represents `b`.
   static List<double> forwardSubstitution(
-      List<List<double>> source, List<double> vector) {
-    final vectorSize = vector.length;
-    final solutions =
-        List<double>.generate(vectorSize, (_) => 0, growable: false);
+    List<List<double>> source,
+    List<double> vector,
+  ) {
+    final size = vector.length;
+    final solutions = List<double>.generate(size, (_) => 0, growable: false);
 
-    for (var i = 0; i < vectorSize; ++i) {
+    for (var i = 0; i < size; ++i) {
       solutions[i] = vector[i];
       for (var j = 0; j < i; ++j) {
         solutions[i] = solutions[i] - source[i][j] * solutions[j];
