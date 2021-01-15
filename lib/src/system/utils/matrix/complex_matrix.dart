@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:equations/equations.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
@@ -269,16 +268,6 @@ class ComplexMatrix extends Matrix<Complex> {
         data: U,
       ),
     ];
-  }
-
-  /// Factors the matrix as the product of an orthogonal matrix `Q` and an upper
-  /// triangular matrix `R`.
-  ///
-  /// The returned list contains `Q` at index 0 and `R` at index 1.
-  @override
-  List<ComplexMatrix> qrDecomposition() {
-
-    return [];
   }
 
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into

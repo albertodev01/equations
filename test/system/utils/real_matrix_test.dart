@@ -304,20 +304,6 @@ void main() {
     });
 
     test(
-        "Making sure that QR decomposition properly works on a square matrix "
-        "of a given dimension.", () {
-      final matrix = RealMatrix.fromData(rows: 3, columns: 3, data: const [
-        [2, -1, 1],
-        [1, 3, -2],
-        [0, 1, -2],
-      ]);
-
-      // Decomposition
-      final d = matrix.qrDecomposition();
-      expect(d.length, isZero);
-    });
-
-    test(
         "Making sure that the Cholesky decomposition properly doesn't work "
         "when the matrix is not square.", () {
       final matrix = RealMatrix.fromData(

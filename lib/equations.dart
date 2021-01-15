@@ -33,8 +33,6 @@ export 'src/system/types/gauss_seidel.dart';
 export 'src/system/utils/matrix.dart';
 export 'src/system/utils/matrix/real_matrix.dart';
 export 'src/system/utils/matrix/complex_matrix.dart';
-export 'src/system/utils/qr_decomposition.dart';
-export 'src/system/utils/qr_decomposition/qr_real_decomposition.dart';
 
 export 'src/utils/complex/complex.dart';
 export 'src/utils/exceptions/exceptions.dart';

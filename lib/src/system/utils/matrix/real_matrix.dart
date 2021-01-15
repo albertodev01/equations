@@ -265,26 +265,6 @@ class RealMatrix extends Matrix<double> {
     ];
   }
 
-  /// Factors the matrix as the product of an orthogonal matrix `Q` and an upper
-  /// triangular matrix `R`.
-  ///
-  /// The returned list contains `Q` at index 0 and `R` at index 1.
-  @override
-  List<RealMatrix> qrDecomposition() {
-    final qrDecomposer = QRRealDecomposition(source: this);
-
-    /*final res = qrDecomposer.decompose();
-
-    print(res[0]);
-    print("\n");
-    print(res[1]);
-    print("\n");
-
-    print(res[0] * res[1]);*/
-
-    return [];
-  }
-
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into
   /// the product of a lower triangular matrix and its conjugate transpose. In
   /// particular, this method returns the `L` and `L`<sup>T</sup> matrices of the

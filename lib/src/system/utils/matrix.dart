@@ -255,10 +255,6 @@ abstract class Matrix<T> {
   /// an upper triangular matrix `U`.
   List<Matrix<T>> luDecomposition();
 
-  /// Factors the matrix as the product of an orthogonal matrix `Q` and an upper
-  /// triangular matrix `R`.
-  List<Matrix<T>> qrDecomposition();
-
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into
   /// the product of a lower triangular matrix and its conjugate transpose.
   List<Matrix<T>> choleskyDecomposition();
