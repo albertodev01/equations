@@ -48,33 +48,6 @@ abstract class SystemSolver {
     _knownValues = b.map((value) => value).toList();
   }
 
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
-  ///
-  ///   - [size] is the total number of equations
-  ///   - [A] is the "flattened" representation of a matrix containing the
-  ///   equations
-  ///   - [b] is the vector with the known values
-  SystemSolver.fromFlattenedData({
-    required int size,
-    required List<double> A,
-    required List<double> b,
-    this.precision = 1.0e-10,
-  }) {
-    // Building the matrix
-    equations =
-        RealMatrix.fromFlattenedData(rows: size, columns: size, data: A);
-
-    // The vector of known values must match the size of the matrix
-    if (equations.rowCount != b.length) {
-      throw const SystemSolverException("The known values vector must have the "
-          "same size as the matrix.");
-    }
-
-    // Copying and storing internally the list of known values
-    _knownValues = b.map((value) => value).toList();
-  }
-
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
