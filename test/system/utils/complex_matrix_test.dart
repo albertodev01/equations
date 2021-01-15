@@ -37,6 +37,67 @@ void main() {
     });
 
     test(
+        "Making sure that the matrix can correctly be 'flattened' and converted "
+        "into a list of 'double' values.", () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: [
+          [Complex(1, 2), Complex(3, 4)],
+          [Complex(5, 6), Complex(7, 8)],
+        ],
+      );
+
+      // Checking the sizes
+      final flattenedMatrix = matrix.toList();
+
+      expect(flattenedMatrix.length, equals(4));
+      expect(
+          flattenedMatrix,
+          orderedEquals(<Complex>[
+            Complex(1, 2),
+            Complex(3, 4),
+            Complex(5, 6),
+            Complex(7, 8),
+          ]));
+    });
+
+    test(
+        "Making sure that the matrix can correctly be created from a 'flattened' "
+        "list of values.", () {
+      final matrix = ComplexMatrix.fromFlattenedData(
+        rows: 2,
+        columns: 2,
+        data: [
+          Complex(1, 2),
+          Complex(3, 4),
+          Complex(5, 6),
+          Complex(7, 8),
+        ],
+      );
+
+      expect(matrix.rowCount * matrix.columnCount, equals(4));
+      expect(
+          matrix,
+          equals(ComplexMatrix.fromData(rows: 2, columns: 2, data: [
+            [Complex(1, 2), Complex(3, 4)],
+            [Complex(5, 6), Complex(7, 8)],
+          ])));
+    });
+
+    test(
+        "Making sure that an exception is thrown when the matrix is being built "
+        "from a list but the sizes are wrong", () {
+      expect(
+          () => ComplexMatrix.fromFlattenedData(
+                rows: 2,
+                columns: 2,
+                data: [Complex(1, 2), Complex(1, 1)],
+              ),
+          throwsA(isA<Exception>()));
+    });
+
+    test(
         "Making sure that the identity matrix is filled with 0s except for "
         "its diagonal, which must contain all 1s.", () {
       final matrix = ComplexMatrix(columns: 3, rows: 3, identity: true);

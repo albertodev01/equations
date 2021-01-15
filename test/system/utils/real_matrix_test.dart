@@ -65,6 +65,55 @@ void main() {
           throwsA(isA<MatrixException>()));
     });
 
+    test(
+        "Making sure that the matrix can correctly be 'flattened' and converted "
+        "into a list of 'double' values.", () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: [
+          [1, 2],
+          [3, 4]
+        ],
+      );
+
+      // Checking the sizes
+      final flattenedMatrix = matrix.toList();
+
+      expect(flattenedMatrix.length, equals(4));
+      expect(flattenedMatrix, orderedEquals(<double>[1, 2, 3, 4]));
+    });
+
+    test(
+        "Making sure that the matrix can correctly be created from a 'flattened' "
+        "list of values.", () {
+      final matrix = RealMatrix.fromFlattenedData(
+        rows: 2,
+        columns: 2,
+        data: [1, 2, 3, 4],
+      );
+
+      expect(matrix.rowCount * matrix.columnCount, equals(4));
+      expect(
+          matrix,
+          equals(RealMatrix.fromData(rows: 2, columns: 2, data: [
+            [1, 2],
+            [3, 4],
+          ])));
+    });
+
+    test(
+        "Making sure that an exception is thrown when the matrix is being built "
+        "from a list but the sizes are wrong", () {
+      expect(
+          () => RealMatrix.fromFlattenedData(
+                rows: 6,
+                columns: 2,
+                data: [1, 2, 3, 4],
+              ),
+          throwsA(isA<Exception>()));
+    });
+
     test("Making sure that 'toString()' works as expected.", () {
       final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
         [1, 2, 3],
