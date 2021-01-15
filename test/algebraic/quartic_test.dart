@@ -36,6 +36,12 @@ void main() {
       expect(equation[3], equals(Complex.fromReal(2)));
       expect(equation[4], equals(Complex.fromReal(-1)));
       expect(() => equation[-1], throwsA(isA<RangeError>()));
+      expect(equation.coefficient(4), equals(Complex.fromReal(3)));
+      expect(equation.coefficient(3), equals(Complex.fromReal(6)));
+      expect(equation.coefficient(2), equals(Complex.zero()));
+      expect(equation.coefficient(1), equals(Complex.fromReal(2)));
+      expect(equation.coefficient(0), equals(Complex.fromReal(-1)));
+      expect(equation.coefficient(5), isNull);
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = 3x^4 + 6x^3 + 2x + -1"));

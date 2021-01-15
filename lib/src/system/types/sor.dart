@@ -29,10 +29,11 @@ class SORSolver extends SystemSolver {
     this.maxSteps = 30,
     double precision = 1.0e-10,
   }) : super(
-            A: equations,
-            b: constants,
-            size: constants.length,
-            precision: precision);
+          A: equations,
+          b: constants,
+          size: constants.length,
+          precision: precision,
+        );
 
   @override
   bool operator ==(Object other) {

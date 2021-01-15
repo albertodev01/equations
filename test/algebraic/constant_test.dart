@@ -16,6 +16,8 @@ void main() {
       // Making sure that coefficients can be accessed via index
       expect(equation[0], equals(Complex(3, 7)));
       expect(() => equation[-1], throwsA(isA<RangeError>()));
+      expect(equation.coefficient(0), equals(Complex(3, 7)));
+      expect(equation.coefficient(1), isNull);
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = (3 + 7i)"));

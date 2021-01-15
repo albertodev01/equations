@@ -11,7 +11,7 @@ void main() {
       final choleskySolver = CholeskySolver(equations: const [
         [6, 15, 55],
         [15, 55, 255],
-        [55, 225, 979]
+        [55, 225, 979],
       ], constants: const [
         76,
         295,
@@ -26,7 +26,7 @@ void main() {
         data: const [
           [6, 15, 55],
           [15, 55, 255],
-          [55, 225, 979]
+          [55, 225, 979],
         ],
       );
 
@@ -48,11 +48,11 @@ void main() {
       final solver = CholeskySolver(equations: const [
         [-6, 15, 55],
         [15, 55, 255],
-        [55, 225, 979]
+        [55, 225, 979],
       ], constants: const [
         76,
         295,
-        1259
+        1259,
       ]);
 
       final toString = "[-6.0, 15.0, 55.0]\n"
@@ -72,11 +72,11 @@ void main() {
       final solver = CholeskySolver(equations: const [
         [-6, 15, 55],
         [15, 55, 255],
-        [55, 225, 979]
+        [55, 225, 979],
       ], constants: const [
         76,
         295,
-        1259
+        1259,
       ]);
 
       expect(solver.solve, throwsA(isA<SystemSolverException>()));
@@ -88,10 +88,10 @@ void main() {
       expect(
           () => CholeskySolver(equations: const [
                 [1, 2, 3],
-                [4, 5, 6]
+                [4, 5, 6],
               ], constants: [
                 7,
-                8
+                8,
               ]),
           throwsA(isA<MatrixException>()));
     });
@@ -102,11 +102,11 @@ void main() {
       expect(
           () => CholeskySolver(equations: const [
                 [1, 2],
-                [4, 5]
+                [4, 5],
               ], constants: [
                 7,
                 8,
-                9
+                9,
               ]),
           throwsA(isA<MatrixException>()));
     });
@@ -114,18 +114,18 @@ void main() {
     test("Making sure that objects comparison works properly.", () {
       final gauss = GaussianElimination(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ]);
 
       final gauss2 = GaussianElimination(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ]);
 
       expect(gauss, equals(gauss2));

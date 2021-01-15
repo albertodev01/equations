@@ -31,6 +31,10 @@ void main() {
       expect(equation[1], equals(Complex.fromReal(3)));
       expect(equation[2], equals(Complex(-3, -2)));
       expect(() => equation[-1], throwsA(isA<RangeError>()));
+      expect(equation.coefficient(2), equals(Complex.i()));
+      expect(equation.coefficient(1), equals(Complex.fromReal(3)));
+      expect(equation.coefficient(0), equals(Complex(-3, -2)));
+      expect(equation.coefficient(3), isNull);
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = 1ix^2 + 3x + (-3 - 2i)"));

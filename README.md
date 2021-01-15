@@ -133,6 +133,7 @@ supports the following root finding methods:
 | `Secant`     | a, b ∈ R          |
 | `Steffensen` | x<sub>0</sub> ∈ R |
 | `Brent`      | a, b ∈ R          |
+| `RegulaFalsi`| a, b ∈ R          |
 
 Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only
 work with real numbers. Here's a simple example of how you can find the roots of an equation:

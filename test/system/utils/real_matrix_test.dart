@@ -1,6 +1,8 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
+import '../../double_approximation_matcher.dart';
+
 void main() {
   group("Testing the constructors of the 'RealMatrix' class", () {
     test("Making sure that a new matrix is initialized with 0s.", () {
@@ -61,6 +63,55 @@ void main() {
         "build an identity matrix with a non-squared entry.", () {
       expect(() => RealMatrix(columns: 3, rows: 5, identity: true),
           throwsA(isA<MatrixException>()));
+    });
+
+    test(
+        "Making sure that the matrix can correctly be 'flattened' and converted "
+        "into a list of 'double' values.", () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: [
+          [1, 2],
+          [3, 4]
+        ],
+      );
+
+      // Checking the sizes
+      final flattenedMatrix = matrix.toList();
+
+      expect(flattenedMatrix.length, equals(4));
+      expect(flattenedMatrix, orderedEquals(<double>[1, 2, 3, 4]));
+    });
+
+    test(
+        "Making sure that the matrix can correctly be created from a 'flattened' "
+        "list of values.", () {
+      final matrix = RealMatrix.fromFlattenedData(
+        rows: 2,
+        columns: 2,
+        data: [1, 2, 3, 4],
+      );
+
+      expect(matrix.rowCount * matrix.columnCount, equals(4));
+      expect(
+          matrix,
+          equals(RealMatrix.fromData(rows: 2, columns: 2, data: [
+            [1, 2],
+            [3, 4],
+          ])));
+    });
+
+    test(
+        "Making sure that an exception is thrown when the matrix is being built "
+        "from a list but the sizes are wrong", () {
+      expect(
+          () => RealMatrix.fromFlattenedData(
+                rows: 6,
+                columns: 2,
+                data: [1, 2, 3, 4],
+              ),
+          throwsA(isA<Exception>()));
     });
 
     test("Making sure that 'toString()' works as expected.", () {
@@ -127,7 +178,7 @@ void main() {
     * */
     final matrixA = RealMatrix.fromData(columns: 2, rows: 2, data: const [
       [2, 6],
-      [-5, 0]
+      [-5, 0],
     ]);
 
     /*
@@ -136,13 +187,13 @@ void main() {
     * */
     final matrixB = RealMatrix.fromData(columns: 2, rows: 2, data: const [
       [-4, 1],
-      [7, -3]
+      [7, -3],
     ]);
 
     test("Making sure that operator+ works properly.", () {
       final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-2, 7],
-        [2, -3]
+        [2, -3],
       ]);
       expect(matrixA + matrixB, equals(matrixSum));
     });
@@ -150,7 +201,7 @@ void main() {
     test("Making sure that operator- works properly.", () {
       final matrixSub = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
-        [-12, 3]
+        [-12, 3],
       ]);
       expect(matrixA - matrixB, equals(matrixSub));
     });
@@ -158,7 +209,7 @@ void main() {
     test("Making sure that operator* works properly.", () {
       final matrixMul = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [34, -16],
-        [20, -5]
+        [20, -5],
       ]);
       expect(matrixA * matrixB, equals(matrixMul));
     });
@@ -166,7 +217,7 @@ void main() {
     test("Making sure that operator/ works properly.", () {
       final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-1 / 2, 6],
-        [-5 / 7, 0]
+        [-5 / 7, 0],
       ]);
       expect(matrixA / matrixB, equals(matrixDiv));
     });
@@ -183,7 +234,7 @@ void main() {
     test("Making sure that the determinant of a 2*2 matrix is correct.", () {
       final matrix = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
-        [-12, 3]
+        [-12, 3],
       ]);
       expect(matrix.determinant(), equals(78));
     });
@@ -192,7 +243,7 @@ void main() {
       final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: [
         [2, -1, 0],
         [11, 0, 7],
-        [6, 1, 1]
+        [6, 1, 1],
       ]);
       expect(matrix.determinant(), equals(-45));
     });
@@ -202,7 +253,7 @@ void main() {
         [2, -1, 13, 4],
         [11, 0, 1, 7],
         [6, -4, 7, 2],
-        [1, -1, 3, 0]
+        [1, -1, 3, 0],
       ]);
       expect(matrix.determinant(), equals(271));
     });
@@ -215,9 +266,9 @@ void main() {
         [11, 0, 5, 1, 7],
         [6, -4, 7, 2, -6],
         [1, 0, -3, -6, 9],
-        [7, 0, 3, -4, 1]
+        [7, 0, 3, -4, 1],
       ]);
-      expect(matrix.determinant(), equals(-28398));
+      expect(matrix.determinant(), MoreOrLessEquals(-28398, precision: 0.1));
     });
   });
 
@@ -231,7 +282,7 @@ void main() {
         data: const [
           [1, 2, 3],
           [4, 5, 6],
-          [7, 8, 9]
+          [7, 8, 9],
         ],
       );
 
@@ -277,7 +328,7 @@ void main() {
       final matrix = RealMatrix.fromData(rows: 3, columns: 3, data: const [
         [25, 15, -5],
         [15, 18, 0],
-        [-5, 0, 11]
+        [-5, 0, 11],
       ]);
 
       // Decomposition

@@ -1,3 +1,10 @@
+# 2.0.0-nullsafety.4
+
+  - Updated some dependencies versions
+  - Added a new root finding algorithm (`RegulaFalsi`)
+  - Improved the computation of the determinant (now it uses LU decomposition which is way better than the old O(n!) implementation)
+  - Minor documentation improvements
+
 # 2.0.0-nullsafety.3
 
   - Added support for linear systems solving using Jacobi, Gauss-Seidel and SOR

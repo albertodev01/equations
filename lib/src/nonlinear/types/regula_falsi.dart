@@ -1,15 +1,18 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/nonlinear/nonlinear.dart';
 
-/// Implements the 'bisection' method to find the roots of a given equation.
+/// Implements the regula falsi method (also known as "_false position method_")
+/// to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
-///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
-///   continuous function on the interval [a, b].
+///   - The method requires the root to be bracketed between two points `a` and
+///   `b` otherwise it won't work.
 ///
-///   - The values of `f(a)` and `f(b)` must have opposite signs.
-class Bisection extends NonLinear {
+///   - If you cannot assume that a function may be interpolated by a linear
+///   function, then applying this method method could result in worse results
+///   than the bisection method.
+class RegulaFalsi extends NonLinear {
   /// The starting point of the interval
   final double a;
 
@@ -17,14 +20,14 @@ class Bisection extends NonLinear {
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the
-  /// Bisection method.
+  /// regula falsi method.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate `f(a)`
   ///   - [b]: the second interval in which evaluate `f(b)`
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  const Bisection({
+  const RegulaFalsi({
     required String function,
     required this.a,
     required this.b,
@@ -36,7 +39,7 @@ class Bisection extends NonLinear {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    if (other is Bisection) {
+    if (other is RegulaFalsi) {
       return super == other && a == other.a && b == other.b;
     } else {
       return false;
@@ -55,31 +58,44 @@ class Bisection extends NonLinear {
 
   @override
   NonlinearResults solve() {
-    var amp = tolerance + 1;
+    // Exit immediately if the root is not bracketed
+    if (evaluateOn(a) * evaluateOn(b) >= 0) {
+      throw NonlinearException("The root is not bracketed in [$a, $b]");
+    }
+
+    final guesses = <double>[];
+    var toleranceCheck = true;
     var n = 1;
-    var guesses = <double>[];
-    var pA = a;
-    var pB = b;
-    var fa = evaluateOn(pA);
 
-    while ((amp >= tolerance) && (n <= maxSteps)) {
-      ++n;
-      amp = (pB - pA).abs();
-      var x0 = pA + amp * 0.5;
+    var tempA = a;
+    var tempB = b;
 
-      guesses.add(x0);
-      var fx = evaluateOn(x0);
+    while (toleranceCheck && (n <= maxSteps)) {
+      // Evaluating on A and B the function
+      final fa = evaluateOn(tempA);
+      final fb = evaluateOn(tempB);
 
-      if (fa * fx < 0) {
-        pB = x0;
-      } else {
-        if (fa * fx > 0) {
-          pA = x0;
-          fa = fx;
-        } else {
-          amp = 0;
-        }
+      // Computing the guess
+      final c = (fa * tempB - fb * tempA) / (fa - fb);
+      final fc = evaluateOn(c);
+
+      // Making sure the evaluation is not zero
+      if (fc == 0) {
+        break;
       }
+
+      // Shrink the interval
+      if (fa * fc < 0) {
+        tempB = c;
+      } else {
+        tempA = c;
+      }
+
+      // Add the root to the list
+      guesses.add(c);
+
+      toleranceCheck = fc.abs() > tolerance;
+      ++n;
     }
 
     return NonlinearResults(

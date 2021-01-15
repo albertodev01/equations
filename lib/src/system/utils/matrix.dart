@@ -78,6 +78,30 @@ abstract class Matrix<T> {
     }
   }
 
+  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// matrix is filled with values from [data].
+  ///
+  /// The source matrix is expressed as an array whose size must **exactly** be
+  /// `N` * `M`.
+  Matrix.fromFlattenedData({
+    required int rows,
+    required int columns,
+    required List<T> data,
+  })   : rowCount = rows,
+        columnCount = columns {
+    // Making sure the size is correct
+    if (data.length != (rows * columns)) {
+      throw const MatrixException("The given sizes don't match the size of the "
+          "data to be inserted.");
+    }
+
+    // Making a deep copy of the data
+    _data = data.map((e) => e).toList();
+
+    // Exposing data to the outside in read-only mode
+    flattenData = UnmodifiableListView<T>(_data);
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -162,6 +186,9 @@ abstract class Matrix<T> {
       return List<T>.generate(columnCount, (col) => this(row, col));
     }, growable: false);
   }
+
+  /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.
+  List<T> toList() => _data.map((e) => e).toList();
 
   /// Determines whether the matrix is square
   bool get isSquareMatrix => rowCount == columnCount;

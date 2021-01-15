@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:equations/equations.dart';
 
@@ -37,7 +39,10 @@ abstract class Algebraic {
   /// the [Algebraic.realEquation(coefficients)] constructor which is more
   /// convenient.
   Algebraic(List<Complex> coefficients) {
-    this.coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
+    // Making a deep copy but there's no need to call 'copyWith' on the complex
+    // coefficients because 'Complex' is an immutable type.
+    this.coefficients =
+        UnmodifiableListView(coefficients.map((c) => c).toList());
 
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -62,7 +67,7 @@ abstract class Algebraic {
   /// were complex numbers as well, use the [Algebraic(coefficients)] constructor.
   Algebraic.realEquation(List<double> coefficients) {
     this.coefficients = UnmodifiableListView(
-        coefficients.map((value) => Complex.fromReal(value)).toList());
+        coefficients.map((c) => Complex.fromReal(c)).toList());
 
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -154,8 +159,8 @@ abstract class Algebraic {
   /// Use this method when the coefficients are all real numbers. If there
   /// were complex numbers as well, use the [Algebraic.from(coefficients)]
   /// instead.
-  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
-      coefficients.map((value) => Complex.fromReal(value)).toList());
+  factory Algebraic.fromReal(List<double> coefficients) =>
+      Algebraic.from(coefficients.map((c) => Complex.fromReal(c)).toList());
 
   @override
   bool operator ==(Object other) {
@@ -289,8 +294,7 @@ abstract class Algebraic {
   /// Determines whether the polynomial is real or not.
   ///
   /// If at least one coefficient is complex, then the polynomial is complex.
-  bool get isRealEquation =>
-      coefficients.every((value) => value.imaginary == 0);
+  bool get isRealEquation => coefficients.every((c) => c.imaginary == 0);
 
   /// A polynomial equation is **valid** if the coefficient associated to the
   /// variable of highest degree is different from zero. In other words, the
@@ -310,11 +314,120 @@ abstract class Algebraic {
   ///   c: Complex.fromReal(5),
   /// );
   ///
-  /// final b = quadratic[1] // Complex(-6, 0)
+  /// final a = quadratic[0] // a = Complex(2, 0)
+  /// final b = quadratic[1] // b = Complex(-6, 0)
+  /// final c = quadratic[2] // c = Complex(5, 0)
   /// ```
   ///
-  /// An exception is thrown if the index is out of the bounds.
+  /// An exception is thrown if the [index] is negative or if it doesn't
+  /// correspond to a valid position.
   Complex operator [](int index) => coefficients[index];
+
+  /// Returns the coefficient of the polynomial whose degree is [degree]. For
+  /// example:
+  ///
+  /// ```dart
+  /// final quadratic = Quadratic(
+  ///   a: Complex.fromReal(2),
+  ///   b: Complex.fromReal(-6),
+  ///   c: Complex.fromReal(5),
+  /// );
+  ///
+  /// final degreeZero = quadratic.coefficient(0) // Complex(5, 0)
+  /// final degreeOne = quadratic.coefficient(1) // Complex(-6, 0)
+  /// final degreeTwo = quadratic.coefficient(2) // Complex(2, 0)
+  /// ```
+  ///
+  /// This method returns `null` if no coefficient of the given [degree] is found.
+  Complex? coefficient(int degree) {
+    // The coefficient of the given degree doesn't exist
+    if ((degree < 0) || (degree > coefficients.length - 1)) {
+      return null;
+    }
+
+    // Return the coefficient of degree 'degree'
+    return coefficients[coefficients.length - degree - 1];
+  }
+
+  /// The addition of two polynomials is performed by adding the corresponding
+  /// coefficients. The degrees of the two polynomials don't need to be the same
+  /// so you can sum a [Cubic] with a [Linear] for example.
+  Algebraic operator +(Algebraic other) {
+    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+    final newCoefficients = <Complex>[];
+
+    // The sum of two polynomials is the sum of the coefficients with the same
+    // degree
+    for (var degree = maxDegree; degree >= 0; --degree) {
+      final thisCoefficient = coefficient(degree) ?? Complex.zero();
+      final otherCoefficient = other.coefficient(degree) ?? Complex.zero();
+      final sum = thisCoefficient + otherCoefficient;
+
+      if (!sum.isZero) {
+        newCoefficients.add(sum);
+      }
+    }
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// The difference of two polynomials is performed by subtracting the
+  /// corresponding coefficients. The degrees of the two polynomials don't need
+  /// to be the same so you can subtract a [Quadratic] and a [Quartic] for example.
+  Algebraic operator -(Algebraic other) {
+    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
+    final newCoefficients = <Complex>[];
+
+    // The difference of two polynomials is the difference of the coefficients
+    // with the same degree
+    for (var degree = maxDegree; degree >= 0; --degree) {
+      final thisCoefficient = coefficient(degree) ?? Complex.zero();
+      final otherCoefficient = other.coefficient(degree) ?? Complex.zero();
+      final diff = thisCoefficient - otherCoefficient;
+
+      if (!diff.isZero) {
+        newCoefficients.add(diff);
+      }
+    }
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// The product of two polynomials is performed by multiplying the corresponding
+  /// coefficients of the polynomials. The degrees of the two polynomials don't
+  /// need to be the same so you can multiply a [Constant] with a [Laguerre] for
+  /// example.
+  Algebraic operator *(Algebraic other) {
+    // Generating the new list of coefficients
+    final newLength = coefficients.length + other.coefficients.length - 1;
+    final newCoefficients = List<Complex>.filled(newLength, Complex.zero());
+
+    // The product
+    for (var i = 0; i < coefficients.length; ++i) {
+      for (var j = 0; j < other.coefficients.length; ++j) {
+        newCoefficients[i + j] += coefficients[i] * other.coefficients[j];
+      }
+    }
+
+    // Returning a new instance
+    return Algebraic.from(newCoefficients);
+  }
+
+  /// The 'negation' operator changes the sign of every coefficient of the
+  /// polynomial. For example:
+  ///
+  /// ```dart
+  /// final poly1 = Linear.realEquation(a: 3, b: -5);
+  /// final poly2 = -poly1; // poly2 = Linear.realEquation(a: -3, b: 5);
+  /// ```
+  ///
+  /// As you can see, in `poly2` all the coefficients have the opposite sign.
+  Algebraic operator -() {
+    final newList = coefficients.map((c) => -c).toList();
+    return Algebraic.from(newList);
+  }
 
   /// The discriminant of the algebraic equation if it exists.
   Complex discriminant();

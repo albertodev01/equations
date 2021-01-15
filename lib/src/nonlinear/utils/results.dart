@@ -16,10 +16,11 @@ class NonlinearResults {
   /// [guesses] is the scalar succession built by the algorithm, [convergence]
   /// represents the rate of convergence and [efficiency] is the efficiency of the
   /// algorithm expressed as _p = convergence <sup>1 / max_steps</sup>_.
-  const NonlinearResults(
-      {required this.guesses,
-      required this.convergence,
-      required this.efficiency});
+  const NonlinearResults({
+    required this.guesses,
+    required this.convergence,
+    required this.efficiency,
+  });
 
   @override
   bool operator ==(Object other) {

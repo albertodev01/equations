@@ -38,6 +38,11 @@ void main() {
       expect(equation[2], equals(Complex.fromReal(5)));
       expect(equation[3], equals(Complex.fromReal(-9)));
       expect(() => equation[-1], throwsA(isA<RangeError>()));
+      expect(equation.coefficient(3), equals(Complex.fromReal(-1)));
+      expect(equation.coefficient(2), equals(Complex.zero()));
+      expect(equation.coefficient(1), equals(Complex.fromReal(5)));
+      expect(equation.coefficient(0), equals(Complex.fromReal(-9)));
+      expect(equation.coefficient(4), isNull);
 
       // Converting to string
       expect(equation.toString(), equals("f(x) = -1x^3 + 5x + -9"));

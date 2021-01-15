@@ -7,6 +7,8 @@ import 'package:equations/equations.dart';
 ///
 /// New instances of [Complex] can be created either by using the various
 /// constructors or by using the extension method on [num].
+///
+/// A [Complex] object is **immutable**.
 class Complex implements Comparable<Complex> {
   /// The real part of the complex number.
   final double real;

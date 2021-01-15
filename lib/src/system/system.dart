@@ -149,14 +149,15 @@ abstract class SystemSolver {
   ///
   /// In this case, [source] represents `U` and [vector] represents `b`.
   static List<double> backSubstitution(
-      List<List<double>> source, List<double> vector) {
-    final vectorSize = vector.length;
-    final solutions =
-        List<double>.generate(vectorSize, (_) => 0, growable: false);
+    List<List<double>> source,
+    List<double> vector,
+  ) {
+    final size = vector.length;
+    final solutions = List<double>.generate(size, (_) => 0, growable: false);
 
-    for (var i = vectorSize - 1; i >= 0; --i) {
+    for (var i = size - 1; i >= 0; --i) {
       solutions[i] = vector[i];
-      for (var j = i + 1; j < vectorSize; ++j) {
+      for (var j = i + 1; j < size; ++j) {
         solutions[i] = solutions[i] - source[i][j] * solutions[j];
       }
       solutions[i] = solutions[i] / source[i][i];
@@ -170,12 +171,13 @@ abstract class SystemSolver {
   ///
   /// In this case, [source] represents `L` and [vector] represents `b`.
   static List<double> forwardSubstitution(
-      List<List<double>> source, List<double> vector) {
-    final vectorSize = vector.length;
-    final solutions =
-        List<double>.generate(vectorSize, (_) => 0, growable: false);
+    List<List<double>> source,
+    List<double> vector,
+  ) {
+    final size = vector.length;
+    final solutions = List<double>.generate(size, (_) => 0, growable: false);
 
-    for (var i = 0; i < vectorSize; ++i) {
+    for (var i = 0; i < size; ++i) {
       solutions[i] = vector[i];
       for (var j = 0; j < i; ++j) {
         solutions[i] = solutions[i] - source[i][j] * solutions[j];

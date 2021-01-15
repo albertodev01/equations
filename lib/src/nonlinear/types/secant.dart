@@ -24,13 +24,13 @@ class Secant extends NonLinear {
   ///   - [secondGuess]: the second interval in which evaluate _f(b)_
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  const Secant(
-      {required String function,
-      required this.firstGuess,
-      required this.secondGuess,
-      double tolerance = 1.0e-10,
-      int maxSteps = 15})
-      : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
+  const Secant({
+    required String function,
+    required this.firstGuess,
+    required this.secondGuess,
+    double tolerance = 1.0e-10,
+    int maxSteps = 15,
+  }) : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
   @override
   bool operator ==(Object other) {
@@ -88,8 +88,9 @@ class Secant extends NonLinear {
     }
 
     return NonlinearResults(
-        guesses: guesses,
-        convergence: convergence(guesses, maxSteps),
-        efficiency: efficiency(guesses, maxSteps));
+      guesses: guesses,
+      convergence: convergence(guesses, maxSteps),
+      efficiency: efficiency(guesses, maxSteps),
+    );
   }
 }

@@ -23,12 +23,12 @@ class Steffensen extends NonLinear {
   ///   - [x0]: the initial guess x<sub>0</sub>
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
-  const Steffensen(
-      {required String function,
-      required this.x0,
-      double tolerance = 1.0e-10,
-      int maxSteps = 15})
-      : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
+  const Steffensen({
+    required String function,
+    required this.x0,
+    double tolerance = 1.0e-10,
+    int maxSteps = 15,
+  }) : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
 
   @override
   bool operator ==(Object other) {
@@ -69,8 +69,9 @@ class Steffensen extends NonLinear {
     }
 
     return NonlinearResults(
-        guesses: guesses,
-        convergence: convergence(guesses, maxSteps),
-        efficiency: efficiency(guesses, maxSteps));
+      guesses: guesses,
+      convergence: convergence(guesses, maxSteps),
+      efficiency: efficiency(guesses, maxSteps),
+    );
   }
 }
