@@ -11,7 +11,7 @@ void main() {
       final jacobi = JacobiSolver(
         equations: const [
           [2, 1],
-          [5, 7]
+          [5, 7],
         ],
         constants: [11, 13],
         x0: [1, 1],
@@ -24,7 +24,7 @@ void main() {
         columns: 2,
         data: const [
           [2, 1],
-          [5, 7]
+          [5, 7],
         ],
       );
 
@@ -48,7 +48,7 @@ void main() {
       final solver = JacobiSolver(
         equations: const [
           [2, 1],
-          [5, 7]
+          [5, 7],
         ],
         constants: [11, 13],
         x0: [1, 1],
@@ -69,11 +69,11 @@ void main() {
       expect(
           () => JacobiSolver(equations: const [
                 [1, 2],
-                [4, 5]
+                [4, 5],
               ], constants: [
                 7,
                 8,
-                9
+                9,
               ], x0: []),
           throwsA(isA<MatrixException>()));
     });
@@ -84,10 +84,10 @@ void main() {
       expect(
           () => JacobiSolver(equations: const [
                 [1, 2],
-                [4, 5]
+                [4, 5],
               ], constants: [
                 7,
-                8
+                8,
               ], x0: []),
           throwsA(isA<SystemSolverException>()));
     });
@@ -95,24 +95,24 @@ void main() {
     test("Making sure that objects comparison works properly.", () {
       final jacobi = JacobiSolver(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ], x0: [
         1,
-        2
+        2,
       ]);
 
       final jacobi2 = JacobiSolver(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ], x0: [
         1,
-        2
+        2,
       ]);
 
       expect(jacobi, equals(jacobi2));

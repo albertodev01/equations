@@ -12,7 +12,7 @@ void main() {
         equations: const [
           [3, -1, 1],
           [-1, 3, -1],
-          [1, -1, 3]
+          [1, -1, 3],
         ],
         constants: [-1, 7, -7],
       );
@@ -25,7 +25,7 @@ void main() {
         data: const [
           [3, -1, 1],
           [-1, 3, -1],
-          [1, -1, 3]
+          [1, -1, 3],
         ],
       );
 
@@ -49,11 +49,11 @@ void main() {
       final solver = GaussSeidelSolver(equations: const [
         [3, -1, 1],
         [-1, 3, -1],
-        [1, -1, 3]
+        [1, -1, 3],
       ], constants: const [
         -1,
         7,
-        -7
+        -7,
       ]);
 
       final toString = "[3.0, -1.0, 1.0]\n"
@@ -73,11 +73,11 @@ void main() {
       expect(
           () => GaussSeidelSolver(equations: const [
                 [1, 2],
-                [4, 5]
+                [4, 5],
               ], constants: [
                 7,
                 8,
-                9
+                9,
               ]),
           throwsA(isA<MatrixException>()));
     });
@@ -85,18 +85,18 @@ void main() {
     test("Making sure that objects comparison works properly.", () {
       final gaussSeidel = GaussSeidelSolver(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ]);
 
       final gaussSeidel2 = GaussSeidelSolver(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ]);
 
       expect(gaussSeidel, equals(gaussSeidel2));

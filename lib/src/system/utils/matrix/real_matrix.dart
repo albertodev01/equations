@@ -265,6 +265,26 @@ class RealMatrix extends Matrix<double> {
     ];
   }
 
+  /// Factors the matrix as the product of an orthogonal matrix `Q` and an upper
+  /// triangular matrix `R`.
+  ///
+  /// The returned list contains `Q` at index 0 and `R` at index 1.
+  @override
+  List<RealMatrix> qrDecomposition() {
+    final qrDecomposer = QRRealDecomposition(source: this);
+
+    /*final res = qrDecomposer.decompose();
+
+    print(res[0]);
+    print("\n");
+    print(res[1]);
+    print("\n");
+
+    print(res[0] * res[1]);*/
+
+    return [];
+  }
+
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into
   /// the product of a lower triangular matrix and its conjugate transpose. In
   /// particular, this method returns the `L` and `L`<sup>T</sup> matrices of the
@@ -283,7 +303,7 @@ class RealMatrix extends Matrix<double> {
           "LU decomposition only works with square matrices!");
     }
 
-    // Exit immediately because is [0,0] is a negative number, the algorithm
+    // Exit immediately because if [0,0] is a negative number, the algorithm
     // cannot even start since the square root of a negative number in R is not
     // allowed.
     if (this(0, 0) <= 0) {
@@ -395,10 +415,6 @@ class RealMatrix extends Matrix<double> {
         det3_201_012 * source.flattenData[15];
   }
 
-  double _computeSquareDeterminant(RealMatrix source) {
-    return 0.0;
-  }
-
   /// Recursively computes the determinant of a matrix. In case of 1x1, 2x2,
   /// 3x3 and 4x4 matrices, the calculations are "manually" done.
   double _computeDeterminant(RealMatrix source) {
@@ -428,41 +444,28 @@ class RealMatrix extends Matrix<double> {
       return _compute4x4Determinant(source);
     }
 
-    // For efficiency, the determinant of square matrices whose size is 5x5 (or
-    // bigger) can be computed using decompositions such as LU or QR.
-    /*if (source.isSquareMatrix) {
-      return _computeSquareDeterminant(source);
-    }*/
+    // In all the other cases, so when a matrix is 5x5 or bigger, the default
+    // determinant computation happens via LU decomposition. Look at this well
+    // known relation:
+    //
+    //  det(A) = det(L x U) = det(L) x det(U)
+    //
+    // In particular, the determinant of a lower triangular and an upper triangular
+    // matrix is the product of the items in the diagonal.
+    //
+    // For this reason, the computation of the determinant is O(n^3) which is way
+    // better than O(n!) from the Leibniz formula or the Laplace transformation!
+    final lu = luDecomposition();
 
-    // 'Standard' determinant algorithm, which is the default option when the
-    // matrix is NOT square
-    var det = 0.0;
-    final tempMatrix = List.generate(
-        source.rowCount - 1,
-        (_) =>
-            List.generate(source.columnCount - 1, (_) => 0.0, growable: false),
-        growable: false);
+    var prodL = 1.0;
+    var prodU = 1.0;
 
-    for (var x = 0; x < source.rowCount; ++x) {
-      var subI = 0;
-      for (var i = 1; i < source.rowCount; ++i) {
-        var subJ = 0;
-        for (var j = 0; j < source.rowCount; ++j) {
-          if (j == x) {
-            continue;
-          }
-          tempMatrix[subI][subJ] = this(i, j);
-          subJ++;
-        }
-        subI++;
-      }
-
-      final matrix = RealMatrix.fromData(
-          rows: rowCount - 1, columns: columnCount - 1, data: tempMatrix);
-
-      det = det + (pow(-1, x) * source(0, x) * _computeDeterminant(matrix));
+    // The determinant of L and U is the product of the elements on the diagonal
+    for (var i = 0; i < rowCount; ++i) {
+      prodL *= lu[0](i, i);
+      prodU *= lu[1](i, i);
     }
 
-    return det;
+    return prodL * prodU;
   }
 }

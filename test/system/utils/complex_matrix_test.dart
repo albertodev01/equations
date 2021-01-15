@@ -123,7 +123,7 @@ void main() {
     * */
     final matrixA = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
       [Complex.i(), Complex(3, -8)],
-      [Complex(4, 7), Complex.zero()]
+      [Complex(4, 7), Complex.zero()],
     ]);
 
     /*
@@ -132,14 +132,14 @@ void main() {
     * */
     final matrixB = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
       [Complex.fromReal(5), Complex(-7, 1)],
-      [Complex.fromImaginary(6), Complex(1, 1)]
+      [Complex.fromImaginary(6), Complex(1, 1)],
     ]);
 
     test("Making sure that operator+ works properly.", () {
       final matrixSum =
           ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
         [Complex(5, 1), Complex(-4, -7)],
-        [Complex(4, 13), Complex(1, 1)]
+        [Complex(4, 13), Complex(1, 1)],
       ]);
       expect(matrixA + matrixB, equals(matrixSum));
     });
@@ -147,7 +147,7 @@ void main() {
     test("Making sure that operator- works properly.", () {
       final matrixSub = ComplexMatrix.fromData(columns: 2, rows: 2, data: [
         [Complex(-5, 1), Complex(10, -9)],
-        [Complex(4, 1), Complex(-1, -1)]
+        [Complex(4, 1), Complex(-1, -1)],
       ]);
       expect(matrixA - matrixB, equals(matrixSub));
     });
@@ -155,7 +155,7 @@ void main() {
     test("Making sure that operator* works properly.", () {
       final matrixProd = ComplexMatrix.fromData(columns: 2, rows: 2, data: [
         [Complex(48, 23), Complex(10, -12)],
-        [Complex(20, 35), Complex(-35, -45)]
+        [Complex(20, 35), Complex(-35, -45)],
       ]);
       expect(matrixA * matrixB, equals(matrixProd));
     });
@@ -191,7 +191,7 @@ void main() {
     test("Making sure that the determinant of a 2*2 matrix is correct.", () {
       final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: [
         [Complex(48, 23), Complex(10, -12)],
-        [Complex(20, 35), Complex(-35, -45)]
+        [Complex(20, 35), Complex(-35, -45)],
       ]);
       expect(matrix.determinant(), equals(Complex(-1265, -3075)));
     });
@@ -253,7 +253,11 @@ void main() {
           Complex.fromReal(8)
         ],
       ]);
-      expect(matrix.determinant(), equals(Complex(33818, 21240)));
+
+      final det = matrix.determinant();
+
+      expect(det.real.round(), equals(33818));
+      expect(det.imaginary.round(), equals(21240));
     });
   });
 

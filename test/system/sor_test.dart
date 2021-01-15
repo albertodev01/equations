@@ -12,7 +12,7 @@ void main() {
         equations: const [
           [3, -1, 1],
           [-1, 3, -1],
-          [1, -1, 3]
+          [1, -1, 3],
         ],
         constants: [-1, 7, -7],
         w: 1.25,
@@ -26,7 +26,7 @@ void main() {
         data: const [
           [3, -1, 1],
           [-1, 3, -1],
-          [1, -1, 3]
+          [1, -1, 3],
         ],
       );
 
@@ -52,7 +52,7 @@ void main() {
         equations: const [
           [3, -1, 1],
           [-1, 3, -1],
-          [1, -1, 3]
+          [1, -1, 3],
         ],
         constants: [-1, 7, -7],
         w: 1.25,
@@ -75,11 +75,11 @@ void main() {
       expect(
           () => SORSolver(equations: const [
                 [1, 2],
-                [4, 5]
+                [4, 5],
               ], constants: [
                 7,
                 8,
-                9
+                9,
               ], w: 2),
           throwsA(isA<MatrixException>()));
     });
@@ -87,18 +87,18 @@ void main() {
     test("Making sure that objects comparison works properly.", () {
       final sor = SORSolver(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ], w: 2);
 
       final sor2 = SORSolver(equations: const [
         [1, 2],
-        [3, 4]
+        [3, 4],
       ], constants: [
         0,
-        -6
+        -6,
       ], w: 2);
 
       expect(sor, equals(sor2));

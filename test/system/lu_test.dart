@@ -9,11 +9,11 @@ void main() {
       final luSolver = LUSolver(equations: const [
         [7, -2, 1],
         [14, -7, -3],
-        [-7, 11, 18]
+        [-7, 11, 18],
       ], constants: const [
         12,
         17,
-        5
+        5,
       ]);
 
       // This is needed because we want to make sure that the "original" matrix
@@ -24,7 +24,7 @@ void main() {
         data: const [
           [7, -2, 1],
           [14, -7, -3],
-          [-7, 11, 18]
+          [-7, 11, 18],
         ],
       );
 
@@ -43,11 +43,11 @@ void main() {
       final solver = LUSolver(equations: const [
         [7, -2, 1],
         [14, -7, -3],
-        [-7, 11, 18]
+        [-7, 11, 18],
       ], constants: const [
         12,
         17,
-        5
+        5,
       ]);
 
       final toString = "[7.0, -2.0, 1.0]\n"
@@ -67,7 +67,7 @@ void main() {
       expect(
           () => LUSolver(equations: const [
                 [7, -2, 1],
-                [14, -7, -3]
+                [14, -7, -3],
               ], constants: const [
                 12,
                 17,
@@ -88,7 +88,7 @@ void main() {
               ], constants: const [
                 12,
                 17,
-                5
+                5,
               ]),
           throwsA(isA<MatrixException>()));
     });
