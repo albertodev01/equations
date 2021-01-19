@@ -291,6 +291,24 @@ abstract class Algebraic {
   /// Evaluates the polynomial on the specified real number [x].
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
+  /// TODO
+  Complex evaluateIntegralOn(double lower, double upper) {
+    // TODO
+    var upperSum = Complex.zero();
+    var lowerSum = Complex.zero();
+
+    // The actual integration
+    for (var n = coefficients.length - 1; n >= 0; --n) {
+      final coeff = coefficient(n) ?? Complex.zero();
+      final denominator = Complex.fromReal(n + 1);
+
+      upperSum += coeff * Complex.fromReal(upper).pow(n + 1) / denominator;
+      lowerSum += coeff * Complex.fromReal(lower).pow(n + 1) / denominator;
+    }
+
+    return upperSum - lowerSum;
+  }
+
   /// Determines whether the polynomial is real or not.
   ///
   /// If at least one coefficient is complex, then the polynomial is complex.

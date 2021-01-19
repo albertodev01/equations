@@ -21,6 +21,7 @@ export 'src/nonlinear/types/newton.dart';
 export 'src/nonlinear/types/regula_falsi.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
+export 'src/nonlinear/utils/integration.dart';
 export 'src/nonlinear/utils/results.dart';
 
 export 'src/system/system.dart';
