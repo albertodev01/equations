@@ -132,7 +132,7 @@ void main() {
     group("Testing the evaluation of the integral of a polynomial", () {
       test(
           "Making sure that that the integral of a 'Constant' instance is "
-              "properly evaluated on the given upper and lower bounds.", () {
+          "properly evaluated on the given upper and lower bounds.", () {
         final constant = Algebraic.from(const [Complex(2, -5)]);
         final integral = constant.evaluateIntegralOn(4, 5);
 
@@ -142,7 +142,7 @@ void main() {
 
       test(
           "Making sure that that the integral of a 'Linear' instance is "
-              "properly evaluated on the given upper and lower bounds.", () {
+          "properly evaluated on the given upper and lower bounds.", () {
         // Real polynomial test
         final realEq = Linear.realEquation(
           a: -6,
@@ -159,7 +159,8 @@ void main() {
 
         final complexRes = complexEq.evaluateIntegralOn(0, 3);
         expect(complexRes.real, MoreOrLessEquals(18, precision: 1.0e-1));
-        expect(complexRes.imaginary, MoreOrLessEquals(-13.5, precision: 1.0e-1));
+        expect(
+            complexRes.imaginary, MoreOrLessEquals(-13.5, precision: 1.0e-1));
       });
 
       test(
@@ -188,13 +189,9 @@ void main() {
 
       test(
           "Making sure that that the integral of a 'Cubic' instance is "
-              "properly evaluated on the given upper and lower bounds.", () {
+          "properly evaluated on the given upper and lower bounds.", () {
         // Real polynomial test
-        final realEq = Cubic.realEquation(
-          a: 1,
-          c: 3,
-          d: -5
-        );
+        final realEq = Cubic.realEquation(a: 1, c: 3, d: -5);
 
         final realRes = realEq.evaluateIntegralOn(1, 3);
         expect(realRes.real.round(), equals(22));
@@ -214,15 +211,9 @@ void main() {
 
       test(
           "Making sure that that the integral of a 'Quartic' instance is "
-              "properly evaluated on the given upper and lower bounds.", () {
+          "properly evaluated on the given upper and lower bounds.", () {
         // Real polynomial test
-        final realEq = Quartic.realEquation(
-            a: 3,
-            b: -1,
-            c: 4,
-            d: 0.5,
-            e: -2
-        );
+        final realEq = Quartic.realEquation(a: 3, b: -1, c: 4, d: 0.5, e: -2);
 
         final realRes = realEq.evaluateIntegralOn(2, -2);
         expect(realRes.real, MoreOrLessEquals(-51.73, precision: 1.0e-2));
@@ -237,7 +228,8 @@ void main() {
 
         final complexRes = complexEq.evaluateIntegralOn(0.5, 1.2);
         expect(complexRes.real, MoreOrLessEquals(0.6290, precision: 1.0e-4));
-        expect(complexRes.imaginary, MoreOrLessEquals(2.9446, precision: 1.0e-4));
+        expect(
+            complexRes.imaginary, MoreOrLessEquals(2.9446, precision: 1.0e-4));
       });
     });
 

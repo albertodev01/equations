@@ -22,7 +22,10 @@ export 'src/nonlinear/types/regula_falsi.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
 export 'src/nonlinear/utils/integration.dart';
-export 'src/nonlinear/utils/results.dart';
+export 'src/nonlinear/utils/integration/simpson_rule.dart';
+export 'src/nonlinear/utils/integration/trapezoidal_rule.dart';
+export 'src/nonlinear/utils/results/integral_results.dart';
+export 'src/nonlinear/utils/results/results_nonlinear.dart';
 
 export 'src/system/system.dart';
 export 'src/system/types/gauss.dart';
