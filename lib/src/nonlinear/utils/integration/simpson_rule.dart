@@ -4,28 +4,25 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 /// The "Simpson rule" is a technique for approximating the value of a
 /// definite integral.
 ///
-/// This algorithms requires a parameter `m` which indicates how many partitions
+/// This algorithm requires a parameter `m` which indicates how many partitions
 /// have to be computed by the algorithm. Note that `n` must be an even number.
 class SimpsonRule extends NumericalIntegration {
-  /// Expects the [function] to be integrated between [lowerBound] and
-  /// [upperBound].
+  /// Expects the [lowerBound] and [upperBound] of the integral.
   ///
   /// The [intervals] variable represents the number of parts in which the
   /// [lowerBound, upperBound] interval has to be split by the algorithm.
   const SimpsonRule({
     required double lowerBound,
     required double upperBound,
-    required String function,
     int intervals = 32,
   }) : super(
           lowerBound: lowerBound,
           upperBound: upperBound,
-          function: function,
           intervals: intervals,
         );
 
   @override
-  IntegralResults integrate() {
+  IntegralResults integrate(String function) {
     // Make sure to throw an exception if 'intervals' is odd
     if (intervals % 2 != 0) {
       throw const NumericalIntegrationException("There must be an even number "
@@ -44,18 +41,18 @@ class SimpsonRule extends NumericalIntegration {
 
     // The first iteration
     for (var i = 1; i < intervals; i += 2) {
-      oddSum += evaluateFunction(lowerBound + i * h);
+      oddSum += evaluateFunction(function, lowerBound + i * h);
       guesses[i] = oddSum;
     }
 
     // The second iteration
     for (var i = 2; i < intervals - 1; i += 2) {
-      evenSum += evaluateFunction(lowerBound + i * h);
+      evenSum += evaluateFunction(function, lowerBound + i * h);
       guesses[i] = oddSum;
     }
 
     // Returning the result
-    final bounds = evaluateFunction(lowerBound) + evaluateFunction(upperBound);
+    final bounds = evaluateFunction(function, lowerBound) + evaluateFunction(function, upperBound);
 
     return IntegralResults(
       guesses: guesses,

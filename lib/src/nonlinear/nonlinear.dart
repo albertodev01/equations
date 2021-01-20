@@ -114,7 +114,7 @@ abstract class NonLinear {
   /// Calculates the numerical value of the integral of this function using a
   /// [NumericalIntegration] algorithm.
   IntegralResults integrateOn(NumericalIntegration numericalIntegration) =>
-      numericalIntegration.integrate();
+      numericalIntegration.integrate(function);
 
   /// Returns a [NonlinearResults] object which contains the data calculated by
   /// the root-finding algorithm.
