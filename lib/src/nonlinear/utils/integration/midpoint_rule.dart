@@ -16,10 +16,10 @@ class MidpointRule extends NumericalIntegration {
     required double upperBound,
     int intervals = 30,
   }) : super(
-    lowerBound: lowerBound,
-    upperBound: upperBound,
-    intervals: intervals,
-  );
+          lowerBound: lowerBound,
+          upperBound: upperBound,
+          intervals: intervals,
+        );
 
   @override
   IntegralResults integrate(String function) {

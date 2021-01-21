@@ -27,8 +27,8 @@ class TrapezoidalRule extends NumericalIntegration {
     final h = (upperBound - lowerBound) / intervals;
 
     // The initial approximation of the result
-    var integralResult =
-        evaluateFunction(function, lowerBound) + evaluateFunction(function, upperBound);
+    var integralResult = evaluateFunction(function, lowerBound) +
+        evaluateFunction(function, upperBound);
 
     // The list containing the various guesses of the algorithm
     final guesses = List<double>.filled(intervals, 0);

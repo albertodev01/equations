@@ -52,7 +52,8 @@ class SimpsonRule extends NumericalIntegration {
     }
 
     // Returning the result
-    final bounds = evaluateFunction(function, lowerBound) + evaluateFunction(function, upperBound);
+    final bounds = evaluateFunction(function, lowerBound) +
+        evaluateFunction(function, upperBound);
 
     return IntegralResults(
       guesses: guesses,

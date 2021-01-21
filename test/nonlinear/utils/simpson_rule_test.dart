@@ -49,7 +49,8 @@ void main() {
           isTrue);
     });
 
-    test("Making sure that the SimpsonRule can properly be used along "
+    test(
+        "Making sure that the SimpsonRule can properly be used along "
         "with a 'Nonlinear' instance", () {
       // The type doesn't actually matter, 'Bisection' has been chosen randomly
       // because any 'Nonlinear' instance shares the SAME implementation of the
