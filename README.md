@@ -163,7 +163,44 @@ final solutions = solutions.efficiency.round(); // 1
 final List<double> guesses = solutions.guesses;
 ```
 
-Note that certain algorithms don't guarantee the convergence to a root so read the documentation carefully before choosing the method.
+Note that certain algorithms don't guarantee the convergence to a root so read the documentation carefully before choosing the method. You can also calculate the numerical value of a definite integral on an interval:
+
+```dart
+final bisection = Bisection(
+  function: "x^3+2*x-1.2", 
+  a: 0, 
+  b: 3
+);
+
+// Integral from 0 to 3 of x^3+2*x-1.2 dx
+final integral = bisection.integrateOn(const SimpsonRule(
+  lowerBound: 0,
+  upperBound: 3,
+  intervals: 40,
+));
+
+// The result may vary depending on the 'intervals' you've decided to use
+print(integral.result); // 25.65
+```
+
+Of course you can also use any `NumericalIntegration` subtype outside of the scope of a `Nonlinear` instance:
+
+```dart
+final midpointValue = MidpointRule(
+  lowerBound: 0,
+  upperBound: 3,
+).integrate("x^3+2*x-1.2");
+
+final trapezoidValue = TrapezoidalRule(
+  lowerBound: 0,
+  upperBound: 3,
+).integrate("x^3+2*x-1.2");
+
+final simpsonValue = SimpsonRule(
+  lowerBound: 0,
+  upperBound: 3,
+).integrate("x^3+2*x-1.2");
+```
 
 # Systems of equations
 
