@@ -34,10 +34,11 @@ abstract class NonLinear {
   ///  - the expression [function] to be solved;
   ///  - the accuracy [tolerance] of the root-finding algorithm;
   ///  - the maximum iterations [maxSteps] the algorithm has to do.
-  const NonLinear(
-      {required this.function,
-      required this.tolerance,
-      required this.maxSteps});
+  const NonLinear({
+    required this.function,
+    required this.tolerance,
+    required this.maxSteps,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -56,9 +57,11 @@ abstract class NonLinear {
   @override
   int get hashCode {
     var result = 17;
+
     result = 37 * result + function.hashCode;
     result = 37 * result + tolerance.hashCode;
     result = 37 * result + maxSteps.hashCode;
+
     return result;
   }
 
@@ -107,6 +110,11 @@ abstract class NonLinear {
 
     return (upper - lower) / (2 * h);
   }
+
+  /// Calculates the numerical value of the integral of this function using a
+  /// [NumericalIntegration] algorithm.
+  IntegralResults integrateOn(NumericalIntegration numericalIntegration) =>
+      numericalIntegration.integrate(function);
 
   /// Returns a [NonlinearResults] object which contains the data calculated by
   /// the root-finding algorithm.

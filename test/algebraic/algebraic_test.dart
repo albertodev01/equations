@@ -1,6 +1,8 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group(
       "Testing the public interface of 'Algebraic' which is shared with all "
@@ -124,6 +126,110 @@ void main() {
           "the length of the coefficients list is 6", () {
         final equation = Algebraic.fromReal([1, 2, 3, 4, 5, 6]);
         expect(equation, isA<Laguerre>());
+      });
+    });
+
+    group("Testing the evaluation of the integral of a polynomial", () {
+      test(
+          "Making sure that that the integral of a 'Constant' instance is "
+          "properly evaluated on the given upper and lower bounds.", () {
+        final constant = Algebraic.from(const [Complex(2, -5)]);
+        final integral = constant.evaluateIntegralOn(4, 5);
+
+        expect(integral.real.round(), equals(2));
+        expect(integral.imaginary.round(), equals(-5));
+      });
+
+      test(
+          "Making sure that that the integral of a 'Linear' instance is "
+          "properly evaluated on the given upper and lower bounds.", () {
+        // Real polynomial test
+        final realEq = Linear.realEquation(
+          a: -6,
+          b: 2,
+        );
+
+        final realRes = realEq.evaluateIntegralOn(2, 1);
+        expect(realRes.real, MoreOrLessEquals(7, precision: 0));
+
+        // Complex polynomial test
+        final complexEq = Linear(
+          a: Complex(4, -3),
+        );
+
+        final complexRes = complexEq.evaluateIntegralOn(0, 3);
+        expect(complexRes.real, MoreOrLessEquals(18, precision: 1.0e-1));
+        expect(
+            complexRes.imaginary, MoreOrLessEquals(-13.5, precision: 1.0e-1));
+      });
+
+      test(
+          "Making sure that that the integral of a 'Quadratic' instance is "
+          "properly evaluated on the given upper and lower bounds.", () {
+        // Real polynomial test
+        final realEq = Quadratic.realEquation(
+          a: 2,
+          c: -5,
+        );
+
+        final realRes = realEq.evaluateIntegralOn(1, 3);
+        expect(realRes.real, MoreOrLessEquals(7.3, precision: 1.0e-1));
+
+        // Complex polynomial test
+        final complexEq = Quadratic(
+          a: Complex(3, -5),
+          b: Complex(1, 2),
+          c: Complex.fromImaginary(4),
+        );
+
+        final complexRes = complexEq.evaluateIntegralOn(-1, 5);
+        expect(complexRes.real, MoreOrLessEquals(138, precision: 1.0e-1));
+        expect(complexRes.imaginary, MoreOrLessEquals(-162, precision: 1.0e-1));
+      });
+
+      test(
+          "Making sure that that the integral of a 'Cubic' instance is "
+          "properly evaluated on the given upper and lower bounds.", () {
+        // Real polynomial test
+        final realEq = Cubic.realEquation(a: 1, c: 3, d: -5);
+
+        final realRes = realEq.evaluateIntegralOn(1, 3);
+        expect(realRes.real.round(), equals(22));
+
+        // Complex polynomial test
+        final complexEq = Cubic(
+          a: Complex(3, -5),
+          b: Complex(1, 2),
+          c: Complex.fromImaginary(4),
+          d: Complex.fromReal(4),
+        );
+
+        final complexRes = complexEq.evaluateIntegralOn(-1, 5);
+        expect(complexRes.real, MoreOrLessEquals(534, precision: 1.0e-1));
+        expect(complexRes.imaginary, MoreOrLessEquals(-648, precision: 1.0e-1));
+      });
+
+      test(
+          "Making sure that that the integral of a 'Quartic' instance is "
+          "properly evaluated on the given upper and lower bounds.", () {
+        // Real polynomial test
+        final realEq = Quartic.realEquation(a: 3, b: -1, c: 4, d: 0.5, e: -2);
+
+        final realRes = realEq.evaluateIntegralOn(2, -2);
+        expect(realRes.real, MoreOrLessEquals(-51.73, precision: 1.0e-2));
+
+        // Complex polynomial test
+        final complexEq = Quartic(
+          a: Complex.i(),
+          b: Complex(-3, 5),
+          c: Complex(4, 1),
+          d: -Complex.i(),
+        );
+
+        final complexRes = complexEq.evaluateIntegralOn(0.5, 1.2);
+        expect(complexRes.real, MoreOrLessEquals(0.6290, precision: 1.0e-4));
+        expect(
+            complexRes.imaginary, MoreOrLessEquals(2.9446, precision: 1.0e-4));
       });
     });
 

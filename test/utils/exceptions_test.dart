@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -11,6 +12,7 @@ void main() {
       const parserException = ExpressionParserException("Message");
       const matrixException = MatrixException("Message");
       const systemException = SystemSolverException("Message");
+      const integrationException = NumericalIntegrationException("Message");
 
       // Objects comparisons
       expect(complexException, equals(const ComplexException("Message")));
@@ -20,6 +22,8 @@ void main() {
           parserException, equals(const ExpressionParserException("Message")));
       expect(matrixException, equals(const MatrixException("Message")));
       expect(systemException, equals(const SystemSolverException("Message")));
+      expect(integrationException,
+          equals(NumericalIntegrationException("Message")));
 
       // Checking types
       expect(complexException, isNot(algebraicException));
@@ -27,6 +31,7 @@ void main() {
       expect(nonlinearException, isNot(parserException));
       expect(parserException, isNot(matrixException));
       expect(matrixException, isNot(systemException));
+      expect(systemException, isNot(integrationException));
 
       // Explicit boolean comparison
       expect(complexException == ComplexException("Message"), isTrue);
@@ -35,6 +40,8 @@ void main() {
       expect(parserException == ExpressionParserException("Message"), isTrue);
       expect(matrixException == MatrixException("Message"), isTrue);
       expect(systemException == SystemSolverException("Message"), isTrue);
+      expect(integrationException == NumericalIntegrationException("Message"),
+          isTrue);
 
       // Checking hash codes
       expect(complexException.hashCode,
@@ -49,6 +56,8 @@ void main() {
           equals(MatrixException("Message").hashCode));
       expect(systemException.hashCode,
           equals(SystemSolverException("Message").hashCode));
+      expect(integrationException.hashCode,
+          equals(NumericalIntegrationException("Message").hashCode));
     });
 
     test("Making sure that 'ComplexException' prints the correct message", () {
@@ -97,6 +106,16 @@ void main() {
 
       expect(exception.message, "Exception message");
       expect("$exception", equals("SystemSolverException: Exception message"));
+    });
+
+    test(
+        "Making sure that 'NumericalIntegrationException' prints the correct message",
+        () {
+      const exception = NumericalIntegrationException("Exception message");
+
+      expect(exception.message, "Exception message");
+      expect("$exception",
+          equals("NumericalIntegrationException: Exception message"));
     });
   });
 }

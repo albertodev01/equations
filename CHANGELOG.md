@@ -1,3 +1,9 @@
+# 2.0.0-nullsafety.5
+
+  - Updated some dependencies versions
+  - Added support for numerical integration with the `NumericalIntegration` type.
+  - Minor code improvements
+
 # 2.0.0-nullsafety.4
 
   - Updated some dependencies versions
