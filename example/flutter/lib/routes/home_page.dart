@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     return EquationScaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: const[
+          children: const [
             // The logo at the top
             AppLogo(),
 

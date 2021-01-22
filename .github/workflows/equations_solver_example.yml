@@ -1,0 +1,32 @@
+name: equations_solver_example
+
+on:
+  push:
+    paths:
+      - "example/flutter/**"
+      - ".github/workflows/equations_solver_example.yaml"
+
+  pull_request:
+    paths:
+      - "example/flutter/**"
+      - ".github/workflows/equations_solver_example.yaml"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: example/flutter
+    runs-on: ubuntu-latest
+    container:
+      image: google/dart:2.12-dev
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.4.0
+      - name: Install Dependencies
+        run: flutter packages get
+      - name: Format
+        run: flutter format --set-exit-if-changed lib test
+      - name: Analyze
+        run: flutter analyze lib test
+      - name: Run tests
+        run: flutter test --no-pub --test-randomize-ordering-seed random

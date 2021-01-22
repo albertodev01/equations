@@ -11,9 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class EquationScaffold extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
-  const EquationScaffold({
-    required this.body
-  });
+  const EquationScaffold({required this.body});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,8 @@ class _ThemeSwitcher extends StatelessWidget {
             return IconButton(
               key: const Key("equations_scaffold_dark_button"),
               icon: const Icon(Icons.nightlight_round),
-              onPressed: () => context.read<ThemeBloc>().add(const LightEvent()),
+              onPressed: () =>
+                  context.read<ThemeBloc>().add(const LightEvent()),
             );
           }
 

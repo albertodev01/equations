@@ -17,12 +17,10 @@ class EquationsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-
         // Manages the theme state of the app
         BlocProvider<ThemeBloc>(
           create: (_) => ThemeBloc(),
         ),
-
       ],
       child: const _MaterialWidget(),
     );

@@ -34,6 +34,7 @@ class RouteGenerator {
 class RouteException implements Exception {
   /// The error message
   final String message;
+
   /// Requires the error [message] to be shown when a route is not found.
   const RouteException(this.message);
 }

@@ -7,7 +7,8 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/logo.svg",
+    return SvgPicture.asset(
+      "assets/logo.svg",
       width: 285,
     );
   }
