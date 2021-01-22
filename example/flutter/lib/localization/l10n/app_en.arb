@@ -1,0 +1,6 @@
+{
+  "appTitle": "Equations Solver",
+  "@appTitle": {
+    "description": "The title (and name) of the app"
+  }
+}
