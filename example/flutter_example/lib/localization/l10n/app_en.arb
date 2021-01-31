@@ -1,0 +1,12 @@
+{
+  "appTitle": "Equations solver",
+  "polynomials": "Polynomials",
+  "functions": "Functions",
+  "systems": "Systems",
+  "integrals": "Integrals",
+  "firstDegree": "First degree",
+  "secondDegree": "Second degree",
+  "thirdDegree": "Third degree",
+  "fourthDegree": "Fourth degree",
+  "anyDegree": "Any degree"
+}
