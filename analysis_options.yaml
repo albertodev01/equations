@@ -2,6 +2,8 @@ analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+  exclude:
+    - 'example/**'
 linter:
   rules:
     - public_member_api_docs

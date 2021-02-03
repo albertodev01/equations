@@ -7,9 +7,12 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      "assets/logo.svg",
-      width: 285,
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: SvgPicture.asset(
+        "assets/logo.svg",
+        width: 285,
+      ),
     );
   }
 }

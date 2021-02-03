@@ -1,41 +1,46 @@
+import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
+import 'package:flutter/material.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/navigation_item.dart';
-import 'package:flutter/material.dart';
+import 'package:equations_solver/localization/localization.dart';
 
-/// This page contains a series of polynomial equations solvers.
+/// This page contains a series of polynomial equations solvers. There are 4 tabs
+/// dedicated to particular polynomial equations
+///
+///  - Linear
+///  - Quadratic
+///  - Cubic
+///  - Quartic
 class PolynomialPage extends StatelessWidget {
   const PolynomialPage();
 
   @override
   Widget build(BuildContext context) {
     return EquationScaffold(
-      isHome: false,
-      navigationItems: const [
+      navigationItems: [
         NavigationItem(
-          title: "Test 1",
-          icon: Icon(Icons.open_in_new_outlined),
-          activeIcon: Icon(Icons.description),
-          content: const Center(
-            child: Text("one"),
+          title: context.l10n.firstDegree,
+          content: const PolynomialBody(
+            polynomialType: PolynomialType.linear,
           ),
         ),
-
         NavigationItem(
-            title: "Test 2",
-            icon: Icon(Icons.map),
-            activeIcon: Icon(Icons.description),
-            content: const Center(
-              child: Text("two"),
-            )
+          title: context.l10n.secondDegree,
+          content: const PolynomialBody(
+            polynomialType: PolynomialType.quadratic,
+          ),
         ),
-
         NavigationItem(
-            title: "Test 3",
-            icon: Icon(Icons.title),
-            activeIcon: Icon(Icons.description),
-            content: const Center(
-              child: Text("three"),
-            )
+          title: context.l10n.thirdDegree,
+          content: const PolynomialBody(
+            polynomialType: PolynomialType.cubic,
+          ),
+        ),
+        NavigationItem(
+          title: context.l10n.anyDegree,
+          content: const PolynomialBody(
+            polynomialType: PolynomialType.quartic,
+          ),
         ),
       ],
     );

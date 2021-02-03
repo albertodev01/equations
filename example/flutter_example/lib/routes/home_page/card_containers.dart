@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 class CardContainer extends StatelessWidget {
   /// The description of the container
   final String title;
+
   /// The image on the left
   final Widget image;
+
   /// The route to be opened when the container is tapped
   final String destinationRoute;
   const CardContainer({
@@ -35,7 +37,8 @@ class CardContainer extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Text(title,
+                  child: Text(
+                    title,
                     style: const TextStyle(
                       fontSize: 18,
                     ),

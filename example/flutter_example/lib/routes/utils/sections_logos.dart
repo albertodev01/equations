@@ -3,13 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 /// Vectorial logo for polynomial equations
 class PolynomialLogo extends StatelessWidget {
-  const PolynomialLogo();
+  final double size;
+  const PolynomialLogo({
+    this.size = 40.0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/polynomial.svg",
-      width: 40,
-      height: 40,
+    return SvgPicture.asset(
+      "assets/polynomial.svg",
+      width: size,
+      height: size,
       placeholderBuilder: (_) => const _SvgLoader(),
     );
   }
@@ -17,13 +21,17 @@ class PolynomialLogo extends StatelessWidget {
 
 /// Vectorial logo for nonlinear equations
 class NonlinearLogo extends StatelessWidget {
-  const NonlinearLogo();
+  final double size;
+  const NonlinearLogo({
+    this.size = 40.0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/function.svg",
-      width: 40,
-      height: 40,
+    return SvgPicture.asset(
+      "assets/function.svg",
+      width: size,
+      height: size,
       placeholderBuilder: (_) => const _SvgLoader(),
     );
   }
@@ -31,13 +39,17 @@ class NonlinearLogo extends StatelessWidget {
 
 /// Vectorial logo for systems of equations
 class SystemsLogo extends StatelessWidget {
-  const SystemsLogo();
+  final double size;
+  const SystemsLogo({
+    this.size = 40.0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/matrix.svg",
-      width: 40,
-      height: 40,
+    return SvgPicture.asset(
+      "assets/matrix.svg",
+      width: size,
+      height: size,
       placeholderBuilder: (_) => const _SvgLoader(),
     );
   }
@@ -45,13 +57,17 @@ class SystemsLogo extends StatelessWidget {
 
 /// Vectorial logo for integrals
 class IntegralLogo extends StatelessWidget {
-  const IntegralLogo();
+  final double size;
+  const IntegralLogo({
+    this.size = 40.0,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/integral.svg",
-      width: 40,
-      height: 40,
+    return SvgPicture.asset(
+      "assets/integral.svg",
+      width: size,
+      height: size,
       placeholderBuilder: (_) => const _SvgLoader(),
     );
   }

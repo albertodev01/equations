@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/utils/sections_logos.dart';
-import 'package:flutter/material.dart';
+import 'package:equations_solver/localization/localization.dart';
 
 /// Contains a series of tiles, represented by a [CardContainer] widget, that
 /// route the user to various pages
@@ -17,27 +18,24 @@ class HomeContents extends StatelessWidget {
         runSpacing: 35,
         alignment: WrapAlignment.spaceBetween,
         runAlignment: WrapAlignment.center,
-        children: const [
+        children: [
           CardContainer(
-            title: "Polynomials",
-            image: PolynomialLogo(),
+            title: context.l10n.polynomials,
+            image: const PolynomialLogo(),
             destinationRoute: RouteGenerator.polynomialPage,
           ),
-
           CardContainer(
-            title: "Functions",
+            title: context.l10n.functions,
             image: const NonlinearLogo(),
             destinationRoute: RouteGenerator.homePage,
           ),
-
           CardContainer(
-            title: "Systems",
+            title: context.l10n.systems,
             image: const SystemsLogo(),
             destinationRoute: RouteGenerator.homePage,
           ),
-
           CardContainer(
-            title: "Integrals",
+            title: context.l10n.integrals,
             image: const IntegralLogo(),
             destinationRoute: RouteGenerator.homePage,
           ),
@@ -46,4 +44,3 @@ class HomeContents extends StatelessWidget {
     );
   }
 }
-

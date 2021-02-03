@@ -4,9 +4,9 @@
   "functions": "Funzioni",
   "systems": "Sistemi",
   "integrals": "Integrali",
-  "firstDegree": "Primo grado",
-  "secondDegree": "Secondo grado",
-  "thirdDegree": "Terzo grado",
-  "fourthDegree": "Quarto grado",
-  "anyDegree": "Qualsiasi grado"
+  "firstDegree": "Lineare",
+  "secondDegree": "Quadratica",
+  "thirdDegree": "Cubica",
+  "fourthDegree": "Quartica",
+  "anyDegree": "Qualsiasi"
 }

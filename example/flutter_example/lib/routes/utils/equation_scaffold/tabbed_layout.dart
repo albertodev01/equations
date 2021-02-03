@@ -15,7 +15,7 @@ class TabbedNavigationLayout extends StatefulWidget {
 }
 
 class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
-  with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late final TabController tabController;
   late final List<Widget> tabPages;
 
@@ -29,8 +29,8 @@ class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
     );
 
     tabPages = widget.navigationItems
-      .map((item) => item.content)
-      .toList(growable: false);
+        .map((item) => item.content)
+        .toList(growable: false);
   }
 
   @override

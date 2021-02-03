@@ -14,19 +14,21 @@ class BottomNavigation extends StatelessWidget {
 
   /// Converts a [NavigationItem] into a [BottomNavigationBarItem]
   List<BottomNavigationBarItem> get _bottom => navigationItems.map((item) {
-    return BottomNavigationBarItem(
-      icon: item.icon,
-      activeIcon: item.activeIcon,
-      label: item.title,
-    );
-  }).toList(growable: false);
+        return BottomNavigationBarItem(
+          icon: item.icon,
+          activeIcon: item.activeIcon,
+          label: item.title,
+        );
+      }).toList(growable: false);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, int>(
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) => BottomNavigationBar(
+        elevation: 6,
         items: _bottom,
+        type: BottomNavigationBarType.fixed,
         currentIndex: state,
         onTap: (newIndex) => context.read<NavigationBloc>().add(newIndex),
       ),

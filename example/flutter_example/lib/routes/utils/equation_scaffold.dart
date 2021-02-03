@@ -25,8 +25,10 @@ class EquationScaffold extends StatelessWidget {
   /// this widget is ignored because the actual body of the scaffold will be
   /// determined by the contents of the list.
   final Widget body;
+
   /// Tells whether the scaffold is being used in the home page widget or not
   final bool isHome;
+
   /// A list of items for a responsive navigation bar. If the list is empty,
   /// then no navigation bars appear on the screen.
   final List<NavigationItem> navigationItems;
@@ -56,6 +58,8 @@ class EquationScaffold extends StatelessWidget {
         builder: (context, dimensions) {
           // If the dimension of the screen is "small" enough, a bottom navigation
           // bar fits better
+          debugPrint("width = ${dimensions.maxWidth}");
+
           if (dimensions.maxWidth < 600) {
             return Scaffold(
               body: _ScaffoldContents(
@@ -92,6 +96,7 @@ class EquationScaffold extends StatelessWidget {
 class _ScaffoldContents extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
+
   /// Tells whether the scaffold is being used in the home page widget or not
   final bool isHome;
   const _ScaffoldContents({
@@ -128,6 +133,7 @@ class _ScaffoldContents extends StatelessWidget {
 class _ScaffoldForeground extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
+
   /// Tells whether the scaffold is being used in the home page widget or not
   final bool isHome;
   const _ScaffoldForeground({
@@ -144,7 +150,7 @@ class _ScaffoldForeground extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(10, 5, 10, 15),
           child: Row(
             children: [
-              if (isHome) const BackButton(),
+              if (!isHome) const BackButton(),
             ],
           ),
         ),
@@ -168,7 +174,8 @@ class _ScaffoldBackground extends StatelessWidget {
 
     return Transform.rotate(
       angle: -math.pi / 8,
-      child: SvgPicture.asset("assets/axis.svg",
+      child: SvgPicture.asset(
+        "assets/axis.svg",
         height: size,
         width: size,
       ),
