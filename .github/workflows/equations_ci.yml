@@ -1,6 +1,11 @@
 name: equations_ci
 
-on: [push]
+on:
+  push:
+    paths:
+      - "lib/**"
+      - "test/**" 
+      - ".github/workflows/equations_ci.yml"
 
 jobs:
   build:
