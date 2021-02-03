@@ -18,7 +18,7 @@ jobs:
         with:
           channel: beta
       - name: Install Dependencies
-        run: flutter packages get
+        run: flutter pub get
       - name: Format
         run: flutter format --set-exit-if-changed lib test
       - name: Analyze
