@@ -3,14 +3,14 @@ name: equations_solver_example
 on:
   push:
     paths:
-      - "example/flutter/**"
+      - "example/flutter_example/**"
       - ".github/workflows/equations_solver_example.yml"
 
 jobs:
   build:
     defaults:
       run:
-        working-directory: example/flutter
+        working-directory: example/flutter_example
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
