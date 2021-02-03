@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "example/flutter/**"
-      - ".github/workflows/equations_solver_example.yaml"
+      - ".github/workflows/equations_solver_example.yml"
 
 jobs:
   build:
