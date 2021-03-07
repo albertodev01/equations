@@ -12,7 +12,7 @@ class HomeContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 40, bottom: 10),
+      padding: const EdgeInsets.fromLTRB(25, 40, 25, 10),
       child: Wrap(
         spacing: 35,
         runSpacing: 35,

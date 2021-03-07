@@ -3,7 +3,7 @@ import 'package:equations_solver/blocs/navigation_bar/bloc/navigation_bloc.dart'
 import 'package:equations_solver/routes/utils/equation_scaffold/bottom_navigation_bar.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/rail_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
-import 'package:equations_solver/routes/utils/navigation_item.dart';
+import 'file:///C:/Users/AlbertoMiola/Desktop/Programmazione/Dart/equations/example/flutter_example/lib/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,9 +15,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 ///  - an [AppBar] with no title and a dark/light theme switcher;
 ///  - the body of the [Scaffold]
 ///
-/// When the [isHome] parameter is set to `false`, a back button appears so that
-/// the user can navigate one page back.
-///
 /// This widget also contains a responsive navigation bar which can be either a
 /// [BottomNavigationBar] or a [NavigationRail] according with the screen's size.
 class EquationScaffold extends StatelessWidget {
@@ -26,15 +23,11 @@ class EquationScaffold extends StatelessWidget {
   /// determined by the contents of the list.
   final Widget body;
 
-  /// Tells whether the scaffold is being used in the home page widget or not
-  final bool isHome;
-
   /// A list of items for a responsive navigation bar. If the list is empty,
   /// then no navigation bars appear on the screen.
   final List<NavigationItem> navigationItems;
   const EquationScaffold({
     this.body = const SizedBox(),
-    this.isHome = false,
     this.navigationItems = const [],
   });
 
@@ -44,7 +37,6 @@ class EquationScaffold extends StatelessWidget {
     if (navigationItems.isEmpty) {
       return Scaffold(
         body: _ScaffoldContents(
-          isHome: isHome,
           body: body,
         ),
       );
@@ -58,12 +50,9 @@ class EquationScaffold extends StatelessWidget {
         builder: (context, dimensions) {
           // If the dimension of the screen is "small" enough, a bottom navigation
           // bar fits better
-          debugPrint("width = ${dimensions.maxWidth}");
-
-          if (dimensions.maxWidth < 600) {
+          if (dimensions.maxWidth < 850) {
             return Scaffold(
               body: _ScaffoldContents(
-                isHome: isHome,
                 body: TabbedNavigationLayout(
                   navigationItems: navigationItems,
                 ),
@@ -76,7 +65,6 @@ class EquationScaffold extends StatelessWidget {
 
           return Scaffold(
             body: _ScaffoldContents(
-              isHome: isHome,
               body: RailNavigation(
                 navigationItems: navigationItems,
               ),
@@ -97,11 +85,8 @@ class _ScaffoldContents extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
 
-  /// Tells whether the scaffold is being used in the home page widget or not
-  final bool isHome;
   const _ScaffoldContents({
     required this.body,
-    this.isHome = false,
   });
 
   @override
@@ -119,7 +104,6 @@ class _ScaffoldContents extends StatelessWidget {
           // The actual contents in the foreground
           Positioned.fill(
             child: _ScaffoldForeground(
-              isHome: isHome,
               body: body,
             ),
           ),
@@ -134,27 +118,14 @@ class _ScaffoldForeground extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
 
-  /// Tells whether the scaffold is being used in the home page widget or not
-  final bool isHome;
   const _ScaffoldForeground({
     required this.body,
-    this.isHome = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // The 'header' bar
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 5, 10, 15),
-          child: Row(
-            children: [
-              if (!isHome) const BackButton(),
-            ],
-          ),
-        ),
-
         // The body of the app
         Expanded(
           child: body,

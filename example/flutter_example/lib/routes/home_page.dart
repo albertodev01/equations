@@ -14,7 +14,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EquationScaffold(
-      isHome: true,
       body: SingleChildScrollView(
         child: Column(
           children: const [

@@ -8,5 +8,14 @@
   "secondDegree": "Quadratic",
   "thirdDegree": "Cubic",
   "fourthDegree": "Quartic",
-  "anyDegree": "Any"
+  "anyDegree": "Any",
+  "solutions": "Solutions",
+  "chart": "Chart",
+  "solve": "Solve",
+  "clean": "Clean",
+  "no_solutions": "No solutions to display.",
+  "no_chart": "No chart to plot.",
+  "polynomial_error": "One or more coefficients have an invalid format.",
+  "wrong_input": "Invalid input",
+  "tap_more": "Tap to see more details"
 }
