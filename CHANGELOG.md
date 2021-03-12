@@ -1,17 +1,22 @@
-# 2.0.0-nullsafety.5
+## [2.0.0]
+
+ - Migration to stable null safety
+ - Dependencies versions update
+
+## 2.0.0-nullsafety.5
 
   - Updated some dependencies versions
   - Added support for numerical integration with the `NumericalIntegration` type.
   - Minor code improvements
 
-# 2.0.0-nullsafety.4
+## 2.0.0-nullsafety.4
 
   - Updated some dependencies versions
   - Added a new root finding algorithm (`RegulaFalsi`)
   - Improved the computation of the determinant (now it uses LU decomposition which is way better than the old O(n!) implementation)
   - Minor documentation improvements
 
-# 2.0.0-nullsafety.3
+## 2.0.0-nullsafety.3
 
   - Added support for linear systems solving using Jacobi, Gauss-Seidel and SOR
   - Improved comparison logic for all the classes of the package
@@ -20,7 +25,7 @@
   - Expanded the README.md file
   - New examples in the `example/` folder
 
-# 2.0.0-nullsafety.2
+## 2.0.0-nullsafety.2
 
   - Created the `RealMatrix` and `ComplexMatrix` types to work with matrix
   - Added support for linear systems solving using Gauss, LU decomposition and Cholesky decomposition
@@ -28,25 +33,25 @@
     equation according with the number of coefficients.
   - Minor documentation fixes
 
-# 2.0.0-nullsafety.1
+## 2.0.0-nullsafety.1
 
   - Added a new root-finding algorithm (`Brent` which implements the Brent's method method)
   - Added `Laguerre` (which implements Laguerre's method for polynomials root finding)
   - Minor on various `Nonlinear` subtypes
   - Documentation fixes
 
-# 2.0.0-nullsafety.0
+## 2.0.0-nullsafety.0
 
   - Package migrated to null safety (Dart 2.12).
   - Added a new `ExpressionParser` class (which is also internally used by `NonLinear`)
   - Minor fixes on `Algebraic` and `NonLinear`
 
-# 1.0.1
+## 1.0.1
 
   - Health suggestions fixes
   - Changed the description of the package
 
-# 1.0.0
+## 1.0.0
 
  - Initial release
  - Use `Algebraic` for algebraic (polynomial) equations and `Nonlinear` for nonlinear equations
