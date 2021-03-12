@@ -18,9 +18,9 @@ class PolynomialState extends Equatable {
 
   @override
   List<Object?> get props => [
-    roots,
-    discriminant,
-  ];
+        roots,
+        discriminant,
+      ];
 }
 
 /// This state is emitted when the solver successfully finds the roots of the
@@ -35,16 +35,16 @@ class PolynomialRoots extends PolynomialState {
     required Complex discriminant,
     required this.algebraic,
   }) : super(
-    roots: roots,
-    discriminant: discriminant,
-  );
+          roots: roots,
+          discriminant: discriminant,
+        );
 
   @override
   List<Object?> get props => [
-    algebraic,
-    roots,
-    discriminant,
-  ];
+        algebraic,
+        roots,
+        discriminant,
+      ];
 }
 
 /// This state is emitted when the solver cannot find the roots of the polynomial

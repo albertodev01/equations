@@ -16,19 +16,67 @@ class HomePage extends StatelessWidget {
     return EquationScaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: const [
+          children: [
             // The logo at the top
-            AppLogo(),
+            const AppLogo(),
 
-            // The body of the home, which is a series of cards redirecting the
-            // users to the various solvers
-            HomeContents(),
+            //700 bp
+            LayoutBuilder(
+              builder: (context, dimensions) {
+                if (dimensions.maxWidth <= 700) {
+                  return const _VerticalContents();
+                }
 
-            // Shows the last 5 actions made with the app
-            RecentActions(),
+                return const _HorizontalContents();
+              },
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _VerticalContents extends StatelessWidget {
+  const _VerticalContents();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: const [
+        // The body of the home, which is a series of cards redirecting the
+        // users to the various solvers
+        HomeContents(),
+
+        // Separator
+        SizedBox(height: 60),
+
+        // Shows the last 5 actions made with the app
+        RecentActions(),
+      ],
+    );
+  }
+}
+
+class _HorizontalContents extends StatelessWidget {
+  const _HorizontalContents();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        // The body of the home, which is a series of cards redirecting the
+        // users to the various solvers
+        HomeContents(),
+
+        // Separator
+        SizedBox(width: 45),
+
+        // Shows the last 5 actions made with the app
+        RecentActions(),
+      ],
     );
   }
 }

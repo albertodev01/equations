@@ -1,6 +1,5 @@
 import 'package:equations/equations.dart';
 import 'package:flutter/material.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 class PolynomialInputField extends StatelessWidget {
   final TextEditingController controller;

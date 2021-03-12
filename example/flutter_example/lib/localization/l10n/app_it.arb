@@ -17,5 +17,6 @@
   "no_chart": "Nessun grafico da disegnare.",
   "polynomial_error": "Uno o più coefficienti hanno un formato non valido.",
   "wrong_input": "Input non valido",
-  "tap_more": "Premi per vedere più dettagli"
+  "tap_more": "Premi per vedere più dettagli",
+  "discriminant": "Discriminante"
 }

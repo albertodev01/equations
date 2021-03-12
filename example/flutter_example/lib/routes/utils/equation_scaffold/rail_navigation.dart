@@ -28,7 +28,9 @@ class RailNavigation extends StatelessWidget {
       children: [
         // The actual contents of the page
         Expanded(
-          child: TabbedNavigationLayout(navigationItems: navigationItems),
+          child: TabbedNavigationLayout(
+            navigationItems: navigationItems,
+          ),
         ),
 
         // The separator between the rail and the contents
@@ -43,6 +45,7 @@ class RailNavigation extends StatelessWidget {
           builder: (context, state) => NavigationRail(
             destinations: _rail,
             selectedIndex: state,
+            labelType: NavigationRailLabelType.all,
             onDestinationSelected: (newIndex) =>
                 context.read<NavigationBloc>().add(newIndex),
           ),

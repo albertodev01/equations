@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlotWidget<T> extends StatelessWidget {
-  final PlotMode<T> plotMode;
+  final PlotMode<T>? plotMode;
   const PlotWidget({
-    required this.plotMode,
+    this.plotMode,
   });
 
   @override
@@ -20,12 +20,14 @@ class PlotWidget<T> extends StatelessWidget {
           return Material(
             elevation: 8,
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            child: CustomPaint(
-              painter: PlotterPainter<T>(
-                plotMode: plotMode,
-                range: 3,
+            child: ClipRRect(
+              child: CustomPaint(
+                painter: PlotterPainter<T>(
+                  plotMode: plotMode,
+                  range: 3,
+                ),
+                size: Size.square(normalized),
               ),
-              size: Size.square(normalized),
             ),
           );
         },

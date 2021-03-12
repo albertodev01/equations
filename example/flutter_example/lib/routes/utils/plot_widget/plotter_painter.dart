@@ -2,7 +2,7 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:flutter/material.dart';
 
 class PlotterPainter<T> extends CustomPainter {
-  final PlotMode<T> plotMode;
+  final PlotMode<T>? plotMode;
   final int range;
   final int _xmax;
   final int _xmin;
@@ -11,16 +11,19 @@ class PlotterPainter<T> extends CustomPainter {
   const PlotterPainter({
     required this.plotMode,
     this.range = 5,
-  }) : _xmax = range,
-       _ymax = range,
-       _xmin = -range,
-       _ymin = -range;
+  })  : _xmax = range,
+        _ymax = range,
+        _xmin = -range,
+        _ymin = -range;
 
   @override
   void paint(Canvas canvas, Size size) {
     _drawMainAxis(canvas, size);
     _drawAxis(canvas, size);
-    _drawEquation(canvas, size);
+
+    if (plotMode != null) {
+      _drawEquation(canvas, size);
+    }
   }
 
   @override
@@ -33,15 +36,11 @@ class PlotterPainter<T> extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2.0;
 
-    canvas..drawLine(
-        Offset(0, size.height / 2),
-        Offset(size.width, size.height / 2),
-        blackThick
-    )..drawLine(
-        Offset(size.width / 2, 0),
-        Offset(size.width / 2, size.height),
-        blackThick
-    );
+    canvas
+      ..drawLine(Offset(0, size.height / 2),
+          Offset(size.width, size.height / 2), blackThick)
+      ..drawLine(Offset(size.width / 2, 0), Offset(size.width / 2, size.height),
+          blackThick);
   }
 
   void _drawAxis(Canvas canvas, Size size) {
@@ -56,21 +55,15 @@ class PlotterPainter<T> extends CustomPainter {
     var prevPoint = Offset(distX, 0);
     var currPoint = Offset(0, distY);
 
-    for(var i = -scale; i < scale; ++i) {
-      if (i == 0)
-        continue;
+    for (var i = -scale; i < scale; ++i) {
+      if (i == 0) continue;
 
-      canvas..drawLine(prevPoint, Offset(prevPoint.dx, size.height), line)
+      canvas
+        ..drawLine(prevPoint, Offset(prevPoint.dx, size.height), line)
         ..drawLine(currPoint, Offset(size.width, currPoint.dy), line);
 
-      prevPoint = Offset(
-          prevPoint.dx + distX,
-          prevPoint.dy
-      );
-      currPoint = Offset(
-          currPoint.dx,
-          currPoint.dy + distY
-      );
+      prevPoint = Offset(prevPoint.dx + distX, prevPoint.dy);
+      currPoint = Offset(currPoint.dx, currPoint.dy + distY);
     }
   }
 
@@ -88,14 +81,14 @@ class PlotterPainter<T> extends CustomPainter {
     var currPoint = Offset(0, 0);
     var prevPoint = Offset(0, 0);
 
-    for(var i = 0; i < size.width; ++i) {
+    for (var i = 0; i < size.width; ++i) {
       logx = _screenToLog(Offset(i * 1.0, 0), width, height).dx;
-      logy = plotMode.evaluateOn(logx);
+      logy = plotMode!.evaluateOn(logx);
 
       var pts = Offset(logx, logy);
       currPoint = Offset(i * 1.0, _logToScreen(pts, width, height).dy);
 
-      if (_checkBounds(currPoint, width)) {
+      if (currPoint.dx > 0) {
         canvas.drawLine(currPoint, prevPoint, line);
       }
 
@@ -103,24 +96,17 @@ class PlotterPainter<T> extends CustomPainter {
     }
   }
 
-  bool _checkBounds(Offset currentPoint, double size) =>
-      (currentPoint.dy > 0) &&
-      (currentPoint.dx > 0) &&
-      (currentPoint.dx <= size + 1.5) &&
-      (currentPoint.dy <= size + 1.5);
-
   Offset _screenToLog(Offset screenPoint, double width, double height) {
     return Offset(
-      _xmin + (screenPoint.dx / width) * (_xmax - _xmin) ,
-      _ymin + (height - screenPoint.dy) * (_ymax - _ymin)
+      _xmin + (screenPoint.dx / width) * (_xmax - _xmin),
+      _ymin + (height - screenPoint.dy) * (_ymax - _ymin),
     );
   }
 
   Offset _logToScreen(Offset logPoint, double width, double height) {
     return Offset(
       width * (logPoint.dx - _xmin) / (_xmax - _xmin),
-      height - height * (logPoint.dy - _ymin) / (_ymax - _ymin)
+      height - height * (logPoint.dy - _ymin) / (_ymax - _ymin),
     );
   }
-
 }

@@ -50,7 +50,7 @@ class EquationScaffold extends StatelessWidget {
         builder: (context, dimensions) {
           // If the dimension of the screen is "small" enough, a bottom navigation
           // bar fits better
-          if (dimensions.maxWidth < 850) {
+          if (dimensions.maxWidth < 950) {
             return Scaffold(
               body: _ScaffoldContents(
                 body: TabbedNavigationLayout(

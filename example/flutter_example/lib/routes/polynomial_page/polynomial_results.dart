@@ -1,7 +1,5 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,21 +29,6 @@ class PolynomialResults extends StatelessWidget {
 
         // Showing the solutions of the polynomial
         const _PolynomialSolutions(),
-
-        const SizedBox(
-          height: 70,
-        ),
-
-        SectionTitle(
-          pageTitle: context.l10n.chart,
-          icon: SvgPicture.asset(
-            "assets/plot.svg",
-            height: 40,
-          ),
-        ),
-
-        // Plotting the function
-        const _PolynomialPlot(),
       ],
     );
   }
@@ -63,10 +46,9 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   late final noResults = Center(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(80, 35, 80, 35),
-      child: Text(context.l10n.no_solutions,
-        style: const TextStyle(
-          fontSize: 16
-        ),
+      child: Text(
+        context.l10n.no_solutions,
+        style: const TextStyle(fontSize: 16),
       ),
     ),
   );
@@ -76,8 +58,7 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
   bool buildCondition(PolynomialState previous, PolynomialState current) =>
       (previous != current) &&
-      ((current is PolynomialRoots) ||
-      (current is PolynomialNone));
+      ((current is PolynomialRoots) || (current is PolynomialNone));
 
   @override
   Widget build(BuildContext context) {
@@ -122,53 +103,7 @@ class _PolynomialRoot extends StatelessWidget {
             ),
           ),
         ),
-      )
-    );
-  }
-}
-
-class _PolynomialPlot extends StatefulWidget {
-  const _PolynomialPlot();
-
-  @override
-  __PolynomialPlotState createState() => __PolynomialPlotState();
-}
-
-class __PolynomialPlotState extends State<_PolynomialPlot> {
-  /// Manually caching this subtree portion which doesn't need to be updated
-  late final noChart = Center(
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(80, 35, 80, 35),
-      child: Text(context.l10n.no_chart,
-        style: const TextStyle(
-            fontSize: 16
-        ),
       ),
-    ),
-  );
-
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
-  bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) &&
-      ((current is PolynomialRoots) ||
-      (current is PolynomialNone));
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<PolynomialBloc, PolynomialState>(
-      builder: (context, state) {
-        if (state is PolynomialRoots) {
-          return PlotWidget(
-            plotMode: PolynomialPlot(
-              algebraic: state.algebraic
-            ),
-          );
-        }
-
-        return noChart;
-      },
     );
   }
 }

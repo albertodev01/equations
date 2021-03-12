@@ -13,11 +13,8 @@ class HomeContents extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 40, 25, 10),
-      child: Wrap(
-        spacing: 35,
-        runSpacing: 35,
-        alignment: WrapAlignment.spaceBetween,
-        runAlignment: WrapAlignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           CardContainer(
             title: context.l10n.polynomials,

@@ -20,31 +20,34 @@ class CardContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 260,
-      child: GestureDetector(
-        onTap: () => Navigator.of(context).pushNamed(destinationRoute),
-        child: Card(
-          elevation: 8,
-          shadowColor: Colors.blueAccent,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: image,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 25),
+      child: SizedBox(
+        width: 260,
+        child: GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(destinationRoute),
+          child: Card(
+            elevation: 8,
+            shadowColor: Colors.blueAccent,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: image,
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -1,14 +1,12 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This bloc...
 class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
   final PolynomialType polynomialType;
-  PolynomialBloc({
-    required this.polynomialType
-  }) : super(const PolynomialNone());
+  PolynomialBloc({required this.polynomialType})
+      : super(const PolynomialNone());
 
   @override
   Stream<PolynomialState> mapEventToState(PolynomialEvent event) async* {
@@ -28,7 +26,8 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
     }).toList(growable: false);
   }
 
-  Stream<PolynomialState> _polynomialSolveHandler(PolynomialSolve event) async* {
+  Stream<PolynomialState> _polynomialSolveHandler(
+      PolynomialSolve event) async* {
     try {
       final params = _parseCoefficients(event.coefficients);
       final solver = Algebraic.from(params);
@@ -48,7 +47,8 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
     }
   }
 
-  Stream<PolynomialState> _polynomialCleanHandler(PolynomialClean event) async* {
+  Stream<PolynomialState> _polynomialCleanHandler(
+      PolynomialClean event) async* {
     yield const PolynomialNone();
   }
 }

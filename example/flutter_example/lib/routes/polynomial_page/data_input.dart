@@ -57,7 +57,9 @@ class _InputWidget extends StatefulWidget {
 
 class __InputWidget extends State<_InputWidget> {
   late final controllers = List<TextEditingController>.generate(
-    widget.inputLength, (_) => TextEditingController(), growable: false,
+    widget.inputLength,
+    (_) => TextEditingController(),
+    growable: false,
   );
 
   late final cachedEquationTitle = Padding(
@@ -73,7 +75,7 @@ class __InputWidget extends State<_InputWidget> {
 
     var placeholderLetter = "a";
 
-    for(var i = 0; i < widget.inputLength; ++i) {
+    for (var i = 0; i < widget.inputLength; ++i) {
       body.add(PolynomialInputField(
         controller: controllers[i],
         placeholder: placeholderLetter,
@@ -88,11 +90,11 @@ class __InputWidget extends State<_InputWidget> {
 
   void _processInput(BuildContext context) {
     if (formKey.currentState?.validate() ?? false) {
-      context.read<PolynomialBloc>().add(
-        PolynomialSolve(
-          coefficients: controllers.map<String>((c) => c.text).toList(),
-        ),
+      final event = PolynomialSolve(
+        coefficients: controllers.map<String>((c) => c.text).toList(),
       );
+
+      context.read<PolynomialBloc>().add(event);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -109,10 +111,7 @@ class __InputWidget extends State<_InputWidget> {
     }
 
     formKey.currentState?.reset();
-
-    context.read<PolynomialBloc>().add(
-      const PolynomialClean(),
-    );
+    context.read<PolynomialBloc>().add(const PolynomialClean());
   }
 
   @override
@@ -160,9 +159,7 @@ class __InputWidget extends State<_InputWidget> {
               child: Text(context.l10n.solve),
               onPressed: () => _processInput(context),
             ),
-
             const SizedBox(width: 30),
-
             ElevatedButton(
               child: Text(context.l10n.clean),
               onPressed: () => _cleanInput(context),

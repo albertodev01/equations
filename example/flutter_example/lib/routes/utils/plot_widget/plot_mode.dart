@@ -9,23 +9,19 @@ abstract class PlotMode<T> extends Equatable {
 
   @override
   List<Object?> get props => [
-    equation,
-  ];
+        equation,
+      ];
 }
 
 class PolynomialPlot extends PlotMode<Algebraic> {
-  const PolynomialPlot({
-    required Algebraic algebraic
-  }) : super(algebraic);
+  const PolynomialPlot({required Algebraic algebraic}) : super(algebraic);
 
   @override
   double evaluateOn(double x) => equation.realEvaluateOn(x).real;
 }
 
 class NonlinearPlot extends PlotMode<NonLinear> {
-  const NonlinearPlot({
-    required NonLinear nonLinear
-  }) : super(nonLinear);
+  const NonlinearPlot({required NonLinear nonLinear}) : super(nonLinear);
 
   @override
   double evaluateOn(double x) => equation.evaluateOn(x) as double;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class SectionTitle extends StatelessWidget {
   /// The title of the page.
   final String pageTitle;
+
   /// The image associate to the title (appearing to the left)
   final Widget icon;
   const SectionTitle({

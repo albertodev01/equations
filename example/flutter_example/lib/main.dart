@@ -34,9 +34,7 @@ class EquationsApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
       // Theme
-      theme: ThemeData.light().copyWith(
-        textTheme: GoogleFonts.latoTextTheme()
-      ),
+      theme: ThemeData.light().copyWith(textTheme: GoogleFonts.latoTextTheme()),
 
       // Hiding the debug banner
       debugShowCheckedModeBanner: false,
