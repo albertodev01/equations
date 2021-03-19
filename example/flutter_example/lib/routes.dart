@@ -28,15 +28,15 @@ class RouteGenerator {
         );
 
       default:
-        throw const RouteException("Route not found");
+        throw const RouteException('Route not found');
     }
   }
 
   /// Route name for the home page of the app
-  static const homePage = "/";
+  static const homePage = '/';
 
   /// Route name for the polynomial equations solver
-  static const polynomialPage = "/polynomials";
+  static const polynomialPage = '/polynomials';
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist

@@ -5,6 +5,8 @@ import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart'
 class PolynomialEvent extends Equatable {
   /// The coefficients of the polynomial
   final List<String> coefficients;
+
+  /// Initializes a [PolynomialEvent]
   const PolynomialEvent({
     this.coefficients = const [],
   });
@@ -23,5 +25,6 @@ class PolynomialSolve extends PolynomialEvent {
 /// Event fired when the state of the bloc has to be "resetted". This is generally
 /// used to clean the UI and bring it to an initial state.
 class PolynomialClean extends PolynomialEvent {
+  /// Instantiates a [PolynomialClean] event.
   const PolynomialClean();
 }

@@ -19,22 +19,23 @@ class HomeContents extends StatelessWidget {
           CardContainer(
             title: context.l10n.polynomials,
             image: const PolynomialLogo(),
-            destinationRoute: RouteGenerator.polynomialPage,
+            onTap: () =>
+                Navigator.of(context).pushNamed(RouteGenerator.polynomialPage),
           ),
           CardContainer(
             title: context.l10n.functions,
             image: const NonlinearLogo(),
-            destinationRoute: RouteGenerator.homePage,
+            onTap: () {},
           ),
           CardContainer(
             title: context.l10n.systems,
             image: const SystemsLogo(),
-            destinationRoute: RouteGenerator.homePage,
+            onTap: () {},
           ),
           CardContainer(
             title: context.l10n.integrals,
             image: const IntegralLogo(),
-            destinationRoute: RouteGenerator.homePage,
+            onTap: () {},
           ),
         ],
       ),

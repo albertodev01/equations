@@ -1,12 +1,14 @@
 import 'dart:math' as math;
 import 'package:equations_solver/blocs/navigation_bar/bloc/navigation_bloc.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/bottom_navigation_bar.dart';
+import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/rail_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
-import 'file:///C:/Users/AlbertoMiola/Desktop/Programmazione/Dart/equations/example/flutter_example/lib/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+const _assertionError = 'There must be at least 1 navigation item.';
 
 /// A simple wrapper of [Scaffold]. This widget is meant to be used across the
 /// entire app to setup the minimal "skeleton" of the UI. This scaffold is made
@@ -26,18 +28,36 @@ class EquationScaffold extends StatelessWidget {
   /// A list of items for a responsive navigation bar. If the list is empty,
   /// then no navigation bars appear on the screen.
   final List<NavigationItem> navigationItems;
+
+  /// A [FloatingActionButton] widget placed on the bottom-left corner of the
+  /// screen.
+  final FloatingActionButton? fab;
+
+  /// Creates a custom [Scaffold] widget with no built-in navigation.
   const EquationScaffold({
-    this.body = const SizedBox(),
-    this.navigationItems = const [],
-  });
+    required this.body,
+    this.fab,
+  }) : navigationItems = const [];
+
+  /// Creates a custom [Scaffold] widget with built-in, tabbed navigation. There
+  /// must be at least 1 navigation item.
+  const EquationScaffold.navigation({
+    required this.navigationItems,
+    this.fab,
+  })  : body = const SizedBox.shrink(),
+        assert(navigationItems.length > 0, _assertionError);
 
   @override
   Widget build(BuildContext context) {
     // If there are NO navigation items, then no navigation bars are required
     if (navigationItems.isEmpty) {
-      return Scaffold(
-        body: _ScaffoldContents(
-          body: body,
+      return LayoutBuilder(
+        builder: (context, dimensions) => Scaffold(
+          body: _ScaffoldContents(
+            body: body,
+            extraBackground: dimensions.maxWidth >= 1300,
+          ),
+          floatingActionButton: fab,
         ),
       );
     }
@@ -48,18 +68,22 @@ class EquationScaffold extends StatelessWidget {
       create: (_) => NavigationBloc(),
       child: LayoutBuilder(
         builder: (context, dimensions) {
+          final hasExtraBackground = dimensions.maxWidth >= 1300;
+
           // If the dimension of the screen is "small" enough, a bottom navigation
           // bar fits better
-          if (dimensions.maxWidth < 950) {
+          if (dimensions.maxWidth <= 950) {
             return Scaffold(
               body: _ScaffoldContents(
                 body: TabbedNavigationLayout(
                   navigationItems: navigationItems,
                 ),
+                extraBackground: hasExtraBackground,
               ),
               bottomNavigationBar: BottomNavigation(
                 navigationItems: navigationItems,
               ),
+              floatingActionButton: fab,
             );
           }
 
@@ -68,7 +92,9 @@ class EquationScaffold extends StatelessWidget {
               body: RailNavigation(
                 navigationItems: navigationItems,
               ),
+              extraBackground: hasExtraBackground,
             ),
+            floatingActionButton: fab,
           );
         },
       ),
@@ -85,8 +111,13 @@ class _ScaffoldContents extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
 
+  /// Determines whether there's enough space in the horizontal axis to add
+  /// another background image
+  final bool extraBackground;
+
   const _ScaffoldContents({
     required this.body,
+    required this.extraBackground,
   });
 
   @override
@@ -100,6 +131,13 @@ class _ScaffoldContents extends StatelessWidget {
             left: -30,
             child: _ScaffoldBackground(),
           ),
+
+          if (extraBackground)
+            const Positioned(
+              top: 20,
+              right: 80,
+              child: _ScaffoldExtraBackground(),
+            ),
 
           // The actual contents in the foreground
           Positioned.fill(
@@ -146,10 +184,26 @@ class _ScaffoldBackground extends StatelessWidget {
     return Transform.rotate(
       angle: -math.pi / 8,
       child: SvgPicture.asset(
-        "assets/axis.svg",
+        'assets/axis.svg',
         height: size,
         width: size,
       ),
+    );
+  }
+}
+
+/// The contents of the scaffold in the background
+class _ScaffoldExtraBackground extends StatelessWidget {
+  const _ScaffoldExtraBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size.shortestSide / 2;
+
+    return SvgPicture.asset(
+      'assets/plot_opacity.svg',
+      height: size,
+      width: size,
     );
   }
 }

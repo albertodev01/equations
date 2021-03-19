@@ -10,7 +10,7 @@ class AppLogo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 25),
       child: SvgPicture.asset(
-        "assets/logo.svg",
+        'assets/logo.svg',
         width: 285,
       ),
     );

@@ -15,8 +15,10 @@
   "clean": "Pulisci",
   "no_solutions": "Nessuna soluzione da mostrare.",
   "no_chart": "Nessun grafico da disegnare.",
+  "no_discriminant": "Nessun discriminante.",
   "polynomial_error": "Uno o più coefficienti hanno un formato non valido.",
   "wrong_input": "Input non valido",
   "tap_more": "Premi per vedere più dettagli",
-  "discriminant": "Discriminante"
+  "discriminant": "Discriminante",
+  "fraction": "Frazione:"
 }

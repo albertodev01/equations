@@ -1,26 +1,32 @@
 import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
+import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
-import 'file:///C:/Users/AlbertoMiola/Desktop/Programmazione/Dart/equations/example/flutter_example/lib/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// A rail navigation bar to be displayed within a a [EquationScaffold] widget.
-class RailNavigation extends StatelessWidget {
+class RailNavigation extends StatefulWidget {
   /// A list of items for a responsive navigation bar
   final List<NavigationItem> navigationItems;
   const RailNavigation({
     required this.navigationItems,
   });
 
+  @override
+  _RailNavigationState createState() => _RailNavigationState();
+}
+
+class _RailNavigationState extends State<RailNavigation> {
   /// Converts a [NavigationItem] into a [BottomNavigationBarItem]
-  List<NavigationRailDestination> get _rail => navigationItems.map((item) {
-        return NavigationRailDestination(
-          icon: item.icon,
-          selectedIcon: item.activeIcon,
-          label: Text(item.title),
-        );
-      }).toList(growable: false);
+  late final rails =
+      widget.navigationItems.map<NavigationRailDestination>((item) {
+    return NavigationRailDestination(
+      icon: item.icon,
+      selectedIcon: item.activeIcon,
+      label: Text(item.title),
+    );
+  }).toList(growable: false);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +35,12 @@ class RailNavigation extends StatelessWidget {
         // The actual contents of the page
         Expanded(
           child: TabbedNavigationLayout(
-            navigationItems: navigationItems,
+            navigationItems: widget.navigationItems,
           ),
         ),
 
         // The separator between the rail and the contents
-        VerticalDivider(
+        const VerticalDivider(
           thickness: 2,
           width: 1,
         ),
@@ -43,7 +49,8 @@ class RailNavigation extends StatelessWidget {
         BlocBuilder<NavigationBloc, int>(
           buildWhen: (previous, current) => previous != current,
           builder: (context, state) => NavigationRail(
-            destinations: _rail,
+            groupAlignment: 0,
+            destinations: rails,
             selectedIndex: state,
             labelType: NavigationRailLabelType.all,
             onDestinationSelected: (newIndex) =>

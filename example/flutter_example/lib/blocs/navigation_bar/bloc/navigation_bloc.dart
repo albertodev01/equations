@@ -4,10 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Bloc that stores the state of a navigation bar. It simply keeps track of the
 /// currently selected index of a [BottomNavigationBar] or a [NavigationRail].
 class NavigationBloc extends Bloc<int, int> {
+  /// The initial value is set to `0`
   NavigationBloc() : super(0);
 
   @override
   Stream<int> mapEventToState(int event) async* {
-    yield event;
+    if (event >= 0) {
+      yield event;
+    }
   }
 }

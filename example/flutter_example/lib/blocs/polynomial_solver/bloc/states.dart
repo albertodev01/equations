@@ -17,10 +17,7 @@ class PolynomialState extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        roots,
-        discriminant,
-      ];
+  List<Object?> get props => [roots, discriminant];
 }
 
 /// This state is emitted when the solver successfully finds the roots of the
@@ -34,27 +31,22 @@ class PolynomialRoots extends PolynomialState {
     required List<Complex> roots,
     required Complex discriminant,
     required this.algebraic,
-  }) : super(
-          roots: roots,
-          discriminant: discriminant,
-        );
+  }) : super(roots: roots, discriminant: discriminant);
 
   @override
-  List<Object?> get props => [
-        algebraic,
-        roots,
-        discriminant,
-      ];
+  List<Object?> get props => [algebraic, roots, discriminant];
 }
 
 /// This state is emitted when the solver cannot find the roots of the polynomial
 /// equation.
 class PolynomialError extends PolynomialState {
+  /// Initializes a [PolynomialError]
   const PolynomialError();
 }
 
 /// This is an initial state used to "clean" the page bringing it to a default
 /// aspect.
 class PolynomialNone extends PolynomialState {
+  /// Initializes a [PolynomialNone]
   const PolynomialNone();
 }

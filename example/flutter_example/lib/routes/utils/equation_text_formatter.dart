@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// This widget appends a blue `f(x) =  ` text in front of the equation string.
 class EquationTextFormatter extends StatelessWidget {
+  /// The string representation of the equation
   final String equation;
   const EquationTextFormatter({
     required this.equation,
@@ -10,7 +12,7 @@ class EquationTextFormatter extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: "f(x) =  ",
+        text: 'f(x) =  ',
         style: DefaultTextStyle.of(context).style.copyWith(
             color: Colors.blueAccent,
             fontStyle: FontStyle.italic,

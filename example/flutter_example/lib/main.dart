@@ -18,6 +18,7 @@ void main() {
 
 /// The root widget of the app
 class EquationsApp extends StatelessWidget {
+  /// Creates an [EquationsApp] instance
   const EquationsApp();
 
   @override

@@ -11,21 +11,21 @@ class CardContainer extends StatelessWidget {
   final Widget image;
 
   /// The route to be opened when the container is tapped
-  final String destinationRoute;
+  final void Function() onTap;
   const CardContainer({
     required this.title,
     required this.image,
-    required this.destinationRoute,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 25),
+      padding: const EdgeInsets.only(bottom: 35),
       child: SizedBox(
         width: 260,
         child: GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed(destinationRoute),
+          onTap: onTap,
           child: Card(
             elevation: 8,
             shadowColor: Colors.blueAccent,
@@ -34,7 +34,6 @@ class CardContainer extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 1,
                     child: image,
                   ),
                   Expanded(

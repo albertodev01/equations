@@ -32,7 +32,7 @@ class PlotterPainter<T> extends CustomPainter {
   }
 
   void _drawMainAxis(Canvas canvas, Size size) {
-    var blackThick = Paint()
+    final blackThick = Paint()
       ..color = Colors.black
       ..strokeWidth = 2.0;
 
@@ -44,19 +44,21 @@ class PlotterPainter<T> extends CustomPainter {
   }
 
   void _drawAxis(Canvas canvas, Size size) {
-    var line = Paint()
+    final line = Paint()
       ..color = Colors.blueGrey
       ..strokeWidth = 1.0;
 
-    var scale = range;
-    var distX = (size.width / 2) / scale;
-    var distY = (size.height / 2) / scale;
+    final scale = range;
+    final distX = (size.width / 2) / scale;
+    final distY = (size.height / 2) / scale;
 
     var prevPoint = Offset(distX, 0);
     var currPoint = Offset(0, distY);
 
     for (var i = -scale; i < scale; ++i) {
-      if (i == 0) continue;
+      if (i == 0) {
+        continue;
+      }
 
       canvas
         ..drawLine(prevPoint, Offset(prevPoint.dx, size.height), line)
@@ -68,24 +70,24 @@ class PlotterPainter<T> extends CustomPainter {
   }
 
   void _drawEquation(Canvas canvas, Size size) {
-    var line = Paint()
+    final line = Paint()
       ..color = Colors.blueAccent
       ..strokeWidth = 2.0;
 
     var logy = 0.0;
     var logx = 0.0;
 
-    var width = size.width;
-    var height = size.height;
+    final width = size.width;
+    final height = size.height;
 
-    var currPoint = Offset(0, 0);
-    var prevPoint = Offset(0, 0);
+    var currPoint = Offset.zero;
+    var prevPoint = Offset.zero;
 
     for (var i = 0; i < size.width; ++i) {
       logx = _screenToLog(Offset(i * 1.0, 0), width, height).dx;
       logy = plotMode!.evaluateOn(logx);
 
-      var pts = Offset(logx, logy);
+      final pts = Offset(logx, logy);
       currPoint = Offset(i * 1.0, _logToScreen(pts, width, height).dy);
 
       if (currPoint.dx > 0) {

@@ -20,24 +20,24 @@ class DataInput extends StatelessWidget {
 
     switch (polynomialType) {
       case PolynomialType.linear:
-        return _InputWidget(
+        return const _InputWidget(
           inputLength: 2,
-          equationTemplate: "ax + b",
+          equationTemplate: 'ax + b',
         );
       case PolynomialType.quadratic:
-        return _InputWidget(
+        return const _InputWidget(
           inputLength: 3,
-          equationTemplate: "ax^2 + bx + c",
+          equationTemplate: 'ax^2 + bx + c',
         );
       case PolynomialType.cubic:
-        return _InputWidget(
+        return const _InputWidget(
           inputLength: 4,
-          equationTemplate: "ax^3 + bx^2 + cx + d",
+          equationTemplate: 'ax^3 + bx^2 + cx + d',
         );
       case PolynomialType.quartic:
-        return _InputWidget(
+        return const _InputWidget(
           inputLength: 5,
-          equationTemplate: "ax^4 + bx^3 + cx^2 + dx + e",
+          equationTemplate: 'ax^4 + bx^3 + cx^2 + dx + e',
         );
     }
   }
@@ -73,7 +73,7 @@ class __InputWidget extends State<_InputWidget> {
   List<PolynomialInputField> generateWrapBody() {
     final body = <PolynomialInputField>[];
 
-    var placeholderLetter = "a";
+    var placeholderLetter = 'a';
 
     for (var i = 0; i < widget.inputLength; ++i) {
       body.add(PolynomialInputField(
@@ -107,7 +107,7 @@ class __InputWidget extends State<_InputWidget> {
 
   void _cleanInput(BuildContext context) {
     for (final controller in controllers) {
-      controller.text = "";
+      controller.text = '';
     }
 
     formKey.currentState?.reset();
@@ -140,7 +140,6 @@ class __InputWidget extends State<_InputWidget> {
           child: Form(
             key: formKey,
             child: Wrap(
-              direction: Axis.horizontal,
               spacing: 30,
               alignment: WrapAlignment.center,
               children: cachedWrapBody,
@@ -156,13 +155,13 @@ class __InputWidget extends State<_InputWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: Text(context.l10n.solve),
               onPressed: () => _processInput(context),
+              child: Text(context.l10n.solve),
             ),
             const SizedBox(width: 30),
             ElevatedButton(
-              child: Text(context.l10n.clean),
               onPressed: () => _cleanInput(context),
+              child: Text(context.l10n.clean),
             ),
           ],
         )

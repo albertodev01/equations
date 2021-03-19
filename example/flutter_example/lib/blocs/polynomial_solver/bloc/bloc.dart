@@ -1,12 +1,16 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// This bloc...
+/// This bloc handles the contents of a [PolynomialBody] widget by processing
+/// the coefficients (received as raw strings) and solving polynomial equations.
 class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
+  /// The type of polynomial this bloc has to solve.
   final PolynomialType polynomialType;
-  PolynomialBloc({required this.polynomialType})
-      : super(const PolynomialNone());
+
+  /// Initializes a [PolynomialBloc] with [PolynomialNone]
+  PolynomialBloc(this.polynomialType) : super(const PolynomialNone());
 
   @override
   Stream<PolynomialState> mapEventToState(PolynomialEvent event) async* {
@@ -20,16 +24,18 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
   }
 
   List<Complex> _parseCoefficients(List<String> rawInput) {
+    // Fractions are accepted so this method throws only if the given string is
+    // NOT a number or a string
     return rawInput.map((coefficient) {
       final fraction = Fraction.fromString(coefficient);
       return Complex.fromRealFraction(fraction);
     }).toList(growable: false);
   }
 
-  Stream<PolynomialState> _polynomialSolveHandler(
-      PolynomialSolve event) async* {
+  Stream<PolynomialState> _polynomialSolveHandler(PolynomialSolve evt) async* {
     try {
-      final params = _parseCoefficients(event.coefficients);
+      // Parsing coefficients
+      final params = _parseCoefficients(evt.coefficients);
       final solver = Algebraic.from(params);
 
       // Determines whether the given equation is valid or not
@@ -47,8 +53,7 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
     }
   }
 
-  Stream<PolynomialState> _polynomialCleanHandler(
-      PolynomialClean event) async* {
+  Stream<PolynomialState> _polynomialCleanHandler(PolynomialClean evt) async* {
     yield const PolynomialNone();
   }
 }

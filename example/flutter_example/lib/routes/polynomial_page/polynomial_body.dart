@@ -19,7 +19,9 @@ class PolynomialBody extends StatelessWidget {
     return Stack(
       children: const [
         // Scrollable contents of the page
-        Positioned.fill(top: 20, child: _ResponsiveBody()),
+        Positioned.fill(
+          child: _ResponsiveBody(),
+        ),
 
         // "Go back" button
         Positioned(
@@ -73,9 +75,8 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
               pageTitleWidget,
               const DataInput(),
               const PolynomialResults(),
-              const SizedBox(height: 85),
               const Padding(
-                padding: EdgeInsets.fromLTRB(60, 0, 60, 20),
+                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
                 child: _PolynomialPlot(),
               ),
             ],
@@ -108,7 +109,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
           SizedBox(
             width: size.maxWidth / 2.3,
             height: double.infinity,
-            child: _PolynomialPlot(),
+            child: const _PolynomialPlot(),
           ),
         ],
       );
@@ -127,7 +128,7 @@ class _PageTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.only(top: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -186,7 +187,7 @@ class __PolynomialPlotState extends State<_PolynomialPlot> {
                 SectionTitle(
                   pageTitle: context.l10n.chart,
                   icon: SvgPicture.asset(
-                    "assets/plot.svg",
+                    'assets/plot.svg',
                     height: 40,
                   ),
                 ),
