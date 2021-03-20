@@ -1,7 +1,6 @@
 ## [2.0.1]
 
- -
- - Added the possibility to set the precision for the `Complex` type, which can be particularly useful when printing values
+ - New `toStringAsFixed()` method for the `Complex` type
  - Improved static analysis with a more elaborated `analysis_options.yaml` file
  - Dependencies versions update
 

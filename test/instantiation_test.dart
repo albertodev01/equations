@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
 
-///There is a bug in the coverage report tool where `const` constructors aren't
+/// There is a bug in the coverage report tool where `const` constructors aren't
 /// recognized. When calling
 ///
 ///  - flutter test --coverage
