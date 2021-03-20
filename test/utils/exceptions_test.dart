@@ -132,10 +132,6 @@ void main() {
 
       // Checking messages
       expect(
-        complexException == const ComplexException('Another Message'),
-        isFalse,
-      );
-      expect(
         algebraicException == const AlgebraicException('Another Message'),
         isFalse,
       );
@@ -160,27 +156,27 @@ void main() {
       // Checking messages prefixes
       expect(
         complexException.messagePrefix,
-        equals(const ComplexException('Message').messagePrefix),
+        equals('ComplexException'),
       );
       expect(
         algebraicException.messagePrefix,
-        equals(const AlgebraicException('Message').messagePrefix),
+        equals('AlgebraicException'),
       );
       expect(
         nonlinearException.messagePrefix,
-        equals(const NonlinearException('Message').messagePrefix),
+        equals('NonlinearException'),
       );
       expect(
         parserException.messagePrefix,
-        equals(const ExpressionParserException('Message').messagePrefix),
+        equals('ExpressionParserException'),
       );
       expect(
         systemException.messagePrefix,
-        equals(const SystemSolverException('Message').messagePrefix),
+        equals('SystemSolverException'),
       );
       expect(
         integrationException.messagePrefix,
-        equals(const NumericalIntegrationException('Message').messagePrefix),
+        equals('NumericalIntegrationException'),
       );
     });
 

@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
+import 'package:petitparser/petitparser.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -45,6 +46,18 @@ void main() {
         SystemSolverException('Message'),
         isA<SystemSolverException>(),
       );
+
+      expect(
+        ParserException(Failure('', 0, '')),
+        isA<ParserException>(),
+      );
+    });
+
+    test('Exception objects comparison', () {
+      final testException = AlgebraicException('message');
+
+      expect(testException.message, equals('message'));
+      expect(testException.messagePrefix, equals('AlgebraicException'));
     });
 
     test('Nonlinear constructors', () {
@@ -88,8 +101,8 @@ void main() {
         isA<SimpsonRule>(),
       );
       expect(
-        TrapezoidalRule(lowerBound: 0, upperBound: 0),
-        isA<TrapezoidalRule>(),
+        MidpointRule(lowerBound: 0, upperBound: 0),
+        isA<MidpointRule>(),
       );
     });
   });
