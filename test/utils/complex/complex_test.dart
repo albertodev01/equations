@@ -4,6 +4,8 @@ import 'package:equations/equations.dart';
 import 'package:fraction/fraction.dart';
 import 'package:test/test.dart';
 
+import '../../double_approximation_matcher.dart';
+
 void main() {
   group('Testing constructors', () {
     test('Making sure that the default constructor works as expected', () {
@@ -104,27 +106,39 @@ void main() {
       expect(fromPolar2.real, isZero);
       expect(fromPolar2.imaginary, isZero);
 
-      final oneOverSqrtTwo = (1 / math.sqrt(2)).toStringAsFixed(12);
+      final oneOverSqrtTwo = 1 / math.sqrt(2);
       final fromPolar3 = Complex.fromPolar(1, math.pi / 4);
       expect(
-        fromPolar3.real.toStringAsFixed(12),
-        equals(oneOverSqrtTwo),
+        fromPolar3.real,
+        MoreOrLessEquals(oneOverSqrtTwo),
       );
       expect(
-        fromPolar3.imaginary.toStringAsFixed(12),
-        equals(oneOverSqrtTwo),
+        fromPolar3.imaginary,
+        MoreOrLessEquals(oneOverSqrtTwo),
       );
 
       // To polar
       final toPolar = const Complex(5, -7).toPolarCoordinates();
       expect(toPolar.r, math.sqrt(74));
-      expect(toPolar.phiDegrees.toStringAsFixed(4), equals('-54.4623'));
-      expect(toPolar.phiRadians.toStringAsFixed(4), equals('-0.9505'));
+      expect(
+        toPolar.phiDegrees,
+        const MoreOrLessEquals(-54.4623, precision: 1.0e-4),
+      );
+      expect(
+        toPolar.phiRadians,
+        const MoreOrLessEquals(-0.9505, precision: 1.0e-4),
+      );
 
       final toPolar2 = const Complex(5, 1).toPolarCoordinates();
       expect(toPolar2.r, math.sqrt(26));
-      expect(toPolar2.phiDegrees.toStringAsFixed(4), equals('11.3099'));
-      expect(toPolar2.phiRadians.toStringAsFixed(4), equals('0.1974'));
+      expect(
+        toPolar2.phiDegrees,
+        const MoreOrLessEquals(11.3099, precision: 1.0e-4),
+      );
+      expect(
+        toPolar2.phiRadians,
+        const MoreOrLessEquals(0.1974, precision: 1.0e-4),
+      );
     });
 
     test('Printing values', () {
@@ -268,31 +282,30 @@ void main() {
         "Making sure that modulus (or 'magnitude' or 'absolute' value) is correct",
         () {
       expect(
-        const Complex(3, 7).abs().toStringAsFixed(12),
-        equals(math.sqrt(58).toStringAsFixed(12)),
+        const Complex(3, 7).abs(),
+        MoreOrLessEquals(math.sqrt(58)),
       );
     });
 
     test('Making sure that the exponential works properly', () {
       final value = const Complex(3, 7).exp(); // e^(3 + 7i)
-
       expect(
-        value.real.toStringAsFixed(12),
-        equals('15.142531566087'),
+        value.real,
+        const MoreOrLessEquals(15.142531566087),
       );
       expect(
-        value.imaginary.toStringAsFixed(12),
-        equals('13.195928586606'),
+        value.imaginary,
+        const MoreOrLessEquals(13.195928586606),
       );
 
       final value2 = const Complex.i().exp(); // e^i
       expect(
-        value2.real.toStringAsFixed(12),
-        equals('0.540302305868'),
+        value2.real,
+        const MoreOrLessEquals(0.540302305868),
       );
       expect(
-        value2.imaginary.toStringAsFixed(12),
-        equals('0.841470984808'),
+        value2.imaginary,
+        const MoreOrLessEquals(0.841470984808),
       );
     });
 
@@ -303,12 +316,12 @@ void main() {
 
       expect(i.sin().real, isZero);
       expect(
-        i.sin().imaginary.toStringAsFixed(12),
-        equals('1.175201193644'),
+        i.sin().imaginary,
+        const MoreOrLessEquals(1.175201193644),
       );
       expect(
-        i.cos().real.toStringAsFixed(12),
-        equals('1.543080634815'),
+        i.cos().real,
+        const MoreOrLessEquals(1.543080634815),
       );
       expect(i.cos().imaginary, isZero);
       expect(
@@ -324,32 +337,32 @@ void main() {
     test('Making sure that the n-th root of the complex number is correct', () {
       final sqrt = const Complex(5, 1).sqrt();
       expect(
-        sqrt.real.toStringAsFixed(12),
-        equals('2.247111425096'),
+        sqrt.real,
+        const MoreOrLessEquals(2.247111425096),
       );
       expect(
-        sqrt.imaginary.toStringAsFixed(12),
-        equals('0.222507880302'),
+        sqrt.imaginary,
+        const MoreOrLessEquals(0.222507880302),
       );
 
       final fifthRoot = const Complex(5, 1).nthRoot(5);
       expect(
-        fifthRoot.real.toStringAsFixed(12),
-        equals('1.384072376713'),
+        fifthRoot.real,
+        const MoreOrLessEquals(1.384072376713),
       );
       expect(
-        fifthRoot.imaginary.toStringAsFixed(12),
-        equals('0.054670354363'),
+        fifthRoot.imaginary,
+        const MoreOrLessEquals(0.054670354363),
       );
 
       final negativeRoot = const Complex(5, 1).nthRoot(-2);
       expect(
-        negativeRoot.real.toStringAsFixed(12),
-        equals('0.440694807915'),
+        negativeRoot.real,
+        const MoreOrLessEquals(0.440694807915),
       );
       expect(
-        negativeRoot.imaginary.toStringAsFixed(12),
-        equals('-0.043637385523'),
+        negativeRoot.imaginary,
+        const MoreOrLessEquals(-0.043637385523),
       );
 
       final noRoot = const Complex(5, 1).nthRoot(1);
@@ -361,6 +374,23 @@ void main() {
         noRoot.imaginary,
         equals(1),
       );
+    });
+
+    test(
+        "Making sure that the 'nthRoot' method also works when the phase is negative",
+        () {
+      const negativePhase = Complex(-0.5, -1);
+      final negativePhaseRoot = negativePhase.nthRoot(2);
+
+      expect(negativePhase.phase(), isNegative);
+      expect(
+        negativePhase.phase(),
+        const MoreOrLessEquals(-2.03444, precision: 1.0e-5),
+      );
+
+      expect(negativePhaseRoot.real.round(), -1);
+      expect(
+          negativePhaseRoot.imaginary, const MoreOrLessEquals(0.899453719973));
     });
 
     test("Making sure that the 'power' operation properly works", () {
@@ -433,14 +463,8 @@ void main() {
 
       // Equality of a double is hard to achieve due to approximations, so I
       // prefer checking the strings with a fixed precision which works better
-      expect(
-        value.real.toStringAsFixed(12),
-        equals(realValue.toStringAsFixed(12)),
-      );
-      expect(
-        value.imaginary.toStringAsFixed(12),
-        equals(imagValue.toStringAsFixed(12)),
-      );
+      expect(value.real, MoreOrLessEquals(realValue));
+      expect(value.imaginary, MoreOrLessEquals(imagValue));
 
       final value2 =
           const Complex.fromReal(5) / const Complex.fromImaginary(-16);
