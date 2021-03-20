@@ -53,6 +53,10 @@ void main() {
         isTrue,
       );
       expect(
+        const Steffensen(function: 'exp(x)-3', x0: 1) == steffensen,
+        isFalse,
+      );
+      expect(
         const Steffensen(function: 'exp(x)-3', x0: 3).hashCode,
         equals(steffensen.hashCode),
       );

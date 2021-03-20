@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
-import '../../double_approximation_matcher.dart';
+import '../../../double_approximation_matcher.dart';
 
 void main() {
   late final TrapezoidalRule trapezoid;

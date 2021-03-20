@@ -62,6 +62,30 @@ void main() {
           Complex(2, 6),
         ).hashCode),
       );
+
+      expect(
+        results ==
+            const HornerResult(
+              [
+                Complex(2, 5),
+                Complex.i(),
+              ],
+              Complex(2, 6),
+            ),
+        isFalse,
+      );
+      expect(
+        results ==
+            const HornerResult(
+              [
+                Complex(-2, 5),
+                Complex.i(),
+                Complex.fromImaginary(2),
+              ],
+              Complex(2, 6),
+            ),
+        isFalse,
+      );
     });
   });
 }

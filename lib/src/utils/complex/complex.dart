@@ -128,7 +128,26 @@ class Complex implements Comparable<Complex> {
   @override
   String toString() => _convertToString();
 
-  /// Prints the number representing the real and the imaginary parts as fractions
+  /// Prints the real and the imaginary parts of this [Complex] instance with
+  /// [fractionDigits] decimal digits. The output produced by this method is the
+  /// same that would result in calling `toStringAsFixed` on a [double]:
+  ///
+  /// ```dart
+  /// final example = Complex(5.123, 8.123);
+  ///
+  /// // Calling 'toStringAsFixed' on the `Complex` instance
+  /// print(example.toStringAsFixed(1)); // 5.1 + 8.1i
+  ///
+  /// // The same result but with 'toStringAsFixed' calls on the single [double]
+  /// // values of the complex value
+  /// final real = example.real.toStringAsFixed(1);
+  /// final imag = example.imaginary.toStringAsFixed(1);
+  /// print("$real + $imag"); // 5.1 + 8.1i
+  /// ```
+  String toStringAsFixed(int fractionDigits) =>
+      _convertToString(fractionDigits: fractionDigits);
+
+  /// Prints the real and the imaginary parts or the complex number as fractions
   /// with the best possible approximation
   String toStringAsFraction() => _convertToString(asFraction: true);
 
@@ -157,7 +176,19 @@ class Complex implements Comparable<Complex> {
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions rather than
   /// being "normal" double values.
-  String _convertToString({bool asFraction = false}) {
+  ///
+  /// You cannot define `asFraction = true` and assign `fractionDigits` a value
+  /// as well.
+  String _convertToString({
+    bool asFraction = false,
+    int? fractionDigits,
+  }) {
+    // Making sure that fractional digits aren't specified for fractions
+    assert(
+      !(asFraction && fractionDigits != null),
+      "You cannot set 'asFraction = true' and also specify the 'fractionDigits'.",
+    );
+
     var realPart = _fixZero(real);
     var imaginaryPart = '${_fixZero(imaginary)}i';
     var imaginaryPartAbs = '${_fixZero(imaginary.abs())}i';
@@ -166,6 +197,12 @@ class Complex implements Comparable<Complex> {
       realPart = '${real.toFraction()}';
       imaginaryPart = '${imaginary.toFraction()}i';
       imaginaryPartAbs = '${imaginary.abs().toFraction()}i';
+    }
+
+    if (fractionDigits != null) {
+      realPart = real.toStringAsFixed(fractionDigits);
+      imaginaryPart = '${imaginary.toStringAsFixed(fractionDigits)}i';
+      imaginaryPartAbs = '${imaginary.abs().toStringAsFixed(fractionDigits)}i';
     }
 
     if (real == 0) {

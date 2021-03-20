@@ -34,21 +34,58 @@ void main() {
 
       expect(results2 == results, isTrue);
       expect(
-          results ==
-              const NonlinearResults(
-                guesses: [1.0, 2.0, 3.0],
-                convergence: 10.0,
-                efficiency: -7.0,
-              ),
-          isTrue);
+        results ==
+            const NonlinearResults(
+              guesses: [
+                1.0,
+                2.0,
+                3.0,
+              ],
+              convergence: 10.0,
+              efficiency: -7.0,
+            ),
+        isTrue,
+      );
 
       expect(
-          results.hashCode,
-          equals(const NonlinearResults(
-            guesses: [1.0, 2.0, 3.0],
-            convergence: 10.0,
-            efficiency: -7.0,
-          ).hashCode));
+        results.hashCode,
+        equals(const NonlinearResults(
+          guesses: [
+            1.0,
+            2.0,
+            3.0,
+          ],
+          convergence: 10.0,
+          efficiency: -7.0,
+        ).hashCode),
+      );
+
+      expect(
+        results ==
+            const NonlinearResults(
+              guesses: [
+                1.0,
+                2.0,
+              ],
+              convergence: 10.0,
+              efficiency: -7.0,
+            ),
+        isFalse,
+      );
+
+      expect(
+        results ==
+            const NonlinearResults(
+              guesses: [
+                1.0,
+                2.0,
+                5.0,
+              ],
+              convergence: 10.0,
+              efficiency: -7.0,
+            ),
+        isFalse,
+      );
     });
   });
 }

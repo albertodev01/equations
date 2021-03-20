@@ -175,6 +175,27 @@ void main() {
         const Complex(0, -7).toStringWithParenthesis(),
         equals('-7i'),
       );
+
+      expect(
+        const Complex(1.123, 9.876).toStringAsFixed(1),
+        equals('1.1 + 9.9i'),
+      );
+      expect(
+        const Complex(1.123, -9.876).toStringAsFixed(1),
+        equals('1.1 - 9.9i'),
+      );
+      expect(
+        const Complex(1.123, 9.876).toStringAsFixed(0),
+        equals('1 + 10i'),
+      );
+      expect(
+        const Complex.fromReal(13.345678).toStringAsFixed(3),
+        equals('13.346'),
+      );
+      expect(
+        const Complex.fromImaginary(13.345678).toStringAsFixed(3),
+        equals('13.346i'),
+      );
     });
   });
 

@@ -37,7 +37,11 @@ void main() {
       expect(
         results ==
             const IntegralResults(
-              guesses: [1.0, 2.0, 3.0],
+              guesses: [
+                1.0,
+                2.0,
+                3.0,
+              ],
               result: 5.28,
             ),
         isTrue,
@@ -53,6 +57,31 @@ void main() {
           ],
           result: 5.28,
         ).hashCode),
+      );
+
+      expect(
+        results ==
+            const IntegralResults(
+              guesses: [
+                1.0,
+                2.0,
+              ],
+              result: 5.28,
+            ),
+        isFalse,
+      );
+
+      expect(
+        results ==
+            const IntegralResults(
+              guesses: [
+                1.0,
+                2.0,
+                5.0,
+              ],
+              result: 5.28,
+            ),
+        isFalse,
       );
     });
   });

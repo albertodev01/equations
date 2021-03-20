@@ -46,6 +46,7 @@ void main() {
 
       expect(const Newton(function: 'x-1', x0: 3), equals(newton));
       expect(const Newton(function: 'x-1', x0: 3) == newton, isTrue);
+      expect(const Newton(function: 'x-1', x0: 3.1) == newton, isFalse);
       expect(
         const Newton(function: 'x-1', x0: 3).hashCode,
         equals(newton.hashCode),
