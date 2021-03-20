@@ -32,7 +32,9 @@ class Steffensen extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Steffensen) {
       return super == other && x0 == other.x0;
@@ -42,13 +44,7 @@ class Steffensen extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = 37 * result + x0.hashCode;
-
-    return result;
-  }
+  int get hashCode => 37 * super.hashCode + x0.hashCode;
 
   @override
   NonlinearResults solve() {
@@ -58,8 +54,8 @@ class Steffensen extends NonLinear {
     final guesses = <double>[];
 
     while ((diff >= tolerance) && (n < maxSteps)) {
-      var fx = evaluateOn(x);
-      var gx = (evaluateOn(x + fx) / fx) - 1;
+      final fx = evaluateOn(x);
+      final gx = (evaluateOn(x + fx) / fx) - 1;
 
       x = x - fx / gx;
       guesses.add(x);

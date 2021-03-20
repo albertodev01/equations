@@ -57,33 +57,33 @@ class Quartic extends Algebraic {
 
   @override
   Algebraic derivative() => Cubic(
-      a: a * Complex.fromReal(4),
-      b: b * Complex.fromReal(3),
-      c: c * Complex.fromReal(2),
+      a: a * const Complex.fromReal(4),
+      b: b * const Complex.fromReal(3),
+      c: c * const Complex.fromReal(2),
       d: d);
 
   @override
   Complex discriminant() {
     final k = (b * b * c * c * d * d) -
-        (d * d * d * b * b * b * Complex.fromReal(4)) -
-        (d * d * c * c * c * a * Complex.fromReal(4)) +
-        (d * d * d * c * b * a * Complex.fromReal(18)) -
-        (d * d * d * d * a * a * Complex.fromReal(27)) +
-        (e * e * e * a * a * a * Complex.fromReal(256));
+        (d * d * d * b * b * b * const Complex.fromReal(4)) -
+        (d * d * c * c * c * a * const Complex.fromReal(4)) +
+        (d * d * d * c * b * a * const Complex.fromReal(18)) -
+        (d * d * d * d * a * a * const Complex.fromReal(27)) +
+        (e * e * e * a * a * a * const Complex.fromReal(256));
 
     final p = e *
-        ((c * c * c * b * b * Complex.fromReal(-4)) +
-            (b * b * b * c * d * Complex.fromReal(18)) +
-            (c * c * c * c * a * Complex.fromReal(16)) -
-            (d * c * c * b * a * Complex.fromReal(80)) -
-            (d * d * b * b * a * Complex.fromReal(6)) +
-            (d * d * a * a * c * Complex.fromReal(144)));
+        ((c * c * c * b * b * const Complex.fromReal(-4)) +
+            (b * b * b * c * d * const Complex.fromReal(18)) +
+            (c * c * c * c * a * const Complex.fromReal(16)) -
+            (d * c * c * b * a * const Complex.fromReal(80)) -
+            (d * d * b * b * a * const Complex.fromReal(6)) +
+            (d * d * a * a * c * const Complex.fromReal(144)));
 
     final r = (e * e) *
-        (b * b * b * b * Complex.fromReal(-27) +
-            b * b * c * a * Complex.fromReal(144) -
-            a * a * c * c * Complex.fromReal(128) -
-            d * b * a * a * Complex.fromReal(192));
+        (b * b * b * b * const Complex.fromReal(-27) +
+            b * b * c * a * const Complex.fromReal(144) -
+            a * a * c * c * const Complex.fromReal(128) -
+            d * b * a * a * const Complex.fromReal(192));
 
     return k + p + r;
   }
@@ -96,39 +96,40 @@ class Quartic extends Algebraic {
     final fe = e / a;
 
     final q1 = (fc * fc) -
-        (fb * fd * Complex.fromReal(3)) +
-        (fe * Complex.fromReal(12));
-    final q2 = (fc.pow(3) * Complex.fromReal(2)) -
-        (fb * fc * fd * Complex.fromReal(9)) +
-        (fd.pow(2) * Complex.fromReal(27)) +
-        (fb.pow(2) * fe * Complex.fromReal(27)) -
-        (fc * fe * Complex.fromReal(72));
-    final q3 = (fb * fc * Complex.fromReal(8)) -
-        (fd * Complex.fromReal(16)) -
-        (fb.pow(3) * Complex.fromReal(2));
-    final q4 = (fb.pow(2) * Complex.fromReal(3)) - (fc * Complex.fromReal(8));
+        (fb * fd * const Complex.fromReal(3)) +
+        (fe * const Complex.fromReal(12));
+    final q2 = (fc.pow(3) * const Complex.fromReal(2)) -
+        (fb * fc * fd * const Complex.fromReal(9)) +
+        (fd.pow(2) * const Complex.fromReal(27)) +
+        (fb.pow(2) * fe * const Complex.fromReal(27)) -
+        (fc * fe * const Complex.fromReal(72));
+    final q3 = (fb * fc * const Complex.fromReal(8)) -
+        (fd * const Complex.fromReal(16)) -
+        (fb.pow(3) * const Complex.fromReal(2));
+    final q4 = (fb.pow(2) * const Complex.fromReal(3)) -
+        (fc * const Complex.fromReal(8));
 
-    var temp = (q2 * q2 / Complex.fromReal(4)) - (q1.pow(3));
-    final q5 = (temp.sqrt() + (q2 / Complex.fromReal(2))).pow(1.0 / 3.0);
-    final q6 = ((q1 / q5) + q5) / Complex.fromReal(3);
-    temp = (q4 / Complex.fromReal(12)) + q6;
-    final q7 = temp.sqrt() * Complex.fromReal(2);
-    temp = ((q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
-        (q6 * Complex.fromReal(4)) -
+    var temp = (q2 * q2 / const Complex.fromReal(4)) - (q1.pow(3));
+    final q5 = (temp.sqrt() + (q2 / const Complex.fromReal(2))).pow(1.0 / 3.0);
+    final q6 = ((q1 / q5) + q5) / const Complex.fromReal(3);
+    temp = (q4 / const Complex.fromReal(12)) + q6;
+    final q7 = temp.sqrt() * const Complex.fromReal(2);
+    temp = ((q4 * const Complex.fromReal(4)) / const Complex.fromReal(6)) -
+        (q6 * const Complex.fromReal(4)) -
         (q3 / q7);
 
     final solutions = [
-      (fb.negate - q7 - temp.sqrt()) / Complex.fromReal(4),
-      (fb.negate - q7 + temp.sqrt()) / Complex.fromReal(4),
+      (fb.negate - q7 - temp.sqrt()) / const Complex.fromReal(4),
+      (fb.negate - q7 + temp.sqrt()) / const Complex.fromReal(4),
     ];
 
-    temp = ((q4 * Complex.fromReal(4)) / Complex.fromReal(6)) -
-        (q6 * Complex.fromReal(4)) +
+    temp = ((q4 * const Complex.fromReal(4)) / const Complex.fromReal(6)) -
+        (q6 * const Complex.fromReal(4)) +
         (q3 / q7);
 
     solutions
-      ..add((fb.negate + q7 - temp.sqrt()) / Complex.fromReal(4))
-      ..add((fb.negate + q7 + temp.sqrt()) / Complex.fromReal(4));
+      ..add((fb.negate + q7 - temp.sqrt()) / const Complex.fromReal(4))
+      ..add((fb.negate + q7 + temp.sqrt()) / const Complex.fromReal(4));
 
     return solutions;
   }

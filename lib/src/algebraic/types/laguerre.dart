@@ -91,7 +91,9 @@ class Laguerre extends Algebraic {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Laguerre) {
       return super == other &&
@@ -224,7 +226,7 @@ class Laguerre extends Algebraic {
 
       // Avoiding division by zero errors. The _cmp function uses the given value
       // for 'precision' to understand which values should be considered zero.
-      if (_compareTo(y0, Complex.zero()) == 0) {
+      if (_compareTo(y0, const Complex.zero()) == 0) {
         break;
       }
 
@@ -240,7 +242,7 @@ class Laguerre extends Algebraic {
 
       // Avoiding division by zero errors. The _cmp function uses the given value
       // for 'precision' to understand which values should be considered zero.
-      if (_compareTo(a, Complex.zero()) == 0) {
+      if (_compareTo(a, const Complex.zero()) == 0) {
         break;
       }
     }
@@ -251,11 +253,11 @@ class Laguerre extends Algebraic {
   /// Horner's method for polynomial evaluation.
   HornerResult _horner(List<Complex> a, Complex x0) {
     final n = a.length - 1;
-    final b = List<Complex>.filled(max(1, n), Complex.zero());
+    final b = List<Complex>.filled(max(1, n), const Complex.zero());
 
     // Horner
     for (var i = n; i > 0; --i) {
-      b[i - 1] = a[i] + (i < n ? b[i] * x0 : Complex.zero());
+      b[i - 1] = a[i] + (i < n ? b[i] * x0 : const Complex.zero());
     }
 
     return HornerResult(b, a[0] + b[0] * x0);

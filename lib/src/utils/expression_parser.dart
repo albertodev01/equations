@@ -99,13 +99,12 @@ class ExpressionParser {
           (_, _Evaluator a, __) => (num value) => math.atan(a(value)));
 
     // Defining operations among operators.
-    builder.group()
-      ..prefix(char('-').trim(), (_, _Evaluator a) => (num value) => -a(value));
-    builder.group()
-      ..right(
-          char('^').trim(),
-          (_Evaluator a, _, _Evaluator b) =>
-              (num value) => math.pow(a(value), b(value)));
+    builder.group().prefix(
+        char('-').trim(), (_, _Evaluator a) => (num value) => -a(value));
+    builder.group().right(
+        char('^').trim(),
+        (_Evaluator a, _, _Evaluator b) =>
+            (num value) => math.pow(a(value), b(value)));
     builder.group()
       ..left(char('*').trim(),
           (_Evaluator a, _, _Evaluator b) => (num value) => a(value) * b(value))
@@ -142,8 +141,8 @@ class ExpressionParser {
   /// the value of the given [evaluationPoint].
   num evaluateOn(String expression, double evaluationPoint) {
     if (!_parser.accept(expression)) {
-      throw const ExpressionParserException("The given expression cannot be "
-          "parsed! Make sure that all operators are supported. Make also sure "
+      throw const ExpressionParserException('The given expression cannot be '
+          'parsed! Make sure that all operators are supported. Make also sure '
           "that the product of two values explicitly has the '*' symbol.");
     }
 

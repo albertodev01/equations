@@ -34,7 +34,9 @@ class Bisection extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Bisection) {
       return super == other && a == other.a && b == other.b;
@@ -57,7 +59,7 @@ class Bisection extends NonLinear {
   NonlinearResults solve() {
     var amp = tolerance + 1;
     var n = 1;
-    var guesses = <double>[];
+    final guesses = <double>[];
     var pA = a;
     var pB = b;
     var fa = evaluateOn(pA);
@@ -65,10 +67,10 @@ class Bisection extends NonLinear {
     while ((amp >= tolerance) && (n <= maxSteps)) {
       ++n;
       amp = (pB - pA).abs();
-      var x0 = pA + amp * 0.5;
+      final x0 = pA + amp * 0.5;
 
       guesses.add(x0);
-      var fx = evaluateOn(x0);
+      final fx = evaluateOn(x0);
 
       if (fa * fx < 0) {
         pB = x0;

@@ -6,8 +6,8 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing the 'SORSolver' class.", () {
     test(
-        "Making sure that the sor iterative method works properly with a "
-        "well formed matrix.", () {
+        'Making sure that the sor iterative method works properly with a'
+        ' well formed matrix.', () {
       final sor = SORSolver(
         equations: const [
           [3, -1, 1],
@@ -42,12 +42,12 @@ void main() {
       expect(sor.determinant(), equals(20));
 
       final solutions = sor.solve();
-      expect(solutions[0], MoreOrLessEquals(1, precision: 1.0e-2));
-      expect(solutions[1], MoreOrLessEquals(2, precision: 1.0e-2));
-      expect(solutions[2], MoreOrLessEquals(-2, precision: 1.0e-2));
+      expect(solutions[0], const MoreOrLessEquals(1, precision: 1.0e-2));
+      expect(solutions[1], const MoreOrLessEquals(2, precision: 1.0e-2));
+      expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
     });
 
-    test("Making sure that the string conversion works properly.", () {
+    test('Making sure that the string conversion works properly.', () {
       final solver = SORSolver(
         equations: const [
           [3, -1, 1],
@@ -58,20 +58,20 @@ void main() {
         w: 1.25,
       );
 
-      final toString = "[3.0, -1.0, 1.0]\n"
-          "[-1.0, 3.0, -1.0]\n"
-          "[1.0, -1.0, 3.0]";
-      final toStringAugmented = "[3.0, -1.0, 1.0 | -1.0]\n"
-          "[-1.0, 3.0, -1.0 | 7.0]\n"
-          "[1.0, -1.0, 3.0 | -7.0]";
+      const toString = '[3.0, -1.0, 1.0]\n'
+          '[-1.0, 3.0, -1.0]\n'
+          '[1.0, -1.0, 3.0]';
+      const toStringAugmented = '[3.0, -1.0, 1.0 | -1.0]\n'
+          '[-1.0, 3.0, -1.0 | 7.0]\n'
+          '[1.0, -1.0, 3.0 | -7.0]';
 
       expect(solver.toString(), equals(toString));
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
     test(
-        "Making sure that the matrix is squared AND the dimension of the "
-        "known values vector also matches the size of the matrix.", () {
+        'Making sure that the matrix is squared AND the dimension of the '
+        'known values vector also matches the size of the matrix.', () {
       expect(
           () => SORSolver(equations: const [
                 [1, 2],
@@ -84,7 +84,7 @@ void main() {
           throwsA(isA<MatrixException>()));
     });
 
-    test("Making sure that objects comparison works properly.", () {
+    test('Making sure that objects comparison works properly.', () {
       final sor = SORSolver(equations: const [
         [1, 2],
         [3, 4],

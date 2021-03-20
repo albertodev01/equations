@@ -25,8 +25,8 @@ class SimpsonRule extends NumericalIntegration {
   IntegralResults integrate(String function) {
     // Make sure to throw an exception if 'intervals' is odd
     if (intervals % 2 != 0) {
-      throw const NumericalIntegrationException("There must be an even number "
-          "of partitions.");
+      throw const NumericalIntegrationException('There must be an even number '
+          'of partitions.');
     }
 
     // The 'step' of the algorithm

@@ -38,14 +38,16 @@ class JacobiSolver extends SystemSolver {
     // The initial vector with the guesses MUST have the same size as the matrix
     // of course
     if (x0.length != size) {
-      throw const SystemSolverException("The length of the guesses vector "
-          "must match the size of the square matrix.");
+      throw const SystemSolverException('The length of the guesses vector '
+          'must match the size of the square matrix.');
     }
   }
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is JacobiSolver) {
       // The lengths of the coefficients must match
@@ -83,9 +85,7 @@ class JacobiSolver extends SystemSolver {
       result = 37 * result + x0[i].hashCode;
     }
 
-    result = 37 * result + maxSteps.hashCode;
-
-    return result;
+    return 37 * result + maxSteps.hashCode;
   }
 
   @override
@@ -108,7 +108,9 @@ class JacobiSolver extends SystemSolver {
 
         for (var j = 0; j < size; ++j) {
           // Skip the diagonal
-          if (i == j) continue;
+          if (i == j) {
+            continue;
+          }
 
           solutions[i] = solutions[i] - equations(i, j) * oldSolutions[j];
         }

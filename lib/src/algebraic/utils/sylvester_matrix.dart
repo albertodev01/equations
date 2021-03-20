@@ -24,7 +24,9 @@ class SylvesterMatrix {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is SylvesterMatrix) {
       // The lengths of the coefficients must match
@@ -72,19 +74,25 @@ class SylvesterMatrix {
     var pos = 0;
 
     // Building the matrix with FIXED length lists (optimization)
-    final flatData = List<Complex>.generate(size * size, (_) => Complex.zero());
-    final setDataAt =
-        (int row, int col, Complex value) => flatData[size * row + col] = value;
+    final flatData =
+        List<Complex>.generate(size * size, (_) => const Complex.zero());
 
-    // Iterating over the coefficients and placing them in the matrix
+    /* Iterating over the coefficients and placing them in the matrix. Since the
+     * 2D array is "flattened", the way we have to access "cells" is this...
+     *
+     *  > flatData[arraySize * row + column] = value
+     *
+     * which is equivalent to 'flatData[row][column]' if 'flatData' was a 2D
+     * array.
+     */
     for (var i = 0; i < size - _coefficients.length + 1; ++i) {
       for (var j = 0; j < _coefficients.length; ++j) {
-        setDataAt(i, j + i, _coefficients[j]);
+        flatData[size * i + (j + i)] = _coefficients[j];
       }
     }
     for (var i = size - _coefficients.length + 1; i < size; ++i) {
       for (var j = 0; j < derivative.length; ++j) {
-        setDataAt(i, j + pos, derivative[j]);
+        flatData[size * i + (j + pos)] = derivative[j];
       }
       ++pos;
     }

@@ -35,7 +35,9 @@ class Chords extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Chords) {
       return super == other && a == other.a && b == other.b;
@@ -56,7 +58,7 @@ class Chords extends NonLinear {
 
   @override
   NonlinearResults solve() {
-    var guesses = <double>[];
+    final guesses = <double>[];
     var n = 1;
 
     var x0 = (a * evaluateOn(b) - b * evaluateOn(a)) /
@@ -64,13 +66,13 @@ class Chords extends NonLinear {
     var diff = evaluateOn(x0).abs();
 
     while ((diff >= tolerance) && (n <= maxSteps)) {
-      var fa = evaluateOn(a);
-      var fx = evaluateOn(x0);
+      final fa = evaluateOn(a);
+      final fx = evaluateOn(x0);
 
       if (fa * fx < 0) {
         x0 = (x0 * fa - a * fx) / (fa - fx);
       } else {
-        var fb = evaluateOn(b);
+        final fb = evaluateOn(b);
         x0 = (x0 * fb - b * fx) / (fb - fx);
       }
 

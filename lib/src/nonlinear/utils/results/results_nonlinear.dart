@@ -24,7 +24,9 @@ class NonlinearResults {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is NonlinearResults) {
       // The lengths of the coefficients must match
@@ -72,13 +74,13 @@ class NonlinearResults {
   @override
   String toString() {
     final sb = StringBuffer()
-      ..write("Convergence rate: ")
+      ..write('Convergence rate: ')
       ..writeln(convergence)
-      ..write("Efficiency: ")
+      ..write('Efficiency: ')
       ..writeln(efficiency)
-      ..write("Guesses: ")
+      ..write('Guesses: ')
       ..write(guesses.length)
-      ..write(" computed");
+      ..write(' computed');
 
     return sb.toString();
   }

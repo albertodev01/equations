@@ -35,7 +35,9 @@ class Brent extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Brent) {
       return super == other && a == other.a && b == other.b;
@@ -77,7 +79,7 @@ class Brent extends NonLinear {
 
   @override
   NonlinearResults solve() {
-    var guesses = <double>[];
+    final guesses = <double>[];
     var n = 1;
 
     final evalA = evaluateOn(a);
@@ -85,7 +87,7 @@ class Brent extends NonLinear {
 
     // Making sure that the root is in the given interval
     if (evalA * evalB >= 0) {
-      throw const NonlinearException("The root is not bracketed.");
+      throw const NonlinearException('The root is not bracketed.');
     }
 
     // Variables setup

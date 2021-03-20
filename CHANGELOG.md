@@ -1,3 +1,9 @@
+## [2.0.1]
+
+ - New `toStringAsFixed()` method for the `Complex` type
+ - Improved static analysis with a more elaborated `analysis_options.yaml` file
+ - Dependencies versions update
+
 ## [2.0.0]
 
  - Migration to stable null safety

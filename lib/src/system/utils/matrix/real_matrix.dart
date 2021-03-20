@@ -71,23 +71,30 @@ class RealMatrix extends Matrix<double> {
           data: data,
         );
 
+  void _setDataAt(List<double> flatMatrix, int row, int col, double value) =>
+      flatMatrix[columnCount * row + col] = value;
+
+  double _getDataAt(List<double> source, int row, int col) =>
+      source[columnCount * row + col];
+
   /// Returns the sum of two matrices.
   @override
   Matrix<double> operator +(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the sum
-    final flatMatrix =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
-    final setDataAt = (int row, int col, double value) =>
-        flatMatrix[columnCount * row + col] = value;
+    final flatMatrix = List<double>.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        setDataAt(i, j, this(i, j) + other(i, j));
+        _setDataAt(flatMatrix, i, j, this(i, j) + other(i, j));
       }
     }
 
@@ -103,19 +110,20 @@ class RealMatrix extends Matrix<double> {
   @override
   Matrix<double> operator -(Matrix<double> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the difference
-    final flatMatrix =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
-    final setDataAt = (int row, int col, double value) =>
-        flatMatrix[columnCount * row + col] = value;
+    final flatMatrix = List.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        setDataAt(i, j, this(i, j) - other(i, j));
+        _setDataAt(flatMatrix, i, j, this(i, j) - other(i, j));
       }
     }
 
@@ -131,24 +139,22 @@ class RealMatrix extends Matrix<double> {
   @override
   Matrix<double> operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the product
     final flatMatrix =
         List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
-    final setDataAt = (int row, int col, double value) =>
-        flatMatrix[columnCount * row + col] = value;
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < other.columnCount; j++) {
         var sum = 0.0;
         for (var k = 0; k < rowCount; k++) {
-          sum += (this(i, k) * other(k, j));
+          sum += this(i, k) * other(k, j);
         }
-        setDataAt(i, j, sum);
+        _setDataAt(flatMatrix, i, j, sum);
       }
     }
 
@@ -164,20 +170,18 @@ class RealMatrix extends Matrix<double> {
   @override
   Matrix<double> operator /(Matrix<double> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the division
     final flatMatrix =
         List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
-    final setDataAt = (int row, int col, double value) =>
-        flatMatrix[columnCount * row + col] = value;
 
     // Performing the division
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        setDataAt(i, j, this(i, j) / other(i, j));
+        _setDataAt(flatMatrix, i, j, this(i, j) / other(i, j));
       }
     }
 
@@ -206,8 +210,8 @@ class RealMatrix extends Matrix<double> {
   List<RealMatrix> luDecomposition() {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw MatrixException(
-          "LU decomposition only works with square matrices!");
+      throw const MatrixException(
+          'LU decomposition only works with square matrices!');
     }
 
     // Creating L and U matrices
@@ -216,37 +220,32 @@ class RealMatrix extends Matrix<double> {
     final U = List<double>.generate(rowCount * columnCount, (_) => 0.0,
         growable: false);
 
-    final getDataAt = (List<double> source, int row, int col) =>
-        source[columnCount * row + col];
-    final setDataAt = (List<double> source, int row, int col, double value) =>
-        source[columnCount * row + col] = value;
-
     // Computing L and U
     for (var i = 0; i < rowCount; ++i) {
       for (var k = i; k < rowCount; k++) {
         // Summation of L(i, j) * U(j, k)
         var sum = 0.0;
         for (var j = 0; j < i; j++) {
-          sum += (getDataAt(L, i, j) * getDataAt(U, j, k));
+          sum += _getDataAt(L, i, j) * _getDataAt(U, j, k);
         }
 
         // Evaluating U(i, k)
-        setDataAt(U, i, k, this(i, k) - sum);
+        _setDataAt(U, i, k, this(i, k) - sum);
       }
 
       // Lower Triangular
       for (var k = i; k < rowCount; k++) {
         if (i == k) {
-          setDataAt(L, i, i, 1);
+          _setDataAt(L, i, i, 1);
         } else {
           // Summation of L(k, j) * U(j, i)
           var sum = 0.0;
           for (var j = 0; j < i; j++) {
-            sum += (getDataAt(L, k, j) * getDataAt(U, j, i));
+            sum += _getDataAt(L, k, j) * _getDataAt(U, j, i);
           }
 
           // Evaluating L(k, i)
-          setDataAt(L, k, i, (this(k, i) - sum) / getDataAt(U, i, i));
+          _setDataAt(L, k, i, (this(k, i) - sum) / _getDataAt(U, i, i));
         }
       }
     }
@@ -279,15 +278,15 @@ class RealMatrix extends Matrix<double> {
   List<RealMatrix> choleskyDecomposition() {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw MatrixException(
-          "LU decomposition only works with square matrices!");
+      throw const MatrixException(
+          'LU decomposition only works with square matrices!');
     }
 
     // Exit immediately because if [0,0] is a negative number, the algorithm
     // cannot even start since the square root of a negative number in R is not
     // allowed.
     if (this(0, 0) <= 0) {
-      throw const SystemSolverException("The matrix is not positive-definite.");
+      throw const SystemSolverException('The matrix is not positive-definite.');
     }
 
     // Creating L and Lt matrices
@@ -296,25 +295,20 @@ class RealMatrix extends Matrix<double> {
     final transpL =
         List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
 
-    final getDataAt = (List<double> source, int row, int col) =>
-        source[columnCount * row + col];
-    final setDataAt = (List<double> source, int row, int col, double value) =>
-        source[columnCount * row + col] = value;
-
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j <= i; j++) {
         var sum = 0.0;
         if (j == i) {
           for (var k = 0; k < j; k++) {
-            sum += getDataAt(L, j, k) * getDataAt(L, j, k);
+            sum += _getDataAt(L, j, k) * _getDataAt(L, j, k);
           }
-          setDataAt(L, j, j, sqrt(this(i, j) - sum));
+          _setDataAt(L, j, j, sqrt(this(i, j) - sum));
         } else {
           for (var k = 0; k < j; k++) {
-            sum += getDataAt(L, i, k) * getDataAt(L, j, k);
+            sum += _getDataAt(L, i, k) * _getDataAt(L, j, k);
           }
-          setDataAt(L, i, j, (this(i, j) - sum) / getDataAt(L, j, j));
+          _setDataAt(L, i, j, (this(i, j) - sum) / _getDataAt(L, j, j));
         }
       }
     }
@@ -322,7 +316,7 @@ class RealMatrix extends Matrix<double> {
     // Computing Lt, the transposed version of L
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < rowCount; j++) {
-        setDataAt(transpL, i, j, getDataAt(L, j, i));
+        _setDataAt(transpL, i, j, _getDataAt(L, j, i));
       }
     }
 

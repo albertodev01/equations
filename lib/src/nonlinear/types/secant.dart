@@ -34,7 +34,9 @@ class Secant extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Secant) {
       return super == other &&
@@ -57,7 +59,7 @@ class Secant extends NonLinear {
 
   @override
   NonlinearResults solve() {
-    var guesses = <double>[];
+    final guesses = <double>[];
     var n = 1;
 
     var xold = firstGuess;
@@ -71,8 +73,8 @@ class Secant extends NonLinear {
       final den = fnew - fold;
 
       if ((den == 0) || (den.isNaN)) {
-        throw NonlinearException("Invalid denominator encountered. "
-            "The invalid value for the denominator was $den");
+        throw NonlinearException('Invalid denominator encountered. '
+            'The invalid value for the denominator was $den');
       }
 
       diff = -(fnew * (x0 - xold)) / den;

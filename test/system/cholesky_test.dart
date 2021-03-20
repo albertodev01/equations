@@ -6,8 +6,8 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing the 'CholeskyDecomposition' class.", () {
     test(
-        "Making sure that the CholeskySolver computes the correct results of a "
-        "system of linear equations.", () {
+        'Making sure that the CholeskySolver computes the correct results of a '
+        'system of linear equations.', () {
       final choleskySolver = CholeskySolver(equations: const [
         [6, 15, 55],
         [15, 55, 255],
@@ -15,7 +15,7 @@ void main() {
       ], constants: const [
         76,
         295,
-        1259
+        1259,
       ]);
 
       // This is needed because we want to make sure that the "original" matrix
@@ -33,7 +33,7 @@ void main() {
       // Checking solutions
       final results = choleskySolver.solve();
       for (final sol in results) {
-        expect(sol, MoreOrLessEquals(1.0, precision: 1.0e-1));
+        expect(sol, const MoreOrLessEquals(1.0, precision: 1.0e-1));
       }
 
       // Checking the "state" of the object
@@ -44,7 +44,7 @@ void main() {
       expect(choleskySolver.size, equals(3));
     });
 
-    test("Making sure that the string conversion works properly.", () {
+    test('Making sure that the string conversion works properly.', () {
       final solver = CholeskySolver(equations: const [
         [-6, 15, 55],
         [15, 55, 255],
@@ -55,20 +55,20 @@ void main() {
         1259,
       ]);
 
-      final toString = "[-6.0, 15.0, 55.0]\n"
-          "[15.0, 55.0, 255.0]\n"
-          "[55.0, 225.0, 979.0]";
-      final toStringAugmented = "[-6.0, 15.0, 55.0 | 76.0]\n"
-          "[15.0, 55.0, 255.0 | 295.0]\n"
-          "[55.0, 225.0, 979.0 | 1259.0]";
+      const toString = '[-6.0, 15.0, 55.0]\n'
+          '[15.0, 55.0, 255.0]\n'
+          '[55.0, 225.0, 979.0]';
+      const toStringAugmented = '[-6.0, 15.0, 55.0 | 76.0]\n'
+          '[15.0, 55.0, 255.0 | 295.0]\n'
+          '[55.0, 225.0, 979.0 | 1259.0]';
 
       expect(solver.toString(), equals(toString));
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
     test(
-        "Making sure that an exception is thrown when the square root of a "
-        "negative number is found while Cholesky-decomposing the matrix.", () {
+        'Making sure that an exception is thrown when the square root of a '
+        'negative number is found while Cholesky-decomposing the matrix.', () {
       final solver = CholeskySolver(equations: const [
         [-6, 15, 55],
         [15, 55, 255],
@@ -83,7 +83,7 @@ void main() {
     });
 
     test(
-        "Making sure that the matrix is squared because this method is only "
+        'Making sure that the matrix is squared because this method is only '
         "able to solve systems of 'N' equations in 'N' variables.", () {
       expect(
           () => CholeskySolver(equations: const [
@@ -97,8 +97,8 @@ void main() {
     });
 
     test(
-        "Making sure that the matrix is squared AND the dimension of the "
-        "known values vector also matches the size of the matrix.", () {
+        'Making sure that the matrix is squared AND the dimension of the '
+        'known values vector also matches the size of the matrix.', () {
       expect(
           () => CholeskySolver(equations: const [
                 [1, 2],
@@ -111,7 +111,7 @@ void main() {
           throwsA(isA<MatrixException>()));
     });
 
-    test("Making sure that objects comparison works properly.", () {
+    test('Making sure that objects comparison works properly.', () {
       final gauss = GaussianElimination(equations: const [
         [1, 2],
         [3, 4],
