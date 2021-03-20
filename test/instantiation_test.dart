@@ -1,6 +1,5 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
-import 'package:petitparser/petitparser.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -46,10 +45,9 @@ void main() {
         SystemSolverException('Message'),
         isA<SystemSolverException>(),
       );
-
       expect(
-        ParserException(Failure('', 0, '')),
-        isA<ParserException>(),
+        ExpressionParserException('Message'),
+        isA<ExpressionParserException>(),
       );
     });
 

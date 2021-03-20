@@ -16,7 +16,10 @@ abstract class EquationException implements Exception {
   final String messagePrefix;
 
   /// Requires the [message] to be associated to the error object.
-  const EquationException({required this.message, required this.messagePrefix});
+  const EquationException({
+    required this.message,
+    required this.messagePrefix,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -25,9 +28,7 @@ abstract class EquationException implements Exception {
     }
 
     if (other is EquationException) {
-      return runtimeType == other.runtimeType &&
-          message == other.message &&
-          messagePrefix == other.messagePrefix;
+      return runtimeType == other.runtimeType && message == other.message;
     } else {
       return false;
     }
