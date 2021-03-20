@@ -42,7 +42,7 @@ class IntegralResults {
       // They must have the same runtime type AND all items must be equal.
       return runtimeType == other.runtimeType &&
           equalsCount == guesses.length &&
-          result == result;
+          result == other.result;
     } else {
       return false;
     }

@@ -129,6 +129,59 @@ void main() {
         integrationException.hashCode,
         equals(const NumericalIntegrationException('Message').hashCode),
       );
+
+      // Checking messages
+      expect(
+        complexException == const ComplexException('Another Message'),
+        isFalse,
+      );
+      expect(
+        algebraicException == const AlgebraicException('Another Message'),
+        isFalse,
+      );
+      expect(
+        nonlinearException == const NonlinearException('Another Message'),
+        isFalse,
+      );
+      expect(
+        parserException == const ExpressionParserException('Another Message'),
+        isFalse,
+      );
+      expect(
+        systemException == const SystemSolverException('Another Message'),
+        isFalse,
+      );
+      expect(
+        integrationException ==
+            const NumericalIntegrationException('Another Message'),
+        isFalse,
+      );
+
+      // Checking messages prefixes
+      expect(
+        complexException.messagePrefix,
+        equals(const ComplexException('Message').messagePrefix),
+      );
+      expect(
+        algebraicException.messagePrefix,
+        equals(const AlgebraicException('Message').messagePrefix),
+      );
+      expect(
+        nonlinearException.messagePrefix,
+        equals(const NonlinearException('Message').messagePrefix),
+      );
+      expect(
+        parserException.messagePrefix,
+        equals(const ExpressionParserException('Message').messagePrefix),
+      );
+      expect(
+        systemException.messagePrefix,
+        equals(const SystemSolverException('Message').messagePrefix),
+      );
+      expect(
+        integrationException.messagePrefix,
+        equals(const NumericalIntegrationException('Message').messagePrefix),
+      );
     });
 
     test('Making sure "ComplexException" prints the correct message', () {

@@ -41,13 +41,16 @@ void main() {
     });
 
     test('Making sure that object comparison properly works', () {
-      const newton = Brent(function: 'x-10', a: 8, b: 12);
+      const brent = Brent(function: 'x-10', a: 8, b: 12);
 
-      expect(const Brent(function: 'x-10', a: 8, b: 12), equals(newton));
-      expect(const Brent(function: 'x-10', a: 8, b: 12) == newton, isTrue);
+      expect(const Brent(function: 'x-10', a: 8, b: 12), equals(brent));
+      expect(const Brent(function: 'x-10', a: 8, b: 12) == brent, isTrue);
+      expect(const Brent(function: 'x-10', a: 1, b: 12) == brent, isFalse);
+      expect(const Brent(function: 'x-10', a: 8, b: -12) == brent, isFalse);
+      expect(const Brent(function: 'x', a: 8, b: 12) == brent, isFalse);
       expect(
         const Brent(function: 'x-10', a: 8, b: 12).hashCode,
-        equals(newton.hashCode),
+        equals(brent.hashCode),
       );
     });
 

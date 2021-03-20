@@ -86,6 +86,18 @@ void main() {
             ),
         isFalse,
       );
+      expect(
+        results ==
+            const HornerResult(
+              [
+                Complex(2, 5),
+                Complex.i(),
+                Complex.fromImaginary(4),
+              ],
+              Complex(2, -6),
+            ),
+        isFalse,
+      );
     });
   });
 }

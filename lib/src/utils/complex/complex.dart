@@ -183,12 +183,6 @@ class Complex implements Comparable<Complex> {
     bool asFraction = false,
     int? fractionDigits,
   }) {
-    // Making sure that fractional digits aren't specified for fractions
-    assert(
-      !(asFraction && fractionDigits != null),
-      "You cannot set 'asFraction = true' and also specify the 'fractionDigits'.",
-    );
-
     var realPart = _fixZero(real);
     var imaginaryPart = '${_fixZero(imaginary)}i';
     var imaginaryPartAbs = '${_fixZero(imaginary.abs())}i';

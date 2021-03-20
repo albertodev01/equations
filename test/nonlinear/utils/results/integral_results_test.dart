@@ -83,6 +83,19 @@ void main() {
             ),
         isFalse,
       );
+
+      expect(
+        results ==
+            const IntegralResults(
+              guesses: [
+                1.0,
+                2.0,
+                3.0,
+              ],
+              result: 6,
+            ),
+        isFalse,
+      );
     });
   });
 }

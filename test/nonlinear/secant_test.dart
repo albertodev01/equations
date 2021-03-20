@@ -63,6 +63,10 @@ void main() {
         isFalse,
       );
       expect(
+        const Secant(function: 'x-2', firstGuess: -1, secondGuess: 0) == secant,
+        isFalse,
+      );
+      expect(
         const Secant(function: 'x-2', firstGuess: -1, secondGuess: 2).hashCode,
         equals(secant.hashCode),
       );
