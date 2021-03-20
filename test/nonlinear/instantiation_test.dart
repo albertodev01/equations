@@ -1,6 +1,5 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
-import 'package:petitparser/core.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
