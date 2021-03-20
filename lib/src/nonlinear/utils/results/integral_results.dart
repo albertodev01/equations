@@ -18,7 +18,9 @@ class IntegralResults {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is IntegralResults) {
       // The lengths of the coefficients must match
@@ -40,7 +42,7 @@ class IntegralResults {
       // They must have the same runtime type AND all items must be equal.
       return runtimeType == other.runtimeType &&
           equalsCount == guesses.length &&
-          result == result;
+          result == other.result;
     } else {
       return false;
     }
@@ -56,19 +58,17 @@ class IntegralResults {
       result = 37 * result + guesses[i].hashCode;
     }
 
-    result = 37 * result + result.hashCode;
-
-    return result;
+    return 37 * result + result.hashCode;
   }
 
   @override
   String toString() {
     final sb = StringBuffer()
-      ..write("Result: ")
+      ..write('Result: ')
       ..writeln(result)
-      ..write("Guesses: ")
+      ..write('Guesses: ')
       ..write(guesses.length)
-      ..write(" computed");
+      ..write(' computed');
 
     return sb.toString();
   }

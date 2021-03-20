@@ -37,7 +37,9 @@ class SORSolver extends SystemSolver {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is SORSolver) {
       return super == other && maxSteps == other.maxSteps && w == other.w;

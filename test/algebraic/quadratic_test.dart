@@ -8,68 +8,82 @@ void main() {
   group("Testing 'Quadratic' algebraic equations", () {
     test("Making sure that a 'Quadratic' object is properly constructed", () {
       final equation = Quadratic(
-        a: Complex.fromReal(2),
-        b: Complex.fromReal(-5),
+        a: const Complex.fromReal(2),
+        b: const Complex.fromReal(-5),
         c: Complex.fromRealFraction(Fraction(3, 2)),
       );
 
       // Checking properties
       expect(equation.degree, equals(2));
       expect(
-          equation.derivative(),
-          Linear(
-            a: Complex.fromReal(4),
-            b: Complex.fromReal(-5),
-          ));
+        equation.derivative(),
+        Linear(
+          a: const Complex.fromReal(4),
+          b: const Complex.fromReal(-5),
+        ),
+      );
       expect(equation.isRealEquation, isTrue);
-      expect(equation.discriminant(), equals(Complex.fromReal(13)));
       expect(
-          equation.coefficients,
-          equals([
-            Complex.fromReal(2),
-            Complex.fromReal(-5),
+        equation.discriminant(),
+        equals(const Complex.fromReal(13)),
+      );
+      expect(
+        equation.coefficients,
+        equals(
+          [
+            const Complex.fromReal(2),
+            const Complex.fromReal(-5),
             Complex.fromRealFraction(Fraction(3, 2)),
-          ]));
+          ],
+        ),
+      );
 
       // Making sure that coefficients can be accessed via index
-      expect(equation[0], equals(Complex.fromReal(2)));
-      expect(equation[1], equals(Complex.fromReal(-5)));
+      expect(equation[0], equals(const Complex.fromReal(2)));
+      expect(equation[1], equals(const Complex.fromReal(-5)));
       expect(equation[2], equals(Complex.fromRealFraction(Fraction(3, 2))));
+
       expect(() => equation[-1], throwsA(isA<RangeError>()));
-      expect(equation.coefficient(2), equals(Complex.fromReal(2)));
-      expect(equation.coefficient(1), equals(Complex.fromReal(-5)));
-      expect(equation.coefficient(0),
-          equals(Complex.fromRealFraction(Fraction(3, 2))));
+
+      expect(equation.coefficient(2), equals(const Complex.fromReal(2)));
+      expect(equation.coefficient(1), equals(const Complex.fromReal(-5)));
+      expect(
+        equation.coefficient(0),
+        equals(Complex.fromRealFraction(Fraction(3, 2))),
+      );
       expect(equation.coefficient(3), isNull);
 
       // Converting to string
-      expect(equation.toString(), equals("f(x) = 2x^2 + -5x + 1.5"));
+      expect(equation.toString(), equals('f(x) = 2x^2 + -5x + 1.5'));
       expect(
-          equation.toStringWithFractions(), equals("f(x) = 2x^2 + -5x + 3/2"));
+        equation.toStringWithFractions(),
+        equals('f(x) = 2x^2 + -5x + 3/2'),
+      );
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real, MoreOrLessEquals(2.151387818866));
+      expect(solutions[0].real, const MoreOrLessEquals(2.151387818866));
       expect(solutions[0].imaginary, isZero);
-      expect(solutions[1].real, MoreOrLessEquals(0.348612181134));
+      expect(solutions[1].real, const MoreOrLessEquals(0.348612181134));
       expect(solutions[1].imaginary, isZero);
 
       // Evaluation
       final eval = equation.realEvaluateOn(Fraction(-2, 5).toDouble());
-      expect(eval.real.toStringAsFixed(2), equals("3.82"));
+      expect(eval.real.toStringAsFixed(2), equals('3.82'));
       expect(eval.imaginary.round(), isZero);
     });
 
     test(
-        "Making sure that an exception is thrown if the coeff. of the highest degree is zero",
+        'Making sure that an exception is thrown if the coeff. of the highest degree is zero',
         () {
       expect(
-          () => Quadratic(
-                a: Complex.zero(),
-                b: Complex.i(),
-                c: Complex.fromReal(4),
-              ),
-          throwsA(isA<AlgebraicException>()));
+        () => Quadratic(
+          a: const Complex.zero(),
+          b: const Complex.i(),
+          c: const Complex.fromReal(4),
+        ),
+        throwsA(isA<AlgebraicException>()),
+      );
     });
 
     test(
@@ -77,20 +91,29 @@ void main() {
         "list of 'double' (real) values", () {
       final quadratic = Quadratic.realEquation(a: -3, b: 2, c: 1);
 
-      expect(quadratic.a, equals(Complex.fromReal(-3)));
-      expect(quadratic.b, equals(Complex.fromReal(2)));
-      expect(quadratic.c, equals(Complex.fromReal(1)));
+      expect(quadratic.a, equals(const Complex.fromReal(-3)));
+      expect(quadratic.b, equals(const Complex.fromReal(2)));
+      expect(quadratic.c, equals(const Complex.fromReal(1)));
 
       // There must be an exception is the first coeff. is zero
-      expect(() => Quadratic.realEquation(a: 0),
-          throwsA(isA<AlgebraicException>()));
+      expect(
+        () => Quadratic.realEquation(a: 0),
+        throwsA(isA<AlgebraicException>()),
+      );
     });
 
-    test("Making sure that objects comparison works properly", () {
-      final fx = Quadratic(a: Complex(2, 3), b: Complex.i(), c: Complex(-1, 0));
+    test('Making sure that objects comparison works properly', () {
+      final fx = Quadratic(
+        a: const Complex(2, 3),
+        b: const Complex.i(),
+        c: const Complex(-1, 0),
+      );
 
-      final otherFx =
-          Quadratic(a: Complex(2, 3), b: Complex.i(), c: Complex(-1, 0));
+      final otherFx = Quadratic(
+        a: const Complex(2, 3),
+        b: const Complex.i(),
+        c: const Complex(-1, 0),
+      );
 
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
@@ -98,21 +121,27 @@ void main() {
     });
 
     test("Making sure that 'copyWith' clones objects correctly", () {
-      final quadratic =
-          Quadratic(a: Complex.i(), b: Complex(6, -1), c: Complex.i());
+      final quadratic = Quadratic(
+        a: const Complex.i(),
+        b: const Complex(6, -1),
+        c: const Complex.i(),
+      );
 
       // Objects equality
       expect(quadratic, equals(quadratic.copyWith()));
       expect(
-          quadratic,
-          equals(quadratic.copyWith(
-            a: Complex.i(),
-            b: Complex(6, -1),
-            c: Complex.i(),
-          )));
+        quadratic,
+        equals(
+          quadratic.copyWith(
+            a: const Complex.i(),
+            b: const Complex(6, -1),
+            c: const Complex.i(),
+          ),
+        ),
+      );
 
       // Objects inequality
-      expect(quadratic == quadratic.copyWith(b: Complex.zero()), isFalse);
+      expect(quadratic == quadratic.copyWith(b: const Complex.zero()), isFalse);
     });
   });
 }

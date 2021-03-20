@@ -10,19 +10,19 @@ void main() {
     x0: [1, 1],
   );
 
-  print("$jacobi\n");
-  print("${jacobi.toStringAugmented()}\n");
-  print("known values: ${jacobi.knownValues}"); // [11, 13]
-  print("initial guess: ${jacobi.x0}"); // [1, 1]
-  print("matrix size: ${jacobi.size}"); // 2
-  print("max. iterations: ${jacobi.maxSteps}"); // 30
-  print("determinant: ${jacobi.determinant()}"); // 9
+  print('$jacobi\n');
+  print('${jacobi.toStringAugmented()}\n');
+  print('known values: ${jacobi.knownValues}'); // [11, 13]
+  print('initial guess: ${jacobi.x0}'); // [1, 1]
+  print('matrix size: ${jacobi.size}'); // 2
+  print('max. iterations: ${jacobi.maxSteps}'); // 30
+  print('determinant: ${jacobi.determinant()}'); // 9
 
   for (final sol in jacobi.solve()) {
-    print(" > x = $sol");
+    print(' > x = $sol');
   }
 
-  print("\n ============ \n");
+  print('\n ============ \n');
 
   final lu = LUSolver(equations: const [
     [7, -2, 1],
@@ -34,11 +34,11 @@ void main() {
     5
   ]);
 
-  print("$lu\n");
-  print("${lu.toStringAugmented()}\n");
-  print("known values: ${lu.knownValues}"); // [12, 17, 5]
-  print("matrix size: ${lu.size}"); // 3
-  print("determinant: ${lu.determinant()}\n"); // -84
+  print('$lu\n');
+  print('${lu.toStringAugmented()}\n');
+  print('known values: ${lu.knownValues}'); // [12, 17, 5]
+  print('matrix size: ${lu.size}'); // 3
+  print('determinant: ${lu.determinant()}\n'); // -84
 
   final decompose = lu.equations.luDecomposition();
 
@@ -53,10 +53,10 @@ void main() {
   * [0, -3, -5]
   * [0, 0, 4]
   * */
-  print("L:\n${decompose[0]}\n");
-  print("U:\n${decompose[1]}\n");
+  print('L:\n${decompose[0]}\n');
+  print('U:\n${decompose[1]}\n');
 
   for (final sol in lu.solve()) {
-    print(" > x = $sol");
+    print(' > x = $sol');
   }
 }

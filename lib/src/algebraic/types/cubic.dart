@@ -53,33 +53,33 @@ class Cubic extends Algebraic {
   int get degree => 3;
 
   @override
-  Algebraic derivative() =>
-      Quadratic(a: a * Complex.fromReal(3), b: b * Complex.fromReal(2), c: c);
+  Algebraic derivative() => Quadratic(
+      a: a * const Complex.fromReal(3), b: b * const Complex.fromReal(2), c: c);
 
   @override
   Complex discriminant() {
     final p1 = c * c * b * b;
-    final p2 = d * b * b * b * Complex.fromReal(4);
-    final p3 = c * c * c * a * Complex.fromReal(4);
-    final p4 = a * b * c * d * Complex.fromReal(18);
-    final p5 = d * d * a * a * Complex.fromReal(27);
+    final p2 = d * b * b * b * const Complex.fromReal(4);
+    final p3 = c * c * c * a * const Complex.fromReal(4);
+    final p4 = a * b * c * d * const Complex.fromReal(18);
+    final p5 = d * d * a * a * const Complex.fromReal(27);
 
     return p1 - p2 - p3 + p4 - p5;
   }
 
   @override
   List<Complex> solutions() {
-    final two = Complex.fromReal(2);
-    final three = Complex.fromReal(3);
+    const two = Complex.fromReal(2);
+    const three = Complex.fromReal(3);
     final sigma = Complex(-1 / 2, 1 / 2 * math.sqrt(3));
 
     final d0 = b * b - a * c * three;
     final d1 = (b.pow(3) * two) -
-        (a * b * c * Complex.fromReal(9)) +
-        (a * a * d * Complex.fromReal(27));
-    final sqrtD = (discriminant() * a * a * Complex.fromReal(-27)).sqrt();
+        (a * b * c * const Complex.fromReal(9)) +
+        (a * a * d * const Complex.fromReal(27));
+    final sqrtD = (discriminant() * a * a * const Complex.fromReal(-27)).sqrt();
     final C = ((d1 + sqrtD) / two).nthRoot(3);
-    final constTerm = Complex.fromReal(-1) / (a * three);
+    final constTerm = const Complex.fromReal(-1) / (a * three);
 
     return <Complex>[
       constTerm * (b + C + (d0 / C)),

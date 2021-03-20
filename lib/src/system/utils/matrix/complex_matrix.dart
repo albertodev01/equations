@@ -39,8 +39,8 @@ class ComplexMatrix extends Matrix<Complex> {
           rows: rows,
           columns: columns,
           identity: identity,
-          defaultValue: Complex.zero(),
-          identityOneValue: Complex.fromReal(1),
+          defaultValue: const Complex.zero(),
+          identityOneValue: const Complex.fromReal(1),
         );
 
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
@@ -70,24 +70,28 @@ class ComplexMatrix extends Matrix<Complex> {
           data: data,
         );
 
+  void _setDataAt(List<Complex> flatMatrix, int row, int col, Complex value) =>
+      flatMatrix[columnCount * row + col] = value;
+
+  Complex _getDataAt(List<Complex> source, int row, int col) =>
+      source[columnCount * row + col];
+
   /// Returns the sum of two matrices.
   @override
   Matrix<Complex> operator +(Matrix<Complex> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the sum
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
-    final setDataAt = (int row, int col, Complex value) =>
-        flatMatrix[columnCount * row + col] = value;
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        setDataAt(i, j, this(i, j) + other(i, j));
+        _setDataAt(flatMatrix, i, j, this(i, j) + other(i, j));
       }
     }
 
@@ -103,20 +107,18 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator -(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the difference
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
-    final setDataAt = (int row, int col, Complex value) =>
-        flatMatrix[columnCount * row + col] = value;
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        setDataAt(i, j, this(i, j) - other(i, j));
+        _setDataAt(flatMatrix, i, j, this(i, j) - other(i, j));
       }
     }
 
@@ -132,25 +134,23 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator *(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the product
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
-    final setDataAt = (int row, int col, Complex value) =>
-        flatMatrix[columnCount * row + col] = value;
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < other.columnCount; j++) {
-        var sum = Complex.zero();
+        var sum = const Complex.zero();
         for (var k = 0; k < rowCount; k++) {
-          sum += (this(i, k) * other(k, j));
+          sum += this(i, k) * other(k, j);
         }
-        setDataAt(i, j, sum);
+        _setDataAt(flatMatrix, i, j, sum);
       }
     }
 
@@ -166,21 +166,19 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator /(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException("Matrices shapes mismatch! The column count "
-          "of the source matrix must match the row count of the other.");
+      throw const MatrixException('Matrices shapes mismatch! The column count '
+          'of the source matrix must match the row count of the other.');
     }
 
     // Performing the division
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
-    final setDataAt = (int row, int col, Complex value) =>
-        flatMatrix[columnCount * row + col] = value;
 
     // Performing the division
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        setDataAt(i, j, this(i, j) / other(i, j));
+        _setDataAt(flatMatrix, i, j, this(i, j) / other(i, j));
       }
     }
 
@@ -209,49 +207,44 @@ class ComplexMatrix extends Matrix<Complex> {
   List<ComplexMatrix> luDecomposition() {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw MatrixException(
-          "LU decomposition only works with square matrices!");
+      throw const MatrixException(
+          'LU decomposition only works with square matrices!');
     }
 
     // Creating L and U matrices
     final L = List<Complex>.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
     final U = List<Complex>.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
-
-    final getDataAt = (List<Complex> source, int row, int col) =>
-        source[columnCount * row + col];
-    final setDataAt = (List<Complex> source, int row, int col, Complex value) =>
-        source[columnCount * row + col] = value;
 
     // Computing L and U
     for (var i = 0; i < rowCount; ++i) {
       for (var k = i; k < rowCount; k++) {
         // Summation of L(i, j) * U(j, k)
-        var sum = Complex.zero();
+        var sum = const Complex.zero();
         for (var j = 0; j < i; j++) {
-          sum += (getDataAt(L, i, j) * getDataAt(U, j, k));
+          sum += _getDataAt(L, i, j) * _getDataAt(U, j, k);
         }
 
         // Evaluating U(i, k)
-        setDataAt(U, i, k, this(i, k) - sum);
+        _setDataAt(U, i, k, this(i, k) - sum);
       }
 
       // Lower Triangular
       for (var k = i; k < rowCount; k++) {
         if (i == k) {
-          setDataAt(L, i, i, Complex.fromReal(1));
+          _setDataAt(L, i, i, const Complex.fromReal(1));
         } else {
           // Summation of L(k, j) * U(j, i)
-          var sum = Complex.zero();
+          var sum = const Complex.zero();
           for (var j = 0; j < i; j++) {
-            sum += (getDataAt(L, k, j) * getDataAt(U, j, i));
+            sum += _getDataAt(L, k, j) * _getDataAt(U, j, i);
           }
 
           // Evaluating L(k, i)
-          setDataAt(L, k, i, (this(k, i) - sum) / getDataAt(U, i, i));
+          _setDataAt(L, k, i, (this(k, i) - sum) / _getDataAt(U, i, i));
         }
       }
     }
@@ -284,44 +277,39 @@ class ComplexMatrix extends Matrix<Complex> {
   List<ComplexMatrix> choleskyDecomposition() {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw MatrixException(
-          "LU decomposition only works with square matrices!");
+      throw const MatrixException(
+          'LU decomposition only works with square matrices!');
     }
 
     // Exit immediately because if [0,0] is a negative number, the algorithm
     // cannot even start since the square root of a negative number in R is not
     // allowed.
-    if (this(0, 0) <= Complex.zero()) {
-      throw const SystemSolverException("The matrix is not positive-definite.");
+    if (this(0, 0) <= const Complex.zero()) {
+      throw const SystemSolverException('The matrix is not positive-definite.');
     }
 
     // Creating L and Lt matrices
     final L = List<Complex>.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
     final transpL = List<Complex>.generate(
-        rowCount * columnCount, (_) => Complex.zero(),
+        rowCount * columnCount, (_) => const Complex.zero(),
         growable: false);
-
-    final getDataAt = (List<Complex> source, int row, int col) =>
-        source[columnCount * row + col];
-    final setDataAt = (List<Complex> source, int row, int col, Complex value) =>
-        source[columnCount * row + col] = value;
 
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j <= i; j++) {
-        var sum = Complex.zero();
+        var sum = const Complex.zero();
         if (j == i) {
           for (var k = 0; k < j; k++) {
-            sum += getDataAt(L, j, k) * getDataAt(L, j, k);
+            sum += _getDataAt(L, j, k) * _getDataAt(L, j, k);
           }
-          setDataAt(L, j, j, (this(i, j) - sum).sqrt());
+          _setDataAt(L, j, j, (this(i, j) - sum).sqrt());
         } else {
           for (var k = 0; k < j; k++) {
-            sum += getDataAt(L, i, k) * getDataAt(L, j, k);
+            sum += _getDataAt(L, i, k) * _getDataAt(L, j, k);
           }
-          setDataAt(L, i, j, (this(i, j) - sum) / getDataAt(L, j, j));
+          _setDataAt(L, i, j, (this(i, j) - sum) / _getDataAt(L, j, j));
         }
       }
     }
@@ -329,7 +317,7 @@ class ComplexMatrix extends Matrix<Complex> {
     // Computing Lt, the transposed version of L
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < rowCount; j++) {
-        setDataAt(transpL, i, j, getDataAt(L, j, i));
+        _setDataAt(transpL, i, j, _getDataAt(L, j, i));
       }
     }
 
@@ -444,8 +432,8 @@ class ComplexMatrix extends Matrix<Complex> {
     // better than O(n!) from the Leibniz formula or the Laplace transformation!
     final lu = luDecomposition();
 
-    var prodL = Complex(1, 0);
-    var prodU = Complex(1, 0);
+    var prodL = const Complex(1, 0);
+    var prodU = const Complex(1, 0);
 
     // The determinant of L and U is the product of the elements on the diagonal
     for (var i = 0; i < rowCount; ++i) {

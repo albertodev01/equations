@@ -31,7 +31,9 @@ class Newton extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Newton) {
       return super == other && x0 == other.x0;
@@ -41,13 +43,7 @@ class Newton extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = 37 * result + x0.hashCode;
-
-    return result;
-  }
+  int get hashCode => 37 * super.hashCode + x0.hashCode;
 
   @override
   NonlinearResults solve() {

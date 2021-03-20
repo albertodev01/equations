@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 void main() {
   group("Testing the 'LUSolver' class.", () {
     test(
-        "Making sure that the LUSolver computes the correct results of a "
-        "system of linear equations.", () {
+        'Making sure that the LUSolver computes the correct results of a '
+        'system of linear equations.', () {
       final luSolver = LUSolver(equations: const [
         [7, -2, 1],
         [14, -7, -3],
@@ -39,7 +39,7 @@ void main() {
       expect(luSolver.size, equals(3));
     });
 
-    test("Making sure that the string conversion works properly.", () {
+    test('Making sure that the string conversion works properly.', () {
       final solver = LUSolver(equations: const [
         [7, -2, 1],
         [14, -7, -3],
@@ -50,19 +50,19 @@ void main() {
         5,
       ]);
 
-      final toString = "[7.0, -2.0, 1.0]\n"
-          "[14.0, -7.0, -3.0]\n"
-          "[-7.0, 11.0, 18.0]";
-      final toStringAugmented = "[7.0, -2.0, 1.0 | 12.0]\n"
-          "[14.0, -7.0, -3.0 | 17.0]\n"
-          "[-7.0, 11.0, 18.0 | 5.0]";
+      const toString = '[7.0, -2.0, 1.0]\n'
+          '[14.0, -7.0, -3.0]\n'
+          '[-7.0, 11.0, 18.0]';
+      const toStringAugmented = '[7.0, -2.0, 1.0 | 12.0]\n'
+          '[14.0, -7.0, -3.0 | 17.0]\n'
+          '[-7.0, 11.0, 18.0 | 5.0]';
 
       expect(solver.toString(), equals(toString));
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
     test(
-        "Making sure that the matrix is squared because this method is only "
+        'Making sure that the matrix is squared because this method is only '
         "able to solve systems of 'N' equations in 'N' variables.", () {
       expect(
           () => LUSolver(equations: const [
@@ -76,14 +76,11 @@ void main() {
     });
 
     test(
-        "Making sure that the matrix is squared AND the dimension of the "
-        "known values vector also matches the size of the matrix.", () {
+        'Making sure that the matrix is squared AND the dimension of the '
+        'known values vector also matches the size of the matrix.', () {
       expect(
           () => LUSolver(equations: const [
-                [
-                  7,
-                  -2,
-                ],
+                [7, -2],
                 [14, -7],
               ], constants: const [
                 12,

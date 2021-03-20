@@ -12,52 +12,64 @@ void main() {
       // Checking properties
       expect(equation.degree, equals(4));
       expect(
-          equation.derivative(),
-          Cubic(
-              a: Complex.fromReal(12),
-              b: Complex.fromReal(18),
-              d: Complex.fromReal(2)));
+        equation.derivative(),
+        Cubic(
+          a: const Complex.fromReal(12),
+          b: const Complex.fromReal(18),
+          d: const Complex.fromReal(2),
+        ),
+      );
       expect(equation.isRealEquation, isTrue);
-      expect(equation.discriminant(), equals(Complex.fromReal(-70848)));
+      expect(equation.discriminant(), equals(const Complex.fromReal(-70848)));
       expect(
-          equation.coefficients,
-          equals([
+        equation.coefficients,
+        equals(
+          const [
             Complex.fromReal(3),
             Complex.fromReal(6),
             Complex.zero(),
             Complex.fromReal(2),
             Complex.fromReal(-1),
-          ]));
+          ],
+        ),
+      );
 
       // Making sure that coefficients can be accessed via index
-      expect(equation[0], equals(Complex.fromReal(3)));
-      expect(equation[1], equals(Complex.fromReal(6)));
-      expect(equation[2], equals(Complex.zero()));
-      expect(equation[3], equals(Complex.fromReal(2)));
-      expect(equation[4], equals(Complex.fromReal(-1)));
+      expect(equation[0], equals(const Complex.fromReal(3)));
+      expect(equation[1], equals(const Complex.fromReal(6)));
+      expect(equation[2], equals(const Complex.zero()));
+      expect(equation[3], equals(const Complex.fromReal(2)));
+      expect(equation[4], equals(const Complex.fromReal(-1)));
+
       expect(() => equation[-1], throwsA(isA<RangeError>()));
-      expect(equation.coefficient(4), equals(Complex.fromReal(3)));
-      expect(equation.coefficient(3), equals(Complex.fromReal(6)));
-      expect(equation.coefficient(2), equals(Complex.zero()));
-      expect(equation.coefficient(1), equals(Complex.fromReal(2)));
-      expect(equation.coefficient(0), equals(Complex.fromReal(-1)));
+
+      expect(equation.coefficient(4), equals(const Complex.fromReal(3)));
+      expect(equation.coefficient(3), equals(const Complex.fromReal(6)));
+      expect(equation.coefficient(2), equals(const Complex.zero()));
+      expect(equation.coefficient(1), equals(const Complex.fromReal(2)));
+      expect(equation.coefficient(0), equals(const Complex.fromReal(-1)));
       expect(equation.coefficient(5), isNull);
 
       // Converting to string
-      expect(equation.toString(), equals("f(x) = 3x^4 + 6x^3 + 2x + -1"));
-      expect(equation.toStringWithFractions(),
-          equals("f(x) = 3x^4 + 6x^3 + 2x + -1"));
+      expect(
+        equation.toString(),
+        equals('f(x) = 3x^4 + 6x^3 + 2x + -1'),
+      );
+      expect(
+        equation.toStringWithFractions(),
+        equals('f(x) = 3x^4 + 6x^3 + 2x + -1'),
+      );
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real, MoreOrLessEquals(-2.173571613806));
+      expect(solutions[0].real, const MoreOrLessEquals(-2.173571613806));
       expect(solutions[0].imaginary.round(), isZero);
-      expect(solutions[1].real, MoreOrLessEquals(0.349518864775));
+      expect(solutions[1].real, const MoreOrLessEquals(0.349518864775));
       expect(solutions[1].imaginary.round(), isZero);
-      expect(solutions[2].real, MoreOrLessEquals(-0.087973625484));
-      expect(solutions[2].imaginary, MoreOrLessEquals(0.656527118533));
-      expect(solutions[3].real, MoreOrLessEquals(-0.087973625484));
-      expect(solutions[3].imaginary, MoreOrLessEquals(-0.656527118533));
+      expect(solutions[2].real, const MoreOrLessEquals(-0.087973625484));
+      expect(solutions[2].imaginary, const MoreOrLessEquals(0.656527118533));
+      expect(solutions[3].real, const MoreOrLessEquals(-0.087973625484));
+      expect(solutions[3].imaginary, const MoreOrLessEquals(-0.656527118533));
 
       // Evaluation
       final eval = equation.realEvaluateOn(2);
@@ -66,13 +78,14 @@ void main() {
     });
 
     test(
-        "Making sure that an exception is thrown if the coeff. of the highest"
-        " degree is zero", () {
-      expect(() {
-        Quartic(
-          a: Complex.zero(),
-        );
-      }, throwsA(isA<AlgebraicException>()));
+        'Making sure that an exception is thrown if the coeff. of the highest'
+        ' degree is zero', () {
+      expect(
+        () {
+          Quartic(a: const Complex.zero());
+        },
+        throwsA(isA<AlgebraicException>()),
+      );
     });
 
     test(
@@ -80,28 +93,31 @@ void main() {
         "list of 'double' (real) values", () {
       final quartic = Quartic.realEquation(a: -3, d: 8);
 
-      expect(quartic.a, equals(Complex.fromReal(-3)));
-      expect(quartic.d, equals(Complex.fromReal(8)));
+      expect(quartic.a, equals(const Complex.fromReal(-3)));
+      expect(quartic.d, equals(const Complex.fromReal(8)));
 
       // There must be an exception is the first coeff. is zero
       expect(
-          () => Quartic.realEquation(a: 0), throwsA(isA<AlgebraicException>()));
+        () => Quartic.realEquation(a: 0),
+        throwsA(isA<AlgebraicException>()),
+      );
     });
 
-    test("Making sure that objects comparison works properly", () {
+    test('Making sure that objects comparison works properly', () {
       final fx = Quartic(
-          a: Complex(3, -6),
-          b: Complex.fromImaginary(-2),
-          c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
-          d: Complex.i(),
-          e: Complex.fromReal(9));
+        a: const Complex(3, -6),
+        b: const Complex.fromImaginary(-2),
+        c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
+        d: const Complex.i(),
+        e: const Complex.fromReal(9),
+      );
 
       final otherFx = Quartic(
-          a: Complex(3, -6),
-          b: Complex.fromImaginary(-2),
+          a: const Complex(3, -6),
+          b: const Complex.fromImaginary(-2),
           c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
-          d: Complex.i(),
-          e: Complex.fromReal(9));
+          d: const Complex.i(),
+          e: const Complex.fromReal(9));
 
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
@@ -114,17 +130,21 @@ void main() {
       // Objects equality
       expect(quartic, equals(quartic.copyWith()));
       expect(
-          quartic,
-          equals(quartic.copyWith(
-            a: Complex.fromReal(1),
-            b: Complex.zero(),
-            c: Complex.fromReal(5),
-            d: Complex.fromReal(-6),
+        quartic,
+        equals(
+          quartic.copyWith(
+            a: const Complex.fromReal(1),
+            b: const Complex.zero(),
+            c: const Complex.fromReal(5),
+            d: const Complex.fromReal(-6),
+            // ignore: prefer_const_constructors
             e: Complex.zero(),
-          )));
+          ),
+        ),
+      );
 
       // Objects inequality
-      expect(quartic == quartic.copyWith(c: Complex.zero()), isFalse);
+      expect(quartic == quartic.copyWith(c: const Complex.zero()), isFalse);
     });
   });
 }

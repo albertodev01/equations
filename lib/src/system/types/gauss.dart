@@ -31,22 +31,22 @@ class GaussianElimination extends SystemSolver {
       }
 
       // Swapping rows
-      var temp = A[p];
+      final temp = A[p];
       A[p] = A[max];
       A[max] = temp;
-      var t = b[p];
+      final t = b[p];
       b[p] = b[max];
       b[max] = t;
 
       // Making sure the matrix is not singular
       if (A[p][p].abs() <= precision) {
         throw const SystemSolverException(
-            "The matrix is singular or nearly singular.");
+            'The matrix is singular or nearly singular.');
       }
 
       // pivot within A and b
       for (var i = p + 1; i < n; i++) {
-        var alpha = A[i][p] / A[p][p];
+        final alpha = A[i][p] / A[p][p];
         b[i] -= alpha * b[p];
         for (var j = p; j < n; j++) {
           A[i][j] -= alpha * A[p][j];

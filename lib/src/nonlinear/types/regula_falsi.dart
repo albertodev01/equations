@@ -37,7 +37,9 @@ class RegulaFalsi extends NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is RegulaFalsi) {
       return super == other && a == other.a && b == other.b;
@@ -60,7 +62,7 @@ class RegulaFalsi extends NonLinear {
   NonlinearResults solve() {
     // Exit immediately if the root is not bracketed
     if (evaluateOn(a) * evaluateOn(b) >= 0) {
-      throw NonlinearException("The root is not bracketed in [$a, $b]");
+      throw NonlinearException('The root is not bracketed in [$a, $b]');
     }
 
     final guesses = <double>[];

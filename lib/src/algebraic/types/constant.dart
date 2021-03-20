@@ -23,10 +23,10 @@ class Constant extends Algebraic {
   num get degree => a.isZero ? double.negativeInfinity : 0;
 
   @override
-  Algebraic derivative() => Constant(a: Complex.zero());
+  Algebraic derivative() => Constant(a: const Complex.zero());
 
   @override
-  Complex discriminant() => Complex(double.nan, double.nan);
+  Complex discriminant() => const Complex(double.nan, double.nan);
 
   @override
   List<Complex> solutions() => [];

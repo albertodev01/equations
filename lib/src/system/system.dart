@@ -40,8 +40,8 @@ abstract class SystemSolver {
 
     // The vector of known values must match the size of the matrix
     if (equations.rowCount != b.length) {
-      throw const SystemSolverException("The known values vector must have the "
-          "same size as the matrix.");
+      throw const SystemSolverException('The known values vector must have the '
+          'same size as the matrix.');
     }
 
     // Copying and storing internally the list of known values
@@ -50,7 +50,9 @@ abstract class SystemSolver {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is SystemSolver) {
       // The lengths of the coefficients must match
@@ -119,25 +121,25 @@ abstract class SystemSolver {
     // [4, 5 | 6]
     for (var i = 0; i < equations.rowCount; ++i) {
       // Leading opening [
-      buffer.write("[");
+      buffer.write('[');
 
       for (var j = 0; j < equations.columnCount; ++j) {
         buffer.write(equations(i, j));
 
         // Adding a comma only between two values
         if (j < equations.columnCount - 1) {
-          buffer.write(", ");
+          buffer.write(', ');
         }
       }
 
       // Adding the known value associated to the current equation
-      buffer..write(" | ")..write(knownValues[i]);
+      buffer..write(' | ')..write(knownValues[i]);
 
       // Ending closing ]
       if (i < equations.rowCount - 1) {
-        buffer.writeln("]");
+        buffer.writeln(']');
       } else {
-        buffer.write("]");
+        buffer.write(']');
       }
     }
 

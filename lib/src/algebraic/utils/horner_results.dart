@@ -15,7 +15,9 @@ class HornerResult {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is HornerResult) {
       // The lengths of the coefficients must match
@@ -53,9 +55,6 @@ class HornerResult {
       result = 37 * result + polynomial[i].hashCode;
     }
 
-    // The missing fields
-    result = 37 * result + value.hashCode;
-
-    return result;
+    return 37 * result + value.hashCode;
   }
 }

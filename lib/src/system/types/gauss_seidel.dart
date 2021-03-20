@@ -30,7 +30,9 @@ class GaussSeidelSolver extends SystemSolver {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is GaussSeidelSolver) {
       return super == other && maxSteps == other.maxSteps;
@@ -40,13 +42,7 @@ class GaussSeidelSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = 37 * result + maxSteps.hashCode;
-
-    return result;
-  }
+  int get hashCode => 37 * super.hashCode + maxSteps.hashCode;
 
   @override
   List<double> solve() {
