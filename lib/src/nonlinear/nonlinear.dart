@@ -42,7 +42,9 @@ abstract class NonLinear {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is NonLinear) {
       return runtimeType == other.runtimeType &&
@@ -66,7 +68,7 @@ abstract class NonLinear {
   }
 
   @override
-  String toString() => "f(x) = $function";
+  String toString() => 'f(x) = $function';
 
   /// In order to get a meaningful result, it makes sense to compute the rate of
   /// convergence only if the algorithm made **at least** 3 [steps] (iterations).

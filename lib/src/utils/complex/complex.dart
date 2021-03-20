@@ -17,21 +17,15 @@ class Complex implements Comparable<Complex> {
   final double imaginary;
 
   /// Creates a complex number with the given real and imaginary parts.
-  const Complex(double real, double imaginary)
-      : real = real,
-        imaginary = imaginary;
+  const Complex(this.real, this.imaginary);
 
   /// Creates a complex number having only the real part, meaning that the
   /// imaginary part is set to 0.
-  const Complex.fromReal(double real)
-      : real = real,
-        imaginary = 0;
+  const Complex.fromReal(this.real) : imaginary = 0;
 
   /// Creates a complex number having only the imaginary part, meaning that the
   /// real part is set to 0.
-  const Complex.fromImaginary(double imaginary)
-      : real = 0,
-        imaginary = imaginary;
+  const Complex.fromImaginary(this.imaginary) : real = 0;
 
   /// Creates a complex number from [Fraction] objects as parameter for the real
   /// and imaginary part.
@@ -86,7 +80,9 @@ class Complex implements Comparable<Complex> {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Complex) {
       return runtimeType == other.runtimeType &&
@@ -110,8 +106,14 @@ class Complex implements Comparable<Complex> {
     // I don't perform == on floating point values because it's not reliable.
     // Instead, '>' and '<' are more reliable in terms of machine precision so
     // 0 is just a fallback.
-    if (abs() > other.abs()) return 1;
-    if (abs() < other.abs()) return -1;
+    if (abs() > other.abs()) {
+      return 1;
+    }
+
+    if (abs() < other.abs()) {
+      return -1;
+    }
+
     return 0;
   }
 
@@ -133,11 +135,15 @@ class Complex implements Comparable<Complex> {
   /// Prints the complex number with opening and closing parenthesis in case the
   /// complex number had both real and imaginary part.
   String toStringWithParenthesis() {
-    if (real == 0) return "${_fixZero(imaginary)}i";
+    if (real == 0) {
+      return '${_fixZero(imaginary)}i';
+    }
 
-    if (imaginary == 0) return _fixZero(real);
+    if (imaginary == 0) {
+      return _fixZero(real);
+    }
 
-    return "($this)";
+    return '($this)';
   }
 
   /// Returns an instance of [PolarComplex] which contains the radius `r` and the
@@ -153,13 +159,13 @@ class Complex implements Comparable<Complex> {
   /// being "normal" double values.
   String _convertToString({bool asFraction = false}) {
     var realPart = _fixZero(real);
-    var imaginaryPart = "${_fixZero(imaginary)}i";
-    var imaginaryPartAbs = "${_fixZero(imaginary.abs())}i";
+    var imaginaryPart = '${_fixZero(imaginary)}i';
+    var imaginaryPartAbs = '${_fixZero(imaginary.abs())}i';
 
     if (asFraction) {
-      realPart = "${real.toFraction()}";
-      imaginaryPart = "${imaginary.toFraction()}i";
-      imaginaryPartAbs = "${imaginary.abs().toFraction()}i";
+      realPart = '${real.toFraction()}';
+      imaginaryPart = '${imaginary.toFraction()}i';
+      imaginaryPartAbs = '${imaginary.abs().toFraction()}i';
     }
 
     if (real == 0) {
@@ -171,18 +177,20 @@ class Complex implements Comparable<Complex> {
     }
 
     if (imaginary < 0) {
-      return "$realPart - $imaginaryPartAbs";
+      return '$realPart - $imaginaryPartAbs';
     }
 
-    return "$realPart + $imaginaryPart";
+    return '$realPart + $imaginaryPart';
   }
 
   /// When a value is a whole number, it's printed without the fractional part.
   /// For example, `_fixZero(5.0)` returns `"5"`.
   String _fixZero(double value) {
-    if (value % 1 == 0) return "${value.truncate()}";
+    if (value % 1 == 0) {
+      return '${value.truncate()}';
+    }
 
-    return "$value";
+    return '$value';
   }
 
   /// Converts an angle from radians to degrees
@@ -201,8 +209,8 @@ class Complex implements Comparable<Complex> {
 
   /// Calculates the product of two complex numbers.
   Complex operator *(Complex other) {
-    var realPart = real * other.real - imaginary * other.imaginary;
-    var imaginaryPart = real * other.imaginary + imaginary * other.real;
+    final realPart = real * other.real - imaginary * other.imaginary;
+    final imaginaryPart = real * other.imaginary + imaginary * other.real;
 
     return Complex(realPart, imaginaryPart);
   }
@@ -272,10 +280,10 @@ class Complex implements Comparable<Complex> {
   ///  - conj(a + bi) / modulo(a + bi)<sup>2</sup>
   Complex reciprocal() {
     if (isZero) {
-      throw ComplexException("The reciprocal of zero is undefined.");
+      throw const ComplexException('The reciprocal of zero is undefined.');
     }
 
-    var scale = real * real + imaginary * imaginary;
+    final scale = real * real + imaginary * imaginary;
     return Complex(real / scale, -imaginary / scale);
   }
 
@@ -328,8 +336,8 @@ class Complex implements Comparable<Complex> {
       return Complex.fromReal(math.sqrt(real));
     }
 
-    var r = math.sqrt(abs());
-    var theta = phase() / 2;
+    final r = math.sqrt(abs());
+    final theta = phase() / 2;
     return Complex(r * math.cos(theta), r * math.sin(theta));
   }
 
@@ -339,7 +347,7 @@ class Complex implements Comparable<Complex> {
     final logRe = x * math.log(abs());
     final logIm = x * phase();
 
-    var modAns = math.exp(logRe);
+    final modAns = math.exp(logRe);
     return Complex(modAns * math.cos(logIm), modAns * math.sin(logIm));
   }
 
@@ -352,9 +360,10 @@ class Complex implements Comparable<Complex> {
 
   /// Computes the complex n-th root of the complex number. The returned root is
   /// the one with the smallest positive argument.
-  Complex nthRoot(int n) {
+  Complex nthRoot(int nth) {
     var a = 0.0, b = 0.0;
     var neg = false;
+    var n = nth;
 
     if (n < 0) {
       n = -n;
@@ -372,7 +381,9 @@ class Complex implements Comparable<Complex> {
         var length = abs();
         var angle = phase();
 
-        if (angle < 0) angle += math.pi * 2;
+        if (angle < 0) {
+          angle += math.pi * 2;
+        }
 
         length = math.pow(length, 1.0 / n) as double;
         angle = angle / n;
@@ -383,7 +394,7 @@ class Complex implements Comparable<Complex> {
     }
 
     if (neg) {
-      var den = a * a + b * b;
+      final den = a * a + b * b;
       a = a / den;
       b = -b / den;
     }

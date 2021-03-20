@@ -1,3 +1,10 @@
+## [2.0.1]
+
+ -
+ - Added the possibility to set the precision for the `Complex` type, which can be particularly useful when printing values
+ - Improved static analysis with a more elaborated `analysis_options.yaml` file
+ - Dependencies versions update
+
 ## [2.0.0]
 
  - Migration to stable null safety

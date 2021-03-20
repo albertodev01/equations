@@ -20,7 +20,9 @@ abstract class EquationException implements Exception {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is EquationException) {
       return runtimeType == other.runtimeType &&
@@ -40,5 +42,5 @@ abstract class EquationException implements Exception {
   }
 
   @override
-  String toString() => "$messagePrefix: $message";
+  String toString() => '$messagePrefix: $message';
 }

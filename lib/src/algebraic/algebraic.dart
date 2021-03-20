@@ -47,7 +47,7 @@ abstract class Algebraic {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!isValid) {
-      throw AlgebraicException("The given equation is not valid.");
+      throw const AlgebraicException('The given equation is not valid.');
     }
   }
 
@@ -72,7 +72,7 @@ abstract class Algebraic {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!isValid) {
-      throw AlgebraicException("The given equation is not valid.");
+      throw const AlgebraicException('The given equation is not valid.');
     }
   }
 
@@ -164,7 +164,9 @@ abstract class Algebraic {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Algebraic) {
       // The lengths of the coefficients must match
@@ -219,16 +221,16 @@ abstract class Algebraic {
       final value = coefficients[0];
 
       if (asFraction) {
-        return "f(x) = ${value.toStringAsFraction()}";
+        return 'f(x) = ${value.toStringAsFraction()}';
       } else {
-        return "f(x) = ${value.toStringWithParenthesis()}";
+        return 'f(x) = ${value.toStringWithParenthesis()}';
       }
     } else {
       final sb = StringBuffer();
       var power = coefficients.length - 1;
 
       // Adding 'f(x) = ' at the beginning
-      sb.write("f(x) = ");
+      sb.write('f(x) = ');
 
       for (final c in coefficients) {
         //1. If it's a coefficient 0, then skip
@@ -239,14 +241,14 @@ abstract class Algebraic {
 
         // Write the sign unless it's the first coefficient
         if (power != coefficients.length - 1) {
-          sb.write(" + ");
+          sb.write(' + ');
         }
 
         //2. Write the complex
         if (asFraction) {
           // Add parenthesis if needed
           if ((c.real != 0) && (c.imaginary != 0)) {
-            sb..write("(")..write(c.toStringAsFraction())..write(")");
+            sb..write('(')..write(c.toStringAsFraction())..write(')');
           } else {
             sb.write(c.toStringAsFraction());
           }
@@ -257,9 +259,9 @@ abstract class Algebraic {
         //3. If it is power = 0 avoid it, we don't want x^0 (useless)
         if (power != 0) {
           if (power == 1) {
-            sb.write("x");
+            sb.write('x');
           } else {
-            sb..write("x^")..write(power);
+            sb..write('x^')..write(power);
           }
         }
 
@@ -272,13 +274,13 @@ abstract class Algebraic {
 
   /// Evaluates the polynomial on the specified complex number [x].
   Complex evaluateOn(Complex x) {
-    var value = Complex.zero();
+    var value = const Complex.zero();
     var power = coefficients.length - 1;
 
     // Actual valuation
-    for (var c in coefficients) {
+    for (final c in coefficients) {
       if (power != 0) {
-        value += (x.pow(power) * c);
+        value += x.pow(power) * c;
       } else {
         value += c;
       }
@@ -294,12 +296,12 @@ abstract class Algebraic {
   /// TODO
   Complex evaluateIntegralOn(double lower, double upper) {
     // TODO
-    var upperSum = Complex.zero();
-    var lowerSum = Complex.zero();
+    var upperSum = const Complex.zero();
+    var lowerSum = const Complex.zero();
 
     // The actual integration
     for (var n = coefficients.length - 1; n >= 0; --n) {
-      final coeff = coefficient(n) ?? Complex.zero();
+      final coeff = coefficient(n) ?? const Complex.zero();
       final denominator = Complex.fromReal(n + 1);
 
       upperSum += coeff * Complex.fromReal(upper).pow(n + 1) / denominator;
@@ -320,7 +322,7 @@ abstract class Algebraic {
   ///
   /// A [Constant] is an exception because a constant value has no variables with
   /// a degree.
-  bool get isValid => this is Constant ? true : !coefficients[0].isZero;
+  bool get isValid => this is Constant || !coefficients[0].isZero;
 
   /// Returns the coefficient of the polynomial at the given [index] position.
   /// For example:
@@ -377,8 +379,9 @@ abstract class Algebraic {
     // The sum of two polynomials is the sum of the coefficients with the same
     // degree
     for (var degree = maxDegree; degree >= 0; --degree) {
-      final thisCoefficient = coefficient(degree) ?? Complex.zero();
-      final otherCoefficient = other.coefficient(degree) ?? Complex.zero();
+      final thisCoefficient = coefficient(degree) ?? const Complex.zero();
+      final otherCoefficient =
+          other.coefficient(degree) ?? const Complex.zero();
       final sum = thisCoefficient + otherCoefficient;
 
       if (!sum.isZero) {
@@ -400,8 +403,9 @@ abstract class Algebraic {
     // The difference of two polynomials is the difference of the coefficients
     // with the same degree
     for (var degree = maxDegree; degree >= 0; --degree) {
-      final thisCoefficient = coefficient(degree) ?? Complex.zero();
-      final otherCoefficient = other.coefficient(degree) ?? Complex.zero();
+      final thisCoefficient = coefficient(degree) ?? const Complex.zero();
+      final otherCoefficient =
+          other.coefficient(degree) ?? const Complex.zero();
       final diff = thisCoefficient - otherCoefficient;
 
       if (!diff.isZero) {
@@ -420,7 +424,8 @@ abstract class Algebraic {
   Algebraic operator *(Algebraic other) {
     // Generating the new list of coefficients
     final newLength = coefficients.length + other.coefficients.length - 1;
-    final newCoefficients = List<Complex>.filled(newLength, Complex.zero());
+    final newCoefficients =
+        List<Complex>.filled(newLength, const Complex.zero());
 
     // The product
     for (var i = 0; i < coefficients.length; ++i) {

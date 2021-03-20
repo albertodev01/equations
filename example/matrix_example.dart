@@ -9,9 +9,9 @@ void main() {
     columns: 5,
     rows: 3,
   );
-  print("Empty matrix:\n$emptyMatrix"); // The matrix is filled with zeroes
+  print('Empty matrix:\n$emptyMatrix'); // The matrix is filled with zeroes
 
-  print("\n ============ \n");
+  print('\n ============ \n');
 
   /*
     * A = |  2  6  |
@@ -31,12 +31,12 @@ void main() {
     [7, -3]
   ]);
 
-  print("A + B:\n${matrixA + matrixB}\n"); // the sum of 2 matrices
-  print("A - B:\n${matrixA - matrixB}\n"); // the difference of 2 matrices
-  print("A * B:\n${matrixA * matrixB}\n"); // the product of 2 matrices
-  print("A / B:\n${matrixA / matrixB}\n"); // the division of 2 matrices
+  print('A + B:\n${matrixA + matrixB}\n'); // the sum of 2 matrices
+  print('A - B:\n${matrixA - matrixB}\n'); // the difference of 2 matrices
+  print('A * B:\n${matrixA * matrixB}\n'); // the product of 2 matrices
+  print('A / B:\n${matrixA / matrixB}\n'); // the division of 2 matrices
 
-  print("\n ============ \n");
+  print('\n ============ \n');
 
   final matrixLU = RealMatrix.fromData(
     rows: 3,
@@ -62,10 +62,10 @@ void main() {
   * [0, -3, -6]
   * [0, 0, 0]
   * */
-  print("L:\n${lu[0]}\n");
-  print("U:\n${lu[1]}\n");
+  print('L:\n${lu[0]}\n');
+  print('U:\n${lu[1]}\n');
 
-  print("\n ============ \n");
+  print('\n ============ \n');
 
   final matrixCholesky = RealMatrix.fromData(
     rows: 3,
@@ -91,6 +91,6 @@ void main() {
   * [0, 3, 1]
   * [0, 0, 3]
   * */
-  print("L:\n${cholesky[0]}\n");
-  print("L transposed:\n${cholesky[1]}\n");
+  print('L:\n${cholesky[0]}\n');
+  print('L transposed:\n${cholesky[1]}\n');
 }

@@ -4,5 +4,5 @@ import 'package:equations/equations.dart';
 class SystemSolverException extends EquationException {
   /// Represents an error for the [SystemSolver] class.
   const SystemSolverException(String message)
-      : super(message: message, messagePrefix: "SystemSolverException");
+      : super(message: message, messagePrefix: 'SystemSolverException');
 }

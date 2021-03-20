@@ -36,7 +36,7 @@ abstract class Matrix<T> {
         columnCount = columns {
     // Making sure the user entered valid dimensions for the matrix
     if ((rows == 0) || (columns == 0)) {
-      throw const MatrixException("The rows or column count cannot be zero.");
+      throw const MatrixException('The rows or column count cannot be zero.');
     }
 
     // Creating a new FIXED length list
@@ -48,7 +48,7 @@ abstract class Matrix<T> {
     // The identity matrix has 1 in the diagonal
     if (identity) {
       if (rows != columns) {
-        throw const MatrixException("The identity matrix must be square.");
+        throw const MatrixException('The identity matrix must be square.');
       }
 
       for (var i = 0; i < rowCount; ++i) {
@@ -74,7 +74,7 @@ abstract class Matrix<T> {
     // Making sure the size is correct
     if (_data.length != (rows * columns)) {
       throw const MatrixException("The given sizes don't match the size of the "
-          "data to be inserted.");
+          'data to be inserted.');
     }
   }
 
@@ -92,7 +92,7 @@ abstract class Matrix<T> {
     // Making sure the size is correct
     if (data.length != (rows * columns)) {
       throw const MatrixException("The given sizes don't match the size of the "
-          "data to be inserted.");
+          'data to be inserted.');
     }
 
     // Making a deep copy of the data
@@ -104,7 +104,9 @@ abstract class Matrix<T> {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is Matrix) {
       // The lengths of the data lists must match
@@ -158,22 +160,22 @@ abstract class Matrix<T> {
     // [4, 5, 6]
     for (var i = 0; i < rowCount; ++i) {
       // Leading opening [
-      buffer.write("[");
+      buffer.write('[');
 
       for (var j = 0; j < columnCount; ++j) {
         buffer.write(this(i, j));
 
         // Adding a comma only between two values
         if (j < columnCount - 1) {
-          buffer.write(", ");
+          buffer.write(', ');
         }
       }
 
       // Ending closing ]
       if (i < rowCount - 1) {
-        buffer.writeln("]");
+        buffer.writeln(']');
       } else {
-        buffer.write("]");
+        buffer.write(']');
       }
     }
 
@@ -209,7 +211,7 @@ abstract class Matrix<T> {
   /// This method is an alias of [itemAt].
   T call(int row, int col) {
     if ((row >= rowCount) || (col >= columnCount)) {
-      throw const MatrixException("The given indices are out of the bounds.");
+      throw const MatrixException('The given indices are out of the bounds.');
     }
 
     // Data are stored sequentially so there's the need to work with the indices

@@ -26,7 +26,9 @@ abstract class NumericalIntegration {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is NumericalIntegration) {
       return runtimeType == other.runtimeType &&
@@ -54,7 +56,7 @@ abstract class NumericalIntegration {
     final lower = lowerBound.toStringAsFixed(2);
     final upper = upperBound.toStringAsFixed(2);
 
-    return "[$lower, $upper] with $intervals intervals";
+    return '[$lower, $upper] with $intervals intervals';
   }
 
   /// Evaluates the given [function] on the [x] point.

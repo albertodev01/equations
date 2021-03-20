@@ -18,13 +18,15 @@ class PolarComplex implements Comparable<PolarComplex> {
       {required this.r, required this.phiRadians, required this.phiDegrees});
 
   @override
-  String toString() => "r = $r\n"
-      "phi (rad) = $phiRadians\n"
-      "phi (deg) = $phiDegrees";
+  String toString() => 'r = $r\n'
+      'phi (rad) = $phiRadians\n'
+      'phi (deg) = $phiDegrees';
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
 
     if (other is PolarComplex) {
       return runtimeType == other.runtimeType &&
@@ -50,8 +52,14 @@ class PolarComplex implements Comparable<PolarComplex> {
     final thisValue = Complex.fromPolar(r, phiRadians);
     final otherValue = Complex.fromPolar(other.r, other.phiRadians);
 
-    if (thisValue > otherValue) return 1;
-    if (thisValue < otherValue) return -1;
+    if (thisValue > otherValue) {
+      return 1;
+    }
+
+    if (thisValue < otherValue) {
+      return -1;
+    }
+
     return 0;
   }
 

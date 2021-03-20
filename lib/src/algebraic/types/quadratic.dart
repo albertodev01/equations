@@ -46,20 +46,20 @@ class Quadratic extends Algebraic {
 
   @override
   Algebraic derivative() => Linear(
-        a: a * Complex.fromReal(2),
+        a: a * const Complex.fromReal(2),
         b: b,
       );
 
   @override
   Complex discriminant() {
-    final root = Complex.fromReal(4) * a * c;
+    final root = const Complex.fromReal(4) * a * c;
     return (b * b) - root;
   }
 
   @override
   List<Complex> solutions() {
     final disc = discriminant();
-    final twoA = Complex.fromReal(2) * a;
+    final twoA = const Complex.fromReal(2) * a;
 
     return <Complex>[
       (b.negate + disc.sqrt()) / twoA,

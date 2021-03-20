@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 void main() {
   group("Testing the 'GaussianElimination' class.", () {
     test(
-        "Making sure that the gaussian elimination works properly with a "
-        "well formed matrix. Trying with a 3x3 matrix.", () {
+        'Making sure that the gaussian elimination works properly with a '
+        'well formed matrix. Trying with a 3x3 matrix.', () {
       final gauss = GaussianElimination(equations: const [
         [1, 2, -2],
         [2, -2, 1],
@@ -39,7 +39,7 @@ void main() {
       expect(gauss.determinant(), equals(-9));
     });
 
-    test("Making sure that the string conversion works properly.", () {
+    test('Making sure that the string conversion works properly.', () {
       final solver = GaussianElimination(equations: const [
         [1, 2, -2],
         [2, -2, 1],
@@ -50,20 +50,20 @@ void main() {
         -7,
       ]);
 
-      final toString = "[1.0, 2.0, -2.0]\n"
-          "[2.0, -2.0, 1.0]\n"
-          "[1.0, -1.0, 2.0]";
-      final toStringAugmented = "[1.0, 2.0, -2.0 | -1.0]\n"
-          "[2.0, -2.0, 1.0 | 7.0]\n"
-          "[1.0, -1.0, 2.0 | -7.0]";
+      const toString = '[1.0, 2.0, -2.0]\n'
+          '[2.0, -2.0, 1.0]\n'
+          '[1.0, -1.0, 2.0]';
+      const toStringAugmented = '[1.0, 2.0, -2.0 | -1.0]\n'
+          '[2.0, -2.0, 1.0 | 7.0]\n'
+          '[1.0, -1.0, 2.0 | -7.0]';
 
       expect(solver.toString(), equals(toString));
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
     test(
-        "Making sure that the gaussian elimination works properly with a "
-        "well formed matrix. Trying with a 2x2 matrix.", () {
+        'Making sure that the gaussian elimination works properly with a '
+        'well formed matrix. Trying with a 2x2 matrix.', () {
       final gauss = GaussianElimination(equations: const [
         [3, -2],
         [1, -2],
@@ -94,7 +94,7 @@ void main() {
       expect(gauss.determinant(), equals(-4));
     });
 
-    test("Making sure that a singular matrices throw an exception.", () {
+    test('Making sure that a singular matrices throw an exception.', () {
       final gauss = GaussianElimination(equations: const [
         [-1, -1],
         [1, 1],
@@ -109,7 +109,7 @@ void main() {
     });
 
     test(
-        "Making sure that the matrix is squared because this method is only "
+        'Making sure that the matrix is squared because this method is only '
         "able to solve systems of 'N' equations in 'N' variables.", () {
       expect(
           () => GaussianElimination(equations: const [
@@ -123,8 +123,8 @@ void main() {
     });
 
     test(
-        "Making sure that the matrix is squared AND the dimension of the "
-        "known values vector also matches the size of the matrix.", () {
+        'Making sure that the matrix is squared AND the dimension of the '
+        'known values vector also matches the size of the matrix.', () {
       expect(
           () => GaussianElimination(equations: const [
                 [1, 2],
@@ -137,7 +137,7 @@ void main() {
           throwsA(isA<MatrixException>()));
     });
 
-    test("Making sure that objects comparison works properly.", () {
+    test('Making sure that objects comparison works properly.', () {
       final gauss = GaussianElimination(equations: const [
         [1, 2],
         [3, 4],
