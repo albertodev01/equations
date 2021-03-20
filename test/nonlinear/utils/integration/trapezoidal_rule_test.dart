@@ -41,12 +41,37 @@ void main() {
       expect(trapezoid.hashCode, equals(trapezoid2.hashCode));
 
       expect(
-          trapezoid ==
-              const TrapezoidalRule(
-                lowerBound: 1,
-                upperBound: 3,
-              ),
-          isTrue);
+        trapezoid ==
+            const TrapezoidalRule(
+              lowerBound: 1,
+              upperBound: 3,
+            ),
+        isTrue,
+      );
+
+      expect(
+        trapezoid ==
+            const TrapezoidalRule(
+              lowerBound: 0,
+              upperBound: 3,
+            ),
+        isFalse,
+      );
+
+      expect(
+        trapezoid ==
+            const TrapezoidalRule(
+              lowerBound: 1,
+              upperBound: 0,
+            ),
+        isFalse,
+      );
+
+      expect(
+        trapezoid ==
+            const TrapezoidalRule(lowerBound: 1, upperBound: 3, intervals: 0),
+        isFalse,
+      );
     });
 
     test(

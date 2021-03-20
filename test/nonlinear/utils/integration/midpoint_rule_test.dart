@@ -48,6 +48,30 @@ void main() {
             ),
         isTrue,
       );
+
+      expect(
+        midpoint ==
+            const MidpointRule(
+              lowerBound: 0,
+              upperBound: -3,
+            ),
+        isFalse,
+      );
+
+      expect(
+        midpoint ==
+            const MidpointRule(
+              lowerBound: 2,
+              upperBound: 0,
+            ),
+        isFalse,
+      );
+
+      expect(
+        midpoint ==
+            const MidpointRule(lowerBound: 2, upperBound: -3, intervals: 0),
+        isFalse,
+      );
     });
 
     test(

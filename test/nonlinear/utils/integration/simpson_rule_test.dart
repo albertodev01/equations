@@ -48,6 +48,30 @@ void main() {
             ),
         isTrue,
       );
+
+      expect(
+        simpson ==
+            const SimpsonRule(
+              lowerBound: 0,
+              upperBound: 4,
+            ),
+        isFalse,
+      );
+
+      expect(
+        simpson ==
+            const SimpsonRule(
+              lowerBound: 2,
+              upperBound: 0,
+            ),
+        isFalse,
+      );
+
+      expect(
+        simpson ==
+            const SimpsonRule(lowerBound: 2, upperBound: 4, intervals: 0),
+        isFalse,
+      );
     });
 
     test(
