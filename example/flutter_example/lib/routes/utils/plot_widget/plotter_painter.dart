@@ -1,13 +1,26 @@
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:flutter/material.dart';
 
+/// A [CustomPainter] that creates a XY cartesian plane and draws any kind of
+/// mathematical function on it. Thanks to its [range] parameter, the user is
+/// able to define the "scale" of the plot (or the "zoom").
 class PlotterPainter<T> extends CustomPainter {
-  final PlotMode<T>? plotMode;
-  final int range;
   final int _xmax;
   final int _xmin;
   final int _ymax;
   final int _ymin;
+
+  /// Provides the ability to evaluate a real function on a point.
+  ///
+  /// If this is `null` then the painter only draws a cartesian plane (without
+  /// a function).
+  final PlotMode<T>? plotMode;
+
+  /// The 'scale' of the plot
+  final int range;
+
+  /// Draws a cartesian plane with a grey grid lines and black (thick) X and Y
+  /// axis. The function instead is plotted in [Colors.blueAccent].
   const PlotterPainter({
     required this.plotMode,
     this.range = 5,
@@ -21,6 +34,7 @@ class PlotterPainter<T> extends CustomPainter {
     _drawMainAxis(canvas, size);
     _drawAxis(canvas, size);
 
+    // Drawing the function ONLY if there's an evaluator available
     if (plotMode != null) {
       _drawEquation(canvas, size);
     }
@@ -48,6 +62,7 @@ class PlotterPainter<T> extends CustomPainter {
       ..color = Colors.blueGrey
       ..strokeWidth = 1.0;
 
+    // Drawing X and Y axis
     final scale = range;
     final distX = (size.width / 2) / scale;
     final distY = (size.height / 2) / scale;
@@ -55,6 +70,7 @@ class PlotterPainter<T> extends CustomPainter {
     var prevPoint = Offset(distX, 0);
     var currPoint = Offset(0, distY);
 
+    // Drawing the grid (with scaling)
     for (var i = -scale; i < scale; ++i) {
       if (i == 0) {
         continue;
@@ -85,6 +101,9 @@ class PlotterPainter<T> extends CustomPainter {
 
     for (var i = 0; i < size.width; ++i) {
       logx = _screenToLog(Offset(i * 1.0, 0), width, height).dx;
+
+      // Using '!' on 'plotMode' here is safe because this function is called
+      // only if 'plotMode != null' (see the 'paint' method above)
       logy = plotMode!.evaluateOn(logx);
 
       final pts = Offset(logx, logy);

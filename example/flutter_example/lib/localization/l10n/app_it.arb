@@ -13,6 +13,7 @@
   "chart": "Grafico",
   "solve": "Risolvi",
   "clean": "Pulisci",
+  "cancel": "Annulla",
   "no_solutions": "Nessuna soluzione da mostrare.",
   "no_chart": "Nessun grafico da disegnare.",
   "no_discriminant": "Nessun discriminante.",
@@ -20,5 +21,11 @@
   "wrong_input": "Input non valido",
   "tap_more": "Premi per vedere più dettagli",
   "discriminant": "Discriminante",
-  "fraction": "Frazione:"
+  "fraction": "Frazione:",
+  "single_point": "Punto fisso",
+  "bracketing": "Intervalli",
+  "precision": "Precisione",
+  "convergence": "Convergenza",
+  "efficiency": "Efficienza",
+  "not_computed": "Non calcolata"
 }

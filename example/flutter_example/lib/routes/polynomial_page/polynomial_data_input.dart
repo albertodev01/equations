@@ -1,16 +1,18 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
-import 'package:equations_solver/routes/utils/equation_text_formatter.dart';
+import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equations_solver/localization/localization.dart';
 
-/// TODO documentation
-class DataInput extends StatelessWidget {
-  const DataInput();
+/// This widget contains a series of [PolynomialInputField] widgets needed to
+/// parse the coefficients of the polynomial to be solved.
+class PolynomialDataInput extends StatelessWidget {
+  /// Creates a [PolynomialDataInput] widget.
+  const PolynomialDataInput();
 
   /// This is required to figure out how many inputs are required for the
-  /// polynomial to be solved
+  /// polynomial to be solved.
   PolynomialType _getType(BuildContext context) =>
       context.read<PolynomialBloc>().polynomialType;
 
@@ -43,9 +45,16 @@ class DataInput extends StatelessWidget {
   }
 }
 
+/// The actual input container.
 class _InputWidget extends StatefulWidget {
+  /// How many input fields the screen has to display.
   final int inputLength;
+
+  /// The 'form' of the equation. This can be, for example, `ax^2 + bx + c` in
+  /// the case of a quadratic polynomial.
   final String equationTemplate;
+
+  /// Creates a [_InputWIdget] widget.
   const _InputWidget({
     required this.inputLength,
     required this.equationTemplate,
@@ -56,23 +65,31 @@ class _InputWidget extends StatefulWidget {
 }
 
 class __InputWidget extends State<_InputWidget> {
+  /// Controllers of the various input fields are "cached" because they'll never
+  /// change during the lifetime of the widget.
   late final controllers = List<TextEditingController>.generate(
     widget.inputLength,
     (_) => TextEditingController(),
     growable: false,
   );
 
+  /// This is displayed at the top of the input box
   late final cachedEquationTitle = Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: EquationTextFormatter(equation: widget.equationTemplate),
   );
 
+  /// Form validation key
   final formKey = GlobalKey<FormState>();
 
-  late final cachedWrapBody = generateWrapBody();
-  List<PolynomialInputField> generateWrapBody() {
+  /// The input fields are placed inside a [Wrap] widget which will take care of
+  /// responsively laying out children in the UI according with the available
+  /// width.
+  ///
+  /// This is cached because the number of input fields won't change.
+  late final cachedWrapBody = _generateWrapBody();
+  List<PolynomialInputField> _generateWrapBody() {
     final body = <PolynomialInputField>[];
-
     var placeholderLetter = 'a';
 
     for (var i = 0; i < widget.inputLength; ++i) {
@@ -81,6 +98,8 @@ class __InputWidget extends State<_InputWidget> {
         placeholder: placeholderLetter,
       ));
 
+      // Increments by 1 the char code unit. Basically, with the below code we
+      // can move from 'a' to 'b' to 'c'...
       final newChar = placeholderLetter.codeUnitAt(0) + 1;
       placeholderLetter = String.fromCharCode(newChar);
     }
@@ -88,6 +107,7 @@ class __InputWidget extends State<_InputWidget> {
     return body;
   }
 
+  /// Validates the input and, if it's valid, sends the data to the bloc
   void _processInput(BuildContext context) {
     if (formKey.currentState?.validate() ?? false) {
       final event = PolynomialSolve(
@@ -105,6 +125,7 @@ class __InputWidget extends State<_InputWidget> {
     }
   }
 
+  /// Form and chart cleanup
   void _cleanInput(BuildContext context) {
     for (final controller in controllers) {
       controller.text = '';

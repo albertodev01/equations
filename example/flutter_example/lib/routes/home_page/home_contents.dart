@@ -7,6 +7,7 @@ import 'package:equations_solver/localization/localization.dart';
 /// Contains a series of tiles, represented by a [CardContainer] widget, that
 /// route the user to various pages
 class HomeContents extends StatelessWidget {
+  /// Creates a [HomeContents] widget.
   const HomeContents();
 
   @override
@@ -25,9 +26,10 @@ class HomeContents extends StatelessWidget {
           CardContainer(
             title: context.l10n.functions,
             image: const NonlinearLogo(),
-            onTap: () {},
+            onTap: () =>
+                Navigator.of(context).pushNamed(RouteGenerator.nonlinearPage),
           ),
-          CardContainer(
+          /*CardContainer(
             title: context.l10n.systems,
             image: const SystemsLogo(),
             onTap: () {},
@@ -36,7 +38,7 @@ class HomeContents extends StatelessWidget {
             title: context.l10n.integrals,
             image: const IntegralLogo(),
             onTap: () {},
-          ),
+          ),*/
         ],
       ),
     );

@@ -3,10 +3,10 @@ import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart'
 
 /// Events for the [PolynomialBloc] bloc.
 class PolynomialEvent extends Equatable {
-  /// The coefficients of the polynomial
+  /// The coefficients of the polynomial.
   final List<String> coefficients;
 
-  /// Initializes a [PolynomialEvent]
+  /// Initializes a [PolynomialEvent].
   const PolynomialEvent({
     this.coefficients = const [],
   });

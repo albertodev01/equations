@@ -15,6 +15,9 @@ class NavigationItem extends Equatable {
 
   /// The content of the page
   final Widget content;
+
+  /// Creates a [NavigationItem] widget. The [title] and the [content] are
+  /// required while the icons default to [Icons.multiline_chart]
   const NavigationItem({
     required this.title,
     required this.content,

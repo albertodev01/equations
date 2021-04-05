@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:equations_solver/blocs/navigation_bar/bloc/navigation_bloc.dart';
+import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/bottom_navigation_bar.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/rail_navigation.dart';
@@ -64,8 +64,8 @@ class EquationScaffold extends StatelessWidget {
 
     // At this point, there's at least 1 navigation item and thus the widget
     // requires some responsiveness!
-    return BlocProvider<NavigationBloc>(
-      create: (_) => NavigationBloc(),
+    return BlocProvider<NavigationCubit>(
+      create: (_) => NavigationCubit(),
       child: LayoutBuilder(
         builder: (context, dimensions) {
           final hasExtraBackground = dimensions.maxWidth >= 1300;

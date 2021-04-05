@@ -13,6 +13,7 @@
   "chart": "Chart",
   "solve": "Solve",
   "clean": "Clean",
+  "cancel": "Cancel",
   "no_solutions": "No solutions to display.",
   "no_chart": "No chart to plot.",
   "no_discriminant": "No discriminant.",
@@ -20,5 +21,11 @@
   "wrong_input": "Invalid input",
   "tap_more": "Tap to see more details",
   "discriminant": "Discriminant",
-  "fraction": "Fraction:"
+  "fraction": "Fraction:",
+  "single_point": "Single point",
+  "bracketing": "Bracketing",
+  "precision": "Precision",
+  "convergence": "Convergence",
+  "efficiency": "Efficiency",
+  "not_computed": "Not computed"
 }

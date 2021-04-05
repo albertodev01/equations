@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///  - Cubic
 ///  - Quartic
 class PolynomialPage extends StatefulWidget {
+  /// Creates a [PolynomialPage] widget.
   const PolynomialPage();
 
   @override
@@ -21,7 +22,7 @@ class PolynomialPage extends StatefulWidget {
 }
 
 class _PolynomialPageState extends State<PolynomialPage> {
-  /// Caching navigation items since they'll never change
+  /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.firstDegree,

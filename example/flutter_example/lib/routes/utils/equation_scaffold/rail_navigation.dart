@@ -9,6 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RailNavigation extends StatefulWidget {
   /// A list of items for a responsive navigation bar
   final List<NavigationItem> navigationItems;
+
+  /// Creates a [RailNavigation] widget.
   const RailNavigation({
     required this.navigationItems,
   });
@@ -46,7 +48,7 @@ class _RailNavigationState extends State<RailNavigation> {
         ),
 
         // The rail
-        BlocBuilder<NavigationBloc, int>(
+        BlocBuilder<NavigationCubit, int>(
           buildWhen: (previous, current) => previous != current,
           builder: (context, state) => NavigationRail(
             groupAlignment: 0,
@@ -54,7 +56,7 @@ class _RailNavigationState extends State<RailNavigation> {
             selectedIndex: state,
             labelType: NavigationRailLabelType.all,
             onDestinationSelected: (newIndex) =>
-                context.read<NavigationBloc>().add(newIndex),
+                context.read<NavigationCubit>().emit(newIndex),
           ),
         ),
       ],

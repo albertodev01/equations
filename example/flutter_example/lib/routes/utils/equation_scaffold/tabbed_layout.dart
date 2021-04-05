@@ -3,9 +3,15 @@ import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// This widget is wrapper of a [TabBarView] where the user cannot swipe to
+/// change tabs.
+///
+/// Tabs can be changed only according with the state of a [NavigationBloc] bloc.
 class TabbedNavigationLayout extends StatefulWidget {
   /// A list of items for a responsive navigation bar
   final List<NavigationItem> navigationItems;
+
+  /// Creates a [TabbedNavigationLayout] widget.
   const TabbedNavigationLayout({
     required this.navigationItems,
   });
@@ -16,8 +22,13 @@ class TabbedNavigationLayout extends StatefulWidget {
 
 class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
     with SingleTickerProviderStateMixin {
+  /// Controls the position of the currently visible page of the [TabBarView]
   late final TabController tabController;
-  late final List<Widget> tabPages;
+
+  /// The various pages of the [TabBarView]
+  late final tabPages = widget.navigationItems
+      .map((item) => item.content)
+      .toList(growable: false);
 
   @override
   void initState() {
@@ -27,10 +38,6 @@ class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
       length: widget.navigationItems.length,
       vsync: this,
     );
-
-    tabPages = widget.navigationItems
-        .map((item) => item.content)
-        .toList(growable: false);
   }
 
   @override
@@ -43,7 +50,7 @@ class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NavigationBloc, int>(
+    return BlocListener<NavigationCubit, int>(
       listenWhen: (previous, current) => previous != current,
       listener: (context, state) => _changePage(state),
       child: TabBarView(

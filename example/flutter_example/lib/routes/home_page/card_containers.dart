@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 /// by the app. A [CardContainer] widget has an icon on the left and some text
 /// on the right.
 class CardContainer extends StatelessWidget {
-  /// The description of the container
+  /// The description of the container.
   final String title;
 
-  /// The image on the left
+  /// The image on the left.
   final Widget image;
 
-  /// The route to be opened when the container is tapped
+  /// The route to be opened when the container is tapped.
   final void Function() onTap;
+
+  /// Creates a [CardContainer] widget.
   const CardContainer({
     required this.title,
     required this.image,

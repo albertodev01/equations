@@ -4,33 +4,44 @@ import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// A bottom navigation bar to be displayed withina a [EquationScaffold] widget.
-class BottomNavigation extends StatelessWidget {
-  /// A list of items for a responsive navigation bar
+/// A bottom navigation bar to be displayed within a [EquationScaffold] widget.
+class BottomNavigation extends StatefulWidget {
+  /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
+
+  /// Creates a [BottomNavigation] widget.
   const BottomNavigation({
     required this.navigationItems,
   });
 
-  /// Converts a [NavigationItem] into a [BottomNavigationBarItem]
-  List<BottomNavigationBarItem> get _bottom => navigationItems.map((item) {
-        return BottomNavigationBarItem(
-          icon: item.icon,
-          activeIcon: item.activeIcon,
-          label: item.title,
-        );
-      }).toList(growable: false);
+  @override
+  _BottomNavigationState createState() => _BottomNavigationState();
+}
+
+class _BottomNavigationState extends State<BottomNavigation> {
+  /// Converts a list of [NavigationItem]s into a list of [BottomNavigationBarItem]s
+  /// to be displayed on the navigation bar.
+  ///
+  /// Since these items will always be the same, we manually cache the list.
+  late final _bottom =
+      widget.navigationItems.map<BottomNavigationBarItem>((item) {
+    return BottomNavigationBarItem(
+      icon: item.icon,
+      activeIcon: item.activeIcon,
+      label: item.title,
+    );
+  }).toList(growable: false);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NavigationBloc, int>(
+    return BlocBuilder<NavigationCubit, int>(
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) => BottomNavigationBar(
         elevation: 6,
         items: _bottom,
         type: BottomNavigationBarType.fixed,
         currentIndex: state,
-        onTap: (newIndex) => context.read<NavigationBloc>().add(newIndex),
+        onTap: (newIndex) => context.read<NavigationCubit>().emit(newIndex),
       ),
     );
   }

@@ -9,6 +9,8 @@ class SectionTitle extends StatelessWidget {
 
   /// The image associate to the title (appearing to the left)
   final Widget icon;
+
+  /// Creates a [SectionTitle] widget
   const SectionTitle({
     required this.pageTitle,
     required this.icon,

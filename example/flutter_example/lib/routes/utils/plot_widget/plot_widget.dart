@@ -1,12 +1,23 @@
-import 'package:equations_solver/blocs/slider/slider_bloc.dart';
+import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// This widget draws a cartesian plane and, if there's a [plotMode], it also
+/// plots a real function `f(x)`.
+///
+/// If [plotMode] is not `null`, then a slider is also added below the widget to
+/// scale the image.
+///
+/// If [plotMode] is `null`, the slider doesn't appear and the widget only draws
+/// a cartesian plane (with no function within).
 class PlotWidget<T> extends StatelessWidget {
+  /// Provides the ability to evaluate a real function on a point.
   final PlotMode<T>? plotMode;
+
+  /// Creates a [PlotWidget] instance.
   const PlotWidget({
     this.plotMode,
   });
@@ -14,19 +25,29 @@ class PlotWidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SliderBloc>(
-      create: (_) => SliderBloc(),
+      create: (_) => SliderBloc(
+        minValue: 2,
+        maxValue: 10,
+        current: 3,
+      ),
       child: Padding(
-          padding: const EdgeInsets.fromLTRB(50, 45, 50, 40),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _PlotBody<T>(
-                plotMode: plotMode,
-              ),
-              const SizedBox(height: 35),
-              if (plotMode != null) const _PlotSlider(),
-            ],
-          )),
+        padding: const EdgeInsets.fromLTRB(50, 45, 50, 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // The plot
+            _PlotBody<T>(
+              plotMode: plotMode,
+            ),
+
+            // Some spacing
+            const SizedBox(height: 35),
+
+            // Placing the slider ONLY if there's a function
+            if (plotMode != null) const _PlotSlider(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -79,6 +100,7 @@ class _PlotSlider extends StatelessWidget {
         return Slider(
           min: 2,
           max: 10,
+          divisions: 8,
           value: state,
           onChanged: (value) => update(context, value),
           label: '${state.round()}',

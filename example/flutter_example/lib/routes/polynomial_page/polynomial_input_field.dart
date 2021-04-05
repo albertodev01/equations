@@ -2,9 +2,15 @@ import 'package:equations/equations.dart';
 import 'package:flutter/material.dart';
 import 'package:equations_solver/localization/localization.dart';
 
+/// A
 class PolynomialInputField extends StatelessWidget {
+  /// The [TextEditingController] controller.
   final TextEditingController controller;
+
+  /// The placeholder text to show in the input field.
   final String placeholder;
+
+  /// Creates a [PolynomialBody] widget.
   const PolynomialInputField({
     required this.controller,
     required this.placeholder,
@@ -33,7 +39,6 @@ class PolynomialInputField extends StatelessWidget {
           } on Exception {
             return context.l10n.wrong_input;
           }
-
           return null;
         },
       ),

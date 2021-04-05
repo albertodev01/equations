@@ -1,5 +1,8 @@
-import 'package:equations_solver/routes/polynomial_page/data_input.dart';
+import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
+import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
+import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
@@ -10,8 +13,13 @@ import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart'
 import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-/// TODO write docs
+/// This widget contains the solutions of the polynomial equation and a chart
+/// which plots the function.
+///
+/// This widget is responsive: contents may be laid out on a single column or
+/// on two columns according with the available width.
 class PolynomialBody extends StatelessWidget {
+  /// Creates a [PolynomialBody] widget.
   const PolynomialBody();
 
   @override
@@ -27,14 +35,16 @@ class PolynomialBody extends StatelessWidget {
         Positioned(
           top: 20,
           left: 20,
-          child: _GoBackButton(),
+          child: GoBackButton(),
         ),
       ],
     );
   }
 }
 
+/// Determines whether the contents should appear in 1 or 2 columns.
 class _ResponsiveBody extends StatefulWidget {
+  /// Creates a [_ResponsiveBody] widget.
   const _ResponsiveBody();
 
   @override
@@ -43,8 +53,11 @@ class _ResponsiveBody extends StatefulWidget {
 
 class __ResponsiveBodyState extends State<_ResponsiveBody> {
   /// Manually caching the page title
-  late final Widget pageTitleWidget = _PageTitle(
+  late final Widget pageTitleWidget = PageTitle(
     pageTitle: getLocalizedName(context),
+    pageLogo: const PolynomialLogo(
+      size: 50,
+    ),
   );
 
   /// Getting the title of the page according with the type of polynomial that
@@ -73,7 +86,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
           child: Column(
             children: [
               pageTitleWidget,
-              const DataInput(),
+              const PolynomialDataInput(),
               const PolynomialResults(),
               const Padding(
                 padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
@@ -97,7 +110,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                 child: Column(
                   children: [
                     pageTitleWidget,
-                    const DataInput(),
+                    const PolynomialDataInput(),
                     const PolynomialResults(),
                   ],
                 ),
@@ -117,51 +130,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   }
 }
 
-/// A widget containing the title of the page.
-class _PageTitle extends StatelessWidget {
-  /// The title of the page.
-  final String pageTitle;
-  const _PageTitle({
-    required this.pageTitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(right: 20),
-            child: PolynomialLogo(
-              size: 50,
-            ),
-          ),
-          Text(
-            pageTitle,
-            style: const TextStyle(fontSize: 26, color: Colors.blueGrey),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// This button simply goes back to the previous page.
-class _GoBackButton extends StatelessWidget {
-  const _GoBackButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () => Navigator.of(context).pop(),
-    );
-  }
-}
-
+/// Puts on the screen a widget that draws mathematical functions.
 class _PolynomialPlot extends StatefulWidget {
+  /// Creates a [_PolynomialPlot] widget.
   const _PolynomialPlot();
 
   @override
@@ -193,7 +164,9 @@ class __PolynomialPlotState extends State<_PolynomialPlot> {
                 ),
 
                 // The actual plot
-                PlotWidget(plotMode: plotMode),
+                PlotWidget(
+                  plotMode: plotMode,
+                ),
               ],
             ),
           ),

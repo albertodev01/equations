@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 ///
 /// At the bottom there's a list with the latest 5 operations made by the user.
 class HomePage extends StatelessWidget {
+  /// Creates a [HomePage] widget.
   const HomePage();
 
   @override
