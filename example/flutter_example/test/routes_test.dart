@@ -1,5 +1,6 @@
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page.dart';
+import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Making sure that route names are consistent', () {
     test('Verifying route names', () {
-      expect(RouteGenerator.homePage, '/');
-      expect(RouteGenerator.polynomialPage, '/polynomials');
+      expect(RouteGenerator.homePage, equals('/'));
+      expect(RouteGenerator.polynomialPage, equals('/polynomials'));
+      expect(RouteGenerator.nonlinearPage, equals('/nonlinear'));
     });
 
     test('Checking routes health', () {
@@ -20,6 +22,7 @@ void main() {
       const routes = <String>[
         RouteGenerator.homePage,
         RouteGenerator.polynomialPage,
+        RouteGenerator.nonlinearPage
       ];
 
       try {
@@ -48,6 +51,13 @@ void main() {
           name: RouteGenerator.polynomialPage,
         )),
         isA<MaterialPageRoute<PolynomialPage>>(),
+      );
+
+      expect(
+        RouteGenerator.generateRoute(const RouteSettings(
+          name: RouteGenerator.nonlinearPage,
+        )),
+        isA<MaterialPageRoute<NonlinearPage>>(),
       );
     });
 

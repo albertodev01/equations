@@ -3,10 +3,10 @@ import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 
 /// Events for the [NonlinearBloc] bloc.
 abstract class NonlinearEvent extends Equatable {
-  /// The maximum number of iterations possible
+  /// The maximum number of iterations possible.
   final int maxIterations;
 
-  /// The precision of the algorithm
+  /// The precision of the algorithm.
   final double precision;
 
   /// Initializes a [NonlinearEvent] instance.
@@ -32,7 +32,7 @@ class SinglePointMethod extends NonlinearEvent {
   /// or a integer/floating point number.
   final String initialGuess;
 
-  /// The method to be used to find the root
+  /// The method to be used to find the root.
   final SinglePointMethods method;
 
   /// Requires the coefficients of the polynomial to be solved.
@@ -72,7 +72,7 @@ class SinglePointMethod extends NonlinearEvent {
 }
 
 /// Event fired when the bloc has to solve an equation using a root finding
-/// algorithm that brackets the root
+/// algorithm that brackets the root.
 class BracketingMethod extends NonlinearEvent {
   /// The real function `f(x)`
   final String function;
@@ -85,18 +85,18 @@ class BracketingMethod extends NonlinearEvent {
   /// or a integer/floating point number.
   final String upperBound;
 
-  /// The method to be used to find the root
+  /// The method to be used to find the root.
   final BracketingMethods method;
 
   /// Requires the coefficients of the polynomial to be solved.
-  const BracketingMethod(
-      {required this.function,
-      required this.lowerBound,
-      required this.upperBound,
-      required this.method,
-      int maxIterations = 15,
-      double precision = 1.0e-10})
-      : super(
+  const BracketingMethod({
+    required this.function,
+    required this.lowerBound,
+    required this.upperBound,
+    required this.method,
+    int maxIterations = 15,
+    double precision = 1.0e-10,
+  }) : super(
           maxIterations: maxIterations,
           precision: precision,
         );

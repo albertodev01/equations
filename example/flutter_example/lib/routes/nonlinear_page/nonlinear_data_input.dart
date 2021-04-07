@@ -6,6 +6,7 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equations/equations.dart';
 import 'package:flutter/material.dart';
 
 /// This widget contains a series of XX widgets needed to
@@ -35,16 +36,18 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// Manually caching the inputs
   late final guessesInput = _GuessesInput(
     controllers: controllers,
-    type: _getType(context),
+    type: _getType,
   );
+
+  /// Form validation key
+  final formKey = GlobalKey<FormState>();
 
   /// This is required to figure out how many inputs are required for the
   /// equation to be solved.
-  NonlinearType _getType(BuildContext context) =>
-      context.read<NonlinearBloc>().nonlinearType;
+  NonlinearType get _getType => context.read<NonlinearBloc>().nonlinearType;
 
   /// How many input fields the widget requires.
-  int get fieldsCount => _getType(context) == NonlinearType.singlePoint ? 2 : 3;
+  int get fieldsCount => _getType == NonlinearType.singlePoint ? 2 : 3;
 
   /// Form and chart cleanup
   void cleanInput(BuildContext context) {
@@ -52,78 +55,91 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
       controller.text = '';
     }
 
+    formKey.currentState?.reset();
     context.read<NonlinearBloc>().add(const NonlinearClean());
   }
 
   /// Solves a nonlinear equation.
   void solve(BuildContext context) {
-    final precision = context.read<SliderBloc>().state;
-    final algorithm = context.read<DropdownCubit>().state;
+    if (formKey.currentState?.validate() ?? false) {
+      final precision = context.read<SliderCubit>().state;
+      final algorithm = context.read<DropdownCubit>().state;
 
-    if (_getType(context) == NonlinearType.singlePoint) {
-      context.read<NonlinearBloc>().add(SinglePointMethod(
-        method: SinglePointMethod.resolve(algorithm),
-        initialGuess: controllers[1].text,
-        function: controllers[0].text,
-        precision: 1.0 * math.pow(10, precision),
-      ));
+      if (_getType == NonlinearType.singlePoint) {
+        context.read<NonlinearBloc>().add(SinglePointMethod(
+              method: SinglePointMethod.resolve(algorithm),
+              initialGuess: controllers[1].text,
+              function: controllers[0].text,
+              precision: 1.0 * math.pow(10, precision),
+            ));
+      } else {
+        context.read<NonlinearBloc>().add(BracketingMethod(
+              method: BracketingMethod.resolve(algorithm),
+              lowerBound: controllers[1].text,
+              upperBound: controllers[2].text,
+              function: controllers[0].text,
+              precision: 1.0 * math.pow(10, precision),
+            ));
+      }
     } else {
-      context.read<NonlinearBloc>().add(BracketingMethod(
-        method: BracketingMethod.resolve(algorithm),
-        lowerBound: controllers[1].text,
-        upperBound: controllers[2].text,
-        function: controllers[0].text,
-        precision: 1.0 * math.pow(10, precision),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.polynomial_error),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Some space from the top
-        const SizedBox(height: 40),
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Some space from the top
+          const SizedBox(height: 40),
 
-        // The equation input
-        functionInput,
+          // The equation input
+          functionInput,
 
-        // The guesses required by the app
-        guessesInput,
+          // The guesses required by the app
+          guessesInput,
 
-        // Some spacing
-        const SizedBox(height: 40),
+          // Some spacing
+          const SizedBox(height: 40),
 
-        // Which algorithm has to be used
-        const DropdownSelection(),
+          // Which algorithm has to be used
+          const DropdownSelection(),
 
-        // Some spacing
-        const SizedBox(height: 40),
+          // Some spacing
+          const SizedBox(height: 40),
 
-        // The slider
-        const PrecisionSlider(),
+          // The slider
+          const PrecisionSlider(),
 
-        // Some spacing
-        const SizedBox(height: 50),
+          // Some spacing
+          const SizedBox(height: 50),
 
-        // Two buttons needed to "solve" and "clear" the equation
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => solve(context),
-              child: Text(context.l10n.solve),
-            ),
-            const SizedBox(width: 30),
-            ElevatedButton(
-              onPressed: () => cleanInput(context),
-              child: Text(context.l10n.clean),
-            ),
-          ],
-        )
-      ],
+          // Two buttons needed to "solve" and "clear" the equation
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => solve(context),
+                child: Text(context.l10n.solve),
+              ),
+              const SizedBox(width: 30),
+              ElevatedButton(
+                onPressed: () => cleanInput(context),
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -143,13 +159,32 @@ class _NonlinearInput extends StatelessWidget {
   /// The maximum length of the input
   final int maxLength;
 
+  /// Determines whether the validator function of the input should allow for
+  /// real values or not.
+  ///
+  /// In other words, when `onlyRealValues = true` then equations aren't accepted
+  /// but numbers are.
+  ///
+  /// This is `false` by default.
+  final bool onlyRealValues;
+
   /// Creates a [_FunctionInput] instance
   const _NonlinearInput({
     required this.controller,
     required this.placeholderText,
     this.baseWidth = 300,
     this.maxLength = 100,
+    this.onlyRealValues = false,
   });
+
+  String? _validator(String? value) {
+    if (value != null) {
+      if (onlyRealValues) {
+        return value.isRealFunction ? null : 'Uh! :(';
+      }
+      return value.isRealFunction ? null : 'Uh! :(';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +205,7 @@ class _NonlinearInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: placeholderText,
             ),
+            validator: _validator,
           ),
         );
       },
@@ -205,14 +241,15 @@ class _GuessesInput extends StatelessWidget {
           placeholderText: 'x0',
           baseWidth: 80,
           maxLength: 8,
+          onlyRealValues: true,
         ),
-
         if (type == NonlinearType.bracketing)
           _NonlinearInput(
             controller: controllers[2],
             placeholderText: 'x1',
             baseWidth: 80,
             maxLength: 8,
+            onlyRealValues: true,
           ),
       ],
     );

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:equations_solver/main.dart' as app_main;
 
 void main() {
-  group('Testing the entrypoint of the app', () {
+  group('Testing the entry point of the app', () {
     testWidgets(
         "Making sure that the root widget contains a 'MaterialApp' and"
         ' it is correctly initialized', (tester) async {

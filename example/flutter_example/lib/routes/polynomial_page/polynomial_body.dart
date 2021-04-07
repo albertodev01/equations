@@ -1,4 +1,3 @@
-import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';

@@ -46,7 +46,7 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   /// Manually caching this subtree portion which doesn't need to be updated
   late final noResults = Center(
     child: Padding(
-      padding: const EdgeInsets.fromLTRB(80, 35, 80, 35),
+      padding: const EdgeInsets.fromLTRB(80, 35, 80, 65),
       child: Text(
         context.l10n.no_solutions,
         style: const TextStyle(fontSize: 16),
@@ -59,7 +59,7 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
   bool buildCondition(NonlinearState previous, NonlinearState current) =>
       (previous != current) &&
-          ((current is NonlinearGuesses) || (current is NonlinearNone));
+      ((current is NonlinearGuesses) || (current is NonlinearNone));
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +75,23 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               RealResultCard(
-                leading: 'x0',
+                leading: 'x0: ',
                 value: guess,
               ),
 
               RealResultCard(
-                leading: context.l10n.convergence,
+                leading: '${context.l10n.convergence}: ',
                 value: convergence,
               ),
 
               RealResultCard(
-                leading: context.l10n.efficiency,
+                leading: '${context.l10n.efficiency}: ',
                 value: efficiency,
+              ),
+
+              // Some spacing
+              const SizedBox(
+                height: 65,
               ),
             ],
           );

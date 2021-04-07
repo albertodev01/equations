@@ -27,5 +27,6 @@
   "precision": "Precision",
   "convergence": "Convergence",
   "efficiency": "Efficiency",
-  "not_computed": "Not computed"
+  "not_computed": "Not computed",
+  "nonlinear_error": "Wrong equation or parameters format."
 }

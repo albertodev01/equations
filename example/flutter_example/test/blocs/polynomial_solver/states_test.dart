@@ -16,14 +16,16 @@ void main() {
             Complex.fromReal(3),
           ],
         ),
-        equals(PolynomialRoots(
-          algebraic: algebraic,
-          discriminant: const Complex.i(),
-          roots: const [
-            Complex.fromReal(-1),
-            Complex.fromReal(3),
-          ],
-        )),
+        equals(
+          PolynomialRoots(
+            algebraic: algebraic,
+            discriminant: const Complex.i(),
+            roots: const [
+              Complex.fromReal(-1),
+              Complex.fromReal(3),
+            ],
+          ),
+        ),
       );
 
       expect(

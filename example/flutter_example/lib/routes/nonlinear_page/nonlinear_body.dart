@@ -39,14 +39,13 @@ class _NonlinearBodyState extends State<NonlinearBody> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SliderBloc>(
-          create: (_) => SliderBloc(
+        BlocProvider<SliderCubit>(
+          create: (_) => SliderCubit(
             minValue: 2,
             maxValue: 15,
             current: 8,
           ),
         ),
-
         BlocProvider<DropdownCubit>(
           create: (_) => DropdownCubit(
             initialValue: initialValue,

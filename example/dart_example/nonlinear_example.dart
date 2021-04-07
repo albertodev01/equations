@@ -14,10 +14,8 @@ void main() {
   print('convergence: ${solutions.convergence}'); // 1.99759...
   print('efficiency: ${solutions.efficiency}'); // 1.18884...
 
-  final integration = newton.integrateOn(const SimpsonRule(
-    lowerBound: 1,
-    upperBound: 2.5
-  ));
+  final integration =
+      newton.integrateOn(const SimpsonRule(lowerBound: 1, upperBound: 2.5));
 
   print("integral [1, 2.5]: ${integration.result}"); // more or less 5
 

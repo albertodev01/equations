@@ -24,7 +24,6 @@ class _DropdownSelectionState extends State<DropdownSelection> {
           value: 'Newton',
           child: Text('Newton'),
         ),
-
         DropdownMenuItem<String>(
           value: 'Steffensen',
           child: Text('Steffensen'),
@@ -36,12 +35,10 @@ class _DropdownSelectionState extends State<DropdownSelection> {
           value: 'Bisection',
           child: Text('Bisection'),
         ),
-
         DropdownMenuItem<String>(
           value: 'Secant',
           child: Text('Secant'),
         ),
-
         DropdownMenuItem<String>(
           value: 'Brent',
           child: Text('Brent'),
@@ -59,16 +56,15 @@ class _DropdownSelectionState extends State<DropdownSelection> {
       child: SizedBox(
         width: 200,
         child: DropdownButtonFormField<String>(
-          isExpanded: true,
-          value: context.watch<DropdownCubit>().state,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
+            isExpanded: true,
+            value: context.watch<DropdownCubit>().state,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
             ),
-          ),
-          onChanged: (value) => changeSelected(value!),
-          items: dropdownItems
-        ),
+            onChanged: (value) => changeSelected(value!),
+            items: dropdownItems),
       ),
     );
   }

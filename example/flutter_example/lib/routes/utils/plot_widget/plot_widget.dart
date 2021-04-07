@@ -24,8 +24,8 @@ class PlotWidget<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<SliderBloc>(
-      create: (_) => SliderBloc(
+    return BlocProvider<SliderCubit>(
+      create: (_) => SliderCubit(
         minValue: 2,
         maxValue: 10,
         current: 3,
@@ -68,7 +68,7 @@ class _PlotBody<T> extends StatelessWidget {
           elevation: 8,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           child: ClipRRect(
-            child: BlocBuilder<SliderBloc, double>(
+            child: BlocBuilder<SliderCubit, double>(
               buildWhen: (prev, curr) => prev != curr,
               builder: (context, state) {
                 return CustomPaint(
@@ -91,11 +91,11 @@ class _PlotSlider extends StatelessWidget {
   const _PlotSlider();
 
   void update(BuildContext context, double value) =>
-      context.read<SliderBloc>().add(value);
+      context.read<SliderCubit>().updateSlider(value);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SliderBloc, double>(
+    return BlocBuilder<SliderCubit, double>(
       builder: (context, state) {
         return Slider(
           min: 2,

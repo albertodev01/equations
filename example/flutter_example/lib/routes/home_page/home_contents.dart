@@ -18,12 +18,14 @@ class HomeContents extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CardContainer(
+            key: const Key('PolynomialLogo-Container'),
             title: context.l10n.polynomials,
             image: const PolynomialLogo(),
             onTap: () =>
                 Navigator.of(context).pushNamed(RouteGenerator.polynomialPage),
           ),
           CardContainer(
+            key: const Key('NonlinearLogo-Container'),
             title: context.l10n.functions,
             image: const NonlinearLogo(),
             onTap: () =>

@@ -3,7 +3,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 
 /// States for the [PolynomialBloc] bloc.
-class PolynomialState extends Equatable {
+abstract class PolynomialState extends Equatable {
   /// The roots of the equation.
   final List<Complex> roots;
 

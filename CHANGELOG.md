@@ -1,3 +1,10 @@
+## [2.0.2]
+
+ - New extension method on `String` called `isRealFunction` that determines whether a string represents a real function or not
+ - New extension method on `String` called `isNumericalExpression` that determines whether a string represents numerical expression or not
+ - Written more tests
+ - Dependencies versions update
+
 ## [2.0.1]
 
  - New `toStringAsFixed()` method for the `Complex` type

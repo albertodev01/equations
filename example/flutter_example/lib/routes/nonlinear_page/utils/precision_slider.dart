@@ -8,7 +8,7 @@ class PrecisionSlider extends StatelessWidget {
   const PrecisionSlider();
 
   void _update(BuildContext context, double value) =>
-      context.read<SliderBloc>().add(value);
+      context.read<SliderCubit>().updateSlider(value);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class PrecisionSlider extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Slider
-              BlocBuilder<SliderBloc, double>(
+              BlocBuilder<SliderCubit, double>(
                 builder: (context, state) {
                   return Slider(
                     min: 2,
@@ -47,7 +47,7 @@ class PrecisionSlider extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Precision'),
-                    BlocBuilder<SliderBloc, double>(
+                    BlocBuilder<SliderCubit, double>(
                       builder: (context, state) => Text('1.0e-$state'),
                     ),
                   ],
