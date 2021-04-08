@@ -26,7 +26,7 @@ jobs:
         run: flutter analyze lib test
 
       - name: Run tests
-        run: dart test --coverage=coverage test && dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+        run: flutter test --coverage
 
       - name: Check Code Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
