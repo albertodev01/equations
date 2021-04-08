@@ -9,8 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equations/equations.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains a series of XX widgets needed to
-/// parse the coefficients of the polynomial to be solved.
+/// This widget contains a series of input widgets needed to parse the
+/// coefficients of the nonlinear equation to be solved.
 class NonlinearDataInput extends StatefulWidget {
   /// Creates a [NonlinearDataInput] widget.
   const NonlinearDataInput();
@@ -20,26 +20,26 @@ class NonlinearDataInput extends StatefulWidget {
 }
 
 class _NonlinearDataInputState extends State<NonlinearDataInput> {
-  /// The controllers needed by the [TextFormField]s of the widget
+  /// The controllers needed by the [TextFormField]s of the widget.
   late final controllers = List<TextEditingController>.generate(
     fieldsCount,
     (_) => TextEditingController(),
     growable: false,
   );
 
-  /// Manually caching the equation input field
+  /// Manually caching the equation input field.
   late final functionInput = _NonlinearInput(
     controller: controllers[0],
     placeholderText: 'f(x)',
   );
 
-  /// Manually caching the inputs
+  /// Manually caching the inputs.
   late final guessesInput = _GuessesInput(
     controllers: controllers,
     type: _getType,
   );
 
-  /// Form validation key
+  /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
   /// This is required to figure out how many inputs are required for the
@@ -49,10 +49,10 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// How many input fields the widget requires.
   int get fieldsCount => _getType == NonlinearType.singlePoint ? 2 : 3;
 
-  /// Form and chart cleanup
+  /// Form and chart cleanup.
   void cleanInput(BuildContext context) {
     for (final controller in controllers) {
-      controller.text = '';
+      controller.clear();
     }
 
     formKey.currentState?.reset();
@@ -66,20 +66,24 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
       final algorithm = context.read<DropdownCubit>().state;
 
       if (_getType == NonlinearType.singlePoint) {
-        context.read<NonlinearBloc>().add(SinglePointMethod(
-              method: SinglePointMethod.resolve(algorithm),
-              initialGuess: controllers[1].text,
-              function: controllers[0].text,
-              precision: 1.0 * math.pow(10, precision),
-            ));
+        context.read<NonlinearBloc>().add(
+              SinglePointMethod(
+                method: SinglePointMethod.resolve(algorithm),
+                initialGuess: controllers[1].text,
+                function: controllers[0].text,
+                precision: 1.0 * math.pow(10, precision),
+              ),
+            );
       } else {
-        context.read<NonlinearBloc>().add(BracketingMethod(
-              method: BracketingMethod.resolve(algorithm),
-              lowerBound: controllers[1].text,
-              upperBound: controllers[2].text,
-              function: controllers[0].text,
-              precision: 1.0 * math.pow(10, precision),
-            ));
+        context.read<NonlinearBloc>().add(
+              BracketingMethod(
+                method: BracketingMethod.resolve(algorithm),
+                lowerBound: controllers[1].text,
+                upperBound: controllers[2].text,
+                function: controllers[0].text,
+                precision: 1.0 * math.pow(10, precision),
+              ),
+            );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

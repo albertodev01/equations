@@ -8,12 +8,12 @@ void main() {
     test(
         'Making sure that the series converges when the root is in the interval.',
         () {
-      const steffensen = Steffensen(function: 'exp(x)-3', x0: 1, maxSteps: 5);
+      const steffensen = Steffensen(function: 'e^x-3', x0: 1, maxSteps: 5);
 
       expect(steffensen.maxSteps, equals(5));
       expect(steffensen.tolerance, equals(1.0e-10));
-      expect(steffensen.function, equals('exp(x)-3'));
-      expect(steffensen.toString(), equals('f(x) = exp(x)-3'));
+      expect(steffensen.function, equals('e^x-3'));
+      expect(steffensen.toString(), equals('f(x) = e^x-3'));
       expect(steffensen.x0, equals(1));
 
       // Solving the equation, making sure that the series converged
@@ -37,27 +37,28 @@ void main() {
 
     test('Making sure that a malformed equation string throws.', () {
       expect(() {
-        const Steffensen(function: 'exp x - 3', x0: 1).solve();
+        const steffensen = Steffensen(function: '', x0: 1);
+        steffensen.solve();
       }, throwsA(isA<ExpressionParserException>()));
     });
 
     test('Making sure that object comparison properly works', () {
-      const steffensen = Steffensen(function: 'exp(x)-3', x0: 3);
+      const steffensen = Steffensen(function: 'e^x-3', x0: 3);
 
       expect(
-        const Steffensen(function: 'exp(x)-3', x0: 3),
+        const Steffensen(function: 'e^x-3', x0: 3),
         equals(steffensen),
       );
       expect(
-        const Steffensen(function: 'exp(x)-3', x0: 3) == steffensen,
+        const Steffensen(function: 'e^x-3', x0: 3) == steffensen,
         isTrue,
       );
       expect(
-        const Steffensen(function: 'exp(x)-3', x0: 1) == steffensen,
+        const Steffensen(function: 'e^x-3', x0: 1) == steffensen,
         isFalse,
       );
       expect(
-        const Steffensen(function: 'exp(x)-3', x0: 3).hashCode,
+        const Steffensen(function: 'e^x-3', x0: 3).hashCode,
         equals(steffensen.hashCode),
       );
     });

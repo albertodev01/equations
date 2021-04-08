@@ -1,3 +1,4 @@
+import 'package:equations/equations.dart' as equations;
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
@@ -105,6 +106,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
       if (size.maxWidth <= 950) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
+          key: const Key('SingleChildScrollView-mobile-responsive'),
           child: Column(
             children: [
               pageTitleWidget,
@@ -129,6 +131,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
             height: double.infinity,
             child: Center(
               child: SingleChildScrollView(
+                key: const Key('SingleChildScrollView-desktop-responsive'),
                 child: Column(
                   children: [
                     pageTitleWidget,
@@ -186,7 +189,7 @@ class _NonlinearPlotState extends State<_NonlinearPlot> {
                 ),
 
                 // The actual plot
-                PlotWidget(
+                PlotWidget<equations.NonLinear>(
                   plotMode: plotMode,
                 ),
               ],

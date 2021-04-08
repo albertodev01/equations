@@ -4,6 +4,7 @@ import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import '../../mock_wrapper.dart';
 
 void main() {
@@ -87,6 +88,35 @@ void main() {
       expect(state.dropdownItems[0].value, equals('Bisection'));
       expect(state.dropdownItems[1].value, equals('Secant'));
       expect(state.dropdownItems[2].value, equals('Brent'));
+    });
+
+    testGoldens('DropdownSelection', (tester) async {
+      final widget = SizedBox(
+        width: 200,
+        height: 200,
+        child: Scaffold(
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>(
+                create: (_) => NonlinearBloc(NonlinearType.bracketing),
+              ),
+              BlocProvider<DropdownCubit>(
+                create: (_) => DropdownCubit(initialValue: 'Bisection'),
+              ),
+            ],
+            child: const DropdownSelection(),
+          ),
+        ),
+      );
+
+      final builder = GoldenBuilder.column()..addScenario('', widget);
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(300, 300),
+      );
+      await screenMatchesGolden(tester, 'dropdown_selection');
     });
   });
 }

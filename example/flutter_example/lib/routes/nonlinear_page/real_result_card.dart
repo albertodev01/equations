@@ -18,7 +18,7 @@ class RealResultCard extends StatelessWidget {
   /// This is `false` by default.
   final bool withFraction;
 
-  /// Creates a [HomePage] widget
+  /// Creates a [RealResultCard] widget.
   const RealResultCard({
     required this.value,
     this.leading = 'x =',
@@ -39,7 +39,10 @@ class RealResultCard extends StatelessWidget {
 
     if (withFraction) {
       final fraction = Fraction.fromDouble(value);
-      subtitle = Text('Fraction: $fraction');
+      subtitle = Text(
+        '${context.l10n.fraction}: $fraction',
+        key: const Key('Fraction-ResultCard'),
+      );
     }
 
     final valueString = _checkNan(context, value);

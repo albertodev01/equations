@@ -128,7 +128,7 @@ class __InputWidget extends State<_InputWidget> {
   /// Form and chart cleanup
   void _cleanInput(BuildContext context) {
     for (final controller in controllers) {
-      controller.text = '';
+      controller.clear();
     }
 
     formKey.currentState?.reset();

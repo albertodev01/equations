@@ -8,7 +8,7 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
   /// The type root finding algorithm this bloc has to solve.
   final NonlinearType nonlinearType;
 
-  /// Initializes a [NonlinearBloc] with [NonlinearNone]
+  /// Initializes a [NonlinearBloc] with [NonlinearNone].
   NonlinearBloc(this.nonlinearType) : super(const NonlinearNone());
 
   @override
@@ -26,6 +26,7 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     }
   }
 
+  /// Converts a [String] into a [Fraction] and throws if the conversion fails.
   double _parseDouble(String value) => Fraction.fromString(value).toDouble();
 
   Stream<NonlinearState> _nonlinearSinglePointHandler(

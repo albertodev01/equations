@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/localization/localization.dart';
 
 /// Sets the precision of the currently selected algorithm.
 class PrecisionSlider extends StatelessWidget {
-  /// Creates a [PrecisionSlider] wiget.
+  /// Creates a [PrecisionSlider] widget.
   const PrecisionSlider();
 
   void _update(BuildContext context, double value) =>
@@ -46,9 +47,13 @@ class PrecisionSlider extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Precision'),
+                    // The precision of the slider
+                    Text(context.l10n.precision),
+
+                    // The label representing the precision
                     BlocBuilder<SliderCubit, double>(
-                      builder: (context, state) => Text('1.0e-$state'),
+                      builder: (context, state) =>
+                          Text('1.0e-${state.round()}'),
                     ),
                   ],
                 ),

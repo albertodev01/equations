@@ -1,12 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:mocktail/mocktail.dart';
 
-class MockDropdownCubit extends MockCubit<String> implements DropdownCubit {}
-
-class MockPolynomialBloc extends MockBloc<PolynomialEvent, PolynomialState>
-    implements PolynomialBloc {}
-
+// ===== Nonlinear bloc mock class ===== //
 class MockNonlinearBloc extends MockBloc<NonlinearEvent, NonlinearState>
     implements NonlinearBloc {}
+
+class MockNonlinearEvent extends Fake implements NonlinearEvent {}
+
+class MockNonlinearState extends Fake implements NonlinearState {}

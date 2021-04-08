@@ -65,9 +65,6 @@ linter:
     # flow statements inside the loop
     - avoid_function_literals_in_foreach_calls
 
-    # Don't break value types by implementing them
-    - avoid_implementing_value_types
-
     # Removes redundant `= null;`
     - avoid_init_to_null
 

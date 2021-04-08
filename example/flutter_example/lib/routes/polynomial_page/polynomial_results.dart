@@ -1,5 +1,7 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/routes/polynomial_page/complex_result_card.dart';
+import 'package:equations_solver/routes/polynomial_page/no_discriminant.dart';
+import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,17 +61,6 @@ class _PolynomialSolutions extends StatefulWidget {
 }
 
 class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
-  /// Manually caching this subtree portion which doesn't need to be updated
-  late final noResults = Center(
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(80, 35, 80, 35),
-      child: Text(
-        context.l10n.no_solutions,
-        style: const TextStyle(fontSize: 16),
-      ),
-    ),
-  );
-
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
@@ -92,7 +83,7 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
           );
         }
 
-        return noResults;
+        return const NoResults();
       },
     );
   }
@@ -107,17 +98,6 @@ class _PolynomialDiscriminant extends StatefulWidget {
 }
 
 class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
-  /// Manually caching this subtree portion which doesn't need to be updated
-  late final noDiscriminant = Center(
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(80, 35, 80, 35),
-      child: Text(
-        context.l10n.no_discriminant,
-        style: const TextStyle(fontSize: 16),
-      ),
-    ),
-  );
-
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
@@ -131,7 +111,6 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
       padding: const EdgeInsets.only(bottom: 30),
       child: BlocBuilder<PolynomialBloc, PolynomialState>(
         builder: (context, state) {
-          debugPrint(state.runtimeType.toString());
           if (state is PolynomialRoots) {
             return ComplexResultCard(
               value: state.discriminant,
@@ -139,7 +118,7 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
             );
           }
 
-          return noDiscriminant;
+          return const NoDiscriminant();
         },
       ),
     );

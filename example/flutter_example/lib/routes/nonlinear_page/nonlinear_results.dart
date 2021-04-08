@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/routes/nonlinear_page/real_result_card.dart';
+import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
@@ -28,35 +29,24 @@ class NonlinearResults extends StatelessWidget {
           ),
         ),
 
-        // Showing the solutions of the polynomial
-        const _PolynomialSolutions(),
+        // Showing the solutions of the nonlinear equation
+        const _NonlinearSolutions(),
       ],
     );
   }
 }
 
-class _PolynomialSolutions extends StatefulWidget {
-  const _PolynomialSolutions();
+class _NonlinearSolutions extends StatefulWidget {
+  const _NonlinearSolutions();
 
   @override
-  __PolynomialSolutionsState createState() => __PolynomialSolutionsState();
+  _NonlinearSolutionsState createState() => _NonlinearSolutionsState();
 }
 
-class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
-  /// Manually caching this subtree portion which doesn't need to be updated
-  late final noResults = Center(
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(80, 35, 80, 65),
-      child: Text(
-        context.l10n.no_solutions,
-        style: const TextStyle(fontSize: 16),
-      ),
-    ),
-  );
-
+class _NonlinearSolutionsState extends State<_NonlinearSolutions> {
   /// Listen condition for the [BlocBuilder].
   ///
-  /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
+  /// Listens **only** when the state is [NonlinearGuesses] or [NonlinearNone].
   bool buildCondition(NonlinearState previous, NonlinearState current) =>
       (previous != current) &&
       ((current is NonlinearGuesses) || (current is NonlinearNone));
@@ -66,6 +56,7 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
     return BlocBuilder<NonlinearBloc, NonlinearState>(
       builder: (context, state) {
         if (state is NonlinearGuesses) {
+          // Computation results
           final guess = state.nonlinearResults.guesses.last;
           final convergence = state.nonlinearResults.convergence;
           final efficiency = state.nonlinearResults.efficiency;
@@ -74,16 +65,19 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: [
+              // The guess
               RealResultCard(
                 leading: 'x0: ',
                 value: guess,
               ),
 
+              // The convergence of the algorithm
               RealResultCard(
                 leading: '${context.l10n.convergence}: ',
                 value: convergence,
               ),
 
+              // The efficiency of the algorithm
               RealResultCard(
                 leading: '${context.l10n.efficiency}: ',
                 value: efficiency,
@@ -97,7 +91,7 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
           );
         }
 
-        return noResults;
+        return const NoResults();
       },
     );
   }
