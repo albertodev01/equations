@@ -47,8 +47,7 @@ void main() {
         onTap: () {},
       );
 
-      final builder = GoldenBuilder.column()
-        ..addScenario('', widget);
+      final builder = GoldenBuilder.column()..addScenario('', widget);
 
       await tester.pumpWidgetBuilder(
         builder.build(),

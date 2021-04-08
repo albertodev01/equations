@@ -26,4 +26,14 @@ jobs:
         run: flutter analyze lib test
 
       - name: Run tests
-        run: flutter test --no-pub --test-randomize-ordering-seed random
+        run: dart test --coverage=coverage test && dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          min_coverage: 10
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

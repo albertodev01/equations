@@ -45,7 +45,10 @@ void main() {
     test("Making sure that 'ExpressionParser' works with functions.", () {
       const parser = ExpressionParser();
 
-      expect(parser.evaluate('sqrt(49)'), equals(7),);
+      expect(
+        parser.evaluate('sqrt(49)'),
+        equals(7),
+      );
       expect(
         parser.evaluate('sin(pi)'),
         const MoreOrLessEquals(0, precision: 1.0e-1),

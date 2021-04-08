@@ -19,7 +19,8 @@ void main() {
       expect(find.byType(NonlinearLogo), findsOneWidget);
     });
 
-    testWidgets('Making sure that tapping on the CardContainer widget for '
+    testWidgets(
+        'Making sure that tapping on the CardContainer widget for '
         'polynomial equations opens a new route', (tester) async {
       await tester.pumpWidget(const MockWrapper(child: HomeContents()));
       final finder = find.byKey(const Key('PolynomialLogo-Container'));
@@ -32,7 +33,8 @@ void main() {
       expect(find.byType(PolynomialPage), findsOneWidget);
     });
 
-    testWidgets('Making sure that tapping on the CardContainer widget for '
+    testWidgets(
+        'Making sure that tapping on the CardContainer widget for '
         'polynomial equations opens a new route', (tester) async {
       await tester.pumpWidget(const MockWrapper(child: HomeContents()));
       final finder = find.byKey(const Key('NonlinearLogo-Container'));

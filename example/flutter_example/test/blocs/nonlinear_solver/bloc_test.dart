@@ -26,7 +26,7 @@ void main() {
 
     blocTest<NonlinearBloc, NonlinearState>(
       'Making sure that an exception is thrown if one (or more) input values '
-          'are malformed strings',
+      'are malformed strings',
       build: () => NonlinearBloc(NonlinearType.singlePoint),
       act: (bloc) => bloc.add(const SinglePointMethod(
         method: SinglePointMethods.newton,

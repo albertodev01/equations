@@ -9,22 +9,27 @@ class DropdownSelection extends StatefulWidget {
   const DropdownSelection();
 
   @override
-  _DropdownSelectionState createState() => _DropdownSelectionState();
+  DropdownSelectionState createState() => DropdownSelectionState();
 }
 
-class _DropdownSelectionState extends State<DropdownSelection> {
-  late final dropdownItems = dropdownValues(context);
+/// The state of the [DropdownSelection] class.
+@visibleForTesting
+class DropdownSelectionState extends State<DropdownSelection> {
+  /// The items of the dropdown.
+  late final dropdownItems = _dropdownValues(context);
 
-  List<DropdownMenuItem<String>> dropdownValues(BuildContext context) {
+  List<DropdownMenuItem<String>> _dropdownValues(BuildContext context) {
     final type = context.read<NonlinearBloc>().nonlinearType;
 
     if (type == NonlinearType.singlePoint) {
       return const [
         DropdownMenuItem<String>(
+          key: Key('Newton-Dropdown'),
           value: 'Newton',
           child: Text('Newton'),
         ),
         DropdownMenuItem<String>(
+          key: Key('Steffensen-Dropdown'),
           value: 'Steffensen',
           child: Text('Steffensen'),
         )
@@ -32,14 +37,17 @@ class _DropdownSelectionState extends State<DropdownSelection> {
     } else {
       return const [
         DropdownMenuItem<String>(
+          key: Key('Bisection-Dropdown'),
           value: 'Bisection',
           child: Text('Bisection'),
         ),
         DropdownMenuItem<String>(
+          key: Key('Secant-Dropdown'),
           value: 'Secant',
           child: Text('Secant'),
         ),
         DropdownMenuItem<String>(
+          key: Key('Brent-Dropdown'),
           value: 'Brent',
           child: Text('Brent'),
         ),
@@ -47,6 +55,7 @@ class _DropdownSelectionState extends State<DropdownSelection> {
     }
   }
 
+  /// Updates the currently selected value in the dropdown.
   void changeSelected(String newValue) =>
       context.read<DropdownCubit>().changeValue(newValue);
 
@@ -55,16 +64,22 @@ class _DropdownSelectionState extends State<DropdownSelection> {
     return Center(
       child: SizedBox(
         width: 200,
-        child: DropdownButtonFormField<String>(
-            isExpanded: true,
-            value: context.watch<DropdownCubit>().state,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: BlocBuilder<DropdownCubit, String>(
+          builder: (context, state) {
+            return DropdownButtonFormField<String>(
+              key: const Key('Dropdown-Button-Selection'),
+              isExpanded: true,
+              value: state,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                ),
               ),
-            ),
-            onChanged: (value) => changeSelected(value!),
-            items: dropdownItems),
+              onChanged: (value) => changeSelected(value!),
+              items: dropdownItems,
+            );
+          },
+        ),
       ),
     );
   }
