@@ -62,7 +62,7 @@ abstract class NumericalIntegration {
   /// Evaluates the given [function] on the [x] point.
   double evaluateFunction(String function, double x) {
     const evaluator = ExpressionParser();
-    return evaluator.evaluateOn(function, x) as double;
+    return evaluator.evaluateOn(function, x);
   }
 
   /// Calculates the numerical value of the [function] **definite** integral

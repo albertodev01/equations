@@ -53,7 +53,17 @@ class _NonlinearSolutionsState extends State<_NonlinearSolutions> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NonlinearBloc, NonlinearState>(
+    return BlocConsumer<NonlinearBloc, NonlinearState>(
+      listener: (context, state) {
+        if (state is NonlinearError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.polynomial_error),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         if (state is NonlinearGuesses) {
           // Computation results

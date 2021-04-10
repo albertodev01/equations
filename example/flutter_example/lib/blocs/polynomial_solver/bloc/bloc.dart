@@ -9,6 +9,10 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
   /// The type of polynomial this bloc has to solve.
   final PolynomialType polynomialType;
 
+  /// This is required to parse the coefficients received from the user as 'raw'
+  /// strings.
+  final _parser = const ExpressionParser();
+
   /// Initializes a [PolynomialBloc] with [PolynomialNone]
   PolynomialBloc(this.polynomialType) : super(const PolynomialNone());
 
@@ -25,15 +29,20 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
 
   List<Complex> _parseCoefficients(List<String> rawInput) {
     if (rawInput.length != _coefficientsListLength) {
-      throw const FormatException();
+      throw const FormatException("'The coefficients list length doesn't match "
+          'the coefficients number expected from the given degree.');
     }
 
     // Fractions are accepted so this method throws only if the given string is
     // NOT a number or a string
-    return rawInput.map((coefficient) {
-      final fraction = Fraction.fromString(coefficient);
-      return Complex.fromRealFraction(fraction);
-    }).toList(growable: false);
+    return rawInput.map<Complex>((value) {
+      if (!value.isNumericalExpression) {
+        throw FormatException(
+            'The given input ($value) is not a valid number.');
+      }
+
+      return Complex.fromReal(_parser.evaluate(value));
+    }).toList();
   }
 
   int get _coefficientsListLength {

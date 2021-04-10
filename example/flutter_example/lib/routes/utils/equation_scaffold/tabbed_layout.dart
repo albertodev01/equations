@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///
 /// Tabs can be changed only according with the state of a [NavigationBloc] bloc.
 class TabbedNavigationLayout extends StatefulWidget {
-  /// A list of items for a responsive navigation bar
+  /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
 
   /// Creates a [TabbedNavigationLayout] widget.
@@ -17,15 +17,17 @@ class TabbedNavigationLayout extends StatefulWidget {
   });
 
   @override
-  _TabbedNavigationLayoutState createState() => _TabbedNavigationLayoutState();
+  TabbedNavigationLayoutState createState() => TabbedNavigationLayoutState();
 }
 
-class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
+/// The state of the [TabbedNavigationLayout] widget.
+@visibleForTesting
+class TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
     with SingleTickerProviderStateMixin {
-  /// Controls the position of the currently visible page of the [TabBarView]
+  /// Controls the position of the currently visible page of the [TabBarView].
   late final TabController tabController;
 
-  /// The various pages of the [TabBarView]
+  /// The various pages of the [TabBarView].
   late final tabPages = widget.navigationItems
       .map((item) => item.content)
       .toList(growable: false);
@@ -46,13 +48,14 @@ class _TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
     super.dispose();
   }
 
-  void _changePage(int pageIndex) => tabController.animateTo(pageIndex);
+  /// Changes the currently visible page of the tab.
+  void changePage(int pageIndex) => tabController.animateTo(pageIndex);
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<NavigationCubit, int>(
       listenWhen: (previous, current) => previous != current,
-      listener: (context, state) => _changePage(state),
+      listener: (context, state) => changePage(state),
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: tabController,

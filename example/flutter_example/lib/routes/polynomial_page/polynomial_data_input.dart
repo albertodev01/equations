@@ -94,6 +94,8 @@ class __InputWidget extends State<_InputWidget> {
 
     for (var i = 0; i < widget.inputLength; ++i) {
       body.add(PolynomialInputField(
+        // This key is used for testing purposes
+        key: Key('PolynomialInputField-coefficient-$i'),
         controller: controllers[i],
         placeholder: placeholderLetter,
       ));
@@ -116,6 +118,8 @@ class __InputWidget extends State<_InputWidget> {
 
       context.read<PolynomialBloc>().add(event);
     } else {
+      context.read<PolynomialBloc>().add(const PolynomialClean());
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.polynomial_error),
@@ -131,7 +135,6 @@ class __InputWidget extends State<_InputWidget> {
       controller.clear();
     }
 
-    formKey.currentState?.reset();
     context.read<PolynomialBloc>().add(const PolynomialClean());
   }
 
@@ -175,12 +178,19 @@ class __InputWidget extends State<_InputWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Solving the polynomial
             ElevatedButton(
+              key: const Key('Polynomial-button-solve'),
               onPressed: () => _processInput(context),
               child: Text(context.l10n.solve),
             ),
+
+            // Some spacing
             const SizedBox(width: 30),
+
+            // Cleaning the inputs
             ElevatedButton(
+              key: const Key('Polynomial-button-clean'),
               onPressed: () => _cleanInput(context),
               child: Text(context.l10n.clean),
             ),

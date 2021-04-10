@@ -8,6 +8,10 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
   /// The type root finding algorithm this bloc has to solve.
   final NonlinearType nonlinearType;
 
+  /// This is required to parse the coefficients received from the user as 'raw'
+  /// strings.
+  final _parser = const ExpressionParser();
+
   /// Initializes a [NonlinearBloc] with [NonlinearNone].
   NonlinearBloc(this.nonlinearType) : super(const NonlinearNone());
 
@@ -26,14 +30,11 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     }
   }
 
-  /// Converts a [String] into a [Fraction] and throws if the conversion fails.
-  double _parseDouble(String value) => Fraction.fromString(value).toDouble();
-
   Stream<NonlinearState> _nonlinearSinglePointHandler(
       SinglePointMethod evt) async* {
     try {
       late final NonLinear solver;
-      final x0 = _parseDouble(evt.initialGuess);
+      final x0 = _parser.evaluate(evt.initialGuess);
 
       switch (evt.method) {
         case SinglePointMethods.newton:
@@ -68,8 +69,8 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     try {
       late final NonLinear solver;
 
-      final lower = _parseDouble(evt.lowerBound);
-      final upper = _parseDouble(evt.upperBound);
+      final lower = _parser.evaluate(evt.lowerBound);
+      final upper = _parser.evaluate(evt.upperBound);
 
       switch (evt.method) {
         case BracketingMethods.bisection:

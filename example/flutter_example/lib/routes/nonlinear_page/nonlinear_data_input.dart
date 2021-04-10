@@ -4,9 +4,9 @@ import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations/equations.dart';
 import 'package:flutter/material.dart';
 
 /// This widget contains a series of input widgets needed to parse the
@@ -28,7 +28,8 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   );
 
   /// Manually caching the equation input field.
-  late final functionInput = _NonlinearInput(
+  late final functionInput = NonlinearInput(
+    key: const Key('NonlinearInput-function'),
     controller: controllers[0],
     placeholderText: 'f(x)',
   );
@@ -71,7 +72,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
                 method: SinglePointMethod.resolve(algorithm),
                 initialGuess: controllers[1].text,
                 function: controllers[0].text,
-                precision: 1.0 * math.pow(10, precision),
+                precision: 1.0 * math.pow(10, -precision),
               ),
             );
       } else {
@@ -81,7 +82,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
                 lowerBound: controllers[1].text,
                 upperBound: controllers[2].text,
                 function: controllers[0].text,
-                precision: 1.0 * math.pow(10, precision),
+                precision: 1.0 * math.pow(10, -precision),
               ),
             );
       }
@@ -131,12 +132,19 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Solving the equation
               ElevatedButton(
+                key: const Key('Nonlinear-button-solve'),
                 onPressed: () => solve(context),
                 child: Text(context.l10n.solve),
               ),
+
+              // Some spacing
               const SizedBox(width: 30),
+
+              // Cleaning the inputs
               ElevatedButton(
+                key: const Key('Nonlinear-button-clean'),
                 onPressed: () => cleanInput(context),
                 child: Text(context.l10n.clean),
               ),
@@ -148,79 +156,10 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   }
 }
 
-/// A [TextFormField] used to input the function `f(x)`
-class _NonlinearInput extends StatelessWidget {
-  /// The controller of the function's [TextFormField]
-  final TextEditingController controller;
-
-  /// The placeholder text of the widget
-  final String placeholderText;
-
-  /// The width of the input, which will scale if the horizontal space is not
-  /// enough
-  final double baseWidth;
-
-  /// The maximum length of the input
-  final int maxLength;
-
-  /// Determines whether the validator function of the input should allow for
-  /// real values or not.
-  ///
-  /// In other words, when `onlyRealValues = true` then equations aren't accepted
-  /// but numbers are.
-  ///
-  /// This is `false` by default.
-  final bool onlyRealValues;
-
-  /// Creates a [_FunctionInput] instance
-  const _NonlinearInput({
-    required this.controller,
-    required this.placeholderText,
-    this.baseWidth = 300,
-    this.maxLength = 100,
-    this.onlyRealValues = false,
-  });
-
-  String? _validator(String? value) {
-    if (value != null) {
-      if (onlyRealValues) {
-        return value.isRealFunction ? null : 'Uh! :(';
-      }
-      return value.isRealFunction ? null : 'Uh! :(';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        var inputWidth = baseWidth;
-
-        if (dimensions.maxWidth <= baseWidth + 100) {
-          inputWidth = dimensions.maxWidth / 1.5;
-        }
-
-        return SizedBox(
-          width: inputWidth,
-          child: TextFormField(
-            controller: controller,
-            maxLength: maxLength,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              hintText: placeholderText,
-            ),
-            validator: _validator,
-          ),
-        );
-      },
-    );
-  }
-}
-
 /// Either 1 or 2 [TextFormField] widgets asking for the initial values of the
 /// root finding algorithm.
 class _GuessesInput extends StatelessWidget {
-  /// The controllers of the [TextFormField] widgets
+  /// The controllers of the [TextFormField] widgets.
   final List<TextEditingController> controllers;
 
   /// The root finding algorithm to be used.
@@ -228,7 +167,7 @@ class _GuessesInput extends StatelessWidget {
   /// This determines how many starting points for the algorithm are needed.
   final NonlinearType type;
 
-  /// Creates a [_GuessesInput] instance
+  /// Creates a [_GuessesInput] instance.
   const _GuessesInput({
     required this.controllers,
     required this.type,
@@ -240,7 +179,8 @@ class _GuessesInput extends StatelessWidget {
       alignment: WrapAlignment.center,
       spacing: 30,
       children: [
-        _NonlinearInput(
+        NonlinearInput(
+          key: const Key('NonlinearInput-first-param'),
           controller: controllers[1],
           placeholderText: 'x0',
           baseWidth: 80,
@@ -248,7 +188,8 @@ class _GuessesInput extends StatelessWidget {
           onlyRealValues: true,
         ),
         if (type == NonlinearType.bracketing)
-          _NonlinearInput(
+          NonlinearInput(
+            key: const Key('NonlinearInput-second-param'),
             controller: controllers[2],
             placeholderText: 'x1',
             baseWidth: 80,

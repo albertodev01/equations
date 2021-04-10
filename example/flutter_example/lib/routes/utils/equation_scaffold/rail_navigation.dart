@@ -7,10 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// A rail navigation bar to be displayed within a a [EquationScaffold] widget.
 class RailNavigation extends StatefulWidget {
-  /// A list of items for a responsive navigation bar
+  /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
 
-  /// Creates a [RailNavigation] widget.
+  /// Creates a [RailNavigation] widget..
   const RailNavigation({
     required this.navigationItems,
   });
@@ -20,7 +20,7 @@ class RailNavigation extends StatefulWidget {
 }
 
 class _RailNavigationState extends State<RailNavigation> {
-  /// Converts a [NavigationItem] into a [BottomNavigationBarItem]
+  /// Converts a [NavigationItem] into a [BottomNavigationBarItem].
   late final rails =
       widget.navigationItems.map<NavigationRailDestination>((item) {
     return NavigationRailDestination(

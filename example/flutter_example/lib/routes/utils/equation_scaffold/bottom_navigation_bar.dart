@@ -23,14 +23,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
   /// to be displayed on the navigation bar.
   ///
   /// Since these items will always be the same, we manually cache the list.
-  late final _bottom =
-      widget.navigationItems.map<BottomNavigationBarItem>((item) {
-    return BottomNavigationBarItem(
-      icon: item.icon,
-      activeIcon: item.activeIcon,
-      label: item.title,
-    );
-  }).toList(growable: false);
+  late final _bottom = widget.navigationItems
+      .map<BottomNavigationBarItem>(
+        (item) => BottomNavigationBarItem(
+          icon: item.icon,
+          activeIcon: item.activeIcon,
+          label: item.title,
+        ),
+      )
+      .toList(growable: false);
 
   @override
   Widget build(BuildContext context) {

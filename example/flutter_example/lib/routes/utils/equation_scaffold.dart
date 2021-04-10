@@ -15,7 +15,7 @@ const _assertionError = 'There must be at least 1 navigation item.';
 /// up of two parts:
 ///
 ///  - an [AppBar] with no title and a dark/light theme switcher;
-///  - the body of the [Scaffold]
+///  - the body of the [Scaffold].
 ///
 /// This widget also contains a responsive navigation bar which can be either a
 /// [BottomNavigationBar] or a [NavigationRail] according with the screen's size.
@@ -45,7 +45,10 @@ class EquationScaffold extends StatelessWidget {
     required this.navigationItems,
     this.fab,
   })  : body = const SizedBox.shrink(),
-        assert(navigationItems.length > 0, _assertionError);
+        assert(
+          navigationItems.length > 0,
+          _assertionError,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +77,7 @@ class EquationScaffold extends StatelessWidget {
           // bar fits better
           if (dimensions.maxWidth <= 950) {
             return Scaffold(
+              key: const Key('TabbedNavigationLayout-Scaffold'),
               body: _ScaffoldContents(
                 body: TabbedNavigationLayout(
                   navigationItems: navigationItems,
@@ -88,6 +92,7 @@ class EquationScaffold extends StatelessWidget {
           }
 
           return Scaffold(
+            key: const Key('RailNavigationLayout-Scaffold'),
             body: _ScaffoldContents(
               body: RailNavigation(
                 navigationItems: navigationItems,
@@ -105,8 +110,8 @@ class EquationScaffold extends StatelessWidget {
 /// The content of the [EquationScaffold] scaffold, which is simply a [Stack]
 /// with two children:
 ///
-///   - A background widget that draws an SVG image as background
-///   - A foreground widget which is the actual content of the page
+///   - A background widget that draws an SVG image as background,
+///   - A foreground widget which is the actual content of the page.
 class _ScaffoldContents extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
@@ -151,7 +156,7 @@ class _ScaffoldContents extends StatelessWidget {
   }
 }
 
-/// The contents of the scaffold in the foreground
+/// The contents of the scaffold in the foreground.
 class _ScaffoldForeground extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
@@ -173,7 +178,7 @@ class _ScaffoldForeground extends StatelessWidget {
   }
 }
 
-/// The contents of the scaffold in the background
+/// The contents of the scaffold in the background.
 class _ScaffoldBackground extends StatelessWidget {
   const _ScaffoldBackground();
 
@@ -185,6 +190,7 @@ class _ScaffoldBackground extends StatelessWidget {
       angle: -math.pi / 8,
       child: SvgPicture.asset(
         'assets/axis.svg',
+        key: const Key('ScaffoldBackground'),
         height: size,
         width: size,
       ),
@@ -192,7 +198,7 @@ class _ScaffoldBackground extends StatelessWidget {
   }
 }
 
-/// The contents of the scaffold in the background
+/// The contents of the scaffold in the background.
 class _ScaffoldExtraBackground extends StatelessWidget {
   const _ScaffoldExtraBackground();
 
@@ -202,6 +208,7 @@ class _ScaffoldExtraBackground extends StatelessWidget {
 
     return SvgPicture.asset(
       'assets/plot_opacity.svg',
+      key: const Key('ScaffoldExtraBackground'),
       height: size,
       width: size,
     );

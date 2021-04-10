@@ -17,7 +17,7 @@
   "no_solutions": "No solutions to display.",
   "no_chart": "No chart to plot.",
   "no_discriminant": "No discriminant.",
-  "polynomial_error": "One or more coefficients have an invalid format.",
+  "polynomial_error": "One or more coefficients aren't valid.",
   "wrong_input": "Invalid input",
   "tap_more": "Tap to see more details",
   "discriminant": "Discriminant",

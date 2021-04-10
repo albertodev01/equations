@@ -1,6 +1,6 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/routes/polynomial_page/complex_result_card.dart';
-import 'package:equations_solver/routes/polynomial_page/no_discriminant.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,9 @@ class PolynomialResults extends StatelessWidget {
         ),
 
         // Showing the solutions of the polynomial
-        const _PolynomialDiscriminant(),
+        const _PolynomialDiscriminant(
+          key: Key('PolynomialDiscriminant'),
+        ),
       ],
     );
   }
@@ -90,7 +92,9 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
 }
 
 class _PolynomialDiscriminant extends StatefulWidget {
-  const _PolynomialDiscriminant();
+  const _PolynomialDiscriminant({
+    Key? key,
+  }) : super(key: key);
 
   @override
   __PolynomialDiscriminantState createState() =>
@@ -109,7 +113,17 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: BlocBuilder<PolynomialBloc, PolynomialState>(
+      child: BlocConsumer<PolynomialBloc, PolynomialState>(
+        listener: (context, state) {
+          if (state is PolynomialError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(context.l10n.polynomial_error),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is PolynomialRoots) {
             return ComplexResultCard(

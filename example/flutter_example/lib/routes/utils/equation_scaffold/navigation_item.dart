@@ -26,5 +26,10 @@ class NavigationItem extends Equatable {
   });
 
   @override
-  List<Object?> get props => [title, icon, activeIcon, content];
+  List<Object?> get props => [
+        title,
+        icon,
+        activeIcon,
+        content,
+      ];
 }

@@ -12,7 +12,7 @@ class ComplexResultCard extends StatelessWidget {
   /// By default, this value is `x =`.
   final String leading;
 
-  /// Creates a [HomePage] widget
+  /// Creates a [ComplexResultCard] widget.
   const ComplexResultCard({
     required this.value,
     this.leading = 'x =',
@@ -29,7 +29,10 @@ class ComplexResultCard extends StatelessWidget {
             elevation: 5,
             child: ListTile(
               title: Text('$leading $value'),
-              subtitle: Text('Fraction: ${value.toStringAsFraction()}'),
+              subtitle: Text(
+                'Fraction: ${value.toStringAsFraction()}',
+                key: const Key('Fraction-ComplexResultCard'),
+              ),
             ),
           ),
         ),

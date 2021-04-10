@@ -52,7 +52,7 @@ class ExpressionParser {
   static late final Parser _parser = () {
     final builder = ExpressionBuilder();
 
-    // This primitive is fundamental as it recognzes real numbers from the input
+    // This primitive is fundamental as it recognizes real numbers from the input
     // and parses them using 'parse'.
     builder.group()
       ..primitive(digit()
@@ -140,7 +140,7 @@ class ExpressionParser {
   ///   - `"6 + 10 * x / 7"` // Bad
   ///
   /// If you want to evaluate a function with the `x` variable, use [evaluateOn].
-  num evaluate(String expression) {
+  double evaluate(String expression) {
     if (expression.contains('x') || (!_parser.accept(expression))) {
       throw const ExpressionParserException('The given expression cannot be '
           'parsed! Make sure that all operators are supported. Make also sure '
@@ -157,14 +157,28 @@ class ExpressionParser {
   ///
   /// If you want to evaluate a simple expression without the `x` variable,
   /// consider using [evaluate].
-  num evaluateOn(String expression, double evaluationPoint) {
+  double evaluateOn(String expression, double evaluationPoint) {
     if (!_parser.accept(expression)) {
       throw const ExpressionParserException('The given expression cannot be '
           'parsed! Make sure that all operators are supported. Make also sure '
           "that the product of two values explicitly has the '*' symbol.");
     }
 
-    return _parser.parse(expression).value(evaluationPoint) as num;
+    // The evaluator returns 'num' so this cast is safe
+    final value = _parser.parse(expression).value(evaluationPoint) as num;
+
+    // NOTE: The following code is safe because 'num' has only 2 subtypes ('int'
+    // and 'double'). Since it is a compile-time error for any type other than
+    // 'int' or 'double' to attempt to extend or implement 'num', we can safely
+    // assume that a 'num' can always be an integer OR a double.
+    //
+    // See the doc: https://api.dart.dev/stable/2.12.2/dart-core/num-class.html
+    if (value is int) {
+      // Converting 'int' into 'double'
+      return value * 1.0;
+    }
+
+    return value as double;
   }
 }
 
