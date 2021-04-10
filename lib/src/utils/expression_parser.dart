@@ -52,7 +52,7 @@ class ExpressionParser {
   static late final Parser _parser = () {
     final builder = ExpressionBuilder();
 
-    // This primitive is fundamental as it recognzes real numbers from the input
+    // This primitive is fundamental as it recognizes real numbers from the input
     // and parses them using 'parse'.
     builder.group()
       ..primitive(digit()
@@ -87,8 +87,6 @@ class ExpressionParser {
           (_, _Evaluator a, __) => (num value) => math.cos(a(value)))
       ..wrapper(string('tan(').trim(), char(')').trim(),
           (_, _Evaluator a, __) => (num value) => math.tan(a(value)))
-      ..wrapper(string('exp(').trim(), char(')').trim(),
-          (_, _Evaluator a, __) => (num value) => math.exp(a(value)))
       ..wrapper(string('log(').trim(), char(')').trim(),
           (_, _Evaluator a, __) => (num value) => math.log(a(value)))
       ..wrapper(string('acos(').trim(), char(')').trim(),
@@ -134,18 +132,82 @@ class ExpressionParser {
   /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**.
   const ExpressionParser();
 
-  /// Evaluates the mathematical [expression] and returns the result.
-  num evaluate(String expression) => evaluateOn(expression, 0);
+  /// Evaluates the mathematical [expression] and returns the result. This method
+  /// should be used to evaluate those expression that don't contain the `x`
+  /// variable. For example:
+  ///
+  ///   - `"6 + 10 * 3 / 7"` // Good
+  ///   - `"6 + 10 * x / 7"` // Bad
+  ///
+  /// If you want to evaluate a function with the `x` variable, use [evaluateOn].
+  double evaluate(String expression) {
+    if (expression.contains('x') || (!_parser.accept(expression))) {
+      throw const ExpressionParserException('The given expression cannot be '
+          'parsed! Make sure that all operators are supported. Make also sure '
+          "that the product of two values explicitly has the '*' symbol.\n\n "
+          "There cannot be the 'x' variable in the expression because this "
+          'method only evaluates numbers.');
+    }
+
+    return evaluateOn(expression, 0);
+  }
 
   /// Evaluates the mathematical [expression] and replaces the `x` variable with
   /// the value of the given [evaluationPoint].
-  num evaluateOn(String expression, double evaluationPoint) {
+  ///
+  /// If you want to evaluate a simple expression without the `x` variable,
+  /// consider using [evaluate].
+  double evaluateOn(String expression, double evaluationPoint) {
     if (!_parser.accept(expression)) {
       throw const ExpressionParserException('The given expression cannot be '
           'parsed! Make sure that all operators are supported. Make also sure '
           "that the product of two values explicitly has the '*' symbol.");
     }
 
-    return _parser.parse(expression).value(evaluationPoint) as num;
+    // The evaluator returns 'num' so this cast is safe
+    final value = _parser.parse(expression).value(evaluationPoint) as num;
+
+    // NOTE: The following code is safe because 'num' has only 2 subtypes ('int'
+    // and 'double'). Since it is a compile-time error for any type other than
+    // 'int' or 'double' to attempt to extend or implement 'num', we can safely
+    // assume that a 'num' can always be an integer OR a double.
+    //
+    // See the doc: https://api.dart.dev/stable/2.12.2/dart-core/num-class.html
+    if (value is int) {
+      // Converting 'int' into 'double'
+      return value * 1.0;
+    }
+
+    return value as double;
   }
+}
+
+/// Extension method for [ExpressionParser] on [String] types.
+extension ExpressionParserX on String {
+  /// Determines whether this string represents a valid real function `f(x)` or
+  /// not. For example, this method returns `true` with the following inputs:
+  ///
+  ///   - `"x/2"`
+  ///   - `"3*x-6"`
+  ///   - `"x^2 + sin(x / 2)"`
+  ///   - `"10 + 8"`
+  ///
+  /// The only possible variable is `"x"`. The product **always** needs the `*`
+  /// operator.
+  ///
+  ///   - `"3x - 5"` // Bad
+  ///   - `"3*x - 5"` // Good
+  bool get isRealFunction =>
+      length > 0 && ExpressionParser._parser.accept(this);
+
+  /// Determines whether this string represents a valid numerical expression
+  /// such as:
+  ///
+  ///   - `"3.8 / 2"`
+  ///   - `"cos(pi) - 18 * 6"`
+  ///
+  /// The `x` variable is **not** considered as valid because this getter only
+  /// considers numerical values.
+  bool get isNumericalExpression =>
+      !contains('x') && ExpressionParser._parser.accept(this);
 }
