@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
 
       - name: Installing the dependencies
         run: flutter pub get

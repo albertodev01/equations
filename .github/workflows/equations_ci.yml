@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
   pull_request:
     types:
       - opened
@@ -21,7 +22,7 @@ jobs:
         run: dart pub get
 
       - name: Making sure the package is formatted
-        run: dart format --set-exit-if-changed
+        run: dart format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
         run: dart analyze --fatal-infos --fatal-warnings
