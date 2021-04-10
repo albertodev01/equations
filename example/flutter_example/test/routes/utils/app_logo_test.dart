@@ -26,7 +26,6 @@ void main() {
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 300),
       );
       await screenMatchesGolden(tester, 'app_logo');
     });

@@ -2,36 +2,73 @@ name: equations_ci
 
 on:
   push:
-    paths:
-      - "lib/**"
-      - "test/**" 
-      - ".github/workflows/equations_ci.yml"
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
 
 jobs:
-  build:
+  verify_equation_package:
+    name: Equations package - CI action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
 
-      - name: Install Dependencies
+      - name: Installing the dependencies
         run: dart pub get
 
-      - name: Format
-        run: dart format --set-exit-if-changed lib
+      - name: Making sure the package is formatted
+        run: dart format --set-exit-if-changed
 
-      - name: Analyze
-        run: dart analyze --fatal-infos --fatal-warnings lib
+      - name: Making sure that there are no analysis warnings or errors
+        run: dart analyze --fatal-infos --fatal-warnings
 
-      - name: Run tests
+      - name: Runing unit tests
         run: dart test --coverage=coverage && dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
 
-      - name: Check Code Coverage
+      - name: Making sure that code coverage is at least 95
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           min_coverage: 95
           
-      - name: Upload coverage to Codecov
+      - name: Uploading coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  verify_equation_flutter_example:
+    name: Equations Flutter example - CI action
+    needs: [verify_equation_package]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: example/flutter_example
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
+
+      - name: Installing the dependencies
+        run: flutter pub get
+
+      - name: Making sure the package is formatted
+        run: flutter format --set-exit-if-changed .
+
+      - name: Making sure that there are no analysis warnings or errors
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      - name: Runing unit tests
+        run: flutter test --coverage
+
+      - name: Making sure that code coverage is at least 30
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          min_coverage: 30
+          
+      - name: Uploading coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
