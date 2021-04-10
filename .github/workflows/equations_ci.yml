@@ -49,7 +49,7 @@ jobs:
         working-directory: example/flutter_example
     steps:
       - name: Checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1.4.0
 
       - name: Installing the dependencies
@@ -61,15 +61,5 @@ jobs:
       - name: Making sure that there are no analysis warnings or errors
         run: flutter analyze --fatal-infos --fatal-warnings
 
-      - name: Runing unit tests
-        run: flutter test --coverage
-
-      - name: Making sure that code coverage is at least 30
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
-          min_coverage: 30
-          
-      - name: Uploading coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Runing unit and widget tests
+        run: flutter test --update-goldens
