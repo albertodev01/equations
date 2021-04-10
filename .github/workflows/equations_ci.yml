@@ -61,15 +61,5 @@ jobs:
       - name: Making sure that there are no analysis warnings or errors
         run: flutter analyze --fatal-infos --fatal-warnings
 
-      - name: Runing unit tests
-        run: flutter test --update-goldens --coverage && flutter pub global activate coverage && flutter pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
-
-      - name: Making sure that code coverage is at least 30
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
-          min_coverage: 30
-          
-      - name: Uploading coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Runing unit and widget tests
+        run: flutter test --update-goldens
