@@ -1,11 +1,11 @@
 {
-    "name": "flutter_example",
-    "short_name": "flutter_example",
+    "name": "Equation solver",
+    "short_name": "Equation solver",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "An equation solving library written purely in Dart.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

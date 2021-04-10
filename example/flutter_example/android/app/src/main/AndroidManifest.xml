@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fluttercompletereference.equations_solver">
    <application
-        android:label="equations_solver"
-        android:icon="@mipmap/ic_launcher">
+        android:label="@string/app_title"
+        android:icon="@drawable/background">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
