@@ -20,7 +20,7 @@ dependency on any framework. It can be used with Flutter for web, desktop and mo
   - `Complex`, which is used to easily handle complex numbers;
   - `Fraction`, from the [fraction](https://pub.dev/packages/fraction) package which helps you working with fractions.
 
-This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps).
+This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps) :rocket:
 
 <p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
 
