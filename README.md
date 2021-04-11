@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/albertodev01/equations/6f15adbc96445c88ca02c7b85f4ae2b51f88e949/assets/equations_logo.svg" height="92" alt="dart_equations logo" />
+<img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/equations_logo.svg" height="92" alt="dart_equations logo" />
 </p>
 <p align="center">An equation solving library written purely in Dart</p>
 <p align="center">
@@ -20,7 +20,11 @@ dependency on any framework. It can be used with Flutter for web, desktop and mo
   - `Complex`, which is used to easily handle complex numbers;
   - `Fraction`, from the [fraction](https://pub.dev/packages/fraction) package which helps you working with fractions.
 
-This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. Please don't hesitate to open a PR or file an issue if you wish to contribute to the growth of this package!
+This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps).
+
+<p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
+
+The source code of the above website can be found at `example/flutter_example`.
 
 # Algebraic equations
 
@@ -294,3 +298,5 @@ print("$lu");
 */
 print("${lu.toStringAugmented()}");
 ```
+
+The `ComplexMatrix` has the same API and the same usage as `RealMatrix` with the only difference that it works with complex numbers.
