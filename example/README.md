@@ -9,5 +9,5 @@ This folder contains some examples showing how the `equations` package can be us
 You'll find an online demo of the Flutter example at [https://albertodev01.github.io/equations/](https://albertodev01.github.io/equations/).
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/albertodev01/equations/master/example/flutter_example/static/web_preview.png" height="811" alt="dart_equations logo" />
+<img src="https://raw.githubusercontent.com/albertodev01/equations/master/example/flutter_example/static/web_preview.png" alt="dart_equations logo" />
 </p>
