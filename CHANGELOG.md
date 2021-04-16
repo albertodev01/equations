@@ -1,3 +1,7 @@
+## [2.0.3]
+
+ - Dependencies versions update
+
 ## [2.0.2]
 
  - New extension method on `String` called `isRealFunction` that determines whether a string represents a real function or not
