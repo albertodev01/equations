@@ -123,5 +123,10 @@ class PolynomialLongDivision {
   }
 
   @override
-  String toString() => '($polyNumerator) / ($polyDenominator)';
+  String toString() {
+    final num = '$polyNumerator'.replaceAll('f(x) = ', '');
+    final den = '$polyDenominator'.replaceAll('f(x) = ', '');
+
+    return '($num) / ($den)';
+  }
 }

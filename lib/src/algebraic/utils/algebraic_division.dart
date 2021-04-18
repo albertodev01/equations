@@ -49,5 +49,10 @@ class AlgebraicDivision {
   }
 
   @override
-  String toString() => 'Q = $quotient\nR = $remainder';
+  String toString() {
+    final q = '$quotient'.replaceAll('f(x) = ', '');
+    final r = '$remainder'.replaceAll('f(x) = ', '');
+
+    return 'Q = $q\nR = $r';
+  }
 }

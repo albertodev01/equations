@@ -359,6 +359,9 @@ void main() {
         expect(div.quotient, isA<Linear>());
         expect(div.remainder, isA<Constant>());
         expect(div, equals(divResult));
+
+        const strResult = 'Q = 1x + -3\nR = (4 - 3i)';
+        expect(div.toString(), strResult);
       });
 
       // Tests with real numbers
