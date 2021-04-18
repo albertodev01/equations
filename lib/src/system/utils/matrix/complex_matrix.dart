@@ -86,8 +86,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Performing the sum
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
@@ -113,8 +115,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Performing the difference
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
@@ -140,8 +144,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Performing the product
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
@@ -172,8 +178,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Performing the division
     final flatMatrix = List.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
 
     // Performing the division
     for (var i = 0; i < rowCount; ++i) {
@@ -213,11 +221,15 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Creating L and U matrices
     final L = List<Complex>.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
     final U = List<Complex>.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
 
     // Computing L and U
     for (var i = 0; i < rowCount; ++i) {
@@ -290,11 +302,15 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Creating L and Lt matrices
     final L = List<Complex>.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
     final transpL = List<Complex>.generate(
-        rowCount * columnCount, (_) => const Complex.zero(),
-        growable: false);
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+      growable: false,
+    );
 
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i++) {

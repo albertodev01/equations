@@ -96,7 +96,7 @@ abstract class Matrix<T> {
     }
 
     // Making a deep copy of the data
-    _data = data.map((e) => e).toList();
+    _data = List<T>.from(data);
 
     // Exposing data to the outside in read-only mode
     flattenData = UnmodifiableListView<T>(_data);
@@ -190,7 +190,7 @@ abstract class Matrix<T> {
   }
 
   /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.
-  List<T> toList() => _data.map((e) => e).toList();
+  List<T> toList() => List<T>.from(_data);
 
   /// Determines whether the matrix is square
   bool get isSquareMatrix => rowCount == columnCount;

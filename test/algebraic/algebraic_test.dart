@@ -261,7 +261,7 @@ void main() {
       });
     });
 
-    group('Testing arithmetic operations on polynomials with real values', () {
+    group('Testing arithmetic operations on polynomials', () {
       // Tests with complex numbers
       test('Sum of two polynomials', () {
         final complex1 = Algebraic.from(const [
@@ -337,6 +337,33 @@ void main() {
         expect(prod, isA<Quartic>());
       });
 
+      test('Division of two polynomials', () {
+        final complex1 = Algebraic.from(const [
+          Complex.fromReal(1),
+          Complex(-3, -1),
+          Complex.fromReal(4),
+        ]);
+        final complex2 = Algebraic.from([
+          const Complex.fromReal(1),
+          -const Complex.i(),
+        ]);
+
+        final div = complex1 / complex2;
+        final divResult = AlgebraicDivision(
+          quotient: Algebraic.fromReal(const [1, -3]),
+          remainder: Algebraic.from(const [Complex(4, -3)]),
+        );
+
+        expect(div.quotient, equals(Algebraic.fromReal(const [1, -3])));
+        expect(div.remainder, equals(Algebraic.from(const [Complex(4, -3)])));
+        expect(div.quotient, isA<Linear>());
+        expect(div.remainder, isA<Constant>());
+        expect(div, equals(divResult));
+
+        const strResult = 'Q = 1x + -3\nR = (4 - 3i)';
+        expect(div.toString(), strResult);
+      });
+
       // Tests with real numbers
       test('Sum of two polynomials', () {
         final quadratic = Algebraic.fromReal([3, -2, 5]);
@@ -372,6 +399,19 @@ void main() {
         expect(prod, equals(prodResult));
         expect(prod, equals(cubic * linear));
         expect(prod, isA<Quartic>());
+      });
+
+      test('Division of two polynomials', () {
+        final numerator = Algebraic.fromReal([1, -3, 2]);
+        final denominator = Algebraic.fromReal([1, 2]);
+
+        final result = numerator / denominator;
+
+        expect(result, isA<AlgebraicDivision>());
+        expect(result.quotient, equals(Algebraic.fromReal([1, -5])));
+        expect(result.remainder, equals(Algebraic.fromReal([12])));
+        expect(result.quotient, isA<Linear>());
+        expect(result.remainder, isA<Constant>());
       });
     });
   });

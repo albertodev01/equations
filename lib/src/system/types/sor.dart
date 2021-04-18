@@ -6,9 +6,9 @@ import 'package:equations/equations.dart';
 /// be square.
 ///
 /// A theorem due to Kahan (1958) shows that SOR fails to converge if `w` is not
-/// in the (0, 2) range
+/// in the (0, 2) range.
 class SORSolver extends SystemSolver {
-  /// The relaxation factor `w` (omega)
+  /// The relaxation factor `w` (omega).
   final double w;
 
   /// The maximum number of iterations to be made by the algorithm.

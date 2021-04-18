@@ -97,13 +97,13 @@ abstract class NonLinear {
     return math.pow(c, 1.0 / steps) as double;
   }
 
-  /// Evaluates the function on the given [x] value
+  /// Evaluates the function on the given [x] value.
   num evaluateOn(double x) {
     const evaluator = ExpressionParser();
     return evaluator.evaluateOn(function, x);
   }
 
-  /// Evaluates the derivative of the function on the given [x] value
+  /// Evaluates the derivative of the function on the given [x] value.
   num evaluateDerivativeOn(double x) {
     final h = math.pow(1.0e-15, 1 / 3) * x;
 

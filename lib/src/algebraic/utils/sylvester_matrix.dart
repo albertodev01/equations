@@ -14,13 +14,13 @@ class SylvesterMatrix {
 
   /// The constructor requires complex [coefficients] for the polynomial P(x).
   SylvesterMatrix({required List<Complex> coefficients})
-      : _coefficients =
-            UnmodifiableListView(coefficients.map((c) => c).toList());
+      : _coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
 
   /// The constructor requires real [coefficients] for the polynomial P(x).
   SylvesterMatrix.fromReal({required List<double> coefficients})
       : _coefficients = UnmodifiableListView(
-            coefficients.map((c) => Complex.fromReal(c)).toList());
+          coefficients.map((c) => Complex.fromReal(c)).toList(),
+        );
 
   @override
   bool operator ==(Object other) {
@@ -74,8 +74,10 @@ class SylvesterMatrix {
     var pos = 0;
 
     // Building the matrix with FIXED length lists (optimization)
-    final flatData =
-        List<Complex>.generate(size * size, (_) => const Complex.zero());
+    final flatData = List<Complex>.generate(
+      size * size,
+      (_) => const Complex.zero(),
+    );
 
     /* Iterating over the coefficients and placing them in the matrix. Since the
      * 2D array is "flattened", the way we have to access "cells" is this...

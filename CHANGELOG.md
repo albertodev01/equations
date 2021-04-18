@@ -1,3 +1,10 @@
+## [2.1.0]
+
+ - Changes on deep copy logic for lists (now the library uses `List.from()` on immutable objects)
+ - Added the `PolynomialLongDivision` class to divide a polynomial by another
+ - Now the `Algebraic` type supports `opeartor/` too so you can divide polynomials to get quotient and remainder
+ - Dependencies versions update
+
 ## [2.0.3]
 
  - Dependencies versions update

@@ -1,16 +1,16 @@
 /// Holds a series of results returned by [NonLinear.solve]:
 ///
 ///  - the list of guesses computed by the algorithm,
-///  - the rate of convergence (if possible)
-///  - the efficiency of the algorithm (if possible)
+///  - the rate of convergence (if possible),
+///  - the efficiency of the algorithm (if possible).
 class NonlinearResults {
-  /// List of values guessed by the algorithm
+  /// List of values guessed by the algorithm.
   final List<double> guesses;
 
-  /// The rate of convergence
+  /// The rate of convergence.
   final double convergence;
 
-  /// The efficiency of the algorithm
+  /// The efficiency of the algorithm.
   final double efficiency;
 
   /// [guesses] is the scalar succession built by the algorithm, [convergence]

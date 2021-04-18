@@ -12,7 +12,11 @@ class GaussianElimination extends SystemSolver {
   GaussianElimination({
     required List<List<double>> equations,
     required List<double> constants,
-  }) : super(A: equations, b: constants, size: constants.length);
+  }) : super(
+          A: equations,
+          b: constants,
+          size: constants.length,
+        );
 
   @override
   List<double> solve() {

@@ -142,13 +142,14 @@ class Complex implements Comparable<Complex> {
   /// // values of the complex value
   /// final real = example.real.toStringAsFixed(1);
   /// final imag = example.imaginary.toStringAsFixed(1);
+  ///
   /// print("$real + $imag"); // 5.1 + 8.1i
   /// ```
   String toStringAsFixed(int fractionDigits) =>
       _convertToString(fractionDigits: fractionDigits);
 
   /// Prints the real and the imaginary parts or the complex number as fractions
-  /// with the best possible approximation
+  /// with the best possible approximation.
   String toStringAsFraction() => _convertToString(asFraction: true);
 
   /// Prints the complex number with opening and closing parenthesis in case the
@@ -224,10 +225,10 @@ class Complex implements Comparable<Complex> {
     return '$value';
   }
 
-  /// Converts an angle from radians to degrees
+  /// Converts an angle from radians to degrees.
   static double radToDeg(num value) => value * 180 / math.pi;
 
-  /// Converts an angle from degrees to radians
+  /// Converts an angle from degrees to radians.
   static double degToRad(num value) => value * math.pi / 180;
 
   /// Calculates the sum between two complex numbers.
@@ -373,7 +374,7 @@ class Complex implements Comparable<Complex> {
   }
 
   /// Calculates the power having a complex number as base and a real value as
-  /// exponent. The expression is in the form _(a + bi)<sup>x</sup>_
+  /// exponent. The expression is in the form _(a + bi)<sup>x</sup>_.
   Complex pow(num x) {
     final logRe = x * math.log(abs());
     final logIm = x * phase();
@@ -386,7 +387,7 @@ class Complex implements Comparable<Complex> {
   /// new [Complex] instance.
   Complex get negate => Complex(-real, -imaginary);
 
-  /// Checks whether the complex number is zero
+  /// Checks whether the complex number is zero.
   bool get isZero => real == 0 && imaginary == 0;
 
   /// Computes the complex n-th root of the complex number. The returned root is
