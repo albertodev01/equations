@@ -13,6 +13,7 @@ void main() {
       const matrixException = MatrixException('Message');
       const systemException = SystemSolverException('Message');
       const integrationException = NumericalIntegrationException('Message');
+      const polyLongDivException = PolynomialLongDivisionException('Message');
 
       // Objects comparisons
       expect(
@@ -43,6 +44,10 @@ void main() {
         integrationException,
         equals(const NumericalIntegrationException('Message')),
       );
+      expect(
+        polyLongDivException,
+        equals(const PolynomialLongDivisionException('Message')),
+      );
 
       // Checking types
       expect(
@@ -68,6 +73,10 @@ void main() {
       expect(
         systemException,
         isNot(integrationException),
+      );
+      expect(
+        integrationException,
+        isNot(polyLongDivException),
       );
 
       // Explicit boolean comparison
@@ -97,6 +106,11 @@ void main() {
       );
       expect(
         integrationException == const NumericalIntegrationException('Message'),
+        isTrue,
+      );
+      expect(
+        polyLongDivException ==
+            const PolynomialLongDivisionException('Message'),
         isTrue,
       );
 
@@ -129,6 +143,10 @@ void main() {
         integrationException.hashCode,
         equals(const NumericalIntegrationException('Message').hashCode),
       );
+      expect(
+        polyLongDivException.hashCode,
+        equals(const PolynomialLongDivisionException('Message').hashCode),
+      );
 
       // Checking messages
       expect(
@@ -150,6 +168,11 @@ void main() {
       expect(
         integrationException ==
             const NumericalIntegrationException('Another Message'),
+        isFalse,
+      );
+      expect(
+        polyLongDivException ==
+            const PolynomialLongDivisionException('Another Message'),
         isFalse,
       );
 
@@ -177,6 +200,10 @@ void main() {
       expect(
         integrationException.messagePrefix,
         equals('NumericalIntegrationException'),
+      );
+      expect(
+        polyLongDivException.messagePrefix,
+        equals('PolynomialLongDivisionException'),
       );
     });
 
@@ -253,6 +280,18 @@ void main() {
       expect(
         '$exception',
         equals('NumericalIntegrationException: Exception message'),
+      );
+    });
+
+    test(
+        'Making sure "PolynomialLongDivisionException" prints the correct message',
+        () {
+      const exception = PolynomialLongDivisionException('Exception message');
+
+      expect(exception.message, 'Exception message');
+      expect(
+        '$exception',
+        equals('PolynomialLongDivisionException: Exception message'),
       );
     });
   });

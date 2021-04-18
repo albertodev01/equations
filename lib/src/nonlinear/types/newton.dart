@@ -27,7 +27,11 @@ class Newton extends NonLinear {
     required this.x0,
     double tolerance = 1.0e-10,
     int maxSteps = 10,
-  }) : super(function: function, tolerance: tolerance, maxSteps: maxSteps);
+  }) : super(
+          function: function,
+          tolerance: tolerance,
+          maxSteps: maxSteps,
+        );
 
   @override
   bool operator ==(Object other) {

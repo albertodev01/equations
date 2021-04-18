@@ -57,10 +57,11 @@ class Quartic extends Algebraic {
 
   @override
   Algebraic derivative() => Cubic(
-      a: a * const Complex.fromReal(4),
-      b: b * const Complex.fromReal(3),
-      c: c * const Complex.fromReal(2),
-      d: d);
+        a: a * const Complex.fromReal(4),
+        b: b * const Complex.fromReal(3),
+        c: c * const Complex.fromReal(2),
+        d: d,
+      );
 
   @override
   Complex discriminant() {

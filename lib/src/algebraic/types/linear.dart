@@ -49,10 +49,10 @@ class Linear extends Algebraic {
   @override
   List<Complex> solutions() => [b.negate / a];
 
-  /// The first coefficient of the equation in the form _f(x) = ab + b_
+  /// The first coefficient of the equation in the form _f(x) = ab + b_.
   Complex get a => coefficients[0];
 
-  /// The second coefficient of the equation in the form _f(x) = ab + b_
+  /// The second coefficient of the equation in the form _f(x) = ab + b_.
   Complex get b => coefficients[1];
 
   /// Creates a **deep** copy of this object with the given fields replaced

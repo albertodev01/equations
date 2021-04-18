@@ -17,7 +17,11 @@ class CholeskySolver extends SystemSolver {
   CholeskySolver({
     required List<List<double>> equations,
     required List<double> constants,
-  }) : super(A: equations, b: constants, size: constants.length);
+  }) : super(
+          A: equations,
+          b: constants,
+          size: constants.length,
+        );
 
   @override
   List<double> solve() {

@@ -31,7 +31,7 @@ class Constant extends Algebraic {
   @override
   List<Complex> solutions() => [];
 
-  /// The constant coefficient
+  /// The constant coefficient.
   Complex get a => coefficients[0];
 
   /// Creates a **deep** copy of this object with the given fields replaced

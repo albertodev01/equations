@@ -7,14 +7,14 @@ import 'package:equations/equations.dart';
 /// Subtypes of [NumericalIntegration] are expected to mostly implement the so
 /// called "the Newton–Cotes formulas".
 abstract class NumericalIntegration {
-  /// The lower bound of the integral
+  /// The lower bound of the integral.
   final double lowerBound;
 
-  /// The upper bound of the integral
+  /// The upper bound of the integral.
   final double upperBound;
 
   /// The number of parts in which the interval [lowerBound, upperBound] has to
-  /// be split by the algorithm
+  /// be split by the algorithm.
   final int intervals;
 
   /// Expects the [lowerBound] and [upperBound] of the integral.

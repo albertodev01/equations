@@ -41,8 +41,7 @@ abstract class Algebraic {
   Algebraic(List<Complex> coefficients) {
     // Making a deep copy but there's no need to call 'copyWith' on the complex
     // coefficients because 'Complex' is an immutable type.
-    this.coefficients =
-        UnmodifiableListView(coefficients.map((c) => c).toList());
+    this.coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
 
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -67,7 +66,8 @@ abstract class Algebraic {
   /// were complex numbers as well, use the [Algebraic(coefficients)] constructor.
   Algebraic.realEquation(List<double> coefficients) {
     this.coefficients = UnmodifiableListView(
-        coefficients.map((c) => Complex.fromReal(c)).toList());
+      coefficients.map((c) => Complex.fromReal(c)).toList(),
+    );
 
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -104,11 +104,18 @@ abstract class Algebraic {
   /// were only real numbers, use the [Algebraic.fromReal(coefficients)] method
   /// which is more convenient.
   factory Algebraic.from(List<Complex> coefficients) {
+    // Reminder: 'Complex' is immutable so there's no risk of getting undesired
+    // side effects if 'coefficients' is altered
     switch (coefficients.length) {
       case 1:
-        return Constant(a: coefficients[0]);
+        return Constant(
+          a: coefficients[0],
+        );
       case 2:
-        return Linear(a: coefficients[0], b: coefficients[1]);
+        return Linear(
+          a: coefficients[0],
+          b: coefficients[1],
+        );
       case 3:
         return Quadratic(
           a: coefficients[0],
@@ -131,7 +138,9 @@ abstract class Algebraic {
           e: coefficients[4],
         );
       default:
-        return Laguerre(coefficients: coefficients);
+        return Laguerre(
+          coefficients: coefficients,
+        );
     }
   }
 
@@ -293,9 +302,9 @@ abstract class Algebraic {
   /// Evaluates the polynomial on the specified real number [x].
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
-  /// TODO
+  /// Integrates the polynomial between [lower] and [upper] and computes the
+  /// result.
   Complex evaluateIntegralOn(double lower, double upper) {
-    // TODO
     var upperSum = const Complex.zero();
     var lowerSum = const Complex.zero();
 
@@ -436,6 +445,20 @@ abstract class Algebraic {
 
     // Returning a new instance
     return Algebraic.from(newCoefficients);
+  }
+
+  /// This operator divides a polynomial by another polynomial of the same or
+  /// lower degree.
+  ///
+  /// The algorithm used to divide a polynomial by another is called "Polynomial
+  /// long division" and it's implemented in the [PolynomialLongDivision] class.
+  AlgebraicDivision operator /(Algebraic other) {
+    final polyLongDivison = PolynomialLongDivision(
+      polyNumerator: this,
+      polyDenominator: other,
+    );
+
+    return polyLongDivison.divide();
   }
 
   /// The 'negation' operator changes the sign of every coefficient of the

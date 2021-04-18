@@ -190,10 +190,10 @@ abstract class SystemSolver {
     return solutions;
   }
 
-  /// The dimension of the system (which is N equations in N unknowns)
+  /// The dimension of the system (which is N equations in N unknowns).
   int get size => _knownValues.length;
 
-  /// Computes the determinant
+  /// Computes the determinant of the associated matrix.
   double determinant() => equations.determinant();
 
   /// Solves the `Ax = b` equation and returns the `x` vector containing the

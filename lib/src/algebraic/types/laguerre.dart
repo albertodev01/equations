@@ -125,9 +125,14 @@ class Laguerre extends Algebraic {
     // the possibility to return a more convenient object
     switch (coefficients.length) {
       case 1:
-        return Constant(a: coefficients[0]).derivative();
+        return Constant(
+          a: coefficients[0],
+        ).derivative();
       case 2:
-        return Linear(a: coefficients[0], b: coefficients[1]).derivative();
+        return Linear(
+          a: coefficients[0],
+          b: coefficients[1],
+        ).derivative();
       case 3:
         return Quadratic(
           a: coefficients[0],
@@ -160,9 +165,10 @@ class Laguerre extends Algebraic {
         );
       default:
         return Laguerre(
-            coefficients: _derivativeOf(coefficients),
-            precision: precision,
-            maxSteps: maxSteps);
+          coefficients: _derivativeOf(coefficients),
+          precision: precision,
+          maxSteps: maxSteps,
+        );
     }
   }
 
@@ -210,7 +216,7 @@ class Laguerre extends Algebraic {
     return roots;
   }
 
-  /// Implementation of the Laguerre's method which requires the [poly] list of
+  /// Implementation of the Laguerre method which requires the [poly] list of
   /// coefficients of the polynomial and an [initial] starting point.
   Complex _laguerre(List<Complex> poly, Complex initial) {
     final n = (poly.length - 1) * 1.0;
@@ -303,7 +309,7 @@ class Laguerre extends Algebraic {
     int? maxSteps,
   }) =>
       Laguerre(
-        coefficients: coefficients ?? this.coefficients.map((e) => e).toList(),
+        coefficients: coefficients ?? List<Complex>.from(this.coefficients),
         initialGuess: initialGuess ?? this.initialGuess,
         precision: precision ?? this.precision,
         maxSteps: maxSteps ?? this.maxSteps,

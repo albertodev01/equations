@@ -1,12 +1,12 @@
 /// Holds a series of results returned by [NumericalIntegration.integrate]:
 ///
 ///  - the list of guesses computed by the algorithm,
-///  - the actual result (the value of the integral on an `[a, b]` interval)
+///  - the actual result (the value of the integral on an `[a, b]` interval).
 class IntegralResults {
-  /// List of values guessed by the algorithm
+  /// List of values guessed by the algorithm.
   final List<double> guesses;
 
-  /// The result of the integral on an `[a, b]` interval
+  /// The result of the integral on an `[a, b]` interval.
   final double result;
 
   /// The list of [guesses] is iteratively built by the algorithm while the

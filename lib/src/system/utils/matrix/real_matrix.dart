@@ -144,8 +144,11 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the product
-    final flatMatrix =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final flatMatrix = List.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
 
     // Performing the multiplication
     for (var i = 0; i < rowCount; i++) {
@@ -175,8 +178,11 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the division
-    final flatMatrix =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final flatMatrix = List.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
 
     // Performing the division
     for (var i = 0; i < rowCount; ++i) {
@@ -215,10 +221,16 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Creating L and U matrices
-    final L = List<double>.generate(rowCount * columnCount, (_) => 0.0,
-        growable: false);
-    final U = List<double>.generate(rowCount * columnCount, (_) => 0.0,
-        growable: false);
+    final L = List<double>.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
+    final U = List<double>.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
 
     // Computing L and U
     for (var i = 0; i < rowCount; ++i) {
@@ -290,10 +302,16 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Creating L and Lt matrices
-    final L =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
-    final transpL =
-        List.generate(rowCount * columnCount, (_) => 0.0, growable: false);
+    final L = List.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
+    final transpL = List.generate(
+      rowCount * columnCount,
+      (_) => 0.0,
+      growable: false,
+    );
 
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i++) {
