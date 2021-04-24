@@ -388,5 +388,23 @@ void main() {
       // Decomposition
       expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
     });
+
+    test('Making sure that the transposed view is correct', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [6, 4, 24],
+          [1, -9, 8],
+        ],
+      );
+
+      expect(matrix.transposedValue(0, 0), equals(6));
+      expect(matrix.transposedValue(0, 1), equals(1));
+      expect(matrix.transposedValue(1, 0), equals(4));
+      expect(matrix.transposedValue(1, 1), equals(-9));
+      expect(matrix.transposedValue(2, 0), equals(24));
+      expect(matrix.transposedValue(2, 1), equals(8));
+    });
   });
 }

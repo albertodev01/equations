@@ -84,15 +84,17 @@ void main() {
     group('Real values', () {
       test('Making sure that QRDecompositionReal works properly - Example 1',
           () {
+        final sourceMatrix = RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [1, 2],
+            [3, 4],
+          ],
+        );
+
         final realQR = QRDecompositionReal(
-          realMatrix: RealMatrix.fromData(
-            rows: 2,
-            columns: 2,
-            data: [
-              [1, 2],
-              [3, 4],
-            ],
-          ),
+          realMatrix: sourceMatrix,
         );
 
         final results = realQR.decompose();
@@ -105,22 +107,39 @@ void main() {
 
         // Testing Q
         expect(
-            matrixQ(0, 0), const MoreOrLessEquals(-0.3162, precision: 1.0e-4));
+          matrixQ(0, 0),
+          const MoreOrLessEquals(-0.3162, precision: 1.0e-4),
+        );
         expect(
-            matrixQ(0, 1), const MoreOrLessEquals(0.9486, precision: 1.0e-4));
+          matrixQ(0, 1),
+          const MoreOrLessEquals(0.9486, precision: 1.0e-4),
+        );
         expect(
-            matrixQ(1, 0), const MoreOrLessEquals(-0.9486, precision: 1.0e-4));
+          matrixQ(1, 0),
+          const MoreOrLessEquals(-0.9486, precision: 1.0e-4),
+        );
         expect(
-            matrixQ(1, 1), const MoreOrLessEquals(-0.3162, precision: 1.0e-4));
+          matrixQ(1, 1),
+          const MoreOrLessEquals(-0.3162, precision: 1.0e-4),
+        );
 
         // Testing R
         expect(
-            matrixR(0, 0), const MoreOrLessEquals(-3.1622, precision: 1.0e-4));
+          matrixR(0, 0),
+          const MoreOrLessEquals(-3.1622, precision: 1.0e-4),
+        );
         expect(
-            matrixR(0, 1), const MoreOrLessEquals(-4.4271, precision: 1.0e-4));
-        expect(matrixR(1, 0), const MoreOrLessEquals(0, precision: 1.0e-4));
+          matrixR(0, 1),
+          const MoreOrLessEquals(-4.4271, precision: 1.0e-4),
+        );
         expect(
-            matrixR(1, 1), const MoreOrLessEquals(0.6324, precision: 1.0e-4));
+          matrixR(1, 0),
+          const MoreOrLessEquals(0, precision: 1.0e-4),
+        );
+        expect(
+          matrixR(1, 1),
+          const MoreOrLessEquals(0.6324, precision: 1.0e-4),
+        );
 
         // Making sure that Q * R = A
         final matrixA = matrixQ * matrixR;
@@ -130,16 +149,8 @@ void main() {
         expect(matrixA(1, 1), const MoreOrLessEquals(4, precision: 1.0e-1));
 
         // Smoke on the RealMatrix method
-        final realMatrix = RealMatrix.fromData(
-          rows: 2,
-          columns: 2,
-          data: [
-            [1, 2],
-            [3, 4],
-          ],
-        );
-
-        expect(realMatrix.qrDecomposition(), orderedEquals(results));
+        expect(sourceMatrix.qrDecomposition(), orderedEquals(results));
+        expect(sourceMatrix.toString(), equals(realQR.toString()));
       });
 
       test('Making sure that QRDecompositionReal works properly - Example 2',
@@ -210,18 +221,20 @@ void main() {
 
     group('Complex values', () {
       test('Making sure that QRDecompositionComplex works properly', () {
-        final realQR = QRDecompositionComplex(
-          complexMatrix: ComplexMatrix.fromData(
-            rows: 2,
-            columns: 2,
-            data: const [
-              [Complex.fromReal(1), Complex.i()],
-              [Complex.fromReal(3), Complex.fromReal(4)],
-            ],
-          ),
+        final sourceMatrix = ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(1), Complex.i()],
+            [Complex.fromReal(3), Complex.fromReal(4)],
+          ],
         );
 
-        final results = realQR.decompose();
+        final complexQR = QRDecompositionComplex(
+          complexMatrix: sourceMatrix,
+        );
+
+        final results = complexQR.decompose();
         final matrixQ = results[0];
         final matrixR = results[1];
 
@@ -343,6 +356,7 @@ void main() {
         );
 
         expect(complexMatrix.qrDecomposition(), orderedEquals(results));
+        expect(sourceMatrix.toString(), equals(complexQR.toString()));
       });
     });
   });
