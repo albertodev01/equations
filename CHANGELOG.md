@@ -1,6 +1,7 @@
 ## [2.1.1]
 
  - Added QR decomposition to the `RealMatrix` and `ComplexMatrix` type
+ - Dependencies versions update
 
 ## [2.1.0]
 
