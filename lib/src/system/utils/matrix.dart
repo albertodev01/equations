@@ -218,6 +218,23 @@ abstract class Matrix<T> {
     return _data[columnCount * row + col];
   }
 
+  /// Returns the value at ([row], [col]) position as if this matrix were
+  /// transposed. For example, let's say we have this matrix object:
+  ///
+  /// A = | 1 2 |
+  ///     | 3 4 |
+  ///
+  /// calling `itemAt(0, 1)` returns `2` because that's the value stored at row
+  /// 0 and column 1. Calling `transposedValue(0, 1)` returns `3` because in the
+  /// transposed matrix of A...
+  ///
+  /// At = | 1 3 |
+  ///      | 2 4 |
+  ///
+  /// ... the number `3` is at row 0 an column 1. In other words, this method
+  /// returns the value of the transposed matrix of this matrix.
+  T transposedValue(int row, int col) => this(col, row);
+
   /// Use this method to retrieve the element at a given position in the matrix.
   /// For example:
   ///

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_real_decomposition.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
 ///
@@ -135,7 +136,7 @@ class RealMatrix extends Matrix<double> {
     );
   }
 
-  /// Returns the sum of two matrices.
+  /// Returns the product of two matrices.
   @override
   Matrix<double> operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
@@ -351,6 +352,15 @@ class RealMatrix extends Matrix<double> {
       )
     ];
   }
+
+  /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
+  /// particular, this method returns the `Q` and `R` matrices of the
+  ///
+  ///  - A = Q x R
+  ///
+  /// relation. The returned list contains `Q` at index 0 and `R` at index 1.
+  List<RealMatrix> qrDecomposition() =>
+      QRDecompositionReal(realMatrix: this).decompose();
 
   /// Computes the determinant of a 2x2 matrix
   double _compute2x2Determinant(RealMatrix source) {

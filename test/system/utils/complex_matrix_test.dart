@@ -524,5 +524,21 @@ void main() {
       // Decomposition
       expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
     });
+
+    test('Making sure that the transposed view is correct', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [Complex.fromReal(1), Complex.fromReal(2)],
+          [Complex.fromReal(3), Complex.fromReal(4)],
+        ],
+      );
+
+      expect(matrix.transposedValue(0, 0), equals(const Complex.fromReal(1)));
+      expect(matrix.transposedValue(0, 1), equals(const Complex.fromReal(3)));
+      expect(matrix.transposedValue(1, 0), equals(const Complex.fromReal(2)));
+      expect(matrix.transposedValue(1, 1), equals(const Complex.fromReal(4)));
+    });
   });
 }

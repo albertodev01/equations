@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_complex_decomposition.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
 ///
@@ -134,7 +135,7 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
-  /// Returns the sum of two matrices.
+  /// Returns the product of two matrices.
   @override
   Matrix<Complex> operator *(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
@@ -290,7 +291,8 @@ class ComplexMatrix extends Matrix<Complex> {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-          'LU decomposition only works with square matrices!');
+        'LU decomposition only works with square matrices!',
+      );
     }
 
     // Exit immediately because if [0,0] is a negative number, the algorithm
@@ -350,6 +352,15 @@ class ComplexMatrix extends Matrix<Complex> {
       )
     ];
   }
+
+  /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
+  /// particular, this method returns the `Q` and `R` matrices of the
+  ///
+  ///  - A = Q x R
+  ///
+  /// relation. The returned list contains `Q` at index 0 and `R` at index 1.
+  List<ComplexMatrix> qrDecomposition() =>
+      QRDecompositionComplex(complexMatrix: this).decompose();
 
   /// Computes the determinant of a 2x2 matrix
   Complex _compute2x2Determinant(ComplexMatrix source) {
