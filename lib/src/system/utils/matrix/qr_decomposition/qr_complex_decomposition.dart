@@ -32,10 +32,6 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
 
       if (nrm != _zero) {
         // Form k-th Householder vector.
-        if (matrixQR[k][k] < _zero) {
-          nrm = -nrm;
-        }
-
         for (var i = k; i < rows; i++) {
           matrixQR[i][k] /= nrm;
         }
