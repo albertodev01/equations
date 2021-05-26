@@ -1,3 +1,8 @@
+## [2.1.2]
+
+ - Dependencies versions update
+ - Updated example to Flutter 2.2.0 and improved coverage
+
 ## [2.1.1]
 
  - Added QR decomposition to the `RealMatrix` and `ComplexMatrix` type
