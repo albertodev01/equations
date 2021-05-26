@@ -65,7 +65,7 @@ void main() {
     );
 
     blocTest<NonlinearBloc, NonlinearState>(
-      'Making sure that nonlinear equations can be solved with Newton',
+      'Making sure that nonlinear equations can be solved with Steffensen',
       build: () => NonlinearBloc(NonlinearType.singlePoint),
       act: (bloc) => bloc.add(const SinglePointMethod(
         method: SinglePointMethods.steffensen,
@@ -85,7 +85,7 @@ void main() {
     );
 
     blocTest<NonlinearBloc, NonlinearState>(
-      'Making sure that nonlinear equations can be solved with Newton',
+      'Making sure that nonlinear equations can be solved with Bisection',
       build: () => NonlinearBloc(NonlinearType.bracketing),
       act: (bloc) => bloc.add(const BracketingMethod(
         method: BracketingMethods.bisection,
@@ -114,7 +114,7 @@ void main() {
     );
 
     blocTest<NonlinearBloc, NonlinearState>(
-      'Making sure that nonlinear equations can be solved with Newton',
+      'Making sure that nonlinear equations can be solved with Brent',
       build: () => NonlinearBloc(NonlinearType.bracketing),
       act: (bloc) => bloc.add(const BracketingMethod(
         method: BracketingMethods.brent,
@@ -143,7 +143,7 @@ void main() {
     );
 
     blocTest<NonlinearBloc, NonlinearState>(
-      'Making sure that nonlinear equations can be solved with Newton',
+      'Making sure that nonlinear equations can be solved with Secant',
       build: () => NonlinearBloc(NonlinearType.bracketing),
       act: (bloc) => bloc.add(const BracketingMethod(
         method: BracketingMethods.secant,
@@ -169,6 +169,20 @@ void main() {
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));
       },
+    );
+
+    blocTest<NonlinearBloc, NonlinearState>(
+      'Making sure that an exception is thrown if one (or more) input values '
+          'are malformed strings',
+      build: () => NonlinearBloc(NonlinearType.bracketing),
+      act: (bloc) => bloc.add(const BracketingMethod(
+        method: BracketingMethods.secant,
+        function: 'abc',
+        lowerBound: '1',
+        upperBound: '3',
+      )),
+      expect: () => const [NonlinearError()],
+      verify: (bloc) => bloc.state == const NonlinearError(),
     );
   });
 }
