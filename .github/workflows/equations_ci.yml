@@ -69,4 +69,5 @@ jobs:
       - name: Making sure that code coverage is at least 90
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
+          path: example/flutter_example/coverage/lcov.info
           min_coverage: 90
