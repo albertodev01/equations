@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/bloc/events.dart';
 import 'package:test/test.dart';
 
