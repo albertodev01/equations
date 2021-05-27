@@ -25,6 +25,16 @@ void main() {
     );
 
     blocTest<PolynomialBloc, PolynomialState>(
+      'Making sure that the bloc handles errors',
+      build: () => PolynomialBloc(PolynomialType.linear),
+      act: (bloc) => bloc.add(const PolynomialSolve(
+        coefficients: ['1'],
+      )),
+      expect: () => const [PolynomialError()],
+      verify: (bloc) => bloc.state == const PolynomialError(),
+    );
+
+    blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that an exception is thrown if the type of polynomial is '
       "'Linear' and the params list length is not 2",
       build: () => PolynomialBloc(PolynomialType.linear),

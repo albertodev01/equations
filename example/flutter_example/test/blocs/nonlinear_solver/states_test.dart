@@ -14,6 +14,8 @@ void main() {
         ),
       );
 
+      expect(guesses.props.length, equals(2));
+
       expect(
         const NonlinearGuesses(
           nonLinear: Newton(function: 'x - 2', x0: 2),

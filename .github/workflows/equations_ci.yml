@@ -63,3 +63,8 @@ jobs:
 
       - name: Runing unit and widget tests
         run: flutter test --update-goldens
+
+      - name: Making sure that code coverage is at least 90
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          min_coverage: 90
