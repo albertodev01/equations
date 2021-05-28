@@ -58,6 +58,7 @@ void main() {
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
         final solutions = expected.solve();
 
+        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Newton>());
         expect(stateResults.efficiency, isNaN);
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));
@@ -78,6 +79,7 @@ void main() {
 
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
 
+        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Steffensen>());
         expect(stateResults.efficiency, isNaN);
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses.contains(2.0), isTrue);
@@ -107,6 +109,7 @@ void main() {
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
         final solutions = expected.solve();
 
+        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Bisection>());
         expect(stateResults.efficiency, isNaN);
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));
@@ -136,6 +139,7 @@ void main() {
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
         final solutions = expected.solve();
 
+        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Brent>());
         expect(stateResults.efficiency, equals(1));
         expect(stateResults.convergence, equals(1));
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));
@@ -165,6 +169,7 @@ void main() {
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
         final solutions = expected.solve();
 
+        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Secant>());
         expect(stateResults.efficiency, isNaN);
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));

@@ -64,6 +64,30 @@ void main() {
       );
     });
 
+    testWidgets(
+        'Making sure that the widget is responsive - large screens '
+        'test', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(2000, 2000));
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<NonlinearBloc>(
+          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+          child: const Scaffold(
+            body: NonlinearBody(),
+          ),
+        ),
+      ));
+
+      expect(
+        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+        findsNothing,
+      );
+      expect(
+        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('Making sure that solving equations works', (tester) async {
       when(() => dropdownCubit.state).thenReturn('Newton');
       final bloc = NonlinearBloc(NonlinearType.singlePoint);

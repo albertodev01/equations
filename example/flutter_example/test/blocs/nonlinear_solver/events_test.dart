@@ -43,6 +43,11 @@ void main() {
         const NonlinearClean(),
         equals(const NonlinearClean()),
       );
+
+      expect(
+        const NonlinearClean().props.length,
+        equals(2),
+      );
     });
 
     test(
