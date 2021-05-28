@@ -8,12 +8,13 @@ on:
   pull_request:
     types:
       - opened
+      - ready_for_review
 
 jobs:
   verify_equation_package:
     name: Equations package - CI action
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    if: github.event.pull_request.draft == false && github.event.pull_request.merged == false
     steps:
       - name: Checkout
         uses: actions/checkout@v2
