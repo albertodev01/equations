@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../bloc_mocks.dart';
+import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
 
 void main() {
@@ -61,6 +61,30 @@ void main() {
       expect(
         find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
         findsNothing,
+      );
+    });
+
+    testWidgets(
+        'Making sure that the widget is responsive - large screens '
+        'test', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(2000, 2000));
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<NonlinearBloc>(
+          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+          child: const Scaffold(
+            body: NonlinearBody(),
+          ),
+        ),
+      ));
+
+      expect(
+        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+        findsNothing,
+      );
+      expect(
+        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+        findsOneWidget,
       );
     });
 

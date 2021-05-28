@@ -17,6 +17,9 @@ void main() {
         method: BracketingMethods.bisection,
       );
 
+      expect(singlePoint.props.length, equals(5));
+      expect(bracketing.props.length, equals(6));
+
       expect(
         const SinglePointMethod(
           function: '',
@@ -39,6 +42,11 @@ void main() {
       expect(
         const NonlinearClean(),
         equals(const NonlinearClean()),
+      );
+
+      expect(
+        const NonlinearClean().props.length,
+        equals(2),
       );
     });
 
@@ -92,21 +100,23 @@ void main() {
 
     test("Making sure that all events are subtypes of 'NonlinearEvent'", () {
       expect(
-          const SinglePointMethod(
-            function: '',
-            initialGuess: '',
-            method: SinglePointMethods.newton,
-          ),
-          isA<NonlinearEvent>());
+        const SinglePointMethod(
+          function: '',
+          initialGuess: '',
+          method: SinglePointMethods.newton,
+        ),
+        isA<NonlinearEvent>(),
+      );
 
       expect(
-          const BracketingMethod(
-            function: '',
-            lowerBound: '',
-            upperBound: '',
-            method: BracketingMethods.bisection,
-          ),
-          isA<NonlinearEvent>());
+        const BracketingMethod(
+          function: '',
+          lowerBound: '',
+          upperBound: '',
+          method: BracketingMethods.bisection,
+        ),
+        isA<NonlinearEvent>(),
+      );
     });
   });
 }

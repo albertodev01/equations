@@ -37,8 +37,7 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
     // NOT a number or a string
     return rawInput.map<Complex>((value) {
       if (!value.isNumericalExpression) {
-        throw FormatException(
-            'The given input ($value) is not a valid number.');
+        throw FormatException('The "$value" input is not a valid number.');
       }
 
       return Complex.fromReal(_parser.evaluate(value));

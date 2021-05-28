@@ -4,15 +4,16 @@ on:
   push:
     branches:
       - master
-      - develop
   pull_request:
     types:
       - opened
+      - ready_for_review
 
 jobs:
   verify_equation_package:
     name: Equations package - CI action
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false && github.event.pull_request.merged == false
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,6 +45,7 @@ jobs:
     name: Equations Flutter example - CI action
     needs: [verify_equation_package]
     runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
     defaults:
       run:
         working-directory: example/flutter_example
@@ -62,4 +64,10 @@ jobs:
         run: flutter analyze --fatal-infos --fatal-warnings
 
       - name: Runing unit and widget tests
-        run: flutter test --update-goldens
+        run: flutter test --update-goldens --coverage
+
+      - name: Making sure that code coverage is at least 90
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          path: example/flutter_example/coverage/lcov.info
+          min_coverage: 90

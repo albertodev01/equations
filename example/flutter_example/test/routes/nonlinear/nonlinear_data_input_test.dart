@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../bloc_mocks.dart';
+import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
 
 void main() {
@@ -115,7 +115,8 @@ void main() {
       expect(find.byType(SnackBar), findsOneWidget);
     });
 
-    testWidgets('Making sure that equations can be solved', (tester) async {
+    testWidgets('Making sure that single point equations can be solved',
+        (tester) async {
       when(() => dropdownCubit.state).thenReturn('Newton');
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
@@ -148,6 +149,68 @@ void main() {
 
       // Sending it to the bloc
       expect(bloc.state, isA<NonlinearGuesses>());
+    });
+
+    testWidgets('Making sure that bracketing equations can be solved',
+        (tester) async {
+      when(() => dropdownCubit.state).thenReturn('Bisection');
+      final bloc = NonlinearBloc(NonlinearType.bracketing);
+
+      await tester.pumpWidget(MockWrapper(
+        child: MultiBlocProvider(
+          providers: providers,
+          child: Scaffold(
+            body: BlocProvider<NonlinearBloc>.value(
+              value: bloc,
+              child: const NonlinearDataInput(),
+            ),
+          ),
+        ),
+      ));
+
+      final equationInput = find.byKey(const Key('NonlinearInput-function'));
+      final paramInput1 = find.byKey(const Key('NonlinearInput-first-param'));
+      final paramInput2 = find.byKey(const Key('NonlinearInput-second-param'));
+      final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
+
+      // Filling the forms
+      await tester.enterText(equationInput, 'x-3');
+      await tester.enterText(paramInput1, '1');
+      await tester.enterText(paramInput2, '4');
+
+      // Making sure that there are no results
+      expect(bloc.state, isA<NonlinearNone>());
+
+      // Solving the equation
+      await tester.tap(solveButton);
+      await tester.pumpAndSettle();
+
+      // Sending it to the bloc
+      expect(bloc.state, isA<NonlinearGuesses>());
+    });
+
+    testWidgets('Making sure that textfields can be cleared', (tester) async {
+      when(() => dropdownCubit.state).thenReturn('Newton');
+      final bloc = NonlinearBloc(NonlinearType.singlePoint);
+
+      await tester.pumpWidget(MockWrapper(
+        child: MultiBlocProvider(
+          providers: providers,
+          child: Scaffold(
+            body: BlocProvider<NonlinearBloc>.value(
+              value: bloc,
+              child: const NonlinearDataInput(),
+            ),
+          ),
+        ),
+      ));
+
+      expect(find.byType(NonlinearDataInput), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('Nonlinear-button-clean')));
+      await tester.pumpAndSettle();
+
+      expect(bloc.state, equals(const NonlinearNone()));
     });
   });
 }

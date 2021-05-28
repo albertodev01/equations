@@ -63,7 +63,7 @@ abstract class Matrix<T> {
     required int rows,
     required int columns,
     required List<List<T>> data,
-  })   : rowCount = rows,
+  })  : rowCount = rows,
         columnCount = columns {
     // "Flattening" the source into a single list
     _data = data.expand((e) => e).toList();
@@ -87,7 +87,7 @@ abstract class Matrix<T> {
     required int rows,
     required int columns,
     required List<T> data,
-  })   : rowCount = rows,
+  })  : rowCount = rows,
         columnCount = columns {
     // Making sure the size is correct
     if (data.length != (rows * columns)) {

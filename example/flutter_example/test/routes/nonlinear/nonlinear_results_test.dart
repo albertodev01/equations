@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart' as equations;
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../bloc_mocks.dart';
+import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
 
 void main() {

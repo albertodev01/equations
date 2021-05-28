@@ -1,6 +1,6 @@
 {
-    "name": "Equation solver",
-    "short_name": "Equation solver",
+    "name": "Equation Solver",
+    "short_name": "equation_solver",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
