@@ -32,7 +32,6 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
       .map((item) => item.content)
       .toList(growable: false);
 
-
   /// Changes the currently visible page of the tab.
   void changePage(int pageIndex) => widget.tabController.animateTo(pageIndex);
 

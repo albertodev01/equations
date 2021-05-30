@@ -54,7 +54,8 @@ class EquationScaffold extends StatefulWidget {
   _EquationScaffoldState createState() => _EquationScaffoldState();
 }
 
-class _EquationScaffoldState extends State<EquationScaffold> with SingleTickerProviderStateMixin {
+class _EquationScaffoldState extends State<EquationScaffold>
+    with SingleTickerProviderStateMixin {
   /// Controls the position of the currently visible page of the [TabBarView].
   late final tabController = TabController(
     length: widget.navigationItems.length,

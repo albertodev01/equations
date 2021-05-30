@@ -25,7 +25,8 @@ class RailNavigation extends StatefulWidget {
 
 class _RailNavigationState extends State<RailNavigation> {
   /// Converts a [NavigationItem] into a [BottomNavigationBarItem].
-  late final rails = widget.navigationItems.map<NavigationRailDestination>((item) {
+  late final rails =
+      widget.navigationItems.map<NavigationRailDestination>((item) {
     return NavigationRailDestination(
       icon: item.icon,
       selectedIcon: item.activeIcon,
