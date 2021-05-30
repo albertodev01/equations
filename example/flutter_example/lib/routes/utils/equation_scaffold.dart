@@ -19,7 +19,7 @@ const _assertionError = 'There must be at least 1 navigation item.';
 ///
 /// This widget also contains a responsive navigation bar which can be either a
 /// [BottomNavigationBar] or a [NavigationRail] according with the screen's size.
-class EquationScaffold extends StatelessWidget {
+class EquationScaffold extends StatefulWidget {
   /// The body of the [Scaffold]. When there's a [navigationItems] list defined,
   /// this widget is ignored because the actual body of the scaffold will be
   /// determined by the contents of the list.
@@ -51,16 +51,35 @@ class EquationScaffold extends StatelessWidget {
         );
 
   @override
+  _EquationScaffoldState createState() => _EquationScaffoldState();
+}
+
+class _EquationScaffoldState extends State<EquationScaffold>
+    with SingleTickerProviderStateMixin {
+  /// Controls the position of the currently visible page.
+  late final tabController = TabController(
+    length: widget.navigationItems.length,
+    vsync: this,
+  );
+
+  @override
+  void dispose() {
+    tabController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // If there are NO navigation items, then no navigation bars are required
-    if (navigationItems.isEmpty) {
+    if (widget.navigationItems.isEmpty) {
       return LayoutBuilder(
         builder: (context, dimensions) => Scaffold(
           body: _ScaffoldContents(
-            body: body,
+            body: widget.body,
             extraBackground: dimensions.maxWidth >= 1300,
           ),
-          floatingActionButton: fab,
+          floatingActionButton: widget.fab,
         ),
       );
     }
@@ -80,14 +99,15 @@ class EquationScaffold extends StatelessWidget {
               key: const Key('TabbedNavigationLayout-Scaffold'),
               body: _ScaffoldContents(
                 body: TabbedNavigationLayout(
-                  navigationItems: navigationItems,
+                  tabController: tabController,
+                  navigationItems: widget.navigationItems,
                 ),
                 extraBackground: hasExtraBackground,
               ),
               bottomNavigationBar: BottomNavigation(
-                navigationItems: navigationItems,
+                navigationItems: widget.navigationItems,
               ),
-              floatingActionButton: fab,
+              floatingActionButton: widget.fab,
             );
           }
 
@@ -95,11 +115,12 @@ class EquationScaffold extends StatelessWidget {
             key: const Key('RailNavigationLayout-Scaffold'),
             body: _ScaffoldContents(
               body: RailNavigation(
-                navigationItems: navigationItems,
+                tabController: tabController,
+                navigationItems: widget.navigationItems,
               ),
               extraBackground: hasExtraBackground,
             ),
-            floatingActionButton: fab,
+            floatingActionButton: widget.fab,
           );
         },
       ),

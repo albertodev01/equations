@@ -10,9 +10,13 @@ class RailNavigation extends StatefulWidget {
   /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
 
+  /// Controls the position of the currently visible page on the screen.
+  final TabController tabController;
+
   /// Creates a [RailNavigation] widget..
   const RailNavigation({
     required this.navigationItems,
+    required this.tabController,
   });
 
   @override
@@ -38,6 +42,7 @@ class _RailNavigationState extends State<RailNavigation> {
         Expanded(
           child: TabbedNavigationLayout(
             navigationItems: widget.navigationItems,
+            tabController: widget.tabController,
           ),
         ),
 
