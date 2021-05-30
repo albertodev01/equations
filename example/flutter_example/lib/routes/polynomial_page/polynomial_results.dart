@@ -113,17 +113,7 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
-      child: BlocConsumer<PolynomialBloc, PolynomialState>(
-        listener: (context, state) {
-          if (state is PolynomialError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(context.l10n.polynomial_error),
-                duration: const Duration(seconds: 2),
-              ),
-            );
-          }
-        },
+      child: BlocBuilder<PolynomialBloc, PolynomialState>(
         builder: (context, state) {
           if (state is PolynomialRoots) {
             return ComplexResultCard(

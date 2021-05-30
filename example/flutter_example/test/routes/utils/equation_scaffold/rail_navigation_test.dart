@@ -9,13 +9,23 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../mock_wrapper.dart';
 
 void main() {
+  late final TabController controller;
+
+  setUpAll(() {
+    controller = TabController(
+      length: 2,
+      vsync: const TestVSync(),
+    );
+  });
+
   group("Testing the 'RailNavigation' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(MockWrapper(
         child: BlocProvider<NavigationCubit>(
           create: (_) => NavigationCubit(),
-          child: const RailNavigation(
-            navigationItems: [
+          child: RailNavigation(
+            tabController: controller,
+            navigationItems: const [
               NavigationItem(
                 title: 'Test',
                 content: SizedBox(),

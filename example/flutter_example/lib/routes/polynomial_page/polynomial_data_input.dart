@@ -149,54 +149,66 @@ class __InputWidget extends State<_InputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Some space from the top
-        const SizedBox(height: 40),
+    return BlocListener<PolynomialBloc, PolynomialState>(
+      listener: (context, state) {
+        if (state is PolynomialError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.polynomial_error),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Some space from the top
+          const SizedBox(height: 40),
 
-        cachedEquationTitle,
+          cachedEquationTitle,
 
-        // Responsively placing input fields using 'Wrap'
-        Padding(
-          padding: const EdgeInsets.only(left: 60, right: 60),
-          child: Form(
-            key: formKey,
-            child: Wrap(
-              spacing: 30,
-              alignment: WrapAlignment.center,
-              children: cachedWrapBody,
+          // Responsively placing input fields using 'Wrap'
+          Padding(
+            padding: const EdgeInsets.only(left: 60, right: 60),
+            child: Form(
+              key: formKey,
+              child: Wrap(
+                spacing: 30,
+                alignment: WrapAlignment.center,
+                children: cachedWrapBody,
+              ),
             ),
           ),
-        ),
 
-        // A "spacer" widget
-        const SizedBox(height: 40),
+          // A "spacer" widget
+          const SizedBox(height: 40),
 
-        // Two buttons needed to "solve" and "clear" the equation
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Solving the polynomial
-            ElevatedButton(
-              key: const Key('Polynomial-button-solve'),
-              onPressed: () => _processInput(context),
-              child: Text(context.l10n.solve),
-            ),
+          // Two buttons needed to "solve" and "clear" the equation
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the polynomial
+              ElevatedButton(
+                key: const Key('Polynomial-button-solve'),
+                onPressed: () => _processInput(context),
+                child: Text(context.l10n.solve),
+              ),
 
-            // Some spacing
-            const SizedBox(width: 30),
+              // Some spacing
+              const SizedBox(width: 30),
 
-            // Cleaning the inputs
-            ElevatedButton(
-              key: const Key('Polynomial-button-clean'),
-              onPressed: () => _cleanInput(context),
-              child: Text(context.l10n.clean),
-            ),
-          ],
-        )
-      ],
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('Polynomial-button-clean'),
+                onPressed: () => _cleanInput(context),
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

@@ -11,9 +11,13 @@ class TabbedNavigationLayout extends StatefulWidget {
   /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
 
+  /// Controls the position of the currently visible page of the [TabBarView].
+  final TabController tabController;
+
   /// Creates a [TabbedNavigationLayout] widget.
   const TabbedNavigationLayout({
     required this.navigationItems,
+    required this.tabController,
   });
 
   @override
@@ -22,34 +26,15 @@ class TabbedNavigationLayout extends StatefulWidget {
 
 /// The state of the [TabbedNavigationLayout] widget.
 @visibleForTesting
-class TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
-    with SingleTickerProviderStateMixin {
-  /// Controls the position of the currently visible page of the [TabBarView].
-  late final TabController tabController;
-
+class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
   /// The various pages of the [TabBarView].
   late final tabPages = widget.navigationItems
       .map((item) => item.content)
       .toList(growable: false);
 
-  @override
-  void initState() {
-    super.initState();
-
-    tabController = TabController(
-      length: widget.navigationItems.length,
-      vsync: this,
-    );
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
 
   /// Changes the currently visible page of the tab.
-  void changePage(int pageIndex) => tabController.animateTo(pageIndex);
+  void changePage(int pageIndex) => widget.tabController.animateTo(pageIndex);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +43,7 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout>
       listener: (context, state) => changePage(state),
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
-        controller: tabController,
+        controller: widget.tabController,
         children: tabPages,
       ),
     );
