@@ -4,8 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Testing the correctness of exception objects', () {
-    test('Making sure that equality comparison works for exception objects',
-        () {
+    test('Making sure that equality comparison works for exceptions', () {
       const complexException = ComplexException('Message');
       const algebraicException = AlgebraicException('Message');
       const nonlinearException = NonlinearException('Message');

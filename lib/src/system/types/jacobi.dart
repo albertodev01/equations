@@ -24,7 +24,64 @@ class JacobiSolver extends SystemSolver {
   ///   - [maxSteps] the maximum number of iterations the algorithm
   ///
   /// `A` must be strictly diagonally dominant.
-  JacobiSolver({
+  factory JacobiSolver({
+    required List<List<double>> equations,
+    required List<double> constants,
+    required List<double> x0,
+    int maxSteps = 30,
+    double precision = 1.0e-10,
+  }) {
+    // The initial vector with the guesses MUST have the same size as the matrix
+    // of course
+    if (x0.length != constants.length) {
+      throw const SystemSolverException('The length of the guesses vector '
+          'must match the size of the square matrix.');
+    }
+
+    return JacobiSolver._(
+      equations: equations,
+      constants: constants,
+      x0: x0,
+      maxSteps: maxSteps,
+      precision: precision,
+    );
+  }
+
+  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
+  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///
+  ///   - [equations] is the flattened matrix containing the equations
+  ///   - [constants] is the vector with the known values
+  ///   - [x0] is the initial guess (which is a vector)
+  ///   - [precision] tells how accurate the algorithm has to be
+  ///   - [maxSteps] the maximum number of iterations the algorithm
+  ///
+  /// `A` must be strictly diagonally dominant.
+  factory JacobiSolver.flatMatrix({
+    required List<double> equations,
+    required List<double> constants,
+    required List<double> x0,
+    int maxSteps = 30,
+    double precision = 1.0e-10,
+  }) {
+    // The initial vector with the guesses MUST have the same size as the matrix
+    // of course
+    if (x0.length != constants.length) {
+      throw const SystemSolverException('The length of the guesses vector '
+          'must match the size of the square matrix.');
+    }
+
+    return JacobiSolver._flatMatrix(
+      equations: equations,
+      constants: constants,
+      x0: x0,
+      maxSteps: maxSteps,
+      precision: precision,
+    );
+  }
+
+  /// Creates a [JacobiSolver] instance with
+  JacobiSolver._({
     required List<List<double>> equations,
     required List<double> constants,
     required this.x0,
@@ -35,14 +92,21 @@ class JacobiSolver extends SystemSolver {
           b: constants,
           size: constants.length,
           precision: precision,
-        ) {
-    // The initial vector with the guesses MUST have the same size as the matrix
-    // of course
-    if (x0.length != size) {
-      throw const SystemSolverException('The length of the guesses vector '
-          'must match the size of the square matrix.');
-    }
-  }
+        );
+
+  /// Creates a [JacobiSolver] instance.
+  JacobiSolver._flatMatrix({
+    required List<double> equations,
+    required List<double> constants,
+    required this.x0,
+    this.maxSteps = 30,
+    double precision = 1.0e-10,
+  }) : super.flatMatrix(
+          A: equations,
+          b: constants,
+          size: constants.length,
+          precision: precision,
+        );
 
   @override
   bool operator ==(Object other) {

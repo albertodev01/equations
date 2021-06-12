@@ -175,13 +175,19 @@ void main() {
       expect(ComplexMatrix(columns: 2, rows: 2), equals(matrix));
       expect(ComplexMatrix(columns: 2, rows: 2) == matrix, isTrue);
       expect(
-          ComplexMatrix(columns: 2, rows: 2).hashCode, equals(matrix.hashCode));
+        ComplexMatrix(columns: 2, rows: 2).hashCode,
+        equals(matrix.hashCode),
+      );
 
       // Inequality tests
-      expect(ComplexMatrix(columns: 2, rows: 2, identity: true) == matrix,
-          isFalse);
-      expect(ComplexMatrix(columns: 2, rows: 1).hashCode == matrix.hashCode,
-          isFalse);
+      expect(
+        ComplexMatrix(columns: 2, rows: 2, identity: true) == matrix,
+        isFalse,
+      );
+      expect(
+        ComplexMatrix(columns: 2, rows: 1).hashCode == matrix.hashCode,
+        isFalse,
+      );
     });
   });
 

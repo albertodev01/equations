@@ -47,6 +47,28 @@ void main() {
       expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
     });
 
+    test(
+        'Making sure that flat constructor produces the same object that '
+        'a non-flattened constructor does', () {
+      final matrix = SORSolver(
+        equations: const [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+        ],
+        constants: const [1, 2, 3],
+        w: 1.5,
+      );
+
+      final flatMatrix = SORSolver.flatMatrix(
+        equations: const [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        constants: const [1, 2, 3],
+        w: 1.5,
+      );
+
+      expect(matrix, equals(flatMatrix));
+    });
+
     test('Making sure that the string conversion works properly.', () {
       final solver = SORSolver(
         equations: const [
@@ -73,33 +95,53 @@ void main() {
         'Making sure that the matrix is squared AND the dimension of the '
         'known values vector also matches the size of the matrix.', () {
       expect(
-          () => SORSolver(equations: const [
-                [1, 2],
-                [4, 5],
-              ], constants: [
-                7,
-                8,
-                9,
-              ], w: 2),
-          throwsA(isA<MatrixException>()));
+        () => SORSolver(
+          equations: const [
+            [1, 2],
+            [4, 5],
+          ],
+          constants: [
+            7,
+            8,
+            9,
+          ],
+          w: 2,
+        ),
+        throwsA(isA<MatrixException>()),
+      );
+    });
+
+    test(
+        'Making sure that when the input is a flat matrix, the matrix must '
+        'be squared.', () {
+      expect(
+        () => SORSolver.flatMatrix(
+          equations: const [1, 2, 3, 4, 5],
+          constants: [7, 8],
+          w: 1.25,
+        ),
+        throwsA(isA<MatrixException>()),
+      );
     });
 
     test('Making sure that objects comparison works properly.', () {
-      final sor = SORSolver(equations: const [
-        [1, 2],
-        [3, 4],
-      ], constants: [
-        0,
-        -6,
-      ], w: 2);
+      final sor = SORSolver(
+        equations: const [
+          [1, 2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+        w: 2,
+      );
 
-      final sor2 = SORSolver(equations: const [
-        [1, 2],
-        [3, 4],
-      ], constants: [
-        0,
-        -6,
-      ], w: 2);
+      final sor2 = SORSolver(
+        equations: const [
+          [1, 2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+        w: 2,
+      );
 
       expect(sor, equals(sor2));
       expect(sor == sor2, isTrue);

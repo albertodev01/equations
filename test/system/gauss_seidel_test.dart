@@ -45,16 +45,35 @@ void main() {
       expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
     });
 
+    test(
+        'Making sure that flat constructor produces the same object that '
+        'a non-flattened constructor does', () {
+      final matrix = GaussSeidelSolver(
+        equations: const [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+        ],
+        constants: const [1, 2, 3],
+      );
+
+      final flatMatrix = GaussSeidelSolver.flatMatrix(
+        equations: const [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        constants: const [1, 2, 3],
+      );
+
+      expect(matrix, equals(flatMatrix));
+    });
+
     test('Making sure that the string conversion works properly.', () {
-      final solver = GaussSeidelSolver(equations: const [
-        [3, -1, 1],
-        [-1, 3, -1],
-        [1, -1, 3],
-      ], constants: const [
-        -1,
-        7,
-        -7,
-      ]);
+      final solver = GaussSeidelSolver(
+        equations: const [
+          [3, -1, 1],
+          [-1, 3, -1],
+          [1, -1, 3],
+        ],
+        constants: const [-1, 7, -7],
+      );
 
       const toString = '[3.0, -1.0, 1.0]\n'
           '[-1.0, 3.0, -1.0]\n'
@@ -71,33 +90,45 @@ void main() {
         'Making sure that the matrix is squared AND the dimension of the '
         'known values vector also matches the size of the matrix.', () {
       expect(
-          () => GaussSeidelSolver(equations: const [
-                [1, 2],
-                [4, 5],
-              ], constants: [
-                7,
-                8,
-                9,
-              ]),
-          throwsA(isA<MatrixException>()));
+        () => GaussSeidelSolver(
+          equations: const [
+            [1, 2],
+            [4, 5],
+          ],
+          constants: [7, 8, 9],
+        ),
+        throwsA(isA<MatrixException>()),
+      );
+    });
+
+    test(
+        'Making sure that when the input is a flat matrix, the matrix must '
+        'be squared.', () {
+      expect(
+        () => GaussSeidelSolver.flatMatrix(
+          equations: const [1, 2, 3, 4, 5],
+          constants: [7, 8],
+        ),
+        throwsA(isA<MatrixException>()),
+      );
     });
 
     test('Making sure that objects comparison works properly.', () {
-      final gaussSeidel = GaussSeidelSolver(equations: const [
-        [1, 2],
-        [3, 4],
-      ], constants: [
-        0,
-        -6,
-      ]);
+      final gaussSeidel = GaussSeidelSolver(
+        equations: const [
+          [1, 2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+      );
 
-      final gaussSeidel2 = GaussSeidelSolver(equations: const [
-        [1, 2],
-        [3, 4],
-      ], constants: [
-        0,
-        -6,
-      ]);
+      final gaussSeidel2 = GaussSeidelSolver(
+        equations: const [
+          [1, 2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+      );
 
       expect(gaussSeidel, equals(gaussSeidel2));
       expect(gaussSeidel == gaussSeidel2, isTrue);

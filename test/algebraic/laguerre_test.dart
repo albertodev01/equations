@@ -103,41 +103,21 @@ void main() {
     });
 
     test('Making sure that various derivatives are properly computed.', () {
-      final polynomialDegree6 = Laguerre.realEquation(coefficients: [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-      ]);
-      final polynomialDegree5 = Laguerre.realEquation(coefficients: [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-      ]);
-      final polynomialDegree4 = Laguerre.realEquation(coefficients: [
-        1,
-        2,
-        3,
-        4,
-        5,
-      ]);
-      final polynomialDegree3 = Laguerre.realEquation(coefficients: [
-        1,
-        2,
-        3,
-        4,
-      ]);
-      final polynomialDegree2 = Laguerre.realEquation(coefficients: [
-        1,
-        2,
-        3,
-      ]);
+      final polynomialDegree6 = Laguerre.realEquation(
+        coefficients: [1, 2, 3, 4, 5, 6, 7],
+      );
+      final polynomialDegree5 = Laguerre.realEquation(
+        coefficients: [1, 2, 3, 4, 5, 6],
+      );
+      final polynomialDegree4 = Laguerre.realEquation(
+        coefficients: [1, 2, 3, 4, 5],
+      );
+      final polynomialDegree3 = Laguerre.realEquation(
+        coefficients: [1, 2, 3, 4],
+      );
+      final polynomialDegree2 = Laguerre.realEquation(
+        coefficients: [1, 2, 3],
+      );
       final polynomialDegree1 = Laguerre.realEquation(coefficients: [1, 2]);
       final polynomialDegree0 = Laguerre.realEquation(coefficients: [1]);
 
@@ -160,11 +140,9 @@ void main() {
     });
 
     test("Making sure that 'copyWith' clones objects correctly", () {
-      final laguerre = Laguerre.realEquation(coefficients: [
-        1,
-        2,
-        3,
-      ]);
+      final laguerre = Laguerre.realEquation(
+        coefficients: [1, 2, 3],
+      );
 
       // Objects equality
       expect(laguerre, equals(laguerre.copyWith()));

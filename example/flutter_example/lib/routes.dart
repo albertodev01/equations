@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
+import 'package:equations_solver/routes/system_page.dart';
 import 'package:flutter/material.dart';
 
 /// Route management class that handles the navigation among various pages of the
@@ -32,6 +33,11 @@ abstract class RouteGenerator {
           builder: (_) => const NonlinearPage(),
         );
 
+      case systemPage:
+        return MaterialPageRoute<SystemPage>(
+          builder: (_) => const SystemPage(),
+        );
+
       default:
         throw const RouteException('Route not found');
     }
@@ -45,6 +51,9 @@ abstract class RouteGenerator {
 
   /// Route name for the nonlinear equations solver.
   static const nonlinearPage = '/nonlinear';
+
+  /// Route name for the systems page.
+  static const systemPage = '/system';
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.

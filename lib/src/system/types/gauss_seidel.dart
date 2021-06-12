@@ -29,6 +29,25 @@ class GaussSeidelSolver extends SystemSolver {
           precision: precision,
         );
 
+  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
+  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///
+  ///   - [equations] is the flattened matrix containing the equations
+  ///   - [constants] is the vector with the known values
+  ///   - [precision] determines how accurate the algorithm has to be
+  ///   - [maxSteps] the maximum number of iterations the algorithm
+  GaussSeidelSolver.flatMatrix({
+    required List<double> equations,
+    required List<double> constants,
+    this.maxSteps = 30,
+    double precision = 1.0e-10,
+  }) : super.flatMatrix(
+          A: equations,
+          b: constants,
+          size: constants.length,
+          precision: precision,
+        );
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
