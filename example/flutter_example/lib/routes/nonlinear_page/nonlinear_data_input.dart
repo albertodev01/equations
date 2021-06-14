@@ -65,26 +65,27 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     if (formKey.currentState?.validate() ?? false) {
       final precision = context.read<SliderCubit>().state;
       final algorithm = context.read<DropdownCubit>().state;
+      final bloc = context.read<NonlinearBloc>();
 
       if (_getType == NonlinearType.singlePoint) {
-        context.read<NonlinearBloc>().add(
-              SinglePointMethod(
-                method: SinglePointMethod.resolve(algorithm),
-                initialGuess: controllers[1].text,
-                function: controllers[0].text,
-                precision: 1.0 * math.pow(10, -precision),
-              ),
-            );
+        bloc.add(
+          SinglePointMethod(
+            method: SinglePointMethod.resolve(algorithm),
+            initialGuess: controllers[1].text,
+            function: controllers[0].text,
+            precision: 1.0 * math.pow(10, -precision),
+          ),
+        );
       } else {
-        context.read<NonlinearBloc>().add(
-              BracketingMethod(
-                method: BracketingMethod.resolve(algorithm),
-                lowerBound: controllers[1].text,
-                upperBound: controllers[2].text,
-                function: controllers[0].text,
-                precision: 1.0 * math.pow(10, -precision),
-              ),
-            );
+        bloc.add(
+          BracketingMethod(
+            method: BracketingMethod.resolve(algorithm),
+            lowerBound: controllers[1].text,
+            upperBound: controllers[2].text,
+            function: controllers[0].text,
+            precision: 1.0 * math.pow(10, -precision),
+          ),
+        );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

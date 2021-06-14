@@ -1,11 +1,13 @@
-import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
-import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
+import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
+import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/routes/system_page/system_data_input.dart';
+import 'package:equations_solver/routes/system_page/system_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 
 /// This widget contains the solutions of the polynomial equation and a chart
@@ -23,7 +25,7 @@ class SystemBody extends StatelessWidget {
       children: const [
         // Scrollable contents of the page
         Positioned.fill(
-          child: _ResponsiveBody(),
+          child: _SystemBodyContents(),
         ),
 
         // "Go back" button
@@ -38,89 +40,67 @@ class SystemBody extends StatelessWidget {
 }
 
 /// Determines whether the contents should appear in 1 or 2 columns.
-class _ResponsiveBody extends StatefulWidget {
-  /// Creates a [_ResponsiveBody] widget.
-  const _ResponsiveBody();
+class _SystemBodyContents extends StatefulWidget {
+  /// Creates a [_SystemBodyContents] widget.
+  const _SystemBodyContents();
 
   @override
-  __ResponsiveBodyState createState() => __ResponsiveBodyState();
+  __SystemBodyContentsState createState() => __SystemBodyContentsState();
 }
 
-class __ResponsiveBodyState extends State<_ResponsiveBody> {
-  /// Manually caching the page title
+class __SystemBodyContentsState extends State<_SystemBodyContents> {
+  /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
     pageTitle: getLocalizedName(context),
-    pageLogo: const PolynomialLogo(
+    pageLogo: const SystemsLogo(
       size: 50,
     ),
   );
 
-  /// Getting the title of the page according with the type of polynomial that
-  /// is going to be solved.
+  /// Getting the title of the page according with the kind of algorithms that
+  /// are going to be used.
   String getLocalizedName(BuildContext context) {
-    final polynomialType = context.read<PolynomialBloc>().polynomialType;
+    final systemType = context.read<SystemBloc>().systemType;
 
-    switch (polynomialType) {
-      case PolynomialType.linear:
-        return context.l10n.firstDegree;
-      case PolynomialType.quadratic:
-        return context.l10n.secondDegree;
-      case PolynomialType.cubic:
-        return context.l10n.thirdDegree;
-      case PolynomialType.quartic:
-        return context.l10n.fourthDegree;
+    switch (systemType) {
+      case SystemType.rowReduction:
+        return context.l10n.row_reduction;
+      case SystemType.factorization:
+        return context.l10n.factorization;
+      case SystemType.iterative:
+        return context.l10n.iterative;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= 950) {
-        // For mobile devices - all in a column
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              pageTitleWidget,
-              const PolynomialDataInput(),
-              const PolynomialResults(),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
-                child: _PolynomialPlot(),
-              ),
-            ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DropdownCubit>(
+          create: (_) => DropdownCubit(
+            initialValue: '',
           ),
-        );
-      }
+        ),
+        BlocProvider<NumberSwitcherCubit>(
+          create: (_) => NumberSwitcherCubit(
+            min: 2,
+            max: 4,
+          ),
+        ),
+      ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            pageTitleWidget,
 
-      // For wider screens - plot on the right and results on the right
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          // Input and results
-          SizedBox(
-            width: size.maxWidth / 3,
-            height: double.infinity,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    pageTitleWidget,
-                    const PolynomialDataInput(),
-                    const PolynomialResults(),
-                  ],
-                ),
-              ),
-            ),
-          ),
+            // Data input
+            const SystemDataInput(),
 
-          // Plot
-          SizedBox(
-            width: size.maxWidth / 2.3,
-            height: double.infinity,
-            child: const _PolynomialPlot(),
-          ),
-        ],
-      );
-    });
+            // Results
+            const SystemResults(),
+          ],
+        ),
+      ),
+    );
   }
 }

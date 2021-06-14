@@ -2,6 +2,7 @@ import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/home_page/home_contents.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
+import 'package:equations_solver/routes/system_page.dart';
 import 'package:equations_solver/routes/utils/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +15,7 @@ void main() {
     testWidgets('Making sure that the widget is rendered', (tester) async {
       await tester.pumpWidget(const MockWrapper(child: HomeContents()));
 
-      expect(find.byType(CardContainer), findsNWidgets(2));
+      expect(find.byType(CardContainer), findsNWidgets(3));
       expect(find.byType(PolynomialLogo), findsOneWidget);
       expect(find.byType(NonlinearLogo), findsOneWidget);
     });
@@ -45,6 +46,20 @@ void main() {
 
       // Expecting to be on the new page
       expect(find.byType(NonlinearPage), findsOneWidget);
+    });
+
+    testWidgets(
+        'Making sure that tapping on the CardContainer widget for '
+        'systems of equations opens a new route', (tester) async {
+      await tester.pumpWidget(const MockWrapper(child: HomeContents()));
+      final finder = find.byKey(const Key('SystemsLogo-Container'));
+
+      // Tapping an waiting for the animations to complete
+      await tester.tap(finder);
+      await tester.pumpAndSettle();
+
+      // Expecting to be on the new page
+      expect(find.byType(SystemPage), findsOneWidget);
     });
 
     testGoldens('HomeContents', (tester) async {

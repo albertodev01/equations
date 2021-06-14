@@ -28,5 +28,12 @@
   "convergence": "Convergenza",
   "efficiency": "Efficienza",
   "not_computed": "Non calcolata",
-  "nonlinear_error": "Il formato dell'equazione o dei parametri non è valido."
+  "nonlinear_error": "Il formato dell'equazione o dei parametri non è valido.",
+  "row_reduction": "Elim. Gauss",
+  "factorization": "Decomposizione",
+  "iterative": "Iterativo",
+  "size": "Dimensione",
+  "matrix_size2": "sistema 2x2",
+  "matrix_size3": "sistema 3x3",
+  "matrix_size4": "sistema 4x4"
 }

@@ -1,7 +1,8 @@
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,23 +24,23 @@ class _SystemPageState extends State<SystemPage> {
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
-      title: '2x2',
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.linear),
+      title: context.l10n.row_reduction,
+      content: BlocProvider<SystemBloc>(
+        create: (_) => SystemBloc(SystemType.rowReduction),
         child: const SystemBody(),
       ),
     ),
     NavigationItem(
-      title: '3x3',
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.quadratic),
+      title: context.l10n.factorization,
+      content: BlocProvider<SystemBloc>(
+        create: (_) => SystemBloc(SystemType.factorization),
         child: const SystemBody(),
       ),
     ),
     NavigationItem(
-      title: '4x4',
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.cubic),
+      title: context.l10n.iterative,
+      content: BlocProvider<SystemBloc>(
+        create: (_) => SystemBloc(SystemType.iterative),
         child: const SystemBody(),
       ),
     ),

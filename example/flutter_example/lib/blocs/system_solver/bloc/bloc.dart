@@ -27,7 +27,7 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
     }
 
     if (event is IterativeMethod) {
-
+      yield* _iterativeHandler(event);
     }
 
     if (event is SystemClean) {
@@ -45,58 +45,89 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       final matrix = _valueParser(event.matrix);
       final vector = _valueParser(event.knownValues);
 
-      final solver = GaussianElimination(
-        equations: ,
+      final solver = GaussianElimination.flatMatrix(
+        equations: matrix,
         constants: vector,
       );
+
+      yield SystemGuesses(
+        solution: solver.solve(),
+        systemSolver: solver,
+      );
     } on Exception {
-      yield const NonlinearError();
+      yield const SystemError();
     }
   }
 
   Stream<SystemState> _factorizationHandler(FactorizationMethod event) async* {
     try {
-      late final NonLinear solver;
+      late final SystemSolver solver;
 
-      final lower = _parser.evaluate(evt.lowerBound);
-      final upper = _parser.evaluate(evt.upperBound);
+      // Parsing the system
+      final matrix = _valueParser(event.matrix);
+      final vector = _valueParser(event.knownValues);
 
-      switch (evt.method) {
-        case BracketingMethods.bisection:
-          solver = Bisection(
-            function: evt.function,
-            a: lower,
-            b: upper,
-            maxSteps: evt.maxIterations,
-            tolerance: evt.precision,
+      switch (event.method) {
+        case FactorizationMethods.lu:
+          solver = LUSolver.flatMatrix(
+            equations: matrix,
+            constants: vector,
           );
           break;
-        case BracketingMethods.secant:
-          solver = Secant(
-            function: evt.function,
-            firstGuess: lower,
-            secondGuess: upper,
-            maxSteps: evt.maxIterations,
-            tolerance: evt.precision,
-          );
-          break;
-        case BracketingMethods.brent:
-          solver = Brent(
-            function: evt.function,
-            a: lower,
-            b: upper,
-            maxSteps: evt.maxIterations,
-            tolerance: evt.precision,
+        case FactorizationMethods.cholesky:
+          solver = CholeskySolver.flatMatrix(
+            equations: matrix,
+            constants: vector,
           );
           break;
       }
 
-      yield NonlinearGuesses(
-        nonLinear: solver,
-        nonlinearResults: solver.solve(),
+      yield SystemGuesses(
+        solution: solver.solve(),
+        systemSolver: solver,
       );
     } on Exception {
-      yield const NonlinearError();
+      yield const SystemError();
+    }
+  }
+
+  Stream<SystemState> _iterativeHandler(IterativeMethod event) async* {
+    try {
+      late final SystemSolver solver;
+
+      // Parsing the system
+      final matrix = _valueParser(event.matrix);
+      final vector = _valueParser(event.knownValues);
+
+      switch (event.method) {
+        case IterativeMethods.sor:
+          solver = SORSolver.flatMatrix(
+            equations: matrix,
+            constants: vector,
+            w: event.w,
+          );
+          break;
+        case IterativeMethods.gaussSeidel:
+          solver = GaussSeidelSolver.flatMatrix(
+            equations: matrix,
+            constants: vector,
+          );
+          break;
+        case IterativeMethods.jacobi:
+          solver = JacobiSolver.flatMatrix(
+            equations: matrix,
+            constants: vector,
+            x0: [],
+          );
+          break;
+      }
+
+      yield SystemGuesses(
+        solution: solver.solve(),
+        systemSolver: solver,
+      );
+    } on Exception {
+      yield const SystemError();
     }
   }
 

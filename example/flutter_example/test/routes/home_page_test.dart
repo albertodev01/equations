@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/home_page.dart';
+import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/home_page/home_contents.dart';
 import 'package:equations_solver/routes/utils/app_logo.dart';
 import 'package:flutter/material.dart';
