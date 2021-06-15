@@ -118,7 +118,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
           const SizedBox(height: 40),
 
           // Which algorithm has to be used
-          const DropdownSelection(),
+          const NonlinearDropdownSelection(),
 
           // Some spacing
           const SizedBox(height: 40),
@@ -150,7 +150,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
                 child: Text(context.l10n.clean),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

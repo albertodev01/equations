@@ -21,12 +21,12 @@ void main() {
             ),
           ],
           child: const Scaffold(
-            body: DropdownSelection(),
+            body: NonlinearDropdownSelection(),
           ),
         ),
       ));
 
-      expect(find.byType(DropdownSelection), findsOneWidget);
+      expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
     });
 
     testWidgets(
@@ -43,7 +43,7 @@ void main() {
             ),
           ],
           child: const Scaffold(
-            body: DropdownSelection(),
+            body: NonlinearDropdownSelection(),
           ),
         ),
       ));
@@ -51,8 +51,9 @@ void main() {
       final dropdownFinder = find.byKey(const Key('Dropdown-Button-Selection'));
       expect(dropdownFinder, findsOneWidget);
 
-      final widgetFinder = find.byType(DropdownSelection);
-      final state = tester.state(widgetFinder) as DropdownSelectionState;
+      final widgetFinder = find.byType(NonlinearDropdownSelection);
+      final state =
+          tester.state(widgetFinder) as NonlinearDropdownSelectionState;
 
       expect(state.dropdownItems.length, equals(2));
       expect(state.dropdownItems[0].value, equals('Newton'));
@@ -73,7 +74,7 @@ void main() {
             ),
           ],
           child: const Scaffold(
-            body: DropdownSelection(),
+            body: NonlinearDropdownSelection(),
           ),
         ),
       ));
@@ -81,8 +82,9 @@ void main() {
       final dropdownFinder = find.byKey(const Key('Dropdown-Button-Selection'));
       expect(dropdownFinder, findsOneWidget);
 
-      final widgetFinder = find.byType(DropdownSelection);
-      final state = tester.state(widgetFinder) as DropdownSelectionState;
+      final widgetFinder = find.byType(NonlinearDropdownSelection);
+      final state =
+          tester.state(widgetFinder) as NonlinearDropdownSelectionState;
 
       expect(state.dropdownItems.length, equals(3));
       expect(state.dropdownItems[0].value, equals('Bisection'));
@@ -104,7 +106,7 @@ void main() {
                 create: (_) => DropdownCubit(initialValue: 'Bisection'),
               ),
             ],
-            child: const DropdownSelection(),
+            child: const NonlinearDropdownSelection(),
           ),
         ),
       );

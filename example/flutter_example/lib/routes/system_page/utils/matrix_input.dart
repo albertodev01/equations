@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// The size of the matrix (`N`) is determined by the length of the controllers
 /// list.
 class MatrixInput extends StatefulWidget {
-  /// Determines the size of the matrix.
+  /// The text controllers of the matrix entries.
   final List<TextEditingController> matrixControllers;
 
   /// The size of the matrix.
@@ -15,7 +15,7 @@ class MatrixInput extends StatefulWidget {
 
   /// Creates a [MatrixInput] widget.
   ///
-  /// The size of the matrix (`N`) is determined by [matrixControllers]'s length.
+  /// The size of the matrix (`N`) is determined by [matrixSize].
   const MatrixInput({
     required this.matrixControllers,
     required this.matrixSize,
@@ -40,7 +40,8 @@ class _MatrixInputState extends State<MatrixInput> {
         children.add(Padding(
           padding: const EdgeInsets.all(5),
           child: SystemInputField(
-              controller: widget.matrixControllers[j + i * widget.matrixSize]),
+            controller: widget.matrixControllers[j + i * widget.matrixSize],
+          ),
         ));
       }
 
@@ -63,18 +64,14 @@ class _MatrixInputState extends State<MatrixInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: LayoutBuilder(
-        builder: (context, dimensions) {
-          final boxWidth = min<double>(250.0, dimensions.maxWidth);
+    final boxWidth = 65.0 * widget.matrixSize;
 
-          return SizedBox(
-            width: boxWidth,
-            child: Table(
-              children: children,
-            ),
-          );
-        },
+    return Center(
+      child: SizedBox(
+        width: boxWidth,
+        child: Table(
+          children: children,
+        ),
       ),
     );
   }

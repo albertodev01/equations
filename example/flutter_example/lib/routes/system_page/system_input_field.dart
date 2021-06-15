@@ -1,4 +1,3 @@
-import 'package:equations_solver/routes/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
@@ -30,8 +29,8 @@ class SystemInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: systemInputFieldWidth,
-      height: systemInputFieldHeight,
+      width: 60,
+      height: 50,
       child: TextFormField(
         key: const Key('SystemInputField-TextFormField'),
         controller: controller,

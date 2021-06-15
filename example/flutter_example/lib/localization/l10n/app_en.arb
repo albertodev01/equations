@@ -35,5 +35,7 @@
   "size": "Size",
   "matrix_size2": "2x2 system",
   "matrix_size3": "3x3 system",
-  "matrix_size4": "4x4 system"
+  "matrix_size4": "4x4 system",
+  "matrix_description": "The matrix with the equations coefficients",
+  "vector_description": "The vector with the known values"
 }

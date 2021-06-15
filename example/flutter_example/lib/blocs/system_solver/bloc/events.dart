@@ -113,7 +113,7 @@ class IterativeMethod extends SystemEvent {
     this.method = IterativeMethods.sor,
     this.w = 1,
     this.precision = 1.0e-10,
-    this.maxSteps = 30,
+    this.maxSteps = 20,
   }) : super(
           matrix: matrix,
           knownValues: knownValues,

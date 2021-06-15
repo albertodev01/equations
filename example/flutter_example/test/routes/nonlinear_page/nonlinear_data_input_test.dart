@@ -59,7 +59,7 @@ void main() {
 
       expect(find.byType(NonlinearDataInput), findsOneWidget);
       expect(find.byType(NonlinearInput), findsNWidgets(2));
-      expect(find.byType(DropdownSelection), findsOneWidget);
+      expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
       expect(find.byType(PrecisionSlider), findsOneWidget);
 
       // To make sure that fields validation actually happens
@@ -82,7 +82,7 @@ void main() {
 
       expect(find.byType(NonlinearDataInput), findsOneWidget);
       expect(find.byType(NonlinearInput), findsNWidgets(3));
-      expect(find.byType(DropdownSelection), findsOneWidget);
+      expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
       expect(find.byType(PrecisionSlider), findsOneWidget);
 
       // To make sure that fields validation actually happens

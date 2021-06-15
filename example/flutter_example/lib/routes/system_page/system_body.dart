@@ -51,7 +51,7 @@ class _SystemBodyContents extends StatefulWidget {
 class __SystemBodyContentsState extends State<_SystemBodyContents> {
   /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
-    pageTitle: getLocalizedName(context),
+    pageTitle: localizedName,
     pageLogo: const SystemsLogo(
       size: 50,
     ),
@@ -59,7 +59,7 @@ class __SystemBodyContentsState extends State<_SystemBodyContents> {
 
   /// Getting the title of the page according with the kind of algorithms that
   /// are going to be used.
-  String getLocalizedName(BuildContext context) {
+  String get localizedName {
     final systemType = context.read<SystemBloc>().systemType;
 
     switch (systemType) {
@@ -72,13 +72,27 @@ class __SystemBodyContentsState extends State<_SystemBodyContents> {
     }
   }
 
+  /// The initial value of the dropdown.
+  String get dropdownInitialValue {
+    final systemType = context.read<SystemBloc>().systemType;
+
+    switch (systemType) {
+      case SystemType.rowReduction:
+        return '';
+      case SystemType.factorization:
+        return 'LU';
+      case SystemType.iterative:
+        return 'SOR';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<DropdownCubit>(
           create: (_) => DropdownCubit(
-            initialValue: '',
+            initialValue: dropdownInitialValue,
           ),
         ),
         BlocProvider<NumberSwitcherCubit>(
