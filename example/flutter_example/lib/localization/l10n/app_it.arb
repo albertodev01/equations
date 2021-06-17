@@ -37,5 +37,7 @@
   "matrix_size3": "sistema 3x3",
   "matrix_size4": "sistema 4x4",
   "matrix_description": "La matrice dei coefficienti delle equazioni",
-  "vector_description": "Il vettore con termini noti"
+  "vector_description": "Il vettore con termini noti",
+  "sor_w": "Relaxation factor",
+  "jacobi_initial": "Iniziale guess vector"
 }

@@ -103,7 +103,10 @@ class IterativeMethod extends SystemEvent {
 
   /// The relaxation value `w`, which is only used when [IterativeMethods.sor]
   /// is used.
-  final double w;
+  final String w;
+
+  /// The input vector of the Jacobi method
+  final List<String> jacobiInitialVector;
 
   /// Creates a [FactorizationMethod] type.
   const IterativeMethod({
@@ -111,7 +114,8 @@ class IterativeMethod extends SystemEvent {
     required List<String> knownValues,
     required int size,
     this.method = IterativeMethods.sor,
-    this.w = 1,
+    this.w = '1',
+    this.jacobiInitialVector = const [],
     this.precision = 1.0e-10,
     this.maxSteps = 20,
   }) : super(
@@ -126,6 +130,10 @@ class IterativeMethod extends SystemEvent {
         knownValues,
         size,
         method,
+        w,
+        jacobiInitialVector,
+        precision,
+        maxSteps,
       ];
 
   /// Tries to return a [IterativeMethods] value from a string value.

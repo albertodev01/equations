@@ -8,12 +8,12 @@ class VectorInput extends StatefulWidget {
   final List<TextEditingController> vectorControllers;
 
   /// The size of the vector.
-  final int vectroSize;
+  final int vectorSize;
 
   /// Creates a [VectorInput] widget.
   const VectorInput({
     required this.vectorControllers,
-    required this.vectroSize,
+    required this.vectorSize,
   });
 
   @override
@@ -29,7 +29,7 @@ class _VectorInputState extends State<VectorInput> {
   List<Widget> _vectorChildren() {
     final entry = <Widget>[];
 
-    for (var i = 0; i < widget.vectroSize; ++i) {
+    for (var i = 0; i < widget.vectorSize; ++i) {
       final padding =
           i == 0 ? const EdgeInsets.all(0) : const EdgeInsets.only(top: 10);
 
@@ -48,7 +48,7 @@ class _VectorInputState extends State<VectorInput> {
   void didUpdateWidget(covariant VectorInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.vectroSize != oldWidget.vectroSize) {
+    if (widget.vectorSize != oldWidget.vectorSize) {
       children = _vectorChildren();
     }
   }
@@ -59,11 +59,12 @@ class _VectorInputState extends State<VectorInput> {
 
     return Center(
       child: SizedBox(
-          width: boxWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: children,
-          )),
+        width: boxWidth,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: children,
+        ),
+      ),
     );
   }
 }

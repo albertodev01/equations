@@ -104,7 +104,7 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
           solver = SORSolver.flatMatrix(
             equations: matrix,
             constants: vector,
-            w: event.w,
+            w: _parser.evaluate(event.w),
           );
           break;
         case IterativeMethods.gaussSeidel:
@@ -117,7 +117,7 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
           solver = JacobiSolver.flatMatrix(
             equations: matrix,
             constants: vector,
-            x0: [],
+            x0: _valueParser(event.jacobiInitialVector),
           );
           break;
       }

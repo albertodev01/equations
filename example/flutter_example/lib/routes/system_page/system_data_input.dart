@@ -4,8 +4,10 @@ import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
 import 'package:equations_solver/blocs/system_solver/bloc/events.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
+import 'package:equations_solver/routes/system_page/utils/jacobi_initial_vector.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
+import 'package:equations_solver/routes/system_page/utils/sor_relaxation_factor.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,15 @@ class _SystemDataInputState extends State<SystemDataInput> {
     return TextEditingController();
   });
 
+  /// The text input controllers for the initial guess vector of the Jacobi
+  /// algorithm.
+  late final jacobiControllers = List<TextEditingController>.generate(4, (_) {
+    return TextEditingController();
+  });
+
+  /// A controller for the relaxation factor `w` of the SOR algorithm.
+  late final wSorController = TextEditingController();
+
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
@@ -55,6 +66,11 @@ class _SystemDataInputState extends State<SystemDataInput> {
     context.l10n.vector_description,
   );
 
+  /// The widget asking for the relaxation factor `w` of the SOR algorithm.
+  late final wInput = RelaxationFactorInput(
+    textEditingController: wSorController,
+  );
+
   /// This is required to figure out which system solving algorithm has to be
   /// used.
   SystemType get _getType => context.read<SystemBloc>().systemType;
@@ -66,7 +82,10 @@ class _SystemDataInputState extends State<SystemDataInput> {
       // Row + Expanded can easily make the text go to a new line
       child: Text(
         description,
-        style: const TextStyle(fontSize: 14, color: Colors.grey),
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.grey,
+        ),
       ),
     );
   }
@@ -81,7 +100,13 @@ class _SystemDataInputState extends State<SystemDataInput> {
       controller.clear();
     }
 
+    for (final controller in jacobiControllers) {
+      controller.clear();
+    }
+
     formKey.currentState?.reset();
+    wSorController.clear();
+
     context.read<SystemBloc>().add(const SystemClean());
   }
 
@@ -119,11 +144,17 @@ class _SystemDataInputState extends State<SystemDataInput> {
           ));
           break;
         case SystemType.iterative:
+          final initialGuesses = jacobiControllers.sublist(0, size).map((c) {
+            return c.text;
+          }).toList();
+
           bloc.add(IterativeMethod(
             matrix: systemInputs,
             knownValues: vectorInputs,
             size: size,
             method: IterativeMethod.resolve(algorithm),
+            w: wSorController.text,
+            jacobiInitialVector: initialGuesses,
           ));
           break;
       }
@@ -139,12 +170,18 @@ class _SystemDataInputState extends State<SystemDataInput> {
 
   @override
   void dispose() {
+    wSorController.dispose();
+
     for (final controller in matrixControllers) {
       controller.dispose();
     }
 
     for (final controller in vectorControllers) {
       controller.dispose();
+    }
+
+    for (final controller in jacobiControllers) {
+      controller.clear();
     }
 
     super.dispose();
@@ -192,7 +229,7 @@ class _SystemDataInputState extends State<SystemDataInput> {
             BlocBuilder<NumberSwitcherCubit, int>(
               builder: (context, state) => VectorInput(
                 vectorControllers: vectorControllers,
-                vectroSize: state,
+                vectorSize: state,
               ),
             ),
 
@@ -201,6 +238,18 @@ class _SystemDataInputState extends State<SystemDataInput> {
 
             // Algorithm type picker
             const SystemDropdownSelection(),
+
+            // The optional input for the relaxation value
+            wInput,
+
+            // The optional input for the initial guesses vector
+            // Vector input
+            BlocBuilder<NumberSwitcherCubit, int>(
+                builder: (context, state) => JacobiVectorInput(
+                  controllers: jacobiControllers,
+                  vectorSize: state,
+                )
+            ),
 
             // Spacing
             const SizedBox(height: 45),
