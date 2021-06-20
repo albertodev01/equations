@@ -39,5 +39,6 @@
   "matrix_description": "The matrix with the equations coefficients",
   "vector_description": "The vector with the known values",
   "sor_w": "Fattore di rilassamento",
-  "jacobi_initial": "Vettore iniziale"
+  "jacobi_initial": "Vettore iniziale",
+  "singular_matrix_error": "The system cannot be solved because the matrix is singular!"
 }

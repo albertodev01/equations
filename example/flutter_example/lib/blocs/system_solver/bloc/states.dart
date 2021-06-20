@@ -39,6 +39,13 @@ class SystemError extends SystemState {
   const SystemError();
 }
 
+/// This state is emitted when the matrix is singular and thus the system cannot
+/// be solved.
+class SingularSystemError extends SystemState {
+  /// Initializes a [SystemError].
+  const SingularSystemError();
+}
+
 /// This is an initial state used to "clean" the page bringing it to a default
 /// aspect.
 class SystemNone extends SystemState {

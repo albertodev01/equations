@@ -50,10 +50,14 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
         constants: vector,
       );
 
-      yield SystemGuesses(
-        solution: solver.solve(),
-        systemSolver: solver,
-      );
+      if (solver.hasSolution()) {
+        yield SystemGuesses(
+          solution: solver.solve(),
+          systemSolver: solver,
+        );
+      } else {
+        yield const SingularSystemError();
+      }
     } on Exception {
       yield const SystemError();
     }
@@ -82,10 +86,14 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
           break;
       }
 
-      yield SystemGuesses(
-        solution: solver.solve(),
-        systemSolver: solver,
-      );
+      if (solver.hasSolution()) {
+        yield SystemGuesses(
+          solution: solver.solve(),
+          systemSolver: solver,
+        );
+      } else {
+        yield const SingularSystemError();
+      }
     } on Exception {
       yield const SystemError();
     }
@@ -122,10 +130,14 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
           break;
       }
 
-      yield SystemGuesses(
-        solution: solver.solve(),
-        systemSolver: solver,
-      );
+      if (solver.hasSolution()) {
+        yield SystemGuesses(
+          solution: solver.solve(),
+          systemSolver: solver,
+        );
+      } else {
+        yield const SingularSystemError();
+      }
     } on Exception {
       yield const SystemError();
     }

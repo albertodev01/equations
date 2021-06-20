@@ -39,5 +39,6 @@
   "matrix_description": "La matrice dei coefficienti delle equazioni",
   "vector_description": "Il vettore con termini noti",
   "sor_w": "Relaxation factor",
-  "jacobi_initial": "Iniziale guess vector"
+  "jacobi_initial": "Iniziale guess vector",
+  "singular_matrix_error": "Il sistema non può essere risolto perchè la matrice è singolare!"
 }

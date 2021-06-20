@@ -8,7 +8,7 @@ void main() {
     test(
         'Making sure that the sor iterative method works properly with a '
         'well formed matrix.', () {
-      final sor = GaussSeidelSolver(
+      final gaussSeidel = GaussSeidelSolver(
         equations: const [
           [3, -1, 1],
           [-1, 3, -1],
@@ -30,16 +30,17 @@ void main() {
       );
 
       // Checking the "state" of the object
-      expect(sor.equations, equals(matrix));
-      expect(sor.knownValues, orderedEquals(<double>[-1, 7, -7]));
-      expect(sor.maxSteps, equals(30));
-      expect(sor.precision, equals(1.0e-10));
-      expect(sor.size, equals(3));
+      expect(gaussSeidel.equations, equals(matrix));
+      expect(gaussSeidel.knownValues, orderedEquals(<double>[-1, 7, -7]));
+      expect(gaussSeidel.maxSteps, equals(30));
+      expect(gaussSeidel.precision, equals(1.0e-10));
+      expect(gaussSeidel.size, equals(3));
+      expect(gaussSeidel.hasSolution(), isTrue);
 
       // Solutions
-      expect(sor.determinant(), equals(20));
+      expect(gaussSeidel.determinant(), equals(20));
 
-      final solutions = sor.solve();
+      final solutions = gaussSeidel.solve();
       expect(solutions[0], const MoreOrLessEquals(1, precision: 1.0e-2));
       expect(solutions[1], const MoreOrLessEquals(2, precision: 1.0e-2));
       expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));

@@ -32,6 +32,7 @@ void main() {
       expect(gauss.knownValues, orderedEquals(<double>[-5, -5, -1]));
       expect(gauss.precision, equals(1.0e-10));
       expect(gauss.size, equals(3));
+      expect(gauss.hasSolution(), isTrue);
 
       // Solutions
       expect(gauss.solve(), unorderedEquals(<double>[-3, 0, 1]));

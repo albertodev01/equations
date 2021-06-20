@@ -36,6 +36,7 @@ void main() {
       expect(luSolver.knownValues, orderedEquals(<double>[12, 17, 5]));
       expect(luSolver.precision, equals(1.0e-10));
       expect(luSolver.size, equals(3));
+      expect(luSolver.hasSolution(), isTrue);
     });
 
     test(

@@ -35,6 +35,7 @@ void main() {
       expect(jacobi.maxSteps, equals(30));
       expect(jacobi.precision, equals(1.0e-10));
       expect(jacobi.size, equals(2));
+      expect(jacobi.hasSolution(), isTrue);
 
       // Solutions
       expect(jacobi.determinant(), equals(9));

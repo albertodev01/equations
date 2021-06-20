@@ -20,6 +20,9 @@ void main() {
         const PolynomialClean(),
         equals(const PolynomialClean()),
       );
+
+      expect(polynomialSolve.props.length, equals(1));
+      expect(const PolynomialClean().props.length, equals(1));
     });
   });
 }

@@ -245,10 +245,10 @@ class _SystemDataInputState extends State<SystemDataInput> {
             // The optional input for the initial guesses vector
             // Vector input
             BlocBuilder<NumberSwitcherCubit, int>(
-                builder: (context, state) => JacobiVectorInput(
-                  controllers: jacobiControllers,
-                  vectorSize: state,
-                )
+              builder: (context, state) => JacobiVectorInput(
+                controllers: jacobiControllers,
+                vectorSize: state,
+              ),
             ),
 
             // Spacing

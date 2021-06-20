@@ -38,6 +38,7 @@ void main() {
 
       // Checking the "state" of the object
       expect(choleskySolver.equations, equals(matrix));
+      expect(choleskySolver.hasSolution(), isTrue);
       expect(
         choleskySolver.knownValues,
         orderedEquals(<double>[76, 295, 1259]),

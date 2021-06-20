@@ -69,6 +69,15 @@ class _SystemSolutionsState extends State<_SystemSolutions> {
             ),
           );
         }
+
+        if (state is SingularSystemError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.singular_matrix_error),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
       },
       builder: (context, state) {
         if (state is SystemGuesses) {

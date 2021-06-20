@@ -37,6 +37,7 @@ void main() {
       expect(sor.maxSteps, equals(30));
       expect(sor.precision, equals(1.0e-10));
       expect(sor.size, equals(3));
+      expect(sor.hasSolution(), isTrue);
 
       // Solutions
       expect(sor.determinant(), equals(20));

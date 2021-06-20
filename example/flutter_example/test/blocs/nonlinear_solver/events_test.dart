@@ -51,7 +51,7 @@ void main() {
     });
 
     test(
-        "Making sure that 'SinglePointMethod. resolve' actually resolves to "
+        "Making sure that 'SinglePointMethod.resolve' actually resolves to "
         'the correct values', () {
       expect(
         SinglePointMethod.resolve('newton'),
@@ -77,7 +77,7 @@ void main() {
     });
 
     test(
-        "Making sure that 'BracketingMethod. resolve' actually resolves to "
+        "Making sure that 'BracketingMethod.resolve' actually resolves to "
         'the correct values', () {
       expect(
         BracketingMethod.resolve('secant'),

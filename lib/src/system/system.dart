@@ -179,6 +179,12 @@ abstract class SystemSolver {
     return buffer.toString();
   }
 
+  /// Computes whether the system can be solved or not.
+  ///
+  /// A system can be solved (meaning that it has exactly ONE solution) if the
+  /// determinant it not zero.
+  bool hasSolution() => equations.determinant() != 0;
+
   /// Back substitution is an iterative process that solves equation matrices
   /// in the form `Ux = b`, where `U` is an upper triangular matrix.
   ///
