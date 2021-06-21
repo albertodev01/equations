@@ -14,5 +14,14 @@ void main() {
       expect(find.byType(PolynomialBody), findsOneWidget);
       expect(find.byType(PolynomialPage), findsOneWidget);
     });
+
+    testWidgets('Making sure that the widget is rendered', (tester) async {
+      await tester.pumpWidget(const MockWrapper(
+        child: PolynomialPage(),
+      ));
+
+      expect(find.byType(PolynomialBody), findsOneWidget);
+      expect(find.byType(PolynomialPage), findsOneWidget);
+    });
   });
 }
