@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:mocktail/mocktail.dart';
@@ -35,3 +36,7 @@ class MockDropdownCubit extends MockCubit<String> implements DropdownCubit {}
 
 // ===== Navigation cubit mock class ===== //
 class MockNavigationCubit extends MockCubit<int> implements NavigationCubit {}
+
+// ===== Navigation cubit mock class ===== //
+class MockNumberSwitcherCubit extends MockCubit<int>
+    implements NumberSwitcherCubit {}

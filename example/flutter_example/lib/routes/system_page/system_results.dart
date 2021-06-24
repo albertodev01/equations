@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
-import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';

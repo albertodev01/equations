@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:flutter/material.dart';

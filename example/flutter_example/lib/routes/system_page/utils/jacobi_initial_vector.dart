@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

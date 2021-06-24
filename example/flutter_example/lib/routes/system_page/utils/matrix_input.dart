@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +38,7 @@ class _MatrixInputState extends State<MatrixInput> {
         children.add(Padding(
           padding: const EdgeInsets.all(5),
           child: SystemInputField(
+            key: Key('SystemEntry-$i-$j'),
             controller: widget.matrixControllers[j + i * widget.matrixSize],
           ),
         ));

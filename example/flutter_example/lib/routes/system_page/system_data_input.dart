@@ -20,10 +20,12 @@ class SystemDataInput extends StatefulWidget {
   const SystemDataInput();
 
   @override
-  _SystemDataInputState createState() => _SystemDataInputState();
+  SystemDataInputState createState() => SystemDataInputState();
 }
 
-class _SystemDataInputState extends State<SystemDataInput> {
+/// State of the [SystemDataInput] widget.
+@visibleForTesting
+class SystemDataInputState extends State<SystemDataInput> {
   /// The text input controllers for the matrix.
   ///
   /// This is asking for `A` in the `Ax = b` equation where:

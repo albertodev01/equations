@@ -8,6 +8,7 @@ import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils/bloc_mocks.dart';
@@ -74,6 +75,32 @@ void main() {
       expect(find.text('No solutions to display.'), findsNothing);
       expect(find.byType(ComplexResultCard), findsNWidgets(2));
       expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
+    });
+
+    testGoldens('PolynomialResults', (tester) async {
+      final linear = Algebraic.fromReal(const [1, 2]);
+
+      when(() => polynomialBloc.state).thenReturn(PolynomialRoots(
+        algebraic: linear,
+        roots: linear.solutions(),
+        discriminant: linear.discriminant(),
+      ));
+
+      final widget = BlocProvider<PolynomialBloc>.value(
+        value: polynomialBloc,
+        child: const PolynomialResults(),
+      );
+
+      final builder = GoldenBuilder.column()..addScenario('', widget);
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(400, 900),
+      );
+      await screenMatchesGolden(tester, 'polynomial_results');
     });
   });
 }

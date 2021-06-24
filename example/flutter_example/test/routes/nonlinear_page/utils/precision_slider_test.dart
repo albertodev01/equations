@@ -52,6 +52,8 @@ void main() {
     });
 
     testGoldens('PrecisionSlider', (tester) async {
+      await loadAppFonts();
+
       final widget = SizedBox(
         width: 300,
         height: 90,

@@ -7,6 +7,7 @@ import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils/bloc_mocks.dart';
@@ -71,6 +72,31 @@ void main() {
       expect(find.byType(ListView), findsOneWidget);
       expect(find.text('No solutions to display.'), findsNothing);
       expect(find.byType(RealResultCard), findsNWidgets(3));
+    });
+
+    testGoldens('PolynomialResults', (tester) async {
+      const newton = equations.Newton(function: 'x-2', x0: 2);
+
+      when(() => nonlinearBloc.state).thenReturn(NonlinearGuesses(
+        nonLinear: newton,
+        nonlinearResults: newton.solve(),
+      ));
+
+      final widget = BlocProvider<NonlinearBloc>.value(
+        value: nonlinearBloc,
+        child: const NonlinearResults(),
+      );
+
+      final builder = GoldenBuilder.column()..addScenario('', widget);
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(400, 700),
+      );
+      await screenMatchesGolden(tester, 'nonlinear_results');
     });
   });
 }
