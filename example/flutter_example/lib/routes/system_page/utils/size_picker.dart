@@ -16,6 +16,7 @@ class SizePicker extends StatelessWidget {
       children: [
         // Decrease
         ElevatedButton(
+          key: const Key('SizePicker-Back-Button'),
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
@@ -59,6 +60,7 @@ class SizePicker extends StatelessWidget {
 
         // Increase
         ElevatedButton(
+          key: const Key('SizePicker-Forward-Button'),
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
