@@ -1,4 +1,3 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/system_page/utils/jacobi_initial_vector.dart';
@@ -6,6 +5,7 @@ import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../utils/bloc_mocks.dart';
 import '../../mock_wrapper.dart';
