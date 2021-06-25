@@ -3,6 +3,7 @@ import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
@@ -50,6 +51,45 @@ void main() {
       await tester.pump();
 
       expect(numberSwitchCubit.state, equals(3));
+    });
+
+    testGoldens('SizePicker', (tester) async {
+      final numberSwitchCubit = NumberSwitcherCubit(
+        min: 2,
+        max: 4,
+      );
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'VectorInput - 2x2',
+          BlocProvider<NumberSwitcherCubit>.value(
+            value: numberSwitchCubit,
+            child: const SizePicker(),
+          ),
+        )
+        ..addScenario(
+          'VectorInput - 3x3',
+          BlocProvider<NumberSwitcherCubit>.value(
+            value: numberSwitchCubit..increase(),
+            child: const SizePicker(),
+          ),
+        )
+        ..addScenario(
+          'VectorInput - 4v4',
+          BlocProvider<NumberSwitcherCubit>.value(
+            value: numberSwitchCubit..increase()..increase(),
+            child: const SizePicker(),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(300, 300),
+      );
+      await screenMatchesGolden(tester, 'size_picker');
     });
   });
 }

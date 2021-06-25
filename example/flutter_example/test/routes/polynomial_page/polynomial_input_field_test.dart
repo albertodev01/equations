@@ -2,6 +2,7 @@ import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.d
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../mock_wrapper.dart';
 
@@ -11,11 +12,9 @@ void main() {
       final controller = TextEditingController();
 
       await tester.pumpWidget(MockWrapper(
-        child: Scaffold(
-          body: PolynomialInputField(
-            controller: controller,
-            placeholder: 'Demo',
-          ),
+        child: PolynomialInputField(
+          controller: controller,
+          placeholder: 'Demo',
         ),
       ));
 
@@ -29,11 +28,9 @@ void main() {
       final controller = TextEditingController();
 
       await tester.pumpWidget(MockWrapper(
-        child: Scaffold(
-          body: PolynomialInputField(
-            controller: controller,
-            placeholder: 'Demo',
-          ),
+        child: PolynomialInputField(
+          controller: controller,
+          placeholder: 'Demo',
         ),
       ));
 
@@ -50,6 +47,26 @@ void main() {
       expect(validatorFunction('2.2587'), isNull);
 
       expect(validatorFunction(''), isNotNull);
+    });
+
+    testGoldens('PolynomialInputField', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          '',
+          PolynomialInputField(
+            controller: TextEditingController(text: '-1/2'),
+            placeholder: 'Demo',
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(110, 110),
+      );
+      await screenMatchesGolden(tester, 'polynomial_input_field');
     });
   });
 }
