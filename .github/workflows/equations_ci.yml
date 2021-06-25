@@ -1,9 +1,6 @@
 name: equations_ci
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     types:
       - opened
@@ -52,7 +49,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.4.0
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Installing the dependencies
         run: flutter pub get
