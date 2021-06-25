@@ -16,6 +16,7 @@ void main() {
   setUpAll(() {
     dropdownCubit = MockDropdownCubit();
   });
+
   group("Testing the 'RelaxationFactorInput' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       when(() => dropdownCubit.state).thenReturn('SOR');
