@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils/bloc_mocks.dart';
@@ -44,7 +45,9 @@ void main() {
       await tester.pumpWidget(MockWrapper(
         child: MultiBlocProvider(
           providers: providers,
-          child: const Scaffold(body: PolynomialDataInput()),
+          child: const Scaffold(
+            body: PolynomialDataInput(),
+          ),
         ),
       ));
 
@@ -64,7 +67,9 @@ void main() {
       await tester.pumpWidget(MockWrapper(
         child: MultiBlocProvider(
           providers: providers,
-          child: const Scaffold(body: PolynomialDataInput()),
+          child: const Scaffold(
+            body: PolynomialDataInput(),
+          ),
         ),
       ));
 
@@ -84,7 +89,9 @@ void main() {
       await tester.pumpWidget(MockWrapper(
         child: MultiBlocProvider(
           providers: providers,
-          child: const Scaffold(body: PolynomialDataInput()),
+          child: const Scaffold(
+            body: PolynomialDataInput(),
+          ),
         ),
       ));
 
@@ -104,7 +111,9 @@ void main() {
       await tester.pumpWidget(MockWrapper(
         child: MultiBlocProvider(
           providers: providers,
-          child: const Scaffold(body: PolynomialDataInput()),
+          child: const Scaffold(
+            body: PolynomialDataInput(),
+          ),
         ),
       ));
 
@@ -124,7 +133,9 @@ void main() {
       await tester.pumpWidget(MockWrapper(
         child: MultiBlocProvider(
           providers: providers,
-          child: const Scaffold(body: PolynomialDataInput()),
+          child: const Scaffold(
+            body: PolynomialDataInput(),
+          ),
         ),
       ));
 
@@ -155,13 +166,18 @@ void main() {
         ),
       ));
 
-      final coeffA =
-          find.byKey(const Key('PolynomialInputField-coefficient-0'));
-      final coeffB =
-          find.byKey(const Key('PolynomialInputField-coefficient-1'));
-      final coeffC =
-          find.byKey(const Key('PolynomialInputField-coefficient-2'));
-      final solveButton = find.byKey(const Key('Polynomial-button-solve'));
+      final coeffA = find.byKey(
+        const Key('PolynomialInputField-coefficient-0'),
+      );
+      final coeffB = find.byKey(
+        const Key('PolynomialInputField-coefficient-1'),
+      );
+      final coeffC = find.byKey(
+        const Key('PolynomialInputField-coefficient-2'),
+      );
+      final solveButton = find.byKey(
+        const Key('Polynomial-button-solve'),
+      );
 
       // Filling the forms
       await tester.enterText(coeffA, '-5');
@@ -177,6 +193,118 @@ void main() {
 
       // Sending it to the bloc
       expect(bloc.state, isA<PolynomialRoots>());
+    });
+
+    testGoldens('PolynomialDataInput - Linear equation', (tester) async {
+      when(() => polynomialBloc.polynomialType)
+          .thenReturn(PolynomialType.linear);
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Linear equations',
+          SizedBox(
+            width: 500,
+            height: 400,
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const PolynomialDataInput(),
+            ),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(500, 500),
+      );
+
+      await screenMatchesGolden(tester, 'polynomial_input_linear');
+    });
+
+    testGoldens('PolynomialDataInput - Quadratic equation', (tester) async {
+      when(() => polynomialBloc.polynomialType)
+          .thenReturn(PolynomialType.quadratic);
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Quadratic equations',
+          SizedBox(
+            width: 500,
+            height: 400,
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const PolynomialDataInput(),
+            ),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(500, 500),
+      );
+
+      await screenMatchesGolden(tester, 'polynomial_input_quadratic');
+    });
+
+    testGoldens('PolynomialDataInput - Cubic equation', (tester) async {
+      when(() => polynomialBloc.polynomialType)
+          .thenReturn(PolynomialType.cubic);
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Cubic equations',
+          SizedBox(
+            width: 500,
+            height: 400,
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const PolynomialDataInput(),
+            ),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(500, 500),
+      );
+
+      await screenMatchesGolden(tester, 'polynomial_input_cubic');
+    });
+
+    testGoldens('PolynomialDataInput - Quartic equation', (tester) async {
+      when(() => polynomialBloc.polynomialType)
+          .thenReturn(PolynomialType.quartic);
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Quartic equations',
+          SizedBox(
+            width: 500,
+            height: 400,
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const PolynomialDataInput(),
+            ),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(500, 500),
+      );
+
+      await screenMatchesGolden(tester, 'polynomial_input_quartic');
     });
   });
 }

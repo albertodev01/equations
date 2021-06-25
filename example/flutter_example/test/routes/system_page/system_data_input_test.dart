@@ -313,15 +313,19 @@ void main() {
     });
 
     testGoldens('SystemDataInput - Factorization', (tester) async {
-      await loadAppFonts();
-
       when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
       when(() => numberSwitcherCubit.state).thenReturn(2);
       when(() => dropdownCubit.state).thenReturn('LU');
 
       final builder = GoldenBuilder.column()
-        ..addScenario('Factorization method',
-            SizedBox(width: 500, height: 800, child: widgetWithMocks));
+        ..addScenario(
+          'Factorization method',
+          SizedBox(
+            width: 500,
+            height: 800,
+            child: widgetWithMocks,
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),
@@ -334,15 +338,19 @@ void main() {
     });
 
     testGoldens('SystemDataInput - Factorization', (tester) async {
-      await loadAppFonts();
-
       when(() => systemBloc.systemType).thenReturn(SystemType.rowReduction);
       when(() => numberSwitcherCubit.state).thenReturn(2);
       when(() => dropdownCubit.state).thenReturn('LU');
 
       final builder = GoldenBuilder.column()
-        ..addScenario('Row reduction method',
-            SizedBox(width: 500, height: 800, child: widgetWithMocks));
+        ..addScenario(
+          'Row reduction method',
+          SizedBox(
+            width: 500,
+            height: 800,
+            child: widgetWithMocks,
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),
@@ -355,15 +363,19 @@ void main() {
     });
 
     testGoldens('SystemDataInput - Iterative - SOR', (tester) async {
-      await loadAppFonts();
-
       when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
       when(() => numberSwitcherCubit.state).thenReturn(2);
       when(() => dropdownCubit.state).thenReturn('SOR');
 
       final builder = GoldenBuilder.column()
-        ..addScenario('Iterative method (SOR)',
-            SizedBox(width: 500, height: 800, child: widgetWithMocks));
+        ..addScenario(
+          'Iterative method (SOR)',
+          SizedBox(
+            width: 500,
+            height: 800,
+            child: widgetWithMocks,
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),
@@ -376,15 +388,19 @@ void main() {
     });
 
     testGoldens('SystemDataInput - Iterative - Jacobi', (tester) async {
-      await loadAppFonts();
-
       when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
       when(() => numberSwitcherCubit.state).thenReturn(2);
       when(() => dropdownCubit.state).thenReturn('Jacobi');
 
       final builder = GoldenBuilder.column()
-        ..addScenario('Iterative method (Jacobi)',
-            SizedBox(width: 500, height: 800, child: widgetWithMocks));
+        ..addScenario(
+          'Iterative method (Jacobi)',
+          SizedBox(
+            width: 500,
+            height: 800,
+            child: widgetWithMocks,
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),

@@ -19,8 +19,6 @@ void main() {
     });
 
     testGoldens('GoBackButton', (tester) async {
-      await loadAppFonts();
-
       final builder = GoldenBuilder.column()
         ..addScenario(
             '',

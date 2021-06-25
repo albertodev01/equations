@@ -98,7 +98,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(400, 900),
+        surfaceSize: const Size(400, 700),
       );
       await screenMatchesGolden(tester, 'polynomial_results');
     });

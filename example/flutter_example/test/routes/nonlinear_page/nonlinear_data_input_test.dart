@@ -8,6 +8,7 @@ import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../utils/bloc_mocks.dart';
@@ -211,6 +212,66 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(bloc.state, equals(const NonlinearNone()));
+    });
+
+    testGoldens('NonlinearDataInput - Single point', (tester) async {
+      when(() => dropdownCubit.state).thenReturn('Newton');
+      final bloc = NonlinearBloc(NonlinearType.singlePoint);
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Single point',
+          SizedBox(
+            width: 600,
+            height: 650,
+            child: MultiBlocProvider(
+              providers: providers,
+              child: BlocProvider<NonlinearBloc>.value(
+                value: bloc,
+                child: const NonlinearDataInput(),
+              ),
+            ),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(600, 750),
+      );
+      await screenMatchesGolden(tester, 'nonlinear_input_data_single_point');
+    });
+
+    testGoldens('NonlinearDataInput - Bracketing', (tester) async {
+      when(() => dropdownCubit.state).thenReturn('Bisection');
+      final bloc = NonlinearBloc(NonlinearType.bracketing);
+
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Bracketing',
+          SizedBox(
+            width: 600,
+            height: 650,
+            child: MultiBlocProvider(
+              providers: providers,
+              child: BlocProvider<NonlinearBloc>.value(
+                value: bloc,
+                child: const NonlinearDataInput(),
+              ),
+            ),
+          ),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(600, 750),
+      );
+      await screenMatchesGolden(tester, 'nonlinear_input_data_bracketing');
     });
   });
 }

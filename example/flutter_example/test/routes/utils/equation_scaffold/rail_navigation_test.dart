@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
@@ -48,6 +49,44 @@ void main() {
 
       final railNavigation = tester.widget(finder) as RailNavigation;
       expect(railNavigation.navigationItems.length, equals(2));
+    });
+
+    testGoldens('RailNavigation', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'Rail Navigation Bar',
+          SizedBox(
+              width: 200,
+              height: 400,
+              child: MockWrapper(
+                child: BlocProvider<NavigationCubit>(
+                  create: (_) => NavigationCubit(),
+                  child: RailNavigation(
+                    tabController: controller,
+                    navigationItems: const [
+                      NavigationItem(
+                        title: 'Test 1',
+                        content: Icon(Icons.date_range),
+                      ),
+                      NavigationItem(
+                        title: 'Test 2',
+                        content: Icon(Icons.wb_auto_rounded),
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+        );
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(
+          child: child,
+        ),
+        surfaceSize: const Size(200, 500),
+      );
+
+      await screenMatchesGolden(tester, 'rail_navigation');
     });
   });
 }
