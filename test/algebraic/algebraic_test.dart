@@ -7,7 +7,6 @@ void main() {
   group(
       "Testing the public interface of 'Algebraic' which is shared with all "
       'of its concrete subclasses.', () {
-    // Tests with complex numbers
     group("Testing the complex 'variant' of the 'from' method", () {
       test(
           "Making sure that a 'Constant' object is properly constructed when "

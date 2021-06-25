@@ -9,7 +9,11 @@ void main() {
         'Making sure that the series converges when the root is in the interval.',
         () {
       const secant = Secant(
-          function: 'x^3-x-2', firstGuess: 1, secondGuess: 2, maxSteps: 10);
+        function: 'x^3-x-2',
+        firstGuess: 1,
+        secondGuess: 2,
+        maxSteps: 10,
+      );
 
       expect(secant.maxSteps, equals(10));
       expect(secant.tolerance, equals(1.0e-10));

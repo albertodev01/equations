@@ -18,6 +18,20 @@ class GaussianElimination extends SystemSolver {
           size: constants.length,
         );
 
+  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
+  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///
+  ///   - [equations] is the flattened matrix containing the equations
+  ///   - [constants] is the vector with the known values
+  GaussianElimination.flatMatrix({
+    required List<double> equations,
+    required List<double> constants,
+  }) : super.flatMatrix(
+          A: equations,
+          b: constants,
+          size: constants.length,
+        );
+
   @override
   List<double> solve() {
     final n = knownValues.length;

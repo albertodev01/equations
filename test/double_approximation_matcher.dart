@@ -30,10 +30,17 @@ class MoreOrLessEquals extends Matcher {
       description.add('$value (±$precision)');
 
   @override
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map<dynamic, dynamic> matchState, bool verbose) {
-    return super
-        .describeMismatch(item, mismatchDescription, matchState, verbose)
-          ..add('$item is not in the range of $value (±$precision).');
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
+    return super.describeMismatch(
+      item,
+      mismatchDescription,
+      matchState,
+      verbose,
+    )..add('$item is not in the range of $value (±$precision).');
   }
 }

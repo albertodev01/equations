@@ -8,7 +8,11 @@ void main() {
     test(
         'Making sure that the series converges when the root is in the interval.',
         () {
-      const steffensen = Steffensen(function: 'e^x-3', x0: 1, maxSteps: 5);
+      const steffensen = Steffensen(
+        function: 'e^x-3',
+        x0: 1,
+        maxSteps: 5,
+      );
 
       expect(steffensen.maxSteps, equals(5));
       expect(steffensen.tolerance, equals(1.0e-10));

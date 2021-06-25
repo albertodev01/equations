@@ -28,7 +28,9 @@ class MockWrapper extends StatelessWidget {
       navigatorObservers: navigatorObservers,
       theme: ThemeData.light().copyWith(textTheme: GoogleFonts.latoTextTheme()),
       debugShowCheckedModeBanner: false,
-      home: child,
+      home: Scaffold(
+        body: child,
+      ),
     );
   }
 }

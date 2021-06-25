@@ -229,8 +229,8 @@ void main() {
     });
 
     test(
-        "Making sure that 'compareTo' returns 1, -1 or 0 according with the natural sorting",
-        () {
+        "Making sure that 'compareTo' returns 1, -1 or 0 according with the "
+        'natural sorting', () {
       expect(const Complex(2, 1).compareTo(const Complex(3, 7)), equals(-1));
       expect(const Complex(3, 7).compareTo(const Complex(2, 1)), equals(1));
       expect(const Complex(3, 5).compareTo(const Complex(3, 5)), equals(0));
@@ -466,10 +466,9 @@ void main() {
       expect(value.real, MoreOrLessEquals(realValue));
       expect(value.imaginary, MoreOrLessEquals(imagValue));
 
-      final value2 =
-          const Complex.fromReal(5) / const Complex.fromImaginary(-16);
-      expect(value2.real, equals(0));
-      expect(value2.imaginary, equals(0.3125));
+      final v2 = const Complex.fromReal(5) / const Complex.fromImaginary(-16);
+      expect(v2.real, equals(0));
+      expect(v2.imaginary, equals(0.3125));
     });
 
     test('Making sure that the negation works properly.', () {

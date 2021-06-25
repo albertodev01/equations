@@ -2,6 +2,7 @@
 
  - Dependencies versions update
  - Updated example to Flutter 2.2.0 and improved coverage
+ - Added `bool hasSolution()` on the `SystemSolver` type to determine whether a system can be solved or not
 
 ## [2.1.1]
 

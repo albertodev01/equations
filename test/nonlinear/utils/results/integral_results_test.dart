@@ -25,11 +25,7 @@ void main() {
 
     test('Making sure that IntegralResults can be properly compared.', () {
       const results2 = IntegralResults(
-        guesses: [
-          1.0,
-          2.0,
-          3.0,
-        ],
+        guesses: [1.0, 2.0, 3.0],
         result: 5.28,
       );
 
@@ -37,11 +33,7 @@ void main() {
       expect(
         results ==
             const IntegralResults(
-              guesses: [
-                1.0,
-                2.0,
-                3.0,
-              ],
+              guesses: [1.0, 2.0, 3.0],
               result: 5.28,
             ),
         isTrue,
@@ -49,23 +41,18 @@ void main() {
 
       expect(
         results.hashCode,
-        equals(const IntegralResults(
-          guesses: [
-            1.0,
-            2.0,
-            3.0,
-          ],
-          result: 5.28,
-        ).hashCode),
+        equals(
+          const IntegralResults(
+            guesses: [1.0, 2.0, 3.0],
+            result: 5.28,
+          ).hashCode,
+        ),
       );
 
       expect(
         results ==
             const IntegralResults(
-              guesses: [
-                1.0,
-                2.0,
-              ],
+              guesses: [1.0, 2.0],
               result: 5.28,
             ),
         isFalse,
@@ -74,11 +61,7 @@ void main() {
       expect(
         results ==
             const IntegralResults(
-              guesses: [
-                1.0,
-                2.0,
-                5.0,
-              ],
+              guesses: [1.0, 2.0, 5.0],
               result: 5.28,
             ),
         isFalse,
@@ -87,11 +70,7 @@ void main() {
       expect(
         results ==
             const IntegralResults(
-              guesses: [
-                1.0,
-                2.0,
-                3.0,
-              ],
+              guesses: [1.0, 2.0, 3.0],
               result: 6,
             ),
         isFalse,

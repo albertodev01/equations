@@ -82,7 +82,7 @@ class _ResponsiveBody extends StatefulWidget {
 }
 
 class __ResponsiveBodyState extends State<_ResponsiveBody> {
-  /// Manually caching the page title
+  /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
     pageTitle: getLocalizedName(context),
     pageLogo: const NonlinearLogo(

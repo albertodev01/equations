@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Dropdown button used to choose which root finding algorithm has to be used
-class DropdownSelection extends StatefulWidget {
-  /// Creates a [DropdownSelection] widget.
-  const DropdownSelection();
+class NonlinearDropdownSelection extends StatefulWidget {
+  /// Creates a [NonlinearDropdownSelection] widget.
+  const NonlinearDropdownSelection();
 
   @override
-  DropdownSelectionState createState() => DropdownSelectionState();
+  NonlinearDropdownSelectionState createState() =>
+      NonlinearDropdownSelectionState();
 }
 
-/// The state of the [DropdownSelection] class.
+/// The state of the [NonlinearDropdownSelection] class.
 @visibleForTesting
-class DropdownSelectionState extends State<DropdownSelection> {
+class NonlinearDropdownSelectionState
+    extends State<NonlinearDropdownSelection> {
   /// The items of the dropdown.
   late final dropdownItems = _dropdownValues(context);
 

@@ -74,8 +74,8 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown if the coeff. of the highest degree is zero',
-        () {
+        'Making sure that an exception is thrown if the coeff. of the '
+        'highest degree is zero', () {
       expect(
         () => Quadratic(
           a: const Complex.zero(),

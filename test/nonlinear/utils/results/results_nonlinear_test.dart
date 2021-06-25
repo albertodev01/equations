@@ -36,11 +36,7 @@ void main() {
       expect(
         results ==
             const NonlinearResults(
-              guesses: [
-                1.0,
-                2.0,
-                3.0,
-              ],
+              guesses: [1.0, 2.0, 3.0],
               convergence: 10.0,
               efficiency: -7.0,
             ),
@@ -50,11 +46,7 @@ void main() {
       expect(
         results.hashCode,
         equals(const NonlinearResults(
-          guesses: [
-            1.0,
-            2.0,
-            3.0,
-          ],
+          guesses: [1.0, 2.0, 3.0],
           convergence: 10.0,
           efficiency: -7.0,
         ).hashCode),
@@ -63,10 +55,7 @@ void main() {
       expect(
         results ==
             const NonlinearResults(
-              guesses: [
-                1.0,
-                2.0,
-              ],
+              guesses: [1.0, 2.0],
               convergence: 10.0,
               efficiency: -7.0,
             ),
@@ -76,11 +65,7 @@ void main() {
       expect(
         results ==
             const NonlinearResults(
-              guesses: [
-                1.0,
-                2.0,
-                5.0,
-              ],
+              guesses: [1.0, 2.0, 5.0],
               convergence: 10.0,
               efficiency: -7.0,
             ),
@@ -90,11 +75,7 @@ void main() {
       expect(
         results ==
             const NonlinearResults(
-              guesses: [
-                1.0,
-                2.0,
-                3.0,
-              ],
+              guesses: [1.0, 2.0, 3.0],
               convergence: 10.0,
               efficiency: 7.0,
             ),
@@ -104,11 +85,7 @@ void main() {
       expect(
         results ==
             const NonlinearResults(
-              guesses: [
-                1.0,
-                2.0,
-                3.0,
-              ],
+              guesses: [1.0, 2.0, 3.0],
               convergence: 0,
               efficiency: 0,
             ),

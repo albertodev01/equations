@@ -28,5 +28,17 @@
   "convergence": "Convergence",
   "efficiency": "Efficiency",
   "not_computed": "Not computed",
-  "nonlinear_error": "Wrong equation or parameters format."
+  "nonlinear_error": "Wrong equation or parameters format.",
+  "row_reduction": "Row reduction",
+  "factorization": "Factorization",
+  "iterative": "Iterative",
+  "size": "Size",
+  "matrix_size2": "2x2 system",
+  "matrix_size3": "3x3 system",
+  "matrix_size4": "4x4 system",
+  "matrix_description": "The matrix with the equations coefficients",
+  "vector_description": "The vector with the known values",
+  "sor_w": "Fattore di rilassamento",
+  "jacobi_initial": "Vettore iniziale",
+  "singular_matrix_error": "The system cannot be solved because the matrix is singular!"
 }

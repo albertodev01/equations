@@ -23,6 +23,24 @@ class CholeskySolver extends SystemSolver {
           size: constants.length,
         );
 
+  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
+  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///
+  ///   - [equations] is the flattened matrix containing the equations
+  ///   - [constants] is the vector with the known values
+  ///   - the matrix must be Hermitian and positive-definite
+  ///
+  /// Note that, when applicable, the Cholesky decomposition is almost twice as
+  /// efficient as the LU decomposition when it comes to linear systems solving.
+  CholeskySolver.flatMatrix({
+    required List<double> equations,
+    required List<double> constants,
+  }) : super.flatMatrix(
+          A: equations,
+          b: constants,
+          size: constants.length,
+        );
+
   @override
   List<double> solve() {
     final cholesky = equations.choleskyDecomposition();

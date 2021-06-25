@@ -86,8 +86,8 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown if the coeff. of the highest degree is zero',
-        () {
+        'Making sure that an exception is thrown if the coeff. of the '
+        'highest degree is zero', () {
       expect(
         () => Cubic(a: const Complex.zero()),
         throwsA(isA<AlgebraicException>()),
