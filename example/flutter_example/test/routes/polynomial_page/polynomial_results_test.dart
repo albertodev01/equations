@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/polynomial_solver/bloc/events.dart';
 import 'package:equations_solver/blocs/polynomial_solver/bloc/states.dart';
@@ -75,6 +76,33 @@ void main() {
       expect(find.text('No solutions to display.'), findsNothing);
       expect(find.byType(ComplexResultCard), findsNWidgets(2));
       expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
+    });
+
+    testWidgets(
+        'Making sure that when an error occurred while solving the '
+        'equation, a Snackbar appears.', (tester) async {
+      when(() => polynomialBloc.state).thenReturn(const PolynomialNone());
+
+      // Triggering the consumer to listen for the error state
+      whenListen<PolynomialState>(
+        polynomialBloc,
+        Stream<PolynomialState>.fromIterable(const [
+          PolynomialNone(),
+          PolynomialError(),
+        ]),
+      );
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<PolynomialBloc>.value(
+          value: polynomialBloc,
+          child: const PolynomialResults(),
+        ),
+      ));
+
+      // Refreshing to make the snackbar appear
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SnackBar), findsOneWidget);
     });
 
     testGoldens('PolynomialResults', (tester) async {

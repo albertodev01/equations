@@ -1,3 +1,5 @@
+import 'package:equations_solver/routes/home_page.dart';
+import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +18,24 @@ void main() {
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(IconButton), findsOneWidget);
+    });
+
+    testWidgets('Making sure that the button can be tapped', (tester) async {
+      await tester.pumpWidget(const MockWrapper(
+        child: Scaffold(
+          body: HomePage(),
+        ),
+      ));
+
+      // Opening a page
+      await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
+      await tester.pumpAndSettle();
+      expect(find.byType(PolynomialPage), findsOneWidget);
+
+      // Going back
+      await tester.tap(find.byType(GoBackButton));
+      await tester.pumpAndSettle();
+      expect(find.byType(HomePage), findsOneWidget);
     });
 
     testGoldens('GoBackButton', (tester) async {

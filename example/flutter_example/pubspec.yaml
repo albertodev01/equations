@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   # https://pub.dev/packages/equatable
-  equatable: ^2.0.2
+  equatable: ^2.0.3
 
   equations:
     path: ../../
@@ -19,7 +19,7 @@ dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/flutter_bloc
-  flutter_bloc: ^7.0.0
+  flutter_bloc: ^7.0.1
 
   flutter_localizations:
     sdk: flutter
@@ -31,7 +31,7 @@ dependencies:
   google_fonts: ^2.1.0
 
   # https://pub.dev/packages/hydrated_bloc
-  hydrated_bloc: ^7.0.0
+  hydrated_bloc: ^7.0.1
 
   # https://pub.dev/packages/intl
   intl: ^0.17.0

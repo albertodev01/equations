@@ -58,6 +58,10 @@ void main() {
         isA<SystemNone>(),
       );
       expect(
+        SystemClean(),
+        isA<SystemClean>(),
+      );
+      expect(
         SingularSystemError(),
         isA<SingularSystemError>(),
       );

@@ -178,6 +178,9 @@ void main() {
       final solveButton = find.byKey(
         const Key('Polynomial-button-solve'),
       );
+      final cleanButton = find.byKey(
+        const Key('Polynomial-button-clean'),
+      );
 
       // Filling the forms
       await tester.enterText(coeffA, '-5');
@@ -193,6 +196,17 @@ void main() {
 
       // Sending it to the bloc
       expect(bloc.state, isA<PolynomialRoots>());
+
+      // Cleaning the UI
+      await tester.tap(cleanButton);
+      await tester.pumpAndSettle();
+
+      expect(bloc.state, isA<PolynomialNone>());
+      tester
+          .widgetList<TextFormField>(find.byType(TextFormField))
+          .forEach((input) {
+        expect(input.controller!.text.length, isZero);
+      });
     });
 
     testGoldens('PolynomialDataInput - Linear equation', (tester) async {

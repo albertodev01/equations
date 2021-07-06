@@ -182,6 +182,21 @@ void main() {
     );
 
     blocTest<SystemBloc, SystemState>(
+      'Making sure that the bloc can emit errors with iterative methods',
+      build: () => SystemBloc(SystemType.iterative),
+      act: (bloc) => bloc.add(const IterativeMethod(
+        matrix: ['3', 'x', '1', '-4'],
+        knownValues: ['4', 'aa'],
+        method: IterativeMethods.jacobi,
+        jacobiInitialVector: ['4', '-1'],
+        size: 2,
+      )),
+      expect: () => const [
+        SystemError(),
+      ],
+    );
+
+    blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws if the matrix is singular (iter.)',
       build: () => SystemBloc(SystemType.iterative),
       act: (bloc) => bloc.add(const IterativeMethod(

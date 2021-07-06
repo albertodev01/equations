@@ -67,12 +67,12 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
   bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) &&
-      ((current is PolynomialRoots) || (current is PolynomialNone));
+      (previous != current) && (current is! PolynomialError);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolynomialBloc, PolynomialState>(
+      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is PolynomialRoots) {
           return ListView.builder(
@@ -106,8 +106,7 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
   bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) &&
-      ((current is PolynomialRoots) || (current is PolynomialNone));
+      (previous != current) && (current is! PolynomialError);
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +123,7 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
             );
           }
         },
+        buildWhen: buildCondition,
         builder: (context, state) {
           if (state is PolynomialRoots) {
             return ComplexResultCard(

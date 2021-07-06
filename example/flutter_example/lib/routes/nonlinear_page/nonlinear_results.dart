@@ -48,8 +48,7 @@ class _NonlinearSolutionsState extends State<_NonlinearSolutions> {
   ///
   /// Listens **only** when the state is [NonlinearGuesses] or [NonlinearNone].
   bool buildCondition(NonlinearState previous, NonlinearState current) =>
-      (previous != current) &&
-      ((current is NonlinearGuesses) || (current is NonlinearNone));
+      (previous != current) && (current is! NonlinearError);
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +63,7 @@ class _NonlinearSolutionsState extends State<_NonlinearSolutions> {
           );
         }
       },
+      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is NonlinearGuesses) {
           // Computation results

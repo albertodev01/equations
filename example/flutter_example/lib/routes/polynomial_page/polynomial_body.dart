@@ -82,6 +82,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
       if (size.maxWidth <= 950) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
+          key: const Key('SingleChildScrollView-mobile-responsive'),
           child: Column(
             children: [
               pageTitleWidget,
@@ -106,6 +107,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
             height: double.infinity,
             child: Center(
               child: SingleChildScrollView(
+                key: const Key('SingleChildScrollView-desktop-responsive'),
                 child: Column(
                   children: [
                     pageTitleWidget,

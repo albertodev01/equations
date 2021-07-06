@@ -44,7 +44,7 @@ void main() {
         'test', (tester) async {
       await tester.pumpWidget(MockWrapper(
         child: BlocProvider<NonlinearBloc>(
-          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+          create: (_) => NonlinearBloc(NonlinearType.bracketing),
           child: const Scaffold(
             body: SizedBox(
               width: 800,
