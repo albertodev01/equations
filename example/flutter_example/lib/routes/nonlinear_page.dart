@@ -26,14 +26,18 @@ class _NonlinearPageState extends State<NonlinearPage> {
       title: context.l10n.single_point,
       content: BlocProvider<NonlinearBloc>(
         create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-        child: const NonlinearBody(),
+        child: const NonlinearBody(
+          key: Key('NonlinearPage-SinglePoint-Body'),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.bracketing,
       content: BlocProvider<NonlinearBloc>(
         create: (_) => NonlinearBloc(NonlinearType.bracketing),
-        child: const NonlinearBody(),
+        child: const NonlinearBody(
+          key: Key('NonlinearPage-Bracketing-Body'),
+        ),
       ),
     ),
   ];

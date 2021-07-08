@@ -19,7 +19,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// on two columns according with the available width.
 class PolynomialBody extends StatelessWidget {
   /// Creates a [PolynomialBody] widget.
-  const PolynomialBody();
+  const PolynomialBody({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

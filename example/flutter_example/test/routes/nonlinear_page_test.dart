@@ -18,25 +18,29 @@ void main() {
     });
 
     testWidgets('Making sure that pages can be changed', (tester) async {
-      var title = '';
-      var wrongTitle = '';
+      var bracketing = '';
+      var singlePoint = '';
 
       await tester.pumpWidget(MockWrapper(
         child: Builder(builder: (context) {
-          title = context.l10n.bracketing;
-          wrongTitle = context.l10n.single_point;
+          bracketing = context.l10n.bracketing;
+          singlePoint = context.l10n.single_point;
 
           return const NonlinearPage();
         }),
       ));
 
-      final bottomRight = tester.getBottomRight(find.byType(NonlinearPage));
-
-      await tester.tapAt(bottomRight);
+      // Bracketing page
+      await tester.tap(find.text(bracketing));
       await tester.pumpAndSettle();
+      expect(find.text(bracketing), findsNWidgets(2));
+      expect(find.text(singlePoint), findsOneWidget);
 
-      expect(find.text(title), findsOneWidget);
-      expect(find.text(wrongTitle), findsWidgets);
+      // Single point page
+      await tester.tap(find.text(singlePoint));
+      await tester.pumpAndSettle();
+      expect(find.text(singlePoint), findsNWidgets(2));
+      expect(find.text(bracketing), findsOneWidget);
     });
   });
 }
