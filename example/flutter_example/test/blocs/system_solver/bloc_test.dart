@@ -36,16 +36,19 @@ void main() {
     );
 
     blocTest<SystemBloc, SystemState>(
-        'Making sure that the bloc throws if the matrix is singular (row red.)',
-        build: () => SystemBloc(SystemType.rowReduction),
-        act: (bloc) => bloc.add(const RowReductionMethod(
-              matrix: ['1', '2', '1', '2'],
-              knownValues: ['4', '-1'],
-              size: 2,
-            )),
-        expect: () => const [
-              SingularSystemError(),
-            ]);
+      'Making sure that the bloc throws if the matrix is singular (row red.)',
+      build: () => SystemBloc(SystemType.rowReduction),
+      act: (bloc) => bloc.add(
+        const RowReductionMethod(
+          matrix: ['1', '2', '1', '2'],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
+      expect: () => const [
+        SingularSystemError(),
+      ],
+    );
 
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws on malformed input data',
@@ -70,6 +73,10 @@ void main() {
       )),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
+        expect(
+          (bloc.state as SystemGuesses).systemSolver.hasSolution(),
+          isTrue,
+        );
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
@@ -89,12 +96,21 @@ void main() {
       )),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
+        expect(
+          (bloc.state as SystemGuesses).systemSolver.hasSolution(),
+          isTrue,
+        );
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
         expect(
-            solutions[0], const MoreOrLessEquals(25 / 21, precision: 1.0e-5));
-        expect(solutions[1], const MoreOrLessEquals(-1 / 7, precision: 1.0e-5));
+          solutions[0],
+          const MoreOrLessEquals(25 / 21, precision: 1.0e-5),
+        );
+        expect(
+          solutions[1],
+          const MoreOrLessEquals(-1 / 7, precision: 1.0e-5),
+        );
       },
     );
 
@@ -134,6 +150,10 @@ void main() {
       )),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
+        expect(
+          (bloc.state as SystemGuesses).systemSolver.hasSolution(),
+          isTrue,
+        );
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
@@ -153,6 +173,10 @@ void main() {
       )),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
+        expect(
+          (bloc.state as SystemGuesses).systemSolver.hasSolution(),
+          isTrue,
+        );
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
@@ -173,6 +197,10 @@ void main() {
       )),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
+        expect(
+          (bloc.state as SystemGuesses).systemSolver.hasSolution(),
+          isTrue,
+        );
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;

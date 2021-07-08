@@ -49,6 +49,13 @@ void main() {
       expect(find.text(rowReduction), findsNWidgets(2));
       expect(find.text(factorization), findsOneWidget);
       expect(find.text(iterative), findsOneWidget);
+
+      // Factorization page
+      await tester.tap(find.text(factorization));
+      await tester.pumpAndSettle();
+      expect(find.text(rowReduction), findsOneWidget);
+      expect(find.text(factorization), findsNWidgets(2));
+      expect(find.text(iterative), findsOneWidget);
     });
   });
 }

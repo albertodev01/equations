@@ -36,6 +36,7 @@ void main() {
 
       expect(find.byType(PolynomialResults), findsOneWidget);
       expect(find.byType(SectionTitle), findsNWidgets(2));
+      expect(find.byType(PolynomialDiscriminant), findsOneWidget);
     });
 
     testWidgets(
