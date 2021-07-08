@@ -97,5 +97,19 @@ void main() {
       expect(results.quotient, equals(Algebraic.fromReal([1, -4])));
       expect(results.remainder, equals(Algebraic.fromReal([22])));
     });
+
+    test(
+        'Making sure that quotient 1 and remainder 0 are returned when '
+        'dividing the same polynomials', () {
+      final polyLongDivision = PolynomialLongDivision(
+        polyNumerator: Algebraic.fromReal([1, 3, -6]),
+        polyDenominator: Algebraic.fromReal([1, 3, -6]),
+      );
+
+      final results = polyLongDivision.divide();
+
+      expect(results.quotient, equals(Algebraic.fromReal([1])));
+      expect(results.remainder, equals(Algebraic.fromReal([0])));
+    });
   });
 }
