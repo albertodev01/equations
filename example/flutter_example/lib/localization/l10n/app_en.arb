@@ -38,7 +38,7 @@
   "matrix_size4": "4x4 system",
   "matrix_description": "The matrix with the equations coefficients",
   "vector_description": "The vector with the known values",
-  "sor_w": "Fattore di rilassamento",
-  "jacobi_initial": "Vettore iniziale",
+  "sor_w": "Relaxation factor",
+  "jacobi_initial": "Initial guesses vector",
   "singular_matrix_error": "The system cannot be solved because the matrix is singular!"
 }

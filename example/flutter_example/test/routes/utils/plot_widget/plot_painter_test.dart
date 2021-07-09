@@ -14,8 +14,9 @@ void main() {
         borderRadius: const BorderRadius.all(Radius.circular(5)),
         child: CustomPaint(
           painter: PlotterPainter(
-            plotMode:
-                PolynomialPlot(algebraic: Algebraic.fromReal([1, 2, -3, -2])),
+            plotMode: PolynomialPlot(
+              algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+            ),
             range: range,
           ),
           size: const Size.square(200),
@@ -49,10 +50,11 @@ void main() {
         wrapper: (child) => MockWrapper(child: child),
         surfaceSize: const Size(300, 900),
       );
+
       await screenMatchesGolden(tester, 'polynomial_plot_painter');
     });
 
-    testGoldens('PlotPainter - Polynomial', (tester) async {
+    testGoldens('PlotPainter - Nonlinear', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario('Nonlinear - low range', _buildNonlinearPainter(2))
         ..addScenario('Nonlinear - default', _buildNonlinearPainter(5))
@@ -63,6 +65,7 @@ void main() {
         wrapper: (child) => MockWrapper(child: child),
         surfaceSize: const Size(300, 900),
       );
+
       await screenMatchesGolden(tester, 'nonlinear_plot_painter');
     });
   });
