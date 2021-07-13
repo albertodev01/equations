@@ -1,3 +1,10 @@
+## [2.1.3]
+
+ - Dependencies versions update
+ - Minor enhancement in the `PolynomialLongDivision` class
+ - Added trace computation on matrices
+ - Added french localization to the Flutter example app
+ 
 ## [2.1.2]
 
  - Dependencies versions update

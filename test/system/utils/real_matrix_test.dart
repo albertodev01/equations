@@ -406,5 +406,31 @@ void main() {
       expect(matrix.transposedValue(2, 0), equals(24));
       expect(matrix.transposedValue(2, 1), equals(8));
     });
+
+    test('Making sure that the trace is correctly computed', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [2, 5],
+          [4, 9],
+        ],
+      );
+
+      expect(matrix.trace(), equals(11));
+    });
+
+    test('Making sure that the trace only computed on square matrices', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [2, 5, 3],
+          [4, 9, 2],
+        ],
+      );
+
+      expect(() => matrix.trace(), throwsA(isA<MatrixException>()));
+    });
   });
 }
