@@ -546,5 +546,31 @@ void main() {
       expect(matrix.transposedValue(1, 0), equals(const Complex.fromReal(2)));
       expect(matrix.transposedValue(1, 1), equals(const Complex.fromReal(4)));
     });
+
+    test('Making sure that the trace is correctly computed', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [Complex.fromImaginary(3), Complex.fromReal(-2)],
+          [Complex.fromReal(15), Complex(2, -8)],
+        ],
+      );
+
+      expect(matrix.trace(), equals(const Complex(2, -5)));
+    });
+
+    test('Making sure that the trace only computed on square matrices', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [Complex.fromImaginary(3), Complex.zero(), Complex.fromReal(-2)],
+          [Complex.fromReal(15), Complex(2, -8), Complex.i()],
+        ],
+      );
+
+      expect(() => matrix.trace(), throwsA(isA<MatrixException>()));
+    });
   });
 }

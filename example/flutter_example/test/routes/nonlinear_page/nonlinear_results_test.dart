@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart' as equations;
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
@@ -33,6 +34,33 @@ void main() {
 
       expect(find.byType(NonlinearResults), findsOneWidget);
       expect(find.byType(SectionTitle), findsOneWidget);
+    });
+
+    testWidgets(
+        'Making sure that when an error occurred while solving the equation, '
+        'a Snackbar appears.', (tester) async {
+      when(() => nonlinearBloc.state).thenReturn(const NonlinearError());
+
+      // Triggering the consumer to listen for the error state
+      whenListen<NonlinearState>(
+        nonlinearBloc,
+        Stream<NonlinearState>.fromIterable(const [
+          NonlinearNone(),
+          NonlinearError(),
+        ]),
+      );
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<NonlinearBloc>.value(
+          value: nonlinearBloc,
+          child: const NonlinearResults(),
+        ),
+      ));
+
+      // Refreshing to make the snackbar appear
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SnackBar), findsOneWidget);
     });
 
     testWidgets(

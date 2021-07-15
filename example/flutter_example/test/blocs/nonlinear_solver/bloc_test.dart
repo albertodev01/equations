@@ -57,8 +57,10 @@ void main() {
 
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
         final solutions = expected.solve();
+        final state = bloc.state as NonlinearGuesses;
 
-        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Newton>());
+        expect(state.nonLinear, isA<Newton>());
+        expect(state.nonLinear.function, equals('x - 2'));
         expect(stateResults.efficiency, isNaN);
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));
@@ -108,8 +110,10 @@ void main() {
 
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;
         final solutions = expected.solve();
+        final state = bloc.state as NonlinearGuesses;
 
-        expect((bloc.state as NonlinearGuesses).nonLinear, isA<Bisection>());
+        expect(state.nonLinear, isA<Bisection>());
+        expect(state.nonLinear.function.trim(), equals('x - 2'));
         expect(stateResults.efficiency, isNaN);
         expect(stateResults.convergence, isNaN);
         expect(stateResults.guesses, unorderedEquals(solutions.guesses));

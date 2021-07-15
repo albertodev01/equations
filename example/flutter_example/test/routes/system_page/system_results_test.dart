@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
@@ -91,6 +92,60 @@ void main() {
       expect(find.byType(ListView), findsOneWidget);
       expect(find.byType(NoResults), findsNothing);
       expect(find.byType(DoubleResultCard), findsNWidgets(2));
+    });
+
+    testWidgets(
+        'Making sure that when an error occurred while solving the '
+        'system, a Snackbar appears.', (tester) async {
+      when(() => systemBloc.state).thenReturn(const SystemNone());
+
+      // Triggering the consumer to listen for the error state
+      whenListen<SystemState>(
+        systemBloc,
+        Stream<SystemState>.fromIterable(const [
+          SystemNone(),
+          SystemError(),
+        ]),
+      );
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<SystemBloc>.value(
+          value: systemBloc,
+          child: const SystemResults(),
+        ),
+      ));
+
+      // Refreshing to make the Snackbar appear
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SnackBar), findsOneWidget);
+    });
+
+    testWidgets(
+        'Making sure that when an error occurred (because the matrix '
+        'is singular), a Snackbar appears.', (tester) async {
+      when(() => systemBloc.state).thenReturn(const SystemNone());
+
+      // Triggering the consumer to listen for the error state
+      whenListen<SystemState>(
+        systemBloc,
+        Stream<SystemState>.fromIterable(const [
+          SystemNone(),
+          SingularSystemError(),
+        ]),
+      );
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<SystemBloc>.value(
+          value: systemBloc,
+          child: const SystemResults(),
+        ),
+      ));
+
+      // Refreshing to make the Snackbar appear
+      await tester.pumpAndSettle();
+
+      expect(find.byType(SnackBar), findsOneWidget);
     });
 
     testGoldens('SystemResults', (tester) async {

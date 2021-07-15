@@ -200,6 +200,30 @@ class RealMatrix extends Matrix<double> {
     );
   }
 
+  /// The trace can only be computed if the matrix is **square**, meaning that
+  /// it must have the same number of columns and rows.
+  ///
+  /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
+  /// sum of elements on the main diagonal (from the upper left to the lower
+  /// right).
+  @override
+  double trace() {
+    // Making sure that the matrix is squared
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix is not square!');
+    }
+
+    // The trace value
+    var trace = 0.0;
+
+    // Computing the trace
+    for (var i = 0; i < columnCount; ++i) {
+      trace += this(i, i);
+    }
+
+    return trace;
+  }
+
   /// The determinant can only be computed if the matrix is **square**, meaning
   /// that it must have the same number of columns and rows.
   ///

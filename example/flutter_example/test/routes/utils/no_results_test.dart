@@ -8,7 +8,11 @@ import '../mock_wrapper.dart';
 void main() {
   group("Testing the 'NoDiscriminant' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(child: NoResults()));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: NoResults(),
+        ),
+      );
 
       expect(find.byType(NoResults), findsOneWidget);
       expect(find.byType(Center), findsOneWidget);

@@ -47,7 +47,7 @@ class _JacobiVectorInputState extends State<JacobiVectorInput> {
 
           // A label that describes what 'w' is
           Text(
-            context.l10n.sor_w,
+            context.l10n.jacobi_initial,
             style: const TextStyle(
               fontSize: 14,
               color: Colors.grey,

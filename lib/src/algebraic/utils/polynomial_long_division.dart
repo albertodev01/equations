@@ -30,6 +30,16 @@ class PolynomialLongDivision {
           'The degree of the denominator cannot exceed the degree of the numerator.');
     }
 
+    // If both are equals, just return 1 with a remainder of 0
+    if (polyNumerator == polyDenominator) {
+      return AlgebraicDivision(
+        quotient: Constant(),
+        remainder: Constant(
+          a: const Complex.zero(),
+        ),
+      );
+    }
+
     final numerator = List<Complex>.from(polyNumerator.coefficients.reversed);
     final denominator =
         List<Complex>.from(polyDenominator.coefficients.reversed);

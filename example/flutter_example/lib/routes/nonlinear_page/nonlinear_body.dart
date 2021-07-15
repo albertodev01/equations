@@ -22,7 +22,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// on two columns according with the available width.
 class NonlinearBody extends StatefulWidget {
   /// Creates a [PolynomialBody] widget.
-  const NonlinearBody();
+  const NonlinearBody({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _NonlinearBodyState createState() => _NonlinearBodyState();

@@ -24,14 +24,62 @@ void main() {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(MockWrapper(
         child: BlocProvider<PolynomialBloc>(
-          create: (_) => PolynomialBloc(PolynomialType.linear),
-          child: const Scaffold(body: PolynomialBody()),
+          create: (_) => PolynomialBloc(PolynomialType.quartic),
+          child: const Scaffold(
+            body: PolynomialBody(),
+          ),
         ),
       ));
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(PolynomialDataInput), findsOneWidget);
       expect(find.byType(PolynomialResults), findsOneWidget);
+    });
+
+    testWidgets(
+        'Making sure that the widget is responsive - small screens '
+        'test', (tester) async {
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<PolynomialBloc>(
+          create: (_) => PolynomialBloc(PolynomialType.quadratic),
+          child: const Scaffold(
+            body: PolynomialBody(),
+          ),
+        ),
+      ));
+
+      expect(
+        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+        findsNothing,
+      );
+    });
+
+    testWidgets(
+        'Making sure that the widget is responsive - large screens '
+        'test', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(2000, 2000));
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<PolynomialBloc>(
+          create: (_) => PolynomialBloc(PolynomialType.cubic),
+          child: const Scaffold(
+            body: PolynomialBody(),
+          ),
+        ),
+      ));
+
+      expect(
+        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+        findsNothing,
+      );
+      expect(
+        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Making sure that solving equations works', (tester) async {

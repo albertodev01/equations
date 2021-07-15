@@ -47,7 +47,7 @@ class PolynomialResults extends StatelessWidget {
         ),
 
         // Showing the solutions of the polynomial
-        const _PolynomialDiscriminant(
+        const PolynomialDiscriminant(
           key: Key('PolynomialDiscriminant'),
         ),
       ],
@@ -67,12 +67,12 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
   bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) &&
-      ((current is PolynomialRoots) || (current is PolynomialNone));
+      (previous != current) && (current is! PolynomialError);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolynomialBloc, PolynomialState>(
+      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is PolynomialRoots) {
           return ListView.builder(
@@ -91,23 +91,24 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   }
 }
 
-class _PolynomialDiscriminant extends StatefulWidget {
-  const _PolynomialDiscriminant({
+/// Shows the discriminant of the polynomial equation to be solved.
+@visibleForTesting
+class PolynomialDiscriminant extends StatefulWidget {
+  /// Creates a [PolynomialDiscriminant] widget.
+  const PolynomialDiscriminant({
     Key? key,
   }) : super(key: key);
 
   @override
-  __PolynomialDiscriminantState createState() =>
-      __PolynomialDiscriminantState();
+  _PolynomialDiscriminantState createState() => _PolynomialDiscriminantState();
 }
 
-class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
+class _PolynomialDiscriminantState extends State<PolynomialDiscriminant> {
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
   bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) &&
-      ((current is PolynomialRoots) || (current is PolynomialNone));
+      (previous != current) && (current is! PolynomialError);
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +125,7 @@ class __PolynomialDiscriminantState extends State<_PolynomialDiscriminant> {
             );
           }
         },
+        buildWhen: buildCondition,
         builder: (context, state) {
           if (state is PolynomialRoots) {
             return ComplexResultCard(

@@ -51,6 +51,32 @@ void main() {
       expect(find.byType(Slider), findsOneWidget);
     });
 
+    testWidgets(
+        'Making sure that the slider updates the bloc state when its current '
+        'value changes', (tester) async {
+      final bloc = SliderCubit(
+        minValue: 1,
+        maxValue: 10,
+        current: 5,
+      );
+
+      await tester.pumpWidget(MockWrapper(
+        child: BlocProvider<SliderCubit>.value(
+          value: bloc,
+          child: const Scaffold(
+            body: PrecisionSlider(),
+          ),
+        ),
+      ));
+
+      expect(find.byType(Slider), findsOneWidget);
+      expect(bloc.state, equals(5));
+
+      // Moving the slider
+      await tester.drag(find.byType(Slider), const Offset(-10, 0));
+      expect(bloc.state, equals(8));
+    });
+
     testGoldens('PrecisionSlider', (tester) async {
       final widget = SizedBox(
         width: 300,

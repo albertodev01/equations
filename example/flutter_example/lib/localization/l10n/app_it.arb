@@ -38,7 +38,7 @@
   "matrix_size4": "sistema 4x4",
   "matrix_description": "La matrice dei coefficienti delle equazioni",
   "vector_description": "Il vettore con termini noti",
-  "sor_w": "Relaxation factor",
-  "jacobi_initial": "Iniziale guess vector",
+  "sor_w": "Fattore di rilassamento",
+  "jacobi_initial": "Vettore iniziale",
   "singular_matrix_error": "Il sistema non può essere risolto perchè la matrice è singolare!"
 }

@@ -262,6 +262,11 @@ abstract class Matrix<T> {
   /// Returns the division of two matrices.
   Matrix<T> operator /(Matrix<T> other);
 
+  /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
+  /// sum of elements on the main diagonal (from the upper left to the lower
+  /// right).
+  T trace();
+
   /// The determinant can only be computed if the matrix is **square**, meaning
   /// that it must have the same number of columns and rows.
   ///

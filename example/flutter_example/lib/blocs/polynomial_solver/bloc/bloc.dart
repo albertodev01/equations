@@ -64,15 +64,11 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
       final solver = Algebraic.from(params);
 
       // Determines whether the given equation is valid or not
-      if (solver.isValid) {
-        yield PolynomialRoots(
-          roots: solver.solutions(),
-          discriminant: solver.discriminant(),
-          algebraic: solver,
-        );
-      } else {
-        yield const PolynomialError();
-      }
+      yield PolynomialRoots(
+        roots: solver.solutions(),
+        discriminant: solver.discriminant(),
+        algebraic: solver,
+      );
     } on Exception {
       yield const PolynomialError();
     }

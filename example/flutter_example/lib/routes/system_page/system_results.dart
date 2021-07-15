@@ -78,6 +78,7 @@ class _SystemSolutionsState extends State<_SystemSolutions> {
           );
         }
       },
+      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is SystemGuesses) {
           return ListView.builder(

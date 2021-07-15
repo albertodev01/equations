@@ -1,5 +1,9 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
+import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
+import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
+import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -58,8 +62,28 @@ void main() {
         isA<SystemNone>(),
       );
       expect(
+        SystemClean(),
+        isA<SystemClean>(),
+      );
+      expect(
         SingularSystemError(),
         isA<SingularSystemError>(),
+      );
+      expect(
+        NonlinearBody(),
+        isA<NonlinearBody>(),
+      );
+      expect(
+        PolynomialBody(),
+        isA<PolynomialBody>(),
+      );
+      expect(
+        SystemBody(),
+        isA<SystemBody>(),
+      );
+      expect(
+        PolynomialDiscriminant(),
+        isA<PolynomialDiscriminant>(),
       );
     });
   });
