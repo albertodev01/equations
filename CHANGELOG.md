@@ -1,3 +1,9 @@
+## [2.2.0]
+
+ - Dependencies versions update
+ - Created the `Interpolation` type to work with points interpolation
+ - Added the `LinearInterpolation`, `PolynomialInterpolation`, `NewtonInterpolation` and `SplineInterpolation` types
+
 ## [2.1.3]
 
  - Dependencies versions update

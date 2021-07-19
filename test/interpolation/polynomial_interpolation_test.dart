@@ -37,8 +37,8 @@ void main() {
       expect(
         interpolation.buildPolynomial(),
         equals(Quadratic.realEquation(
-          a: -1/2,
-          b: 5/2,
+          a: -1 / 2,
+          b: 5 / 2,
           c: -1,
         )),
       );
