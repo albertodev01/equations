@@ -14,6 +14,11 @@ export 'src/algebraic/utils/horner_results.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
 
+export 'src/interpolation/interpolation.dart';
+export 'src/interpolation/types/linear_interpolation.dart';
+export 'src/interpolation/types/polynomial_interpolation.dart';
+export 'src/interpolation/utils/interpolation_node.dart';
+
 export 'src/nonlinear/nonlinear.dart';
 export 'src/nonlinear/types/bisection.dart';
 export 'src/nonlinear/types/brent.dart';

@@ -87,6 +87,22 @@ void main() {
       );
     });
 
+    test('Interpolation constructors', () {
+      const nodesList = [
+        InterpolationNode(x: 1, y: 3),
+        InterpolationNode(x: -4, y: 6),
+      ];
+
+      expect(
+        LinearInterpolation(nodes: nodesList),
+        isA<LinearInterpolation>(),
+      );
+      expect(
+        PolynomialInterpolation(nodes: nodesList),
+        isA<PolynomialInterpolation>(),
+      );
+    });
+
     test('Numerical integration constructors', () {
       expect(
         TrapezoidalRule(lowerBound: 0, upperBound: 0),
