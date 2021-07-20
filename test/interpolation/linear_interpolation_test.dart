@@ -34,6 +34,23 @@ void main() {
       );
     });
 
+    test("Making sure that an exception is thrown when nodes aren't 2", () {
+      expect(
+        () => LinearInterpolation(nodes: const [
+          InterpolationNode(x: 1, y: 3),
+        ]),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => LinearInterpolation(nodes: const [
+          InterpolationNode(x: 1, y: 3),
+          InterpolationNode(x: 2, y: 4),
+          InterpolationNode(x: 5, y: 6),
+        ]),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
     test('Making sure that objects comparison works properly', () {
       final interpolation = LinearInterpolation(
         nodes: const [

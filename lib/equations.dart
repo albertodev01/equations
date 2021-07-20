@@ -16,6 +16,7 @@ export 'src/algebraic/utils/sylvester_matrix.dart';
 
 export 'src/interpolation/interpolation.dart';
 export 'src/interpolation/types/linear_interpolation.dart';
+export 'src/interpolation/types/newton_interpolation.dart';
 export 'src/interpolation/types/polynomial_interpolation.dart';
 export 'src/interpolation/utils/interpolation_node.dart';
 

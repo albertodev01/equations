@@ -75,5 +75,63 @@ void main() {
       );
       expect(interpolation.buildPolynomial(), equals(expected));
     });
+
+    test('Making sure that objects comparison works properly', () {
+      const interpolation = PolynomialInterpolation(
+        nodes: [
+          InterpolationNode(x: 1, y: 3),
+          InterpolationNode(x: -2, y: 5),
+        ],
+      );
+
+      expect(
+        interpolation,
+        equals(
+          const PolynomialInterpolation(
+            nodes: [
+              InterpolationNode(x: 1, y: 3),
+              InterpolationNode(x: -2, y: 5),
+            ],
+          ),
+        ),
+      );
+
+      expect(
+        interpolation ==
+            const PolynomialInterpolation(
+              nodes: [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: -2, y: 5),
+              ],
+            ),
+        isTrue,
+      );
+
+      expect(
+        interpolation ==
+            const PolynomialInterpolation(
+              nodes: [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: 2, y: 5),
+              ],
+            ),
+        isFalse,
+      );
+
+      expect(
+        interpolation == interpolation,
+        isTrue,
+      );
+
+      expect(
+        interpolation.hashCode,
+        equals(const PolynomialInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: -2, y: 5),
+          ],
+        ).hashCode),
+      );
+    });
   });
 }

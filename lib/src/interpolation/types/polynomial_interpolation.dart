@@ -20,13 +20,11 @@ class PolynomialInterpolation extends Interpolation {
 
     for (var i = 0; i < nodes.length; ++i) {
       var term = nodes[i].y;
-
       for (var j = 0; j < nodes.length; j++) {
         if (i != j) {
           term *= (x - nodes[j].x) / (nodes[i].x - nodes[j].x);
         }
       }
-
       result += term;
     }
 
