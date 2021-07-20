@@ -38,7 +38,8 @@ void main() {
       );
     });
 
-    test('Making sure that the forward differences table is correctly built', () {
+    test('Making sure that the forward differences table is correctly built',
+        () {
       const interpolation = NewtonInterpolation(
         nodes: [
           InterpolationNode(x: 45, y: 0.7071),
@@ -116,7 +117,8 @@ void main() {
       );
     });
 
-    test('Making sure that the backward differences table is correctly built', () {
+    test('Making sure that the backward differences table is correctly built',
+        () {
       const interpolation = NewtonInterpolation(
         nodes: [
           InterpolationNode(x: 1891, y: 46),
