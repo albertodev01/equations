@@ -199,6 +199,27 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
+  /// Returns the transpose of a matrix.
+  ///
+  /// This is an operation that simply flips a matrix over its diagonal (so it
+  /// switches the row and column indices of the matrix to create a new one).
+  @override
+  ComplexMatrix transpose() {
+    final source = List<Complex>.from(flattenData);
+
+    for (var i = 0; i < rowCount; i++) {
+      for (int j = 0; j < columnCount; j++) {
+        source[columnCount * j + i] = this(i, j);
+      }
+    }
+
+    return ComplexMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: source,
+    );
+  }
+
   /// The trace can only be computed if the matrix is **square**, meaning that
   /// it must have the same number of columns and rows.
   ///

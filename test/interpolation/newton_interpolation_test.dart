@@ -6,8 +6,8 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing the 'NewtonInterpolation' type", () {
     test(
-        "Making sure that a 'NewtonInterpolation' object is properly constructed",
-        () {
+        "Making sure that a 'NewtonInterpolation' object is properly "
+        'constructed with forward differences table', () {
       const interpolation = NewtonInterpolation(
         nodes: [
           InterpolationNode(x: 45, y: 0.7071),
@@ -35,6 +35,38 @@ void main() {
       expect(
         interpolation.compute(52),
         const MoreOrLessEquals(0.788, precision: 1.0e-3),
+      );
+    });
+
+    test(
+        "Making sure that a 'NewtonInterpolation' object is properly "
+        'constructed with backward differences table', () {
+      const interpolation = NewtonInterpolation(
+        nodes: [
+          InterpolationNode(x: 45, y: 0.7071),
+          InterpolationNode(x: 50, y: 0.7660),
+          InterpolationNode(x: 55, y: 0.8192),
+        ],
+        forwardDifference: false,
+      );
+
+      expect(() => interpolation.nodes.clear(), throwsUnsupportedError);
+      expect(interpolation.forwardDifference, isFalse);
+      expect(interpolation.nodes.length, equals(3));
+      expect(
+        interpolation.nodes,
+        orderedEquals(
+          const [
+            InterpolationNode(x: 45, y: 0.7071),
+            InterpolationNode(x: 50, y: 0.7660),
+            InterpolationNode(x: 55, y: 0.8192),
+          ],
+        ),
+      );
+
+      expect(
+        interpolation.compute(52),
+        const MoreOrLessEquals(0.784, precision: 1.0e-3),
       );
     });
 

@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
+import 'package:equations/src/utils/factorial.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -101,6 +102,10 @@ void main() {
         PolynomialInterpolation(nodes: nodesList),
         isA<PolynomialInterpolation>(),
       );
+      expect(
+        NewtonInterpolation(nodes: nodesList),
+        isA<NewtonInterpolation>(),
+      );
     });
 
     test('Numerical integration constructors', () {
@@ -115,6 +120,13 @@ void main() {
       expect(
         MidpointRule(lowerBound: 0, upperBound: 0),
         isA<MidpointRule>(),
+      );
+    });
+
+    test('Other constructors', () {
+      expect(
+        Factorial(),
+        isA<Factorial>(),
       );
     });
   });

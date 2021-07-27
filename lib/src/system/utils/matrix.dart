@@ -262,6 +262,12 @@ abstract class Matrix<T> {
   /// Returns the division of two matrices.
   Matrix<T> operator /(Matrix<T> other);
 
+  /// Returns the transpose of a matrix.
+  ///
+  /// This is an operation that simply flips a matrix over its diagonal (so it
+  /// switches the row and column indices of the matrix to create a new one).
+  Matrix<T> transpose();
+
   /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
   /// sum of elements on the main diagonal (from the upper left to the lower
   /// right).

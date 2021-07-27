@@ -1,9 +1,13 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/real_matrix.dart';
+import 'package:equations/src/utils/factorial.dart';
 
 /// Newton interpolation is an interpolation polynomial for a given set of data
 /// points. It can be expressed using forward or backward divided differences.
 class NewtonInterpolation extends Interpolation {
+  /// Required to compute the factorial of a number.
+  static const _factorial = Factorial();
+
   /// When `true`, the Newton interpolation with forward differences is used.
   /// When `false`, the Newton interpolation with backward differences is used.
   ///
@@ -30,15 +34,6 @@ class NewtonInterpolation extends Interpolation {
     }
   }
 
-  /// Efficiently computes the factorial of a number using a cache.
-  int _factorial(int n) {
-    if (_factorialsCache.containsKey(n)) {
-      return _factorialsCache[n]!;
-    }
-
-    return n * _factorial(n - 1);
-  }
-
   /// Computes the u of the formula, where `u = (x – a)/h`.
   double _computeU(double u, int n) {
     var temp = u;
@@ -55,7 +50,8 @@ class NewtonInterpolation extends Interpolation {
     final u = (x - nodes[0].x) / (nodes[1].x - nodes[0].x);
 
     for (var i = 1; i < differencesTable.rowCount; i++) {
-      sum += (_computeU(u, i) * differencesTable(0, i)) / _factorial(i);
+      final fact = _factorial.compute(i);
+      sum += (_computeU(u, i) * differencesTable(0, i)) / fact;
     }
 
     return sum;
@@ -69,7 +65,8 @@ class NewtonInterpolation extends Interpolation {
     final u = (x - nodes[size].x) / (nodes[1].x - nodes[0].x);
 
     for (var i = 1; i < differencesTable.rowCount; i++) {
-      sum += (_computeU(u, i) * differencesTable(size, i)) / _factorial(i);
+      final fact = _factorial.compute(i);
+      sum += (_computeU(u, i) * differencesTable(size, i)) / fact;
     }
 
     return sum;
@@ -125,27 +122,3 @@ class NewtonInterpolation extends Interpolation {
     return RealMatrix.fromData(columns: size, rows: size, data: table);
   }
 }
-
-final _factorialsCache = <int, int>{
-  0: 1,
-  1: 1,
-  2: 2,
-  3: 6,
-  4: 24,
-  5: 120,
-  6: 720,
-  7: 5040,
-  8: 40320,
-  9: 362880,
-  10: 3628800,
-  11: 39916800,
-  12: 479001600,
-  13: 6227020800,
-  14: 87178291200,
-  15: 1307674368000,
-  16: 20922789888000,
-  17: 355687428096000,
-  18: 6402373705728000,
-  19: 121645100408832000,
-  20: 2432902008176640000,
-};
