@@ -407,6 +407,223 @@ void main() {
       expect(matrix.transposedValue(2, 1), equals(8));
     });
 
+    test('Making sure that the transposed matrix is correct', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [6, 4, 24],
+          [1, -9, 8],
+        ],
+      );
+
+      final transposed = matrix.transpose();
+      expect(transposed(0, 0), equals(6));
+      expect(transposed(0, 1), equals(1));
+      expect(transposed(1, 0), equals(4));
+      expect(transposed(1, 1), equals(-9));
+      expect(transposed(2, 0), equals(24));
+      expect(transposed(2, 1), equals(8));
+
+      // The view must match the actual matrix
+      for (var i = 0; i < matrix.rowCount; ++i) {
+        for (var j = 0; j < matrix.columnCount; ++j) {
+          expect(transposed(i, j), equals(matrix.transposedValue(i, j)));
+        }
+      }
+    });
+
+    test('Making sure that minors are correctly generated', () {
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [2, 3, 1],
+          [0, 5, 6],
+          [1, 1, 2],
+        ],
+      );
+
+      // Removing (0; 0)
+      final minor1 = matrix.minor(0, 0);
+      expect(
+        minor1.flattenData,
+        orderedEquals(
+          [5, 6, 1, 2],
+        ),
+      );
+
+      // Removing (1; 2)
+      final minor2 = matrix.minor(1, 2);
+      expect(
+        minor2.flattenData,
+        orderedEquals(
+          [2, 3, 1, 1],
+        ),
+      );
+
+      // Errors
+      expect(
+        () => matrix.minor(-1, 2),
+        throwsA(isA<MatrixException>()),
+      );
+      expect(
+        () => matrix.minor(11, 2),
+        throwsA(isA<MatrixException>()),
+      );
+    });
+
+    test('Making sure that the cofactor matrix is correctly computed', () {
+      final matrixSize2 = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [4, -5],
+          [7, 3],
+        ],
+      );
+
+      final cofactorMatrixSize2 = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [3, -7],
+          [5, 4],
+        ],
+      );
+
+      expect(matrixSize2.cofactorMatrix(), equals(cofactorMatrixSize2));
+
+      final matrixSize3 = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [2, 8, -3],
+          [0, 6, 1],
+          [-4, 7, 1],
+        ],
+      );
+
+      final cofactorMatrixSize3 = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [-1, -4, 24],
+          [-29, -10, -46],
+          [26, -2, 12],
+        ],
+      );
+
+      expect(matrixSize3.cofactorMatrix(), equals(cofactorMatrixSize3));
+    });
+
+    test(
+        'Making sure that the cofactor matrix is NOT computed if the source '
+        'matrix is NOT square', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 1,
+        data: const [
+          [2],
+          [8],
+        ],
+      );
+
+      expect(() => matrix.cofactorMatrix(), throwsA(isA<MatrixException>()));
+    });
+
+    test(
+        'Making sure that the inverse matrix is NOT computed if the source '
+        'matrix is NOT square', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 1,
+        data: const [
+          [2],
+          [8],
+        ],
+      );
+
+      expect(() => matrix.inverse(), throwsA(isA<MatrixException>()));
+    });
+
+    test('Making sure that the inverse of a 2x2 matrix is correct', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [-4, 2],
+          [1, 3],
+        ],
+      ).inverse();
+
+      expect(
+        matrix(0, 0),
+        const MoreOrLessEquals(-0.214286, precision: 1.0e-6),
+      );
+      expect(
+        matrix(0, 1),
+        const MoreOrLessEquals(0.142857, precision: 1.0e-6),
+      );
+      expect(
+        matrix(1, 0),
+        const MoreOrLessEquals(0.071428, precision: 1.0e-6),
+      );
+      expect(
+        matrix(1, 1),
+        const MoreOrLessEquals(0.285714, precision: 1.0e-6),
+      );
+    });
+
+    test('Making sure that the inverse of a matrix is correct', () {
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [2, -1, 0],
+          [4, 0, 7],
+          [6, 1, 3],
+        ],
+      ).inverse();
+
+      expect(
+        matrix(0, 0),
+        const MoreOrLessEquals(0.159091, precision: 1.0e-6),
+      );
+      expect(
+        matrix(0, 1),
+        const MoreOrLessEquals(-0.068181, precision: 1.0e-6),
+      );
+      expect(
+        matrix(0, 2),
+        const MoreOrLessEquals(0.159091, precision: 1.0e-6),
+      );
+      expect(
+        matrix(1, 0),
+        const MoreOrLessEquals(-0.681818, precision: 1.0e-6),
+      );
+      expect(
+        matrix(1, 1),
+        const MoreOrLessEquals(-0.136364, precision: 1.0e-6),
+      );
+      expect(
+        matrix(1, 2),
+        const MoreOrLessEquals(0.318182, precision: 1.0e-6),
+      );
+      expect(
+        matrix(2, 0),
+        const MoreOrLessEquals(-0.090909, precision: 1.0e-6),
+      );
+      expect(
+        matrix(2, 1),
+        const MoreOrLessEquals(0.181818, precision: 1.0e-6),
+      );
+      expect(
+        matrix(2, 2),
+        const MoreOrLessEquals(-0.090909, precision: 1.0e-6),
+      );
+    });
+
     test('Making sure that the trace is correctly computed', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
@@ -431,6 +648,92 @@ void main() {
       );
 
       expect(() => matrix.trace(), throwsA(isA<MatrixException>()));
+    });
+
+    test('Making sure that eigenvalues can be computed (1x1 matrices)', () {
+      final matrix = RealMatrix.fromData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          [-16],
+        ],
+      );
+
+      final eigenvalues = matrix.eigenValues();
+
+      expect(eigenvalues.length, equals(1));
+      expect(eigenvalues[0], equals(const Complex.fromReal(-16)));
+    });
+
+    test('Making sure that eigenvalues can be computed (2x2 matrices)', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [3, 1],
+          [2, 5],
+        ],
+      );
+
+      final eigenvalues = matrix.eigenValues();
+
+      expect(eigenvalues.length, equals(2));
+      expect(
+        eigenvalues[0].real,
+        const MoreOrLessEquals(5.7320, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[1].real,
+        const MoreOrLessEquals(2.2679, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[0].imaginary,
+        isZero,
+      );
+      expect(
+        eigenvalues[1].imaginary,
+        isZero,
+      );
+    });
+
+    test('Making sure that eigenvalues can be computed (3x3 matrices)', () {
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [3, 1, 6],
+          [-4, 2, 5],
+          [0, 8, 2],
+        ],
+      );
+
+      final eigenvalues = matrix.eigenValues();
+
+      expect(eigenvalues.length, equals(3));
+      expect(
+        eigenvalues[0].real,
+        const MoreOrLessEquals(6.3288, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[1].real,
+        const MoreOrLessEquals(6.3288, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[2].real,
+        const MoreOrLessEquals(-5.6576, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[0].imaginary,
+        const MoreOrLessEquals(3.3997, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[1].imaginary,
+        const MoreOrLessEquals(3.3997, precision: 1.0e-4),
+      );
+      expect(
+        eigenvalues[2].imaginary,
+        equals(const Complex.zero()),
+      );
     });
   });
 }

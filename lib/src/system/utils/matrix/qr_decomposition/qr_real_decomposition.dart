@@ -49,7 +49,9 @@ class QRDecompositionReal extends QRDecomposition<double, RealMatrix> {
             s += matrixQR[i][k] * matrixQR[i][j];
           }
 
-          s = -s / matrixQR[k][k];
+          if (matrixQR[k][k] != 0) {
+            s = -s / matrixQR[k][k];
+          }
 
           for (var i = k; i < rows; i++) {
             matrixQR[i][j] += s * matrixQR[i][k];

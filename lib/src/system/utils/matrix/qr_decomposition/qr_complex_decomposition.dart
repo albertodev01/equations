@@ -46,7 +46,9 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
             s += matrixQR[i][k] * matrixQR[i][j];
           }
 
-          s = -s / matrixQR[k][k];
+          if (matrixQR[k][k] != const Complex.zero()) {
+            s = -s / matrixQR[k][k];
+          }
 
           for (var i = k; i < rows; i++) {
             matrixQR[i][j] += s * matrixQR[i][k];

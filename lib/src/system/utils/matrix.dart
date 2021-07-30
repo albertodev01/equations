@@ -262,11 +262,35 @@ abstract class Matrix<T> {
   /// Returns the division of two matrices.
   Matrix<T> operator /(Matrix<T> other);
 
-  /// Returns the transpose of a matrix.
+  /// Returns the transpose of this matrix.
   ///
   /// This is an operation that simply flips a matrix over its diagonal (so it
   /// switches the row and column indices of the matrix to create a new one).
   Matrix<T> transpose();
+
+  /// A minor of a matrix `A` is the determinant of some smaller square matrix,
+  /// cut down from `A` by removing one or more of its rows and columns.
+  ///
+  /// This function only computes the **first minor**, which is the minor obtained
+  /// by only removing 1 row and 1 column from the source matrix. This is often
+  /// useful to calculate cofactors.
+  Matrix<T> minor(int row, int col);
+
+  /// The matrix formed by all of the cofactors of a square matrix is called the
+  /// "cofactor matrix" (also called "the matrix of cofactors").
+  ///
+  /// In practice, this matrix is obtained by calling [minor(i, j)] for all the
+  /// rows and columns combinations of the matrix.
+  Matrix<T> cofactorMatrix();
+
+  /// Returns the inverse of this matrix.
+  ///
+  /// The inverse of a square matrix `A`, sometimes called a reciprocal matrix,
+  /// is a matrix A<sup>-1</sup> such that "A A<sup>-1</sup> = I" where `I` is
+  /// the identity matrix.
+  ///
+  /// A square matrix has an inverse if and only if the determinant **isn't** 0.
+  Matrix<T> inverse();
 
   /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
   /// sum of elements on the main diagonal (from the upper left to the lower
@@ -281,11 +305,35 @@ abstract class Matrix<T> {
   /// slower.
   T determinant();
 
+  /// Returns the eigenvalues associated to this matrix.
+  ///
+  /// Eigenvalues can only be computed if the matrix is **square**, meaning
+  /// that it must have the same number of columns and rows.
+  List<Complex> eigenValues();
+
   /// Factors the matrix as the product of a lower triangular matrix `L` and
-  /// an upper triangular matrix `U`.
+  /// an upper triangular matrix `U`. The matrix **must** be square.
+  ///
+  /// The returned list contains `L` at index 0 and `U` at index 1.
   List<Matrix<T>> luDecomposition();
 
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into
-  /// the product of a lower triangular matrix and its conjugate transpose.
+  /// the product of a lower triangular matrix and its conjugate transpose. In
+  /// particular, this method returns the `L` and `L`<sup>T</sup> matrices of the
+  ///
+  ///  - A = L x L<sup>T</sup>
+  ///
+  /// relation. The algorithm might fail in case the square root of a negative
+  /// number were encountered.
+  ///
+  /// The returned list contains `L` at index 0 and `L`<sup>T</sup> at index 1.
   List<Matrix<T>> choleskyDecomposition();
+
+  /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
+  /// particular, this method returns the `Q` and `R` matrices of the
+  ///
+  ///  - A = Q x R
+  ///
+  /// relation. The returned list contains `Q` at index 0 and `R` at index 1.
+  List<Matrix<T>> qrDecomposition();
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_complex_decomposition.dart';
 
@@ -77,7 +79,6 @@ class ComplexMatrix extends Matrix<Complex> {
   Complex _getDataAt(List<Complex> source, int row, int col) =>
       source[columnCount * row + col];
 
-  /// Returns the sum of two matrices.
   @override
   Matrix<Complex> operator +(Matrix<Complex> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
@@ -106,7 +107,6 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
-  /// Returns the difference of two matrices.
   @override
   Matrix<Complex> operator -(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
@@ -135,7 +135,6 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
-  /// Returns the product of two matrices.
   @override
   Matrix<Complex> operator *(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
@@ -169,7 +168,6 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
-  /// Returns the division of two matrices in `O(n)` complexity.
   @override
   Matrix<Complex> operator /(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
@@ -199,10 +197,6 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
-  /// Returns the transpose of a matrix.
-  ///
-  /// This is an operation that simply flips a matrix over its diagonal (so it
-  /// switches the row and column indices of the matrix to create a new one).
   @override
   ComplexMatrix transpose() {
     final source = List<Complex>.from(flattenData);
@@ -220,12 +214,114 @@ class ComplexMatrix extends Matrix<Complex> {
     );
   }
 
-  /// The trace can only be computed if the matrix is **square**, meaning that
-  /// it must have the same number of columns and rows.
-  ///
-  /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
-  /// sum of elements on the main diagonal (from the upper left to the lower
-  /// right).
+  @override
+  ComplexMatrix minor(int row, int col) {
+    if (row < 0 || col < 0) {
+      throw const MatrixException('The arguments must be positive!');
+    }
+
+    if (row > rowCount || col > columnCount) {
+      throw const MatrixException('The given (row; col) pair is invalid.');
+    }
+
+    final source = List<List<Complex>>.generate(rowCount - 1, (_) {
+      return List<Complex>.generate(
+        columnCount - 1,
+        (_) => const Complex.zero(),
+      );
+    });
+
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; i != row && j < columnCount; ++j) {
+        if (j != col) {
+          final minorRow = i < row ? i : i - 1;
+          final minorCol = j < col ? j : j - 1;
+
+          source[minorRow][minorCol] = this(i, j);
+        }
+      }
+    }
+
+    return ComplexMatrix.fromData(
+      rows: rowCount - 1,
+      columns: columnCount - 1,
+      data: source,
+    );
+  }
+
+  @override
+  ComplexMatrix cofactorMatrix() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix must be square!');
+    }
+
+    final source = List<List<Complex>>.generate(rowCount, (_) {
+      return List<Complex>.generate(columnCount, (_) => const Complex.zero());
+    });
+
+    // Computing cofactors
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        final sign = Complex.fromReal(pow(-1, i + j) * 1.0);
+        source[i][j] = sign * minor(i, j).determinant();
+      }
+    }
+
+    return ComplexMatrix.fromData(
+      rows: rowCount,
+      columns: columnCount,
+      data: source,
+    );
+  }
+
+  @override
+  ComplexMatrix inverse() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix must be square!');
+    }
+
+    // In case of a 2x2 matrix, we can directly compute it and save computational
+    // time. Note that, from here, we're sure that this matrix is square so no
+    // need to check both the row count and the col count.
+    if (rowCount == 2) {
+      final multiplier = const Complex(1, 0) /
+          (this(0, 0) * this(1, 1) - this(0, 1) * this(1, 0));
+
+      return ComplexMatrix.fromFlattenedData(
+        rows: 2,
+        columns: 2,
+        data: [
+          multiplier * this(1, 1),
+          -multiplier * this(0, 1),
+          -multiplier * this(1, 0),
+          multiplier * this(0, 0),
+        ],
+      );
+    }
+
+    // If the matrix to be inverted is 3x3 or greater, let's use the cofactor
+    // method to compute the inverse. The inverse of a matrix can be computed
+    // like so:
+    //
+    //   A^(-1) = 1 / det(A) * cof(A)^(T)
+    //
+    // where 'det(A)' is the determinant of A and 'cof(A)^T' is the transposed
+    // matrix of the cofactor matrix.
+    final transpose = cofactorMatrix().transpose();
+
+    // Multiplying each number by 1/det(A)
+    final multiplier = const Complex(1, 0) / determinant();
+    final inverse = transpose.flattenData.map((value) {
+      return multiplier * value;
+    }).toList(growable: false);
+
+    return ComplexMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: inverse,
+    );
+  }
+
   @override
   Complex trace() {
     // Making sure that the matrix is squared
@@ -244,19 +340,50 @@ class ComplexMatrix extends Matrix<Complex> {
     return trace;
   }
 
-  /// The determinant can only be computed if the matrix is **square**, meaning
-  /// that it must have the same number of columns and rows.
-  ///
-  /// The determinant of a 1*1, 2*2, 3*3 or 4*4 matrix is efficiently computed.
-  /// Note that for all the other dimensions, the algorithm is exponentially
-  /// slower.
   @override
   Complex determinant() => _computeDeterminant(this);
 
-  /// Factors the matrix as the product of a lower triangular matrix `L` and
-  /// an upper triangular matrix `U`. The matrix **must** be square.
-  ///
-  /// The returned list contains `L` at index 0 and `U` at index 1.
+  @override
+  List<Complex> eigenValues() {
+    // Making sure that the matrix is squared
+    if (!isSquareMatrix) {
+      throw const MatrixException(
+          'Eigenvalues can be computed on square matrices only!');
+    }
+
+    // From now on, we're sure that the matrix is square. If it's 1x1, then the
+    // only eigenvalue is the only value in the matrix.
+    if (rowCount == 1) {
+      return [this(0, 0)];
+    }
+
+    // In case of a 2x2 matrix, there is a direct formula we can use to avoid
+    // The iterations of the QR algorithm.
+    if (rowCount == 2) {
+      final characteristicPolynomial = Quadratic(b: -trace(), c: determinant());
+
+      return characteristicPolynomial.solutions();
+    }
+
+    // For 3x3 matrices and bigger, we use the QR algorithm.
+    var matrix = this;
+    final values = <Complex>[];
+
+    // The QR algorithm simply uses the QR factorization and iterates the product
+    // of R x Q for 'n' steps
+    for (var i = 0; i < 50; ++i) {
+      final qr = matrix.qrDecomposition();
+      matrix = qr[0].transpose() * matrix * qr[0] as ComplexMatrix;
+    }
+
+    // The eigenvalues are the elements in the diagonal
+    for (var i = 0; i < matrix.columnCount; ++i) {
+      values.add(matrix(i, i));
+    }
+
+    return values;
+  }
+
   @override
   List<ComplexMatrix> luDecomposition() {
     // Making sure that the matrix is squared
@@ -321,16 +448,6 @@ class ComplexMatrix extends Matrix<Complex> {
     ];
   }
 
-  /// Uses the the Cholesky decomposition algorithm to factor the matrix into
-  /// the product of a lower triangular matrix and its conjugate transpose. In
-  /// particular, this method returns the `L` and `L`<sup>T</sup> matrices of the
-  ///
-  ///  - A = L x L<sup>T</sup>
-  ///
-  /// relation. The algorithm might fail in case the square root of a negative
-  /// number were encountered.
-  ///
-  /// The returned list contains `L` at index 0 and `L`<sup>T</sup> at index 1.
   @override
   List<ComplexMatrix> choleskyDecomposition() {
     // Making sure that the matrix is squared
@@ -398,12 +515,7 @@ class ComplexMatrix extends Matrix<Complex> {
     ];
   }
 
-  /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
-  /// particular, this method returns the `Q` and `R` matrices of the
-  ///
-  ///  - A = Q x R
-  ///
-  /// relation. The returned list contains `Q` at index 0 and `R` at index 1.
+  @override
   List<ComplexMatrix> qrDecomposition() =>
       QRDecompositionComplex(complexMatrix: this).decompose();
 
