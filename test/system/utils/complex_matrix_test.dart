@@ -547,7 +547,7 @@ void main() {
       expect(matrix.transposedValue(1, 1), equals(const Complex.fromReal(4)));
     });
 
-    test('Making sure that the transposed matrix is correct', () {
+    test('Making sure that the transposed matrix is correct (2x2)', () {
       final matrix = ComplexMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -563,13 +563,21 @@ void main() {
       expect(transposed(0, 1), equals(const Complex.fromReal(3)));
       expect(transposed(1, 0), equals(const Complex.fromReal(2)));
       expect(transposed(1, 1), equals(const Complex.fromReal(4)));
+    });
 
-      // The view must match the actual matrix
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          expect(transposed(i, j), equals(matrix.transposedValue(i, j)));
-        }
-      }
+    test('Making sure that the transposed matrix is correct (1x3)', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 1,
+        columns: 3,
+        data: const [
+          [Complex.i(), Complex(2, -5), Complex.zero()],
+        ],
+      );
+
+      final transposed = matrix.transpose();
+      expect(transposed(0, 0), equals(const Complex.i()));
+      expect(transposed(1, 0), equals(const Complex(2, -5)));
+      expect(transposed(2, 0), equals(const Complex.zero()));
     });
 
     test('Making sure that minors are correctly generated', () {

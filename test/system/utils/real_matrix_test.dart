@@ -365,8 +365,10 @@ void main() {
 
       // Checking Lt
       final transposedL = cholesky[1];
-      expect(transposedL.flattenData,
-          orderedEquals(<double>[5, 3, -1, 0, 3, 1, 0, 0, 3]));
+      expect(
+        transposedL.flattenData,
+        orderedEquals(<double>[5, 3, -1, 0, 3, 1, 0, 0, 3]),
+      );
       expect(transposedL.rowCount, equals(matrix.rowCount));
       expect(transposedL.columnCount, equals(matrix.columnCount));
       expect(transposedL.isSquareMatrix, isTrue);
@@ -407,7 +409,24 @@ void main() {
       expect(matrix.transposedValue(2, 1), equals(8));
     });
 
-    test('Making sure that the transposed matrix is correct', () {
+    test('Making sure that the transposed matrix is correct (2x2)', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [1, 2],
+          [3, 4],
+        ],
+      );
+
+      final transposed = matrix.transpose();
+      expect(transposed(0, 0), equals(1));
+      expect(transposed(0, 1), equals(3));
+      expect(transposed(1, 0), equals(2));
+      expect(transposed(1, 1), equals(4));
+    });
+
+    test('Making sure that the transposed matrix is correct (2x3)', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -424,13 +443,6 @@ void main() {
       expect(transposed(1, 1), equals(-9));
       expect(transposed(2, 0), equals(24));
       expect(transposed(2, 1), equals(8));
-
-      // The view must match the actual matrix
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          expect(transposed(i, j), equals(matrix.transposedValue(i, j)));
-        }
-      }
     });
 
     test('Making sure that minors are correctly generated', () {
@@ -701,9 +713,9 @@ void main() {
         rows: 3,
         columns: 3,
         data: const [
-          [3, 1, 6],
-          [-4, 2, 5],
-          [0, 8, 2],
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
         ],
       );
 
@@ -712,27 +724,27 @@ void main() {
       expect(eigenvalues.length, equals(3));
       expect(
         eigenvalues[0].real,
-        const MoreOrLessEquals(6.3288, precision: 1.0e-4),
+        const MoreOrLessEquals(16.1168, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].real,
-        const MoreOrLessEquals(6.3288, precision: 1.0e-4),
+        const MoreOrLessEquals(-1.1168, precision: 1.0e-4),
       );
       expect(
         eigenvalues[2].real,
-        const MoreOrLessEquals(-5.6576, precision: 1.0e-4),
+        const MoreOrLessEquals(0, precision: 1.0e-4),
       );
       expect(
         eigenvalues[0].imaginary,
-        const MoreOrLessEquals(3.3997, precision: 1.0e-4),
+        const MoreOrLessEquals(0, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].imaginary,
-        const MoreOrLessEquals(3.3997, precision: 1.0e-4),
+        const MoreOrLessEquals(0, precision: 1.0e-4),
       );
       expect(
         eigenvalues[2].imaginary,
-        equals(const Complex.zero()),
+        const MoreOrLessEquals(0, precision: 1.0e-4),
       );
     });
   });

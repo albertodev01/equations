@@ -198,17 +198,17 @@ class RealMatrix extends Matrix<double> {
 
   @override
   RealMatrix transpose() {
-    final source = List<double>.from(flattenData);
+    final source = List<double>.generate(rowCount * columnCount, (_) => 0);
 
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < columnCount; j++) {
-        source[columnCount * j + i] = this(i, j);
+        source[rowCount * j + i] = this(i, j);
       }
     }
 
     return RealMatrix.fromFlattenedData(
-      rows: rowCount,
-      columns: columnCount,
+      rows: columnCount,
+      columns: rowCount,
       data: source,
     );
   }
@@ -343,7 +343,8 @@ class RealMatrix extends Matrix<double> {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-          'Eigenvalues can be computed on square matrices only!');
+        'Eigenvalues can be computed on square matrices only!',
+      );
     }
 
     // From now on, we're sure that the matrix is square. If it's 1x1, then the

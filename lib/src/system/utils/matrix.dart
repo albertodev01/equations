@@ -73,8 +73,9 @@ abstract class Matrix<T> {
 
     // Making sure the size is correct
     if (_data.length != (rows * columns)) {
-      throw const MatrixException("The given sizes don't match the size of the "
-          'data to be inserted.');
+      throw const MatrixException(
+        "The given sizes don't match the size of the data to be inserted.",
+      );
     }
   }
 

@@ -199,17 +199,20 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   ComplexMatrix transpose() {
-    final source = List<Complex>.from(flattenData);
+    final source = List<Complex>.generate(
+      rowCount * columnCount,
+      (_) => const Complex.zero(),
+    );
 
     for (var i = 0; i < rowCount; i++) {
-      for (int j = 0; j < columnCount; j++) {
-        source[columnCount * j + i] = this(i, j);
+      for (var j = 0; j < columnCount; j++) {
+        source[rowCount * j + i] = this(i, j);
       }
     }
 
     return ComplexMatrix.fromFlattenedData(
-      rows: rowCount,
-      columns: columnCount,
+      rows: columnCount,
+      columns: rowCount,
       data: source,
     );
   }
@@ -324,7 +327,6 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   Complex trace() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException('The matrix is not square!');
     }
@@ -345,10 +347,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   List<Complex> eigenValues() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-          'Eigenvalues can be computed on square matrices only!');
+        'Eigenvalues can be computed on square matrices only!',
+      );
     }
 
     // From now on, we're sure that the matrix is square. If it's 1x1, then the
@@ -360,7 +362,10 @@ class ComplexMatrix extends Matrix<Complex> {
     // In case of a 2x2 matrix, there is a direct formula we can use to avoid
     // The iterations of the QR algorithm.
     if (rowCount == 2) {
-      final characteristicPolynomial = Quadratic(b: -trace(), c: determinant());
+      final characteristicPolynomial = Quadratic(
+        b: -trace(),
+        c: determinant(),
+      );
 
       return characteristicPolynomial.solutions();
     }
@@ -373,7 +378,7 @@ class ComplexMatrix extends Matrix<Complex> {
     // of R x Q for 'n' steps
     for (var i = 0; i < 50; ++i) {
       final qr = matrix.qrDecomposition();
-      matrix = qr[0].transpose() * matrix * qr[0] as ComplexMatrix;
+      matrix = qr[1] * qr[0] as ComplexMatrix;
     }
 
     // The eigenvalues are the elements in the diagonal
@@ -389,7 +394,8 @@ class ComplexMatrix extends Matrix<Complex> {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-          'LU decomposition only works with square matrices!');
+        'LU decomposition only works with square matrices!',
+      );
     }
 
     // Creating L and U matrices
