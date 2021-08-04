@@ -705,79 +705,131 @@ void main() {
     });
 
     test('Making sure that the inverse of a 2x2 matrix is correct', () {
-      final matrix = RealMatrix.fromData(
+      final matrix = ComplexMatrix.fromData(
         rows: 2,
         columns: 2,
         data: const [
-          [-4, 2],
-          [1, 3],
+          [Complex.i(), Complex.fromReal(5)],
+          [Complex.fromImaginary(-4), Complex(7, -6)],
         ],
       ).inverse();
 
       expect(
-        matrix(0, 0),
-        const MoreOrLessEquals(-0.214286, precision: 1.0e-6),
+        matrix(0, 0).real,
+        const MoreOrLessEquals(-0.1568, precision: 1.0e-4),
       );
       expect(
-        matrix(0, 1),
-        const MoreOrLessEquals(0.142857, precision: 1.0e-6),
+        matrix(0, 0).imaginary,
+        const MoreOrLessEquals(-0.2941, precision: 1.0e-4),
       );
       expect(
-        matrix(1, 0),
-        const MoreOrLessEquals(0.071428, precision: 1.0e-6),
+        matrix(0, 1).real,
+        const MoreOrLessEquals(-0.0392, precision: 1.0e-4),
       );
       expect(
-        matrix(1, 1),
-        const MoreOrLessEquals(0.285714, precision: 1.0e-6),
+        matrix(0, 1).imaginary,
+        const MoreOrLessEquals(0.1764, precision: 1.0e-4),
+      );
+      expect(
+        matrix(1, 0).real,
+        const MoreOrLessEquals(0.1411, precision: 1.0e-4),
+      );
+      expect(
+        matrix(1, 0).imaginary,
+        const MoreOrLessEquals(0.0313, precision: 1.0e-4),
+      );
+      expect(
+        matrix(1, 1).real,
+        const MoreOrLessEquals(0.0352, precision: 1.0e-4),
+      );
+      expect(
+        matrix(1, 1).imaginary,
+        const MoreOrLessEquals(0.0078, precision: 1.0e-4),
       );
     });
 
     test('Making sure that the inverse of a matrix is correct', () {
-      final matrix = RealMatrix.fromData(
+      final matrix = ComplexMatrix.fromData(
         rows: 3,
         columns: 3,
         data: const [
-          [2, -1, 0],
-          [4, 0, 7],
-          [6, 1, 3],
+          [Complex.fromReal(2), Complex.fromReal(-1), Complex.fromReal(0)],
+          [Complex.fromReal(4), Complex.fromReal(0), Complex.fromReal(7)],
+          [Complex.fromReal(6), Complex.fromReal(1), Complex.fromReal(3)],
         ],
       ).inverse();
 
       expect(
-        matrix(0, 0),
+        matrix(0, 0).real,
         const MoreOrLessEquals(0.159091, precision: 1.0e-6),
       );
       expect(
-        matrix(0, 1),
+        matrix(0, 0).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(0, 1).real,
         const MoreOrLessEquals(-0.068181, precision: 1.0e-6),
       );
       expect(
-        matrix(0, 2),
+        matrix(0, 1).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(0, 2).real,
         const MoreOrLessEquals(0.159091, precision: 1.0e-6),
       );
       expect(
-        matrix(1, 0),
+        matrix(0, 2).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(1, 0).real,
         const MoreOrLessEquals(-0.681818, precision: 1.0e-6),
       );
       expect(
-        matrix(1, 1),
+        matrix(1, 0).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(1, 1).real,
         const MoreOrLessEquals(-0.136364, precision: 1.0e-6),
       );
       expect(
-        matrix(1, 2),
+        matrix(1, 1).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(1, 2).real,
         const MoreOrLessEquals(0.318182, precision: 1.0e-6),
       );
       expect(
-        matrix(2, 0),
+        matrix(1, 2).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(2, 0).real,
         const MoreOrLessEquals(-0.090909, precision: 1.0e-6),
       );
       expect(
-        matrix(2, 1),
+        matrix(2, 0).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(2, 1).real,
         const MoreOrLessEquals(0.181818, precision: 1.0e-6),
       );
       expect(
-        matrix(2, 2),
+        matrix(2, 1).imaginary,
+        isZero,
+      );
+      expect(
+        matrix(2, 2).real,
         const MoreOrLessEquals(-0.090909, precision: 1.0e-6),
+      );
+      expect(
+        matrix(2, 2).imaginary,
+        isZero,
       );
     });
 

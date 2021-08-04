@@ -1,8 +1,12 @@
-## [2.2.0]
+## [3.0.0]
 
  - Dependencies versions update
  - Created the `Interpolation` type to work with points interpolation
  - Added the `LinearInterpolation`, `PolynomialInterpolation` and `NewtonInterpolation` types
+ - Added eigenvalues computation on `Matrix<T>` with the `eigenValues()` method.
+ - Added inverse matrix computation on `Matrix<T>` with the `inverse()` method.
+ - Added cofactor matrix computation on `Matrix<T>` with the `cofactor()` method.
+ - Added minor computation on `Matrix<T>` with the `minor(int row, int col)` method.
 
 ## [2.1.3]
 
