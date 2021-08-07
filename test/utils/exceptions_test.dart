@@ -13,6 +13,7 @@ void main() {
       const systemException = SystemSolverException('Message');
       const integrationException = NumericalIntegrationException('Message');
       const polyLongDivException = PolynomialLongDivisionException('Message');
+      const interpolationException = InterpolationException('Message');
 
       // Objects comparisons
       expect(
@@ -47,6 +48,10 @@ void main() {
         polyLongDivException,
         equals(const PolynomialLongDivisionException('Message')),
       );
+      expect(
+        interpolationException,
+        equals(const InterpolationException('Message')),
+      );
 
       // Checking types
       expect(
@@ -75,6 +80,10 @@ void main() {
       );
       expect(
         integrationException,
+        isNot(polyLongDivException),
+      );
+      expect(
+        interpolationException,
         isNot(polyLongDivException),
       );
 
@@ -112,6 +121,10 @@ void main() {
             const PolynomialLongDivisionException('Message'),
         isTrue,
       );
+      expect(
+        interpolationException == const InterpolationException('Message'),
+        isTrue,
+      );
 
       // Checking hash codes
       expect(
@@ -146,6 +159,10 @@ void main() {
         polyLongDivException.hashCode,
         equals(const PolynomialLongDivisionException('Message').hashCode),
       );
+      expect(
+        interpolationException.hashCode,
+        equals(const InterpolationException('Message').hashCode),
+      );
 
       // Checking messages
       expect(
@@ -172,6 +189,11 @@ void main() {
       expect(
         polyLongDivException ==
             const PolynomialLongDivisionException('Another Message'),
+        isFalse,
+      );
+      expect(
+        interpolationException ==
+            const InterpolationException('Another Message'),
         isFalse,
       );
 
@@ -203,6 +225,10 @@ void main() {
       expect(
         polyLongDivException.messagePrefix,
         equals('PolynomialLongDivisionException'),
+      );
+      expect(
+        interpolationException.messagePrefix,
+        equals('InterpolationException'),
       );
     });
 
@@ -291,6 +317,16 @@ void main() {
       expect(
         '$exception',
         equals('PolynomialLongDivisionException: Exception message'),
+      );
+    });
+
+    test('Making sure "InterpolationException" prints the correct message', () {
+      const exception = InterpolationException('Exception message');
+
+      expect(exception.message, 'Exception message');
+      expect(
+        '$exception',
+        equals('InterpolationException: Exception message'),
       );
     });
   });

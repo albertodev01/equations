@@ -18,6 +18,7 @@ export 'src/interpolation/interpolation.dart';
 export 'src/interpolation/types/linear_interpolation.dart';
 export 'src/interpolation/types/newton_interpolation.dart';
 export 'src/interpolation/types/polynomial_interpolation.dart';
+export 'src/interpolation/types/spline_interpolation.dart';
 export 'src/interpolation/utils/interpolation_node.dart';
 
 export 'src/nonlinear/nonlinear.dart';
@@ -51,6 +52,7 @@ export 'src/utils/complex/polar_complex.dart';
 export 'src/utils/exceptions/exceptions.dart';
 export 'src/utils/exceptions/types/algebraic_exception.dart';
 export 'src/utils/exceptions/types/complex_exception.dart';
+export 'src/utils/exceptions/types/interpolation_exception.dart';
 export 'src/utils/exceptions/types/matrix_exception.dart';
 export 'src/utils/exceptions/types/nonlinear_exception.dart';
 export 'src/utils/exceptions/types/parser_exception.dart';

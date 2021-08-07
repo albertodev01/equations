@@ -38,7 +38,7 @@ class InterpolationNode {
   }
 
   @override
-  String toString() => '($x, $y)';
+  String toString() => '($x; $y)';
 
   /// Prints the [x] and [y] values of this [InterpolationNode] instance with
   /// [fractionDigits] decimal digits. The output produced by this method is the

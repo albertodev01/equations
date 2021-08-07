@@ -13,6 +13,7 @@ void main() {
 
       expect(node.x, equals(1.5));
       expect(node.y, equals(3));
+      expect('$node', equals('(1.5; 3.0)'));
     });
 
     test('Making sure that the instance is correctly converted into a string',
@@ -22,7 +23,7 @@ void main() {
         y: 3.546,
       );
 
-      expect('$node', equals('(1.5, 3.546)'));
+      expect('$node', equals('(1.5; 3.546)'));
       expect(node.toStringAsFixed(2), equals('(1.50, 3.55)'));
     });
 

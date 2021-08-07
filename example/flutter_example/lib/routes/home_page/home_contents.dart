@@ -41,11 +41,14 @@ class HomeContents extends StatelessWidget {
               RouteGenerator.systemPage,
             ),
           ),
-          /*CardContainer(
+          CardContainer(
+            key: const Key('IntegralsLogo-Container'),
             title: context.l10n.integrals,
             image: const IntegralLogo(),
-            onTap: () {},
-          ),*/
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.integralPage,
+            ),
+          ),
         ],
       ),
     );
