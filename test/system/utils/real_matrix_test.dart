@@ -928,6 +928,155 @@ void main() {
       expect(() => matrix.trace(), throwsA(isA<MatrixException>()));
     });
 
+    test('Making sure that symmetric matrices are correctly identified.', () {
+      final symmetric = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [1, 7, 3],
+          [7, 4, 5],
+          [3, 5, 6],
+        ],
+      );
+
+      expect(symmetric.isSymmetric(), isTrue);
+
+      final notSymmetric = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [1, -7, 3],
+          [7, 4, 5],
+          [3, 5, 6],
+        ],
+      );
+
+      expect(notSymmetric.isSymmetric(), isFalse);
+    });
+
+    test('Making sure that diagonal matrices are correctly identified.', () {
+      final diagonal = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [3, 0, 0],
+          [0, 4, 0],
+          [0, 0, 6],
+        ],
+      );
+
+      expect(diagonal.isDiagonal(), isTrue);
+
+      final stillDiagonal = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [3, 0, 0],
+          [0, 4, 0],
+        ],
+      );
+
+      expect(stillDiagonal.isDiagonal(), isTrue);
+
+      final notDiagonal = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [3, 0, 0],
+          [0, 4, 0],
+          [1, 0, 6],
+        ],
+      );
+
+      expect(notDiagonal.isDiagonal(), isFalse);
+    });
+
+    test('Making sure that identity matrices are correctly identified.', () {
+      final diagonal = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [1, 0, 0],
+          [0, 1, 0],
+          [0, 0, 1],
+        ],
+      );
+
+      expect(diagonal.isDiagonal(), isTrue);
+      expect(diagonal.isIdentity(), isTrue);
+
+      final notDiagonal = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [1, 0, 0],
+          [0, -1, 0],
+          [0, 0, 1],
+        ],
+      );
+
+      expect(notDiagonal.isDiagonal(), isTrue);
+      expect(notDiagonal.isIdentity(), isFalse);
+    });
+
+    test('Making sure that identity matrix is only computed when square.', () {
+      final identity = RealMatrix.fromData(
+        rows: 3,
+        columns: 2,
+        data: const [
+          [1, 0],
+          [0, 1],
+          [0, 0],
+        ],
+      );
+
+      expect(() => identity.isIdentity(), throwsA(isA<MatrixException>()));
+    });
+
+    test('Making sure that the rank can correctly be computed.', () {
+      final rank = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [6, -7],
+          [0, 3],
+        ],
+      );
+
+      expect(rank.rank(), equals(2));
+
+      final singularRank = RealMatrix.fromData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          [6]
+        ],
+      );
+
+      expect(singularRank.rank(), equals(1));
+
+      final zeroRank = RealMatrix.fromData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          [0]
+        ],
+      );
+
+      expect(zeroRank.rank(), isZero);
+
+      final rectangular = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [0, 2, 4],
+          [7, -1, 4],
+        ],
+      );
+
+      expect(rectangular.rank(), equals(2));
+    });
+
     test('Making sure that eigenvalues can be computed (1x1 matrices)', () {
       final matrix = RealMatrix.fromData(
         rows: 1,

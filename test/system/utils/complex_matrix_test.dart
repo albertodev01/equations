@@ -846,6 +846,143 @@ void main() {
       expect(matrix.trace(), equals(const Complex(2, -5)));
     });
 
+    test('Making sure that symmetric matrices are correctly identified.', () {
+      final symmetric = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(6), Complex(4, -5), Complex.i()],
+          [Complex(4, -5), Complex.fromReal(41), Complex(-3, 6)],
+          [Complex.i(), Complex(-3, 5), Complex.fromImaginary(3)],
+        ],
+      );
+
+      expect(symmetric.isSymmetric(), isTrue);
+
+      final notSymmetric = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(-6), Complex(4, -5), Complex.i()],
+          [Complex(4, -5), Complex.fromReal(41), Complex(-3, 6)],
+          [Complex.i(), Complex(-3, 5), Complex.fromImaginary(3)],
+        ],
+      );
+
+      expect(notSymmetric.isSymmetric(), isFalse);
+    });
+
+    test('Making sure that diagonal matrices are correctly identified.', () {
+      final diagonal = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(6), Complex.zero(), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(41), Complex.zero()],
+          [Complex.zero(), Complex.zero(), Complex.fromImaginary(3)],
+        ],
+      );
+
+      expect(diagonal.isDiagonal(), isTrue);
+
+      final stillDiagonal = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(6), Complex.zero(), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(41), Complex.zero()],
+        ],
+      );
+
+      expect(stillDiagonal.isDiagonal(), isTrue);
+
+      final notDiagonal = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(6), Complex.zero(), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(41), Complex.zero()],
+          [Complex.i(), Complex.zero(), Complex.fromImaginary(3)],
+        ],
+      );
+
+      expect(notDiagonal.isDiagonal(), isFalse);
+    });
+
+    test('Making sure that identity matrices are correctly identified.', () {
+      final diagonal = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(1), Complex.zero(), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(1), Complex.zero()],
+          [Complex.zero(), Complex.zero(), Complex.fromReal(1)],
+        ],
+      );
+
+      expect(diagonal.isDiagonal(), isTrue);
+      expect(diagonal.isIdentity(), isTrue);
+
+      final notDiagonal = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(1), Complex.zero(), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(1), Complex.zero()],
+          [Complex.zero(), Complex.zero(), Complex.fromReal(-1)],
+        ],
+      );
+
+      expect(notDiagonal.isDiagonal(), isTrue);
+      expect(notDiagonal.isIdentity(), isFalse);
+    });
+
+    test('Making sure that identity matrix is only computed when square.', () {
+      final identity = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(1), Complex.zero(), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(1), Complex.zero()],
+        ],
+      );
+
+      expect(() => identity.isIdentity(), throwsA(isA<MatrixException>()));
+    });
+
+    test('Making sure that the rank can correctly be computed.', () {
+      final rank = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [Complex.fromReal(3), Complex(4, -6)],
+          [Complex(2, -8), Complex.fromImaginary(2)],
+        ],
+      );
+
+      expect(rank.rank(), equals(2));
+
+      final singularRank = ComplexMatrix.fromData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          [Complex.i()]
+        ],
+      );
+
+      expect(singularRank.rank(), equals(1));
+
+      final zeroRank = ComplexMatrix.fromData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          [Complex.zero()]
+        ],
+      );
+
+      expect(zeroRank.rank(), isZero);
+    });
+
     test('Making sure that the trace only computed on square matrices', () {
       final matrix = ComplexMatrix.fromData(
         rows: 2,

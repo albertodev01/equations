@@ -218,21 +218,20 @@ void main() {
         expect(realMatrix.qrDecomposition(), orderedEquals(results));
       });
 
-      test('Making sure that SVD decomposition works on a square matrix', () {
+      test('Making sure that SVD decomposition works on a non-square matrix',
+          () {
         final matrix = ComplexMatrix.fromData(
           rows: 2,
           columns: 2,
           data: const [
-            [Complex(1, 0), Complex(5, 0)],
-            [Complex(7, 0), Complex(-3, 0)],
+            [Complex(1, 0), Complex(5, 0), Complex(3, 0)],
+            [Complex(7, 0), Complex(-3, 0), Complex(5, 0)],
           ],
         );
 
         // Decomposition
         final svd = matrix.singleValueDecomposition();
         expect(svd.length, equals(3));
-
-        print('E=${svd[0]}\n\nU=${svd[1]}\n\nv=${svd[2]}');
       });
     });
 

@@ -375,6 +375,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   int rank() {
+    if (isSquareMatrix && rowCount == 1) {
+      return this(0, 0) == const Complex.zero() ? 0 : 1;
+    }
+
     final lower = luDecomposition()[0];
 
     // Linearly independent columns

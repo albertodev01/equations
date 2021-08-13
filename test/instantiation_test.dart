@@ -48,6 +48,10 @@ void main() {
         PolynomialLongDivisionException('Message'),
         isA<PolynomialLongDivisionException>(),
       );
+      expect(
+        InterpolationException('Message'),
+        isA<InterpolationException>(),
+      );
     });
 
     test('Exception objects comparison', () {
@@ -105,6 +109,10 @@ void main() {
       expect(
         NewtonInterpolation(nodes: nodesList),
         isA<NewtonInterpolation>(),
+      );
+      expect(
+        SplineInterpolation(nodes: nodesList),
+        isA<SplineInterpolation>(),
       );
     });
 

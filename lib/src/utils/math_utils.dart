@@ -23,6 +23,9 @@ mixin MathUtils {
     return first * sqrt(1 + t * t);
   }
 
+  /// Computes sqrt(x^2 + y^2) without under/overflow.
+  ///
+  /// Uses the magnitude (modulo) of [x] and [y].
   Complex complexHypot(Complex x, Complex y) {
     var first = x.abs();
     var second = y.abs();

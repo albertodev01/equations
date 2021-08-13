@@ -352,6 +352,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   bool isIdentity() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix is not square!');
+    }
+
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < columnCount; j++) {
         if ((i != j) && (this(i, j) != 0)) {
@@ -369,6 +373,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   int rank() {
+    if (isSquareMatrix && rowCount == 1) {
+      return this(0, 0) == 0 ? 0 : 1;
+    }
+
     final lower = luDecomposition()[0];
 
     // Linearly independent columns
