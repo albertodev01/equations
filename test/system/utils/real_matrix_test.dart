@@ -1064,17 +1064,6 @@ void main() {
       );
 
       expect(zeroRank.rank(), isZero);
-
-      final rectangular = RealMatrix.fromData(
-        rows: 2,
-        columns: 3,
-        data: const [
-          [0, 2, 4],
-          [7, -1, 4],
-        ],
-      );
-
-      expect(rectangular.rank(), equals(2));
     });
 
     test('Making sure that eigenvalues can be computed (1x1 matrices)', () {

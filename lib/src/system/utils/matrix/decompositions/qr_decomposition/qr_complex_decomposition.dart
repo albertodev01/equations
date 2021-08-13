@@ -1,6 +1,5 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
-import 'package:equations/src/utils/math_utils.dart';
 
 /// QR decomposition, also known as a QR factorization or QU factorization, is
 /// a decomposition of a matrix A into a product `A = QR` of:
@@ -9,8 +8,7 @@ import 'package:equations/src/utils/math_utils.dart';
 ///   - an upper triangular matrix R
 ///
 /// This class performs the QR decomposition on [ComplexMatrix] types.
-class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix>
-    with MathUtils {
+class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
   static const _zero = Complex.zero();
 
   /// Requires the [realMatrix] matrix to be decomposed.
@@ -29,7 +27,7 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix>
       // Compute 2-norm of k-th column.
       var nrm = _zero;
       for (var i = k; i < rows; i++) {
-        nrm = complexHypot(nrm, matrixQR[i][k]);
+        nrm = _complexSideLen(nrm, matrixQR[i][k]);
       }
 
       if (nrm != _zero) {
@@ -123,4 +121,6 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix>
       ComplexMatrix.fromData(rows: columns, columns: columns, data: R),
     ];
   }
+
+  Complex _complexSideLen(Complex a, Complex b) => (a.pow(2) + b.pow(2)).sqrt();
 }

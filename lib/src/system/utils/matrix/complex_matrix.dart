@@ -358,6 +358,10 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   bool isIdentity() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix is not square!');
+    }
+
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < columnCount; j++) {
         if ((i != j) && (this(i, j) != const Complex.zero())) {

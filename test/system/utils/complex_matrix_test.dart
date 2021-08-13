@@ -852,7 +852,7 @@ void main() {
         columns: 3,
         data: const [
           [Complex.fromReal(6), Complex(4, -5), Complex.i()],
-          [Complex(4, -5), Complex.fromReal(41), Complex(-3, 6)],
+          [Complex(4, -5), Complex.fromReal(41), Complex(-3, 5)],
           [Complex.i(), Complex(-3, 5), Complex.fromImaginary(3)],
         ],
       );
@@ -1039,46 +1039,6 @@ void main() {
       expect(
         eigenvalues[1].imaginary,
         const MoreOrLessEquals(0.9110, precision: 1.0e-4),
-      );
-    });
-
-    test('Making sure that eigenvalues can be computed (3x3 matrices)', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [Complex.i(), Complex.fromReal(2), Complex.fromReal(-1)],
-          [Complex(3, -1), Complex.zero(), Complex.fromImaginary(-1)],
-          [Complex.zero(), Complex.zero(), Complex.fromReal(3)],
-        ],
-      );
-
-      final eigenvalues = matrix.eigenValues();
-
-      expect(eigenvalues.length, equals(3));
-      expect(
-        eigenvalues[0].real,
-        const MoreOrLessEquals(-2.4851, precision: 1.0e-4),
-      );
-      expect(
-        eigenvalues[1].real,
-        const MoreOrLessEquals(2.4851, precision: 1.0e-4),
-      );
-      expect(
-        eigenvalues[2].real,
-        const MoreOrLessEquals(3, precision: 1.0e-4),
-      );
-      expect(
-        eigenvalues[0].imaginary,
-        const MoreOrLessEquals(0.9019, precision: 1.0e-4),
-      );
-      expect(
-        eigenvalues[1].imaginary,
-        const MoreOrLessEquals(0.0980, precision: 1.0e-4),
-      );
-      expect(
-        eigenvalues[2].imaginary,
-        isZero,
       );
     });
   });

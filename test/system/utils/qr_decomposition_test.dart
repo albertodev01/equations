@@ -222,7 +222,7 @@ void main() {
           () {
         final matrix = ComplexMatrix.fromData(
           rows: 2,
-          columns: 2,
+          columns: 3,
           data: const [
             [Complex(1, 0), Complex(5, 0), Complex(3, 0)],
             [Complex(7, 0), Complex(-3, 0), Complex(5, 0)],
