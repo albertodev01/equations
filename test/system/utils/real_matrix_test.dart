@@ -233,6 +233,37 @@ void main() {
       ]);
       expect(matrixA / matrixB, equals(matrixDiv));
     });
+
+    test('Making sure that operator* works on non-square matrices.', () {
+      final matrixA = RealMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: [
+          [2, 4],
+          [1, -3],
+        ],
+      );
+
+      final matrixB = RealMatrix.fromData(
+        columns: 3,
+        rows: 2,
+        data: [
+          [6, 0, 4],
+          [-1, 0, 2],
+        ],
+      );
+
+      final matrixMul = RealMatrix.fromData(
+        columns: 3,
+        rows: 2,
+        data: [
+          [8, 0, 16],
+          [9, 0, -2],
+        ],
+      );
+
+      expect(matrixA * matrixB, equals(matrixMul));
+    });
   });
 
   group('Testing the computation of the determinant.', () {
@@ -343,11 +374,15 @@ void main() {
     test(
         'Making sure that Cholesky decomposition properly works on a square '
         'matrix of a given dimension.', () {
-      final matrix = RealMatrix.fromData(rows: 3, columns: 3, data: const [
-        [25, 15, -5],
-        [15, 18, 0],
-        [-5, 0, 11],
-      ]);
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [25, 15, -5],
+          [15, 18, 0],
+          [-5, 0, 11],
+        ],
+      );
 
       // Decomposition
       final cholesky = matrix.choleskyDecomposition();
@@ -389,6 +424,237 @@ void main() {
 
       // Decomposition
       expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
+    });
+
+    test('Making sure that SVD decomposition works on a square matrix', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [1, 5],
+          [7, -3],
+        ],
+      );
+
+      // Decomposition
+      final svd = matrix.singleValueDecomposition();
+      expect(svd.length, equals(3));
+
+      // Checking E
+      final E = svd[0];
+      expect(E.isSquareMatrix, isTrue);
+      expect(
+        E(0, 0),
+        const MoreOrLessEquals(7.73877, precision: 1.0e-5),
+      );
+      expect(
+        E(0, 1),
+        isZero,
+      );
+      expect(
+        E(1, 0),
+        isZero,
+      );
+      expect(
+        E(1, 1),
+        const MoreOrLessEquals(4.91034, precision: 1.0e-5),
+      );
+
+      // Checking U
+      final U = svd[1];
+      expect(U.isSquareMatrix, isTrue);
+      expect(
+        U(0, 0),
+        const MoreOrLessEquals(-0.22975, precision: 1.0e-5),
+      );
+      expect(
+        U(0, 1),
+        const MoreOrLessEquals(0.97324, precision: 1.0e-5),
+      );
+      expect(
+        U(1, 0),
+        const MoreOrLessEquals(0.97324, precision: 1.0e-5),
+      );
+      expect(
+        U(1, 1),
+        const MoreOrLessEquals(0.229753, precision: 1.0e-5),
+      );
+
+      // Checking V
+      final V = svd[2];
+      expect(V.isSquareMatrix, isTrue);
+      expect(
+        V(0, 0),
+        const MoreOrLessEquals(0.85065, precision: 1.0e-5),
+      );
+      expect(
+        V(0, 1),
+        const MoreOrLessEquals(0.52573, precision: 1.0e-5),
+      );
+      expect(
+        V(1, 0),
+        const MoreOrLessEquals(-0.52573, precision: 1.0e-5),
+      );
+      expect(
+        V(1, 1),
+        const MoreOrLessEquals(0.85065, precision: 1.0e-5),
+      );
+
+      // Making sure that U x E x Vt (where Vt is V transposed) equals to the
+      // starting matrix
+      final original = U * E * V.transpose();
+
+      expect(
+        original(0, 0),
+        const MoreOrLessEquals(1, precision: 1.0e-5),
+      );
+      expect(
+        original(0, 1),
+        const MoreOrLessEquals(5, precision: 1.0e-5),
+      );
+      expect(
+        original(1, 0),
+        const MoreOrLessEquals(7, precision: 1.0e-5),
+      );
+      expect(
+        original(1, 1),
+        const MoreOrLessEquals(-3, precision: 1.0e-5),
+      );
+    });
+
+    test('Making sure that SVD decomposition works on a non-square matrix', () {
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 2,
+        data: const [
+          [3, -5],
+          [4, 9],
+          [-2, 1],
+        ],
+      );
+
+      // Decomposition
+      final svd = matrix.singleValueDecomposition();
+      expect(svd.length, equals(3));
+
+      // Checking E
+      final E = svd[0];
+      expect(E.isSquareMatrix, isFalse);
+      expect(E.rowCount, equals(3));
+      expect(E.columnCount, equals(2));
+      expect(
+        E(0, 0),
+        const MoreOrLessEquals(10.55376, precision: 1.0e-5),
+      );
+      expect(
+        E(0, 1),
+        isZero,
+      );
+      expect(
+        E(1, 0),
+        isZero,
+      );
+      expect(
+        E(1, 1),
+        const MoreOrLessEquals(4.96165, precision: 1.0e-5),
+      );
+      expect(
+        E(2, 0),
+        isZero,
+      );
+      expect(
+        E(2, 1),
+        isZero,
+      );
+
+      // Checking U
+      final U = svd[1];
+      expect(U.isSquareMatrix, isTrue);
+      expect(
+        U(0, 0),
+        const MoreOrLessEquals(0.397763, precision: 1.0e-5),
+      );
+      expect(
+        U(0, 1),
+        const MoreOrLessEquals(-0.815641, precision: 1.0e-5),
+      );
+      expect(
+        U(0, 2),
+        const MoreOrLessEquals(0.420135, precision: 1.0e-5),
+      );
+      expect(
+        U(1, 0),
+        const MoreOrLessEquals(-0.916139, precision: 1.0e-5),
+      );
+      expect(
+        U(1, 1),
+        const MoreOrLessEquals(-0.377915, precision: 1.0e-5),
+      );
+      expect(
+        U(1, 2),
+        const MoreOrLessEquals(0.133679, precision: 1.0e-5),
+      );
+      expect(
+        U(2, 0),
+        const MoreOrLessEquals(-0.04974, precision: 1.0e-5),
+      );
+      expect(
+        U(2, 1),
+        const MoreOrLessEquals(0.43807, precision: 1.0e-5),
+      );
+      expect(
+        U(2, 2),
+        const MoreOrLessEquals(0.89756, precision: 1.0e-5),
+      );
+
+      // Checking V
+      final V = svd[2];
+      expect(V.isSquareMatrix, isTrue);
+      expect(
+        V(0, 0),
+        const MoreOrLessEquals(-0.22473, precision: 1.0e-5),
+      );
+      expect(
+        V(0, 1),
+        const MoreOrLessEquals(-0.97442, precision: 1.0e-5),
+      );
+      expect(
+        V(1, 0),
+        const MoreOrLessEquals(-0.97442, precision: 1.0e-5),
+      );
+      expect(
+        V(1, 1),
+        const MoreOrLessEquals(0.22473, precision: 1.0e-5),
+      );
+
+      // Making sure that U x E x Vt (where Vt is V transposed) equals to the
+      // starting matrix
+      final original = U * E * V.transpose();
+
+      expect(
+        original(0, 0),
+        const MoreOrLessEquals(3, precision: 1.0e-5),
+      );
+      expect(
+        original(0, 1),
+        const MoreOrLessEquals(-5, precision: 1.0e-5),
+      );
+      expect(
+        original(1, 0),
+        const MoreOrLessEquals(4, precision: 1.0e-5),
+      );
+      expect(
+        original(1, 1),
+        const MoreOrLessEquals(9, precision: 1.0e-5),
+      );
+      expect(
+        original(2, 0),
+        const MoreOrLessEquals(-2, precision: 1.0e-5),
+      );
+      expect(
+        original(2, 1),
+        const MoreOrLessEquals(1, precision: 1.0e-5),
+      );
     });
 
     test('Making sure that the transposed view is correct', () {

@@ -6,7 +6,9 @@
  - Added eigenvalues computation on `Matrix<T>` with the `eigenValues()` method.
  - Added inverse matrix computation on `Matrix<T>` with the `inverse()` method.
  - Added cofactor matrix computation on `Matrix<T>` with the `cofactor()` method.
+ - Added the `isSymmetric()` method to determine whether a matrix is symmetric or not.
  - Added minor computation on `Matrix<T>` with the `minor(int row, int col)` method.
+ - Added SVD decomposition algorithm to matrix types.
 
 ## [2.1.3]
 

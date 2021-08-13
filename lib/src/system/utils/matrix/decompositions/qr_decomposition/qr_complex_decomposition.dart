@@ -1,6 +1,5 @@
-import 'dart:math';
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
 
 /// QR decomposition, also known as a QR factorization or QU factorization, is
 /// a decomposition of a matrix A into a product `A = QR` of:
@@ -8,48 +7,46 @@ import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_decomposit
 ///   - an orthogonal matrix Q
 ///   - an upper triangular matrix R
 ///
-/// This class performs the QR decomposition on [RealMatrix] types.
-class QRDecompositionReal extends QRDecomposition<double, RealMatrix> {
+/// This class performs the QR decomposition on [ComplexMatrix] types.
+class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
+  static const _zero = Complex.zero();
+
   /// Requires the [realMatrix] matrix to be decomposed.
-  const QRDecompositionReal({
-    required RealMatrix realMatrix,
-  }) : super(matrix: realMatrix);
+  const QRDecompositionComplex({
+    required ComplexMatrix complexMatrix,
+  }) : super(matrix: complexMatrix);
 
   @override
-  List<RealMatrix> decompose() {
+  List<ComplexMatrix> decompose() {
     final matrixQR = matrix.toListOfList();
     final rows = matrix.rowCount;
     final columns = matrix.columnCount;
-    final diagonal = List<double>.generate(columns, (index) => 0.0);
+    final diagonal = List<Complex>.generate(columns, (index) => _zero);
 
     for (var k = 0; k < columns; k++) {
       // Compute 2-norm of k-th column.
-      var nrm = 0.0;
+      var nrm = _zero;
       for (var i = k; i < rows; i++) {
         nrm = hypot(nrm, matrixQR[i][k]);
       }
 
-      if (nrm != 0.0) {
+      if (nrm != _zero) {
         // Form k-th Householder vector.
-        if (matrixQR[k][k] < 0) {
-          nrm = -nrm;
-        }
-
         for (var i = k; i < rows; i++) {
           matrixQR[i][k] /= nrm;
         }
 
-        matrixQR[k][k] += 1.0;
+        matrixQR[k][k] += const Complex.fromReal(1);
 
         // Apply transformation to remaining columns.
         for (var j = k + 1; j < columns; j++) {
-          var s = 0.0;
+          var s = _zero;
 
           for (var i = k; i < rows; i++) {
             s += matrixQR[i][k] * matrixQR[i][j];
           }
 
-          if (matrixQR[k][k] != 0) {
+          if (matrixQR[k][k] != const Complex.zero()) {
             s = -s / matrixQR[k][k];
           }
 
@@ -63,9 +60,12 @@ class QRDecompositionReal extends QRDecomposition<double, RealMatrix> {
     }
 
     // Computing the 'R' matrix
-    final R = List<List<double>>.generate(
+    final R = List<List<Complex>>.generate(
       columns,
-      (index) => List<double>.generate(columns, (index) => 0.0),
+      (index) => List<Complex>.generate(
+        columns,
+        (index) => _zero,
+      ),
     );
 
     for (var i = 0; i < columns; i++) {
@@ -76,28 +76,31 @@ class QRDecompositionReal extends QRDecomposition<double, RealMatrix> {
           if (i == j) {
             R[i][j] = diagonal[i];
           } else {
-            R[i][j] = 0.0;
+            R[i][j] = _zero;
           }
         }
       }
     }
 
     // Get Q
-    final Q = List<List<double>>.generate(
+    final Q = List<List<Complex>>.generate(
       rows,
-      (index) => List<double>.generate(columns, (index) => 0.0),
+      (index) => List<Complex>.generate(
+        columns,
+        (index) => _zero,
+      ),
     );
 
     for (var k = columns - 1; k >= 0; k--) {
       for (var i = 0; i < rows; i++) {
-        Q[i][k] = 0.0;
+        Q[i][k] = _zero;
       }
 
-      Q[k][k] = 1.0;
+      Q[k][k] = const Complex.fromReal(1);
 
       for (var j = k; j < columns; j++) {
-        if (matrixQR[k][k] != 0) {
-          var s = 0.0;
+        if (matrixQR[k][k] != _zero) {
+          var s = _zero;
 
           for (var i = k; i < rows; i++) {
             s += matrixQR[i][k] * Q[i][j];
@@ -114,21 +117,11 @@ class QRDecompositionReal extends QRDecomposition<double, RealMatrix> {
 
     // Returning Q and R
     return [
-      RealMatrix.fromData(rows: rows, columns: columns, data: Q),
-      RealMatrix.fromData(rows: columns, columns: columns, data: R),
+      ComplexMatrix.fromData(rows: rows, columns: columns, data: Q),
+      ComplexMatrix.fromData(rows: columns, columns: columns, data: R),
     ];
   }
 
   @override
-  double hypot(double a, double b) {
-    if (a.abs() > b.abs()) {
-      final r = b / a;
-      return a.abs() * sqrt(1 + r * r);
-    } else if (b != 0) {
-      final r = a / b;
-      return b.abs() * sqrt(1 + r * r);
-    } else {
-      return 0;
-    }
-  }
+  Complex hypot(Complex a, Complex b) => (a.pow(2) + b.pow(2)).sqrt();
 }

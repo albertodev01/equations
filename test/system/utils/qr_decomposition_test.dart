@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_complex_decomposition.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
 import 'package:test/test.dart';
 
 import '../../double_approximation_matcher.dart';
@@ -216,6 +216,23 @@ void main() {
         );
 
         expect(realMatrix.qrDecomposition(), orderedEquals(results));
+      });
+
+      test('Making sure that SVD decomposition works on a square matrix', () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex(1, 0), Complex(5, 0)],
+            [Complex(7, 0), Complex(-3, 0)],
+          ],
+        );
+
+        // Decomposition
+        final svd = matrix.singleValueDecomposition();
+        expect(svd.length, equals(3));
+
+        print('E=${svd[0]}\n\nU=${svd[1]}\n\nv=${svd[2]}');
       });
     });
 

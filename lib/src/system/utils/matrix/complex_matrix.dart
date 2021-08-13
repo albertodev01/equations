@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_complex_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/complex_svd.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
 ///
@@ -343,6 +344,54 @@ class ComplexMatrix extends Matrix<Complex> {
   }
 
   @override
+  bool isDiagonal() {
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        if ((i != j) && (this(i, j) != const Complex.zero())) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  bool isIdentity() {
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        if ((i != j) && (this(i, j) != const Complex.zero())) {
+          return false;
+        }
+
+        if ((i == j) && (this(i, j) != const Complex.fromReal(1))) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  int rank() {
+    final lower = luDecomposition()[0];
+
+    // Linearly independent columns
+    var independentCols = 0;
+
+    for (var i = 0; i < lower.rowCount; ++i) {
+      for (var j = 0; j < lower.columnCount; ++j) {
+        if ((i == j) && (lower(i, j) != const Complex.zero())) {
+          ++independentCols;
+        }
+      }
+    }
+
+    return independentCols;
+  }
+
+  @override
   Complex determinant() => _computeDeterminant(this);
 
   @override
@@ -522,8 +571,14 @@ class ComplexMatrix extends Matrix<Complex> {
   }
 
   @override
-  List<ComplexMatrix> qrDecomposition() =>
-      QRDecompositionComplex(complexMatrix: this).decompose();
+  List<ComplexMatrix> qrDecomposition() => QRDecompositionComplex(
+        complexMatrix: this,
+      ).decompose();
+
+  @override
+  List<ComplexMatrix> singleValueDecomposition() => SVDComplex(
+        complexMatrix: this,
+      ).decompose();
 
   /// Computes the determinant of a 2x2 matrix
   Complex _compute2x2Determinant(ComplexMatrix source) {

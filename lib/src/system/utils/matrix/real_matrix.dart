@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
+import 'package:equations/src/utils/math_utils.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
 ///
@@ -27,7 +29,7 @@ import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_real_decom
 /// Both versions return the same value but the first one is of course less
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
-class RealMatrix extends Matrix<double> {
+class RealMatrix extends Matrix<double> with MathUtils {
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with zeroes.
   ///
@@ -142,8 +144,8 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the product
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
+    final flatMatrix = List<double>.generate(
+      rowCount * other.columnCount,
       (_) => 0.0,
       growable: false,
     );
@@ -152,17 +154,17 @@ class RealMatrix extends Matrix<double> {
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < other.columnCount; j++) {
         var sum = 0.0;
-        for (var k = 0; k < rowCount; k++) {
+        for (var k = 0; k < other.rowCount; k++) {
           sum += this(i, k) * other(k, j);
         }
-        _setDataAt(flatMatrix, i, j, sum);
+        flatMatrix[other.columnCount * i + j] = sum;
       }
     }
 
     // Building the new matrix
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
-      columns: columnCount,
+      columns: other.columnCount,
       data: flatMatrix,
     );
   }
@@ -333,6 +335,54 @@ class RealMatrix extends Matrix<double> {
     }
 
     return trace;
+  }
+
+  @override
+  bool isDiagonal() {
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        if ((i != j) && (this(i, j) != 0)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  bool isIdentity() {
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        if ((i != j) && (this(i, j) != 0)) {
+          return false;
+        }
+
+        if ((i == j) && (this(i, j) != 1)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  int rank() {
+    final lower = luDecomposition()[0];
+
+    // Linearly independent columns
+    var independentCols = 0;
+
+    for (var i = 0; i < lower.rowCount; ++i) {
+      for (var j = 0; j < lower.columnCount; ++j) {
+        if ((i == j) && (lower(i, j) != 0)) {
+          ++independentCols;
+        }
+      }
+    }
+
+    return independentCols;
   }
 
   @override
@@ -516,8 +566,14 @@ class RealMatrix extends Matrix<double> {
   }
 
   @override
-  List<RealMatrix> qrDecomposition() =>
-      QRDecompositionReal(realMatrix: this).decompose();
+  List<RealMatrix> qrDecomposition() => QRDecompositionReal(
+        realMatrix: this,
+      ).decompose();
+
+  @override
+  List<RealMatrix> singleValueDecomposition() => SVDReal(
+        realMatrix: this,
+      ).decompose();
 
   /// Computes the determinant of a 2x2 matrix.
   double _compute2x2Determinant(RealMatrix source) {

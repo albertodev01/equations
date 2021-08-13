@@ -219,6 +219,17 @@ abstract class Matrix<T> {
     return _data[columnCount * row + col];
   }
 
+  /// A symmetric matrix is a square matrix that is equal to its transpose.
+  /// Because equal matrices have equal dimensions, only square matrices can be
+  /// symmetric.
+  bool isSymmetric() {
+    if (isSquareMatrix) {
+      return this == transpose();
+    }
+
+    return false;
+  }
+
   /// Returns the value at ([row], [col]) position as if this matrix were
   /// transposed. For example, let's say we have this matrix object:
   ///
@@ -298,6 +309,23 @@ abstract class Matrix<T> {
   /// right).
   T trace();
 
+  /// A diagonal matrix is a matrix in which the entries outside the main
+  /// diagonal are all zero.
+  bool isDiagonal();
+
+  /// The identity matrix is a square matrix with ones on the main diagonal
+  /// and zeros elsewhere. It is denoted by In, or simply by I i
+  ///
+  /// This method throws if the matrix is **not** square.
+  bool isIdentity();
+
+  /// The **rank** of a matrix `A` is the dimension of the vector space generated
+  /// by its columns. This corresponds to the maximal number of linearly
+  /// independent columns of `A`.
+  ///
+  /// The rank is generally denoted by rank(A) or rk(A).
+  int rank();
+
   /// The determinant can only be computed if the matrix is **square**, meaning
   /// that it must have the same number of columns and rows.
   ///
@@ -337,4 +365,16 @@ abstract class Matrix<T> {
   ///
   /// relation. The returned list contains `Q` at index 0 and `R` at index 1.
   List<Matrix<T>> qrDecomposition();
+
+  /// Computes the `E`, `U` and `V` matrices of the SVD (Single Value
+  /// Decomposition) algorithm. In particular, this method returns the following
+  /// matrices:
+  ///
+  ///  - `E`: rectangular diagonal matrix with positive values on the diagonal;
+  ///  - `U`: a square matrix of size [rowCount]x[rowCount];
+  ///  - `V`: a square matrix of size [columnCount]x[columnCount].
+  ///
+  /// The returned list contains `E` at index 0, `U` at index 1 and `V` at index
+  /// 2.
+  List<Matrix<T>> singleValueDecomposition();
 }

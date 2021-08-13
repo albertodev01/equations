@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
+import 'package:equations/src/utils/math_utils.dart';
 
 /// QR decomposition, also known as a QR factorization or QU factorization, is
 /// a decomposition of a matrix A into a product `A = QR` of:
@@ -7,46 +8,49 @@ import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_decomposit
 ///   - an orthogonal matrix Q
 ///   - an upper triangular matrix R
 ///
-/// This class performs the QR decomposition on [ComplexMatrix] types.
-class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
-  static const _zero = Complex.zero();
-
+/// This class performs the QR decomposition on [RealMatrix] types.
+class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
+    with MathUtils {
   /// Requires the [realMatrix] matrix to be decomposed.
-  const QRDecompositionComplex({
-    required ComplexMatrix complexMatrix,
-  }) : super(matrix: complexMatrix);
+  const QRDecompositionReal({
+    required RealMatrix realMatrix,
+  }) : super(matrix: realMatrix);
 
   @override
-  List<ComplexMatrix> decompose() {
+  List<RealMatrix> decompose() {
     final matrixQR = matrix.toListOfList();
     final rows = matrix.rowCount;
     final columns = matrix.columnCount;
-    final diagonal = List<Complex>.generate(columns, (index) => _zero);
+    final diagonal = List<double>.generate(columns, (index) => 0.0);
 
     for (var k = 0; k < columns; k++) {
       // Compute 2-norm of k-th column.
-      var nrm = _zero;
+      var nrm = 0.0;
       for (var i = k; i < rows; i++) {
         nrm = hypot(nrm, matrixQR[i][k]);
       }
 
-      if (nrm != _zero) {
+      if (nrm != 0.0) {
         // Form k-th Householder vector.
+        if (matrixQR[k][k] < 0) {
+          nrm = -nrm;
+        }
+
         for (var i = k; i < rows; i++) {
           matrixQR[i][k] /= nrm;
         }
 
-        matrixQR[k][k] += const Complex.fromReal(1);
+        matrixQR[k][k] += 1.0;
 
         // Apply transformation to remaining columns.
         for (var j = k + 1; j < columns; j++) {
-          var s = _zero;
+          var s = 0.0;
 
           for (var i = k; i < rows; i++) {
             s += matrixQR[i][k] * matrixQR[i][j];
           }
 
-          if (matrixQR[k][k] != const Complex.zero()) {
+          if (matrixQR[k][k] != 0) {
             s = -s / matrixQR[k][k];
           }
 
@@ -60,12 +64,9 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
     }
 
     // Computing the 'R' matrix
-    final R = List<List<Complex>>.generate(
+    final R = List<List<double>>.generate(
       columns,
-      (index) => List<Complex>.generate(
-        columns,
-        (index) => _zero,
-      ),
+      (index) => List<double>.generate(columns, (index) => 0.0),
     );
 
     for (var i = 0; i < columns; i++) {
@@ -76,31 +77,28 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
           if (i == j) {
             R[i][j] = diagonal[i];
           } else {
-            R[i][j] = _zero;
+            R[i][j] = 0.0;
           }
         }
       }
     }
 
     // Get Q
-    final Q = List<List<Complex>>.generate(
+    final Q = List<List<double>>.generate(
       rows,
-      (index) => List<Complex>.generate(
-        columns,
-        (index) => _zero,
-      ),
+      (index) => List<double>.generate(columns, (index) => 0.0),
     );
 
     for (var k = columns - 1; k >= 0; k--) {
       for (var i = 0; i < rows; i++) {
-        Q[i][k] = _zero;
+        Q[i][k] = 0.0;
       }
 
-      Q[k][k] = const Complex.fromReal(1);
+      Q[k][k] = 1.0;
 
       for (var j = k; j < columns; j++) {
-        if (matrixQR[k][k] != _zero) {
-          var s = _zero;
+        if (matrixQR[k][k] != 0) {
+          var s = 0.0;
 
           for (var i = k; i < rows; i++) {
             s += matrixQR[i][k] * Q[i][j];
@@ -117,11 +115,8 @@ class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
 
     // Returning Q and R
     return [
-      ComplexMatrix.fromData(rows: rows, columns: columns, data: Q),
-      ComplexMatrix.fromData(rows: columns, columns: columns, data: R),
+      RealMatrix.fromData(rows: rows, columns: columns, data: Q),
+      RealMatrix.fromData(rows: columns, columns: columns, data: R),
     ];
   }
-
-  @override
-  Complex hypot(Complex a, Complex b) => (a.pow(2) + b.pow(2)).sqrt();
 }

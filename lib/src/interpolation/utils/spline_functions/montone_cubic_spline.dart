@@ -1,14 +1,13 @@
-import 'dart:math';
-
 import 'package:equations/equations.dart';
 import 'package:equations/src/interpolation/utils/spline_function.dart';
+import 'package:equations/src/utils/math_utils.dart';
 
 /// Represents a monotone cubic spline from a given set of control points.
 ///
 /// The spline is guaranteed to pass through each control point exactly. In
 /// addition, assuming the control points are monotonic, then the interpolated
 /// values will also be monotonic.
-class MonotoneCubicSpline extends SplineFunction {
+class MonotoneCubicSpline extends SplineFunction with MathUtils {
   /// Creates a [MonotoneCubicSpline] instance from the given nodes.
   const MonotoneCubicSpline({
     required List<InterpolationNode> nodes,
@@ -57,7 +56,7 @@ class MonotoneCubicSpline extends SplineFunction {
           );
         }
 
-        final h = _hypot(a, b);
+        final h = hypot(a, b);
 
         if (h > 3) {
           final t = 3 / h;
@@ -98,23 +97,5 @@ class MonotoneCubicSpline extends SplineFunction {
 
     return (nodes[i].y * (1 + 2 * t) + h * nodesM[i] * t) * (1 - t) * (1 - t) +
         (nodes[i + 1].y * (3 - 2 * t) + h * nodesM[i + 1] * (t - 1)) * t * t;
-  }
-
-  /// Computes sqrt(x^2 + y^2) without under/overflow.
-  num _hypot(num x, num y) {
-    var first = x.abs();
-    var second = y.abs();
-
-    if (y > x) {
-      first = y.abs();
-      second = x.abs();
-    }
-
-    if (first == 0.0) {
-      return second;
-    }
-
-    final t = second / first;
-    return first * sqrt(1 + t * t);
   }
 }
