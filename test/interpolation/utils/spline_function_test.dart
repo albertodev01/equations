@@ -34,27 +34,29 @@ void main() {
         'Making sure that "MonotoneCubicSpline" is returned when the given '
         'nodes are monotonic.', () {
       expect(
-          SplineFunction.generate(
-            nodes: const [
-              InterpolationNode(x: 3, y: -2),
-              InterpolationNode(x: 4, y: 1),
-            ],
-          ),
-          isA<MonotoneCubicSpline>());
+        SplineFunction.generate(
+          nodes: const [
+            InterpolationNode(x: 3, y: -2),
+            InterpolationNode(x: 4, y: 1),
+          ],
+        ),
+        isA<MonotoneCubicSpline>(),
+      );
     });
 
     test(
         'Making sure that "MonotoneCubicSpline" is returned when the given '
         'nodes are NOT monotonic.', () {
       expect(
-          SplineFunction.generate(
-            nodes: const [
-              InterpolationNode(x: 3, y: -2),
-              InterpolationNode(x: 4, y: 1),
-              InterpolationNode(x: 7, y: 0),
-            ],
-          ),
-          isA<LinearSpline>());
+        SplineFunction.generate(
+          nodes: const [
+            InterpolationNode(x: 3, y: -2),
+            InterpolationNode(x: 4, y: 1),
+            InterpolationNode(x: 7, y: 0),
+          ],
+        ),
+        isA<LinearSpline>(),
+      );
     });
   });
 }

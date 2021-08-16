@@ -657,6 +657,22 @@ void main() {
       );
     });
 
+    test('Making sure that SVD decomposition works on a non-square matrix 2',
+        () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [3, -5, 1],
+          [4, -3, 9],
+        ],
+      );
+
+      // Decomposition
+      final svd = matrix.singleValueDecomposition();
+      expect(svd.length, equals(3));
+    });
+
     test('Making sure that the transposed view is correct', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
