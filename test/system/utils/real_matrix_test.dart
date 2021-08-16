@@ -657,20 +657,45 @@ void main() {
       );
     });
 
-    test('Making sure that SVD decomposition works on a non-square matrix 2',
-        () {
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 3,
-        data: const [
-          [3, -5, 1],
-          [4, -3, 9],
-        ],
+    test(
+        'Making sure that the SVD algorithm does NOT throw exceptions with '
+        'particular matrices.', () {
+      expect(
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 3,
+          data: const [
+            [3, -5, 1],
+            [4, -3, 9],
+          ],
+        ).singleValueDecomposition(),
+        isA<List<RealMatrix>>(),
       );
 
-      // Decomposition
-      final svd = matrix.singleValueDecomposition();
-      expect(svd.length, equals(3));
+      expect(
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 4,
+          data: const [
+            [0, 3, -5, 1],
+            [4, 0, -3, 9],
+          ],
+        ).singleValueDecomposition(),
+        isA<List<RealMatrix>>(),
+      );
+
+      // Single element
+      final special1x1 = RealMatrix.fromData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          [8],
+        ],
+      ).singleValueDecomposition();
+
+      expect(special1x1[0](0, 0), equals(8));
+      expect(special1x1[1](0, 0), equals(1));
+      expect(special1x1[2](0, 0), equals(1));
     });
 
     test('Making sure that the transposed view is correct', () {
