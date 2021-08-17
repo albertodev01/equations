@@ -17,7 +17,10 @@ void main() {
         ],
       );
 
-      expect('$cubic', equals('(3.0; -6.0), (4.0; -2.0), (5.0; 1.0)'));
+      expect(
+        '$cubic',
+        equals('(3.0; -6.0), (4.0; -2.0), (5.0; 1.0)'),
+      );
 
       expect(cubic.interpolate(8), equals(1));
       expect(cubic.interpolate(-5), equals(-6));
@@ -43,9 +46,9 @@ void main() {
       );
 
       expect(
-          '$cubic',
-          equals(
-              '(-2.0; 0.0), (3.0; 2.0), (4.0; 6.0), (6.0; 7.0), (10.0; 15.0)'));
+        '$cubic',
+        equals('(-2.0; 0.0), (3.0; 2.0), (4.0; 6.0), (6.0; 7.0), (10.0; 15.0)'),
+      );
 
       expect(
         cubic.interpolate(0),

@@ -226,15 +226,7 @@ void main() {
       expect(matrixA * matrixB, equals(matrixMul));
     });
 
-    test('Making sure that operator/ works properly.', () {
-      final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
-        [-1 / 2, 6],
-        [-5 / 7, 0],
-      ]);
-      expect(matrixA / matrixB, equals(matrixDiv));
-    });
-
-    test('Making sure that operator* works on non-square matrices.', () {
+    test('Making sure that operator* works on rectangular matrices too.', () {
       final matrixA = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -263,6 +255,14 @@ void main() {
       );
 
       expect(matrixA * matrixB, equals(matrixMul));
+    });
+
+    test('Making sure that operator/ works properly.', () {
+      final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
+        [-1 / 2, 6],
+        [-5 / 7, 0],
+      ]);
+      expect(matrixA / matrixB, equals(matrixDiv));
     });
   });
 
@@ -675,6 +675,18 @@ void main() {
       expect(
         RealMatrix.fromData(
           rows: 2,
+          columns: 2,
+          data: const [
+            [-3, 0],
+            [0, -3],
+          ],
+        ).singleValueDecomposition(),
+        isA<List<RealMatrix>>(),
+      );
+
+      expect(
+        RealMatrix.fromData(
+          rows: 2,
           columns: 4,
           data: const [
             [0, 3, -5, 1],
@@ -682,6 +694,78 @@ void main() {
           ],
         ).singleValueDecomposition(),
         isA<List<RealMatrix>>(),
+      );
+
+      expect(
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 6,
+          data: const [
+            [0, 3, -5, 1, 0, -1],
+            [4, 0, -3, 9, 0, 0],
+            [4, 5, 0, -1, -2, 1],
+          ],
+        ).singleValueDecomposition(),
+        isA<List<RealMatrix>>(),
+      );
+
+      expect(
+        RealMatrix.fromData(
+          rows: 5,
+          columns: 5,
+          data: const [
+            [-1, 0, 0, 0, 1],
+            [0, -1, 0, 1, 0],
+            [0, 0, 1, 0, 0],
+            [0, 1, 0, -1, 0],
+            [1, 0, 0, 0, -1],
+          ],
+        ).singleValueDecomposition(),
+        isA<List<RealMatrix>>(),
+      );
+
+      // Small values precision
+      expect(
+        RealMatrix.fromData(
+          rows: 5,
+          columns: 4,
+          data: const [
+            [0, 0, 1.0e-4, 4],
+            [0, 0, 0, 0],
+            [0, 0, 1.0e-6, 0],
+            [0, 5, 0, 0],
+            [0, 0, 1.0e-4, 0],
+          ],
+        ).singleValueDecomposition(),
+        isA<List<RealMatrix>>(),
+      );
+
+      // Zeroes
+      final zeroes = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [0, 0],
+          [0, 0],
+        ],
+      );
+      final zeroesSvd = zeroes.singleValueDecomposition();
+
+      expect(
+        zeroesSvd[0],
+        RealMatrix.fromFlattenedData(rows: 2, columns: 2, data: [0, 0, 0, 0]),
+      );
+      expect(
+        zeroesSvd[1],
+        RealMatrix.fromFlattenedData(rows: 2, columns: 2, data: [1, 0, 0, 1]),
+      );
+      expect(
+        zeroesSvd[2],
+        RealMatrix.fromFlattenedData(rows: 2, columns: 2, data: [-1, 0, 0, -1]),
+      );
+      expect(
+        zeroesSvd[0] * zeroesSvd[1] * zeroesSvd[2].transpose(),
+        equals(zeroes),
       );
 
       // Single element

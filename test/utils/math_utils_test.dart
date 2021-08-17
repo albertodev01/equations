@@ -30,11 +30,11 @@ void main() {
       );
       expect(
         demo.complexHypot(const Complex.zero(), const Complex.i()),
-        equals(const Complex.fromReal(1)),
+        equals(const Complex.i()),
       );
       expect(
         demo.complexHypot(const Complex.i(), const Complex.zero()),
-        equals(const Complex.fromReal(1)),
+        equals(const Complex.i()),
       );
       expect(
         demo.complexHypot(const Complex.fromReal(3), const Complex.fromReal(4)),
@@ -47,11 +47,11 @@ void main() {
       );
       expect(
         hypot.real,
-        const MoreOrLessEquals(8.71779, precision: 1.0e-5),
+        const MoreOrLessEquals(-1.43370, precision: 1.0e-5),
       );
       expect(
         hypot.imaginary,
-        isZero,
+        const MoreOrLessEquals(8.36991, precision: 1.0e-5),
       );
     });
   });

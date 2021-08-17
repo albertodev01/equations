@@ -48,7 +48,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
             arrayS[k] = -arrayS[k];
           }
 
-          // Dividing eatch by the k-th element of the values array.
+          // Dividing each by the k-th element of the values array.
           for (int i = k; i < matrix.rowCount; i++) {
             sourceMatrix[i][k] /= arrayS[k];
           }
@@ -150,9 +150,9 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     required List<double> arrayS,
   }) {
     final maxRowCol = max(matrix.rowCount, matrix.columnCount);
-    final nct = min(matrix.rowCount - 1, matrix.columnCount);
+    final nct = min<int>(matrix.rowCount - 1, matrix.columnCount);
 
-    // Generaton of U based on the previous transformations. Works with square
+    // Generation of U based on the previous transformations. Works with square
     // and rectangular matrices.
     for (var j = nct; j < maxRowCol; j++) {
       for (var i = 0; i < matrix.rowCount; i++) {
@@ -195,17 +195,17 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
   /// Generation of the `V` from a bidiagonal source.
   void _generateV({
     required List<List<double>> matrixV,
+    required List<List<double>> matrixU,
     required List<double> arrayS,
     required List<double> arrayE,
   }) {
-    final maxRowCol = max(matrix.rowCount, matrix.columnCount);
     final nrt = max(0, min(matrix.columnCount - 2, matrix.rowCount));
 
-    // Generaton of V based on the previous transformations. Works with square
+    // Generation of V based on the previous transformations. Works with square
     // and rectangular matrices.
     for (var k = matrix.columnCount - 1; k >= 0; k--) {
       if ((k < nrt) && (arrayE[k] != 0.0)) {
-        for (var j = k + 1; j < maxRowCol; j++) {
+        for (var j = k + 1; j < matrixV[0].length; j++) {
           var t = 0.0;
           for (var i = k + 1; i < matrix.columnCount; i++) {
             t += matrixV[i][k] * matrixV[i][j];
@@ -273,6 +273,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     // Setup 3: generating V.
     _generateV(
       matrixV: matrixV,
+      matrixU: matrixU,
       arrayS: arrayS,
       arrayE: arrayE,
     );
@@ -342,7 +343,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
       index++;
 
       // Now that the convergence status is updated, we proceed with different
-      // srategies according with the flag.
+      // strategies according with the flag.
       switch (convergenceStatus) {
         case 1:
           var f = arrayE[p - 2];
@@ -455,7 +456,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
           break;
 
         case 4:
-          // Changing sign to singular values to make the positive.
+          // Changing sign to singular values to make them positive.
           if (arrayS[index] <= 0.0) {
             arrayS[index] = arrayS[index] < 0.0 ? -arrayS[index] : 0.0;
             for (var i = 0; i <= pp; i++) {
@@ -487,6 +488,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
             }
             index++;
           }
+
           step = 0;
           p--;
           break;
@@ -509,16 +511,19 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
 
     // Returning E, U and V.
     return [
+      // E
       RealMatrix.fromData(
         rows: matrix.rowCount,
         columns: matrix.columnCount,
         data: sAsMatrix,
       ),
+      // U
       RealMatrix.fromData(
         rows: matrix.rowCount,
         columns: maxRowCol,
         data: matrixU,
       ),
+      // V
       RealMatrix.fromData(
         rows: matrix.columnCount,
         columns: matrix.columnCount,

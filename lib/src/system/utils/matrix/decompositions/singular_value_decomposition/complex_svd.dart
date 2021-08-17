@@ -43,12 +43,7 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
         }
 
         if (arrayS[k] != const Complex.zero()) {
-          // Fixing the sign.
-          if (sourceMatrix[k][k] < const Complex.zero()) {
-            arrayS[k] = -arrayS[k];
-          }
-
-          // Dividing eatch by the k-th element of the values array.
+          // Dividing each by the k-th element of the values array.
           for (int i = k; i < matrix.rowCount; i++) {
             sourceMatrix[i][k] /= arrayS[k];
           }
@@ -92,9 +87,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
         }
 
         if (arrayE[k] != const Complex.zero()) {
-          if (arrayE[k + 1] < const Complex.zero()) {
-            arrayE[k] = -arrayE[k];
-          }
           for (var i = k + 1; i < matrix.columnCount; i++) {
             arrayE[i] /= arrayE[k];
           }
@@ -198,14 +190,13 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     required List<Complex> arrayS,
     required List<Complex> arrayE,
   }) {
-    final maxRowCol = max(matrix.rowCount, matrix.columnCount);
     final nrt = max(0, min(matrix.columnCount - 2, matrix.rowCount));
 
-    // Generaton of V based on the previous transformations. Works with square
+    // Generation of V based on the previous transformations. Works with square
     // and rectangular matrices.
     for (var k = matrix.columnCount - 1; k >= 0; k--) {
       if ((k < nrt) && (arrayE[k] != const Complex.zero())) {
-        for (var j = k + 1; j < maxRowCol; j++) {
+        for (var j = k + 1; j < matrixV[0].length; j++) {
           var t = const Complex.zero();
           for (var i = k + 1; i < matrix.columnCount; i++) {
             t += matrixV[i][k] * matrixV[i][j];
@@ -415,9 +406,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
 
           if ((b != const Complex.zero()) | (c != const Complex.zero())) {
             shift = (b * b + c).sqrt();
-            if (b < const Complex.zero()) {
-              shift = -shift;
-            }
             shift = c / (b + shift);
           }
           var f = (sk + sp) * (sk - sp) + shift;
@@ -460,11 +448,9 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
           break;
 
         case 4:
-          // Changing sign to singular values to make the positive.
+          // Changing sign to singular values to make them positive.
           if (arrayS[index] <= const Complex.zero()) {
-            arrayS[index] = arrayS[index] < const Complex.zero()
-                ? -arrayS[index]
-                : const Complex.zero();
+            arrayS[index] = const Complex.zero();
             for (var i = 0; i <= pp; i++) {
               matrixV[i][index] = -matrixV[i][index];
             }

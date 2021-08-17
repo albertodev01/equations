@@ -144,8 +144,8 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     // Performing the product
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
+    final flatMatrix = List<Complex>.generate(
+      rowCount * other.columnCount,
       (_) => const Complex.zero(),
       growable: false,
     );
@@ -154,17 +154,17 @@ class ComplexMatrix extends Matrix<Complex> {
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < other.columnCount; j++) {
         var sum = const Complex.zero();
-        for (var k = 0; k < rowCount; k++) {
+        for (var k = 0; k < other.rowCount; k++) {
           sum += this(i, k) * other(k, j);
         }
-        _setDataAt(flatMatrix, i, j, sum);
+        flatMatrix[other.columnCount * i + j] = sum;
       }
     }
 
     // Building the new matrix
     return ComplexMatrix.fromFlattenedData(
       rows: rowCount,
-      columns: columnCount,
+      columns: other.columnCount,
       data: flatMatrix,
     );
   }

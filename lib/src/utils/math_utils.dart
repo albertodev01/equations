@@ -27,19 +27,20 @@ mixin MathUtils {
   ///
   /// Uses the magnitude (modulo) of [x] and [y].
   Complex complexHypot(Complex x, Complex y) {
-    var first = x.abs();
-    var second = y.abs();
+    var first = x;
+    var second = y;
 
     if (y > x) {
-      first = y.abs();
-      second = x.abs();
+      first = y;
+      second = x;
     }
 
-    if (first == 0.0) {
-      return Complex.fromReal(second);
+    if (first == const Complex.zero()) {
+      return second;
     }
 
     final t = second / first;
-    return Complex.fromReal(first * sqrt(1 + t * t));
+    return first * (const Complex.fromReal(1) + (t * t)).sqrt();
+    //return (x.pow(2) + y.pow(2)).sqrt();
   }
 }
