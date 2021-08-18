@@ -172,8 +172,8 @@ void main() {
     });
 
     test(
-        'Making sure that when 2 nodes have the same "y" value, the "nodesM"'
-        ' array manually sets values to zero', () {
+        'Making sure that when 2 nodes have the same "y" value, the "nodesM" '
+        'array manually sets values to zero', () {
       const cubic = MonotoneCubicSpline(
         nodes: [
           InterpolationNode(x: -2, y: 0),
