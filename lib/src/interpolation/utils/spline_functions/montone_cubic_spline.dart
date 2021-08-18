@@ -44,6 +44,7 @@ class MonotoneCubicSpline extends SplineFunction with MathUtils {
     // Updating tangents to preserve monotonicity.
     for (var i = 0; i < nodes.length - 1; i++) {
       if (pointsD[i] == 0) {
+        // When successive 'Y' values are equals, manually set to 0
         nodesM[i] = 0;
         nodesM[i + 1] = 0;
       } else {

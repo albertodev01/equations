@@ -140,6 +140,38 @@ void main() {
     });
 
     test(
+        'Making sure that cubic spline interpolation works correctly (test '
+        'points - set 5).', () {
+      const cubic = MonotoneCubicSpline(
+        nodes: [
+          InterpolationNode(x: 0, y: 0),
+          InterpolationNode(x: 1, y: 1),
+          InterpolationNode(x: 2, y: 6),
+        ],
+      );
+
+      expect(cubic.interpolate(5), equals(6));
+    });
+
+    test('Making sure that Hermite spline interpolation correctly works.', () {
+      const cubic = MonotoneCubicSpline(
+        nodes: [
+          InterpolationNode(x: 1, y: -1),
+          InterpolationNode(x: 5, y: 6),
+          InterpolationNode(x: 13, y: 12),
+        ],
+      );
+
+      expect(cubic.interpolate(5), equals(6));
+      expect(cubic.interpolate(9), equals(9.5));
+
+      // Testing known values
+      expect(cubic.interpolate(1), equals(-1));
+      expect(cubic.interpolate(5), equals(6));
+      expect(cubic.interpolate(13), equals(12));
+    });
+
+    test(
         'Making sure that when 2 nodes have the same "y" value, the "nodesM"'
         ' array manually sets values to zero', () {
       const cubic = MonotoneCubicSpline(
