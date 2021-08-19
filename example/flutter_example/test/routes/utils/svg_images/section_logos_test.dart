@@ -1,10 +1,10 @@
-import 'package:equations_solver/routes/utils/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
-import '../mock_wrapper.dart';
+import '../../mock_wrapper.dart';
 
 void main() {
   group('Making sure that sections logos can be rendered', () {
@@ -86,6 +86,25 @@ void main() {
           wrapper: (child) => MockWrapper(child: child),
           surfaceSize: const Size(100, 100));
       await screenMatchesGolden(tester, 'section_logo_integral');
+    });
+
+    testWidgets("Making sure that 'ToolsLogo' can be rendered", (tester) async {
+      await tester.pumpWidget(const MockWrapper(
+        child: ToolsLogo(),
+      ));
+
+      expect(find.byType(ToolsLogo), findsOneWidget);
+      expect(find.byType(SvgPicture), findsOneWidget);
+    });
+
+    testGoldens('ToolsLogo', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const ToolsLogo());
+
+      await tester.pumpWidgetBuilder(builder.build(),
+          wrapper: (child) => MockWrapper(child: child),
+          surfaceSize: const Size(100, 100));
+      await screenMatchesGolden(tester, 'section_logo_tools');
     });
   });
 }

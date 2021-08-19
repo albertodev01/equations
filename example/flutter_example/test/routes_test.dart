@@ -16,6 +16,8 @@ void main() {
       expect(RouteGenerator.nonlinearPage, equals('/nonlinear'));
       expect(RouteGenerator.systemPage, equals('/system'));
       expect(RouteGenerator.integralPage, equals('/integral'));
+      expect(RouteGenerator.interpolationPage, equals('/interpolation'));
+      expect(RouteGenerator.utilsPage, equals('/utils'));
     });
 
     test('Checking routes health', () {

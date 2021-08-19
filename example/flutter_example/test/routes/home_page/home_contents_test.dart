@@ -3,7 +3,7 @@ import 'package:equations_solver/routes/home_page/home_contents.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
-import 'package:equations_solver/routes/utils/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -15,7 +15,7 @@ void main() {
     testWidgets('Making sure that the widget is rendered', (tester) async {
       await tester.pumpWidget(const MockWrapper(child: HomeContents()));
 
-      expect(find.byType(CardContainer), findsNWidgets(3));
+      expect(find.byType(CardContainer), findsNWidgets(5));
       expect(find.byType(PolynomialLogo), findsOneWidget);
       expect(find.byType(NonlinearLogo), findsOneWidget);
     });
@@ -62,6 +62,20 @@ void main() {
       expect(find.byType(SystemPage), findsOneWidget);
     });
 
+    testWidgets(
+        'Making sure that tapping on the CardContainer widget for '
+        'integrals opens a new route', (tester) async {
+      await tester.pumpWidget(const MockWrapper(child: HomeContents()));
+      final finder = find.byKey(const Key('IntegralsLogo-Container'));
+
+      // Tapping an waiting for the animations to complete
+      await tester.tap(finder);
+      await tester.pumpAndSettle();
+
+      // Expecting to be on the new page
+      // TODO: expect(find.byType(IntegralPage), findsOneWidget);
+    });
+
     testGoldens('HomeContents', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario('', const HomeContents());
@@ -69,7 +83,7 @@ void main() {
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(800, 800),
+        surfaceSize: const Size(400, 700),
       );
       await screenMatchesGolden(tester, 'home_contents');
     });

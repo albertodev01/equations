@@ -62,7 +62,13 @@ abstract class RouteGenerator {
   static const systemPage = '/system';
 
   /// Route name for the integrals page.
-  static const integralPage = '/integrals';
+  static const integralPage = '/integral';
+
+  /// Route name for the interpolation page.
+  static const interpolationPage = '/interpolation';
+
+  /// Route name for the utils page.
+  static const utilsPage = '/utils';
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.
