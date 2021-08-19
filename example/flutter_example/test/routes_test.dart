@@ -1,6 +1,7 @@
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
+import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
@@ -17,7 +18,6 @@ void main() {
       expect(RouteGenerator.systemPage, equals('/system'));
       expect(RouteGenerator.integralPage, equals('/integral'));
       expect(RouteGenerator.interpolationPage, equals('/interpolation'));
-      expect(RouteGenerator.utilsPage, equals('/utils'));
     });
 
     test('Checking routes health', () {
@@ -31,6 +31,7 @@ void main() {
         RouteGenerator.nonlinearPage,
         RouteGenerator.systemPage,
         RouteGenerator.integralPage,
+        RouteGenerator.interpolationPage,
       ];
 
       try {
@@ -80,6 +81,13 @@ void main() {
           name: RouteGenerator.integralPage,
         )),
         isA<MaterialPageRoute<IntegralPage>>(),
+      );
+
+      expect(
+        RouteGenerator.generateRoute(const RouteSettings(
+          name: RouteGenerator.interpolationPage,
+        )),
+        isA<MaterialPageRoute<InterpolationPage>>(),
       );
     });
 

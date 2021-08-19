@@ -68,7 +68,7 @@ class HomeContents extends StatelessWidget {
           CardContainer(
             key: const Key('InterpolationLogo-Container'),
             title: context.l10n.interpolation,
-            image: const IntegralLogo(),
+            image: const InterpolationLogo(),
             onTap: () => _comingSoonDialog(context),
           ),
         ],
