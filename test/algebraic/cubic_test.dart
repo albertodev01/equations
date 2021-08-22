@@ -132,5 +132,75 @@ void main() {
       // Objects inequality
       expect(cubic == cubic.copyWith(b: const Complex.fromReal(7)), isFalse);
     });
+
+    test('Batch tests', () {
+      final equations = [
+        Cubic.realEquation(
+          a: 2,
+          b: 3,
+          c: -11,
+          d: -6,
+        ).solutions(),
+        Cubic(
+          a: const Complex.i(),
+          c: const Complex(-2, 5),
+          d: const Complex.fromReal(7),
+        ).solutions(),
+        Cubic.realEquation(
+          a: -4,
+          c: 8,
+        ).solutions(),
+        Cubic.realEquation(
+          b: 1,
+          c: 1,
+          d: 1,
+        ).solutions(),
+        Cubic(
+          a: const Complex.i(),
+          b: const Complex(5, -8),
+        ).solutions(),
+      ];
+
+      final solutions = <List<Complex>>[
+        const [
+          Complex.fromReal(-3),
+          Complex.fromReal(2),
+          Complex.fromReal(-0.5),
+        ],
+        const [
+          Complex(0.73338, 0.97815),
+          Complex(0.31133, -2.75745),
+          Complex(-1.04472, 1.77929),
+        ],
+        const [
+          Complex.fromReal(1.41421),
+          Complex.fromReal(-1.41421),
+          Complex.zero(),
+        ],
+        const [
+          Complex.fromReal(-1),
+          Complex.fromImaginary(-1),
+          Complex.i(),
+        ],
+        const [
+          Complex.zero(),
+          Complex.zero(),
+          Complex(8, 5),
+        ],
+      ];
+
+      for (var i = 0; i < equations.length; ++i) {
+        for (var j = 0; j < 2; ++j) {
+          expect(
+            equations[i][j].real,
+            MoreOrLessEquals(solutions[i][j].real, precision: 1.0e-5),
+          );
+          expect(
+            equations[i][j].imaginary,
+            MoreOrLessEquals(solutions[i][j].imaginary, precision: 1.0e-5),
+          );
+        }
+      }
+    });
   });
 }

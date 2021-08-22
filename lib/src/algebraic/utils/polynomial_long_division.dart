@@ -40,6 +40,18 @@ class PolynomialLongDivision {
       );
     }
 
+    // If both are constant values, just do a regular 'double' division.
+    if (polyNumerator is Constant && polyDenominator is Constant) {
+      return AlgebraicDivision(
+        quotient: Constant(
+          a: polyNumerator[0] / polyDenominator[0],
+        ),
+        remainder: Constant(
+          a: const Complex.zero(),
+        ),
+      );
+    }
+
     final numerator = List<Complex>.from(polyNumerator.coefficients.reversed);
     final denominator =
         List<Complex>.from(polyDenominator.coefficients.reversed);

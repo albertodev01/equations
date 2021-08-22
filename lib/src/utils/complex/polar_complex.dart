@@ -14,8 +14,11 @@ class PolarComplex implements Comparable<PolarComplex> {
 
   /// The angle [r] is required both in radians ([phiRadians]) and degrees.
   /// ([phiDegrees]).
-  const PolarComplex(
-      {required this.r, required this.phiRadians, required this.phiDegrees});
+  const PolarComplex({
+    required this.r,
+    required this.phiRadians,
+    required this.phiDegrees,
+  });
 
   @override
   String toString() => 'r = $r\n'

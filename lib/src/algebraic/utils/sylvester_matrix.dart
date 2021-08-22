@@ -66,8 +66,8 @@ class SylvesterMatrix {
     return result;
   }
 
-  /// Computes the determinant of the Sylvester matrix.
-  Complex matrixDeterminant() {
+  /// Builds the Sylvester matrix associated to the given polynomial.
+  ComplexMatrix buildMatrix() {
     // Computing the derivative of the polynomial and the size of the matrix
     final derivative = Algebraic.from(_coefficients).derivative().coefficients;
     final size = (_coefficients.length - 1) + (derivative.length - 1);
@@ -99,13 +99,16 @@ class SylvesterMatrix {
       ++pos;
     }
 
-    // Computing the determinant of the Sylvester matrix
+    // Returning the Sylvester matrix.
     return ComplexMatrix.fromFlattenedData(
       rows: size,
       columns: size,
       data: flatData,
-    ).determinant();
+    );
   }
+
+  /// Computes the determinant of the Sylvester matrix.
+  Complex matrixDeterminant() => buildMatrix().determinant();
 
   /// The discriminant of a polynomial P(x) is the determinant of the Sylvester
   /// matrix of P and P' (where P' is the derivative of P).

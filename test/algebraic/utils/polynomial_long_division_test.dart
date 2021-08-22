@@ -111,5 +111,48 @@ void main() {
       expect(results.quotient, equals(Algebraic.fromReal([1])));
       expect(results.remainder, equals(Algebraic.fromReal([0])));
     });
+
+    test('Batch tests', () {
+      final dividends = [
+        Algebraic.fromReal([3, -5, 10, -3]),
+        Algebraic.fromReal([2, -9, 0, 15]),
+        Algebraic.fromReal([1, 5]),
+        Algebraic.fromReal([1, -3, 0]),
+        Algebraic.fromReal([26]),
+      ];
+      final divisors = [
+        Algebraic.fromReal([3, 1]),
+        Algebraic.fromReal([2, -5]),
+        Algebraic.fromReal([1, 5]),
+        Algebraic.fromReal([1, 0, 1]),
+        Algebraic.fromReal([2]),
+      ];
+      final results = [
+        AlgebraicDivision(
+          quotient: Algebraic.fromReal([1, -2, 4]),
+          remainder: Algebraic.fromReal([-7]),
+        ),
+        AlgebraicDivision(
+          quotient: Algebraic.fromReal([1, -2, -5]),
+          remainder: Algebraic.fromReal([-10]),
+        ),
+        AlgebraicDivision(
+          quotient: Algebraic.fromReal([1]),
+          remainder: Algebraic.fromReal([0]),
+        ),
+        AlgebraicDivision(
+          quotient: Algebraic.fromReal([1]),
+          remainder: Algebraic.fromReal([-3, -1]),
+        ),
+        AlgebraicDivision(
+          quotient: Algebraic.fromReal([13]),
+          remainder: Algebraic.fromReal([0]),
+        ),
+      ];
+
+      for (var i = 0; i < results.length; ++i) {
+        expect(dividends[i] / divisors[i], equals(results[i]));
+      }
+    });
   });
 }

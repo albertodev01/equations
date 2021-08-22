@@ -5,12 +5,11 @@ export 'package:fraction/fraction.dart';
 export 'src/algebraic/algebraic.dart';
 export 'src/algebraic/types/constant.dart';
 export 'src/algebraic/types/cubic.dart';
-export 'src/algebraic/types/laguerre.dart';
+export 'src/algebraic/types/durand_kerner.dart';
 export 'src/algebraic/types/linear.dart';
 export 'src/algebraic/types/quadratic.dart';
 export 'src/algebraic/types/quartic.dart';
 export 'src/algebraic/utils/algebraic_division.dart';
-export 'src/algebraic/utils/horner_results.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
 
