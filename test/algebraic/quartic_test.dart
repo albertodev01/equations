@@ -81,9 +81,7 @@ void main() {
         'Making sure that an exception is thrown if the coeff. of the highest'
         ' degree is zero', () {
       expect(
-        () {
-          Quartic(a: const Complex.zero());
-        },
+        () => Quartic(a: const Complex.zero()),
         throwsA(isA<AlgebraicException>()),
       );
     });
@@ -113,11 +111,12 @@ void main() {
       );
 
       final otherFx = Quartic(
-          a: const Complex(3, -6),
-          b: const Complex.fromImaginary(-2),
-          c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
-          d: const Complex.i(),
-          e: const Complex.fromReal(9));
+        a: const Complex(3, -6),
+        b: const Complex.fromImaginary(-2),
+        c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
+        d: const Complex.i(),
+        e: const Complex.fromReal(9),
+      );
 
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
@@ -145,6 +144,85 @@ void main() {
 
       // Objects inequality
       expect(quartic == quartic.copyWith(c: const Complex.zero()), isFalse);
+    });
+
+    test('Batch tests', () {
+      final equations = [
+        Quartic.realEquation(
+          a: 2,
+          b: 1,
+          c: -2,
+          d: 1,
+          e: 7,
+        ).solutions(),
+        Quartic(
+          a: const Complex.fromReal(5),
+          b: const Complex(-5, 12),
+          d: const Complex.fromReal(1),
+        ).solutions(),
+        Quartic.realEquation(
+          a: 5,
+          b: 6,
+          d: -1,
+        ).solutions(),
+        Quartic(
+                a: const Complex(4, -7),
+                b: const Complex(2, 3),
+                d: const Complex.fromReal(2),
+                e: const Complex(10, 1))
+            .solutions(),
+        Quartic(
+          a: const Complex.i(),
+          c: -const Complex.i(),
+          e: const Complex.fromReal(-3),
+        ).solutions(),
+      ];
+
+      final solutions = <List<Complex>>[
+        const [
+          Complex(-1.22152, -0.69349),
+          Complex(-1.22152, 0.69349),
+          Complex(0.97152, -0.91106),
+          Complex(0.97152, 0.91106),
+        ],
+        const [
+          Complex(-0.23979, -0.14190),
+          Complex.zero(),
+          Complex(0.21956, 0.16265),
+          Complex(1.02023, -2.42074),
+        ],
+        const [
+          Complex.fromReal(-1),
+          Complex.fromReal(-0.55826),
+          Complex.zero(),
+          Complex.fromReal(0.35826),
+        ],
+        const [
+          Complex(-0.85119, 0.37549),
+          Complex(-0.46831, -0.97907),
+          Complex(0.51992, 0.88058),
+          Complex(0.99958, -0.67700),
+        ],
+        const [
+          Complex(-1.39765, 0.42028),
+          Complex(-0.56196, -1.04527),
+          Complex(0.56196, 1.04527),
+          Complex(1.39765, -0.42028),
+        ],
+      ];
+
+      for (var i = 0; i < equations.length; ++i) {
+        for (var j = 0; j < equations[i].length; ++j) {
+          expect(
+            equations[i][j].real,
+            MoreOrLessEquals(solutions[i][j].real, precision: 1.0e-5),
+          );
+          expect(
+            equations[i][j].imaginary,
+            MoreOrLessEquals(solutions[i][j].imaginary, precision: 1.0e-5),
+          );
+        }
+      }
     });
   });
 }

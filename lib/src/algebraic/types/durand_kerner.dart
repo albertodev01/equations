@@ -4,12 +4,6 @@ import 'package:equations/equations.dart';
 import 'package:equations/src/algebraic/utils/sylvester_matrix.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
-/// a
-List<double> pr = List<double>.generate(1024, (_) => 0);
-
-/// b
-List<double> pi = List<double>.generate(1024, (_) => 0);
-
 /// The Durand–Kerner method, also known as Weierstrass method, is a root
 /// finding algorithm for solving polynomial equations. With this class, you
 /// can find all the roots of a polynomial of any degree.
@@ -238,26 +232,30 @@ class DurandKerner extends Algebraic with MathUtils {
     final coefficientsLength = coefficients.length;
     final reversedCoefficients = coefficients.reversed.toList();
 
-    if (pr.length < coefficientsLength) {
+    // Buffers for numerators and denominators or real and complex parts.
+    var realBuffer = List<double>.generate(32, (_) => 0);
+    var imaginaryBuffer = List<double>.generate(32, (_) => 0);
+
+    if (realBuffer.length < coefficientsLength) {
       final newLength = _nextPow2(coefficientsLength);
 
-      pr = List<double>.generate(newLength, (_) => 0);
-      pi = List<double>.generate(newLength, (_) => 0);
+      realBuffer = List<double>.generate(newLength, (_) => 0);
+      imaginaryBuffer = List<double>.generate(newLength, (_) => 0);
     }
 
     // Filling the real values auxiliary array.
     for (var i = 0; i < coefficientsLength; ++i) {
-      pr[i] = reversedCoefficients[i].real;
+      realBuffer[i] = reversedCoefficients[i].real;
     }
 
     // Filling the imaginary values auxiliary array.
     for (var i = 0; i < coefficientsLength; ++i) {
-      pi[i] = reversedCoefficients[i].imaginary;
+      imaginaryBuffer[i] = reversedCoefficients[i].imaginary;
     }
 
     // Scaling the various coefficients.
-    var upperReal = pr[coefficientsLength - 1];
-    var upperComplex = pi[coefficientsLength - 1];
+    var upperReal = realBuffer[coefficientsLength - 1];
+    var upperComplex = imaginaryBuffer[coefficientsLength - 1];
     final squareSum = upperReal * upperReal + upperComplex * upperComplex;
 
     upperReal /= squareSum;
@@ -270,15 +268,15 @@ class DurandKerner extends Algebraic with MathUtils {
     final t = upperReal + upperComplex;
 
     for (var i = 0; i < coefficientsLength - 1; ++i) {
-      k1 = upperReal * (pr[i] + pi[i]);
-      k2 = pr[i] * s;
-      k3 = pi[i] * t;
-      pr[i] = k1 - k3;
-      pi[i] = k1 + k2;
+      k1 = upperReal * (realBuffer[i] + imaginaryBuffer[i]);
+      k2 = realBuffer[i] * s;
+      k3 = imaginaryBuffer[i] * t;
+      realBuffer[i] = k1 - k3;
+      imaginaryBuffer[i] = k1 + k2;
     }
 
-    pr[coefficientsLength - 1] = 1.0;
-    pi[coefficientsLength - 1] = 0.0;
+    realBuffer[coefficientsLength - 1] = 1.0;
+    imaginaryBuffer[coefficientsLength - 1] = 0.0;
 
     // Using default values to compute the solutions. If they aren't provided,
     // we will generate default ones.
@@ -289,6 +287,8 @@ class DurandKerner extends Algebraic with MathUtils {
       return _solve(
         realValues: real,
         imaginaryValues: complex,
+        realBuffer: realBuffer,
+        imaginaryBuffer: imaginaryBuffer,
       );
     } else {
       // If we're here, it means that no initial guesses were provided and so we
@@ -302,7 +302,13 @@ class DurandKerner extends Algebraic with MathUtils {
         (_) => 0.0,
       );
 
-      final factor = 0.65 * _bound(coefficientsLength);
+      final factor = 0.65 *
+          _bound(
+            value: coefficientsLength,
+            realBuffer: realBuffer,
+            imaginaryBuffer: imaginaryBuffer,
+          );
+
       final multiplier = math.cos(0.25 * 2 * math.pi);
 
       for (var i = 0; i < coefficientsLength - 1; ++i) {
@@ -313,6 +319,8 @@ class DurandKerner extends Algebraic with MathUtils {
       return _solve(
         realValues: real,
         imaginaryValues: complex,
+        realBuffer: realBuffer,
+        imaginaryBuffer: imaginaryBuffer,
       );
     }
   }
@@ -363,11 +371,18 @@ class DurandKerner extends Algebraic with MathUtils {
   }
 
   /// Returns the maximum magnitude of the complex number, increased by 1.
-  double _bound(int value) {
+  double _bound({
+    required int value,
+    required List<double> realBuffer,
+    required List<double> imaginaryBuffer,
+  }) {
     var bound = 0.0;
 
     for (var i = 0; i < value; ++i) {
-      bound = math.max(bound, pr[i] * pr[i] + pi[i] * pi[i]);
+      final realSquare = realBuffer[i] * realBuffer[i];
+      final imagSquare = imaginaryBuffer[i] * imaginaryBuffer[i];
+
+      bound = math.max(bound, realSquare + imagSquare);
     }
 
     return 1.0 + math.sqrt(bound);
@@ -392,10 +407,13 @@ class DurandKerner extends Algebraic with MathUtils {
   List<Complex> _solve({
     required List<double> realValues,
     required List<double> imaginaryValues,
+    required List<double> realBuffer,
+    required List<double> imaginaryBuffer,
   }) {
-    final n = coefficients.length;
-    final m = realValues.length;
+    final coefficientsLength = coefficients.length;
+    final realValuesLen = realValues.length;
 
+    // Variables setup.
     var pa = 0.0;
     var pb = 0.0;
     var qa = 0.0;
@@ -408,28 +426,30 @@ class DurandKerner extends Algebraic with MathUtils {
     var s1 = 0.0;
     var s2 = 0.0;
 
+    // Main iteration loop of the Durand-Kerner algorithm.
     for (var i = 0; i < maxSteps; ++i) {
       var d = 0.0;
-      for (var j = 0; j < m; ++j) {
-        //Read in zj
+
+      for (var j = 0; j < realValuesLen; ++j) {
         pa = realValues[j];
         pb = imaginaryValues[j];
 
-        //Compute denominator
-        //
-        //  (zj - z0) * (zj - z1) * ... * (zj - z_{n-1})
-        //
+        // Computing the denominator of type (zj - z0) * ... * (zj - z_{n-1}).
         var a = 1.0;
         var b = 1.0;
-        for (var k = 0; k < m; ++k) {
+        for (var k = 0; k < realValuesLen; ++k) {
           if (k == j) {
             continue;
           }
+
           qa = pa - realValues[k];
           qb = pb - imaginaryValues[k];
+
+          // Tolerance test.
           if (qa * qa + qb * qb < precision) {
             continue;
           }
+
           k1 = qa * (a + b);
           k2 = a * (qb - qa);
           k3 = b * (qa + qb);
@@ -437,22 +457,23 @@ class DurandKerner extends Algebraic with MathUtils {
           b = k1 + k2;
         }
 
-        //Compute numerator
-        na = pr[n - 1];
-        nb = pi[n - 1];
+        // Computing the numerator.
+        na = realBuffer[coefficientsLength - 1];
+        nb = imaginaryBuffer[coefficientsLength - 1];
         s1 = pb - pa;
         s2 = pa + pb;
-        for (var k = n - 2; k >= 0; --k) {
+
+        for (var k = coefficientsLength - 2; k >= 0; --k) {
           k1 = pa * (na + nb);
           k2 = na * s1;
           k3 = nb * s2;
-          na = k1 - k3 + pr[k];
-          nb = k1 + k2 + pi[k];
+          na = k1 - k3 + realBuffer[k];
+          nb = k1 + k2 + imaginaryBuffer[k];
         }
 
-        //Compute reciprocal
+        // Computing the reciprocal.
         k1 = a * a + b * b;
-        if (k1.abs() > 1.0e-10) {
+        if (k1.abs() > precision) {
           a /= k1;
           b /= -k1;
         } else {
@@ -460,7 +481,7 @@ class DurandKerner extends Algebraic with MathUtils {
           b = 0.0;
         }
 
-        //Multiply and accumulate
+        // Multiplying and accumulating.
         k1 = na * (a + b);
         k2 = a * (nb - na);
         k3 = b * (na + nb);
@@ -474,20 +495,20 @@ class DurandKerner extends Algebraic with MathUtils {
         d = math.max(d, math.max(qa.abs(), qb.abs()));
       }
 
-      //If converged, exit early
+      // Exiting early if convergence is reached.
       if (d < precision) {
         break;
       }
     }
 
-    //Post process: Combine any repeated roots
+    // Done! Now we need to combine together repeated roots.
     var count = 0.0;
 
-    for (var i = 0; i < m; ++i) {
+    for (var i = 0; i < realValuesLen; ++i) {
       count = 1;
       var a = realValues[i];
       var b = imaginaryValues[i];
-      for (var j = 0; j < m; ++j) {
+      for (var j = 0; j < realValuesLen; ++j) {
         if (i == j) {
           continue;
         }
@@ -505,7 +526,7 @@ class DurandKerner extends Algebraic with MathUtils {
       if (count > 1) {
         a /= count;
         b /= count;
-        for (var j = 0; j < m; ++j) {
+        for (var j = 0; j < realValuesLen; ++j) {
           if (i == j) {
             continue;
           }
@@ -524,15 +545,17 @@ class DurandKerner extends Algebraic with MathUtils {
       }
     }
 
+    // Merging the two real and complex helper arrays into a single list.
     final roots = List<Complex>.generate(
-      n - 1,
+      coefficientsLength - 1,
       (_) => const Complex.zero(),
     );
 
-    for (var i = 0; i < n - 1; ++i) {
+    for (var i = 0; i < coefficientsLength - 1; ++i) {
       roots[i] = Complex(realValues[i], imaginaryValues[i]);
     }
 
+    // The polynomial roots.
     return roots;
   }
 }

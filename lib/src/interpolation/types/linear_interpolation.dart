@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
 
-/// Linear interpolation is a method of curve fitting using linear polynomials
+/// Linear interpolation is a curve fitting method that uses linear polynomials
 /// to construct new data points within the range of a discrete set of known
 /// data points.
 ///
