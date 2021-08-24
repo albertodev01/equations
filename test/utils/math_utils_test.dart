@@ -54,5 +54,13 @@ void main() {
         const MoreOrLessEquals(8.36991, precision: 1.0e-5),
       );
     });
+
+    test("Making sure that the 'log2' method works correctly", () {
+      expect(demo.log2(0), equals(double.negativeInfinity));
+      expect(demo.log2(1), isZero);
+      expect(demo.log2(2), equals(1));
+      expect(demo.log2(8), equals(3));
+      expect(demo.log2(9), const MoreOrLessEquals(3.16992, precision: 1.0e-5));
+    });
   });
 }

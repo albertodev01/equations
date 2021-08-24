@@ -75,8 +75,9 @@ void main() {
       );
     });
 
-    test("Making sure that 'ExpressionParser' works with the 'x' variable.",
-        () {
+    test(
+        "Making sure that 'ExpressionParser' correctly recognizes with the 'x'"
+        ' variable.', () {
       const parser = ExpressionParser();
 
       expect(parser.evaluateOn('6*x + 4', 3), equals(22));
@@ -89,8 +90,7 @@ void main() {
       expect(const ExpressionParser().evaluateOn('6*3 + 4', 0), equals(22));
     });
 
-    test("Making sure that the extension method on 'String' work correctly.",
-        () {
+    test("Making sure that the 'String' extension method works correctly.", () {
       expect('6*3 + 4'.isRealFunction, isTrue);
       expect('6*3 + 4'.isNumericalExpression, isTrue);
       expect('e*x - pi'.isRealFunction, isTrue);

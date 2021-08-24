@@ -110,7 +110,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   Matrix<Complex> operator -(Matrix<Complex> other) {
-    if (columnCount != other.rowCount) {
+    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
       throw const MatrixException('Matrices shapes mismatch! The column count '
           'of the source matrix must match the row count of the other.');
     }
@@ -171,7 +171,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   Matrix<Complex> operator /(Matrix<Complex> other) {
-    if (columnCount != other.rowCount) {
+    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
       throw const MatrixException('Matrices shapes mismatch! The column count '
           'of the source matrix must match the row count of the other.');
     }

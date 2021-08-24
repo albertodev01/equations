@@ -83,7 +83,7 @@ void main() {
         isA<RegulaFalsi>(),
       );
       expect(
-        Secant(function: 'x+1', firstGuess: 0, secondGuess: 0),
+        Secant(function: 'x+1', a: 0, b: 0),
         isA<Secant>(),
       );
       expect(

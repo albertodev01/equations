@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
 
-/// Object returned by a [Complex] which represents the number in polar
+/// The wrapper returned by a [Complex] that represents the number in polar
 /// coordinates.
 class PolarComplex implements Comparable<PolarComplex> {
   /// The absolute value/modulus of the complex number.
@@ -44,9 +44,11 @@ class PolarComplex implements Comparable<PolarComplex> {
   @override
   int get hashCode {
     var result = 83;
+
     result = 37 * result + r.hashCode;
     result = 37 * result + phiDegrees.hashCode;
     result = 37 * result + phiRadians.hashCode;
+
     return result;
   }
 

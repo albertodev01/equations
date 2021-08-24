@@ -211,12 +211,52 @@ void main() {
     ]);
 
     test('Making sure that operator+ works properly.', () {
-      final matrixSum =
-          ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
-        [Complex(5, 1), Complex(-4, -7)],
-        [Complex(4, 13), Complex(1, 1)],
-      ]);
+      final matrixSum = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: const [
+          [Complex(5, 1), Complex(-4, -7)],
+          [Complex(4, 13), Complex(1, 1)],
+        ],
+      );
       expect(matrixA + matrixB, equals(matrixSum));
+    });
+
+    test('Making sure that operator+ works on rectangular matrices too.', () {
+      final matrixA = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: const [
+          [Complex.i(), Complex.fromReal(-1)],
+          [Complex(4, -1), Complex.fromReal(9)],
+          [Complex(5, 2), Complex(6, -3)],
+        ],
+      );
+
+      final matrixB = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: const [
+          [Complex.fromReal(3), Complex.fromImaginary(4)],
+          [Complex.fromImaginary(-1), Complex.fromReal(5)],
+          [Complex(2, 2), Complex(2, -2)],
+        ],
+      );
+
+      expect(
+        matrixA + matrixB,
+        equals(
+          ComplexMatrix.fromData(
+            columns: 2,
+            rows: 3,
+            data: const [
+              [Complex(3, 1), Complex(-1, 4)],
+              [Complex(4, -2), Complex.fromReal(14)],
+              [Complex(7, 4), Complex(8, -5)],
+            ],
+          ),
+        ),
+      );
     });
 
     test('Making sure that operator- works properly.', () {
@@ -229,6 +269,43 @@ void main() {
         ],
       );
       expect(matrixA - matrixB, equals(matrixSub));
+    });
+
+    test('Making sure that operator- works on rectangular matrices too.', () {
+      final matrixA = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: const [
+          [Complex.i(), Complex.fromReal(-1)],
+          [Complex(4, -1), Complex.fromReal(9)],
+          [Complex(5, 2), Complex(6, -3)],
+        ],
+      );
+
+      final matrixB = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: const [
+          [Complex.fromReal(3), Complex.fromImaginary(4)],
+          [Complex.fromImaginary(-1), Complex.fromReal(5)],
+          [Complex(2, 2), Complex(2, -2)],
+        ],
+      );
+
+      expect(
+        matrixA - matrixB,
+        equals(
+          ComplexMatrix.fromData(
+            columns: 2,
+            rows: 3,
+            data: const [
+              [Complex(-3, 1), Complex(-1, -4)],
+              [Complex.fromReal(4), Complex.fromReal(4)],
+              [Complex.fromReal(3), Complex(4, -1)],
+            ],
+          ),
+        ),
+      );
     });
 
     test('Making sure that operator* works properly.', () {
@@ -299,6 +376,43 @@ void main() {
       expect(
         divResult(0, 1).imaginary,
         const MoreOrLessEquals(53 / 50, precision: 1.0e-3),
+      );
+    });
+
+    test('Making sure that operator/ works on rectangular matrices too.', () {
+      final matrixA = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: const [
+          [Complex.i(), Complex.fromReal(-1)],
+          [Complex(4, -1), Complex.fromReal(9)],
+          [Complex(5, 2), Complex(6, -3)],
+        ],
+      );
+
+      final matrixB = ComplexMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: const [
+          [Complex.fromReal(3), Complex.fromImaginary(4)],
+          [Complex.fromImaginary(-1), Complex.fromReal(5)],
+          [Complex(2, 2), Complex(2, -2)],
+        ],
+      );
+
+      expect(
+        matrixA / matrixB,
+        equals(
+          ComplexMatrix.fromData(
+            columns: 2,
+            rows: 3,
+            data: const [
+              [Complex.fromImaginary(1 / 3), Complex.fromImaginary(1 / 4)],
+              [Complex(1, 4), Complex.fromReal(9 / 5)],
+              [Complex(7 / 4, -3 / 4), Complex(9 / 4, 3 / 4)],
+            ],
+          ),
+        ),
       );
     });
   });

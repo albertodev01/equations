@@ -82,8 +82,7 @@ void main() {
     });
 
     group('Real values', () {
-      test('Making sure that QRDecompositionReal works properly - Example 1',
-          () {
+      test('Making sure that QRDecompositionReal works properly - Test 1', () {
         final sourceMatrix = RealMatrix.fromData(
           rows: 2,
           columns: 2,
@@ -153,8 +152,7 @@ void main() {
         expect(sourceMatrix.toString(), equals(realQR.toString()));
       });
 
-      test('Making sure that QRDecompositionReal works properly - Example 2',
-          () {
+      test('Making sure that QRDecompositionReal works properly - Test 2', () {
         final realQR = QRDecompositionReal(
           realMatrix: RealMatrix.fromData(
             rows: 4,
@@ -203,7 +201,6 @@ void main() {
         expect(matrixR(2, 1), const MoreOrLessEquals(0, precision: 0.1));
         expect(matrixR(2, 2), const MoreOrLessEquals(-4, precision: 0.1));
 
-        // Smoke on the RealMatrix method
         final realMatrix = RealMatrix.fromData(
           rows: 4,
           columns: 3,
@@ -216,22 +213,6 @@ void main() {
         );
 
         expect(realMatrix.qrDecomposition(), orderedEquals(results));
-      });
-
-      test('Making sure that SVD decomposition works on a non-square matrix',
-          () {
-        final matrix = ComplexMatrix.fromData(
-          rows: 2,
-          columns: 3,
-          data: const [
-            [Complex(1, 0), Complex(5, 0), Complex(3, 0)],
-            [Complex(7, 0), Complex(-3, 0), Complex(5, 0)],
-          ],
-        );
-
-        // Decomposition
-        final svd = matrix.singleValueDecomposition();
-        expect(svd.length, equals(3));
       });
     });
 
@@ -361,7 +342,6 @@ void main() {
           const MoreOrLessEquals(0, precision: 1.0e-1),
         );
 
-        // Smoke on the RealMatrix method
         final complexMatrix = ComplexMatrix.fromData(
           rows: 2,
           columns: 2,

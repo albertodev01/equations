@@ -5,8 +5,7 @@ import '../double_approximation_matcher.dart';
 
 void main() {
   group("Testing the 'PolynomialInterpolation' type", () {
-    test(
-        "Making sure that a 'PolynomialInterpolation' object is properly constructed",
+    test("Making sure that 'PolynomialInterpolation' is properly constructed",
         () {
       const interpolation = PolynomialInterpolation(
         nodes: [
@@ -72,6 +71,28 @@ void main() {
         a: 5 / 6,
         b: 3 / 2,
         c: -14 / 6,
+      );
+      expect(interpolation.buildPolynomial(), equals(expected));
+    });
+
+    test('Making sure that the interpolating poly is correctly generated (3)',
+        () {
+      const interpolation = PolynomialInterpolation(
+        nodes: [
+          InterpolationNode(x: 2, y: 2),
+          InterpolationNode(x: 3, y: 6),
+          InterpolationNode(x: 4, y: 5),
+          InterpolationNode(x: 5, y: 5),
+          InterpolationNode(x: 6, y: 6),
+        ],
+      );
+
+      final expected = Quartic.realEquation(
+        a: -0.25,
+        b: 4.5,
+        c: -29.25,
+        d: 81,
+        e: -75,
       );
       expect(interpolation.buildPolynomial(), equals(expected));
     });

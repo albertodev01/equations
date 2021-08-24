@@ -14,11 +14,8 @@ void main() {
       expect(results.result, equals(5.28));
     });
 
-    test(
-        'Making sure that IntegralResults is properly converted into a '
-        'string.', () {
-      const strResult = 'Result: 5.28\n'
-          'Guesses: 3 computed';
+    test('Making sure that "IntegralResults" overrides "toString()".', () {
+      const strResult = 'Result: 5.28\nGuesses: 3 computed';
 
       expect(results.toString(), equals(strResult));
     });

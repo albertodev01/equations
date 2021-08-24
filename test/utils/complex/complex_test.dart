@@ -390,7 +390,9 @@ void main() {
 
       expect(negativePhaseRoot.real.round(), -1);
       expect(
-          negativePhaseRoot.imaginary, const MoreOrLessEquals(0.899453719973));
+        negativePhaseRoot.imaginary,
+        const MoreOrLessEquals(0.899453719973),
+      );
     });
 
     test("Making sure that the 'power' operation properly works", () {

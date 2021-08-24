@@ -210,12 +210,86 @@ void main() {
       expect(matrixA + matrixB, equals(matrixSum));
     });
 
+    test('Making sure that operator+ works on rectangular matrices too.', () {
+      final matrixA = RealMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: [
+          [4, -1],
+          [1, 9],
+          [6, 5],
+        ],
+      );
+
+      final matrixB = RealMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: [
+          [3, 1],
+          [-1, 5],
+          [4, 9],
+        ],
+      );
+
+      expect(
+        matrixA + matrixB,
+        equals(
+          RealMatrix.fromData(
+            columns: 2,
+            rows: 3,
+            data: [
+              [7, 0],
+              [0, 14],
+              [10, 14],
+            ],
+          ),
+        ),
+      );
+    });
+
     test('Making sure that operator- works properly.', () {
       final matrixSub = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
         [-12, 3],
       ]);
       expect(matrixA - matrixB, equals(matrixSub));
+    });
+
+    test('Making sure that operator- works on rectangular matrices too.', () {
+      final matrixA = RealMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: [
+          [4, -1],
+          [1, 9],
+          [6, 5],
+        ],
+      );
+
+      final matrixB = RealMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: [
+          [3, 0],
+          [-1, 5],
+          [4, 9],
+        ],
+      );
+
+      expect(
+        matrixA - matrixB,
+        equals(
+          RealMatrix.fromData(
+            columns: 2,
+            rows: 3,
+            data: [
+              [1, -1],
+              [2, 4],
+              [2, -4],
+            ],
+          ),
+        ),
+      );
     });
 
     test('Making sure that operator* works properly.', () {
@@ -263,6 +337,43 @@ void main() {
         [-5 / 7, 0],
       ]);
       expect(matrixA / matrixB, equals(matrixDiv));
+    });
+
+    test('Making sure that operator/ works on rectangular matrices too.', () {
+      final matrixA = RealMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: [
+          [4, -1],
+          [1, 9],
+          [6, 5],
+        ],
+      );
+
+      final matrixB = RealMatrix.fromData(
+        columns: 2,
+        rows: 3,
+        data: [
+          [3, 1],
+          [-1, 5],
+          [4, 9],
+        ],
+      );
+
+      expect(
+        matrixA / matrixB,
+        equals(
+          RealMatrix.fromData(
+            columns: 2,
+            rows: 3,
+            data: [
+              [4 / 3, -1],
+              [-1, 9 / 5],
+              [3 / 2, 5 / 9],
+            ],
+          ),
+        ),
+      );
     });
   });
 
@@ -312,7 +423,9 @@ void main() {
         [7, 0, 3, -4, 1],
       ]);
       expect(
-          matrix.determinant(), const MoreOrLessEquals(-28398, precision: 0.1));
+        matrix.determinant(),
+        const MoreOrLessEquals(-28398, precision: 0.1),
+      );
     });
   });
 
@@ -356,8 +469,8 @@ void main() {
     });
 
     test(
-        "Making sure that the LU decomposition properly doesn't work when "
-        'the matrix is not square.', () {
+        "Making sure that the LU decomposition doesn't work when the matrix "
+        'is not square.', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -410,8 +523,8 @@ void main() {
     });
 
     test(
-        "Making sure that the Cholesky decomposition properly doesn't work "
-        'when the matrix is not square.', () {
+        "Making sure that the Cholesky decomposition doesn't work when the "
+        'matrix is not square.', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 2,

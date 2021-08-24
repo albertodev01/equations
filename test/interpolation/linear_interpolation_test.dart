@@ -5,9 +5,7 @@ import '../double_approximation_matcher.dart';
 
 void main() {
   group("Testing the 'LinearInterpolation' type", () {
-    test(
-        "Making sure that a 'LinearInterpolation' object is properly constructed",
-        () {
+    test("Making sure that 'LinearInterpolation' is properly constructed", () {
       final interpolation = LinearInterpolation(
         nodes: const [
           InterpolationNode(x: 1, y: 3),
