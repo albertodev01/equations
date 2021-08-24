@@ -203,6 +203,33 @@ void main() {
 
       expect(fx == notEqual, isFalse);
       expect(fx.hashCode == notEqual.hashCode, isFalse);
+
+      expect(
+        DurandKerner(
+          coefficients: const [
+            Complex(3, -2),
+            Complex.zero(),
+            Complex.fromReal(7),
+          ],
+          initialGuess: const [
+            Complex(3, 2),
+            Complex.fromImaginary(8),
+          ],
+        ),
+        equals(
+          DurandKerner(
+            coefficients: const [
+              Complex(3, -2),
+              Complex.zero(),
+              Complex.fromReal(7),
+            ],
+            initialGuess: const [
+              Complex(3, 2),
+              Complex.fromImaginary(8),
+            ],
+          ),
+        ),
+      );
     });
 
     test("Making sure that 'copyWith' clones objects correctly", () {
@@ -261,9 +288,14 @@ void main() {
           Complex.zero(),
           Complex(1, -6),
         ]).solutions(),
-        DurandKerner.realEquation(
-          coefficients: [1, 2, 1],
-        ).solutions(),
+        DurandKerner.realEquation(coefficients: [
+          1,
+          2,
+          1
+        ], initialGuess: const [
+          Complex.fromReal(-2),
+          Complex.fromReal(-2),
+        ]).solutions(),
       ];
 
       final solutions = <List<Complex>>[
