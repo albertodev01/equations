@@ -85,8 +85,8 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
         case BracketingMethods.secant:
           solver = Secant(
             function: evt.function,
-            firstGuess: lower,
-            secondGuess: upper,
+            a: lower,
+            b: upper,
             maxSteps: evt.maxIterations,
             tolerance: evt.precision,
           );

@@ -25,13 +25,16 @@ void main() {
       expect(equation.isRealEquation, isTrue);
       expect(equation.discriminant(), equals(const Complex.fromReal(-1687)));
       expect(
-          equation.coefficients,
-          equals(const [
+        equation.coefficients,
+        equals(
+          const [
             Complex.fromReal(-1),
             Complex.zero(),
             Complex.fromReal(5),
             Complex.fromReal(-9),
-          ]));
+          ],
+        ),
+      );
 
       // Making sure that coefficients can be accessed via index
       expect(equation[0], equals(const Complex.fromReal(-1)));

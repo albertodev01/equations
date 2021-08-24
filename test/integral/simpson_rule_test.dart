@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
-import '../../../double_approximation_matcher.dart';
+import '../double_approximation_matcher.dart';
 
 void main() {
   late final SimpsonRule simpson;
@@ -74,22 +74,35 @@ void main() {
       );
     });
 
-    test(
-        'Making sure that the SimpsonRule can properly be used along '
-        "with a 'Nonlinear' instance", () {
-      // The type doesn't actually matter, 'Bisection' has been chosen randomly
-      // because any 'Nonlinear' instance shares the SAME implementation of the
-      // 'integrateOn' method.
-      const bisection = Bisection(function: 'x^3+2*x-1.2', a: 0, b: 3);
+    test('Batch tests', () {
+      final equations = [
+        'cos(x)-x^2',
+        'e^(x-1)/(x^2+3*x-8)',
+        'sin(x+2)*(x-1)+sqrt(x)',
+        'abs(x-2)*e^x',
+        'log(x+sqrt(x))',
+      ];
 
-      // Evaluation
-      final integral = bisection.integrateOn(const SimpsonRule(
-        lowerBound: 0,
-        upperBound: 3,
-        intervals: 40,
-      ));
+      final solution = <List<double>>[
+        [2, 3, -7.101],
+        [4, 5.25, 1.769],
+        [3, 4, 0.235],
+        [-2, 0, 2.323],
+        [1, 1.25, 0.195],
+      ];
 
-      expect(integral.result.truncate(), equals(25));
+      for (var i = 0; i < equations.length; ++i) {
+        final result = SimpsonRule(
+                lowerBound: solution[i][0],
+                upperBound: solution[i][1],
+                intervals: 60)
+            .integrate(equations[i]);
+
+        expect(
+          result.result,
+          MoreOrLessEquals(solution[i][2], precision: 1.0e-3),
+        );
+      }
     });
   });
 }

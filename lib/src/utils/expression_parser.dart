@@ -81,6 +81,8 @@ class ExpressionParser {
       // Adding various mathematical operators
       ..wrapper(string('sqrt(').trim(), char(')').trim(),
           (_, _Evaluator a, __) => (num value) => math.sqrt(a(value)))
+      ..wrapper(string('abs(').trim(), char(')').trim(),
+          (_, _Evaluator a, __) => (num value) => a(value).abs())
       ..wrapper(string('sin(').trim(), char(')').trim(),
           (_, _Evaluator a, __) => (num value) => math.sin(a(value)))
       ..wrapper(string('cos(').trim(), char(')').trim(),

@@ -13,6 +13,11 @@ export 'src/algebraic/utils/algebraic_division.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
 
+export 'src/integral/numerical_integration.dart';
+export 'src/integral/types/midpoint_rule.dart';
+export 'src/integral/types/simpson_rule.dart';
+export 'src/integral/types/trapezoidal_rule.dart';
+
 export 'src/interpolation/interpolation.dart';
 export 'src/interpolation/types/linear_interpolation.dart';
 export 'src/interpolation/types/newton_interpolation.dart';
@@ -28,10 +33,6 @@ export 'src/nonlinear/types/newton.dart';
 export 'src/nonlinear/types/regula_falsi.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
-export 'src/nonlinear/utils/integration.dart';
-export 'src/nonlinear/utils/integration/midpoint_rule.dart';
-export 'src/nonlinear/utils/integration/simpson_rule.dart';
-export 'src/nonlinear/utils/integration/trapezoidal_rule.dart';
 export 'src/nonlinear/utils/results/integral_results.dart';
 export 'src/nonlinear/utils/results/results_nonlinear.dart';
 

@@ -166,8 +166,8 @@ void main() {
         // The expected result
         const expected = Secant(
           function: 'x-2',
-          firstGuess: 1,
-          secondGuess: 3,
+          a: 1,
+          b: 3,
         );
 
         final stateResults = (bloc.state as NonlinearGuesses).nonlinearResults;

@@ -50,6 +50,14 @@ void main() {
         equals(7),
       );
       expect(
+        parser.evaluate('abs(-8)'),
+        equals(8),
+      );
+      expect(
+        parser.evaluate('abs(8)'),
+        equals(8),
+      );
+      expect(
         parser.evaluate('sin(pi)'),
         const MoreOrLessEquals(0, precision: 1.0e-1),
       );
