@@ -80,6 +80,16 @@ void main() {
     });
 
     test(
+        'Making sure that, when the polynomial degree is 0 (so it is a simple '
+        'constant, the returned list is empty.', () {
+      final noSolutions = DurandKerner.realEquation(
+        coefficients: [1],
+      );
+
+      expect(noSolutions.solutions().length, isZero);
+    });
+
+    test(
         "Making sure that a correct 'DurandKerner' instance is created from a"
         " list of 'double' (real) values", () {
       final durandKerner = DurandKerner.realEquation(coefficients: [1, 2, 3]);
@@ -120,8 +130,12 @@ void main() {
       final polynomialDegree2 = DurandKerner.realEquation(
         coefficients: [1, 2, 3],
       );
-      final polynomialDegree1 = DurandKerner.realEquation(coefficients: [1, 2]);
-      final polynomialDegree0 = DurandKerner.realEquation(coefficients: [1]);
+      final polynomialDegree1 = DurandKerner.realEquation(
+        coefficients: [1, 2],
+      );
+      final polynomialDegree0 = DurandKerner.realEquation(
+        coefficients: [1],
+      );
 
       expect(polynomialDegree6.derivative(), isA<DurandKerner>());
       expect(polynomialDegree5.derivative(), isA<Quartic>());
@@ -178,9 +192,17 @@ void main() {
       final fx = DurandKerner.realEquation(coefficients: [1, 2, 3, 4, 5]);
       final otherFx = DurandKerner.realEquation(coefficients: [1, 2, 3, 4, 5]);
 
+      final notEqual = DurandKerner.realEquation(
+        coefficients: [1, 2, 3, 4, 5],
+        initialGuess: List<Complex>.generate(4, (_) => const Complex.zero()),
+      );
+
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
       expect(fx.hashCode, equals(otherFx.hashCode));
+
+      expect(fx == notEqual, isFalse);
+      expect(fx.hashCode == notEqual.hashCode, isFalse);
     });
 
     test("Making sure that 'copyWith' clones objects correctly", () {
@@ -239,6 +261,9 @@ void main() {
           Complex.zero(),
           Complex(1, -6),
         ]).solutions(),
+        DurandKerner.realEquation(
+          coefficients: [1, 2, 1],
+        ).solutions(),
       ];
 
       final solutions = <List<Complex>>[
@@ -272,6 +297,10 @@ void main() {
           Complex(1.0034, -1.2234),
           Complex(-1.4083, 0.5424),
           Complex(-0.1881, 1.4250),
+        ],
+        const [
+          Complex.fromReal(-1),
+          Complex.fromReal(-1),
         ],
       ];
 

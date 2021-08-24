@@ -1,5 +1,6 @@
 ## [3.0.0]
 
+ - **BREAKING**: Replaced the `Laguerre` type with `DurandKerner` (the latter is a more reliable root-finding algorithm for polynomials)
  - Dependencies versions update
  - Created the `Interpolation` type to work with points interpolation
  - Added the `LinearInterpolation`, `PolynomialInterpolation`, and `NewtonInterpolation` types

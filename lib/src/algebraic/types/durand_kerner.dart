@@ -31,8 +31,37 @@ class DurandKerner extends Algebraic with MathUtils {
   ///
   /// You can provide specific initial guesses with this param.
   ///
-  /// The length of the [initialGuess] must match the length of the coefficients
-  /// list.
+  /// The length of the [initialGuess] must equals the coefficients length minus
+  /// one. For example, this is ok...
+  ///
+  /// ```dart
+  /// final durandKerner = DurandKerner(
+  ///   coefficients: [
+  ///     Complex.fromReal(-5),
+  ///     Complex.fromReal(3),
+  ///     Complex.i(),
+  ///   ],
+  ///   initialGuess: [
+  ///     Complex(1, -2),
+  ///     Complex.fromReal(3),
+  ///   ],
+  /// );
+  /// ```
+  ///
+  /// ... but this is **not** ok:
+  ///
+  ///```dart
+  /// final durandKerner = DurandKerner(
+  ///   coefficients: [
+  ///     Complex.fromReal(-5),
+  ///     Complex.fromReal(3),
+  ///     Complex.i(),
+  ///   ],
+  ///   initialGuess: [
+  ///     Complex(1, -2),
+  ///   ],
+  /// );
+  /// ```
   final List<Complex> initialGuess;
 
   /// The accuracy of the algorithm.
@@ -57,7 +86,7 @@ class DurandKerner extends Algebraic with MathUtils {
   ///
   /// ```dart
   /// final durandKerner = DurandKerner(
-  ///   coefficients [
+  ///   coefficients: [
   ///     Complex.fromReal(-5),
   ///     Complex.fromReal(3),
   ///     Complex.i(),
@@ -230,28 +259,11 @@ class DurandKerner extends Algebraic with MathUtils {
 
     // Proceeding with the setup since the polynomial degree is >= 1.
     final coefficientsLength = coefficients.length;
-    final reversedCoefficients = coefficients.reversed.toList();
+    final reversedCoeffs = coefficients.reversed.toList();
 
     // Buffers for numerators and denominators or real and complex parts.
-    var realBuffer = List<double>.generate(32, (_) => 0);
-    var imaginaryBuffer = List<double>.generate(32, (_) => 0);
-
-    if (realBuffer.length < coefficientsLength) {
-      final newLength = _nextPow2(coefficientsLength);
-
-      realBuffer = List<double>.generate(newLength, (_) => 0);
-      imaginaryBuffer = List<double>.generate(newLength, (_) => 0);
-    }
-
-    // Filling the real values auxiliary array.
-    for (var i = 0; i < coefficientsLength; ++i) {
-      realBuffer[i] = reversedCoefficients[i].real;
-    }
-
-    // Filling the imaginary values auxiliary array.
-    for (var i = 0; i < coefficientsLength; ++i) {
-      imaginaryBuffer[i] = reversedCoefficients[i].imaginary;
-    }
+    final realBuffer = reversedCoeffs.map((e) => e.real).toList();
+    final imaginaryBuffer = reversedCoeffs.map((e) => e.imaginary).toList();
 
     // Scaling the various coefficients.
     var upperReal = realBuffer[coefficientsLength - 1];
@@ -387,21 +399,6 @@ class DurandKerner extends Algebraic with MathUtils {
 
     return 1.0 + math.sqrt(bound);
   }
-
-  /// Rounds a number to the closest power of 2. Some examples are:
-  ///
-  ///  - 0 rounds to 1
-  ///  - 1 rounds to 1
-  ///  - 2 rounds to 2
-  ///  - 3 rounds to 4
-  ///  - 4 rounds to 4
-  ///  - 5 rounds to 8
-  ///  - 6 rounds to 8
-  ///  - 7 rounds to 8
-  ///  - 8 rounds to 8
-  ///  - 9 rounds to 16
-  ///  - 10 rounds to 16
-  int _nextPow2(int value) => log2(value.abs()).ceil();
 
   /// The Durand-Kerner algorithm that finds the roots of the polynomial.
   List<Complex> _solve({
