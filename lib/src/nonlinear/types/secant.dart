@@ -11,23 +11,23 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   the bisection method does for example, so it doesn't always converge.
 class Secant extends NonLinear {
   /// The first guess
-  final double firstGuess;
+  final double a;
 
   /// The second guess
-  final double secondGuess;
+  final double b;
 
   /// Instantiates a new object to find the root of an equation by using the
   /// Secant method. Ideally, the two guesses should be close to the root.
   ///
   ///   - [function]: the function f(x)
-  ///   - [firstGuess]: the first interval in which evaluate _f(a)_
-  ///   - [secondGuess]: the second interval in which evaluate _f(b)_
+  ///   - [a]: the first interval in which evaluate _f(a)_
+  ///   - [b]: the second interval in which evaluate _f(b)_
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Secant({
     required String function,
-    required this.firstGuess,
-    required this.secondGuess,
+    required this.a,
+    required this.b,
     double tolerance = 1.0e-10,
     int maxSteps = 15,
   }) : super(
@@ -43,9 +43,7 @@ class Secant extends NonLinear {
     }
 
     if (other is Secant) {
-      return super == other &&
-          firstGuess == other.firstGuess &&
-          secondGuess == other.secondGuess;
+      return super == other && a == other.a && b == other.b;
     } else {
       return false;
     }
@@ -55,8 +53,8 @@ class Secant extends NonLinear {
   int get hashCode {
     var result = super.hashCode;
 
-    result = 37 * result + firstGuess.hashCode;
-    result = 37 * result + secondGuess.hashCode;
+    result = 37 * result + a.hashCode;
+    result = 37 * result + b.hashCode;
 
     return result;
   }
@@ -66,8 +64,8 @@ class Secant extends NonLinear {
     final guesses = <double>[];
     var n = 1;
 
-    var xold = firstGuess;
-    var x0 = secondGuess;
+    var xold = a;
+    var x0 = b;
 
     var fold = evaluateOn(xold);
     var fnew = evaluateOn(x0);

@@ -50,7 +50,7 @@ dev_dependencies:
   # https://pub.dev/packages/golden_toolkit
   golden_toolkit: ^0.9.0
 
-  # https://pub.dev/packages/golden_toolkit
+  # https://pub.dev/packages/mocktail
   mocktail: ^0.1.4
 
   # https://pub.dev/packages/test

@@ -67,5 +67,48 @@ void main() {
       const regula = RegulaFalsi(function: 'x - 2', a: 50, b: 70);
       expect(regula.solve, throwsA(isA<NonlinearException>()));
     });
+
+    test('Batch tests', () {
+      final equations = [
+        'x^e-cos(x)',
+        '3*x-sqrt(x+2)-1',
+        'x^3-5*x^2',
+        'x^2-13',
+        'e^(x)*(x+1)',
+      ];
+
+      final initialGuesses = <List<double>>[
+        [0.5, 1],
+        [-1, 1],
+        [4, 6],
+        [3, 4],
+        [-2, 0],
+      ];
+
+      final expectedSolutions = <double>[
+        0.856,
+        0.901,
+        5.000,
+        3.605,
+        -1.000,
+      ];
+
+      for (var i = 0; i < equations.length; ++i) {
+        for (var j = 0; j < equations[i].length; ++j) {
+          final solutions = RegulaFalsi(
+            function: equations[i],
+            a: initialGuesses[i][0],
+            b: initialGuesses[i][1],
+            tolerance: 1.0e-15,
+            maxSteps: 20,
+          ).solve();
+
+          expect(
+            solutions.guesses.last,
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-3),
+          );
+        }
+      }
+    });
   });
 }

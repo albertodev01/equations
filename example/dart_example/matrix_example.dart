@@ -17,19 +17,27 @@ void main() {
     * A = |  2  6  |
     *     | -5  0  |
     * */
-  final matrixA = RealMatrix.fromData(columns: 2, rows: 2, data: const [
-    [2, 6],
-    [-5, 0]
-  ]);
+  final matrixA = RealMatrix.fromData(
+    columns: 2,
+    rows: 2,
+    data: const [
+      [2, 6],
+      [-5, 0]
+    ],
+  );
 
   /*
     * B = | -4  1  |
     *     |  7 -3  |
     * */
-  final matrixB = RealMatrix.fromData(columns: 2, rows: 2, data: const [
-    [-4, 1],
-    [7, -3]
-  ]);
+  final matrixB = RealMatrix.fromData(
+    columns: 2,
+    rows: 2,
+    data: const [
+      [-4, 1],
+      [7, -3]
+    ],
+  );
 
   print('A + B:\n${matrixA + matrixB}\n'); // the sum of 2 matrices
   print('A - B:\n${matrixA - matrixB}\n'); // the difference of 2 matrices

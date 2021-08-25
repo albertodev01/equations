@@ -5,7 +5,7 @@ import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
-import 'package:equations_solver/routes/utils/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';

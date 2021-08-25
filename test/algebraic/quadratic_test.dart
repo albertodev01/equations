@@ -143,5 +143,54 @@ void main() {
       // Objects inequality
       expect(quadratic == quadratic.copyWith(b: const Complex.zero()), isFalse);
     });
+
+    test('Batch tests', () {
+      final equations = [
+        Quadratic.realEquation(a: -3, b: 1 / 5, c: 16).solutions(),
+        Quadratic.realEquation(b: 5, c: -4).solutions(),
+        Quadratic(
+          a: const Complex(3, 1),
+          b: const Complex(2, -7),
+        ).solutions(),
+        Quadratic().solutions(),
+        Quadratic.realEquation(a: 9, b: 6, c: -6).solutions(),
+      ];
+
+      final solutions = <List<Complex>>[
+        const [
+          Complex.fromReal(-2.2763),
+          Complex.fromReal(2.3429),
+        ],
+        const [
+          Complex.fromReal(0.7015),
+          Complex.fromReal(-5.7016),
+        ],
+        const [
+          Complex.zero(),
+          Complex(0.1000, 2.3000),
+        ],
+        const [
+          Complex.zero(),
+          Complex.zero(),
+        ],
+        const [
+          Complex.fromReal(0.5485),
+          Complex.fromReal(-1.2153),
+        ],
+      ];
+
+      for (var i = 0; i < equations.length; ++i) {
+        for (var j = 0; j < equations[i].length; ++j) {
+          expect(
+            equations[i][j].real,
+            MoreOrLessEquals(solutions[i][j].real, precision: 1.0e-4),
+          );
+          expect(
+            equations[i][j].imaginary,
+            MoreOrLessEquals(solutions[i][j].imaginary, precision: 1.0e-4),
+          );
+        }
+      }
+    });
   });
 }

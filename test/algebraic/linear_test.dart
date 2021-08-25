@@ -153,5 +153,48 @@ void main() {
       // Objects inequality
       expect(linear == linear.copyWith(b: const Complex.zero()), isFalse);
     });
+
+    test('Batch tests', () {
+      final equations = [
+        Linear.realEquation(
+          a: 2,
+          b: 3,
+        ).solutions(),
+        Linear(
+          a: const Complex.i(),
+          b: const Complex(4, -6),
+        ).solutions(),
+        Linear().solutions(),
+        Linear.realEquation(
+          a: -61,
+          b: -61,
+        ).solutions(),
+        Linear(
+          a: const Complex.i(),
+          b: -const Complex.i(),
+        ).solutions(),
+      ];
+
+      final solutions = <List<Complex>>[
+        const [Complex.fromReal(-3 / 2)],
+        const [Complex(6, 4)],
+        const [Complex.zero()],
+        const [Complex.fromReal(-1)],
+        const [Complex.fromReal(1)],
+      ];
+
+      for (var i = 0; i < equations.length; ++i) {
+        for (var j = 0; j < equations[i].length; ++j) {
+          expect(
+            equations[i][j].real,
+            MoreOrLessEquals(solutions[i][j].real, precision: 1.0e-5),
+          );
+          expect(
+            equations[i][j].imaginary,
+            MoreOrLessEquals(solutions[i][j].imaginary, precision: 1.0e-5),
+          );
+        }
+      }
+    });
   });
 }

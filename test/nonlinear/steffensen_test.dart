@@ -76,5 +76,44 @@ void main() {
       expect(solutions.guesses.length, isNonZero);
       expect(solutions.guesses.length <= 3, isTrue);
     });
+
+    test('Batch tests', () {
+      final equations = [
+        'x^e-cos(x)',
+        '3*x-sqrt(x+2)-1',
+        'x^3-5*x',
+        'x^2-13',
+      ];
+
+      final initialGuesses = <double>[
+        1,
+        0.6,
+        4,
+        0,
+      ];
+
+      final expectedSolutions = <double>[
+        0.856,
+        0.901,
+        2.236,
+        -3.605,
+      ];
+
+      for (var i = 0; i < equations.length; ++i) {
+        for (var j = 0; j < equations[i].length; ++j) {
+          final solutions = Steffensen(
+            function: equations[i],
+            x0: initialGuesses[i],
+            tolerance: 1.0e-16,
+            maxSteps: 60,
+          ).solve();
+
+          expect(
+            solutions.guesses.last,
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-3),
+          );
+        }
+      }
+    });
   });
 }

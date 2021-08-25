@@ -162,9 +162,19 @@ void main() {
         constants: [0, -6],
       );
 
+      final different = CholeskySolver(
+        equations: const [
+          [1, -2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+      );
+
       expect(cholesky, equals(cholesky2));
       expect(cholesky == cholesky2, isTrue);
       expect(cholesky.hashCode, equals(cholesky2.hashCode));
+      expect(cholesky == different, isFalse);
+      expect(cholesky.hashCode == different.hashCode, isFalse);
     });
   });
 }

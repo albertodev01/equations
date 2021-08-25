@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/utils/exceptions/types/numerical_integration_exception.dart';
+import 'package:equations/src/utils/factorial.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -47,6 +48,10 @@ void main() {
         PolynomialLongDivisionException('Message'),
         isA<PolynomialLongDivisionException>(),
       );
+      expect(
+        InterpolationException('Message'),
+        isA<InterpolationException>(),
+      );
     });
 
     test('Exception objects comparison', () {
@@ -78,12 +83,36 @@ void main() {
         isA<RegulaFalsi>(),
       );
       expect(
-        Secant(function: 'x+1', firstGuess: 0, secondGuess: 0),
+        Secant(function: 'x+1', a: 0, b: 0),
         isA<Secant>(),
       );
       expect(
         Steffensen(function: 'x+1', x0: 0),
         isA<Steffensen>(),
+      );
+    });
+
+    test('Interpolation constructors', () {
+      const nodesList = [
+        InterpolationNode(x: 1, y: 3),
+        InterpolationNode(x: -4, y: 6),
+      ];
+
+      expect(
+        LinearInterpolation(nodes: nodesList),
+        isA<LinearInterpolation>(),
+      );
+      expect(
+        PolynomialInterpolation(nodes: nodesList),
+        isA<PolynomialInterpolation>(),
+      );
+      expect(
+        NewtonInterpolation(nodes: nodesList),
+        isA<NewtonInterpolation>(),
+      );
+      expect(
+        SplineInterpolation(nodes: nodesList),
+        isA<SplineInterpolation>(),
       );
     });
 
@@ -99,6 +128,13 @@ void main() {
       expect(
         MidpointRule(lowerBound: 0, upperBound: 0),
         isA<MidpointRule>(),
+      );
+    });
+
+    test('Other constructors', () {
+      expect(
+        Factorial(),
+        isA<Factorial>(),
       );
     });
   });

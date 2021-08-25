@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
+import 'package:equations/src/utils/math_utils.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is [double].
 ///
@@ -27,7 +29,7 @@ import 'package:equations/src/system/utils/matrix/qr_decomposition/qr_real_decom
 /// Both versions return the same value but the first one is of course less
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
-class RealMatrix extends Matrix<double> {
+class RealMatrix extends Matrix<double> with MathUtils {
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with zeroes.
   ///
@@ -78,7 +80,6 @@ class RealMatrix extends Matrix<double> {
   double _getDataAt(List<double> source, int row, int col) =>
       source[columnCount * row + col];
 
-  /// Returns the sum of two matrices.
   @override
   Matrix<double> operator +(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
@@ -107,10 +108,9 @@ class RealMatrix extends Matrix<double> {
     );
   }
 
-  /// Returns the difference of two matrices.
   @override
   Matrix<double> operator -(Matrix<double> other) {
-    if (columnCount != other.rowCount) {
+    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
       throw const MatrixException('Matrices shapes mismatch! The column count '
           'of the source matrix must match the row count of the other.');
     }
@@ -136,7 +136,6 @@ class RealMatrix extends Matrix<double> {
     );
   }
 
-  /// Returns the product of two matrices.
   @override
   Matrix<double> operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
@@ -145,8 +144,8 @@ class RealMatrix extends Matrix<double> {
     }
 
     // Performing the product
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
+    final flatMatrix = List<double>.generate(
+      rowCount * other.columnCount,
       (_) => 0.0,
       growable: false,
     );
@@ -155,25 +154,24 @@ class RealMatrix extends Matrix<double> {
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < other.columnCount; j++) {
         var sum = 0.0;
-        for (var k = 0; k < rowCount; k++) {
+        for (var k = 0; k < other.rowCount; k++) {
           sum += this(i, k) * other(k, j);
         }
-        _setDataAt(flatMatrix, i, j, sum);
+        flatMatrix[other.columnCount * i + j] = sum;
       }
     }
 
     // Building the new matrix
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
-      columns: columnCount,
+      columns: other.columnCount,
       data: flatMatrix,
     );
   }
 
-  /// Returns the division of two matrices in `O(n)` complexity.
   @override
   Matrix<double> operator /(Matrix<double> other) {
-    if (columnCount != other.rowCount) {
+    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
       throw const MatrixException('Matrices shapes mismatch! The column count '
           'of the source matrix must match the row count of the other.');
     }
@@ -200,12 +198,127 @@ class RealMatrix extends Matrix<double> {
     );
   }
 
-  /// The trace can only be computed if the matrix is **square**, meaning that
-  /// it must have the same number of columns and rows.
-  ///
-  /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
-  /// sum of elements on the main diagonal (from the upper left to the lower
-  /// right).
+  @override
+  RealMatrix transpose() {
+    final source = List<double>.generate(rowCount * columnCount, (_) => 0);
+
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        source[rowCount * j + i] = this(i, j);
+      }
+    }
+
+    return RealMatrix.fromFlattenedData(
+      rows: columnCount,
+      columns: rowCount,
+      data: source,
+    );
+  }
+
+  @override
+  RealMatrix minor(int row, int col) {
+    if (row < 0 || col < 0) {
+      throw const MatrixException('The arguments must be positive!');
+    }
+
+    if (row > rowCount || col > columnCount) {
+      throw const MatrixException('The given (row; col) pair is invalid.');
+    }
+
+    final source = List<List<double>>.generate(rowCount - 1, (_) {
+      return List<double>.generate(columnCount - 1, (_) => 0.0);
+    });
+
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; i != row && j < columnCount; ++j) {
+        if (j != col) {
+          final minorRow = i < row ? i : i - 1;
+          final minorCol = j < col ? j : j - 1;
+
+          source[minorRow][minorCol] = this(i, j);
+        }
+      }
+    }
+
+    return RealMatrix.fromData(
+      rows: rowCount - 1,
+      columns: columnCount - 1,
+      data: source,
+    );
+  }
+
+  @override
+  RealMatrix cofactorMatrix() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix must be square!');
+    }
+
+    final source = List<List<double>>.generate(rowCount, (_) {
+      return List<double>.generate(columnCount, (_) => 0.0);
+    });
+
+    // Computing cofactors
+    for (var i = 0; i < rowCount; ++i) {
+      for (var j = 0; j < columnCount; ++j) {
+        source[i][j] = pow(-1, i + j) * minor(i, j).determinant();
+      }
+    }
+
+    return RealMatrix.fromData(
+      rows: rowCount,
+      columns: columnCount,
+      data: source,
+    );
+  }
+
+  @override
+  RealMatrix inverse() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix must be square!');
+    }
+
+    // In case of a 2x2 matrix, we can directly compute it and save computational
+    // time. Note that, from here, we're sure that this matrix is square so no
+    // need to check both the row count and the col count.
+    if (rowCount == 2) {
+      final multiplier =
+          1 / (this(0, 0) * this(1, 1) - this(0, 1) * this(1, 0));
+
+      return RealMatrix.fromFlattenedData(
+        rows: 2,
+        columns: 2,
+        data: [
+          multiplier * this(1, 1),
+          -multiplier * this(0, 1),
+          -multiplier * this(1, 0),
+          multiplier * this(0, 0),
+        ],
+      );
+    }
+
+    // If the matrix to be inverted is 3x3 or greater, let's use the cofactor
+    // method to compute the inverse. The inverse of a matrix can be computed
+    // like so:
+    //
+    //   A^(-1) = 1 / det(A) * cof(A)^(T)
+    //
+    // where 'det(A)' is the determinant of A and 'cof(A)^T' is the transposed
+    // matrix of the cofactor matrix.
+    final transpose = cofactorMatrix().transpose();
+
+    // Multiplying each number by 1/det(A)
+    final multiplier = 1 / determinant();
+    final inverse = transpose.flattenData.map((value) {
+      return multiplier * value;
+    }).toList(growable: false);
+
+    return RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: inverse,
+    );
+  }
+
   @override
   double trace() {
     // Making sure that the matrix is squared
@@ -224,19 +337,112 @@ class RealMatrix extends Matrix<double> {
     return trace;
   }
 
-  /// The determinant can only be computed if the matrix is **square**, meaning
-  /// that it must have the same number of columns and rows.
-  ///
-  /// The determinant of a 1*1, 2*2, 3*3 or 4*4 matrix is efficiently computed.
-  /// Note that for all the other dimensions, the algorithm is exponentially
-  /// slower.
+  @override
+  bool isDiagonal() {
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        if ((i != j) && (this(i, j) != 0)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  bool isIdentity() {
+    if (!isSquareMatrix) {
+      throw const MatrixException('The matrix is not square!');
+    }
+
+    for (var i = 0; i < rowCount; i++) {
+      for (var j = 0; j < columnCount; j++) {
+        if ((i != j) && (this(i, j) != 0)) {
+          return false;
+        }
+
+        if ((i == j) && (this(i, j) != 1)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  @override
+  int rank() {
+    if (isSquareMatrix && rowCount == 1) {
+      return this(0, 0) == 0 ? 0 : 1;
+    }
+
+    final lower = luDecomposition()[0];
+
+    // Linearly independent columns
+    var independentCols = 0;
+
+    for (var i = 0; i < lower.rowCount; ++i) {
+      for (var j = 0; j < lower.columnCount; ++j) {
+        if ((i == j) && (lower(i, j) != 0)) {
+          ++independentCols;
+        }
+      }
+    }
+
+    return independentCols;
+  }
+
   @override
   double determinant() => _computeDeterminant(this);
 
-  /// Factors the matrix as the product of a lower triangular matrix `L` and
-  /// an upper triangular matrix `U`. The matrix **must** be square.
-  ///
-  /// The returned list contains `L` at index 0 and `U` at index 1.
+  @override
+  List<Complex> eigenValues() {
+    // Making sure that the matrix is squared
+    if (!isSquareMatrix) {
+      throw const MatrixException(
+        'Eigenvalues can be computed on square matrices only!',
+      );
+    }
+
+    // From now on, we're sure that the matrix is square. If it's 1x1, then the
+    // only eigenvalue is the only value in the matrix.
+    if (rowCount == 1) {
+      return [
+        Complex.fromReal(this(0, 0)),
+      ];
+    }
+
+    // In case of a 2x2 matrix, there is a direct formula we can use to avoid
+    // The iterations of the QR algorithm.
+    if (rowCount == 2) {
+      final characteristicPolynomial = Quadratic.realEquation(
+        b: -trace(),
+        c: determinant(),
+      );
+
+      return characteristicPolynomial.solutions();
+    }
+
+    // For 3x3 matrices and bigger, we use the QR algorithm.
+    var matrix = this;
+    final values = <Complex>[];
+
+    // The QR algorithm simply uses the QR factorization and iterates the product
+    // of R x Q for 'n' steps
+    for (var i = 0; i < 50; ++i) {
+      final qr = matrix.qrDecomposition();
+      matrix = qr[1] * qr[0] as RealMatrix;
+    }
+
+    // The eigenvalues are the elements in the diagonal
+    for (var i = 0; i < matrix.columnCount; ++i) {
+      values.add(Complex.fromReal(matrix(i, i)));
+    }
+
+    return values;
+  }
+
   @override
   List<RealMatrix> luDecomposition() {
     // Making sure that the matrix is squared
@@ -301,16 +507,6 @@ class RealMatrix extends Matrix<double> {
     ];
   }
 
-  /// Uses the the Cholesky decomposition algorithm to factor the matrix into
-  /// the product of a lower triangular matrix and its conjugate transpose. In
-  /// particular, this method returns the `L` and `L`<sup>T</sup> matrices of the
-  ///
-  ///  - A = L x L<sup>T</sup>
-  ///
-  /// relation. The algorithm might fail in case the square root of a negative
-  /// number were encountered.
-  ///
-  /// The returned list contains `L` at index 0 and `L`<sup>T</sup> at index 1.
   @override
   List<RealMatrix> choleskyDecomposition() {
     // Making sure that the matrix is squared
@@ -377,22 +573,23 @@ class RealMatrix extends Matrix<double> {
     ];
   }
 
-  /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
-  /// particular, this method returns the `Q` and `R` matrices of the
-  ///
-  ///  - A = Q x R
-  ///
-  /// relation. The returned list contains `Q` at index 0 and `R` at index 1.
-  List<RealMatrix> qrDecomposition() =>
-      QRDecompositionReal(realMatrix: this).decompose();
+  @override
+  List<RealMatrix> qrDecomposition() => QRDecompositionReal(
+        realMatrix: this,
+      ).decompose();
 
-  /// Computes the determinant of a 2x2 matrix
+  @override
+  List<RealMatrix> singleValueDecomposition() => SVDReal(
+        realMatrix: this,
+      ).decompose();
+
+  /// Computes the determinant of a 2x2 matrix.
   double _compute2x2Determinant(RealMatrix source) {
     return source.flattenData[0] * source.flattenData[3] -
         source.flattenData[1] * source.flattenData[2];
   }
 
-  /// Computes the determinant of a 3x3 matrix
+  /// Computes the determinant of a 3x3 matrix.
   double _compute3x3Determinant(RealMatrix source) {
     final x = source.flattenData[0] *
         ((source.flattenData[4] * source.flattenData[8]) -
@@ -407,7 +604,7 @@ class RealMatrix extends Matrix<double> {
     return x - y + z;
   }
 
-  /// Computes the determinant of a 4x4 matrix
+  /// Computes the determinant of a 4x4 matrix.
   double _compute4x4Determinant(RealMatrix source) {
     final det2_01_01 = source.flattenData[0] * source.flattenData[5] -
         source.flattenData[1] * source.flattenData[4];
@@ -445,7 +642,7 @@ class RealMatrix extends Matrix<double> {
   /// 3x3 and 4x4 matrices, the calculations are "manually" done.
   double _computeDeterminant(RealMatrix source) {
     // Computing the determinant only if the matrix is square
-    if (source.rowCount != source.columnCount) {
+    if (!isSquareMatrix) {
       throw const MatrixException("Can't compute the determinant of this "
           "matrix because it's not square.");
     }

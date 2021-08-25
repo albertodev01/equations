@@ -4,6 +4,8 @@
   "functions": "Functions",
   "systems": "Systems",
   "integrals": "Integrals",
+  "interpolation": "Interpolation",
+  "tools": "Tools",
   "firstDegree": "Linear",
   "secondDegree": "Quadratic",
   "thirdDegree": "Cubic",

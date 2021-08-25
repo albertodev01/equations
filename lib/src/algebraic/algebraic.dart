@@ -84,7 +84,7 @@ abstract class Algebraic {
   ///  - if length is 3, a [Quadratic] object is returned;
   ///  - if length is 4, a [Cubic] object is returned;
   ///  - if length is 5, a [Quartic] object is returned;
-  ///  - if length is 6 or higher, a [Laguerre] object is returned.
+  ///  - if length is 6 or higher, a [DurandKerner] object is returned.
   ///
   /// For example, if the length of [coefficients] were 3 it would mean that
   /// you're trying to solve a quadratic equation (because a quadratic has
@@ -138,7 +138,7 @@ abstract class Algebraic {
           e: coefficients[4],
         );
       default:
-        return Laguerre(
+        return DurandKerner(
           coefficients: coefficients,
         );
     }
@@ -152,7 +152,7 @@ abstract class Algebraic {
   ///  - if length is 3, a [Quadratic] object is returned;
   ///  - if length is 4, a [Cubic] object is returned;
   ///  - if length is 5, a [Quartic] object is returned;
-  ///  - if length is 6 or higher, a [Laguerre] object is returned.
+  ///  - if length is 6 or higher, a [DurandKerner] object is returned.
   ///
   /// For example, if the length of [coefficients] were 3 it would mean that
   /// you're trying to solve a quadratic equation (because a quadratic has
@@ -281,7 +281,7 @@ abstract class Algebraic {
     }
   }
 
-  /// Evaluates the polynomial on the specified complex number [x].
+  /// Evaluates the polynomial on the given complex number [x].
   Complex evaluateOn(Complex x) {
     var value = const Complex.zero();
     var power = coefficients.length - 1;
@@ -299,7 +299,7 @@ abstract class Algebraic {
     return value;
   }
 
-  /// Evaluates the polynomial on the specified real number [x].
+  /// Evaluates the polynomial on the given real number [x].
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
   /// Integrates the polynomial between [lower] and [upper] and computes the
@@ -428,13 +428,15 @@ abstract class Algebraic {
 
   /// The product of two polynomials is performed by multiplying the corresponding
   /// coefficients of the polynomials. The degrees of the two polynomials don't
-  /// need to be the same so you can multiply a [Constant] with a [Laguerre] for
+  /// need to be the same so you can multiply a [Constant] with a [DurandKerner] for
   /// example.
   Algebraic operator *(Algebraic other) {
     // Generating the new list of coefficients
     final newLength = coefficients.length + other.coefficients.length - 1;
-    final newCoefficients =
-        List<Complex>.filled(newLength, const Complex.zero());
+    final newCoefficients = List<Complex>.filled(
+      newLength,
+      const Complex.zero(),
+    );
 
     // The product
     for (var i = 0; i < coefficients.length; ++i) {

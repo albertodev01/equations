@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/home_page.dart';
+import 'package:equations_solver/routes/integral_page.dart';
+import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
@@ -38,6 +40,16 @@ abstract class RouteGenerator {
           builder: (_) => const SystemPage(),
         );
 
+      case integralPage:
+        return MaterialPageRoute<IntegralPage>(
+          builder: (_) => const IntegralPage(),
+        );
+
+      case interpolationPage:
+        return MaterialPageRoute<InterpolationPage>(
+          builder: (_) => const InterpolationPage(),
+        );
+
       default:
         throw const RouteException('Route not found');
     }
@@ -54,6 +66,12 @@ abstract class RouteGenerator {
 
   /// Route name for the systems page.
   static const systemPage = '/system';
+
+  /// Route name for the integrals page.
+  static const integralPage = '/integral';
+
+  /// Route name for the interpolation page.
+  static const interpolationPage = '/interpolation';
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.

@@ -20,9 +20,6 @@ abstract class SystemSolver {
   /// The accuracy of the algorithm.
   final double precision;
 
-  /// The vector containing the known values of the equation.
-  List<double> get knownValues => UnmodifiableListView<double>(_knownValues);
-
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
@@ -132,6 +129,9 @@ abstract class SystemSolver {
 
   @override
   String toString() => equations.toString();
+
+  /// The vector containing the known values of the equation.
+  List<double> get knownValues => UnmodifiableListView<double>(_knownValues);
 
   /// Prints the augmented matrix of this instance, which is the equations matrix
   /// plus the known values vector to the right. For example, if...

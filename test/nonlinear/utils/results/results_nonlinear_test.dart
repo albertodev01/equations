@@ -15,9 +15,7 @@ void main() {
       expect(results.efficiency, equals(-7.0));
     });
 
-    test(
-        'Making sure that NonlinearResults is properly converted into a string.',
-        () {
+    test('Making sure that "NonlinearResults" overrides "toString()".', () {
       const strResult = 'Convergence rate: 10.0\n'
           'Efficiency: -7.0\n'
           'Guesses: 3 computed';

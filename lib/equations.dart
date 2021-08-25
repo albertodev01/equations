@@ -5,14 +5,25 @@ export 'package:fraction/fraction.dart';
 export 'src/algebraic/algebraic.dart';
 export 'src/algebraic/types/constant.dart';
 export 'src/algebraic/types/cubic.dart';
-export 'src/algebraic/types/laguerre.dart';
+export 'src/algebraic/types/durand_kerner.dart';
 export 'src/algebraic/types/linear.dart';
 export 'src/algebraic/types/quadratic.dart';
 export 'src/algebraic/types/quartic.dart';
 export 'src/algebraic/utils/algebraic_division.dart';
-export 'src/algebraic/utils/horner_results.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
+
+export 'src/integral/numerical_integration.dart';
+export 'src/integral/types/midpoint_rule.dart';
+export 'src/integral/types/simpson_rule.dart';
+export 'src/integral/types/trapezoidal_rule.dart';
+
+export 'src/interpolation/interpolation.dart';
+export 'src/interpolation/types/linear_interpolation.dart';
+export 'src/interpolation/types/newton_interpolation.dart';
+export 'src/interpolation/types/polynomial_interpolation.dart';
+export 'src/interpolation/types/spline_interpolation.dart';
+export 'src/interpolation/utils/interpolation_node.dart';
 
 export 'src/nonlinear/nonlinear.dart';
 export 'src/nonlinear/types/bisection.dart';
@@ -22,10 +33,6 @@ export 'src/nonlinear/types/newton.dart';
 export 'src/nonlinear/types/regula_falsi.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
-export 'src/nonlinear/utils/integration.dart';
-export 'src/nonlinear/utils/integration/midpoint_rule.dart';
-export 'src/nonlinear/utils/integration/simpson_rule.dart';
-export 'src/nonlinear/utils/integration/trapezoidal_rule.dart';
 export 'src/nonlinear/utils/results/integral_results.dart';
 export 'src/nonlinear/utils/results/results_nonlinear.dart';
 
@@ -45,6 +52,7 @@ export 'src/utils/complex/polar_complex.dart';
 export 'src/utils/exceptions/exceptions.dart';
 export 'src/utils/exceptions/types/algebraic_exception.dart';
 export 'src/utils/exceptions/types/complex_exception.dart';
+export 'src/utils/exceptions/types/interpolation_exception.dart';
 export 'src/utils/exceptions/types/matrix_exception.dart';
 export 'src/utils/exceptions/types/nonlinear_exception.dart';
 export 'src/utils/exceptions/types/parser_exception.dart';

@@ -24,15 +24,14 @@ void main() {
 
   print('\n ============ \n');
 
-  final lu = LUSolver(equations: const [
-    [7, -2, 1],
-    [14, -7, -3],
-    [-7, 11, 18]
-  ], constants: const [
-    12,
-    17,
-    5
-  ]);
+  final lu = LUSolver(
+    equations: const [
+      [7, -2, 1],
+      [14, -7, -3],
+      [-7, 11, 18]
+    ],
+    constants: const [12, 17, 5],
+  );
 
   print('$lu\n');
   print('${lu.toStringAugmented()}\n');

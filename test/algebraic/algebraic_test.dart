@@ -40,6 +40,7 @@ void main() {
           Complex(2, 0),
           Complex(3, 0),
         ]);
+
         expect(equation, isA<Quadratic>());
       });
 
@@ -65,6 +66,7 @@ void main() {
           Complex(4, 0),
           Complex(5, 0),
         ]);
+
         expect(equation, isA<Quartic>());
       });
 
@@ -79,7 +81,8 @@ void main() {
           Complex(5, 0),
           Complex(6, 0),
         ]);
-        expect(equation, isA<Laguerre>());
+
+        expect(equation, isA<DurandKerner>());
       });
     });
 
@@ -124,7 +127,7 @@ void main() {
           "Making sure that a 'Laguerre' object is properly constructed when "
           'the length of the coefficients list is 6', () {
         final equation = Algebraic.fromReal([1, 2, 3, 4, 5, 6]);
-        expect(equation, isA<Laguerre>());
+        expect(equation, isA<DurandKerner>());
       });
     });
 
@@ -157,6 +160,7 @@ void main() {
         );
 
         final complexRes = complexEq.evaluateIntegralOn(0, 3);
+
         expect(
           complexRes.real,
           const MoreOrLessEquals(18, precision: 1.0e-1),
@@ -177,6 +181,7 @@ void main() {
         );
 
         final realRes = realEq.evaluateIntegralOn(1, 3);
+
         expect(
           realRes.real,
           const MoreOrLessEquals(7.3, precision: 1.0e-1),
@@ -190,6 +195,7 @@ void main() {
         );
 
         final complexRes = complexEq.evaluateIntegralOn(-1, 5);
+
         expect(
           complexRes.real,
           const MoreOrLessEquals(138, precision: 1.0e-1),

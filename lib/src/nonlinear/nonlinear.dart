@@ -16,9 +16,10 @@ import 'package:equations/equations.dart';
 ///   - [Secant]
 ///   - [Steffensen]
 ///   - [Brent]
+///   - [RegulaFalsi]
 ///
-/// Each subclass of [NonLinear] has to define the [solve] method which is required
-/// in order to build the scalar succession with a certain logic.
+/// Each subclass of [NonLinear] has to define the [solve] method which is
+/// required in order to build the scalar succession with a certain logic.
 abstract class NonLinear {
   /// The function f(x) for which the algorithm has to find a solution.
   final String function;
@@ -105,6 +106,7 @@ abstract class NonLinear {
 
   /// Evaluates the derivative of the function on the given [x] value.
   num evaluateDerivativeOn(double x) {
+    // Setting the precision to 1.0e-15
     final h = math.pow(1.0e-15, 1 / 3) * x;
 
     final upper = evaluateOn(x + h);
@@ -112,11 +114,6 @@ abstract class NonLinear {
 
     return (upper - lower) / (2 * h);
   }
-
-  /// Calculates the numerical value of the integral of this function using a
-  /// [NumericalIntegration] algorithm.
-  IntegralResults integrateOn(NumericalIntegration numericalIntegration) =>
-      numericalIntegration.integrate(function);
 
   /// Returns a [NonlinearResults] object which contains the data calculated by
   /// the root-finding algorithm.

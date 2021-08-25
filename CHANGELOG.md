@@ -1,3 +1,25 @@
+## [3.0.0]
+
+ - **BREAKING**: Replaced the `Laguerre` type with `DurandKerner` (the latter is a more reliable root-finding algorithm for polynomials)
+ - **BREAKING**: Removed the `integrateOn` method on `Nonlinear`. Now numerical integration algorithms live on their own in the `src/integral` folder
+ - **BREAKING**: renamed `firstGuess` and `secondGuess` to `a` and `b` respectively in `Secant` (for consistency with other `Nonlinear` types)
+ - Created the `Interpolation` type to work with points interpolation
+ - Moved `NumericalIntegration` into a 'top-level' directoy inside `src/`
+ - Added the `LinearInterpolation`, `PolynomialInterpolation`, and `NewtonInterpolation` types
+ - Added eigenvalues computation on `Matrix<T>` with the `eigenValues()` method
+ - Added inverse matrix computation on `Matrix<T>` with the `inverse()` method
+ - Added cofactor matrix computation on `Matrix<T>` with the `cofactor()` method
+ - Added the `isSymmetric()` method to determine whether a matrix is symmetric or not
+ - Added minor computation on `Matrix<T>` with the `minor(int row, int col)` method
+ - Added SVD decomposition algorithm to matrix types
+ - Added the `isDiagonal()` method on `Matrix<T>`
+ - Added the `isIdentity()` method on `Matrix<T>`
+ - Added the `trace()` method on `Matrix<T>`
+ - Added the `rank()` method on `Matrix<T>`
+ - Bug fixes on various matrix operations
+ - Bug fixes in `Algebraic`
+ - Dependencies versions update
+
 ## [2.1.3]
 
  - Dependencies versions update
