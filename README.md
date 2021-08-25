@@ -11,23 +11,34 @@
 
 ---
 
-Thanks to the `equations` package you will be able to solve polynomials, nonlinear equations and systems with ease. It's been written purely in Dart, meaning that it has no platform-specific dependencies and it doens't require Flutter to work. You can use, for example, `equations` with Flutter for web, desktop and mobile. Here's a summary of the contents of the package:
+Thanks to the `equations` package you will be able to solve numerical analysis problems with ease. It's been written purely in Dart, meaning that it has no platform-specific dependencies and it doens't require Flutter to work. You can use, for example, `equations` with Flutter for web, desktop and mobile. Here's a summary of what you can do with this package:
 
-  - `Algebraic` and all of its subtypes, which can be used to solve algebraic equations (also known as polynomial equations);
-  - `Nonlinear` and all of its subtypes, which can be used to solve nonlinear equations;
-  - `SystemSolver` and all of its subtypes, which can be used to solve systems of linear equations;
-  - `Complex`, which is used to easily handle complex numbers;
-  - `Fraction`, from the [fraction](https://pub.dev/packages/fraction) package which helps you working with fractions.
+  - Solve polynomial equations with `Algebraic` types;
+  - Solve nonlinear equations with `Nonlinear` types;
+  - Solve linear systems of equations with `SystemSolver` types;
+  - Evaluate integrals with `NumericalIntegration` types;
+  - Interpolate data points with `Interpolation ` types.
+
+In addition, you can also find utilities to work with:
+
+  - Real and complex matrices, using the `Matrix<T>` types;
+  - Complex number, using the `Complex` type;
+  - Fractions, using the `Fraction` and `MixedFraction` types.
 
 This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps) :rocket:
 
+
+<p align="center"><img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/circle_logo.svg" alt="Equation Solver logo" width="55" height="55" /></p>
 <p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
 
-The source code of the above website can be found at `example/flutter_example`.
 
-# Algebraic equations
+The source code of the above website can be found at `example/flutter_example`. In the following lines, you'll find an overview of the various types in this package and their APIs; make sure to visit the [pub.dev documentation](https://pub.dev/documentation/equations/latest/) for details about methods signatures and docstring comments.
 
-Use one of the following classes to find the roots of a polynomial. You can use both complex numbers and fractions as coefficients.
+---
+
+# Algebraic (Polynomial equations)
+
+Use one of the following classes to find the roots of a polynomial equation (also known as "algebraic equation"). You can use both complex numbers and fractions as coefficients.
 
 | Solver name |                                  Equation                                 |    Params field   |
 |:-----------:|:-------------------------------------------------------------------------:|:-----------------:|
@@ -36,17 +47,17 @@ Use one of the following classes to find the roots of a polynomial. You can use 
 | `Quadratic` | <em>f(x) = ax<sup>2</sup> + bx + c</em>                                   | a, b, c ∈ C       |
 | `Cubic`     | <em>f(x) = ax<sup>3</sup> + bx<sup>2</sup> + cx + d</em>                  | a, b, c, d ∈ C    |
 | `Quartic`   | <em>f(x) = ax<sup>4</sup> + bx<sup>3</sup> + cx<sup>2</sup> + dx + e</em> | a, b, c, d, e ∈ C |
-| `Laguerre`  | Any polynomial P(x<sub>i</sub>) where x<sub>i</sub> are coefficients      | x<sub>i</sub> ∈ C |
+| `DurandKerner` | Any polynomial P(x<sub>i</sub>) where x<sub>i</sub> are coefficients      | x<sub>i</sub> ∈ C |
 
-There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of polynomials whose degree is 5 or higher, must be seeked using Laguerre's method or any other root-finding algorithm. For this reason, we suggest to go for the following approach:
+There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of polynomials whose degree is 5 or higher, must be seeked using DurandKerner's method or any other root-finding algorithm. For this reason, we suggest to go for the following approach:
 
   - Use `Linear` to find the roots of a polynomial whose degree is 1.
   - Use `Quadratic` to find the roots of a polynomial whose degree is 2.
   - Use `Cubic` to find the roots of a polynomial whose degree is 3.
   - Use `Quartic` to find the roots of a polynomial whose degree is 4.
-  - Use `Laguerre` to find the roots of a polynomial whose degree is 5 or higher.
+  - Use `DurandKerner` to find the roots of a polynomial whose degree is 5 or higher.
 
-Note that `Laguerre` can be used with any polynomials, so you could use it (for example) to solve a cubic equation as well. `Laguerre` internally uses loops, derivatives and other mechanics that are much slower (and less precise) than `Quartic`, `Cubic`, `Quadratic` and `Linear` so use it only when really needed. Here's how you can solve a cubic:
+Note that `DurandKerner` can be used with any polynomials, so you could use it (for example) to solve a cubic equation as well. However, `DurandKerner` internally uses loops, derivatives, and other mechanics to approximate the actual roots. When trying to solve a polynomial equation whose degree is 4 or lower, prefer using `Quartic`, `Cubic`, `Quadratic` and `Linear` since they use direct formulas to find the roots. Here's how you can solve a cubic:
 
 ```dart
 // f(x) = (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i)
@@ -79,11 +90,11 @@ for (final root in equation.solutions()) {
 }
 ```
 
-Alternatively, you could have used `Laguerre` to solve the same equation:
+Alternatively, you could have used `DurandKerner` to solve the same equation:
 
 ```dart
 // f(x) = (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i)
-final equation = Laguerre(
+final equation = DurandKerner(
   coefficients: [
     Complex(2, -3),
     Complex.fromImaginaryFraction(Fraction(6, 5)),
@@ -104,7 +115,7 @@ for (final root in equation.solutions()) {
 }
 ```
 
-As we've already pointed out, both ways are equivalent but `Laguerre` internally performs operations on matrices and calculates determinants many times so it's computationally slower than `Cubic`. Use `Laguerre` only when the degree of your polynomial is greater or equal than 5.
+As we've already pointed out, both ways are equivalent but `DurandKerner` is computationally slower than `Cubic` and it doesn't guaranteed to always converge to the correct roots. Use `DurandKerner` only when the degree of your polynomial is greater or equal than 5.
 
 ```dart
 final quadratic = Algebraic.from(const [
@@ -122,8 +133,7 @@ The factory constructor `Algebraic.from()` automatically returns the best type o
 
 # Nonlinear equations
 
-Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package
-supports the following root finding methods:
+Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package supports the following root finding methods:
 
 | Solver name  | Params field      |
 |:------------:|:-----------------:|
@@ -162,48 +172,12 @@ final solutions = solutions.efficiency.round(); // 1
 final List<double> guesses = solutions.guesses;
 ```
 
-Note that certain algorithms don't guarantee the convergence to a root so read the documentation carefully before choosing the method. You can also calculate the numerical value of a definite integral on an interval:
+Note that certain algorithms don't always guarantee t converge to a correct root so read the documentation carefully before choosing the method.
 
-```dart
-final bisection = Bisection(
-  function: "x^3+2*x-1.2", 
-  a: 0, 
-  b: 3
-);
-
-// Integral from 0 to 3 of x^3+2*x-1.2 dx
-final integral = bisection.integrateOn(const SimpsonRule(
-  lowerBound: 0,
-  upperBound: 3,
-  intervals: 40,
-));
-
-// The result may vary depending on the 'intervals' you've decided to use
-print(integral.result); // 25.65
-```
-
-Of course you can also use any `NumericalIntegration` subtype outside of the scope of a `Nonlinear` instance:
-
-```dart
-final midpointValue = MidpointRule(
-  lowerBound: 0,
-  upperBound: 3,
-).integrate("x^3+2*x-1.2");
-
-final trapezoidValue = TrapezoidalRule(
-  lowerBound: 0,
-  upperBound: 3,
-).integrate("x^3+2*x-1.2");
-
-final simpsonValue = SimpsonRule(
-  lowerBound: 0,
-  upperBound: 3,
-).integrate("x^3+2*x-1.2");
-```
 
 # Systems of equations
 
-Use one of the following classes to solve systems of linear equations. Note that only real coefficients are allowed (so `double` is ok but `Complex` isn't) and you must define `N` equations in `N` variables (so a **square** matrix is needed).
+Use one of the following classes to solve systems of linear equations. Note that only real coefficients are allowed (so `double` is ok but `Complex` isn't) and you must define `N` equations in `N` variables (so a **square** matrix is needed). This package supports the following algorithms:
 
 | Solver name           | Iterative method   |
 |:---------------------:|:------------------:|
@@ -214,7 +188,7 @@ Use one of the following classes to solve systems of linear equations. Note that
 | `LUSolver`            | :x:                |
 | `SORSolver`           | :heavy_check_mark: |
 
-In any case, solvers only work with square matrices so `N` equations in `N` variables. These solvers are used to find the `x` in the `Ax = b` relation. Methods require at least the equation system matrix `A` and the vector `b` containing the unknowns. Iterative methods may require additional parameters such as an initial guess or a particular configuration value.
+In any case, solvers only work with square matrices so `N` equations in `N` variables. These solvers are used to find the `x` in the `Ax = b` equation. Methods require at least the equation system matrix `A` and the vector `b` containing the unknowns. Iterative methods may require additional parameters such as an initial guess or a particular configuration value.
 
 ```dart
 // Solve a system using LU decomposition
@@ -231,7 +205,7 @@ final solutions = luSolver.solve(); // [-1, 4, 3]
 final determinant = luSolver.determinant(); // -84.0
 ```
 
-If you just want to work with matrices (operations, LU/Cholesky/QR decompositions...) you can consider the usage of `RealMatrix` or `ComplexMatrix` which are a real or complex representation of a matrix.
+If you just want to work with matrices (for operations, LU/Cholesky/QR/SVD decompositions, etc...) you can consider using either `RealMatrix` (to work with the `double` data type) or `ComplexMatrix` (to work with the `Complex` data type). Both classes are of type `Matrix<T>` so they have the same public API.
 
 ```dart
 final matrixA = RealMatrix.fromData(
@@ -259,8 +233,12 @@ final div = matrixA / matrixB;
 
 final lu = matrixA.luDecomposition();
 final cholesky = matrixA.choleskyDecomposition();
+final cholesky = matrixA.choleskyDecomposition();
+final qr = matrixA.qrDecomposition();
+final svd = matrixA.singleValueDecomposition();
 
 final det = matrixA.determinant();
+finak rank = matrixA.rank();
 ```
 
 You can use `toString()` to print the content of the matrix but there's also the possibility to use `toStringAugmented()` which prints the augmented matrix (the matrix + one extra column with the known values vector).
@@ -294,4 +272,98 @@ print("$lu");
 print("${lu.toStringAugmented()}");
 ```
 
-The `ComplexMatrix` has the same API and the same usage as `RealMatrix` with the only difference that it works with complex numbers.
+The `ComplexMatrix` has the same API and the same usage as `RealMatrix` with the only difference that it works with complex numbers rather then real numbers.
+
+# Numerical integration
+
+The **numerical integration** term refers to a group of algorithms for calculating the numerical value of a definite integral (on a given interval). The function must be continuous within the integration bounds. This package currently supports the following algorithms:
+
+| Algorithm type        |
+|:----------------------:
+| `MidpointRule`        |
+| `SimpsonRule`         |
+| `TrapezoidalRule`     |
+
+Other than the integration bounds (called `lowerBound` and `lowerBound`), the classes also have an optional parameter called `intervals`. It already has a good default value but if you wanted to change the number of parts in which the interval will be split, just make sure to set it!
+
+```dart
+const simpson = SimpsonRule(
+  lowerBound: 2,
+  upperBound: 4,
+);
+
+// Calculating the value of...
+//
+//   ∫ sin(x) * e^x dx
+//
+// ... between 2 and 4.
+final results = simpson.integrate('sin(x)*e^x');
+
+// Prints '-7.713'
+print('${results.result.toStringAsFixed(3)}');
+
+// Prints '32'
+print('${results.guesses.length}');
+```
+
+The `integrate(String)` function returns an `IntegralResults` which is a simple wrapper for 2 values:
+
+  1. `result`: the actual result, which is the value of the definite integral evaluated within `lowerBound` and `lowerBound`,
+  2. `guesses`: the various intermetiate values that brought to the final result.
+
+# Interpolation
+
+If you want to perform linear, polynomial or spline interpolation, then you can use the `Interpolation` types provided by this package. You just need to provide a few points in the constructor and then use `compute(double x)` to interpolate the value. This package currently supports the following algorithms:
+
+| Interpolation type       |
+|:-------------------------:
+| `LinearInterpolation`    |
+| `PolynomialInterpolation`|
+| `NewtonInterpolation`    |
+| `SplineInterpolation`    |
+
+You'll always find the `compute(double x)` method in any `Interpolation` type but some classes may have additional methods that others haven't. For example:
+
+```dart
+const newton = NewtonInterpolation(
+  nodes: [
+    InterpolationNode(x: 45, y: 0.7071),
+    InterpolationNode(x: 50, y: 0.7660),
+    InterpolationNode(x: 55, y: 0.8192),
+    InterpolationNode(x: 60, y: 0.8660),
+  ],
+);
+
+// Prints 0.788
+final y = newton.compute(52);
+print(y.toStringAsFixed(3));
+
+// Prints the following:
+//
+// [0.7071, 0.05890000000000006, -0.005700000000000038, -0.0007000000000000339]
+// [0.766, 0.053200000000000025, -0.006400000000000072, 0.0]
+// [0.8192, 0.04679999999999995, 0.0, 0.0]
+// [0.866, 0.0, 0.0, 0.0]
+print('\n${newton.forwardDifferenceTable()}');
+```
+
+Since the newtown interpolation algorithm internally builds the "divided differences table", the API exposes two methods (`forwardDifferenceTable()` and `forwardDifferenceTable()`) to print those tables. Of course, you won't find `forwardDifferenceTable()` in other interpolation types because they just don't use it. By default, `NewtonInterpolation` uses the forward difference method but if you want the backwards one, just pass `forwardDifference: false` in the constructor.
+
+```dart
+const polynomial = PolynomialInterpolation(
+  nodes: [
+    InterpolationNode(x: 0, y: -1),
+    InterpolationNode(x: 1, y: 1),
+    InterpolationNode(x: 4, y: 1),
+  ],
+);
+
+// Prints -4.54
+final y = polynomial.compute(-1.15);
+print(y.toStringAsFixed(2));
+
+// Prints -0.5x^2 + 2.5x + -1
+print('\n${polynomial.buildPolynomial()}');
+```
+
+This is another example with a different interpolation strategy. The `buildPolynomial()` returns the interpolation polynomial (as an `Algebraic` type) internally used to interpolate `x`.

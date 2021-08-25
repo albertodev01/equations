@@ -8,6 +8,7 @@ import 'package:equations/equations.dart';
 ///  - [LinearInterpolation];
 ///  - [PolynomialInterpolation];
 ///  - [NewtonInterpolation];
+///  - [SplineInterpolation].
 ///
 /// Subclasses of [Interpolation] should only override the `compute()` method.
 abstract class Interpolation {

@@ -2,7 +2,12 @@ import 'package:equations/equations.dart';
 
 void main() {
   // f(x) = x^3 + 7x^2 + 2x - 5
-  final cubic = Cubic.realEquation(a: 1, b: 7, c: 2, d: -5);
+  final cubic = Cubic.realEquation(
+    a: 1,
+    b: 7,
+    c: 2,
+    d: -5,
+  );
 
   print('$cubic'); // f(x) = 1x^3 + 7x^2 + 2x + -5
   print('discriminant: ${cubic.discriminant()}'); // 5089
