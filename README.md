@@ -27,10 +27,8 @@ In addition, you can also find utilities to work with:
 
 This package is meant to be used with Dart 2.12 or higher because the code is entirely null safe. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps) :rocket:
 
-
 <p align="center"><img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/circle_logo.svg" alt="Equation Solver logo" width="55" height="55" /></p>
 <p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
-
 
 The source code of the above website can be found at `example/flutter_example`. In the following lines, you'll find an overview of the various types in this package and their APIs; make sure to visit the [pub.dev documentation](https://pub.dev/documentation/equations/latest/) for details about methods signatures and docstring comments.
 
