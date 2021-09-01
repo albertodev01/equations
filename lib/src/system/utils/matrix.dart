@@ -103,6 +103,37 @@ abstract class Matrix<T> {
     flattenData = UnmodifiableListView<T>(_data);
   }
 
+  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
+  /// otherwise.
+  Matrix.diagonal({
+    required int rows,
+    required int columns,
+    required T defaultValue,
+    required T diagonalValue,
+  })  : rowCount = rows,
+        columnCount = columns {
+    // Making sure the user entered valid dimensions for the matrix
+    if ((rows == 0) || (columns == 0)) {
+      throw const MatrixException('The rows or column count cannot be zero.');
+    }
+
+    // Creating a new FIXED length list
+    _data = List<T>.filled(rows * columns, defaultValue);
+
+    // Exposing data to the outside in read-only mode
+    flattenData = UnmodifiableListView<T>(_data);
+
+    // Putting the given value in the diagonal
+    for (var i = 0; i < rowCount; ++i) {
+      final pos = columnCount * i + i;
+
+      if (pos < _data.length && i < columnCount) {
+        _data[pos] = diagonalValue;
+      }
+    }
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -333,6 +364,18 @@ abstract class Matrix<T> {
   /// Note that for all the other dimensions, the algorithm is exponentially
   /// slower.
   T determinant();
+
+  /// The characteristic polynomial can only be computed if the matrix is
+  /// **square**, meaning that it must have the same number of columns and rows.
+  ///
+  /// The roots of the characteristic polynomial are the eigenvalues of the
+  /// matrix.
+  ///
+  /// If you want to find the eigenvalues of a matrix, you can compute the
+  /// characteristic polynomial and solve the polynomial equation. However, for
+  /// 5x5 or bigger matrices, consider using the [eigenValues()] method which is
+  /// faster and more accurate.
+  Algebraic characteristicPolynomial();
 
   /// Returns the eigenvalues associated to this matrix.
   ///

@@ -74,6 +74,20 @@ class ComplexMatrix extends Matrix<Complex> {
           data: data,
         );
 
+  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
+  /// otherwise.
+  ComplexMatrix.diagonal({
+    required int rows,
+    required int columns,
+    required Complex diagonalValue,
+  }) : super.diagonal(
+          rows: rows,
+          columns: columns,
+          diagonalValue: diagonalValue,
+          defaultValue: const Complex.zero(),
+        );
+
   void _setDataAt(List<Complex> flatMatrix, int row, int col, Complex value) =>
       flatMatrix[columnCount * row + col] = value;
 
@@ -383,24 +397,111 @@ class ComplexMatrix extends Matrix<Complex> {
       return this(0, 0) == const Complex.zero() ? 0 : 1;
     }
 
-    final lower = luDecomposition()[0];
+    // If it's a square matrix, we can use the LU decomposition which is faster
+    if (isSquareMatrix) {
+      final lower = luDecomposition()[0];
 
-    // Linearly independent columns
-    var independentCols = 0;
+      // Linearly independent columns
+      var independentCols = 0;
 
-    for (var i = 0; i < lower.rowCount; ++i) {
-      for (var j = 0; j < lower.columnCount; ++j) {
-        if ((i == j) && (lower(i, j) != const Complex.zero())) {
-          ++independentCols;
+      for (var i = 0; i < lower.rowCount; ++i) {
+        for (var j = 0; j < lower.columnCount; ++j) {
+          if ((i == j) && (lower(i, j) != const Complex.zero())) {
+            ++independentCols;
+          }
+        }
+      }
+
+      return independentCols;
+    }
+
+    // If the matrix is rectangular and it's not 1x1, then use the "traditional"
+    // algorithm
+    var rank = 0;
+    final matrix = toListOfList();
+
+    const precision = 1.0e-12;
+    final selectedRow = List<bool>.generate(rowCount, (_) => false);
+
+    for (var i = 0; i < columnCount; ++i) {
+      var j = 0;
+      for (j = 0; j < rowCount; ++j) {
+        if (!selectedRow[j] && matrix[j][i].abs() > precision) {
+          break;
+        }
+      }
+
+      if (j != rowCount) {
+        ++rank;
+        selectedRow[j] = true;
+
+        for (var p = i + 1; p < columnCount; ++p) {
+          matrix[j][p] /= matrix[j][i];
+        }
+
+        for (var k = 0; k < rowCount; ++k) {
+          if (k != j && matrix[k][i].abs() > precision) {
+            for (var p = i + 1; p < columnCount; ++p) {
+              matrix[k][p] -= matrix[j][p] * matrix[k][i];
+            }
+          }
         }
       }
     }
 
-    return independentCols;
+    return rank;
   }
 
   @override
   Complex determinant() => _computeDeterminant(this);
+
+  @override
+  Algebraic characteristicPolynomial() {
+    // Making sure that the matrix is squared
+    if (!isSquareMatrix) {
+      throw const MatrixException(
+        'Eigenvalues can be computed on square matrices only!',
+      );
+    }
+
+    // For 1x1 matrices, directly compute it
+    if (rowCount == 1) {
+      return Linear(
+        b: -this(0, 0),
+      );
+    }
+
+    // For 2x2 matries, use a direct formula which is faster
+    if (rowCount == 2) {
+      return Quadratic(
+        b: -trace(),
+        c: determinant(),
+      );
+    }
+
+    // For 3x3 matrices and bigger, use the Faddeev–LeVerrier algorithm
+    var supportMatrix = this;
+    var oldTrace = supportMatrix.trace();
+
+    // The coefficients of the characteristic polynomial. The coefficient of the
+    // highest degree is always 1.
+    final coefficients = <Complex>[const Complex.fromReal(1), trace()];
+
+    for (var i = 1; i < rowCount; ++i) {
+      final diagonal = ComplexMatrix.diagonal(
+        rows: rowCount,
+        columns: columnCount,
+        diagonalValue: Complex.fromReal(1 / i) * oldTrace,
+      );
+
+      supportMatrix = this * (supportMatrix - diagonal) as ComplexMatrix;
+      oldTrace = supportMatrix.trace();
+
+      coefficients.add(Complex.fromReal(1 / (i + 1)) * oldTrace);
+    }
+
+    return Algebraic.from(coefficients);
+  }
 
   @override
   List<Complex> eigenValues() {
