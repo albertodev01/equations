@@ -495,7 +495,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
       }
     }
 
-    // Building the 'E' rectangular matrix, whose size is rowCount*columnCount.
+    // Building the 'E' rectangular matrix, whose size is rowCount * columnCount
     final sAsMatrix = List<List<double>>.generate(matrix.rowCount, (_) {
       return List<double>.generate(matrix.columnCount, (_) => 0);
     });

@@ -1560,6 +1560,103 @@ void main() {
       }
     });
 
-    test('Batch tests - Eigenvalues and eigenvectors', () {});
+    test('Batch tests - Eigenvalues', () {
+      final eigenvalues = [
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [2, -4],
+            [-1, -1],
+          ],
+        ).eigenValues(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [5, 8, 16],
+            [4, 1, 8],
+            [6, -4, -11],
+          ],
+        ).eigenValues(),
+        RealMatrix.fromData(
+          rows: 4,
+          columns: 4,
+          data: [
+            [1, 2, 3, 4],
+            [-1, 8, 3, 7],
+            [0, 0, 0, 0],
+            [9, 5, -7, 4],
+          ],
+        ).eigenValues(),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: [
+            [16],
+          ],
+        ).eigenValues(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [9, 7, -6],
+            [5, 8, -1],
+            [5, 3, 2],
+          ],
+        ).eigenValues(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [1, -1],
+            [1, 1],
+          ],
+        ).eigenValues(),
+      ];
+
+      final expected = <List<Complex>>[
+        const [
+          Complex.fromReal(3),
+          Complex.fromReal(-2),
+        ],
+        const [
+          Complex.fromReal(11.8062),
+          Complex.fromReal(-13.8062),
+          Complex.fromReal(-3),
+        ],
+        const [
+          Complex.fromReal(-4.0390),
+          Complex.fromReal(3.1566),
+          Complex.fromReal(13.8824),
+          Complex.zero(),
+        ],
+        const [
+          Complex.fromReal(16),
+        ],
+        const [
+          Complex.fromReal(11.6784),
+          Complex(3.6607, 2.2570),
+          Complex(3.6607, -2.2570),
+        ],
+        const [
+          Complex(1, -1),
+          Complex(1, 1),
+        ],
+      ];
+
+      for (var i = 0; i < eigenvalues.length; ++i) {
+        for (var j = 0; j < expected[i].length; ++j) {
+          expect(
+            eigenvalues[i][j].real,
+            MoreOrLessEquals(expected[i][j].real, precision: 1.0e-4),
+          );
+          expect(
+            eigenvalues[i][j].imaginary,
+            MoreOrLessEquals(expected[i][j].imaginary, precision: 1.0e-4),
+          );
+        }
+      }
+    });
   });
 }

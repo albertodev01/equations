@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
 import 'package:equations/src/utils/math_utils.dart';
@@ -536,23 +537,48 @@ class RealMatrix extends Matrix<double> with MathUtils {
       return characteristicPolynomial().solutions();
     }
 
-    // For 3x3 matrices and bigger, we use the QR algorithm.
-    var matrix = this;
-    final values = <Complex>[];
+    // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
+    final eigenDecomposition = EigendecompositionReal(
+      matrix: this,
+    );
 
-    // The QR algorithm simply uses the QR factorization and iterates the product
-    // of R x Q for 'n' steps
-    for (var i = 0; i < 50; ++i) {
-      final qr = matrix.qrDecomposition();
-      matrix = qr[1] * qr[0] as RealMatrix;
+    // The 'D' matrix contains real and complex coefficients of the eigenvalues
+    // so we can ignore the other 2.
+    final decomposition = eigenDecomposition.decompose()[1];
+    final eigenvalues = <Complex>[];
+
+    for (var i = 0; i < decomposition.rowCount; ++i) {
+      // The real value is ALWAYS in the diagonal.
+      final real = decomposition(i, i);
+
+      // The imaginary part can be either on the right or the left of the main
+      // diagonal, depending on the sign.
+      if (i > 0 && i < (decomposition.rowCount - 1)) {
+        // Values on the left and right of the diagonal.
+        final pre = decomposition(i, i - 1);
+        final post = decomposition(i, i + 1);
+
+        if (pre == 0 && post == 0) {
+          eigenvalues.add(Complex.fromReal(real));
+        } else {
+          if (pre == 0) {
+            eigenvalues.add(Complex(real, post));
+          } else {
+            eigenvalues.add(Complex(real, pre));
+          }
+        }
+      } else {
+        // Here the loop is either at (0,0) or at the bottom of the diagonal so
+        // we need to check only one side.
+        if (i == 0) {
+          eigenvalues.add(Complex(real, decomposition(i, i + 1)));
+        } else {
+          eigenvalues.add(Complex(real, decomposition(i, i - 1)));
+        }
+      }
     }
 
-    // The eigenvalues are the elements in the diagonal
-    for (var i = 0; i < matrix.columnCount; ++i) {
-      values.add(Complex.fromReal(matrix(i, i)));
-    }
-
-    return values;
+    return eigenvalues;
   }
 
   @override
