@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_complex_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/complex_svd.dart';
 
@@ -242,6 +243,12 @@ class ComplexMatrix extends Matrix<Complex> {
       throw const MatrixException('The given (row; col) pair is invalid.');
     }
 
+    if (rowCount == 1 || columnCount == 1) {
+      throw const MatrixException(
+        'Cannot compute minors when "rowCount" or "columnCount" is 1.',
+      );
+    }
+
     final source = List<List<Complex>>.generate(rowCount - 1, (_) {
       return List<Complex>.generate(
         columnCount - 1,
@@ -273,6 +280,17 @@ class ComplexMatrix extends Matrix<Complex> {
       throw const MatrixException('The matrix must be square!');
     }
 
+    // The cofactor matrix of an 1x1 matrix is always 1
+    if (rowCount == 1) {
+      return ComplexMatrix.fromFlattenedData(
+        rows: 1,
+        columns: 1,
+        data: const [
+          Complex.fromReal(1),
+        ],
+      );
+    }
+
     final source = List<List<Complex>>.generate(rowCount, (_) {
       return List<Complex>.generate(columnCount, (_) => const Complex.zero());
     });
@@ -296,6 +314,15 @@ class ComplexMatrix extends Matrix<Complex> {
   ComplexMatrix inverse() {
     if (!isSquareMatrix) {
       throw const MatrixException('The matrix must be square!');
+    }
+
+    // The inverse of an 1x1 matrix "A" is simply "1/A(0,0)"
+    if (rowCount == 1) {
+      return ComplexMatrix.fromFlattenedData(
+        rows: 1,
+        columns: 1,
+        data: [const Complex.fromReal(1) / this(0, 0)],
+      );
     }
 
     // In case of a 2x2 matrix, we can directly compute it and save computational
@@ -511,40 +538,28 @@ class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    // From now on, we're sure that the matrix is square. If it's 1x1, then the
-    // only eigenvalue is the only value in the matrix.
-    if (rowCount == 1) {
-      return [this(0, 0)];
+    // From now on, we're sure that the matrix is square. If it's 1x1 or 2x2,
+    // computing the roots of the characteristic polynomial is faster and more
+    // precise.
+    if (rowCount == 1 || rowCount == 2) {
+      return characteristicPolynomial().solutions();
     }
 
-    // In case of a 2x2 matrix, there is a direct formula we can use to avoid
-    // The iterations of the QR algorithm.
-    if (rowCount == 2) {
-      final characteristicPolynomial = Quadratic(
-        b: -trace(),
-        c: determinant(),
-      );
+    // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
+    final eigenDecomposition = EigendecompositionComplex(
+      matrix: this,
+    );
 
-      return characteristicPolynomial.solutions();
+    // The 'D' matrix contains real and complex coefficients of the eigenvalues
+    // so we can ignore the other 2.
+    final decomposition = eigenDecomposition.decompose()[1];
+    final eigenvalues = <Complex>[];
+
+    for (var i = 0; i < decomposition.rowCount; ++i) {
+      eigenvalues.add(decomposition(i, i));
     }
 
-    // For 3x3 matrices and bigger, we use the QR algorithm.
-    var matrix = this;
-    final values = <Complex>[];
-
-    // The QR algorithm simply uses the QR factorization and iterates the product
-    // of R x Q for 'n' steps
-    for (var i = 0; i < 50; ++i) {
-      final qr = matrix.qrDecomposition();
-      matrix = qr[1] * qr[0] as ComplexMatrix;
-    }
-
-    // The eigenvalues are the elements in the diagonal
-    for (var i = 0; i < matrix.columnCount; ++i) {
-      values.add(matrix(i, i));
-    }
-
-    return values;
+    return eigenvalues;
   }
 
   @override
@@ -680,14 +695,25 @@ class ComplexMatrix extends Matrix<Complex> {
   }
 
   @override
-  List<ComplexMatrix> qrDecomposition() => QRDecompositionComplex(
-        complexMatrix: this,
-      ).decompose();
+  List<ComplexMatrix> qrDecomposition() {
+    return QRDecompositionComplex(
+      complexMatrix: this,
+    ).decompose();
+  }
 
   @override
-  List<ComplexMatrix> singleValueDecomposition() => SVDComplex(
-        complexMatrix: this,
-      ).decompose();
+  List<ComplexMatrix> singleValueDecomposition() {
+    return SVDComplex(
+      complexMatrix: this,
+    ).decompose();
+  }
+
+  @override
+  List<ComplexMatrix> eigenDecomposition() {
+    return EigendecompositionComplex(
+      matrix: this,
+    ).decompose();
+  }
 
   /// Computes the determinant of a 2x2 matrix
   Complex _compute2x2Determinant(ComplexMatrix source) {

@@ -11,28 +11,28 @@ import 'package:equations/src/utils/math_utils.dart';
 ///   - D is a square matrix with the eigenvalues of A;
 ///   - V^-1 is the inverse of V.
 ///
-/// This class performs the QR decomposition on [RealMatrix] types.
-class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
-    with MathUtils {
+/// This class performs the QR decomposition on [ComplexMatrix] types.
+class EigendecompositionComplex
+    extends EigenDecomposition<Complex, ComplexMatrix> with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
-  const EigendecompositionReal({
-    required RealMatrix matrix,
+  const EigendecompositionComplex({
+    required ComplexMatrix matrix,
   }) : super(matrix: matrix);
 
   @override
-  List<RealMatrix> decompose() {
+  List<ComplexMatrix> decompose() {
     // Variables setup
-    final realEigenvalues = List<double>.generate(
+    final realEigenvalues = List<Complex>.generate(
       matrix.rowCount,
-      (_) => 0.0,
+      (_) => const Complex.zero(),
     );
-    final complexEigenvalues = List<double>.generate(
+    final complexEigenvalues = List<Complex>.generate(
       matrix.rowCount,
-      (_) => 0.0,
+      (_) => const Complex.zero(),
     );
-    final hessenbergValues = List<double>.generate(
+    final hessenbergValues = List<Complex>.generate(
       matrix.columnCount,
-      (_) => 0.0,
+      (_) => const Complex.zero(),
     );
     final eigenVectors = matrix.toListOfList();
 
@@ -71,32 +71,32 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
     }
 
     // Now there's just the need to build 'Q' and 'V'.
-    final dataMatrixD = List<List<double>>.generate(
+    final dataMatrixD = List<List<Complex>>.generate(
       matrix.rowCount,
-      (_) => List<double>.generate(
+      (_) => List<Complex>.generate(
         matrix.columnCount,
-        (_) => 0,
+        (_) => const Complex.zero(),
       ),
     );
 
     for (var i = 0; i < matrix.rowCount; ++i) {
       dataMatrixD[i][i] = realEigenvalues[i];
 
-      if (complexEigenvalues[i] > 0) {
+      if (complexEigenvalues[i].imaginary > 0) {
         dataMatrixD[i][i + 1] = complexEigenvalues[i];
-      } else if (complexEigenvalues[i] < 0) {
+      } else if (complexEigenvalues[i].imaginary < 0) {
         dataMatrixD[i][i - 1] = complexEigenvalues[i];
       }
     }
 
     // Building D and V.
-    final D = RealMatrix.fromData(
+    final D = ComplexMatrix.fromData(
       rows: matrix.rowCount,
       columns: matrix.columnCount,
       data: dataMatrixD,
     );
 
-    final V = RealMatrix.fromData(
+    final V = ComplexMatrix.fromData(
       rows: eigenVectors.length,
       columns: eigenVectors[0].length,
       data: eigenVectors,
@@ -112,9 +112,9 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
   /// Using Householder reduction to obtain the tridiagonal form.
   void _tridiagonalForm({
-    required List<double> realEigenvalues,
-    required List<double> complexEigenvalues,
-    required List<List<double>> eigenVectors,
+    required List<Complex> realEigenvalues,
+    required List<Complex> complexEigenvalues,
+    required List<List<Complex>> eigenVectors,
   }) {
     for (var j = 0; j < matrix.rowCount; j++) {
       realEigenvalues[j] = eigenVectors.get(matrix.rowCount - 1, j);
@@ -122,17 +122,17 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
     // Householder reduction to tridiagonal form.
     for (var i = matrix.rowCount - 1; i > 0; i--) {
-      var scale = 0.0;
-      var h = 0.0;
+      var scale = const Complex.zero();
+      var h = const Complex.zero();
       for (var k = 0; k < i; k++) {
-        scale = scale + realEigenvalues[k].abs();
+        scale = scale + realEigenvalues[k];
       }
-      if (scale == 0.0) {
+      if (scale == const Complex.zero()) {
         complexEigenvalues[i] = realEigenvalues[i - 1];
         for (var j = 0; j < i; j++) {
           realEigenvalues[j] = eigenVectors.get(i - 1, j);
-          eigenVectors.set(i, j, 0);
-          eigenVectors.set(j, i, 0);
+          eigenVectors.set(i, j, const Complex.zero());
+          eigenVectors.set(j, i, const Complex.zero());
         }
       } else {
         // Generating the Householder vector.
@@ -141,15 +141,15 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           h += realEigenvalues[k] * realEigenvalues[k];
         }
         var f = realEigenvalues[i - 1];
-        var g = math.sqrt(h);
-        if (f > 0) {
+        var g = h.sqrt();
+        if (f > const Complex.zero()) {
           g = -g;
         }
         complexEigenvalues[i] = scale * g;
         h = h - f * g;
         realEigenvalues[i - 1] = f - g;
         for (var j = 0; j < i; j++) {
-          complexEigenvalues[j] = 0.0;
+          complexEigenvalues[j] = const Complex.zero();
         }
 
         for (var j = 0; j < i; j++) {
@@ -162,7 +162,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           }
           complexEigenvalues[j] = g;
         }
-        f = 0.0;
+        f = const Complex.zero();
         for (var j = 0; j < i; j++) {
           complexEigenvalues[j] /= h;
           f += complexEigenvalues[j] * realEigenvalues[j];
@@ -183,7 +183,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
             );
           }
           realEigenvalues[j] = eigenVectors.get(i - 1, j);
-          eigenVectors.set(i, j, 0);
+          eigenVectors.set(i, j, const Complex.zero());
         }
       }
       realEigenvalues[i] = h;
@@ -191,14 +191,14 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
     for (var i = 0; i < matrix.rowCount - 1; i++) {
       eigenVectors.set(matrix.rowCount - 1, i, eigenVectors.get(i, i));
-      eigenVectors.set(i, i, 1);
+      eigenVectors.set(i, i, const Complex.fromReal(1));
       final h = realEigenvalues[i + 1];
-      if (h != 0.0) {
+      if (h != const Complex.zero()) {
         for (var k = 0; k <= i; k++) {
           realEigenvalues[k] = eigenVectors.get(k, i + 1) / h;
         }
         for (var j = 0; j <= i; j++) {
-          var g = 0.0;
+          var g = const Complex.zero();
           for (var k = 0; k <= i; k++) {
             g += eigenVectors.get(k, i + 1) * eigenVectors.get(k, j);
           }
@@ -209,40 +209,44 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         }
       }
       for (var k = 0; k <= i; k++) {
-        eigenVectors.set(k, i + 1, 0);
+        eigenVectors.set(k, i + 1, const Complex.zero());
       }
     }
     for (var j = 0; j < matrix.rowCount; j++) {
       realEigenvalues[j] = eigenVectors.get(matrix.rowCount - 1, j);
-      eigenVectors.set(matrix.rowCount - 1, j, 0);
+      eigenVectors.set(matrix.rowCount - 1, j, const Complex.zero());
     }
-    eigenVectors.set(matrix.rowCount - 1, matrix.rowCount - 1, 1);
-    complexEigenvalues[0] = 0.0;
+    eigenVectors.set(
+      matrix.rowCount - 1,
+      matrix.rowCount - 1,
+      const Complex.fromReal(1),
+    );
+    complexEigenvalues[0] = const Complex.zero();
   }
 
   /// Applying the tridiagonal QL algorithm, which is an efficient method to
   /// find eigenvalues of a matrix.
   void _qlTridiagonal({
-    required List<double> realEigenvalues,
-    required List<double> complexEigenvalues,
-    required List<List<double>> eigenVectors,
+    required List<Complex> realEigenvalues,
+    required List<Complex> complexEigenvalues,
+    required List<List<Complex>> eigenVectors,
   }) {
     for (var i = 1; i < matrix.rowCount; i++) {
       complexEigenvalues[i - 1] = complexEigenvalues[i];
     }
-    complexEigenvalues[matrix.rowCount - 1] = 0.0;
+    complexEigenvalues[matrix.rowCount - 1] = const Complex.zero();
 
-    var f = 0.0;
-    var tst1 = 0.0;
-    final eps = math.pow(2.0, -52.0);
+    var f = const Complex.zero();
+    var tst1 = const Complex.zero();
+    const eps = Complex.fromReal(1.0e-20);
     for (var l = 0; l < matrix.rowCount; l++) {
-      tst1 = math.max(
-        tst1,
+      tst1 = Complex.fromReal(math.max(
+        tst1.abs(),
         realEigenvalues[l].abs() + complexEigenvalues[l].abs(),
-      );
+      ));
       var m = l;
       while (m < matrix.rowCount) {
-        if (complexEigenvalues[m].abs() <= eps * tst1) {
+        if (complexEigenvalues[m].abs() <= eps.abs() * tst1.abs()) {
           break;
         }
         m++;
@@ -254,9 +258,10 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         do {
           // Computing the implicit shift.
           var g = realEigenvalues[l];
-          var p = (realEigenvalues[l + 1] - g) / (2.0 * complexEigenvalues[l]);
-          var r = hypot(p, 1.0);
-          if (p < 0) {
+          var p = (realEigenvalues[l + 1] - g) /
+              (const Complex.fromReal(2) * complexEigenvalues[l]);
+          var r = complexHypot(p, const Complex.fromReal(1));
+          if (p < const Complex.zero()) {
             r = -r;
           }
           realEigenvalues[l] = complexEigenvalues[l] / (p + r);
@@ -270,19 +275,19 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
           // Implicit QL transformation.
           p = realEigenvalues[m];
-          var c = 1.0;
+          var c = const Complex.fromReal(1);
           var c2 = c;
           var c3 = c;
           final el1 = complexEigenvalues[l + 1];
-          var s = 0.0;
-          var s2 = 0.0;
+          var s = const Complex.zero();
+          var s2 = const Complex.zero();
           for (var i = m - 1; i >= l; i--) {
             c3 = c2;
             c2 = c;
             s2 = s;
             g = c * complexEigenvalues[i];
             h = c * p;
-            r = hypot(p, complexEigenvalues[i]);
+            r = complexHypot(p, complexEigenvalues[i]);
             complexEigenvalues[i + 1] = s * r;
             s = complexEigenvalues[i] / r;
             c = p / r;
@@ -298,10 +303,10 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           p = -s * s2 * c3 * el1 * complexEigenvalues[l] / dl1;
           complexEigenvalues[l] = s * p;
           realEigenvalues[l] = c * p;
-        } while (complexEigenvalues[l].abs() > eps * tst1);
+        } while (complexEigenvalues[l].abs() > eps.abs() * tst1.abs());
       }
       realEigenvalues[l] = realEigenvalues[l] + f;
-      complexEigenvalues[l] = 0.0;
+      complexEigenvalues[l] = const Complex.zero();
     }
 
     // Sorting eigenvalues and their corresponding vectors.
@@ -328,26 +333,26 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
   /// Nonsymmetric reduction to the Hessenberg form.
   void _nonsymmetricHessReduction({
-    required List<List<double>> hessenbergCache,
-    required List<double> hessenbergValues,
-    required List<List<double>> eigenVectors,
+    required List<List<Complex>> hessenbergCache,
+    required List<Complex> hessenbergValues,
+    required List<List<Complex>> eigenVectors,
   }) {
     final high = matrix.rowCount - 1;
 
     for (var m = 1; m <= high - 1; m++) {
-      var scale = 0.0;
+      var scale = const Complex.zero();
       for (var i = m; i <= high; i++) {
-        scale = scale + hessenbergCache.get(i, m - 1).abs();
+        scale = scale + hessenbergCache.get(i, m - 1);
       }
-      if (scale != 0.0) {
+      if (scale != const Complex.zero()) {
         // Householder transformation here.
-        var h = 0.0;
+        var h = const Complex.zero();
         for (var i = high; i >= m; i--) {
           hessenbergValues[i] = hessenbergCache.get(i, m - 1) / scale;
           h += hessenbergValues[i] * hessenbergValues[i];
         }
-        var g = math.sqrt(h);
-        if (hessenbergValues[m] > 0) {
+        var g = h.sqrt();
+        if (hessenbergValues[m] > const Complex.zero()) {
           g = -g;
         }
         h -= hessenbergValues[m] * g;
@@ -357,7 +362,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         //
         // H = (I-u*u'/h) x H x (I-u*u')/h)
         for (var j = m; j < matrix.rowCount; j++) {
-          var f = 0.0;
+          var f = const Complex.zero();
           for (var i = high; i >= m; i--) {
             f += hessenbergValues[i] * hessenbergCache.get(i, j);
           }
@@ -372,7 +377,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         }
 
         for (var i = 0; i <= high; i++) {
-          var f = 0.0;
+          var f = const Complex.zero();
           for (var j = high; j >= m; j--) {
             f += hessenbergValues[j] * hessenbergCache.get(i, j);
           }
@@ -389,17 +394,21 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
     for (var i = 0; i < matrix.rowCount; i++) {
       for (var j = 0; j < matrix.rowCount; j++) {
-        eigenVectors.set(i, j, i == j ? 1.0 : 0.0);
+        eigenVectors.set(
+          i,
+          j,
+          i == j ? const Complex.fromReal(1) : const Complex.zero(),
+        );
       }
     }
 
     for (var m = high - 1; m >= 1; m--) {
-      if (hessenbergCache.get(m, m - 1) != 0.0) {
+      if (hessenbergCache.get(m, m - 1) != const Complex.zero()) {
         for (var i = m + 1; i <= high; i++) {
           hessenbergValues[i] = hessenbergCache.get(i, m - 1);
         }
         for (var j = m; j <= high; j++) {
-          var g = 0.0;
+          var g = const Complex.zero();
           for (var i = m; i <= high; i++) {
             g += hessenbergValues[i] * eigenVectors.get(i, j);
           }
@@ -429,35 +438,35 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
   /// Nonsymmetric reduction from the Hessenbergform to the real Schur form.
   void _hessenbergToSchur({
-    required List<double> realEigenvalues,
-    required List<double> complexEigenvalues,
-    required List<List<double>> hessenbergCache,
-    required List<List<double>> eigenVectors,
+    required List<Complex> realEigenvalues,
+    required List<Complex> complexEigenvalues,
+    required List<List<Complex>> hessenbergCache,
+    required List<List<Complex>> eigenVectors,
   }) {
     final nn = matrix.rowCount;
     var n = nn - 1;
     const low = 0;
     final high = nn - 1;
-    final eps = math.pow(2.0, -52.0);
-    var exshift = 0.0;
-    var p = 0.0,
-        q = 0.0,
-        r = 0.0,
-        s = 0.0,
-        z = 0.0,
-        t = 0.0,
-        w = 0.0,
-        x = 0.0,
-        y = 0.0;
+    final eps = Complex.fromReal(math.pow(2.0, -52.0) as double);
+    var exshift = const Complex.zero();
+    var p = const Complex.zero(),
+        q = const Complex.zero(),
+        r = const Complex.zero(),
+        s = const Complex.zero(),
+        z = const Complex.zero(),
+        t = const Complex.zero(),
+        w = const Complex.zero(),
+        x = const Complex.zero(),
+        y = const Complex.zero();
 
-    var norm = 0.0;
+    var norm = const Complex.zero();
     for (var i = 0; i < nn; i++) {
       if (i < low || i > high) {
         realEigenvalues[i] = hessenbergCache.get(i, i);
-        complexEigenvalues[i] = 0.0;
+        complexEigenvalues[i] = const Complex.zero();
       }
       for (var j = math.max(i - 1, 0); j < nn; j++) {
-        norm = norm + hessenbergCache.get(i, j).abs();
+        norm = norm + hessenbergCache.get(i, j);
       }
     }
 
@@ -466,12 +475,11 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
       // Looking for single small sub-diagonal elements.
       var l = n;
       while (l > low) {
-        s = hessenbergCache.get(l - 1, l - 1).abs() +
-            hessenbergCache.get(l, l).abs();
-        if (s == 0.0) {
+        s = hessenbergCache.get(l - 1, l - 1) + hessenbergCache.get(l, l);
+        if (s == const Complex.zero()) {
           s = norm;
         }
-        if (hessenbergCache.get(l, l - 1).abs() < eps * s) {
+        if (hessenbergCache.get(l, l - 1).abs() < eps.abs() * s.abs()) {
           break;
         }
         l--;
@@ -481,16 +489,16 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
       if (l == n) {
         hessenbergCache.set(n, n, hessenbergCache.get(n, n) + exshift);
         realEigenvalues[n] = hessenbergCache.get(n, n);
-        complexEigenvalues[n] = 0.0;
+        complexEigenvalues[n] = const Complex.zero();
         n--;
         iter = 0;
       } else if (l == n - 1) {
         // CASE 2: 2 roots found.
         w = hessenbergCache.get(n, n - 1) * hessenbergCache.get(n - 1, n);
         p = (hessenbergCache.get(n - 1, n - 1) - hessenbergCache.get(n, n)) /
-            2.0;
+            const Complex.fromReal(2);
         q = p * p + w;
-        z = math.sqrt(q.abs());
+        z = q.sqrt();
         hessenbergCache.set(n, n, hessenbergCache.get(n, n) + exshift);
         hessenbergCache.set(
           n - 1,
@@ -500,24 +508,24 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         x = hessenbergCache.get(n, n);
 
         // Real roots.
-        if (q >= 0) {
-          if (p >= 0) {
+        if (q >= const Complex.zero()) {
+          if (p >= const Complex.zero()) {
             z = p + z;
           } else {
             z = p - z;
           }
           realEigenvalues[n - 1] = x + z;
           realEigenvalues[n] = realEigenvalues[n - 1];
-          if (z != 0.0) {
+          if (z != const Complex.zero()) {
             realEigenvalues[n] = x - w / z;
           }
-          complexEigenvalues[n - 1] = 0.0;
-          complexEigenvalues[n] = 0.0;
+          complexEigenvalues[n - 1] = const Complex.zero();
+          complexEigenvalues[n] = const Complex.zero();
           x = hessenbergCache.get(n, n - 1);
-          s = x.abs() + z.abs();
+          s = x + z;
           p = x / s;
           q = z / s;
-          r = math.sqrt(p * p + q * q);
+          r = (p * p + q * q).sqrt();
           p = p / r;
           q = q / r;
 
@@ -561,8 +569,8 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
       } else {
         // Form shift
         x = hessenbergCache.get(n, n);
-        y = 0.0;
-        w = 0.0;
+        y = const Complex.zero();
+        w = const Complex.zero();
         if (l < n) {
           y = hessenbergCache.get(n - 1, n - 1);
           w = hessenbergCache.get(n, n - 1) * hessenbergCache.get(n - 1, n);
@@ -573,26 +581,25 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           for (var i = low; i <= n; i++) {
             hessenbergCache.set(i, i, hessenbergCache.get(i, i) - x);
           }
-          s = hessenbergCache.get(n, n - 1).abs() +
-              hessenbergCache.get(n - 1, n - 2).abs();
-          x = y = 0.75 * s;
-          w = -0.4375 * s * s;
+          s = hessenbergCache.get(n, n - 1) + hessenbergCache.get(n - 1, n - 2);
+          x = y = const Complex.fromReal(0.75) * s;
+          w = const Complex.fromReal(-0.4375) * s * s;
         }
 
         if (iter == 30) {
-          s = (y - x) / 2.0;
+          s = (y - x) / const Complex.fromReal(2.0);
           s = s * s + w;
-          if (s > 0) {
-            s = math.sqrt(s);
+          if (s > const Complex.zero()) {
+            s = s.sqrt();
             if (y < x) {
               s = -s;
             }
-            s = x - w / ((y - x) / 2.0 + s);
+            s = x - w / ((y - x) / const Complex.fromReal(2.0) + s);
             for (var i = low; i <= n; i++) {
               hessenbergCache.set(i, i, hessenbergCache.get(i, i) - s);
             }
             exshift += s;
-            x = y = w = 0.964;
+            x = y = w = const Complex.fromReal(0.964);
           }
         }
 
@@ -607,7 +614,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
               hessenbergCache.get(m, m + 1);
           q = hessenbergCache.get(m + 1, m + 1) - z - r - s;
           r = hessenbergCache.get(m + 2, m + 1);
-          s = p.abs() + q.abs() + r.abs();
+          s = p + q + r;
           p = p / s;
           q = q / s;
           r = r / s;
@@ -616,7 +623,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           }
 
           if (hessenbergCache.get(m, m - 1).abs() * (q.abs() + r.abs()) <
-              eps *
+              eps.abs() *
                   (p.abs() *
                       (hessenbergCache.get(m - 1, m - 1).abs() +
                           z.abs() +
@@ -627,9 +634,9 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         }
 
         for (var i = m + 2; i <= n; i++) {
-          hessenbergCache.set(i, i - 2, 0);
+          hessenbergCache.set(i, i - 2, const Complex.zero());
           if (i > m + 2) {
-            hessenbergCache.set(i, i - 3, 0);
+            hessenbergCache.set(i, i - 3, const Complex.zero());
           }
         }
 
@@ -639,9 +646,11 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           if (k != m) {
             p = hessenbergCache.get(k, k - 1);
             q = hessenbergCache.get(k + 1, k - 1);
-            r = notlast ? hessenbergCache.get(k + 2, k - 1) : 0.0;
-            x = p.abs() + q.abs() + r.abs();
-            if (x == 0.0) {
+            r = notlast
+                ? hessenbergCache.get(k + 2, k - 1)
+                : const Complex.zero();
+            x = p + q + r;
+            if (x == const Complex.zero()) {
               continue;
             }
             p = p / x;
@@ -649,11 +658,11 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
             r = r / x;
           }
 
-          s = math.sqrt(p * p + q * q + r * r);
-          if (p < 0) {
+          s = (p * p + q * q + r * r).sqrt();
+          if (p < const Complex.zero()) {
             s = -s;
           }
-          if (s != 0) {
+          if (s != const Complex.zero()) {
             if (k != m) {
               hessenbergCache.set(k, k - 1, -s * x);
             } else if (l != m) {
@@ -717,7 +726,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
       }
     }
 
-    if (norm == 0.0) {
+    if (norm == const Complex.zero()) {
       return;
     }
 
@@ -725,25 +734,25 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
       p = realEigenvalues[n];
       q = complexEigenvalues[n];
 
-      if (q == 0) {
+      if (q == const Complex.zero()) {
         var l = n;
-        hessenbergCache.set(n, n, 1);
+        hessenbergCache.set(n, n, const Complex.fromReal(1));
         for (var i = n - 1; i >= 0; i--) {
           w = hessenbergCache.get(i, i) - p;
-          r = 0.0;
+          r = const Complex.zero();
           for (var j = l; j <= n; j++) {
             r = r + hessenbergCache.get(i, j) * hessenbergCache.get(j, n);
           }
-          if (complexEigenvalues[i] < 0.0) {
+          if (complexEigenvalues[i] < const Complex.zero()) {
             z = w;
             s = r;
           } else {
             l = i;
-            if (complexEigenvalues[i] == 0.0) {
-              if (w != 0.0) {
+            if (complexEigenvalues[i] == const Complex.zero()) {
+              if (w != const Complex.zero()) {
                 hessenbergCache.set(i, n, -r / w);
               } else {
-                hessenbergCache.set(i, n, -r / (eps * norm));
+                hessenbergCache.set(i, n, -r / eps * norm);
               }
 
               // Solve real equations
@@ -762,15 +771,15 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
               }
             }
 
-            t = hessenbergCache.get(i, n).abs();
-            if ((eps * t) * t > 1) {
+            t = hessenbergCache.get(i, n);
+            if ((eps * t) * t > const Complex.fromReal(1)) {
               for (var j = i; j <= n; j++) {
                 hessenbergCache.set(j, n, hessenbergCache.get(j, n) / t);
               }
             }
           }
         }
-      } else if (q < 0) {
+      } else if (q < const Complex.zero()) {
         var l = n - 1;
         if (hessenbergCache.get(n, n - 1).abs() >
             hessenbergCache.get(n - 1, n).abs()) {
@@ -783,55 +792,61 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         } else {
           final division = _complexDiv(
             0,
-            -hessenbergCache.get(n - 1, n),
-            hessenbergCache.get(n - 1, n - 1) - p,
-            q,
+            -hessenbergCache.get(n - 1, n).real,
+            (hessenbergCache.get(n - 1, n - 1) - p).real,
+            q.real,
           );
-          hessenbergCache.set(n - 1, n - 1, division.real);
-          hessenbergCache.set(n - 1, n, division.imaginary);
+          hessenbergCache.set(n - 1, n - 1, Complex.fromReal(division.real));
+          hessenbergCache.set(n - 1, n, Complex.fromReal(division.imaginary));
         }
-        hessenbergCache.set(n, n - 1, 0);
-        hessenbergCache.set(n, n, 1);
+        hessenbergCache.set(n, n - 1, const Complex.zero());
+        hessenbergCache.set(n, n, const Complex.fromReal(1));
         for (var i = n - 2; i >= 0; i--) {
-          var ra = 0.0, sa = 0.0, vr = 0.0, vi = 0.0;
-          ra = 0.0;
-          sa = 0.0;
+          var ra = const Complex.zero(),
+              sa = const Complex.zero(),
+              vr = const Complex.zero(),
+              vi = const Complex.zero();
+          ra = const Complex.zero();
+          sa = const Complex.zero();
           for (var j = l; j <= n; j++) {
             ra = ra + hessenbergCache.get(i, j) * hessenbergCache.get(j, n - 1);
             sa = sa + hessenbergCache.get(i, j) * hessenbergCache.get(j, n);
           }
           w = hessenbergCache.get(i, i) - p;
 
-          if (complexEigenvalues[i] < 0.0) {
+          if (complexEigenvalues[i] < const Complex.zero()) {
             z = w;
             r = ra;
             s = sa;
           } else {
             l = i;
-            if (complexEigenvalues[i] == 0) {
-              final division = _complexDiv(-ra, -sa, w, q);
-              hessenbergCache.set(i, n - 1, division.real);
-              hessenbergCache.set(i, n, division.imaginary);
+            if (complexEigenvalues[i] == const Complex.zero()) {
+              final division = _complexDiv(
+                -ra.real,
+                -sa.real,
+                w.real,
+                q.real,
+              );
+              hessenbergCache.set(i, n - 1, Complex.fromReal(division.real));
+              hessenbergCache.set(i, n, Complex.fromReal(division.imaginary));
             } else {
               x = hessenbergCache.get(i, i + 1);
               y = hessenbergCache.get(i + 1, i);
               vr = (realEigenvalues[i] - p) * (realEigenvalues[i] - p) +
                   complexEigenvalues[i] * complexEigenvalues[i] -
                   q * q;
-              vi = (realEigenvalues[i] - p) * 2.0 * q;
-              if (vr == 0.0 && vi == 0.0) {
-                vr = eps *
-                    norm *
-                    (w.abs() + q.abs() + x.abs() + y.abs() + z.abs());
+              vi = (realEigenvalues[i] - p) * const Complex.fromReal(2) * q;
+              if (vr == const Complex.zero() && vi == const Complex.zero()) {
+                vr = eps * norm * (w + q + x + y + z);
               }
               final division = _complexDiv(
-                x * r - z * ra + q * sa,
-                x * s - z * sa - q * ra,
-                vr,
-                vi,
+                (x * r - z * ra + q * sa).real,
+                (x * s - z * sa - q * ra).real,
+                vr.real,
+                vi.real,
               );
-              hessenbergCache.set(i, n - 1, division.real);
-              hessenbergCache.set(i, n, division.imaginary);
+              hessenbergCache.set(i, n - 1, Complex.fromReal(division.real));
+              hessenbergCache.set(i, n, Complex.fromReal(division.imaginary));
               if (x.abs() > (z.abs() + q.abs())) {
                 final mult = q * hessenbergCache.get(i, n);
                 final pmult = q * hessenbergCache.get(i, n - 1);
@@ -848,19 +863,23 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
                 );
               } else {
                 final division = _complexDiv(
-                  -r - y * hessenbergCache.get(i, n - 1),
-                  -s - y * hessenbergCache.get(i, n),
-                  z,
-                  q,
+                  (-r - y * hessenbergCache.get(i, n - 1)).real,
+                  (-s - y * hessenbergCache.get(i, n)).real,
+                  z.real,
+                  q.real,
                 );
-                hessenbergCache.set(i + 1, n - 1, division.real);
-                hessenbergCache.set(i + 1, n, division.imaginary);
+                hessenbergCache.set(
+                    i + 1, n - 1, Complex.fromReal(division.real));
+                hessenbergCache.set(
+                    i + 1, n, Complex.fromReal(division.imaginary));
               }
             }
 
-            t = math.max(hessenbergCache.get(i, n - 1).abs(),
-                hessenbergCache.get(i, n).abs());
-            if ((eps * t) * t > 1) {
+            t = Complex.fromReal(math.max(
+              hessenbergCache.get(i, n - 1).abs(),
+              hessenbergCache.get(i, n).abs(),
+            ));
+            if ((eps * t) * t > const Complex.fromReal(1)) {
               for (var j = i; j <= n; j++) {
                 hessenbergCache.set(
                   j,
@@ -885,7 +904,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
     for (var j = nn - 1; j >= low; j--) {
       for (var i = low; i <= high; i++) {
-        z = 0.0;
+        z = const Complex.zero();
         for (var k = low; k <= math.min(j, high); k++) {
           z = z + eigenVectors.get(i, k) * hessenbergCache.get(k, j);
         }
@@ -897,14 +916,14 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
 /// Extension method on `List<List<double>>` with two shortcuts to read and write
 /// the contents of a list of lists.
-extension _EigenHelper on List<List<double>> {
+extension _EigenHelper on List<List<Complex>> {
   /// Reads the data at the given ([row]; [col]) position.
-  double get(int row, int col) {
+  Complex get(int row, int col) {
     return this[row][col];
   }
 
   /// Writes the given [value] in the ([row]; [col]) position.
-  void set(int row, int col, double value) {
+  void set(int row, int col, Complex value) {
     this[row][col] = value;
   }
 }

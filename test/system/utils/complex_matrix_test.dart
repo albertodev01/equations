@@ -1319,11 +1319,11 @@ void main() {
       expect(eigenvalues.length, equals(3));
       expect(
         eigenvalues[0].real,
-        const MoreOrLessEquals(-2.4851, precision: 1.0e-4),
+        const MoreOrLessEquals(2.4328, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].real,
-        const MoreOrLessEquals(2.4851, precision: 1.0e-4),
+        const MoreOrLessEquals(-2.4328, precision: 1.0e-4),
       );
       expect(
         eigenvalues[2].real,
@@ -1331,15 +1331,133 @@ void main() {
       );
       expect(
         eigenvalues[0].imaginary,
-        const MoreOrLessEquals(0.9019, precision: 1.0e-4),
+        const MoreOrLessEquals(0.0889, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].imaginary,
-        const MoreOrLessEquals(0.0980, precision: 1.0e-4),
+        const MoreOrLessEquals(0.9110, precision: 1.0e-4),
       );
       expect(
         eigenvalues[2].imaginary,
         isZero,
+      );
+    });
+
+    test('Batch tests - Minors', () {
+      final source = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 4,
+          data: const [
+            [
+              Complex.fromReal(2),
+              Complex.fromReal(-1),
+              Complex.fromReal(5),
+              Complex.fromReal(9)
+            ],
+            [
+              Complex.fromReal(-12),
+              Complex.fromReal(3),
+              Complex.fromReal(2),
+              Complex.fromReal(0)
+            ],
+            [
+              Complex.fromReal(1),
+              Complex.fromReal(-1),
+              Complex.fromReal(9),
+              Complex.fromReal(8)
+            ],
+          ],
+        ).minor(1, 2),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 4,
+          data: const [
+            [
+              Complex.fromReal(2),
+              Complex.i(),
+              Complex(-8, 3),
+              Complex.fromReal(9)
+            ],
+            [Complex.zero(), Complex(4, 4), Complex.i(), Complex(9, -9)],
+            [
+              Complex.fromReal(1),
+              Complex.i(),
+              Complex(3, 5),
+              Complex.fromReal(8)
+            ],
+          ],
+        ).minor(2, 3),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.i(), Complex(4, 5)],
+            [Complex.fromReal(2), Complex.fromImaginary(-7)],
+          ],
+        ).minor(0, 1),
+        ComplexMatrix.fromData(
+          rows: 4,
+          columns: 2,
+          data: const [
+            [Complex.i(), Complex.zero()],
+            [Complex(6, 7), Complex.i()],
+            [Complex.fromReal(2), Complex(3, -10)],
+            [Complex.zero(), Complex(8, 1)],
+          ],
+        ).minor(2, 0),
+      ];
+
+      final minors = [
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(2), Complex.fromReal(-1), Complex.fromReal(9)],
+            [Complex.fromReal(1), Complex.fromReal(-1), Complex.fromReal(8)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(2), Complex.i(), Complex(-8, 3)],
+            [Complex.zero(), Complex(4, 4), Complex.i()],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex.fromReal(2)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 1,
+          data: const [
+            [Complex.zero()],
+            [Complex.i()],
+            [Complex(8, 1)],
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        expect(source[i], equals(minors[i]));
+      }
+
+      // Exception test
+      expect(
+        () => ComplexMatrix.fromData(
+          rows: 2,
+          columns: 1,
+          data: const [
+            [Complex(3, 7)],
+            [Complex.fromImaginary(-9)],
+          ],
+        ).minor(1, 0),
+        throwsA(isA<MatrixException>()),
       );
     });
   });

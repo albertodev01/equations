@@ -420,4 +420,17 @@ abstract class Matrix<T> {
   /// The returned list contains `E` at index 0, `U` at index 1 and `V` at index
   /// 2.
   List<Matrix<T>> singleValueDecomposition();
+
+  /// Computes the `V`, `D` and `V'` matrices of the eigendecomposition
+  /// algorithm. In particular, this method returns the following matrices:
+  ///
+  ///  - `V`: square matrix whose i<sup>th</sup> column is the eigenvector of
+  ///         the source matrix;
+  ///  - `U`: the diagonal matrix whose diagonal elements are the corresponding
+  ///         eigenvalues of A;
+  ///  - `V`: the inverse of V.
+  ///
+  /// The returned list contains `V` at index 0, `D` at index 1 and `V'` at index
+  /// 2.
+  List<Matrix<T>> eigenDecomposition();
 }

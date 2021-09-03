@@ -1613,6 +1613,15 @@ void main() {
             [1, 1],
           ],
         ).eigenValues(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [1, 7, 3],
+            [7, 4, 5],
+            [3, 5, 0],
+          ],
+        ).eigenValues(),
       ];
 
       final expected = <List<Complex>>[
@@ -1642,6 +1651,11 @@ void main() {
         const [
           Complex(1, -1),
           Complex(1, 1),
+        ],
+        const [
+          Complex.fromReal(-4.9095),
+          Complex.fromReal(-2.4546),
+          Complex.fromReal(12.3641),
         ],
       ];
 

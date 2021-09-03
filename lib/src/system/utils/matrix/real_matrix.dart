@@ -712,14 +712,25 @@ class RealMatrix extends Matrix<double> with MathUtils {
   }
 
   @override
-  List<RealMatrix> qrDecomposition() => QRDecompositionReal(
-        realMatrix: this,
-      ).decompose();
+  List<RealMatrix> qrDecomposition() {
+    return QRDecompositionReal(
+      realMatrix: this,
+    ).decompose();
+  }
 
   @override
-  List<RealMatrix> singleValueDecomposition() => SVDReal(
-        realMatrix: this,
-      ).decompose();
+  List<RealMatrix> singleValueDecomposition() {
+    return SVDReal(
+      realMatrix: this,
+    ).decompose();
+  }
+
+  @override
+  List<RealMatrix> eigenDecomposition() {
+    return EigendecompositionReal(
+      matrix: this,
+    ).decompose();
+  }
 
   /// Computes the determinant of a 2x2 matrix.
   double _compute2x2Determinant(RealMatrix source) {
