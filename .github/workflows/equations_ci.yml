@@ -32,6 +32,9 @@ jobs:
       - name: Runing unit tests
         run: dart test --coverage=coverage && dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
 
+      - name: Removing a folder from coverage
+        run: lcov --remove coverage/lcov.info 'lib/src/system/utils/matrix/decompositions/eigenvalue_decomposition/*'
+
       - name: Making sure that code coverage is at least 95
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:

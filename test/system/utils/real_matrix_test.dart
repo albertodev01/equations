@@ -1093,7 +1093,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(1));
       expect(eigenvalues[0], equals(const Complex.fromReal(-16)));
@@ -1109,7 +1109,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(2));
       expect(
@@ -1141,7 +1141,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(3));
       expect(
@@ -1569,7 +1569,7 @@ void main() {
             [2, -4],
             [-1, -1],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
         RealMatrix.fromData(
           rows: 3,
           columns: 3,
@@ -1578,7 +1578,7 @@ void main() {
             [4, 1, 8],
             [6, -4, -11],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
         RealMatrix.fromData(
           rows: 4,
           columns: 4,
@@ -1588,14 +1588,14 @@ void main() {
             [0, 0, 0, 0],
             [9, 5, -7, 4],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
         RealMatrix.fromData(
           rows: 1,
           columns: 1,
           data: [
             [16],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
         RealMatrix.fromData(
           rows: 3,
           columns: 3,
@@ -1604,7 +1604,7 @@ void main() {
             [5, 8, -1],
             [5, 3, 2],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
         RealMatrix.fromData(
           rows: 2,
           columns: 2,
@@ -1612,7 +1612,7 @@ void main() {
             [1, -1],
             [1, 1],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
         RealMatrix.fromData(
           rows: 3,
           columns: 3,
@@ -1621,7 +1621,7 @@ void main() {
             [7, 4, 5],
             [3, 5, 0],
           ],
-        ).eigenValues(),
+        ).eigenvalues(),
       ];
 
       final expected = <List<Complex>>[

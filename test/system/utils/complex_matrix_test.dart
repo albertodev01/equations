@@ -1266,7 +1266,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(1));
       expect(eigenvalues[0], equals(const Complex.fromReal(-16)));
@@ -1282,7 +1282,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(2));
       expect(
@@ -1314,7 +1314,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(3));
       expect(
@@ -1459,6 +1459,387 @@ void main() {
         ).minor(1, 0),
         throwsA(isA<MatrixException>()),
       );
+    });
+
+    test('Batch tests - Cofactor matrix', () {
+      final source = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
+            [Complex.fromReal(0), Complex.fromReal(4), Complex.fromReal(5)],
+            [Complex.fromReal(1), Complex.fromReal(0), Complex.fromReal(6)],
+          ],
+        ).cofactorMatrix(),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.i(), Complex(3, -7), Complex.zero()],
+            [Complex(-5, 1), Complex(8, 10), Complex.fromImaginary(-5)],
+            [Complex(2, 2), Complex.i(), Complex.fromReal(-2)],
+          ],
+        ).cofactorMatrix(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(-3), Complex.fromReal(6)],
+            [Complex.fromReal(7), Complex.fromReal(9)],
+          ],
+        ).cofactorMatrix(),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex(4, -7)],
+          ],
+        ).cofactorMatrix(),
+      ];
+
+      final cofactorMatrices = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(24), Complex.fromReal(5), Complex.fromReal(-4)],
+            [Complex.fromReal(-12), Complex.fromReal(3), Complex.fromReal(2)],
+            [Complex.fromReal(-2), Complex.fromReal(-5), Complex.fromReal(4)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex(-21, -20), Complex.fromImaginary(-8), Complex(3, -41)],
+            [Complex(6, -14), Complex.fromImaginary(-2), Complex(21, -8)],
+            [Complex(-35, -15), Complex.fromReal(-5), Complex(-2, -30)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(9), Complex.fromReal(-7)],
+            [Complex.fromReal(-6), Complex.fromReal(-3)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex.fromReal(1)],
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        expect(source[i], equals(cofactorMatrices[i]));
+      }
+    });
+
+    test('Batch tests - Rank of a matrix', () {
+      final source = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(3), Complex(9, 4), Complex.fromReal(2)],
+            [Complex.fromReal(2), Complex(3, -2), Complex.fromReal(-2)],
+            [Complex.fromReal(8), Complex.fromReal(1), Complex.fromReal(1)],
+          ],
+        ).rank(),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex(1, 3)],
+          ],
+        ).rank(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex(2, -4), Complex.i()],
+            [Complex(7, -9), Complex.zero()],
+          ],
+        ).rank(),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(1), Complex.fromReal(6)],
+            [Complex.fromReal(-2), Complex.fromReal(9)],
+            [Complex.zero(), Complex.fromReal(1)],
+          ],
+        ).rank(),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 2,
+          data: const [
+            [Complex(2, 2), Complex(6, 6)],
+            [Complex(3, 3), Complex(9, 9)],
+            [Complex(4, 4), Complex(12, 12)],
+          ],
+        ).rank(),
+      ];
+
+      final ranks = [
+        3,
+        1,
+        2,
+        2,
+        1,
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        expect(source[i], equals(ranks[i]));
+      }
+    });
+
+    test('Batch tests - Characteristic polynomial', () {
+      final polynomials = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(3), Complex(9, 4), Complex.fromReal(2)],
+            [Complex.fromReal(2), Complex(3, -2), Complex.fromReal(-2)],
+            [Complex.fromReal(8), Complex.fromReal(1), Complex.fromReal(1)],
+          ],
+        ).characteristicPolynomial(),
+        ComplexMatrix.fromData(
+          rows: 4,
+          columns: 4,
+          data: const [
+            [
+              Complex.fromReal(3),
+              Complex(9, 4),
+              Complex.fromReal(2),
+              Complex.fromReal(2)
+            ],
+            [
+              Complex.fromReal(2),
+              Complex(3, -2),
+              Complex.fromReal(-2),
+              Complex.zero()
+            ],
+            [
+              Complex.fromReal(8),
+              Complex.i(),
+              Complex.fromReal(1),
+              Complex(6, -1)
+            ],
+            [
+              Complex(5, 3),
+              Complex.zero(),
+              Complex.fromReal(9),
+              Complex.fromImaginary(4)
+            ],
+          ],
+        ).characteristicPolynomial(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(3), Complex(6, -4)],
+            [Complex.i(), Complex.fromReal(2)],
+          ],
+        ).characteristicPolynomial(),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex.fromReal(14)],
+          ],
+        ).characteristicPolynomial(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(3), Complex.fromReal(9)],
+            [Complex.fromReal(-7), Complex.fromReal(2)],
+          ],
+        ).characteristicPolynomial(),
+      ];
+
+      final expectedSolutions = <Algebraic>[
+        Algebraic.from(
+          [
+            const Complex.fromReal(1),
+            const Complex(-7, 2),
+            const Complex(-17, -16),
+            const Complex(191, 46)
+          ],
+        ),
+        Algebraic.from(
+          [
+            const Complex.fromReal(1),
+            const Complex(-7, -2),
+            const Complex(-75, 17),
+            const Complex(293, -72),
+            const Complex(1898, -27),
+          ],
+        ),
+        Algebraic.from(
+          [
+            const Complex.fromReal(1),
+            const Complex.fromReal(-5),
+            const Complex(2, -6),
+          ],
+        ),
+        Algebraic.from(
+          [
+            const Complex.fromReal(1),
+            -const Complex.fromReal(14),
+          ],
+        ),
+        Algebraic.from(
+          [
+            const Complex.fromReal(1),
+            -const Complex.fromReal(5),
+            const Complex.fromReal(69),
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < polynomials.length; ++i) {
+        expect(polynomials[i].degree, equals(expectedSolutions[i].degree));
+
+        for (var j = 0; j < polynomials[i].coefficients.length; ++j) {
+          expect(
+            polynomials[i].coefficients[j].real,
+            MoreOrLessEquals(
+              expectedSolutions[i].coefficients[j].real,
+              precision: 1.0e-3,
+            ),
+          );
+          expect(
+            polynomials[i].coefficients[j].imaginary,
+            MoreOrLessEquals(
+              expectedSolutions[i].coefficients[j].imaginary,
+              precision: 1.0e-3,
+            ),
+          );
+        }
+      }
+    });
+
+    test('Batch tests - Eigenvalues', () {
+      final eigenvalues = [
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(2), Complex(6, -1)],
+            [Complex(5, 3), Complex.zero()],
+          ],
+        ).eigenvalues(),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(5), Complex.fromReal(8), Complex.fromReal(16)],
+            [Complex.fromReal(4), Complex.fromReal(1), Complex.fromReal(8)],
+            [Complex.fromReal(6), Complex.fromReal(-4), Complex.fromReal(-11)],
+          ],
+        ).eigenvalues(),
+        ComplexMatrix.fromData(
+          rows: 4,
+          columns: 4,
+          data: const [
+            [
+              Complex.fromReal(3),
+              Complex(9, 4),
+              Complex.fromReal(2),
+              Complex.fromReal(2)
+            ],
+            [
+              Complex.fromReal(2),
+              Complex(3, -2),
+              Complex.fromReal(-2),
+              Complex.zero()
+            ],
+            [
+              Complex.fromReal(8),
+              Complex.i(),
+              Complex.fromReal(1),
+              Complex(6, -1)
+            ],
+            [
+              Complex(5, 3),
+              Complex.zero(),
+              Complex.fromReal(9),
+              Complex.fromImaginary(4)
+            ],
+          ],
+        ).eigenvalues(),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex(4, -2)],
+          ],
+        ).eigenvalues(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [const Complex.i(), -const Complex.i()],
+            [const Complex.i(), const Complex.i()],
+          ],
+        ).eigenvalues(),
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex(3, 5), Complex.i(), Complex(6, -8)],
+            [Complex.i(), Complex.zero(), Complex.fromReal(3)],
+            [Complex(6, -8), Complex.fromReal(3), Complex.fromReal(-8)],
+          ],
+        ).eigenvalues(),
+      ];
+
+      final expected = <List<Complex>>[
+        const [Complex(6.9329, 1.0955), Complex(-4.9329, -1.0955)],
+        const [
+          Complex.fromReal(11.8062),
+          Complex.fromReal(-13.8062),
+          Complex.fromReal(-3),
+        ],
+        const [
+          Complex(9.9301, 1.6185),
+          Complex(-3.5200, -1.1455),
+          Complex(7.1789, -0.9473),
+          Complex(-6.5891, 2.4743),
+        ],
+        const [
+          Complex(4, -2),
+        ],
+        const [
+          Complex(1, 1),
+          Complex(-1, 1),
+        ],
+        const [
+          Complex(-0.1837, -0.2127),
+          Complex(3.6609, -3.0358),
+          Complex(-8.4772, 8.2485),
+        ],
+      ];
+
+      for (var i = 0; i < eigenvalues.length; ++i) {
+        for (var j = 0; j < expected[i].length; ++j) {
+          expect(
+            eigenvalues[i][j].real,
+            MoreOrLessEquals(expected[i][j].real, precision: 1.0e-4),
+          );
+          expect(
+            eigenvalues[i][j].imaginary,
+            MoreOrLessEquals(expected[i][j].imaginary, precision: 1.0e-4),
+          );
+        }
+      }
     });
   });
 }

@@ -381,7 +381,7 @@ abstract class Matrix<T> {
   ///
   /// Eigenvalues can only be computed if the matrix is **square**, meaning
   /// that it must have the same number of columns and rows.
-  List<Complex> eigenValues();
+  List<Complex> eigenvalues();
 
   /// Factors the matrix as the product of a lower triangular matrix `L` and
   /// an upper triangular matrix `U`. The matrix **must** be square.

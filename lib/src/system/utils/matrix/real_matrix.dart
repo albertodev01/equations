@@ -522,7 +522,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
   }
 
   @override
-  List<Complex> eigenValues() {
+  List<Complex> eigenvalues() {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(

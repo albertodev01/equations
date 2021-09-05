@@ -512,7 +512,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // The coefficients of the characteristic polynomial. The coefficient of the
     // highest degree is always 1.
-    final coefficients = <Complex>[const Complex.fromReal(1), trace()];
+    final coefficients = <Complex>[const Complex.fromReal(1), -trace()];
 
     for (var i = 1; i < rowCount; ++i) {
       final diagonal = ComplexMatrix.diagonal(
@@ -524,14 +524,14 @@ class ComplexMatrix extends Matrix<Complex> {
       supportMatrix = this * (supportMatrix - diagonal) as ComplexMatrix;
       oldTrace = supportMatrix.trace();
 
-      coefficients.add(Complex.fromReal(1 / (i + 1)) * oldTrace);
+      coefficients.add(Complex.fromReal(-1 / (i + 1)) * oldTrace);
     }
 
     return Algebraic.from(coefficients);
   }
 
   @override
-  List<Complex> eigenValues() {
+  List<Complex> eigenvalues() {
     if (!isSquareMatrix) {
       throw const MatrixException(
         'Eigenvalues can be computed on square matrices only!',
