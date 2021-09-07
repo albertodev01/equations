@@ -1,6 +1,10 @@
-## [3.0.1]
+## [3.1.0]
 
- - TBA
+ - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
+ - Added the `eigenvaluesEigenvectors()` method on `Matrix<T>` to compute both eigenvalues and eigenvectors of a matrix
+ - Fixed some bugs in the `eigenvalue()` method
+ - Added the `eigenDecomposition()` method on `Matrix<T>` to implement the "Eigendecomposition" algorithm
+ - Added the `Matrix.diagonal()` constructor on `Matrix<T>` to create diagonal matrices
 
 ## [3.0.0]
 

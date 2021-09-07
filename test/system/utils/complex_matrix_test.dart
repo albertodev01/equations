@@ -1538,6 +1538,92 @@ void main() {
         expect(source[i], equals(cofactorMatrices[i]));
       }
     });
+    test('Batch tests - Inverse matrix', () {
+      final source = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.i(), Complex.zero(), Complex.fromReal(-1)],
+            [Complex.zero(), Complex.i(), Complex.fromReal(1)],
+            [Complex(1, -1), Complex(0, -1), Complex(1, 1)],
+          ],
+        ).inverse(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(4), Complex.fromReal(7)],
+            [Complex.fromReal(2), Complex.fromReal(6)],
+          ],
+        ).inverse(),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex.fromReal(13)],
+          ],
+        ).inverse(),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.i(), Complex.zero()],
+            [Complex.zero(), Complex.i()],
+          ],
+        ).inverse(),
+      ];
+
+      final inverse = [
+        ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex(1, -2), Complex(0, -1), Complex(0, -1)],
+            [Complex(-1, 1), Complex.zero(), Complex.i()],
+            [Complex(1, 1), Complex.fromReal(1), Complex.fromReal(1)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(0.6), Complex.fromReal(-0.7)],
+            [Complex.fromReal(-0.2), Complex.fromReal(0.4)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [Complex.fromReal(1 / 13)],
+          ],
+        ),
+        ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [Complex.fromImaginary(-1), Complex.zero()],
+            [Complex.zero(), Complex.fromImaginary(-1)],
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        for (var j = 0; j < source[i].rowCount; ++j) {
+          for (var k = 0; k < source[i].rowCount; ++k) {
+            expect(
+              source[i](j, k).real,
+              MoreOrLessEquals(inverse[i](j, k).real, precision: 1.0e-2),
+            );
+            expect(
+              source[i](j, k).imaginary,
+              MoreOrLessEquals(inverse[i](j, k).imaginary, precision: 1.0e-2),
+            );
+          }
+        }
+      }
+    });
 
     test('Batch tests - Rank of a matrix', () {
       final source = [
