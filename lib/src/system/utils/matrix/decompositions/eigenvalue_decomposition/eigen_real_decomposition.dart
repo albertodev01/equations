@@ -53,18 +53,18 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
         realEigenvalues: realEigenvalues,
       );
     } else {
-      final hessenbersCache = matrix.toListOfList();
+      final hessenbergCache = matrix.toListOfList();
 
       // Reducing to Hessenberg form.
       _nonsymmetricHessReduction(
         eigenVectors: eigenVectors,
-        hessenbergCache: hessenbersCache,
+        hessenbergCache: hessenbergCache,
         hessenbergValues: hessenbergValues,
       );
 
       // Converting into real Schur form.
       _hessenbergToSchur(
-        hessenbergCache: hessenbersCache,
+        hessenbergCache: hessenbergCache,
         eigenVectors: eigenVectors,
         realEigenvalues: realEigenvalues,
         complexEigenvalues: complexEigenvalues,

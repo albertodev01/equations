@@ -561,11 +561,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
         if (pre == 0 && post == 0) {
           eigenvalues.add(Complex.fromReal(real));
         } else {
-          if (pre == 0) {
-            eigenvalues.add(Complex(real, post));
-          } else {
-            eigenvalues.add(Complex(real, pre));
-          }
+          eigenvalues.add(Complex(real, pre == 0 ? post : pre));
         }
       } else {
         // Here the loop is either at (0,0) or at the bottom of the diagonal so
@@ -586,7 +582,8 @@ class RealMatrix extends Matrix<double> with MathUtils {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-          'LU decomposition only works with square matrices!');
+        'LU decomposition only works with square matrices!',
+      );
     }
 
     // Creating L and U matrices
@@ -650,7 +647,8 @@ class RealMatrix extends Matrix<double> with MathUtils {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-          'LU decomposition only works with square matrices!');
+        'LU decomposition only works with square matrices!',
+      );
     }
 
     // Exit immediately because if [0,0] is a negative number, the algorithm
