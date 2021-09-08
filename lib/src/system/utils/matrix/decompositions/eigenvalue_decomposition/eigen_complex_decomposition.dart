@@ -1,3 +1,4 @@
+// coverage:ignore-file
 import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
@@ -54,7 +55,7 @@ class EigendecompositionComplex
     } else {
       final hessenbersCache = matrix.toListOfList();
 
-      // Reduceing to Hessenberg form.
+      // Reducing to Hessenberg form.
       _nonsymmetricHessReduction(
         eigenVectors: eigenVectors,
         hessenbergCache: hessenbersCache,
