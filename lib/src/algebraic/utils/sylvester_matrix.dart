@@ -60,7 +60,7 @@ class SylvesterMatrix {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < _coefficients.length; ++i) {
-      result = 37 * result + _coefficients[i].hashCode;
+      result = result * 37 + _coefficients[i].hashCode;
     }
 
     return result;

@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Dropdown button used to choose which system solving algorithm has to be used.
 class SystemDropdownSelection extends StatefulWidget {
   /// Creates a [SystemDropdownSelection] widget.
-  const SystemDropdownSelection();
+  const SystemDropdownSelection({Key? key}) : super(key: key);
 
   @override
   SystemDropdownSelectionState createState() => SystemDropdownSelectionState();
@@ -17,36 +17,34 @@ class SystemDropdownSelection extends StatefulWidget {
 @visibleForTesting
 class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
   /// The items of the dropdown.
-  late final dropdownItems = _dropdownValues(context);
+  late final dropdownItems = _dropdownValues();
 
-  List<DropdownMenuItem<String>> _dropdownValues(BuildContext context) {
-    if (systemType == SystemType.factorization) {
-      return const [
-        DropdownMenuItem<String>(
-          key: Key('LU-Dropdown'),
-          value: 'LU',
-          child: Text('LU'),
-        ),
-        DropdownMenuItem<String>(
-          key: Key('Cholesky-Dropdown'),
-          value: 'Cholesky',
-          child: Text('Cholesky'),
-        )
-      ];
-    } else {
-      return const [
-        DropdownMenuItem<String>(
-          key: Key('SOR-Dropdown'),
-          value: 'SOR',
-          child: Text('SOR'),
-        ),
-        DropdownMenuItem<String>(
-          key: Key('Jacobi-Dropdown'),
-          value: 'Jacobi',
-          child: Text('Jacobi'),
-        ),
-      ];
-    }
+  List<DropdownMenuItem<String>> _dropdownValues() {
+    return systemType == SystemType.factorization
+        ? const [
+            DropdownMenuItem<String>(
+              key: Key('LU-Dropdown'),
+              value: 'LU',
+              child: Text('LU'),
+            ),
+            DropdownMenuItem<String>(
+              key: Key('Cholesky-Dropdown'),
+              value: 'Cholesky',
+              child: Text('Cholesky'),
+            ),
+          ]
+        : const [
+            DropdownMenuItem<String>(
+              key: Key('SOR-Dropdown'),
+              value: 'SOR',
+              child: Text('SOR'),
+            ),
+            DropdownMenuItem<String>(
+              key: Key('Jacobi-Dropdown'),
+              value: 'Jacobi',
+              child: Text('Jacobi'),
+            ),
+          ];
   }
 
   /// Updates the currently selected value in the dropdown.

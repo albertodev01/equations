@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Dropdown button used to choose which root finding algorithm has to be used
 class NonlinearDropdownSelection extends StatefulWidget {
   /// Creates a [NonlinearDropdownSelection] widget.
-  const NonlinearDropdownSelection();
+  const NonlinearDropdownSelection({Key? key}) : super(key: key);
 
   @override
   NonlinearDropdownSelectionState createState() =>
@@ -34,7 +34,7 @@ class NonlinearDropdownSelectionState
           key: Key('Steffensen-Dropdown'),
           value: 'Steffensen',
           child: Text('Steffensen'),
-        )
+        ),
       ];
     } else {
       return const [

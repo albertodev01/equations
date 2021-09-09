@@ -13,7 +13,9 @@ void main() {
     blocTest<NavigationCubit, int>(
       'Making sure that the bloc emits states',
       build: () => NavigationCubit(),
-      act: (cubit) => cubit..pageIndex(1)..pageIndex(2),
+      act: (cubit) => cubit
+        ..pageIndex(1)
+        ..pageIndex(2),
       expect: () => const [1, 2],
       verify: (cubit) => cubit.state == 2,
     );

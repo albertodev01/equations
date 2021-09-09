@@ -73,8 +73,8 @@ class SORSolver extends SystemSolver {
   int get hashCode {
     var result = super.hashCode;
 
-    result = 37 * result + w.hashCode;
-    result = 37 * result + maxSteps.hashCode;
+    result = result * 37 + w.hashCode;
+    result = result * 37 + maxSteps.hashCode;
 
     return result;
   }
@@ -131,6 +131,7 @@ class SORSolver extends SystemSolver {
 
     // Computing the euclidean norm
     final sum = difference.map((xi) => xi * xi).reduce((a, b) => a + b);
+
     return math.sqrt(sum);
   }
 }

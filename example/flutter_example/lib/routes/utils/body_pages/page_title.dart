@@ -11,9 +11,10 @@ class PageTitle extends StatelessWidget {
 
   /// Creates a [PageTItle] widget.
   const PageTitle({
+    Key? key,
     required this.pageTitle,
     required this.pageLogo,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

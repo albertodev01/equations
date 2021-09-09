@@ -205,7 +205,10 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           }
           for (var k = 0; k <= i; k++) {
             eigenVectors.set(
-                k, j, eigenVectors.get(k, j) - g * realEigenvalues[k]);
+              k,
+              j,
+              eigenVectors.get(k, j) - g * realEigenvalues[k],
+            );
           }
         }
       }
@@ -420,10 +423,12 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
     if (yr.abs() > yi.abs()) {
       final r = yi / yr;
       final d = yr + r * yi;
+
       return Complex((xr + r * xi) / d, (xi - r * xr) / d);
     } else {
       final r = yr / yi;
       final d = yi + r * yr;
+
       return Complex((r * xr + xi) / d, (r * xi - xr) / d);
     }
   }
@@ -576,7 +581,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
           }
           s = hessenbergCache.get(n, n - 1).abs() +
               hessenbergCache.get(n - 1, n - 2).abs();
-          x = y = 0.75 * s;
+          x = y = s * 0.75;
           w = -0.4375 * s * s;
         }
 
@@ -859,8 +864,10 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
               }
             }
 
-            t = math.max(hessenbergCache.get(i, n - 1).abs(),
-                hessenbergCache.get(i, n).abs());
+            t = math.max(
+              hessenbergCache.get(i, n - 1).abs(),
+              hessenbergCache.get(i, n).abs(),
+            );
             if ((eps * t) * t > 1) {
               for (var j = i; j <= n; j++) {
                 hessenbergCache.set(

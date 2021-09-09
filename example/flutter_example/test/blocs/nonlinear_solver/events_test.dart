@@ -51,52 +51,56 @@ void main() {
     });
 
     test(
-        "Making sure that 'SinglePointMethod.resolve' actually resolves to "
-        'the correct values', () {
-      expect(
-        SinglePointMethod.resolve('newton'),
-        equals(SinglePointMethods.newton),
-      );
-      expect(
-        SinglePointMethod.resolve('NewTOn'),
-        equals(SinglePointMethods.newton),
-      );
-      expect(
-        SinglePointMethod.resolve('steffensen'),
-        equals(SinglePointMethods.steffensen),
-      );
-      expect(
-        SinglePointMethod.resolve('stefFenSEn'),
-        equals(SinglePointMethods.steffensen),
-      );
+      "Making sure that 'SinglePointMethod.resolve' actually resolves to "
+      'the correct values',
+      () {
+        expect(
+          SinglePointMethod.resolve('newton'),
+          equals(SinglePointMethods.newton),
+        );
+        expect(
+          SinglePointMethod.resolve('NewTOn'),
+          equals(SinglePointMethods.newton),
+        );
+        expect(
+          SinglePointMethod.resolve('steffensen'),
+          equals(SinglePointMethods.steffensen),
+        );
+        expect(
+          SinglePointMethod.resolve('stefFenSEn'),
+          equals(SinglePointMethods.steffensen),
+        );
 
-      expect(
-        () => SinglePointMethod.resolve('abc'),
-        throwsA(isA<ArgumentError>()),
-      );
-    });
+        expect(
+          () => SinglePointMethod.resolve('abc'),
+          throwsA(isA<ArgumentError>()),
+        );
+      },
+    );
 
     test(
-        "Making sure that 'BracketingMethod.resolve' actually resolves to "
-        'the correct values', () {
-      expect(
-        BracketingMethod.resolve('secant'),
-        equals(BracketingMethods.secant),
-      );
-      expect(
-        BracketingMethod.resolve('brent'),
-        equals(BracketingMethods.brent),
-      );
-      expect(
-        BracketingMethod.resolve('bisection'),
-        equals(BracketingMethods.bisection),
-      );
+      "Making sure that 'BracketingMethod.resolve' actually resolves to "
+      'the correct values',
+      () {
+        expect(
+          BracketingMethod.resolve('secant'),
+          equals(BracketingMethods.secant),
+        );
+        expect(
+          BracketingMethod.resolve('brent'),
+          equals(BracketingMethods.brent),
+        );
+        expect(
+          BracketingMethod.resolve('bisection'),
+          equals(BracketingMethods.bisection),
+        );
 
-      expect(
-        () => BracketingMethod.resolve(''),
-        throwsA(isA<ArgumentError>()),
-      );
-    });
+        expect(
+          () => BracketingMethod.resolve(''),
+          throwsA(isA<ArgumentError>()),
+        );
+      },
+    );
 
     test("Making sure that all events are subtypes of 'NonlinearEvent'", () {
       expect(

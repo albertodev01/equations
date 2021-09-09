@@ -4,34 +4,38 @@ import 'package:test/test.dart';
 void main() {
   group("Testing the 'SplineInterpolation' class", () {
     test(
-        'Making sure that, when the given nodes are monotonic, interpolation '
-        'happens with the "MonotoneCubicSpline" class.', () {
-      const spline = SplineInterpolation(
-        nodes: [
-          InterpolationNode(x: 3, y: -2),
-          InterpolationNode(x: 4, y: 1),
-          InterpolationNode(x: 7, y: 3),
-        ],
-      );
+      'Making sure that, when the given nodes are monotonic, interpolation '
+      'happens with the "MonotoneCubicSpline" class.',
+      () {
+        const spline = SplineInterpolation(
+          nodes: [
+            InterpolationNode(x: 3, y: -2),
+            InterpolationNode(x: 4, y: 1),
+            InterpolationNode(x: 7, y: 3),
+          ],
+        );
 
-      expect(spline.compute(8), equals(3));
-      expect(spline.compute(-11), equals(-2));
-    });
+        expect(spline.compute(8), equals(3));
+        expect(spline.compute(-11), equals(-2));
+      },
+    );
 
     test(
-        'Making sure that, when the given nodes are monotonic, interpolation '
-        'happens with the "LinearSpline" class.', () {
-      const spline = SplineInterpolation(
-        nodes: [
-          InterpolationNode(x: 3, y: -2),
-          InterpolationNode(x: 4, y: 1),
-          InterpolationNode(x: 7, y: 0),
-        ],
-      );
+      'Making sure that, when the given nodes are monotonic, interpolation '
+      'happens with the "LinearSpline" class.',
+      () {
+        const spline = SplineInterpolation(
+          nodes: [
+            InterpolationNode(x: 3, y: -2),
+            InterpolationNode(x: 4, y: 1),
+            InterpolationNode(x: 7, y: 0),
+          ],
+        );
 
-      expect(spline.compute(4), equals(1));
-      expect(spline.compute(-3), equals(-2));
-    });
+        expect(spline.compute(4), equals(1));
+        expect(spline.compute(-3), equals(-2));
+      },
+    );
 
     test('Making sure that objects comparison works properly', () {
       const interpolation = SplineInterpolation(

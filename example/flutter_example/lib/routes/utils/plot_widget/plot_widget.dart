@@ -19,8 +19,9 @@ class PlotWidget<T> extends StatelessWidget {
 
   /// Creates a [PlotWidget] instance.
   const PlotWidget({
+    Key? key,
     this.plotMode,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

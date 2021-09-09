@@ -40,71 +40,77 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that, when there are no solutions, a text widget '
-        "appears saying that there's nothing to display", (tester) async {
-      when(() => polynomialBloc.state).thenReturn(const PolynomialNone());
+      'Making sure that, when there are no solutions, a text widget '
+      "appears saying that there's nothing to display",
+      (tester) async {
+        when(() => polynomialBloc.state).thenReturn(const PolynomialNone());
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>.value(
-          value: polynomialBloc,
-          child: const PolynomialResults(),
-        ),
-      ));
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<PolynomialBloc>.value(
+            value: polynomialBloc,
+            child: const PolynomialResults(),
+          ),
+        ));
 
-      expect(find.byType(ListView), findsNothing);
-      expect(find.text('No solutions to display.'), findsOneWidget);
-    });
-
-    testWidgets(
-        'Making sure that, when there are solutions, solution widgets '
-        'appear on the screen', (tester) async {
-      final linear = Algebraic.fromReal(const [1, 2]);
-
-      when(() => polynomialBloc.state).thenReturn(PolynomialRoots(
-        algebraic: linear,
-        roots: linear.solutions(),
-        discriminant: linear.discriminant(),
-      ));
-
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>.value(
-          value: polynomialBloc,
-          child: const PolynomialResults(),
-        ),
-      ));
-
-      expect(find.byType(ListView), findsOneWidget);
-      expect(find.text('No solutions to display.'), findsNothing);
-      expect(find.byType(ComplexResultCard), findsNWidgets(2));
-      expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
-    });
+        expect(find.byType(ListView), findsNothing);
+        expect(find.text('No solutions to display.'), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'Making sure that when an error occurred while solving the '
-        'equation, a Snackbar appears.', (tester) async {
-      when(() => polynomialBloc.state).thenReturn(const PolynomialNone());
+      'Making sure that, when there are solutions, solution widgets '
+      'appear on the screen',
+      (tester) async {
+        final linear = Algebraic.fromReal(const [1, 2]);
 
-      // Triggering the consumer to listen for the error state
-      whenListen<PolynomialState>(
-        polynomialBloc,
-        Stream<PolynomialState>.fromIterable(const [
-          PolynomialNone(),
-          PolynomialError(),
-        ]),
-      );
+        when(() => polynomialBloc.state).thenReturn(PolynomialRoots(
+          algebraic: linear,
+          roots: linear.solutions(),
+          discriminant: linear.discriminant(),
+        ));
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>.value(
-          value: polynomialBloc,
-          child: const PolynomialResults(),
-        ),
-      ));
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<PolynomialBloc>.value(
+            value: polynomialBloc,
+            child: const PolynomialResults(),
+          ),
+        ));
 
-      // Refreshing to make the snackbar appear
-      await tester.pumpAndSettle();
+        expect(find.byType(ListView), findsOneWidget);
+        expect(find.text('No solutions to display.'), findsNothing);
+        expect(find.byType(ComplexResultCard), findsNWidgets(2));
+        expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
+      },
+    );
 
-      expect(find.byType(SnackBar), findsOneWidget);
-    });
+    testWidgets(
+      'Making sure that when an error occurred while solving the '
+      'equation, a Snackbar appears.',
+      (tester) async {
+        when(() => polynomialBloc.state).thenReturn(const PolynomialNone());
+
+        // Triggering the consumer to listen for the error state
+        whenListen<PolynomialState>(
+          polynomialBloc,
+          Stream<PolynomialState>.fromIterable(const [
+            PolynomialNone(),
+            PolynomialError(),
+          ]),
+        );
+
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<PolynomialBloc>.value(
+            value: polynomialBloc,
+            child: const PolynomialResults(),
+          ),
+        ));
+
+        // Refreshing to make the snackbar appear
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SnackBar), findsOneWidget);
+      },
+    );
 
     testGoldens('PolynomialResults', (tester) async {
       final linear = Algebraic.fromReal(const [1, 2]);

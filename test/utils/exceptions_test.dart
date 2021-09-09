@@ -265,16 +265,18 @@ void main() {
       );
     });
 
-    test('Making sure "ExpressionParserException" prints the correct message',
-        () {
-      const exception = ExpressionParserException('Exception message');
+    test(
+      'Making sure "ExpressionParserException" prints the correct message',
+      () {
+        const exception = ExpressionParserException('Exception message');
 
-      expect(exception.message, 'Exception message');
-      expect(
-        '$exception',
-        equals('ExpressionParserException: Exception message'),
-      );
-    });
+        expect(exception.message, 'Exception message');
+        expect(
+          '$exception',
+          equals('ExpressionParserException: Exception message'),
+        );
+      },
+    );
 
     test('Making sure "MatrixException" prints the correct message', () {
       const exception = MatrixException('Exception message');
@@ -297,28 +299,30 @@ void main() {
     });
 
     test(
-        'Making sure "NumericalIntegrationException" prints the correct message',
-        () {
-      const exception = NumericalIntegrationException('Exception message');
+      'Making sure "NumericalIntegrationException" prints the correct message',
+      () {
+        const exception = NumericalIntegrationException('Exception message');
 
-      expect(exception.message, 'Exception message');
-      expect(
-        '$exception',
-        equals('NumericalIntegrationException: Exception message'),
-      );
-    });
+        expect(exception.message, 'Exception message');
+        expect(
+          '$exception',
+          equals('NumericalIntegrationException: Exception message'),
+        );
+      },
+    );
 
     test(
-        'Making sure "PolynomialLongDivisionException" prints the correct message',
-        () {
-      const exception = PolynomialLongDivisionException('Exception message');
+      'Making sure "PolynomialLongDivisionException" prints the correct message',
+      () {
+        const exception = PolynomialLongDivisionException('Exception message');
 
-      expect(exception.message, 'Exception message');
-      expect(
-        '$exception',
-        equals('PolynomialLongDivisionException: Exception message'),
-      );
-    });
+        expect(exception.message, 'Exception message');
+        expect(
+          '$exception',
+          equals('PolynomialLongDivisionException: Exception message'),
+        );
+      },
+    );
 
     test('Making sure "InterpolationException" prints the correct message', () {
       const exception = InterpolationException('Exception message');

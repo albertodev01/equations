@@ -64,30 +64,32 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that nothing is rendered when the selected '
-        'method is NOT Jacobi', (tester) async {
-      when(() => dropdownCubit.state).thenReturn('SOR');
+      'Making sure that nothing is rendered when the selected '
+      'method is NOT Jacobi',
+      (tester) async {
+        when(() => dropdownCubit.state).thenReturn('SOR');
 
-      await tester.pumpWidget(MockWrapper(
-        child: Scaffold(
-          body: BlocProvider.value(
-            value: dropdownCubit,
-            child: JacobiVectorInput(
-              controllers: [
-                TextEditingController(),
-                TextEditingController(),
-                TextEditingController(),
-                TextEditingController(),
-              ],
-              vectorSize: 2,
+        await tester.pumpWidget(MockWrapper(
+          child: Scaffold(
+            body: BlocProvider.value(
+              value: dropdownCubit,
+              child: JacobiVectorInput(
+                controllers: [
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
+                ],
+                vectorSize: 2,
+              ),
             ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(JacobiVectorInput), findsOneWidget);
-      expect(find.byType(VectorInput), findsNothing);
-      expect(find.byType(SystemInputField), findsNothing);
-    });
+        expect(find.byType(JacobiVectorInput), findsOneWidget);
+        expect(find.byType(VectorInput), findsNothing);
+        expect(find.byType(SystemInputField), findsNothing);
+      },
+    );
   });
 }

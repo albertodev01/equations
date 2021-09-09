@@ -13,7 +13,7 @@ void main() {
           rows: 1,
           columns: 1,
           data: [
-            [1]
+            [1],
           ],
         ),
       );
@@ -23,7 +23,7 @@ void main() {
           rows: 1,
           columns: 1,
           data: const [
-            [Complex.i()]
+            [Complex.i()],
           ],
         ),
       );
@@ -34,7 +34,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: [
-              [1]
+              [1],
             ],
           ),
         ),
@@ -47,7 +47,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: [
-              [1]
+              [1],
             ],
           ),
         ).hashCode,
@@ -60,7 +60,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: const [
-              [Complex.i()]
+              [Complex.i()],
             ],
           ),
         ),
@@ -73,7 +73,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: const [
-              [Complex.i()]
+              [Complex.i()],
             ],
           ),
         ).hashCode,
@@ -121,7 +121,7 @@ void main() {
         );
         expect(
           matrixV(1, 1),
-          const MoreOrLessEquals(-1.1180, precision: 1.0e-4),
+          const MoreOrLessEquals(-1.118, precision: 1.0e-4),
         );
 
         // Testing D
@@ -145,7 +145,7 @@ void main() {
         // Testing V'
         expect(
           matrixVinverse(0, 0),
-          const MoreOrLessEquals(-1.1180, precision: 1.0e-4),
+          const MoreOrLessEquals(-1.118, precision: 1.0e-4),
         );
         expect(
           matrixVinverse(0, 1),
@@ -183,7 +183,7 @@ void main() {
             [
               Complex.fromImaginary(-1),
               Complex.fromReal(3),
-              Complex.fromReal(1)
+              Complex.fromReal(1),
             ],
             [Complex(4, 6), Complex.fromReal(2), Complex.zero()],
           ],
@@ -324,7 +324,7 @@ void main() {
         );
         expect(
           matrixD(2, 2).imaginary,
-          const MoreOrLessEquals(0.5440, precision: 1.0e-4),
+          const MoreOrLessEquals(0.544, precision: 1.0e-4),
         );
 
         // Testing V'
@@ -398,7 +398,7 @@ void main() {
         );
         expect(
           matrixVinverse(2, 2).imaginary,
-          const MoreOrLessEquals(-0.1430, precision: 1.0e-4),
+          const MoreOrLessEquals(-0.143, precision: 1.0e-4),
         );
 
         // Making sure that V x D x V' = A

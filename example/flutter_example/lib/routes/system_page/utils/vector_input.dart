@@ -12,9 +12,10 @@ class VectorInput extends StatefulWidget {
 
   /// Creates a [VectorInput] widget.
   const VectorInput({
+    Key? key,
     required this.vectorControllers,
     required this.vectorSize,
-  });
+  }) : super(key: key);
 
   @override
   _VectorInputState createState() => _VectorInputState();

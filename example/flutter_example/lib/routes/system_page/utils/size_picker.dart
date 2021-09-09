@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// held in the state of the [NumberSwitcherCubit] bloc.
 class SizePicker extends StatelessWidget {
   /// Creates a [SizePicker] widget.
-  const SizePicker();
+  const SizePicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

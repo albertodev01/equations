@@ -83,28 +83,32 @@ void main() {
     });
 
     test(
-        "Making sure that a correct 'Linear' instance is created from a "
-        "list of 'double' (real) values", () {
-      final linear = Linear.realEquation(a: 5, b: 1);
+      "Making sure that a correct 'Linear' instance is created from a "
+      "list of 'double' (real) values",
+      () {
+        final linear = Linear.realEquation(a: 5, b: 1);
 
-      expect(linear.a, equals(const Complex.fromReal(5)));
-      expect(linear.b, equals(const Complex.fromReal(1)));
+        expect(linear.a, equals(const Complex.fromReal(5)));
+        expect(linear.b, equals(const Complex.fromReal(1)));
 
-      // There must be an exception is the first coeff. is zero
-      expect(
-        () => Linear.realEquation(a: 0),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+        // There must be an exception is the first coeff. is zero
+        expect(
+          () => Linear.realEquation(a: 0),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test(
-        'Making sure that an exception is thrown if the coeff. of the '
-        'highest degree is zero', () {
-      expect(
-        () => Linear(a: const Complex.zero()),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+      'Making sure that an exception is thrown if the coeff. of the '
+      'highest degree is zero',
+      () {
+        expect(
+          () => Linear(a: const Complex.zero()),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test('Making sure that objects comparison works properly', () {
       final fx = Linear(
@@ -120,12 +124,13 @@ void main() {
         )),
       );
       expect(
-          fx ==
-              Linear(
-                a: const Complex(2, 3),
-                b: const Complex.i(),
-              ),
-          isTrue);
+        fx ==
+            Linear(
+              a: const Complex(2, 3),
+              b: const Complex.i(),
+            ),
+        isTrue,
+      );
       expect(
         fx.hashCode,
         equals(Linear(

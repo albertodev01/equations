@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// A very simple widget that simply states inside a [Text] that there are no
 /// results to display.
 class NoResults extends StatelessWidget {
   /// Creates a [NoResults] widget.
-  const NoResults();
+  const NoResults({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

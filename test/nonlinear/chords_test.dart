@@ -6,41 +6,45 @@ import '../double_approximation_matcher.dart';
 void main() {
   group("Testing the 'Chords' class", () {
     test(
-        'Making sure that the series converges when the root is in the interval.',
-        () {
-      const chords = Chords(
-        function: 'cos(x+3)-log(x)+2',
-        a: 0.1,
-        b: 7,
-        maxSteps: 5,
-      );
+      'Making sure that the series converges when the root is in the interval.',
+      () {
+        const chords = Chords(
+          function: 'cos(x+3)-log(x)+2',
+          a: 0.1,
+          b: 7,
+          maxSteps: 5,
+        );
 
-      expect(chords.maxSteps, equals(5));
-      expect(chords.tolerance, equals(1.0e-10));
-      expect(chords.function, equals('cos(x+3)-log(x)+2'));
-      expect(chords.toString(), equals('f(x) = cos(x+3)-log(x)+2'));
-      expect(chords.a, equals(0.1));
-      expect(chords.b, equals(7));
+        expect(chords.maxSteps, equals(5));
+        expect(chords.tolerance, equals(1.0e-10));
+        expect(chords.function, equals('cos(x+3)-log(x)+2'));
+        expect(chords.toString(), equals('f(x) = cos(x+3)-log(x)+2'));
+        expect(chords.a, equals(0.1));
+        expect(chords.b, equals(7));
 
-      // Solving the equation, making sure that the series converged
-      final solutions = chords.solve();
-      expect(solutions.guesses.length <= 5, isTrue);
-      expect(solutions.guesses.length, isNonZero);
-      expect(solutions.guesses.last, const MoreOrLessEquals(5, precision: 1));
-      expect(
-        solutions.convergence,
-        const MoreOrLessEquals(0.5, precision: 1.0),
-      );
-      expect(
-        solutions.efficiency,
-        const MoreOrLessEquals(0.8, precision: 1.0e-1),
-      );
-    });
+        // Solving the equation, making sure that the series converged
+        final solutions = chords.solve();
+        expect(solutions.guesses.length <= 5, isTrue);
+        expect(solutions.guesses.length, isNonZero);
+        expect(solutions.guesses.last, const MoreOrLessEquals(5, precision: 1));
+        expect(
+          solutions.convergence,
+          const MoreOrLessEquals(0.5, precision: 1.0),
+        );
+        expect(
+          solutions.efficiency,
+          const MoreOrLessEquals(0.8, precision: 1.0e-1),
+        );
+      },
+    );
 
     test('Making sure that a malformed equation string throws.', () {
-      expect(() {
-        const Chords(function: '2^ -6y', a: 2, b: 0).solve();
-      }, throwsA(isA<ExpressionParserException>()));
+      expect(
+        () {
+          const Chords(function: '2^ -6y', a: 2, b: 0).solve();
+        },
+        throwsA(isA<ExpressionParserException>()),
+      );
     });
 
     test('Making sure that object comparison properly works', () {
@@ -59,14 +63,16 @@ void main() {
     });
 
     test(
-        'Making sure that the chords method still works when the root is '
-        'not in the interval but the actual solution is not found', () {
-      const chords = Chords(function: 'x^2-2', a: 10, b: 20, maxSteps: 3);
-      final solutions = chords.solve();
+      'Making sure that the chords method still works when the root is '
+      'not in the interval but the actual solution is not found',
+      () {
+        const chords = Chords(function: 'x^2-2', a: 10, b: 20, maxSteps: 3);
+        final solutions = chords.solve();
 
-      expect(solutions.guesses.length, isNonZero);
-      expect(solutions.guesses.length <= 3, isTrue);
-    });
+        expect(solutions.guesses.length, isNonZero);
+        expect(solutions.guesses.length <= 3, isTrue);
+      },
+    );
 
     test('Batch tests', () {
       final equations = [
@@ -88,9 +94,9 @@ void main() {
       final expectedSolutions = <double>[
         0.856,
         0.901,
-        5.000,
+        5.0,
         3.605,
-        -1.000,
+        -1.0,
       ];
 
       for (var i = 0; i < equations.length; ++i) {

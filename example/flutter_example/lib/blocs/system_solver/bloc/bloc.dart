@@ -143,7 +143,7 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
     }
   }
 
-  Stream<SystemState> _systemCleanHandler(SystemClean evt) async* {
+  Stream<SystemState> _systemCleanHandler(_) async* {
     yield const SystemNone();
   }
 }

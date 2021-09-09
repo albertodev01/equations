@@ -99,8 +99,8 @@ class Complex implements Comparable<Complex> {
   int get hashCode {
     var result = 83;
 
-    result = 37 * result + real.hashCode;
-    result = 37 * result + imaginary.hashCode;
+    result = result * 37 + real.hashCode;
+    result = result * 37 + imaginary.hashCode;
 
     return result;
   }
@@ -334,6 +334,7 @@ class Complex implements Comparable<Complex> {
     }
 
     final scale = real * real + imaginary * imaginary;
+
     return Complex(real / scale, -imaginary / scale);
   }
 
@@ -400,6 +401,7 @@ class Complex implements Comparable<Complex> {
 
     final r = math.sqrt(abs());
     final theta = phase() / 2;
+
     return Complex(r * math.cos(theta), r * math.sin(theta));
   }
 
@@ -410,6 +412,7 @@ class Complex implements Comparable<Complex> {
     final logIm = x * phase();
 
     final modAns = math.exp(logRe);
+
     return Complex(modAns * math.cos(logIm), modAns * math.sin(logIm));
   }
 

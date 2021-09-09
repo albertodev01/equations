@@ -17,6 +17,28 @@ import 'package:flutter/material.dart';
 ///
 /// No differences since both ways are valid.
 abstract class RouteGenerator {
+  /// Route name for the home page of the app.
+  static const homePage = '/';
+
+  /// Route name for the polynomial equations solver.
+  static const polynomialPage = '/polynomials';
+
+  /// Route name for the nonlinear equations solver.
+  static const nonlinearPage = '/nonlinear';
+
+  /// Route name for the systems page.
+  static const systemPage = '/system';
+
+  /// Route name for the integrals page.
+  static const integralPage = '/integral';
+
+  /// Route name for the interpolation page.
+  static const interpolationPage = '/interpolation';
+
+  /// Making the constructor private since this class is not meant to be
+  /// instantiated.
+  const RouteGenerator._();
+
   /// The "dispatcher" that assigns a route name to a particular widget.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -54,24 +76,6 @@ abstract class RouteGenerator {
         throw const RouteException('Route not found');
     }
   }
-
-  /// Route name for the home page of the app.
-  static const homePage = '/';
-
-  /// Route name for the polynomial equations solver.
-  static const polynomialPage = '/polynomials';
-
-  /// Route name for the nonlinear equations solver.
-  static const nonlinearPage = '/nonlinear';
-
-  /// Route name for the systems page.
-  static const systemPage = '/system';
-
-  /// Route name for the integrals page.
-  static const integralPage = '/integral';
-
-  /// Route name for the interpolation page.
-  static const interpolationPage = '/interpolation';
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.

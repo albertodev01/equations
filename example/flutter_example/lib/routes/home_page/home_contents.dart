@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
-import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// Contains a series of tiles, represented by a [CardContainer] widget, that
 /// route the user to various pages
 class HomeContents extends StatelessWidget {
   /// Creates a [HomeContents] widget.
-  const HomeContents();
+  const HomeContents({Key? key}) : super(key: key);
 
   /// Shows an [AlertDialog] stating that the page is under development and it
   /// will be ready soon.

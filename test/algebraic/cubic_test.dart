@@ -59,11 +59,11 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[2].real, const MoreOrLessEquals(1.427598269660));
+      expect(solutions[2].real, const MoreOrLessEquals(1.42759826966));
       expect(solutions[2].imaginary, const MoreOrLessEquals(1.055514309999));
       expect(solutions[1].real, const MoreOrLessEquals(-2.855196539321));
       expect(solutions[1].imaginary.round(), isZero);
-      expect(solutions[0].real, const MoreOrLessEquals(1.427598269660));
+      expect(solutions[0].real, const MoreOrLessEquals(1.42759826966));
       expect(solutions[0].imaginary, const MoreOrLessEquals(-1.055514309999));
 
       // Evaluation
@@ -72,30 +72,34 @@ void main() {
     });
 
     test(
-        "Making sure that a correct 'Cubic' instance is created from a list "
-        "of 'double' (real) values", () {
-      final cubic = Cubic.realEquation(a: 5, b: 1, c: -6);
+      "Making sure that a correct 'Cubic' instance is created from a list "
+      "of 'double' (real) values",
+      () {
+        final cubic = Cubic.realEquation(a: 5, b: 1, c: -6);
 
-      expect(cubic.a, equals(const Complex.fromReal(5)));
-      expect(cubic.b, equals(const Complex.fromReal(1)));
-      expect(cubic.c, equals(const Complex.fromReal(-6)));
-      expect(cubic.d, equals(const Complex.zero()));
+        expect(cubic.a, equals(const Complex.fromReal(5)));
+        expect(cubic.b, equals(const Complex.fromReal(1)));
+        expect(cubic.c, equals(const Complex.fromReal(-6)));
+        expect(cubic.d, equals(const Complex.zero()));
 
-      // There must be an exception is the first coeff. is zero
-      expect(
-        () => Cubic.realEquation(a: 0),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+        // There must be an exception is the first coeff. is zero
+        expect(
+          () => Cubic.realEquation(a: 0),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test(
-        'Making sure that an exception is thrown if the coeff. of the '
-        'highest degree is zero', () {
-      expect(
-        () => Cubic(a: const Complex.zero()),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+      'Making sure that an exception is thrown if the coeff. of the '
+      'highest degree is zero',
+      () {
+        expect(
+          () => Cubic(a: const Complex.zero()),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test('Making sure that objects comparison works properly', () {
       final fx = Cubic(

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
@@ -6,14 +7,14 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a series of input widgets needed to parse the
 /// coefficients of the nonlinear equation to be solved.
 class NonlinearDataInput extends StatefulWidget {
   /// Creates a [NonlinearDataInput] widget.
-  const NonlinearDataInput();
+  const NonlinearDataInput({Key? key}) : super(key: key);
 
   @override
   _NonlinearDataInputState createState() => _NonlinearDataInputState();

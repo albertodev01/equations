@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
@@ -6,12 +7,11 @@ import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
   /// Creates a [PolynomialResults] widget.
-  const PolynomialResults();
+  const PolynomialResults({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

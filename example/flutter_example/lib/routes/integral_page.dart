@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// The function is also plotted and the area is highlighted on the chart.
 class IntegralPage extends StatelessWidget {
   /// Creates a [IntegralPage] widget.
-  const IntegralPage();
+  const IntegralPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

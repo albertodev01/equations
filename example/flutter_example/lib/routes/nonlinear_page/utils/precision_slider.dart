@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Sets the precision of the currently selected algorithm.
 class PrecisionSlider extends StatelessWidget {
   /// Creates a [PrecisionSlider] widget.
-  const PrecisionSlider();
+  const PrecisionSlider({Key? key}) : super(key: key);
 
   void _update(BuildContext context, double value) =>
       context.read<SliderCubit>().updateSlider(value);

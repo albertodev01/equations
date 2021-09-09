@@ -26,206 +26,228 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown when the user tries to '
-        'build a matrix whose row or column count is zero.', () {
-      expect(
-        () => ComplexMatrix(
-          columns: 0,
-          rows: 2,
-        ),
-        throwsA(isA<MatrixException>()),
-      );
-    });
+      'Making sure that an exception is thrown when the user tries to '
+      'build a matrix whose row or column count is zero.',
+      () {
+        expect(
+          () => ComplexMatrix(
+            columns: 0,
+            rows: 2,
+          ),
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
 
     test(
-        "Making sure that the matrix can correctly be 'flattened' and converted"
-        " into a list of 'double' values.", () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [Complex(1, 2), Complex(3, 4)],
-          [Complex(5, 6), Complex(7, 8)],
-        ],
-      );
-
-      // Checking the sizes
-      final flattenedMatrix = matrix.toList();
-
-      expect(flattenedMatrix.length, equals(4));
-      expect(
-        flattenedMatrix,
-        orderedEquals(const <Complex>[
-          Complex(1, 2),
-          Complex(3, 4),
-          Complex(5, 6),
-          Complex(7, 8),
-        ]),
-      );
-    });
-
-    test(
-        "Making sure that the matrix can correctly be created from a 'flattened'"
-        ' list of values.', () {
-      final matrix = ComplexMatrix.fromFlattenedData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          Complex(1, 2),
-          Complex(3, 4),
-          Complex(5, 6),
-          Complex(7, 8),
-        ],
-      );
-
-      expect(matrix.rowCount * matrix.columnCount, equals(4));
-      expect(
-        matrix,
-        equals(ComplexMatrix.fromData(
+      "Making sure that the matrix can correctly be 'flattened' and converted"
+      " into a list of 'double' values.",
+      () {
+        final matrix = ComplexMatrix.fromData(
           rows: 2,
           columns: 2,
           data: const [
             [Complex(1, 2), Complex(3, 4)],
             [Complex(5, 6), Complex(7, 8)],
           ],
-        )),
-      );
-    });
+        );
+
+        // Checking the sizes
+        final flattenedMatrix = matrix.toList();
+
+        expect(flattenedMatrix.length, equals(4));
+        expect(
+          flattenedMatrix,
+          orderedEquals(const <Complex>[
+            Complex(1, 2),
+            Complex(3, 4),
+            Complex(5, 6),
+            Complex(7, 8),
+          ]),
+        );
+      },
+    );
 
     test(
-        'Making sure that a diagonal, square matrix is correctly build with '
-        'the given value in the diagonal', () {
-      final matrix = ComplexMatrix.diagonal(
-        rows: 3,
-        columns: 3,
-        diagonalValue: const Complex(6, 2),
-      );
-
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          if (i == j) {
-            expect(matrix(i, j), equals(const Complex(6, 2)));
-          } else {
-            expect(matrix(i, j), equals(const Complex.zero()));
-          }
-        }
-      }
-
-      const stringRepresentation = '[6 + 2i, 0i, 0i]\n'
-          '[0i, 6 + 2i, 0i]\n'
-          '[0i, 0i, 6 + 2i]';
-
-      expect('$matrix', equals(stringRepresentation));
-    });
-
-    test(
-        'Making sure that a diagonal, non square matrix is correctly build '
-        'with the given value in the diagonal', () {
-      final matrix = ComplexMatrix.diagonal(
-        rows: 3,
-        columns: 5,
-        diagonalValue: const Complex(6, 2),
-      );
-
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          if (i == j) {
-            expect(matrix(i, j), equals(const Complex(6, 2)));
-          } else {
-            expect(matrix(i, j), equals(const Complex.zero()));
-          }
-        }
-      }
-
-      const stringRepresentation = '[6 + 2i, 0i, 0i, 0i, 0i]\n'
-          '[0i, 6 + 2i, 0i, 0i, 0i]\n'
-          '[0i, 0i, 6 + 2i, 0i, 0i]';
-
-      expect('$matrix', equals(stringRepresentation));
-    });
-
-    test(
-        'Making sure that a diagonal, non square matrix is correctly build '
-        'with the given value in the diagonal', () {
-      final matrix = ComplexMatrix.diagonal(
-        rows: 6,
-        columns: 2,
-        diagonalValue: const Complex(6, 2),
-      );
-
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          if (i == j) {
-            expect(matrix(i, j), equals(const Complex(6, 2)));
-          } else {
-            expect(matrix(i, j), equals(const Complex.zero()));
-          }
-        }
-      }
-
-      const stringRepresentation = '[6 + 2i, 0i]\n'
-          '[0i, 6 + 2i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]';
-
-      expect('$matrix', equals(stringRepresentation));
-    });
-
-    test('Making sure that a diagonal of a single element is correctly built',
-        () {
-      final matrix = RealMatrix.diagonal(
-        rows: 1,
-        columns: 1,
-        diagonalValue: 31,
-      );
-
-      expect(matrix(0, 0), equals(31));
-      expect('$matrix', equals('[31.0]'));
-    });
-
-    test(
-        'Making sure that an exception is thrown when the matrix is being built '
-        'from a list but the sizes are wrong', () {
-      expect(
-        () => ComplexMatrix.fromFlattenedData(
+      "Making sure that the matrix can correctly be created from a 'flattened'"
+      ' list of values.',
+      () {
+        final matrix = ComplexMatrix.fromFlattenedData(
           rows: 2,
           columns: 2,
-          data: const [Complex(1, 2), Complex(1, 1)],
-        ),
-        throwsA(isA<Exception>()),
-      );
-    });
+          data: const [
+            Complex(1, 2),
+            Complex(3, 4),
+            Complex(5, 6),
+            Complex(7, 8),
+          ],
+        );
+
+        expect(matrix.rowCount * matrix.columnCount, equals(4));
+        expect(
+          matrix,
+          equals(ComplexMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [Complex(1, 2), Complex(3, 4)],
+              [Complex(5, 6), Complex(7, 8)],
+            ],
+          )),
+        );
+      },
+    );
 
     test(
-        'Making sure that the identity matrix is filled with 0s except for '
-        'its diagonal, which must contain all 1s.', () {
-      final matrix = ComplexMatrix(columns: 3, rows: 3, identity: true);
+      'Making sure that a diagonal, square matrix is correctly build with '
+      'the given value in the diagonal',
+      () {
+        final matrix = ComplexMatrix.diagonal(
+          rows: 3,
+          columns: 3,
+          diagonalValue: const Complex(6, 2),
+        );
 
-      // Checking the sizes
-      expect(matrix.rowCount, equals(3));
-      expect(matrix.columnCount, equals(3));
-
-      // Checking the content of the matrix
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          if (i == j) {
-            expect(matrix(i, j), equals(const Complex(1, 0)));
-          } else {
-            expect(matrix(i, j), equals(const Complex.zero()));
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(const Complex(6, 2)));
+            } else {
+              expect(matrix(i, j), equals(const Complex.zero()));
+            }
           }
-          expect(matrix(i, j), equals(matrix.itemAt(i, j)));
         }
-      }
-    });
+
+        const stringRepresentation = '[6 + 2i, 0i, 0i]\n'
+            '[0i, 6 + 2i, 0i]\n'
+            '[0i, 0i, 6 + 2i]';
+
+        expect('$matrix', equals(stringRepresentation));
+      },
+    );
 
     test(
-        'Making sure that an exception is thrown when the user tries to '
-        'build an identity matrix with a non-squared entry.', () {
-      expect(() => ComplexMatrix(columns: 3, rows: 5, identity: true),
-          throwsA(isA<MatrixException>()));
-    });
+      'Making sure that a diagonal, non square matrix is correctly build '
+      'with the given value in the diagonal',
+      () {
+        final matrix = ComplexMatrix.diagonal(
+          rows: 3,
+          columns: 5,
+          diagonalValue: const Complex(6, 2),
+        );
+
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(const Complex(6, 2)));
+            } else {
+              expect(matrix(i, j), equals(const Complex.zero()));
+            }
+          }
+        }
+
+        const stringRepresentation = '[6 + 2i, 0i, 0i, 0i, 0i]\n'
+            '[0i, 6 + 2i, 0i, 0i, 0i]\n'
+            '[0i, 0i, 6 + 2i, 0i, 0i]';
+
+        expect('$matrix', equals(stringRepresentation));
+      },
+    );
+
+    test(
+      'Making sure that a diagonal, non square matrix is correctly build '
+      'with the given value in the diagonal',
+      () {
+        final matrix = ComplexMatrix.diagonal(
+          rows: 6,
+          columns: 2,
+          diagonalValue: const Complex(6, 2),
+        );
+
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(const Complex(6, 2)));
+            } else {
+              expect(matrix(i, j), equals(const Complex.zero()));
+            }
+          }
+        }
+
+        const stringRepresentation = '[6 + 2i, 0i]\n'
+            '[0i, 6 + 2i]\n'
+            '[0i, 0i]\n'
+            '[0i, 0i]\n'
+            '[0i, 0i]\n'
+            '[0i, 0i]';
+
+        expect('$matrix', equals(stringRepresentation));
+      },
+    );
+
+    test(
+      'Making sure that a diagonal of a single element is correctly built',
+      () {
+        final matrix = RealMatrix.diagonal(
+          rows: 1,
+          columns: 1,
+          diagonalValue: 31,
+        );
+
+        expect(matrix(0, 0), equals(31));
+        expect('$matrix', equals('[31.0]'));
+      },
+    );
+
+    test(
+      'Making sure that an exception is thrown when the matrix is being built '
+      'from a list but the sizes are wrong',
+      () {
+        expect(
+          () => ComplexMatrix.fromFlattenedData(
+            rows: 2,
+            columns: 2,
+            data: const [Complex(1, 2), Complex(1, 1)],
+          ),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
+
+    test(
+      'Making sure that the identity matrix is filled with 0s except for '
+      'its diagonal, which must contain all 1s.',
+      () {
+        final matrix = ComplexMatrix(columns: 3, rows: 3, identity: true);
+
+        // Checking the sizes
+        expect(matrix.rowCount, equals(3));
+        expect(matrix.columnCount, equals(3));
+
+        // Checking the content of the matrix
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(const Complex(1, 0)));
+            } else {
+              expect(matrix(i, j), equals(const Complex.zero()));
+            }
+            expect(matrix(i, j), equals(matrix.itemAt(i, j)));
+          }
+        }
+      },
+    );
+
+    test(
+      'Making sure that an exception is thrown when the user tries to '
+      'build an identity matrix with a non-squared entry.',
+      () {
+        expect(
+          () => ComplexMatrix(columns: 3, rows: 5, identity: true),
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
 
     test("Making sure that 'toString()' works as expected.", () {
       final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
@@ -238,23 +260,25 @@ void main() {
     });
 
     test(
-        'Making sure that a matrix is properly built from a list of lists '
-        'entries.', () {
-      final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
-        [Complex(1, 2), Complex(3, 4)],
-        [Complex(5, 6), Complex(7, 8)],
-      ]);
+      'Making sure that a matrix is properly built from a list of lists '
+      'entries.',
+      () {
+        final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
+          [Complex(1, 2), Complex(3, 4)],
+          [Complex(5, 6), Complex(7, 8)],
+        ]);
 
-      // Checking the sizes
-      expect(matrix.rowCount, equals(2));
-      expect(matrix.columnCount, equals(2));
+        // Checking the sizes
+        expect(matrix.rowCount, equals(2));
+        expect(matrix.columnCount, equals(2));
 
-      // Checking the content of the matrix
-      expect(matrix(0, 0), equals(const Complex(1, 2)));
-      expect(matrix(0, 1), equals(const Complex(3, 4)));
-      expect(matrix(1, 0), equals(const Complex(5, 6)));
-      expect(matrix(1, 1), equals(const Complex(7, 8)));
-    });
+        // Checking the content of the matrix
+        expect(matrix(0, 0), equals(const Complex(1, 2)));
+        expect(matrix(0, 1), equals(const Complex(3, 4)));
+        expect(matrix(1, 0), equals(const Complex(5, 6)));
+        expect(matrix(1, 1), equals(const Complex(7, 8)));
+      },
+    );
   });
 
   group("Testing equality of 'ComplexMatrix' objects", () {
@@ -516,7 +540,7 @@ void main() {
         columns: 1,
         rows: 1,
         data: const [
-          [Complex(4, 7)]
+          [Complex(4, 7)],
         ],
       );
       expect(matrix.determinant(), equals(const Complex(4, 7)));
@@ -571,35 +595,35 @@ void main() {
             Complex(3, -8),
             Complex(3, -3),
             Complex.i(),
-            Complex(4, -4)
+            Complex(4, -4),
           ],
           [
             Complex(-4, 4),
             Complex(2, 9),
             Complex(4, 7),
             Complex(-2, 5),
-            Complex(10, 2)
+            Complex(10, 2),
           ],
           [
             Complex(4, 7),
             Complex.zero(),
             Complex(6, 7),
             Complex(2, -6),
-            Complex.zero()
+            Complex.zero(),
           ],
           [
             Complex(6, 1),
             Complex.i(),
             Complex.zero(),
             Complex(5, 4),
-            Complex(1, 2)
+            Complex(1, 2),
           ],
           [
             Complex(3, -2),
             Complex(5, 2),
             Complex(1, 3),
             Complex(6, -3),
-            Complex.fromReal(8)
+            Complex.fromReal(8),
           ],
         ],
       );
@@ -613,161 +637,169 @@ void main() {
 
   group('Testing operations on matrices.', () {
     test(
-        'Making sure that the LU decomposition properly works on a square '
-        'matrix of a given dimension.', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
-          [Complex.fromReal(4), Complex.fromReal(5), Complex.fromReal(6)],
-          [Complex.fromReal(7), Complex.fromReal(8), Complex.fromReal(9)],
-        ],
-      );
-
-      // Decomposition
-      final lu = matrix.luDecomposition();
-      expect(lu.length, equals(2));
-
-      // Checking L
-      final L = lu[0];
-      expect(L.rowCount, equals(matrix.rowCount));
-      expect(L.columnCount, equals(matrix.columnCount));
-      expect(L.isSquareMatrix, isTrue);
-      expect(
-        L.flattenData,
-        orderedEquals(
-          const <Complex>[
-            Complex.fromReal(1),
-            Complex.zero(),
-            Complex.zero(),
-            Complex.fromReal(4),
-            Complex.fromReal(1),
-            Complex.zero(),
-            Complex.fromReal(7),
-            Complex.fromReal(2),
-            Complex.fromReal(1),
+      'Making sure that the LU decomposition properly works on a square '
+      'matrix of a given dimension.',
+      () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
+            [Complex.fromReal(4), Complex.fromReal(5), Complex.fromReal(6)],
+            [Complex.fromReal(7), Complex.fromReal(8), Complex.fromReal(9)],
           ],
-        ),
-      );
+        );
 
-      // Checking U
-      final U = lu[1];
-      expect(U.rowCount, equals(matrix.rowCount));
-      expect(U.columnCount, equals(matrix.columnCount));
-      expect(U.isSquareMatrix, isTrue);
-      expect(
-        U.flattenData,
-        orderedEquals(
-          const <Complex>[
-            Complex.fromReal(1),
-            Complex.fromReal(2),
-            Complex.fromReal(3),
-            Complex.zero(),
-            Complex.fromReal(-3),
-            Complex.fromReal(-6),
-            Complex.zero(),
-            Complex.zero(),
-            Complex.zero(),
-          ],
-        ),
-      );
-    });
+        // Decomposition
+        final lu = matrix.luDecomposition();
+        expect(lu.length, equals(2));
+
+        // Checking L
+        final L = lu[0];
+        expect(L.rowCount, equals(matrix.rowCount));
+        expect(L.columnCount, equals(matrix.columnCount));
+        expect(L.isSquareMatrix, isTrue);
+        expect(
+          L.flattenData,
+          orderedEquals(
+            const <Complex>[
+              Complex.fromReal(1),
+              Complex.zero(),
+              Complex.zero(),
+              Complex.fromReal(4),
+              Complex.fromReal(1),
+              Complex.zero(),
+              Complex.fromReal(7),
+              Complex.fromReal(2),
+              Complex.fromReal(1),
+            ],
+          ),
+        );
+
+        // Checking U
+        final U = lu[1];
+        expect(U.rowCount, equals(matrix.rowCount));
+        expect(U.columnCount, equals(matrix.columnCount));
+        expect(U.isSquareMatrix, isTrue);
+        expect(
+          U.flattenData,
+          orderedEquals(
+            const <Complex>[
+              Complex.fromReal(1),
+              Complex.fromReal(2),
+              Complex.fromReal(3),
+              Complex.zero(),
+              Complex.fromReal(-3),
+              Complex.fromReal(-6),
+              Complex.zero(),
+              Complex.zero(),
+              Complex.zero(),
+            ],
+          ),
+        );
+      },
+    );
 
     test(
-        "Making sure that the LU decomposition properly doesn't work when "
-        'the matrix is not square.', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 3,
-        data: const [
-          [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
-          [Complex.fromReal(4), Complex.fromReal(5), Complex.fromReal(6)],
-        ],
-      );
+      "Making sure that the LU decomposition properly doesn't work when "
+      'the matrix is not square.',
+      () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 2,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
+            [Complex.fromReal(4), Complex.fromReal(5), Complex.fromReal(6)],
+          ],
+        );
 
-      // Decomposition
-      expect(matrix.luDecomposition, throwsA(isA<MatrixException>()));
-    });
+        // Decomposition
+        expect(matrix.luDecomposition, throwsA(isA<MatrixException>()));
+      },
+    );
 
     test(
-        'Making sure that Cholesky decomposition properly works on a square '
-        'matrix of a given dimension.', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [Complex.fromReal(25), Complex.fromReal(15), Complex.fromReal(-5)],
-          [Complex.fromReal(15), Complex.fromReal(18), Complex.fromReal(0)],
-          [Complex.fromReal(-5), Complex.fromReal(0), Complex.fromReal(11)],
-        ],
-      );
-
-      // Decomposition
-      final cholesky = matrix.choleskyDecomposition();
-      expect(cholesky.length, equals(2));
-
-      // Checking L
-      final L = cholesky[0];
-      expect(
-        L.flattenData,
-        orderedEquals(
-          const <Complex>[
-            Complex.fromReal(5),
-            Complex.zero(),
-            Complex.zero(),
-            Complex.fromReal(3),
-            Complex.fromReal(3),
-            Complex.zero(),
-            Complex.fromReal(-1),
-            Complex.fromReal(1),
-            Complex.fromReal(3),
+      'Making sure that Cholesky decomposition properly works on a square '
+      'matrix of a given dimension.',
+      () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [Complex.fromReal(25), Complex.fromReal(15), Complex.fromReal(-5)],
+            [Complex.fromReal(15), Complex.fromReal(18), Complex.fromReal(0)],
+            [Complex.fromReal(-5), Complex.fromReal(0), Complex.fromReal(11)],
           ],
-        ),
-      );
-      expect(L.rowCount, equals(matrix.rowCount));
-      expect(L.columnCount, equals(matrix.columnCount));
-      expect(L.isSquareMatrix, isTrue);
+        );
 
-      // Checking Lt
-      final transposedL = cholesky[1];
-      expect(
-        transposedL.flattenData,
-        orderedEquals(
-          const <Complex>[
-            Complex.fromReal(5),
-            Complex.fromReal(3),
-            Complex.fromReal(-1),
-            Complex.zero(),
-            Complex.fromReal(3),
-            Complex.fromReal(1),
-            Complex.zero(),
-            Complex.zero(),
-            Complex.fromReal(3),
-          ],
-        ),
-      );
-      expect(transposedL.rowCount, equals(matrix.rowCount));
-      expect(transposedL.columnCount, equals(matrix.columnCount));
-      expect(transposedL.isSquareMatrix, isTrue);
-    });
+        // Decomposition
+        final cholesky = matrix.choleskyDecomposition();
+        expect(cholesky.length, equals(2));
+
+        // Checking L
+        final L = cholesky[0];
+        expect(
+          L.flattenData,
+          orderedEquals(
+            const <Complex>[
+              Complex.fromReal(5),
+              Complex.zero(),
+              Complex.zero(),
+              Complex.fromReal(3),
+              Complex.fromReal(3),
+              Complex.zero(),
+              Complex.fromReal(-1),
+              Complex.fromReal(1),
+              Complex.fromReal(3),
+            ],
+          ),
+        );
+        expect(L.rowCount, equals(matrix.rowCount));
+        expect(L.columnCount, equals(matrix.columnCount));
+        expect(L.isSquareMatrix, isTrue);
+
+        // Checking Lt
+        final transposedL = cholesky[1];
+        expect(
+          transposedL.flattenData,
+          orderedEquals(
+            const <Complex>[
+              Complex.fromReal(5),
+              Complex.fromReal(3),
+              Complex.fromReal(-1),
+              Complex.zero(),
+              Complex.fromReal(3),
+              Complex.fromReal(1),
+              Complex.zero(),
+              Complex.zero(),
+              Complex.fromReal(3),
+            ],
+          ),
+        );
+        expect(transposedL.rowCount, equals(matrix.rowCount));
+        expect(transposedL.columnCount, equals(matrix.columnCount));
+        expect(transposedL.isSquareMatrix, isTrue);
+      },
+    );
 
     test(
-        "Making sure that the Cholesky decomposition properly doesn't work "
-        'when the matrix is not square.', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 2,
-        data: const [
-          [Complex.fromReal(1), Complex.fromReal(2)],
-          [Complex.fromReal(3), Complex.fromReal(4)],
-          [Complex.fromReal(5), Complex.fromReal(6)],
-        ],
-      );
+      "Making sure that the Cholesky decomposition properly doesn't work "
+      'when the matrix is not square.',
+      () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 3,
+          columns: 2,
+          data: const [
+            [Complex.fromReal(1), Complex.fromReal(2)],
+            [Complex.fromReal(3), Complex.fromReal(4)],
+            [Complex.fromReal(5), Complex.fromReal(6)],
+          ],
+        );
 
-      // Decomposition
-      expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
-    });
+        // Decomposition
+        expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
+      },
+    );
 
     test('Making sure that the transposed view is correct', () {
       final matrix = ComplexMatrix.fromData(
@@ -913,34 +945,38 @@ void main() {
     });
 
     test(
-        'Making sure that the cofactor matrix is NOT computed if the source '
-        'matrix is NOT square', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 1,
-        data: const [
-          [Complex.i()],
-          [Complex.fromImaginary(3)],
-        ],
-      );
+      'Making sure that the cofactor matrix is NOT computed if the source '
+      'matrix is NOT square',
+      () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 2,
+          columns: 1,
+          data: const [
+            [Complex.i()],
+            [Complex.fromImaginary(3)],
+          ],
+        );
 
-      expect(() => matrix.cofactorMatrix(), throwsA(isA<MatrixException>()));
-    });
+        expect(() => matrix.cofactorMatrix(), throwsA(isA<MatrixException>()));
+      },
+    );
 
     test(
-        'Making sure that the inverse matrix is NOT computed if the source '
-        'matrix is NOT square', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 1,
-        data: const [
-          [Complex.i()],
-          [Complex.fromImaginary(3)],
-        ],
-      );
+      'Making sure that the inverse matrix is NOT computed if the source '
+      'matrix is NOT square',
+      () {
+        final matrix = ComplexMatrix.fromData(
+          rows: 2,
+          columns: 1,
+          data: const [
+            [Complex.i()],
+            [Complex.fromImaginary(3)],
+          ],
+        );
 
-      expect(() => matrix.inverse(), throwsA(isA<MatrixException>()));
-    });
+        expect(() => matrix.inverse(), throwsA(isA<MatrixException>()));
+      },
+    );
 
     test('Making sure that the inverse of a 2x2 matrix is correct', () {
       final matrix = ComplexMatrix.fromData(
@@ -1204,7 +1240,7 @@ void main() {
         rows: 1,
         columns: 1,
         data: const [
-          [Complex.i()]
+          [Complex.i()],
         ],
       );
 
@@ -1214,7 +1250,7 @@ void main() {
         rows: 1,
         columns: 1,
         data: const [
-          [Complex.zero()]
+          [Complex.zero()],
         ],
       );
 
@@ -1299,7 +1335,7 @@ void main() {
       );
       expect(
         eigenvalues[1].imaginary,
-        const MoreOrLessEquals(0.9110, precision: 1.0e-4),
+        const MoreOrLessEquals(0.911, precision: 1.0e-4),
       );
     });
 
@@ -1335,7 +1371,7 @@ void main() {
       );
       expect(
         eigenvalues[1].imaginary,
-        const MoreOrLessEquals(0.9110, precision: 1.0e-4),
+        const MoreOrLessEquals(0.911, precision: 1.0e-4),
       );
       expect(
         eigenvalues[2].imaginary,
@@ -1353,19 +1389,19 @@ void main() {
               Complex.fromReal(2),
               Complex.fromReal(-1),
               Complex.fromReal(5),
-              Complex.fromReal(9)
+              Complex.fromReal(9),
             ],
             [
               Complex.fromReal(-12),
               Complex.fromReal(3),
               Complex.fromReal(2),
-              Complex.fromReal(0)
+              Complex.fromReal(0),
             ],
             [
               Complex.fromReal(1),
               Complex.fromReal(-1),
               Complex.fromReal(9),
-              Complex.fromReal(8)
+              Complex.fromReal(8),
             ],
           ],
         ).minor(1, 2),
@@ -1377,14 +1413,14 @@ void main() {
               Complex.fromReal(2),
               Complex.i(),
               Complex(-8, 3),
-              Complex.fromReal(9)
+              Complex.fromReal(9),
             ],
             [Complex.zero(), Complex(4, 4), Complex.i(), Complex(9, -9)],
             [
               Complex.fromReal(1),
               Complex.i(),
               Complex(3, 5),
-              Complex.fromReal(8)
+              Complex.fromReal(8),
             ],
           ],
         ).minor(2, 3),
@@ -1703,25 +1739,25 @@ void main() {
               Complex.fromReal(3),
               Complex(9, 4),
               Complex.fromReal(2),
-              Complex.fromReal(2)
+              Complex.fromReal(2),
             ],
             [
               Complex.fromReal(2),
               Complex(3, -2),
               Complex.fromReal(-2),
-              Complex.zero()
+              Complex.zero(),
             ],
             [
               Complex.fromReal(8),
               Complex.i(),
               Complex.fromReal(1),
-              Complex(6, -1)
+              Complex(6, -1),
             ],
             [
               Complex(5, 3),
               Complex.zero(),
               Complex.fromReal(9),
-              Complex.fromImaginary(4)
+              Complex.fromImaginary(4),
             ],
           ],
         ).characteristicPolynomial(),
@@ -1756,7 +1792,7 @@ void main() {
             const Complex.fromReal(1),
             const Complex(-7, 2),
             const Complex(-17, -16),
-            const Complex(191, 46)
+            const Complex(191, 46),
           ],
         ),
         Algebraic.from(
@@ -1839,25 +1875,25 @@ void main() {
               Complex.fromReal(3),
               Complex(9, 4),
               Complex.fromReal(2),
-              Complex.fromReal(2)
+              Complex.fromReal(2),
             ],
             [
               Complex.fromReal(2),
               Complex(3, -2),
               Complex.fromReal(-2),
-              Complex.zero()
+              Complex.zero(),
             ],
             [
               Complex.fromReal(8),
               Complex.i(),
               Complex.fromReal(1),
-              Complex(6, -1)
+              Complex(6, -1),
             ],
             [
               Complex(5, 3),
               Complex.zero(),
               Complex.fromReal(9),
-              Complex.fromImaginary(4)
+              Complex.fromImaginary(4),
             ],
           ],
         ).eigenvalues(),
@@ -1896,7 +1932,7 @@ void main() {
         ],
         const [
           Complex(9.9301, 1.6185),
-          Complex(-3.5200, -1.1455),
+          Complex(-3.52, -1.1455),
           Complex(7.1789, -0.9473),
           Complex(-6.5891, 2.4743),
         ],

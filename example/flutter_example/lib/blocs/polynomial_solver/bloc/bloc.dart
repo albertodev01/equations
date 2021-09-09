@@ -74,7 +74,7 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
     }
   }
 
-  Stream<PolynomialState> _polynomialCleanHandler(PolynomialClean evt) async* {
+  Stream<PolynomialState> _polynomialCleanHandler(_) async* {
     yield const PolynomialNone();
   }
 }

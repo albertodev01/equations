@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// This is just a wrapper of a [TextFormField] that parses and validates the
 /// coefficients of a polynomial equation.

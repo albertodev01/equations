@@ -59,7 +59,8 @@ class GaussianElimination extends SystemSolver {
       // Making sure the matrix is not singular
       if (A[p][p].abs() <= precision) {
         throw const SystemSolverException(
-            'The matrix is singular or nearly singular.');
+          'The matrix is singular or nearly singular.',
+        );
       }
 
       // pivot within A and b

@@ -3,7 +3,6 @@ import 'package:equations/equations.dart';
 void main() {
   // f(x) = x^3 + 7x^2 + 2x - 5
   final cubic = Cubic.realEquation(
-    a: 1,
     b: 7,
     c: 2,
     d: -5,

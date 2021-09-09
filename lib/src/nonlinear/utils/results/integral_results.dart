@@ -55,10 +55,10 @@ class IntegralResults {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < guesses.length; ++i) {
-      result = 37 * result + guesses[i].hashCode;
+      result = result * 37 + guesses[i].hashCode;
     }
 
-    return 37 * result + result.hashCode;
+    return result * 37 + result.hashCode;
   }
 
   @override

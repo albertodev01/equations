@@ -1,15 +1,15 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 /// This widget contains a series of [PolynomialInputField] widgets needed to
 /// parse the coefficients of the polynomial to be solved.
 class PolynomialDataInput extends StatelessWidget {
   /// Creates a [PolynomialDataInput] widget.
-  const PolynomialDataInput();
+  const PolynomialDataInput({Key? key}) : super(key: key);
 
   /// This is required to figure out how many inputs are required for the
   /// polynomial to be solved.
@@ -195,7 +195,7 @@ class __InputWidget extends State<_InputWidget> {
               child: Text(context.l10n.clean),
             ),
           ],
-        )
+        ),
       ],
     );
   }

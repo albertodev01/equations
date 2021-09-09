@@ -705,7 +705,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
         rows: rowCount,
         columns: columnCount,
         data: transpL,
-      )
+      ),
     ];
   }
 

@@ -23,6 +23,7 @@ mixin MathUtils {
     }
 
     final t = second / first;
+
     return first * sqrt(1 + t * t);
   }
 
@@ -43,6 +44,7 @@ mixin MathUtils {
     }
 
     final t = second / first;
+
     return first * (const Complex.fromReal(1) + (t * t)).sqrt();
   }
 }

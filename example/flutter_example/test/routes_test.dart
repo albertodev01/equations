@@ -92,25 +92,30 @@ void main() {
     });
 
     test('Checking the type of the exception thrown', () {
-      expect(() {
-        RouteGenerator.generateRoute(const RouteSettings(name: ''));
-      }, throwsA(isA<RouteException>()));
+      expect(
+        () {
+          RouteGenerator.generateRoute(const RouteSettings(name: ''));
+        },
+        throwsA(isA<RouteException>()),
+      );
     });
 
     test(
-        "Making sure that 'RouteException' objects properly define equality"
-        ' overrides', () {
-      const exception = RouteException('Message');
+      "Making sure that 'RouteException' objects properly define equality"
+      ' overrides',
+      () {
+        const exception = RouteException('Message');
 
-      expect(exception.message, equals('Message'));
-      expect(
-        exception,
-        equals(const RouteException('Message')),
-      );
-      expect(
-        exception.hashCode,
-        equals(const RouteException('Message').hashCode),
-      );
-    });
+        expect(exception.message, equals('Message'));
+        expect(
+          exception,
+          equals(const RouteException('Message')),
+        );
+        expect(
+          exception.hashCode,
+          equals(const RouteException('Message').hashCode),
+        );
+      },
+    );
   });
 }

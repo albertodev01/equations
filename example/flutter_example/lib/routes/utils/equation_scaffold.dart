@@ -35,20 +35,24 @@ class EquationScaffold extends StatefulWidget {
 
   /// Creates a custom [Scaffold] widget with no built-in navigation.
   const EquationScaffold({
+    Key? key,
     required this.body,
     this.fab,
-  }) : navigationItems = const [];
+  })  : navigationItems = const [],
+        super(key: key);
 
   /// Creates a custom [Scaffold] widget with built-in, tabbed navigation. There
   /// must be at least 1 navigation item.
   const EquationScaffold.navigation({
+    Key? key,
     required this.navigationItems,
     this.fab,
   })  : body = const SizedBox.shrink(),
         assert(
           navigationItems.length > 0,
           _assertionError,
-        );
+        ),
+        super(key: key);
 
   @override
   _EquationScaffoldState createState() => _EquationScaffoldState();

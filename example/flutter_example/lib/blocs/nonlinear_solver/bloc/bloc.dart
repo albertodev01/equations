@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// This bloc handles the contents of a [NonlinearBody] widget by processing
 /// the inputs (received as raw strings) and solving nonlinear equations.
 class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
-  /// The type root finding algorithm this bloc has to solve.
-  final NonlinearType nonlinearType;
-
   /// This is required to parse the coefficients received from the user as 'raw'
   /// strings.
   final _parser = const ExpressionParser();
+
+  /// The type root finding algorithm this bloc has to solve.
+  final NonlinearType nonlinearType;
 
   /// Initializes a [NonlinearBloc] with [NonlinearNone].
   NonlinearBloc(this.nonlinearType) : super(const NonlinearNone());
@@ -30,42 +30,9 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     }
   }
 
-  Stream<NonlinearState> _nonlinearSinglePointHandler(
-      SinglePointMethod evt) async* {
-    try {
-      late final NonLinear solver;
-      final x0 = _parser.evaluate(evt.initialGuess);
-
-      switch (evt.method) {
-        case SinglePointMethods.newton:
-          solver = Newton(
-            function: evt.function,
-            x0: x0,
-            maxSteps: evt.maxIterations,
-            tolerance: evt.precision,
-          );
-          break;
-        case SinglePointMethods.steffensen:
-          solver = Steffensen(
-            function: evt.function,
-            x0: x0,
-            maxSteps: evt.maxIterations,
-            tolerance: evt.precision,
-          );
-          break;
-      }
-
-      yield NonlinearGuesses(
-        nonLinear: solver,
-        nonlinearResults: solver.solve(),
-      );
-    } on Exception {
-      yield const NonlinearError();
-    }
-  }
-
   Stream<NonlinearState> _bracketingHandlerHandler(
-      BracketingMethod evt) async* {
+    BracketingMethod evt,
+  ) async* {
     try {
       late final NonLinear solver;
 
@@ -111,7 +78,42 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     }
   }
 
-  Stream<NonlinearState> _nonlinearCleanHandler(NonlinearClean evt) async* {
+  Stream<NonlinearState> _nonlinearSinglePointHandler(
+    SinglePointMethod evt,
+  ) async* {
+    try {
+      late final NonLinear solver;
+      final x0 = _parser.evaluate(evt.initialGuess);
+
+      switch (evt.method) {
+        case SinglePointMethods.newton:
+          solver = Newton(
+            function: evt.function,
+            x0: x0,
+            maxSteps: evt.maxIterations,
+            tolerance: evt.precision,
+          );
+          break;
+        case SinglePointMethods.steffensen:
+          solver = Steffensen(
+            function: evt.function,
+            x0: x0,
+            maxSteps: evt.maxIterations,
+            tolerance: evt.precision,
+          );
+          break;
+      }
+
+      yield NonlinearGuesses(
+        nonLinear: solver,
+        nonlinearResults: solver.solve(),
+      );
+    } on Exception {
+      yield const NonlinearError();
+    }
+  }
+
+  Stream<NonlinearState> _nonlinearCleanHandler(_) async* {
     yield const NonlinearNone();
   }
 }

@@ -1,8 +1,8 @@
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// The result vector of the system of equations.
 class SystemResults extends StatelessWidget {
   /// Creates a [SystemResults] widget.
-  const SystemResults();
+  const SystemResults({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

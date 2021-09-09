@@ -195,8 +195,6 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
   /// Generation of the `V` from a bidiagonal source.
   void _generateV({
     required List<List<double>> matrixV,
-    required List<List<double>> matrixU,
-    required List<double> arrayS,
     required List<double> arrayE,
   }) {
     final nrt = max(0, min(matrix.columnCount - 2, matrix.rowCount));
@@ -273,8 +271,6 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     // Setup 3: generating V.
     _generateV(
       matrixV: matrixV,
-      matrixU: matrixU,
-      arrayS: arrayS,
       arrayE: arrayE,
     );
 

@@ -45,9 +45,9 @@ class PolarComplex implements Comparable<PolarComplex> {
   int get hashCode {
     var result = 83;
 
-    result = 37 * result + r.hashCode;
-    result = 37 * result + phiDegrees.hashCode;
-    result = 37 * result + phiRadians.hashCode;
+    result = result * 37 + r.hashCode;
+    result = result * 37 + phiDegrees.hashCode;
+    result = result * 37 + phiRadians.hashCode;
 
     return result;
   }

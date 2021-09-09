@@ -1,8 +1,8 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 /// This very simple widget allows the input of the relaxation factor `w` of the
 /// SOR system solving algorithm.
@@ -12,8 +12,9 @@ class RelaxationFactorInput extends StatefulWidget {
 
   /// Creates a [RelaxationFactorInput] widget.
   const RelaxationFactorInput({
+    Key? key,
     required this.textEditingController,
-  });
+  }) : super(key: key);
 
   @override
   _RelaxationFactorInputState createState() => _RelaxationFactorInputState();

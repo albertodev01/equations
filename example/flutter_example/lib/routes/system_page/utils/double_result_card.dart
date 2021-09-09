@@ -14,9 +14,10 @@ class DoubleResultCard extends StatelessWidget {
 
   /// Creates a [DoubleResultCard] widget.
   const DoubleResultCard({
+    Key? key,
     required this.value,
     this.leading = 'x =',
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

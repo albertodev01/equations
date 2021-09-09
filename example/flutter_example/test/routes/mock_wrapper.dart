@@ -15,9 +15,10 @@ class MockWrapper extends StatelessWidget {
 
   /// The [child] to be tested.
   const MockWrapper({
+    Key? key,
     required this.child,
     this.navigatorObservers = const [],
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

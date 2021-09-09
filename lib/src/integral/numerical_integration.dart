@@ -54,9 +54,9 @@ abstract class NumericalIntegration {
   int get hashCode {
     var result = 17;
 
-    result = 37 * result + intervals.hashCode;
-    result = 37 * result + lowerBound.hashCode;
-    result = 37 * result + upperBound.hashCode;
+    result = result * 37 + intervals.hashCode;
+    result = result * 37 + lowerBound.hashCode;
+    result = result * 37 + upperBound.hashCode;
 
     return result;
   }

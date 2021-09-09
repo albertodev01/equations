@@ -174,11 +174,11 @@ abstract class Matrix<T> {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < _data.length; ++i) {
-      result = 37 * result + _data[i].hashCode;
+      result = result * 37 + _data[i].hashCode;
     }
 
-    result = 37 * result + rowCount.hashCode;
-    result = 37 * result + columnCount.hashCode;
+    result = result * 37 + rowCount.hashCode;
+    result = result * 37 + columnCount.hashCode;
 
     return result;
   }
@@ -216,9 +216,13 @@ abstract class Matrix<T> {
 
   /// Returns a modifiable view of the matrix as a `List<List<T>>` object.
   List<List<T>> toListOfList() {
-    return List<List<T>>.generate(rowCount, (row) {
-      return List<T>.generate(columnCount, (col) => this(row, col));
-    }, growable: false);
+    return List<List<T>>.generate(
+      rowCount,
+      (row) {
+        return List<T>.generate(columnCount, (col) => this(row, col));
+      },
+      growable: false,
+    );
   }
 
   /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.

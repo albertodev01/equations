@@ -187,7 +187,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
   /// Generation of the `V` from a bidiagonal source.
   void _generateV({
     required List<List<Complex>> matrixV,
-    required List<Complex> arrayS,
     required List<Complex> arrayE,
   }) {
     final nrt = max(0, min(matrix.columnCount - 2, matrix.rowCount));
@@ -267,7 +266,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     // Setup 3: generating V.
     _generateV(
       matrixV: matrixV,
-      arrayS: arrayS,
       arrayE: arrayE,
     );
 
@@ -489,7 +487,9 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     // Building the 'E' rectangular matrix, whose size is rowCount*columnCount.
     final sAsMatrix = List<List<Complex>>.generate(matrix.rowCount, (_) {
       return List<Complex>.generate(
-          matrix.columnCount, (_) => const Complex.zero());
+        matrix.columnCount,
+        (_) => const Complex.zero(),
+      );
     });
     for (int i = 0; i < matrix.rowCount; i++) {
       for (int j = 0; j < matrix.columnCount; j++) {

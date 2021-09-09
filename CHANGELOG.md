@@ -1,10 +1,11 @@
 ## [3.1.0]
 
  - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
- - Added the `eigenvaluesEigenvectors()` method on `Matrix<T>` to compute both eigenvalues and eigenvectors of a matrix
- - Fixed some bugs in the `eigenvalue()` method
+ - Fixed an issue in the `eigenvalue()` method
+ - Fixed an issue in the `rank()` method
  - Added the `eigenDecomposition()` method on `Matrix<T>` to implement the "Eigendecomposition" algorithm
  - Added the `Matrix.diagonal()` constructor on `Matrix<T>` to create diagonal matrices
+ - Added more lints and stricter rules in `analysis_options.yaml`
 
 ## [3.0.0]
 

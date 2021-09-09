@@ -58,7 +58,7 @@ class SimpsonRule extends NumericalIntegration {
 
     return IntegralResults(
       guesses: guesses,
-      result: (bounds + (2 * evenSum) + (4 * oddSum)) * h / 3,
+      result: (bounds + (evenSum * 2) + (oddSum * 4)) * h / 3,
     );
   }
 }

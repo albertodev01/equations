@@ -205,7 +205,10 @@ class EigendecompositionComplex
           }
           for (var k = 0; k <= i; k++) {
             eigenVectors.set(
-                k, j, eigenVectors.get(k, j) - g * realEigenvalues[k]);
+              k,
+              j,
+              eigenVectors.get(k, j) - g * realEigenvalues[k],
+            );
           }
         }
       }
@@ -429,10 +432,12 @@ class EigendecompositionComplex
     if (yr.abs() > yi.abs()) {
       final r = yi / yr;
       final d = yr + r * yi;
+
       return Complex((xr + r * xi) / d, (xi - r * xr) / d);
     } else {
       final r = yr / yi;
       final d = yi + r * yr;
+
       return Complex((r * xr + xi) / d, (r * xi - xr) / d);
     }
   }
@@ -870,9 +875,15 @@ class EigendecompositionComplex
                   q.real,
                 );
                 hessenbergCache.set(
-                    i + 1, n - 1, Complex.fromReal(division.real));
+                  i + 1,
+                  n - 1,
+                  Complex.fromReal(division.real),
+                );
                 hessenbergCache.set(
-                    i + 1, n, Complex.fromReal(division.imaginary));
+                  i + 1,
+                  n,
+                  Complex.fromReal(division.imaginary),
+                );
               }
             }
 

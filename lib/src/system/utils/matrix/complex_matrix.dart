@@ -690,7 +690,7 @@ class ComplexMatrix extends Matrix<Complex> {
         rows: rowCount,
         columns: columnCount,
         data: transpL,
-      )
+      ),
     ];
   }
 

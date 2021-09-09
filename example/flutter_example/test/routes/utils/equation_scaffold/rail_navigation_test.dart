@@ -56,26 +56,27 @@ void main() {
         ..addScenario(
           'Rail Navigation Bar',
           SizedBox(
-              width: 200,
-              height: 400,
-              child: MockWrapper(
-                child: BlocProvider<NavigationCubit>(
-                  create: (_) => NavigationCubit(),
-                  child: RailNavigation(
-                    tabController: controller,
-                    navigationItems: const [
-                      NavigationItem(
-                        title: 'Test 1',
-                        content: Icon(Icons.date_range),
-                      ),
-                      NavigationItem(
-                        title: 'Test 2',
-                        content: Icon(Icons.wb_auto_rounded),
-                      ),
-                    ],
-                  ),
+            width: 200,
+            height: 400,
+            child: MockWrapper(
+              child: BlocProvider<NavigationCubit>(
+                create: (_) => NavigationCubit(),
+                child: RailNavigation(
+                  tabController: controller,
+                  navigationItems: const [
+                    NavigationItem(
+                      title: 'Test 1',
+                      content: Icon(Icons.date_range),
+                    ),
+                    NavigationItem(
+                      title: 'Test 2',
+                      content: Icon(Icons.wb_auto_rounded),
+                    ),
+                  ],
                 ),
-              )),
+              ),
+            ),
+          ),
         );
 
       await tester.pumpWidgetBuilder(

@@ -51,10 +51,16 @@ class PlotterPainter<T> extends CustomPainter {
       ..strokeWidth = 2.0;
 
     canvas
-      ..drawLine(Offset(0, size.height / 2),
-          Offset(size.width, size.height / 2), blackThick)
-      ..drawLine(Offset(size.width / 2, 0), Offset(size.width / 2, size.height),
-          blackThick);
+      ..drawLine(
+        Offset(0, size.height / 2),
+        Offset(size.width, size.height / 2),
+        blackThick,
+      )
+      ..drawLine(
+        Offset(size.width / 2, 0),
+        Offset(size.width / 2, size.height),
+        blackThick,
+      );
   }
 
   void _drawAxis(Canvas canvas, Size size) {
