@@ -7,22 +7,25 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 /// This algorithm requires a parameter `m` which indicates how many partitions
 /// have to be computed by the algorithm. Note that `n` must be an even number.
 class SimpsonRule extends NumericalIntegration {
-  /// Expects the [lowerBound] and [upperBound] of the integral.
+  /// Expects the [function] to be integrated ad the integration bounds
+  /// ([lowerBound] and [upperBound]).
   ///
   /// The [intervals] variable represents the number of parts in which the
   /// [lowerBound, upperBound] interval has to be split by the algorithm.
   const SimpsonRule({
+    required String function,
     required double lowerBound,
     required double upperBound,
     int intervals = 32,
   }) : super(
+          function: function,
           lowerBound: lowerBound,
           upperBound: upperBound,
           intervals: intervals,
         );
 
   @override
-  IntegralResults integrate(String function) {
+  IntegralResults integrate() {
     // Make sure to throw an exception if 'intervals' is odd
     if (intervals % 2 != 0) {
       throw const NumericalIntegrationException(
@@ -42,19 +45,18 @@ class SimpsonRule extends NumericalIntegration {
 
     // The first iteration
     for (var i = 1; i < intervals; i += 2) {
-      oddSum += evaluateFunction(function, lowerBound + i * h);
+      oddSum += evaluateFunction(lowerBound + i * h);
       guesses[i] = oddSum;
     }
 
     // The second iteration
     for (var i = 2; i < intervals - 1; i += 2) {
-      evenSum += evaluateFunction(function, lowerBound + i * h);
+      evenSum += evaluateFunction(lowerBound + i * h);
       guesses[i] = oddSum;
     }
 
     // Returning the result
-    final bounds = evaluateFunction(function, lowerBound) +
-        evaluateFunction(function, upperBound);
+    final bounds = evaluateFunction(lowerBound) + evaluateFunction(upperBound);
 
     return IntegralResults(
       guesses: guesses,

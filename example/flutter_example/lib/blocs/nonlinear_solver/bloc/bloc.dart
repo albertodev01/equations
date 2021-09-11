@@ -26,7 +26,7 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     }
 
     if (event is NonlinearClean) {
-      yield* _nonlinearCleanHandler(event);
+      yield const NonlinearNone();
     }
   }
 
@@ -111,9 +111,5 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
     } on Exception {
       yield const NonlinearError();
     }
-  }
-
-  Stream<NonlinearState> _nonlinearCleanHandler(_) async* {
-    yield const NonlinearNone();
   }
 }

@@ -1,6 +1,8 @@
 include: package:lints/recommended.yaml
 
 analyzer:
+  exclude:
+    - example/**
   plugins:
     - dart_code_metrics
 
@@ -13,6 +15,7 @@ dart_code_metrics:
     maximum-nesting: 5
   metrics-exclude:
     - test/**
+    - example/**
   rules:
     - avoid-unused-parameters
     - avoid-wrapping-in-padding
@@ -23,6 +26,8 @@ dart_code_metrics:
     - no-equal-then-else
     - no-object-declaration
     - prefer-trailing-comma
+  rules-exclude:
+    - example/**
 
 linter:
   rules:

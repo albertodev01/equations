@@ -66,8 +66,9 @@ class SinglePointMethod extends NonlinearEvent {
       return SinglePointMethods.steffensen;
     }
 
-    throw ArgumentError("The given string doesn't map to a valid "
-        'SinglePointMethods value.');
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'SinglePointMethods value.'",
+    );
   }
 }
 
@@ -125,8 +126,9 @@ class BracketingMethod extends NonlinearEvent {
       return BracketingMethods.bisection;
     }
 
-    throw ArgumentError("The given string doesn't map to a valid "
-        'BracketingMethods value.');
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'BracketingMethods value.'",
+    );
   }
 }
 

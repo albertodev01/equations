@@ -1,5 +1,6 @@
 ## [3.1.0]
 
+ - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (earlier it was passed to the `integrate()` function)
  - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
  - Fixed an issue in the `eigenvalue()` method
  - Fixed an issue in the `rank()` method

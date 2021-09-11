@@ -1,4 +1,6 @@
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'dart:math';
+
+import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
@@ -10,11 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-/// This widget contains the solutions of the polynomial equation and a chart
-/// which plots the function.
-///
-/// This widget is responsive: contents may be laid out on a single column or
-/// on two columns according with the available width.
+/// This widget contains the input of the function (along with the integration
+/// bounds), the result and a cartesian plane that highlights the area.
 class IntegralBody extends StatelessWidget {
   /// Creates an [IntegralBody] widget.
   const IntegralBody({
@@ -27,7 +26,7 @@ class IntegralBody extends StatelessWidget {
       children: const [
         // Scrollable contents of the page
         Positioned.fill(
-          child: _ResponsiveBody(),
+          child: _PageBody(),
         ),
 
         // "Go back" button
@@ -42,15 +41,15 @@ class IntegralBody extends StatelessWidget {
 }
 
 /// Determines whether the contents should appear in 1 or 2 columns.
-class _ResponsiveBody extends StatefulWidget {
-  /// Creates a [_ResponsiveBody] widget.
-  const _ResponsiveBody();
+class _PageBody extends StatefulWidget {
+  /// Creates a [_PageBody] widget.
+  const _PageBody();
 
   @override
-  __ResponsiveBodyState createState() => __ResponsiveBodyState();
+  _PageBodyState createState() => _PageBodyState();
 }
 
-class __ResponsiveBodyState extends State<_ResponsiveBody> {
+class _PageBodyState extends State<_PageBody> {
   /// Manually caching the page title
   late final Widget pageTitleWidget = PageTitle(
     pageTitle: context.l10n.integrals,
@@ -61,29 +60,35 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
   @override
   Widget build(BuildContext context) {
-    return const _IntegralPlot();
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            _IntegralPlot(),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 /// Puts on the screen a widget that draws mathematical functions and highlights
 /// the area underneath the function.
-class _IntegralPlot extends StatefulWidget {
+class _IntegralPlot extends StatelessWidget {
   /// Creates a [_IntegralPlot] widget.
   const _IntegralPlot();
 
   @override
-  _IntegralPlotState createState() => _IntegralPlotState();
-}
-
-class _IntegralPlotState extends State<_IntegralPlot> {
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PolynomialBloc, PolynomialState>(
+    return BlocBuilder<IntegralBloc, IntegralState>(
       builder: (context, state) {
-        PolynomialPlot? plotMode;
+        IntegralPlot? plotMode;
 
-        if (state is PolynomialRoots) {
-          plotMode = PolynomialPlot(algebraic: state.algebraic);
+        if (state is IntegralResult) {
+          plotMode = IntegralPlot(
+            function: state.numericalIntegration,
+          );
         }
 
         return Center(

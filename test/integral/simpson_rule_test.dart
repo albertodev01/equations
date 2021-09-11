@@ -8,6 +8,7 @@ void main() {
 
   setUpAll(() {
     simpson = const SimpsonRule(
+      function: 'sin(x)*e^x',
       lowerBound: 2,
       upperBound: 4,
     );
@@ -20,19 +21,20 @@ void main() {
       expect(simpson.intervals, equals(32));
 
       // Actual approximation
-      final results = simpson.integrate('sin(x)*e^x');
+      final results = simpson.integrate();
 
       expect(results.result, const MoreOrLessEquals(-7.713, precision: 1.0e-4));
       expect(results.guesses.length, equals(simpson.intervals));
     });
 
     test("Making sure that SimpsonRule's toString() method works.", () {
-      const strResult = '[2.00, 4.00] with 32 intervals';
+      const strResult = 'sin(x)*e^x on [2.00, 4.00]\nUsing 32 intervals';
       expect(simpson.toString(), equals(strResult));
     });
 
     test('Making sure that SimpsonRule can be properly compared.', () {
       const simpson2 = SimpsonRule(
+        function: 'sin(x)*e^x',
         lowerBound: 2,
         upperBound: 4,
       );
@@ -43,6 +45,7 @@ void main() {
       expect(
         simpson ==
             const SimpsonRule(
+              function: 'sin(x)*e^x',
               lowerBound: 2,
               upperBound: 4,
             ),
@@ -52,6 +55,7 @@ void main() {
       expect(
         simpson ==
             const SimpsonRule(
+              function: 'sin(x)*e^x',
               lowerBound: 0,
               upperBound: 4,
             ),
@@ -61,6 +65,7 @@ void main() {
       expect(
         simpson ==
             const SimpsonRule(
+              function: 'sin(x)*e^x',
               lowerBound: 2,
               upperBound: 0,
             ),
@@ -69,7 +74,12 @@ void main() {
 
       expect(
         simpson ==
-            const SimpsonRule(lowerBound: 2, upperBound: 4, intervals: 0),
+            const SimpsonRule(
+              function: 'sin(x)*e^x',
+              lowerBound: 2,
+              upperBound: 4,
+              intervals: 0,
+            ),
         isFalse,
       );
     });
@@ -93,10 +103,11 @@ void main() {
 
       for (var i = 0; i < equations.length; ++i) {
         final result = SimpsonRule(
+          function: equations[i],
           lowerBound: solution[i][0],
           upperBound: solution[i][1],
           intervals: 60,
-        ).integrate(equations[i]);
+        ).integrate();
 
         expect(
           result.result,

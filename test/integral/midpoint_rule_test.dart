@@ -8,6 +8,7 @@ void main() {
 
   setUpAll(() {
     midpoint = const MidpointRule(
+      function: 'sin(x)-3',
       lowerBound: 2,
       upperBound: -3,
     );
@@ -20,19 +21,20 @@ void main() {
       expect(midpoint.intervals, equals(30));
 
       // Actual approximation
-      final results = midpoint.integrate('sin(x)-3');
+      final results = midpoint.integrate();
 
       expect(results.result, const MoreOrLessEquals(15.5, precision: 1.0e-1));
       expect(results.guesses.length, equals(midpoint.intervals));
     });
 
     test("Making sure that MidpointRule's toString() method works.", () {
-      const strResult = '[2.00, -3.00] with 30 intervals';
+      const strResult = 'sin(x)-3 on [2.00, -3.00]\nUsing 30 intervals';
       expect(midpoint.toString(), equals(strResult));
     });
 
     test('Making sure that MidpointRule can be properly compared.', () {
       const midpoint2 = MidpointRule(
+        function: 'sin(x)-3',
         lowerBound: 2,
         upperBound: -3,
       );
@@ -43,6 +45,7 @@ void main() {
       expect(
         midpoint ==
             const MidpointRule(
+              function: 'sin(x)-3',
               lowerBound: 2,
               upperBound: -3,
             ),
@@ -52,6 +55,7 @@ void main() {
       expect(
         midpoint ==
             const MidpointRule(
+              function: 'sin(x)-3',
               lowerBound: 0,
               upperBound: -3,
             ),
@@ -61,6 +65,7 @@ void main() {
       expect(
         midpoint ==
             const MidpointRule(
+              function: 'sin(x)-3',
               lowerBound: 2,
               upperBound: 0,
             ),
@@ -69,7 +74,12 @@ void main() {
 
       expect(
         midpoint ==
-            const MidpointRule(lowerBound: 2, upperBound: -3, intervals: 0),
+            const MidpointRule(
+              function: 'sin(x)-3',
+              lowerBound: 2,
+              upperBound: -3,
+              intervals: 0,
+            ),
         isFalse,
       );
     });
@@ -93,10 +103,11 @@ void main() {
 
       for (var i = 0; i < equations.length; ++i) {
         final result = MidpointRule(
+          function: equations[i],
           lowerBound: solution[i][0],
           upperBound: solution[i][1],
           intervals: 60,
-        ).integrate(equations[i]);
+        ).integrate();
 
         expect(
           result.result,

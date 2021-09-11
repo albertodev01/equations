@@ -28,7 +28,7 @@ class PolynomialPlot extends PlotMode<Algebraic> {
   double evaluateOn(double x) => equation.realEvaluateOn(x).real;
 }
 
-/// Real functions evaluator.
+/// Nonlinear functions evaluator.
 class NonlinearPlot extends PlotMode<NonLinear> {
   /// Creates an instance of [NonlinearPlot].
   const NonlinearPlot({
@@ -37,4 +37,15 @@ class NonlinearPlot extends PlotMode<NonLinear> {
 
   @override
   double evaluateOn(double x) => equation.evaluateOn(x) as double;
+}
+
+/// Integral functions evaluator.
+class IntegralPlot extends PlotMode<NumericalIntegration> {
+  /// Creates an instance of [IntegralPlot].
+  const IntegralPlot({
+    required NumericalIntegration function,
+  }) : super(function);
+
+  @override
+  double evaluateOn(double x) => equation.evaluateFunction(x);
 }

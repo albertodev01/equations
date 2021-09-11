@@ -63,7 +63,9 @@ class HomeContents extends StatelessWidget {
             key: const Key('IntegralsLogo-Container'),
             title: context.l10n.integrals,
             image: const IntegralLogo(),
-            onTap: () => _comingSoonDialog(context),
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.integralPage,
+            ),
           ),
           CardContainer(
             key: const Key('InterpolationLogo-Container'),

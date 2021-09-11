@@ -1,3 +1,4 @@
+import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:flutter/material.dart';
 
@@ -5,11 +6,6 @@ import 'package:flutter/material.dart';
 /// mathematical function on it. Thanks to its [range] parameter, the user is
 /// able to define the "scale" of the plot (or the "zoom").
 class PlotterPainter<T> extends CustomPainter {
-  final int _xmax;
-  final int _xmin;
-  final int _ymax;
-  final int _ymin;
-
   /// Provides the ability to evaluate a real function on a point.
   ///
   /// If this is `null` then the painter only draws a cartesian plane (without
@@ -19,15 +15,20 @@ class PlotterPainter<T> extends CustomPainter {
   /// The 'scale' of the plot
   final int range;
 
+  /// The [ColorArea] object used to retrieve info about the color of the area
+  /// below the function.
+  final ColorArea colorArea;
+
   /// Draws a cartesian plane with a grey grid lines and black (thick) X and Y
   /// axis. The function instead is plotted in [Colors.blueAccent].
   const PlotterPainter({
     required this.plotMode,
     this.range = 5,
-  })  : _xmax = range,
-        _ymax = range,
-        _xmin = -range,
-        _ymin = -range;
+    this.colorArea = const ColorArea(
+      startPoint: 5,
+      endPoint: 5,
+    ),
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -42,7 +43,9 @@ class PlotterPainter<T> extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant PlotterPainter<T> oldDelegate) {
-    return (range != oldDelegate.range) || (plotMode != oldDelegate.plotMode);
+    return (range != oldDelegate.range) ||
+        (plotMode != oldDelegate.plotMode) ||
+        (colorArea != oldDelegate.colorArea);
   }
 
   void _drawMainAxis(Canvas canvas, Size size) {
@@ -96,6 +99,10 @@ class PlotterPainter<T> extends CustomPainter {
       ..color = Colors.blueAccent
       ..strokeWidth = 2.0;
 
+    final area = Paint()
+      ..color = colorArea.color
+      ..strokeWidth = 1.0;
+
     var logy = 0.0;
     var logx = 0.0;
 
@@ -119,21 +126,30 @@ class PlotterPainter<T> extends CustomPainter {
         canvas.drawLine(currPoint, prevPoint, line);
       }
 
+      // Highlighting the area below the function ONLY if a color is defined
+      if (colorArea.color != Colors.transparent) {
+        final xAxis = Offset(currPoint.dx, size.height / 2);
+
+        if (logx >= colorArea.startPoint && logx <= colorArea.endPoint) {
+          canvas.drawLine(xAxis, currPoint, area);
+        }
+      }
+
       prevPoint = currPoint;
     }
   }
 
   Offset _screenToLog(Offset screenPoint, double width, double height) {
     return Offset(
-      _xmin + (screenPoint.dx / width) * (_xmax - _xmin),
-      _ymin + (height - screenPoint.dy) * (_ymax - _ymin),
+      -range + (screenPoint.dx / width) * (range + range),
+      -range + (height - screenPoint.dy) * (range + range),
     );
   }
 
   Offset _logToScreen(Offset logPoint, double width, double height) {
     return Offset(
-      width * (logPoint.dx - _xmin) / (_xmax - _xmin),
-      height - height * (logPoint.dy - _ymin) / (_ymax - _ymin),
+      width * (logPoint.dx + range) / (range + range),
+      height - height * (logPoint.dy + range) / (range + range),
     );
   }
 }
