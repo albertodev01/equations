@@ -31,5 +31,29 @@ void main() {
       );
       await screenMatchesGolden(tester, 'vectorial_arrow_up');
     });
+
+    testGoldens('ToolsSquareX', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const ToolsSquareX());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'tools_square_x');
+    });
+
+    testGoldens('ToolsMatrix', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const ToolsMatrix());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'tools_matrix');
+    });
   });
 }

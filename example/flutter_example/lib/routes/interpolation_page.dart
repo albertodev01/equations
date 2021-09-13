@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 /// a series of inputs for the (x, y) points and a chart that plots the points.
 class InterpolationPage extends StatelessWidget {
   /// Creates a [InterpolationPage] widget.
-  const InterpolationPage({Key? key}) : super(key: key);
+  const InterpolationPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

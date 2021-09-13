@@ -44,5 +44,6 @@
   "sor_w": "Facteur de relaxation",
   "jacobi_initial": "Vecteur de valeurs initiales",
   "singular_matrix_error": "Le système ne peut pas être résolu car la matrice est singulière",
-  "invalid_values": "Une ou plusieurs valeurs ne sont pas correctes."
+  "invalid_values": "Une ou plusieurs valeurs ne sont pas correctes.",
+  "matrices": "Matrices"
 }

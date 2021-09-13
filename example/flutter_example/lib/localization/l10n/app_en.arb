@@ -44,5 +44,6 @@
   "sor_w": "Relaxation factor",
   "jacobi_initial": "Initial guesses vector",
   "singular_matrix_error": "The system cannot be solved because the matrix is singular!",
-  "invalid_values": "One or more values aren't correct."
+  "invalid_values": "One or more values aren't correct.",
+  "matrices": "Matrices"
 }

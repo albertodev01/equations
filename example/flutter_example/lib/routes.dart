@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
+import 'package:equations_solver/routes/tools_page.dart';
 import 'package:flutter/material.dart';
 
 /// Route management class that handles the navigation among various pages of the
@@ -20,20 +21,23 @@ abstract class RouteGenerator {
   /// Route name for the home page of the app.
   static const homePage = '/';
 
-  /// Route name for the polynomial equations solver.
-  static const polynomialPage = '/polynomials';
-
-  /// Route name for the nonlinear equations solver.
-  static const nonlinearPage = '/nonlinear';
-
-  /// Route name for the systems page.
-  static const systemPage = '/system';
-
   /// Route name for the integrals page.
   static const integralPage = '/integral';
 
   /// Route name for the interpolation page.
   static const interpolationPage = '/interpolation';
+
+  /// Route name for the nonlinear equations solver page.
+  static const nonlinearPage = '/nonlinear';
+
+  /// Route name for the polynomial equations solver page.
+  static const polynomialPage = '/polynomials';
+
+  /// Route name for the systems page.
+  static const systemPage = '/system';
+
+  /// Route name for the tools page.
+  static const toolsPage = '/tools';
 
   /// Making the constructor private since this class is not meant to be
   /// instantiated.
@@ -93,6 +97,12 @@ abstract class RouteGenerator {
       case interpolationPage:
         return PageRouteBuilder<InterpolationPage>(
           pageBuilder: (_, __, ___) => const InterpolationPage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      case toolsPage:
+        return PageRouteBuilder<ToolsPage>(
+          pageBuilder: (_, __, ___) => const ToolsPage(),
           transitionsBuilder: _slideTransition,
         );
 

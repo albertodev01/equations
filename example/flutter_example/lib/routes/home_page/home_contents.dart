@@ -55,7 +55,17 @@ class HomeContents extends StatelessWidget {
             key: const Key('InterpolationLogo-Container'),
             title: context.l10n.interpolation,
             image: const InterpolationLogo(),
-            onTap: () {},
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.interpolationPage,
+            ),
+          ),
+          CardContainer(
+            key: const Key('ToolsLogo-Container'),
+            title: context.l10n.tools,
+            image: const ToolsLogo(),
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.toolsPage,
+            ),
           ),
         ],
       ),
