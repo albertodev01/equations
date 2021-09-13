@@ -18,8 +18,9 @@ abstract class PolynomialEvent extends Equatable {
 /// Event fired when there's a polynomial equation to be solved.
 class PolynomialSolve extends PolynomialEvent {
   /// Requires the coefficients of the polynomial to be solved.
-  const PolynomialSolve({required List<String> coefficients})
-      : super(coefficients: coefficients);
+  const PolynomialSolve({
+    required List<String> coefficients,
+  }) : super(coefficients: coefficients);
 }
 
 /// Event fired when the state of the bloc has to be "reset". This is generally

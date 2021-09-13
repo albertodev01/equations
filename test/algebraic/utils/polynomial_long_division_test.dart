@@ -73,18 +73,20 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown if the degree of the '
-        'denominator is bigger than the degree of the numerator.', () {
-      final results = PolynomialLongDivision(
-        polyNumerator: Algebraic.fromReal([1, 2, 3]),
-        polyDenominator: Algebraic.fromReal([2, 1, 0, -1]),
-      );
+      'Making sure that an exception is thrown if the degree of the '
+      'denominator is bigger than the degree of the numerator.',
+      () {
+        final results = PolynomialLongDivision(
+          polyNumerator: Algebraic.fromReal([1, 2, 3]),
+          polyDenominator: Algebraic.fromReal([2, 1, 0, -1]),
+        );
 
-      expect(
-        () => results.divide(),
-        throwsA(isA<PolynomialLongDivisionException>()),
-      );
-    });
+        expect(
+          results.divide,
+          throwsA(isA<PolynomialLongDivisionException>()),
+        );
+      },
+    );
 
     test("Making sure that the 'divide()' method works properly", () {
       final polyLongDivision = PolynomialLongDivision(
@@ -99,18 +101,20 @@ void main() {
     });
 
     test(
-        'Making sure that quotient 1 and remainder 0 are returned when '
-        'dividing the same polynomials', () {
-      final polyLongDivision = PolynomialLongDivision(
-        polyNumerator: Algebraic.fromReal([1, 3, -6]),
-        polyDenominator: Algebraic.fromReal([1, 3, -6]),
-      );
+      'Making sure that quotient 1 and remainder 0 are returned when '
+      'dividing the same polynomials',
+      () {
+        final polyLongDivision = PolynomialLongDivision(
+          polyNumerator: Algebraic.fromReal([1, 3, -6]),
+          polyDenominator: Algebraic.fromReal([1, 3, -6]),
+        );
 
-      final results = polyLongDivision.divide();
+        final results = polyLongDivision.divide();
 
-      expect(results.quotient, equals(Algebraic.fromReal([1])));
-      expect(results.remainder, equals(Algebraic.fromReal([0])));
-    });
+        expect(results.quotient, equals(Algebraic.fromReal([1])));
+        expect(results.remainder, equals(Algebraic.fromReal([0])));
+      },
+    );
 
     test('Batch tests', () {
       final dividends = [

@@ -103,6 +103,37 @@ abstract class Matrix<T> {
     flattenData = UnmodifiableListView<T>(_data);
   }
 
+  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
+  /// otherwise.
+  Matrix.diagonal({
+    required int rows,
+    required int columns,
+    required T defaultValue,
+    required T diagonalValue,
+  })  : rowCount = rows,
+        columnCount = columns {
+    // Making sure the user entered valid dimensions for the matrix
+    if ((rows == 0) || (columns == 0)) {
+      throw const MatrixException('The rows or column count cannot be zero.');
+    }
+
+    // Creating a new FIXED length list
+    _data = List<T>.filled(rows * columns, defaultValue);
+
+    // Exposing data to the outside in read-only mode
+    flattenData = UnmodifiableListView<T>(_data);
+
+    // Putting the given value in the diagonal
+    for (var i = 0; i < rowCount; ++i) {
+      final pos = columnCount * i + i;
+
+      if (pos < _data.length && i < columnCount) {
+        _data[pos] = diagonalValue;
+      }
+    }
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -143,11 +174,11 @@ abstract class Matrix<T> {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < _data.length; ++i) {
-      result = 37 * result + _data[i].hashCode;
+      result = result * 37 + _data[i].hashCode;
     }
 
-    result = 37 * result + rowCount.hashCode;
-    result = 37 * result + columnCount.hashCode;
+    result = result * 37 + rowCount.hashCode;
+    result = result * 37 + columnCount.hashCode;
 
     return result;
   }
@@ -185,9 +216,13 @@ abstract class Matrix<T> {
 
   /// Returns a modifiable view of the matrix as a `List<List<T>>` object.
   List<List<T>> toListOfList() {
-    return List<List<T>>.generate(rowCount, (row) {
-      return List<T>.generate(columnCount, (col) => this(row, col));
-    }, growable: false);
+    return List<List<T>>.generate(
+      rowCount,
+      (row) {
+        return List<T>.generate(columnCount, (col) => this(row, col));
+      },
+      growable: false,
+    );
   }
 
   /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.
@@ -334,11 +369,23 @@ abstract class Matrix<T> {
   /// slower.
   T determinant();
 
+  /// The characteristic polynomial can only be computed if the matrix is
+  /// **square**, meaning that it must have the same number of columns and rows.
+  ///
+  /// The roots of the characteristic polynomial are the eigenvalues of the
+  /// matrix.
+  ///
+  /// If you want to find the eigenvalues of a matrix, you can compute the
+  /// characteristic polynomial and solve the polynomial equation. However, for
+  /// 5x5 or bigger matrices, consider using the [eigenValues()] method which is
+  /// faster and more accurate.
+  Algebraic characteristicPolynomial();
+
   /// Returns the eigenvalues associated to this matrix.
   ///
   /// Eigenvalues can only be computed if the matrix is **square**, meaning
   /// that it must have the same number of columns and rows.
-  List<Complex> eigenValues();
+  List<Complex> eigenvalues();
 
   /// Factors the matrix as the product of a lower triangular matrix `L` and
   /// an upper triangular matrix `U`. The matrix **must** be square.
@@ -377,4 +424,17 @@ abstract class Matrix<T> {
   /// The returned list contains `E` at index 0, `U` at index 1 and `V` at index
   /// 2.
   List<Matrix<T>> singleValueDecomposition();
+
+  /// Computes the `V`, `D` and `V'` matrices of the eigendecomposition
+  /// algorithm. In particular, this method returns the following matrices:
+  ///
+  ///  - `V`: square matrix whose i<sup>th</sup> column is the eigenvector of
+  ///         the source matrix;
+  ///  - `U`: the diagonal matrix whose diagonal elements are the corresponding
+  ///         eigenvalues of A;
+  ///  - `V`: the inverse of V.
+  ///
+  /// The returned list contains `V` at index 0, `D` at index 1 and `V'` at index
+  /// 2.
+  List<Matrix<T>> eigenDecomposition();
 }

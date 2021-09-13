@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_implementing_value_types
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';

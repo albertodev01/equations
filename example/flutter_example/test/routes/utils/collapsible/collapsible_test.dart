@@ -11,25 +11,27 @@ import '../../mock_wrapper.dart';
 
 void main() {
   group("Testing the 'Collapsible' widget.", () {
-    testWidgets("Making sure that 'Collapsible' can be rendered",
-        (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<ExpansionCubit>(
-          create: (_) => ExpansionCubit(),
-          child: const Collapsible(
-            header: Text('Header'),
-            content: Text('Contents'),
+    testWidgets(
+      "Making sure that 'Collapsible' can be rendered",
+      (tester) async {
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<ExpansionCubit>(
+            create: (_) => ExpansionCubit(),
+            child: const Collapsible(
+              header: Text('Header'),
+              content: Text('Contents'),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(PrimaryRegion), findsOneWidget);
-      expect(find.byType(SecondaryRegion), findsOneWidget);
-      expect(find.byType(SizeTransition), findsOneWidget);
+        expect(find.byType(PrimaryRegion), findsOneWidget);
+        expect(find.byType(SecondaryRegion), findsOneWidget);
+        expect(find.byType(SizeTransition), findsOneWidget);
 
-      expect(find.text('Header'), findsOneWidget);
-      expect(find.text('Contents'), findsOneWidget);
-    });
+        expect(find.text('Header'), findsOneWidget);
+        expect(find.text('Contents'), findsOneWidget);
+      },
+    );
 
     testWidgets("Making sure that 'Collapsible' is tappable", (tester) async {
       final bloc = ExpansionCubit();

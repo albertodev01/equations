@@ -62,11 +62,11 @@ class NonlinearResults {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < guesses.length; ++i) {
-      result = 37 * result + guesses[i].hashCode;
+      result = result * 37 + guesses[i].hashCode;
     }
 
-    result = 37 * result + convergence.hashCode;
-    result = 37 * result + efficiency.hashCode;
+    result = result * 37 + convergence.hashCode;
+    result = result * 37 + efficiency.hashCode;
 
     return result;
   }

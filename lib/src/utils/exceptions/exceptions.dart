@@ -37,8 +37,9 @@ abstract class EquationException implements Exception {
   @override
   int get hashCode {
     var result = 83;
-    result = 37 * result + message.hashCode;
-    result = 37 * result + messagePrefix.hashCode;
+    result = result * 37 + message.hashCode;
+    result = result * 37 + messagePrefix.hashCode;
+
     return result;
   }
 

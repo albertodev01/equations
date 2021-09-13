@@ -53,6 +53,7 @@ class Quadratic extends Algebraic {
   @override
   Complex discriminant() {
     final root = const Complex.fromReal(4) * a * c;
+
     return (b * b) - root;
   }
 

@@ -41,14 +41,15 @@ void main() {
     testGoldens('GoBackButton', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
-            '',
-            const SizedBox(
-              width: 90,
-              height: 90,
-              child: Scaffold(
-                body: GoBackButton(),
-              ),
-            ));
+          '',
+          const SizedBox(
+            width: 90,
+            height: 90,
+            child: Scaffold(
+              body: GoBackButton(),
+            ),
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),

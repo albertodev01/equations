@@ -37,119 +37,129 @@ void main() {
 
   group("Testing the 'PolynomialDataInput' widget", () {
     testWidgets(
-        "Making sure that with a 'linear' configuration type only "
-        '2 input fields appear on the screen', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.linear);
+      "Making sure that with a 'linear' configuration type only "
+      '2 input fields appear on the screen',
+      (tester) async {
+        when(() => polynomialBloc.polynomialType)
+            .thenReturn(PolynomialType.linear);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: const Scaffold(
-            body: PolynomialDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: const Scaffold(
+              body: PolynomialDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(PolynomialDataInput), findsOneWidget);
-      expect(find.byType(PolynomialInputField), findsNWidgets(2));
+        expect(find.byType(PolynomialDataInput), findsOneWidget);
+        expect(find.byType(PolynomialInputField), findsNWidgets(2));
 
-      // To make sure that fields validation actually happens
-      expect(find.byType(Form), findsOneWidget);
-    });
+        // To make sure that fields validation actually happens
+        expect(find.byType(Form), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        "Making sure that with a 'quadratic' configuration type only "
-        '3 input fields appear on the screen', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.quadratic);
+      "Making sure that with a 'quadratic' configuration type only "
+      '3 input fields appear on the screen',
+      (tester) async {
+        when(() => polynomialBloc.polynomialType)
+            .thenReturn(PolynomialType.quadratic);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: const Scaffold(
-            body: PolynomialDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: const Scaffold(
+              body: PolynomialDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(PolynomialDataInput), findsOneWidget);
-      expect(find.byType(PolynomialInputField), findsNWidgets(3));
+        expect(find.byType(PolynomialDataInput), findsOneWidget);
+        expect(find.byType(PolynomialInputField), findsNWidgets(3));
 
-      // To make sure that fields validation actually happens
-      expect(find.byType(Form), findsOneWidget);
-    });
+        // To make sure that fields validation actually happens
+        expect(find.byType(Form), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        "Making sure that with a 'cubic' configuration type only "
-        '4 input fields appear on the screen', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.cubic);
+      "Making sure that with a 'cubic' configuration type only "
+      '4 input fields appear on the screen',
+      (tester) async {
+        when(() => polynomialBloc.polynomialType)
+            .thenReturn(PolynomialType.cubic);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: const Scaffold(
-            body: PolynomialDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: const Scaffold(
+              body: PolynomialDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(PolynomialDataInput), findsOneWidget);
-      expect(find.byType(PolynomialInputField), findsNWidgets(4));
+        expect(find.byType(PolynomialDataInput), findsOneWidget);
+        expect(find.byType(PolynomialInputField), findsNWidgets(4));
 
-      // To make sure that fields validation actually happens
-      expect(find.byType(Form), findsOneWidget);
-    });
+        // To make sure that fields validation actually happens
+        expect(find.byType(Form), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        "Making sure that with a 'cubic' configuration type only "
-        '5 input fields appear on the screen', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.quartic);
+      "Making sure that with a 'cubic' configuration type only "
+      '5 input fields appear on the screen',
+      (tester) async {
+        when(() => polynomialBloc.polynomialType)
+            .thenReturn(PolynomialType.quartic);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: const Scaffold(
-            body: PolynomialDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: const Scaffold(
+              body: PolynomialDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(PolynomialDataInput), findsOneWidget);
-      expect(find.byType(PolynomialInputField), findsNWidgets(5));
+        expect(find.byType(PolynomialDataInput), findsOneWidget);
+        expect(find.byType(PolynomialInputField), findsNWidgets(5));
 
-      // To make sure that fields validation actually happens
-      expect(find.byType(Form), findsOneWidget);
-    });
+        // To make sure that fields validation actually happens
+        expect(find.byType(Form), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'Making sure that when trying to solve an equation, if at '
-        'least one of the inputs is wrong, a snackbar appears', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.linear);
+      'Making sure that when trying to solve an equation, if at '
+      'least one of the inputs is wrong, a snackbar appears',
+      (tester) async {
+        when(() => polynomialBloc.polynomialType)
+            .thenReturn(PolynomialType.linear);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: const Scaffold(
-            body: PolynomialDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: const Scaffold(
+              body: PolynomialDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      // No snackbar by default
-      expect(find.byType(SnackBar), findsNothing);
+        // No snackbar by default
+        expect(find.byType(SnackBar), findsNothing);
 
-      // Tap the 'Solve' button
-      final finder = find.byKey(const Key('Polynomial-button-solve'));
-      await tester.tap(finder);
+        // Tap the 'Solve' button
+        final finder = find.byKey(const Key('Polynomial-button-solve'));
+        await tester.tap(finder);
 
-      // The snackbar appeared
-      await tester.pumpAndSettle();
-      expect(find.byType(SnackBar), findsOneWidget);
-    });
+        // The snackbar appeared
+        await tester.pumpAndSettle();
+        expect(find.byType(SnackBar), findsOneWidget);
+      },
+    );
 
     testWidgets('Making sure that equations can be solved', (tester) async {
       final bloc = PolynomialBloc(PolynomialType.quadratic);

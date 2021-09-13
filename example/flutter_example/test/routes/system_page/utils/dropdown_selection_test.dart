@@ -24,75 +24,81 @@ void main() {
 
   group("Testing the 'SystemDropdownSelection' widget", () {
     testWidgets(
-        'Making sure that the widget shows no dropdown when row '
-        'reduction type is selected', (tester) async {
-      when(() => systemBloc.systemType).thenReturn(SystemType.rowReduction);
-      when(() => dropdownCubit.state).thenReturn('');
+      'Making sure that the widget shows no dropdown when row '
+      'reduction type is selected',
+      (tester) async {
+        when(() => systemBloc.systemType).thenReturn(SystemType.rowReduction);
+        when(() => dropdownCubit.state).thenReturn('');
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<SystemBloc>.value(value: systemBloc),
-            BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-          ],
-          child: const SystemDropdownSelection(),
-        ),
-      ));
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<SystemBloc>.value(value: systemBloc),
+              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+            ],
+            child: const SystemDropdownSelection(),
+          ),
+        ));
 
-      expect(find.byType(SystemDropdownSelection), findsOneWidget);
-      expect(
-        find.byKey(const Key('System-Dropdown-Button-Selection')),
-        findsNothing,
-      );
-    });
-
-    testWidgets(
-        'Making sure that the widget shows the dropdown when the '
-        'factorization type is selected', (tester) async {
-      when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
-      when(() => dropdownCubit.state).thenReturn('LU');
-
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<SystemBloc>.value(value: systemBloc),
-            BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-          ],
-          child: const SystemDropdownSelection(),
-        ),
-      ));
-
-      expect(find.byType(SystemDropdownSelection), findsOneWidget);
-      expect(
-        find.byKey(const Key('System-Dropdown-Button-Selection')),
-        findsOneWidget,
-      );
-      expect(find.text('LU'), findsOneWidget);
-    });
+        expect(find.byType(SystemDropdownSelection), findsOneWidget);
+        expect(
+          find.byKey(const Key('System-Dropdown-Button-Selection')),
+          findsNothing,
+        );
+      },
+    );
 
     testWidgets(
-        'Making sure that the widget shows the dropdown when the '
-        'iterative type is selected', (tester) async {
-      when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
-      when(() => dropdownCubit.state).thenReturn('SOR');
+      'Making sure that the widget shows the dropdown when the '
+      'factorization type is selected',
+      (tester) async {
+        when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
+        when(() => dropdownCubit.state).thenReturn('LU');
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<SystemBloc>.value(value: systemBloc),
-            BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-          ],
-          child: const SystemDropdownSelection(),
-        ),
-      ));
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<SystemBloc>.value(value: systemBloc),
+              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+            ],
+            child: const SystemDropdownSelection(),
+          ),
+        ));
 
-      expect(find.byType(SystemDropdownSelection), findsOneWidget);
-      expect(
-        find.byKey(const Key('System-Dropdown-Button-Selection')),
-        findsOneWidget,
-      );
-      expect(find.text('SOR'), findsOneWidget);
-    });
+        expect(find.byType(SystemDropdownSelection), findsOneWidget);
+        expect(
+          find.byKey(const Key('System-Dropdown-Button-Selection')),
+          findsOneWidget,
+        );
+        expect(find.text('LU'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Making sure that the widget shows the dropdown when the '
+      'iterative type is selected',
+      (tester) async {
+        when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
+        when(() => dropdownCubit.state).thenReturn('SOR');
+
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<SystemBloc>.value(value: systemBloc),
+              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+            ],
+            child: const SystemDropdownSelection(),
+          ),
+        ));
+
+        expect(find.byType(SystemDropdownSelection), findsOneWidget);
+        expect(
+          find.byKey(const Key('System-Dropdown-Button-Selection')),
+          findsOneWidget,
+        );
+        expect(find.text('SOR'), findsOneWidget);
+      },
+    );
 
     testGoldens('SystemDropdownSelection', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.iterative);

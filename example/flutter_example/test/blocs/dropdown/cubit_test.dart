@@ -15,7 +15,9 @@ void main() {
     blocTest<DropdownCubit, String>(
       'Making sure that the bloc emits states',
       build: () => DropdownCubit(initialValue: '0'),
-      act: (cubit) => cubit..changeValue('1')..changeValue('2'),
+      act: (cubit) => cubit
+        ..changeValue('1')
+        ..changeValue('2'),
       expect: () => const ['1', '2'],
       verify: (cubit) => cubit.state == '2',
     );
@@ -23,7 +25,9 @@ void main() {
     blocTest<DropdownCubit, String>(
       'Making sure that the bloc emits states',
       build: () => DropdownCubit(initialValue: '0'),
-      act: (cubit) => cubit..changeValue('1')..changeValue('2'),
+      act: (cubit) => cubit
+        ..changeValue('1')
+        ..changeValue('2'),
       expect: () => const ['1', '2'],
       verify: (cubit) => cubit.state == '2',
     );

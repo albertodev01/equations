@@ -41,13 +41,15 @@ void main() {
     });
 
     test(
-        "Making sure that 'compute' works with value bigger than 21 but the "
-        'result is not exact', () {
-      final value = factorial.compute(21);
-      expect(
-        value.toStringAsExponential(),
-        equals('-4.249290049419215e+18'),
-      );
-    });
+      "Making sure that 'compute' works with value bigger than 21 but the "
+      'result is not exact',
+      () {
+        final value = factorial.compute(21);
+        expect(
+          value.toStringAsExponential(),
+          equals('-4.249290049419215e+18'),
+        );
+      },
+    );
   });
 }

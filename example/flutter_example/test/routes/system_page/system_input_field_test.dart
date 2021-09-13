@@ -20,16 +20,18 @@ void main() {
     testGoldens('SystemInputField', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
-            'Without placeholder',
-            SystemInputField(
-              controller: TextEditingController(),
-            ))
+          'Without placeholder',
+          SystemInputField(
+            controller: TextEditingController(),
+          ),
+        )
         ..addScenario(
-            'With placeholder',
-            SystemInputField(
-              controller: TextEditingController(),
-              placeholder: 'Placeholder',
-            ));
+          'With placeholder',
+          SystemInputField(
+            controller: TextEditingController(),
+            placeholder: 'Placeholder',
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),

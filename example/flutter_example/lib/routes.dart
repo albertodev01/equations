@@ -17,44 +17,6 @@ import 'package:flutter/material.dart';
 ///
 /// No differences since both ways are valid.
 abstract class RouteGenerator {
-  /// The "dispatcher" that assigns a route name to a particular widget.
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case homePage:
-        return MaterialPageRoute<HomePage>(
-          builder: (_) => const HomePage(),
-        );
-
-      case polynomialPage:
-        return MaterialPageRoute<PolynomialPage>(
-          builder: (_) => const PolynomialPage(),
-        );
-
-      case nonlinearPage:
-        return MaterialPageRoute<NonlinearPage>(
-          builder: (_) => const NonlinearPage(),
-        );
-
-      case systemPage:
-        return MaterialPageRoute<SystemPage>(
-          builder: (_) => const SystemPage(),
-        );
-
-      case integralPage:
-        return MaterialPageRoute<IntegralPage>(
-          builder: (_) => const IntegralPage(),
-        );
-
-      case interpolationPage:
-        return MaterialPageRoute<InterpolationPage>(
-          builder: (_) => const InterpolationPage(),
-        );
-
-      default:
-        throw const RouteException('Route not found');
-    }
-  }
-
   /// Route name for the home page of the app.
   static const homePage = '/';
 
@@ -72,6 +34,72 @@ abstract class RouteGenerator {
 
   /// Route name for the interpolation page.
   static const interpolationPage = '/interpolation';
+
+  /// Making the constructor private since this class is not meant to be
+  /// instantiated.
+  const RouteGenerator._();
+
+  /// The transition animation between two pages.
+  static Widget _slideTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final tween = Tween(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    );
+
+    return SlideTransition(
+      position: animation.drive(tween),
+      child: child,
+    );
+  }
+
+  /// The "dispatcher" that assigns a route name to a particular widget.
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case homePage:
+        return PageRouteBuilder<HomePage>(
+          pageBuilder: (_, __, ___) => const HomePage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      case polynomialPage:
+        return PageRouteBuilder<PolynomialPage>(
+          pageBuilder: (_, __, ___) => const PolynomialPage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      case nonlinearPage:
+        return PageRouteBuilder<NonlinearPage>(
+          pageBuilder: (_, __, ___) => const NonlinearPage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      case systemPage:
+        return PageRouteBuilder<SystemPage>(
+          pageBuilder: (_, __, ___) => const SystemPage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      case integralPage:
+        return PageRouteBuilder<IntegralPage>(
+          pageBuilder: (_, __, ___) => const IntegralPage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      case interpolationPage:
+        return PageRouteBuilder<InterpolationPage>(
+          pageBuilder: (_, __, ___) => const InterpolationPage(),
+          transitionsBuilder: _slideTransition,
+        );
+
+      default:
+        throw const RouteException('Route not found');
+    }
+  }
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.

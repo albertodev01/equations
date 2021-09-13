@@ -11,6 +11,7 @@
   "thirdDegree": "Cubic",
   "fourthDegree": "Quartic",
   "anyDegree": "Any",
+  "solution": "Solution",
   "solutions": "Solutions",
   "chart": "Chart",
   "solve": "Solve",
@@ -42,5 +43,6 @@
   "vector_description": "The vector with the known values",
   "sor_w": "Relaxation factor",
   "jacobi_initial": "Initial guesses vector",
-  "singular_matrix_error": "The system cannot be solved because the matrix is singular!"
+  "singular_matrix_error": "The system cannot be solved because the matrix is singular!",
+  "invalid_values": "One or more values aren't correct."
 }

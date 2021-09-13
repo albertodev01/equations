@@ -23,16 +23,18 @@ void main() {
     testGoldens('DoubleResultCard', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
-            'Default placeholder',
-            const DoubleResultCard(
-              value: 0.5,
-            ))
+          'Default placeholder',
+          const DoubleResultCard(
+            value: 0.5,
+          ),
+        )
         ..addScenario(
-            'Custom placeholder',
-            const DoubleResultCard(
-              value: 0.5,
-              leading: 'value = ',
-            ));
+          'Custom placeholder',
+          const DoubleResultCard(
+            value: 0.5,
+            leading: 'value = ',
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),

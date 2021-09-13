@@ -27,9 +27,11 @@ class NewtonInterpolation extends Interpolation {
 
     if (forwardDifference) {
       matrix = forwardDifferenceTable();
+
       return _forwardEvaluation(matrix, x);
     } else {
       matrix = backwardDifferenceTable();
+
       return _backwardEvaluation(matrix, x);
     }
   }
@@ -40,6 +42,7 @@ class NewtonInterpolation extends Interpolation {
     for (int i = 1; i < n; i++) {
       temp = temp * (u - i);
     }
+
     return temp;
   }
 

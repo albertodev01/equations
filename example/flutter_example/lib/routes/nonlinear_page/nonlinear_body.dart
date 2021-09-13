@@ -2,17 +2,18 @@ import 'package:equations/equations.dart' as equations;
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// This widget contains the solutions of the nonlinear equation and a chart
@@ -35,7 +36,10 @@ class _NonlinearBodyState extends State<NonlinearBody> {
 
   String _initialValue(BuildContext context) {
     final type = context.read<NonlinearBloc>().nonlinearType;
-    return type == NonlinearType.singlePoint ? 'Newton' : 'Bisection';
+
+    return type == NonlinearType.singlePoint
+        ? NonlinearDropdownItems.newton.asString()
+        : NonlinearDropdownItems.bisection.asString();
   }
 
   @override
@@ -174,7 +178,9 @@ class _NonlinearPlotState extends State<_NonlinearPlot> {
         NonlinearPlot? plotMode;
 
         if (state is NonlinearGuesses) {
-          plotMode = NonlinearPlot(nonLinear: state.nonLinear);
+          plotMode = NonlinearPlot(
+            nonLinear: state.nonLinear,
+          );
         }
 
         return Center(

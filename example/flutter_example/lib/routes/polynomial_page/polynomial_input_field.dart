@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// This is just a wrapper of a [TextFormField] that parses and validates the
 /// coefficients of a polynomial equation.
@@ -11,7 +11,7 @@ class PolynomialInputField extends StatelessWidget {
   /// The placeholder text to show in the input field.
   final String placeholder;
 
-  /// Creates a [PolynomialBody] widget.
+  /// Creates a [PolynomialInputField] widget.
   const PolynomialInputField({
     Key? key,
     required this.controller,

@@ -1,8 +1,8 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 /// This widget allows the input of the initial guesses vector of the Jacobi
 /// algorithm.
@@ -15,16 +15,17 @@ class JacobiVectorInput extends StatefulWidget {
 
   /// Creates a [JacobiVectorInput] widget.
   const JacobiVectorInput({
+    Key? key,
     required this.controllers,
     required this.vectorSize,
-  });
+  }) : super(key: key);
 
   @override
   _JacobiVectorInputState createState() => _JacobiVectorInputState();
 }
 
 class _JacobiVectorInputState extends State<JacobiVectorInput> {
-  /// Caching the input widget
+  /// Caching the input widget.
   late Widget inputWidget = buildInput();
 
   /// Builds the input widget.

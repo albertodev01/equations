@@ -78,28 +78,32 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown if the coeff. of the highest'
-        ' degree is zero', () {
-      expect(
-        () => Quartic(a: const Complex.zero()),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+      'Making sure that an exception is thrown if the coeff. of the highest'
+      ' degree is zero',
+      () {
+        expect(
+          () => Quartic(a: const Complex.zero()),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test(
-        "Making sure that a correct 'Quadratic' instance is created from a "
-        "list of 'double' (real) values", () {
-      final quartic = Quartic.realEquation(a: -3, d: 8);
+      "Making sure that a correct 'Quadratic' instance is created from a "
+      "list of 'double' (real) values",
+      () {
+        final quartic = Quartic.realEquation(a: -3, d: 8);
 
-      expect(quartic.a, equals(const Complex.fromReal(-3)));
-      expect(quartic.d, equals(const Complex.fromReal(8)));
+        expect(quartic.a, equals(const Complex.fromReal(-3)));
+        expect(quartic.d, equals(const Complex.fromReal(8)));
 
-      // There must be an exception is the first coeff. is zero
-      expect(
-        () => Quartic.realEquation(a: 0),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+        // There must be an exception is the first coeff. is zero
+        expect(
+          () => Quartic.realEquation(a: 0),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test('Making sure that objects comparison works properly', () {
       final fx = Quartic(
@@ -166,11 +170,11 @@ void main() {
           d: -1,
         ).solutions(),
         Quartic(
-                a: const Complex(4, -7),
-                b: const Complex(2, 3),
-                d: const Complex.fromReal(2),
-                e: const Complex(10, 1))
-            .solutions(),
+          a: const Complex(4, -7),
+          b: const Complex(2, 3),
+          d: const Complex.fromReal(2),
+          e: const Complex(10, 1),
+        ).solutions(),
         Quartic(
           a: const Complex.i(),
           c: -const Complex.i(),
@@ -186,7 +190,7 @@ void main() {
           Complex(0.97152, 0.91106),
         ],
         const [
-          Complex(-0.23979, -0.14190),
+          Complex(-0.23979, -0.1419),
           Complex.zero(),
           Complex(0.21956, 0.16265),
           Complex(1.02023, -2.42074),
@@ -201,7 +205,7 @@ void main() {
           Complex(-0.85119, 0.37549),
           Complex(-0.46831, -0.97907),
           Complex(0.51992, 0.88058),
-          Complex(0.99958, -0.67700),
+          Complex(0.99958, -0.677),
         ],
         const [
           Complex(-1.39765, 0.42028),

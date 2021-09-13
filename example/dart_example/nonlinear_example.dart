@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 
 void main() {
   // f(x) = 2x + cos(x)
-  const newton = const Newton(
+  const newton = Newton(
     function: '2*x + cos(x)',
     x0: -1,
     maxSteps: 4,

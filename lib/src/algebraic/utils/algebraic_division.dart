@@ -44,8 +44,9 @@ class AlgebraicDivision {
   int get hashCode {
     var result = 17;
 
-    result = 37 * result + quotient.hashCode;
-    return 37 * result + remainder.hashCode;
+    result = result * 37 + quotient.hashCode;
+
+    return result * 37 + remainder.hashCode;
   }
 
   @override

@@ -4,9 +4,9 @@ void main() {
   const newton = NewtonInterpolation(
     nodes: [
       InterpolationNode(x: 45, y: 0.7071),
-      InterpolationNode(x: 50, y: 0.7660),
+      InterpolationNode(x: 50, y: 0.766),
       InterpolationNode(x: 55, y: 0.8192),
-      InterpolationNode(x: 60, y: 0.8660),
+      InterpolationNode(x: 60, y: 0.866),
     ],
   );
 

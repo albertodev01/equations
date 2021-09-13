@@ -1,7 +1,7 @@
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:flutter/material.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_wrapper.dart';

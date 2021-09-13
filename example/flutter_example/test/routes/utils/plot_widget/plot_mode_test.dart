@@ -52,26 +52,30 @@ void main() {
     });
 
     test(
-        'Making sure that function evaluation works as expected with '
-        'polynomial equations.', () {
-      final plot = PolynomialPlot(
-        algebraic: Algebraic.fromReal([1, -5]),
-      );
+      'Making sure that function evaluation works as expected with '
+      'polynomial equations.',
+      () {
+        final plot = PolynomialPlot(
+          algebraic: Algebraic.fromReal([1, -5]),
+        );
 
-      expect(plot.evaluateOn(-3), equals(-8));
-    });
+        expect(plot.evaluateOn(-3), equals(-8));
+      },
+    );
 
     test(
-        'Making sure that function evaluation works as expected with '
-        'nonlinear equations.', () {
-      const plot = NonlinearPlot(
-        nonLinear: Newton(
-          function: 'x-5',
-          x0: 1,
-        ),
-      );
+      'Making sure that function evaluation works as expected with '
+      'nonlinear equations.',
+      () {
+        const plot = NonlinearPlot(
+          nonLinear: Newton(
+            function: 'x-5',
+            x0: 1,
+          ),
+        );
 
-      expect(plot.evaluateOn(-3), equals(-8));
-    });
+        expect(plot.evaluateOn(-3), equals(-8));
+      },
+    );
   });
 }

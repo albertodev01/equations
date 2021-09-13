@@ -33,8 +33,9 @@ class InterpolationNode {
   int get hashCode {
     var result = 2011;
 
-    result = 37 * result + x.hashCode;
-    return 37 * result + y.hashCode;
+    result = result * 37 + x.hashCode;
+
+    return result * 37 + y.hashCode;
   }
 
   @override

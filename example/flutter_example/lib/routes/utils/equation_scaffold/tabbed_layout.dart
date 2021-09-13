@@ -16,9 +16,10 @@ class TabbedNavigationLayout extends StatefulWidget {
 
   /// Creates a [TabbedNavigationLayout] widget.
   const TabbedNavigationLayout({
+    Key? key,
     required this.navigationItems,
     required this.tabController,
-  });
+  }) : super(key: key);
 
   @override
   TabbedNavigationLayoutState createState() => TabbedNavigationLayoutState();

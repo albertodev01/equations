@@ -29,21 +29,22 @@ void main() {
     testGoldens('PageTitle', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
-            '',
-            SizedBox(
-              width: 300,
-              height: 300,
-              child: Scaffold(
-                body: PageTitle(
-                  pageLogo: SvgPicture.asset(
-                    'assets/function.svg',
-                    width: 50,
-                    height: 60,
-                  ),
-                  pageTitle: 'Demo title',
+          '',
+          SizedBox(
+            width: 300,
+            height: 300,
+            child: Scaffold(
+              body: PageTitle(
+                pageLogo: SvgPicture.asset(
+                  'assets/function.svg',
+                  width: 50,
+                  height: 60,
                 ),
+                pageTitle: 'Demo title',
               ),
-            ));
+            ),
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),

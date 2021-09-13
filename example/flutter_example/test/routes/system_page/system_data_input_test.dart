@@ -63,254 +63,271 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that the "Clear" button actually clears the '
-        'text controllers and the bloc', (tester) async {
-      when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      'Making sure that the "Clear" button actually clears the '
+      'text controllers and the bloc',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state).thenReturn('LU');
 
-      final bloc = SystemBloc(SystemType.factorization);
+        final bloc = SystemBloc(SystemType.factorization);
 
-      await tester.pumpWidget(MockWrapper(
-        child: SingleChildScrollView(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: bloc),
-              BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(bloc.state, equals(const SystemNone()));
+        expect(bloc.state, equals(const SystemNone()));
 
-      // Cleaning
-      final clearButton = find.byKey(const Key('System-button-clean'));
+        // Cleaning
+        final clearButton = find.byKey(const Key('System-button-clean'));
 
-      await tester.ensureVisible(clearButton);
-      await tester.tap(clearButton);
-      await tester.pumpAndSettle();
+        await tester.ensureVisible(clearButton);
+        await tester.tap(clearButton);
+        await tester.pumpAndSettle();
 
-      expect(bloc.state, equals(const SystemNone()));
-    });
+        expect(bloc.state, equals(const SystemNone()));
+      },
+    );
 
     testWidgets(
-        'Making sure that the "Solve" button actually solves the '
-        'system of equations with a row reduction method', (tester) async {
-      when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      'Making sure that the "Solve" button actually solves the '
+      'system of equations with a row reduction method',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state).thenReturn('LU');
 
-      final bloc = SystemBloc(SystemType.rowReduction);
+        final bloc = SystemBloc(SystemType.rowReduction);
 
-      await tester.pumpWidget(MockWrapper(
-        child: SingleChildScrollView(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: bloc),
-              BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      // Filling the matrix with some data
-      final widget = find.byType(SystemDataInput);
-      final state = tester.state<SystemDataInputState>(widget);
+        // Filling the matrix with some data
+        final widget = find.byType(SystemDataInput);
+        final state = tester.state<SystemDataInputState>(widget);
 
-      state.matrixControllers[0].text = '1';
-      state.matrixControllers[1].text = '2';
-      state.matrixControllers[2].text = '3';
-      state.matrixControllers[3].text = '4';
-      state.vectorControllers[0].text = '7';
-      state.vectorControllers[1].text = '8';
+        state.matrixControllers[0].text = '1';
+        state.matrixControllers[1].text = '2';
+        state.matrixControllers[2].text = '3';
+        state.matrixControllers[3].text = '4';
+        state.vectorControllers[0].text = '7';
+        state.vectorControllers[1].text = '8';
 
-      expect(bloc.state, equals(const SystemNone()));
+        expect(bloc.state, equals(const SystemNone()));
 
-      // Solving the system
-      final solveButton = find.byKey(const Key('System-button-solve'));
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
 
-      await tester.ensureVisible(solveButton);
-      await tester.tap(solveButton);
-      await tester.pumpAndSettle();
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
 
-      expect(bloc.state, isA<SystemGuesses>());
-    });
+        expect(bloc.state, isA<SystemGuesses>());
+      },
+    );
 
     testWidgets(
-        'Making sure that the "Solve" button actually solves the '
-        'system of equations with a factorization method', (tester) async {
-      when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      'Making sure that the "Solve" button actually solves the '
+      'system of equations with a factorization method',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state).thenReturn('LU');
 
-      final bloc = SystemBloc(SystemType.factorization);
+        final bloc = SystemBloc(SystemType.factorization);
 
-      await tester.pumpWidget(MockWrapper(
-        child: SingleChildScrollView(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: bloc),
-              BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      // Filling the matrix with some data
-      final widget = find.byType(SystemDataInput);
-      final state = tester.state<SystemDataInputState>(widget);
+        // Filling the matrix with some data
+        final widget = find.byType(SystemDataInput);
+        final state = tester.state<SystemDataInputState>(widget);
 
-      state.matrixControllers[0].text = '1';
-      state.matrixControllers[1].text = '2';
-      state.matrixControllers[2].text = '3';
-      state.matrixControllers[3].text = '4';
-      state.vectorControllers[0].text = '7';
-      state.vectorControllers[1].text = '8';
+        state.matrixControllers[0].text = '1';
+        state.matrixControllers[1].text = '2';
+        state.matrixControllers[2].text = '3';
+        state.matrixControllers[3].text = '4';
+        state.vectorControllers[0].text = '7';
+        state.vectorControllers[1].text = '8';
 
-      expect(bloc.state, equals(const SystemNone()));
+        expect(bloc.state, equals(const SystemNone()));
 
-      // Solving the system
-      final solveButton = find.byKey(const Key('System-button-solve'));
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
 
-      await tester.ensureVisible(solveButton);
-      await tester.tap(solveButton);
-      await tester.pumpAndSettle();
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
 
-      expect(bloc.state, isA<SystemGuesses>());
-    });
+        expect(bloc.state, isA<SystemGuesses>());
+      },
+    );
 
     testWidgets(
-        'Making sure that the "Solve" button actually solves the '
-        'system of equations with an iterative method', (tester) async {
-      when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('SOR');
+      'Making sure that the "Solve" button actually solves the '
+      'system of equations with an iterative method',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state).thenReturn('SOR');
 
-      final bloc = SystemBloc(SystemType.iterative);
+        final bloc = SystemBloc(SystemType.iterative);
 
-      await tester.pumpWidget(MockWrapper(
-        child: SingleChildScrollView(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: bloc),
-              BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      // Filling the matrix with some data
-      final widget = find.byType(SystemDataInput);
-      final state = tester.state<SystemDataInputState>(widget);
+        // Filling the matrix with some data
+        final widget = find.byType(SystemDataInput);
+        final state = tester.state<SystemDataInputState>(widget);
 
-      state.matrixControllers[0].text = '1';
-      state.matrixControllers[1].text = '2';
-      state.matrixControllers[2].text = '3';
-      state.matrixControllers[3].text = '4';
-      state.vectorControllers[0].text = '7';
-      state.vectorControllers[1].text = '8';
-      state.wSorController.text = '1';
+        state.matrixControllers[0].text = '1';
+        state.matrixControllers[1].text = '2';
+        state.matrixControllers[2].text = '3';
+        state.matrixControllers[3].text = '4';
+        state.vectorControllers[0].text = '7';
+        state.vectorControllers[1].text = '8';
+        state.wSorController.text = '1';
 
-      expect(bloc.state, equals(const SystemNone()));
+        expect(bloc.state, equals(const SystemNone()));
 
-      // Solving the system
-      final solveButton = find.byKey(const Key('System-button-solve'));
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
 
-      await tester.ensureVisible(solveButton);
-      await tester.tap(solveButton);
-      await tester.pumpAndSettle();
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
 
-      expect(bloc.state, isA<SystemGuesses>());
-    });
+        expect(bloc.state, isA<SystemGuesses>());
+      },
+    );
 
     testWidgets(
-        'Making sure that the "Solve" button does NOT solve the '
-        'system in case of malformed input', (tester) async {
-      when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      'Making sure that the "Solve" button does NOT solve the '
+      'system in case of malformed input',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state).thenReturn('LU');
 
-      final bloc = SystemBloc(SystemType.rowReduction);
+        final bloc = SystemBloc(SystemType.rowReduction);
 
-      await tester.pumpWidget(MockWrapper(
-        child: SingleChildScrollView(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: bloc),
-              BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      // Filling the matrix with some data
-      final widget = find.byType(SystemDataInput);
-      final state = tester.state<SystemDataInputState>(widget);
+        // Filling the matrix with some data
+        final widget = find.byType(SystemDataInput);
+        final state = tester.state<SystemDataInputState>(widget);
 
-      state.matrixControllers[0].text = '1';
-      state.matrixControllers[1].text = '2';
-      state.matrixControllers[2].text = '';
-      state.matrixControllers[3].text = '4';
-      state.vectorControllers[0].text = 'abc';
-      state.vectorControllers[1].text = '8';
+        state.matrixControllers[0].text = '1';
+        state.matrixControllers[1].text = '2';
+        state.matrixControllers[2].text = '';
+        state.matrixControllers[3].text = '4';
+        state.vectorControllers[0].text = 'abc';
+        state.vectorControllers[1].text = '8';
 
-      expect(bloc.state, equals(const SystemNone()));
+        expect(bloc.state, equals(const SystemNone()));
 
-      // Solving the system
-      final solveButton = find.byKey(const Key('System-button-solve'));
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
 
-      await tester.ensureVisible(solveButton);
-      await tester.tap(solveButton);
-      await tester.pumpAndSettle();
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
 
-      expect(bloc.state, equals(const SystemNone()));
-      expect(find.byType(SnackBar), findsOneWidget);
-    });
+        expect(bloc.state, equals(const SystemNone()));
+        expect(find.byType(SnackBar), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'Making sure that the number switcher also changes the total '
-        'number of input tiles on the screen', (tester) async {
-      when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      'Making sure that the number switcher also changes the total '
+      'number of input tiles on the screen',
+      (tester) async {
+        when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
+        when(() => dropdownCubit.state).thenReturn('LU');
 
-      final bloc = NumberSwitcherCubit(min: 2, max: 4);
+        final bloc = NumberSwitcherCubit(min: 2, max: 4);
 
-      await tester.pumpWidget(MockWrapper(
-        child: SingleChildScrollView(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: systemBloc),
-              BlocProvider<NumberSwitcherCubit>.value(value: bloc),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDataInput(),
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: systemBloc),
+                BlocProvider<NumberSwitcherCubit>.value(value: bloc),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(bloc.state, equals(2));
+        expect(bloc.state, equals(2));
 
-      // 4 (2*2) for the matrix and 2 for the vector
-      expect(find.byType(SystemInputField), findsNWidgets(6));
+        // 4 (2*2) for the matrix and 2 for the vector
+        expect(find.byType(SystemInputField), findsNWidgets(6));
 
-      // Changing the size
-      await tester.tap(find.byKey(const Key('SizePicker-Forward-Button')));
-      await tester.pumpAndSettle();
+        // Changing the size
+        await tester.tap(find.byKey(const Key('SizePicker-Forward-Button')));
+        await tester.pumpAndSettle();
 
-      // 9 (3*3) for the matrix and 3 for the vector
-      expect(find.byType(SystemInputField), findsNWidgets(12));
-    });
+        // 9 (3*3) for the matrix and 3 for the vector
+        expect(find.byType(SystemInputField), findsNWidgets(12));
+      },
+    );
 
     testGoldens('SystemDataInput - Factorization', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.factorization);

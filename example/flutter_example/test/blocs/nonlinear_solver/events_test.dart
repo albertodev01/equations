@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -51,52 +52,38 @@ void main() {
     });
 
     test(
-        "Making sure that 'SinglePointMethod.resolve' actually resolves to "
-        'the correct values', () {
-      expect(
-        SinglePointMethod.resolve('newton'),
-        equals(SinglePointMethods.newton),
-      );
-      expect(
-        SinglePointMethod.resolve('NewTOn'),
-        equals(SinglePointMethods.newton),
-      );
-      expect(
-        SinglePointMethod.resolve('steffensen'),
-        equals(SinglePointMethods.steffensen),
-      );
-      expect(
-        SinglePointMethod.resolve('stefFenSEn'),
-        equals(SinglePointMethods.steffensen),
-      );
-
-      expect(
-        () => SinglePointMethod.resolve('abc'),
-        throwsA(isA<ArgumentError>()),
-      );
-    });
+      "Making sure that 'SinglePointMethod.resolve' actually resolves to "
+      'the correct values',
+      () {
+        expect(
+          SinglePointMethod.resolve(NonlinearDropdownItems.newton),
+          equals(SinglePointMethods.newton),
+        );
+        expect(
+          SinglePointMethod.resolve(NonlinearDropdownItems.steffensen),
+          equals(SinglePointMethods.steffensen),
+        );
+      },
+    );
 
     test(
-        "Making sure that 'BracketingMethod.resolve' actually resolves to "
-        'the correct values', () {
-      expect(
-        BracketingMethod.resolve('secant'),
-        equals(BracketingMethods.secant),
-      );
-      expect(
-        BracketingMethod.resolve('brent'),
-        equals(BracketingMethods.brent),
-      );
-      expect(
-        BracketingMethod.resolve('bisection'),
-        equals(BracketingMethods.bisection),
-      );
-
-      expect(
-        () => BracketingMethod.resolve(''),
-        throwsA(isA<ArgumentError>()),
-      );
-    });
+      "Making sure that 'BracketingMethod.resolve' actually resolves to "
+      'the correct values',
+      () {
+        expect(
+          BracketingMethod.resolve(NonlinearDropdownItems.secant),
+          equals(BracketingMethods.secant),
+        );
+        expect(
+          BracketingMethod.resolve(NonlinearDropdownItems.brent),
+          equals(BracketingMethods.brent),
+        );
+        expect(
+          BracketingMethod.resolve(NonlinearDropdownItems.bisection),
+          equals(BracketingMethods.bisection),
+        );
+      },
+    );
 
     test("Making sure that all events are subtypes of 'NonlinearEvent'", () {
       expect(

@@ -27,55 +27,59 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that when the slider has the same initial position defined '
-        'by the state of the bloc.', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<SliderCubit>(
-          create: (_) => SliderCubit(
-            minValue: 1,
-            maxValue: 10,
-            current: 5,
+      'Making sure that when the slider has the same initial position defined '
+      'by the state of the bloc.',
+      (tester) async {
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<SliderCubit>(
+            create: (_) => SliderCubit(
+              minValue: 1,
+              maxValue: 10,
+              current: 5,
+            ),
+            child: const Scaffold(
+              body: PrecisionSlider(),
+            ),
           ),
-          child: const Scaffold(
-            body: PrecisionSlider(),
-          ),
-        ),
-      ));
+        ));
 
-      final finder = find.byType(Slider);
-      final slider = tester.firstWidget(finder) as Slider;
-      expect(slider.value, equals(5));
+        final finder = find.byType(Slider);
+        final slider = tester.firstWidget(finder) as Slider;
+        expect(slider.value, equals(5));
 
-      // State
-      expect(find.text('1.0e-5'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
-    });
+        // State
+        expect(find.text('1.0e-5'), findsOneWidget);
+        expect(find.byType(Slider), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        'Making sure that the slider updates the bloc state when its current '
-        'value changes', (tester) async {
-      final bloc = SliderCubit(
-        minValue: 1,
-        maxValue: 10,
-        current: 5,
-      );
+      'Making sure that the slider updates the bloc state when its current '
+      'value changes',
+      (tester) async {
+        final bloc = SliderCubit(
+          minValue: 1,
+          maxValue: 10,
+          current: 5,
+        );
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<SliderCubit>.value(
-          value: bloc,
-          child: const Scaffold(
-            body: PrecisionSlider(),
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<SliderCubit>.value(
+            value: bloc,
+            child: const Scaffold(
+              body: PrecisionSlider(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(Slider), findsOneWidget);
-      expect(bloc.state, equals(5));
+        expect(find.byType(Slider), findsOneWidget);
+        expect(bloc.state, equals(5));
 
-      // Moving the slider
-      await tester.drag(find.byType(Slider), const Offset(-10, 0));
-      expect(bloc.state, equals(8));
-    });
+        // Moving the slider
+        await tester.drag(find.byType(Slider), const Offset(-10, 0));
+        expect(bloc.state, equals(8));
+      },
+    );
 
     testGoldens('PrecisionSlider', (tester) async {
       final widget = SizedBox(

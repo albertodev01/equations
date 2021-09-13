@@ -1,8 +1,8 @@
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///  - 4x4 systems
 class SystemPage extends StatefulWidget {
   /// Creates a [SystemPage] widget.
-  const SystemPage();
+  const SystemPage({Key? key}) : super(key: key);
 
   @override
   _SystemPageState createState() => _SystemPageState();

@@ -58,7 +58,7 @@ abstract class Interpolation {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < nodes.length; ++i) {
-      result = 37 * result + nodes[i].hashCode;
+      result = result * 37 + nodes[i].hashCode;
     }
 
     return result;

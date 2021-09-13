@@ -1,7 +1,7 @@
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:flutter/material.dart';
 
-/// Creates an column of [SystemInputField] to input the known values vector
+/// Creates a column of [SystemInputField] to input the known values vector
 /// of the system.
 class VectorInput extends StatefulWidget {
   /// Determines the size of the vector.
@@ -12,9 +12,10 @@ class VectorInput extends StatefulWidget {
 
   /// Creates a [VectorInput] widget.
   const VectorInput({
+    Key? key,
     required this.vectorControllers,
     required this.vectorSize,
-  });
+  }) : super(key: key);
 
   @override
   _VectorInputState createState() => _VectorInputState();
@@ -33,12 +34,14 @@ class _VectorInputState extends State<VectorInput> {
       final padding =
           i == 0 ? const EdgeInsets.all(0) : const EdgeInsets.only(top: 10);
 
-      entry.add(Padding(
-        padding: padding,
-        child: SystemInputField(
-          controller: widget.vectorControllers[i],
+      entry.add(
+        Padding(
+          padding: padding,
+          child: SystemInputField(
+            controller: widget.vectorControllers[i],
+          ),
         ),
-      ));
+      );
     }
 
     return entry;

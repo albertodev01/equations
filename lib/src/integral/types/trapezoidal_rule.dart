@@ -7,28 +7,31 @@ import 'package:equations/equations.dart';
 /// have to be computed by the algorithm. The bigger the value of `m`, the better
 /// the result approximation.
 class TrapezoidalRule extends NumericalIntegration {
-  /// Expects the [lowerBound] and [upperBound] of the integral.
+  /// Expects the [function] to be integrated ad the integration bounds
+  /// ([lowerBound] and [upperBound]).
   ///
   /// The [intervals] variable represents the number of parts in which the
   /// [lowerBound, upperBound] interval has to be split by the algorithm.
   const TrapezoidalRule({
+    required String function,
     required double lowerBound,
     required double upperBound,
     int intervals = 20,
   }) : super(
+          function: function,
           lowerBound: lowerBound,
           upperBound: upperBound,
           intervals: intervals,
         );
 
   @override
-  IntegralResults integrate(String function) {
+  IntegralResults integrate() {
     // The 'step' of the algorithm
     final h = (upperBound - lowerBound) / intervals;
 
     // The initial approximation of the result
-    var integralResult = evaluateFunction(function, lowerBound) +
-        evaluateFunction(function, upperBound);
+    var integralResult =
+        evaluateFunction(lowerBound) + evaluateFunction(upperBound);
 
     // The list containing the various guesses of the algorithm
     final guesses = List<double>.filled(intervals, 0);
@@ -37,7 +40,7 @@ class TrapezoidalRule extends NumericalIntegration {
     for (var i = 0; i < intervals; ++i) {
       final x = lowerBound + i * h;
 
-      integralResult += 2 * evaluateFunction(function, x);
+      integralResult += 2 * evaluateFunction(x);
       guesses[i] = integralResult;
     }
 

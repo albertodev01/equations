@@ -54,14 +54,15 @@ class Brent extends NonLinear {
   int get hashCode {
     var result = super.hashCode;
 
-    result = 37 * result + a.hashCode;
-    result = 37 * result + b.hashCode;
+    result = result * 37 + a.hashCode;
+    result = result * 37 + b.hashCode;
 
     return result;
   }
 
   bool _condition1(double s, double a, double b) {
-    final lower = (3 * a + b) / 4;
+    final lower = (a * 3 + b) / 4;
+
     return !((s >= lower) && (s <= b));
   }
 

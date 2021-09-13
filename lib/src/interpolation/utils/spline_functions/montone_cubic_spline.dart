@@ -96,7 +96,7 @@ class MonotoneCubicSpline extends SplineFunction with MathUtils {
     final h = nodes[i + 1].x - nodes[i].x;
     final t = (x - nodes[i].x) / h;
 
-    return (nodes[i].y * (1 + 2 * t) + h * nodesM[i] * t) * (1 - t) * (1 - t) +
-        (nodes[i + 1].y * (3 - 2 * t) + h * nodesM[i + 1] * (t - 1)) * t * t;
+    return (nodes[i].y * (1 + t * 2) + h * nodesM[i] * t) * (1 - t) * (1 - t) +
+        (nodes[i + 1].y * (3 - t * 2) + h * nodesM[i + 1] * (t - 1)) * t * t;
   }
 }

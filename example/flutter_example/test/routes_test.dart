@@ -52,65 +52,70 @@ void main() {
         RouteGenerator.generateRoute(const RouteSettings(
           name: RouteGenerator.homePage,
         )),
-        isA<MaterialPageRoute<HomePage>>(),
+        isA<PageRouteBuilder<HomePage>>(),
       );
 
       expect(
         RouteGenerator.generateRoute(const RouteSettings(
           name: RouteGenerator.polynomialPage,
         )),
-        isA<MaterialPageRoute<PolynomialPage>>(),
+        isA<PageRouteBuilder<PolynomialPage>>(),
       );
 
       expect(
         RouteGenerator.generateRoute(const RouteSettings(
           name: RouteGenerator.nonlinearPage,
         )),
-        isA<MaterialPageRoute<NonlinearPage>>(),
+        isA<PageRouteBuilder<NonlinearPage>>(),
       );
 
       expect(
         RouteGenerator.generateRoute(const RouteSettings(
           name: RouteGenerator.systemPage,
         )),
-        isA<MaterialPageRoute<SystemPage>>(),
+        isA<PageRouteBuilder<SystemPage>>(),
       );
 
       expect(
         RouteGenerator.generateRoute(const RouteSettings(
           name: RouteGenerator.integralPage,
         )),
-        isA<MaterialPageRoute<IntegralPage>>(),
+        isA<PageRouteBuilder<IntegralPage>>(),
       );
 
       expect(
         RouteGenerator.generateRoute(const RouteSettings(
           name: RouteGenerator.interpolationPage,
         )),
-        isA<MaterialPageRoute<InterpolationPage>>(),
+        isA<PageRouteBuilder<InterpolationPage>>(),
       );
     });
 
     test('Checking the type of the exception thrown', () {
-      expect(() {
-        RouteGenerator.generateRoute(const RouteSettings(name: ''));
-      }, throwsA(isA<RouteException>()));
+      expect(
+        () {
+          RouteGenerator.generateRoute(const RouteSettings(name: ''));
+        },
+        throwsA(isA<RouteException>()),
+      );
     });
 
     test(
-        "Making sure that 'RouteException' objects properly define equality"
-        ' overrides', () {
-      const exception = RouteException('Message');
+      "Making sure that 'RouteException' objects properly define equality"
+      ' overrides',
+      () {
+        const exception = RouteException('Message');
 
-      expect(exception.message, equals('Message'));
-      expect(
-        exception,
-        equals(const RouteException('Message')),
-      );
-      expect(
-        exception.hashCode,
-        equals(const RouteException('Message').hashCode),
-      );
-    });
+        expect(exception.message, equals('Message'));
+        expect(
+          exception,
+          equals(const RouteException('Message')),
+        );
+        expect(
+          exception.hashCode,
+          equals(const RouteException('Message').hashCode),
+        );
+      },
+    );
   });
 }

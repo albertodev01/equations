@@ -4,7 +4,7 @@ void main() {
   final jacobi = JacobiSolver(
     equations: const [
       [2, 1],
-      [5, 7]
+      [5, 7],
     ],
     constants: [11, 13],
     x0: [1, 1],
@@ -28,7 +28,7 @@ void main() {
     equations: const [
       [7, -2, 1],
       [14, -7, -3],
-      [-7, 11, 18]
+      [-7, 11, 18],
     ],
     constants: const [12, 17, 5],
   );

@@ -12,9 +12,10 @@ class SectionTitle extends StatelessWidget {
 
   /// Creates a [SectionTitle] widget.
   const SectionTitle({
+    Key? key,
     required this.pageTitle,
     required this.icon,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

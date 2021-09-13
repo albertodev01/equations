@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// This is just a wrapper of a [TextFormField] that parses and validates the
 /// entries of a matrix.
@@ -11,7 +11,7 @@ class SystemInputField extends StatelessWidget {
   /// The placeholder text to show in the input field.
   final String placeholder;
 
-  /// Creates a [PolynomialBody] widget.
+  /// Creates a [SystemInputField] widget.
   const SystemInputField({
     Key? key,
     required this.controller,

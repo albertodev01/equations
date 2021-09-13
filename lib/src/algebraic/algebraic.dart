@@ -209,7 +209,7 @@ abstract class Algebraic {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < coefficients.length; ++i) {
-      result = 37 * result + coefficients[i].hashCode;
+      result = result * 37 + coefficients[i].hashCode;
     }
 
     return result;
@@ -257,7 +257,10 @@ abstract class Algebraic {
         if (asFraction) {
           // Add parenthesis if needed
           if ((c.real != 0) && (c.imaginary != 0)) {
-            sb..write('(')..write(c.toStringAsFraction())..write(')');
+            sb
+              ..write('(')
+              ..write(c.toStringAsFraction())
+              ..write(')');
           } else {
             sb.write(c.toStringAsFraction());
           }
@@ -270,7 +273,9 @@ abstract class Algebraic {
           if (power == 1) {
             sb.write('x');
           } else {
-            sb..write('x^')..write(power);
+            sb
+              ..write('x^')
+              ..write(power);
           }
         }
 
@@ -474,6 +479,7 @@ abstract class Algebraic {
   /// As you can see, in `poly2` all the coefficients have the opposite sign.
   Algebraic operator -() {
     final newList = coefficients.map((c) => -c).toList();
+
     return Algebraic.from(newList);
   }
 

@@ -52,7 +52,11 @@ void main() {
         min: 2,
         max: 2,
       ),
-      act: (cubit) => cubit..increase()..increase()..increase()..increase(),
+      act: (cubit) => cubit
+        ..increase()
+        ..increase()
+        ..increase()
+        ..increase(),
       expect: () => const [],
       verify: (cubit) => cubit.state == 2,
     );

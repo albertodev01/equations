@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/bloc/events.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -19,7 +20,7 @@ void main() {
         SinglePointMethod(
           function: '',
           initialGuess: '',
-          method: SinglePointMethod.resolve('newton'),
+          method: SinglePointMethod.resolve(NonlinearDropdownItems.newton),
         ),
         isA<SinglePointMethod>(),
       );
@@ -28,7 +29,7 @@ void main() {
           function: '',
           upperBound: '',
           lowerBound: '',
-          method: BracketingMethod.resolve('secant'),
+          method: BracketingMethod.resolve(NonlinearDropdownItems.secant),
         ),
         isA<BracketingMethod>(),
       );

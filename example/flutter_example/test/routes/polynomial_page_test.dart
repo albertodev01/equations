@@ -1,6 +1,6 @@
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

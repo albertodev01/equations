@@ -26,99 +26,212 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown when the user tries to '
-        'build a matrix whose row or column count is zero.', () {
-      expect(
-        () => RealMatrix(columns: 0, rows: 2),
-        throwsA(isA<MatrixException>()),
-      );
-    });
+      'Making sure that an exception is thrown when the user tries to '
+      'build a matrix whose row or column count is zero.',
+      () {
+        expect(
+          () => RealMatrix(columns: 0, rows: 2),
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
 
     test(
-        'Making sure that the identity matrix is filled with 0s except for '
-        'its diagonal, which must contain all 1s.', () {
-      final matrix = RealMatrix(columns: 3, rows: 3, identity: true);
+      'Making sure that the identity matrix is filled with 0s except for '
+      'its diagonal, which must contain all 1s.',
+      () {
+        final matrix = RealMatrix(columns: 3, rows: 3, identity: true);
 
-      // Checking the sizes
-      expect(matrix.rowCount, equals(3));
-      expect(matrix.columnCount, equals(3));
+        // Checking the sizes
+        expect(matrix.rowCount, equals(3));
+        expect(matrix.columnCount, equals(3));
 
-      // Checking the content of the matrix
-      for (var i = 0; i < matrix.rowCount; ++i) {
-        for (var j = 0; j < matrix.columnCount; ++j) {
-          if (i == j) {
-            expect(matrix(i, j), equals(1));
-          } else {
-            expect(matrix(i, j), isZero);
+        // Checking the content of the matrix
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(1));
+            } else {
+              expect(matrix(i, j), isZero);
+            }
+            expect(matrix(i, j), equals(matrix.itemAt(i, j)));
           }
-          expect(matrix(i, j), equals(matrix.itemAt(i, j)));
         }
-      }
-    });
+      },
+    );
 
     test(
-        'Making sure that an exception is thrown when the user tries to '
-        'build an identity matrix with a non-squared entry.', () {
-      expect(
-        () => RealMatrix(columns: 3, rows: 5, identity: true),
-        throwsA(isA<MatrixException>()),
-      );
-    });
+      'Making sure that an exception is thrown when the user tries to '
+      'build an identity matrix with a non-squared entry.',
+      () {
+        expect(
+          () => RealMatrix(columns: 3, rows: 5, identity: true),
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
 
     test(
-        "Making sure that the matrix can correctly be 'flattened' and converted"
-        " into a list of 'double' values.", () {
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: [
-          [1, 2],
-          [3, 4]
-        ],
-      );
-
-      // Checking the sizes
-      final flattenedMatrix = matrix.toList();
-
-      expect(flattenedMatrix.length, equals(4));
-      expect(flattenedMatrix, orderedEquals(<double>[1, 2, 3, 4]));
-    });
-
-    test(
-        "Making sure that the matrix can correctly be created from a 'flattened' "
-        'list of values.', () {
-      final matrix = RealMatrix.fromFlattenedData(
-        rows: 2,
-        columns: 2,
-        data: [1, 2, 3, 4],
-      );
-
-      expect(matrix.rowCount * matrix.columnCount, equals(4));
-      expect(
-        matrix,
-        equals(RealMatrix.fromData(
+      "Making sure that the matrix can correctly be 'flattened' and converted"
+      " into a list of 'double' values.",
+      () {
+        final matrix = RealMatrix.fromData(
           rows: 2,
           columns: 2,
           data: [
             [1, 2],
             [3, 4],
           ],
-        )),
-      );
-    });
+        );
+
+        // Checking the sizes
+        final flattenedMatrix = matrix.toList();
+
+        expect(flattenedMatrix.length, equals(4));
+        expect(flattenedMatrix, orderedEquals(<double>[1, 2, 3, 4]));
+      },
+    );
 
     test(
-        'Making sure that an exception is thrown when the matrix is being built '
-        'from a list but the sizes are wrong', () {
-      expect(
-        () => RealMatrix.fromFlattenedData(
-          rows: 6,
+      "Making sure that the matrix can correctly be created from a 'flattened' "
+      'list of values.',
+      () {
+        final matrix = RealMatrix.fromFlattenedData(
+          rows: 2,
           columns: 2,
           data: [1, 2, 3, 4],
-        ),
-        throwsA(isA<Exception>()),
-      );
-    });
+        );
+
+        expect(matrix.rowCount * matrix.columnCount, equals(4));
+        expect(
+          matrix,
+          equals(RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: [
+              [1, 2],
+              [3, 4],
+            ],
+          )),
+        );
+      },
+    );
+
+    test(
+      'Making sure that a diagonal, square matrix is correctly build with '
+      'the given value in the diagonal',
+      () {
+        final matrix = RealMatrix.diagonal(
+          rows: 3,
+          columns: 3,
+          diagonalValue: 8,
+        );
+
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(8));
+            } else {
+              expect(matrix(i, j), isZero);
+            }
+          }
+        }
+
+        const stringRepresentation = '[8.0, 0.0, 0.0]\n'
+            '[0.0, 8.0, 0.0]\n'
+            '[0.0, 0.0, 8.0]';
+
+        expect('$matrix', equals(stringRepresentation));
+      },
+    );
+
+    test(
+      'Making sure that a diagonal, non square matrix is correctly build '
+      'with the given value in the diagonal',
+      () {
+        final matrix = RealMatrix.diagonal(
+          rows: 3,
+          columns: 5,
+          diagonalValue: 8,
+        );
+
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(8));
+            } else {
+              expect(matrix(i, j), isZero);
+            }
+          }
+        }
+
+        const stringRepresentation = '[8.0, 0.0, 0.0, 0.0, 0.0]\n'
+            '[0.0, 8.0, 0.0, 0.0, 0.0]\n'
+            '[0.0, 0.0, 8.0, 0.0, 0.0]';
+
+        expect('$matrix', equals(stringRepresentation));
+      },
+    );
+
+    test(
+      'Making sure that a diagonal, non square matrix is correctly build '
+      'with the given value in the diagonal',
+      () {
+        final matrix = RealMatrix.diagonal(
+          rows: 6,
+          columns: 2,
+          diagonalValue: 1,
+        );
+
+        for (var i = 0; i < matrix.rowCount; ++i) {
+          for (var j = 0; j < matrix.columnCount; ++j) {
+            if (i == j) {
+              expect(matrix(i, j), equals(1));
+            } else {
+              expect(matrix(i, j), isZero);
+            }
+          }
+        }
+
+        const stringRepresentation = '[1.0, 0.0]\n'
+            '[0.0, 1.0]\n'
+            '[0.0, 0.0]\n'
+            '[0.0, 0.0]\n'
+            '[0.0, 0.0]\n'
+            '[0.0, 0.0]';
+
+        expect('$matrix', equals(stringRepresentation));
+      },
+    );
+
+    test(
+      'Making sure that a diagonal of a single element is correctly built',
+      () {
+        final matrix = RealMatrix.diagonal(
+          rows: 1,
+          columns: 1,
+          diagonalValue: 31,
+        );
+
+        expect(matrix(0, 0), equals(31));
+        expect('$matrix', equals('[31.0]'));
+      },
+    );
+
+    test(
+      'Making sure that an exception is thrown when the matrix is being built '
+      'from a list but the sizes are wrong',
+      () {
+        expect(
+          () => RealMatrix.fromFlattenedData(
+            rows: 6,
+            columns: 2,
+            data: [1, 2, 3, 4],
+          ),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
     test("Making sure that 'toString()' works as expected.", () {
       final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
@@ -134,29 +247,31 @@ void main() {
     });
 
     test(
-        'Making sure that a matrix is properly built from a list of lists '
-        'entries.', () {
-      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-      ]);
+      'Making sure that a matrix is properly built from a list of lists '
+      'entries.',
+      () {
+        final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+        ]);
 
-      // Checking the sizes
-      expect(matrix.rowCount, equals(3));
-      expect(matrix.columnCount, equals(3));
+        // Checking the sizes
+        expect(matrix.rowCount, equals(3));
+        expect(matrix.columnCount, equals(3));
 
-      // Checking the content of the matrix
-      expect(matrix(0, 0), equals(1));
-      expect(matrix(0, 1), equals(2));
-      expect(matrix(0, 2), equals(3));
-      expect(matrix(1, 0), equals(4));
-      expect(matrix(1, 1), equals(5));
-      expect(matrix(1, 2), equals(6));
-      expect(matrix(2, 0), equals(7));
-      expect(matrix(2, 1), equals(8));
-      expect(matrix(2, 2), equals(9));
-    });
+        // Checking the content of the matrix
+        expect(matrix(0, 0), equals(1));
+        expect(matrix(0, 1), equals(2));
+        expect(matrix(0, 2), equals(3));
+        expect(matrix(1, 0), equals(4));
+        expect(matrix(1, 1), equals(5));
+        expect(matrix(1, 2), equals(6));
+        expect(matrix(2, 0), equals(7));
+        expect(matrix(2, 1), equals(8));
+        expect(matrix(2, 2), equals(9));
+      },
+    );
   });
 
   group("Testing equality of 'RealMatrix' objects", () {
@@ -379,521 +494,195 @@ void main() {
 
   group('Testing the computation of the determinant.', () {
     test('Making sure that the determinant of an 1*1 matrix is correct.', () {
-      final matrix = RealMatrix.fromData(columns: 1, rows: 1, data: [
-        [-5]
-      ]);
+      final matrix = RealMatrix.fromData(
+        columns: 1,
+        rows: 1,
+        data: [
+          [-5],
+        ],
+      );
       expect(matrix.determinant(), equals(-5));
     });
 
     test('Making sure that the determinant of a 2*2 matrix is correct.', () {
-      final matrix = RealMatrix.fromData(columns: 2, rows: 2, data: [
-        [6, 5],
-        [-12, 3],
-      ]);
+      final matrix = RealMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: [
+          [6, 5],
+          [-12, 3],
+        ],
+      );
       expect(matrix.determinant(), equals(78));
     });
 
     test('Making sure that the determinant of a 3*3 matrix is correct.', () {
-      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: [
-        [2, -1, 0],
-        [11, 0, 7],
-        [6, 1, 1],
-      ]);
+      final matrix = RealMatrix.fromData(
+        columns: 3,
+        rows: 3,
+        data: [
+          [2, -1, 0],
+          [11, 0, 7],
+          [6, 1, 1],
+        ],
+      );
       expect(matrix.determinant(), equals(-45));
     });
 
     test('Making sure that the determinant of a 4*4 matrix is correct.', () {
-      final matrix = RealMatrix.fromData(columns: 4, rows: 4, data: [
-        [2, -1, 13, 4],
-        [11, 0, 1, 7],
-        [6, -4, 7, 2],
-        [1, -1, 3, 0],
-      ]);
+      final matrix = RealMatrix.fromData(
+        columns: 4,
+        rows: 4,
+        data: [
+          [2, -1, 13, 4],
+          [11, 0, 1, 7],
+          [6, -4, 7, 2],
+          [1, -1, 3, 0],
+        ],
+      );
       expect(matrix.determinant(), equals(271));
     });
 
     test(
-        'Making sure that the determinant of a 5*5 (or greater) matrix is '
-        'correct.', () {
-      final matrix = RealMatrix.fromData(columns: 5, rows: 5, data: [
-        [2, -1, 13, 4, 1],
-        [11, 0, 5, 1, 7],
-        [6, -4, 7, 2, -6],
-        [1, 0, -3, -6, 9],
-        [7, 0, 3, -4, 1],
-      ]);
-      expect(
-        matrix.determinant(),
-        const MoreOrLessEquals(-28398, precision: 0.1),
-      );
-    });
+      'Making sure that the determinant of a 5*5 (or greater) matrix is '
+      'correct.',
+      () {
+        final matrix = RealMatrix.fromData(
+          columns: 5,
+          rows: 5,
+          data: [
+            [2, -1, 13, 4, 1],
+            [11, 0, 5, 1, 7],
+            [6, -4, 7, 2, -6],
+            [1, 0, -3, -6, 9],
+            [7, 0, 3, -4, 1],
+          ],
+        );
+        expect(
+          matrix.determinant(),
+          const MoreOrLessEquals(-28398, precision: 0.1),
+        );
+      },
+    );
   });
 
   group('Testing operations on matrices.', () {
     test(
-        'Making sure that the LU decomposition properly works on a square '
-        'matrix of a given dimension.', () {
-      final matrix = RealMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [1, 2, 3],
-          [4, 5, 6],
-          [7, 8, 9],
-        ],
-      );
+      'Making sure that the LU decomposition properly works on a square '
+      'matrix of a given dimension.',
+      () {
+        final matrix = RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
+        );
 
-      // Decomposition
-      final lu = matrix.luDecomposition();
-      expect(lu.length, equals(2));
+        // Decomposition
+        final lu = matrix.luDecomposition();
+        expect(lu.length, equals(2));
 
-      // Checking L
-      final L = lu[0];
-      expect(L.rowCount, equals(matrix.rowCount));
-      expect(L.columnCount, equals(matrix.columnCount));
-      expect(L.isSquareMatrix, isTrue);
-      expect(
-        L.flattenData,
-        orderedEquals(<double>[1, 0, 0, 4, 1, 0, 7, 2, 1]),
-      );
+        // Checking L
+        final L = lu[0];
+        expect(L.rowCount, equals(matrix.rowCount));
+        expect(L.columnCount, equals(matrix.columnCount));
+        expect(L.isSquareMatrix, isTrue);
+        expect(
+          L.flattenData,
+          orderedEquals(<double>[1, 0, 0, 4, 1, 0, 7, 2, 1]),
+        );
 
-      // Checking U
-      final U = lu[1];
-      expect(U.rowCount, equals(matrix.rowCount));
-      expect(U.columnCount, equals(matrix.columnCount));
-      expect(U.isSquareMatrix, isTrue);
-      expect(
-        U.flattenData,
-        orderedEquals(<double>[1, 2, 3, 0, -3, -6, 0, 0, 0]),
-      );
-    });
-
-    test(
-        "Making sure that the LU decomposition doesn't work when the matrix "
-        'is not square.', () {
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 3,
-        data: const [
-          [1, 2, 3],
-          [4, 5, 6],
-        ],
-      );
-
-      // Decomposition
-      expect(matrix.luDecomposition, throwsA(isA<MatrixException>()));
-    });
+        // Checking U
+        final U = lu[1];
+        expect(U.rowCount, equals(matrix.rowCount));
+        expect(U.columnCount, equals(matrix.columnCount));
+        expect(U.isSquareMatrix, isTrue);
+        expect(
+          U.flattenData,
+          orderedEquals(<double>[1, 2, 3, 0, -3, -6, 0, 0, 0]),
+        );
+      },
+    );
 
     test(
-        'Making sure that Cholesky decomposition properly works on a square '
-        'matrix of a given dimension.', () {
-      final matrix = RealMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [25, 15, -5],
-          [15, 18, 0],
-          [-5, 0, 11],
-        ],
-      );
-
-      // Decomposition
-      final cholesky = matrix.choleskyDecomposition();
-      expect(cholesky.length, equals(2));
-
-      // Checking L
-      final L = cholesky[0];
-      expect(
-        L.flattenData,
-        orderedEquals(<double>[5, 0, 0, 3, 3, 0, -1, 1, 3]),
-      );
-      expect(L.rowCount, equals(matrix.rowCount));
-      expect(L.columnCount, equals(matrix.columnCount));
-      expect(L.isSquareMatrix, isTrue);
-
-      // Checking Lt
-      final transposedL = cholesky[1];
-      expect(
-        transposedL.flattenData,
-        orderedEquals(<double>[5, 3, -1, 0, 3, 1, 0, 0, 3]),
-      );
-      expect(transposedL.rowCount, equals(matrix.rowCount));
-      expect(transposedL.columnCount, equals(matrix.columnCount));
-      expect(transposedL.isSquareMatrix, isTrue);
-    });
-
-    test(
-        "Making sure that the Cholesky decomposition doesn't work when the "
-        'matrix is not square.', () {
-      final matrix = RealMatrix.fromData(
-        rows: 3,
-        columns: 2,
-        data: const [
-          [1, 2],
-          [3, 4],
-          [5, 6],
-        ],
-      );
-
-      // Decomposition
-      expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
-    });
-
-    test('Making sure that SVD decomposition works on a square matrix', () {
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [1, 5],
-          [7, -3],
-        ],
-      );
-
-      // Decomposition
-      final svd = matrix.singleValueDecomposition();
-      expect(svd.length, equals(3));
-
-      // Checking E
-      final E = svd[0];
-      expect(E.isSquareMatrix, isTrue);
-      expect(
-        E(0, 0),
-        const MoreOrLessEquals(7.73877, precision: 1.0e-5),
-      );
-      expect(
-        E(0, 1),
-        isZero,
-      );
-      expect(
-        E(1, 0),
-        isZero,
-      );
-      expect(
-        E(1, 1),
-        const MoreOrLessEquals(4.91034, precision: 1.0e-5),
-      );
-
-      // Checking U
-      final U = svd[1];
-      expect(U.isSquareMatrix, isTrue);
-      expect(
-        U(0, 0),
-        const MoreOrLessEquals(-0.22975, precision: 1.0e-5),
-      );
-      expect(
-        U(0, 1),
-        const MoreOrLessEquals(0.97324, precision: 1.0e-5),
-      );
-      expect(
-        U(1, 0),
-        const MoreOrLessEquals(0.97324, precision: 1.0e-5),
-      );
-      expect(
-        U(1, 1),
-        const MoreOrLessEquals(0.229753, precision: 1.0e-5),
-      );
-
-      // Checking V
-      final V = svd[2];
-      expect(V.isSquareMatrix, isTrue);
-      expect(
-        V(0, 0),
-        const MoreOrLessEquals(0.85065, precision: 1.0e-5),
-      );
-      expect(
-        V(0, 1),
-        const MoreOrLessEquals(0.52573, precision: 1.0e-5),
-      );
-      expect(
-        V(1, 0),
-        const MoreOrLessEquals(-0.52573, precision: 1.0e-5),
-      );
-      expect(
-        V(1, 1),
-        const MoreOrLessEquals(0.85065, precision: 1.0e-5),
-      );
-
-      // Making sure that U x E x Vt (where Vt is V transposed) equals to the
-      // starting matrix
-      final original = U * E * V.transpose();
-
-      expect(
-        original(0, 0),
-        const MoreOrLessEquals(1, precision: 1.0e-5),
-      );
-      expect(
-        original(0, 1),
-        const MoreOrLessEquals(5, precision: 1.0e-5),
-      );
-      expect(
-        original(1, 0),
-        const MoreOrLessEquals(7, precision: 1.0e-5),
-      );
-      expect(
-        original(1, 1),
-        const MoreOrLessEquals(-3, precision: 1.0e-5),
-      );
-    });
-
-    test('Making sure that SVD decomposition works on a non-square matrix', () {
-      final matrix = RealMatrix.fromData(
-        rows: 3,
-        columns: 2,
-        data: const [
-          [3, -5],
-          [4, 9],
-          [-2, 1],
-        ],
-      );
-
-      // Decomposition
-      final svd = matrix.singleValueDecomposition();
-      expect(svd.length, equals(3));
-
-      // Checking E
-      final E = svd[0];
-      expect(E.isSquareMatrix, isFalse);
-      expect(E.rowCount, equals(3));
-      expect(E.columnCount, equals(2));
-      expect(
-        E(0, 0),
-        const MoreOrLessEquals(10.55376, precision: 1.0e-5),
-      );
-      expect(
-        E(0, 1),
-        isZero,
-      );
-      expect(
-        E(1, 0),
-        isZero,
-      );
-      expect(
-        E(1, 1),
-        const MoreOrLessEquals(4.96165, precision: 1.0e-5),
-      );
-      expect(
-        E(2, 0),
-        isZero,
-      );
-      expect(
-        E(2, 1),
-        isZero,
-      );
-
-      // Checking U
-      final U = svd[1];
-      expect(U.isSquareMatrix, isTrue);
-      expect(
-        U(0, 0),
-        const MoreOrLessEquals(0.397763, precision: 1.0e-5),
-      );
-      expect(
-        U(0, 1),
-        const MoreOrLessEquals(-0.815641, precision: 1.0e-5),
-      );
-      expect(
-        U(0, 2),
-        const MoreOrLessEquals(0.420135, precision: 1.0e-5),
-      );
-      expect(
-        U(1, 0),
-        const MoreOrLessEquals(-0.916139, precision: 1.0e-5),
-      );
-      expect(
-        U(1, 1),
-        const MoreOrLessEquals(-0.377915, precision: 1.0e-5),
-      );
-      expect(
-        U(1, 2),
-        const MoreOrLessEquals(0.133679, precision: 1.0e-5),
-      );
-      expect(
-        U(2, 0),
-        const MoreOrLessEquals(-0.04974, precision: 1.0e-5),
-      );
-      expect(
-        U(2, 1),
-        const MoreOrLessEquals(0.43807, precision: 1.0e-5),
-      );
-      expect(
-        U(2, 2),
-        const MoreOrLessEquals(0.89756, precision: 1.0e-5),
-      );
-
-      // Checking V
-      final V = svd[2];
-      expect(V.isSquareMatrix, isTrue);
-      expect(
-        V(0, 0),
-        const MoreOrLessEquals(-0.22473, precision: 1.0e-5),
-      );
-      expect(
-        V(0, 1),
-        const MoreOrLessEquals(-0.97442, precision: 1.0e-5),
-      );
-      expect(
-        V(1, 0),
-        const MoreOrLessEquals(-0.97442, precision: 1.0e-5),
-      );
-      expect(
-        V(1, 1),
-        const MoreOrLessEquals(0.22473, precision: 1.0e-5),
-      );
-
-      // Making sure that U x E x Vt (where Vt is V transposed) equals to the
-      // starting matrix
-      final original = U * E * V.transpose();
-
-      expect(
-        original(0, 0),
-        const MoreOrLessEquals(3, precision: 1.0e-5),
-      );
-      expect(
-        original(0, 1),
-        const MoreOrLessEquals(-5, precision: 1.0e-5),
-      );
-      expect(
-        original(1, 0),
-        const MoreOrLessEquals(4, precision: 1.0e-5),
-      );
-      expect(
-        original(1, 1),
-        const MoreOrLessEquals(9, precision: 1.0e-5),
-      );
-      expect(
-        original(2, 0),
-        const MoreOrLessEquals(-2, precision: 1.0e-5),
-      );
-      expect(
-        original(2, 1),
-        const MoreOrLessEquals(1, precision: 1.0e-5),
-      );
-    });
-
-    test(
-        'Making sure that the SVD algorithm does NOT throw exceptions with '
-        'particular matrices.', () {
-      expect(
-        RealMatrix.fromData(
+      "Making sure that the LU decomposition doesn't work when the matrix "
+      'is not square.',
+      () {
+        final matrix = RealMatrix.fromData(
           rows: 2,
           columns: 3,
           data: const [
-            [3, -5, 1],
-            [4, -3, 9],
+            [1, 2, 3],
+            [4, 5, 6],
           ],
-        ).singleValueDecomposition(),
-        isA<List<RealMatrix>>(),
-      );
+        );
 
-      expect(
-        RealMatrix.fromData(
-          rows: 2,
+        // Decomposition
+        expect(matrix.luDecomposition, throwsA(isA<MatrixException>()));
+      },
+    );
+
+    test(
+      'Making sure that Cholesky decomposition properly works on a square '
+      'matrix of a given dimension.',
+      () {
+        final matrix = RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [25, 15, -5],
+            [15, 18, 0],
+            [-5, 0, 11],
+          ],
+        );
+
+        // Decomposition
+        final cholesky = matrix.choleskyDecomposition();
+        expect(cholesky.length, equals(2));
+
+        // Checking L
+        final L = cholesky[0];
+        expect(
+          L.flattenData,
+          orderedEquals(<double>[5, 0, 0, 3, 3, 0, -1, 1, 3]),
+        );
+        expect(L.rowCount, equals(matrix.rowCount));
+        expect(L.columnCount, equals(matrix.columnCount));
+        expect(L.isSquareMatrix, isTrue);
+
+        // Checking Lt
+        final transposedL = cholesky[1];
+        expect(
+          transposedL.flattenData,
+          orderedEquals(<double>[5, 3, -1, 0, 3, 1, 0, 0, 3]),
+        );
+        expect(transposedL.rowCount, equals(matrix.rowCount));
+        expect(transposedL.columnCount, equals(matrix.columnCount));
+        expect(transposedL.isSquareMatrix, isTrue);
+      },
+    );
+
+    test(
+      "Making sure that the Cholesky decomposition doesn't work when the "
+      'matrix is not square.',
+      () {
+        final matrix = RealMatrix.fromData(
+          rows: 3,
           columns: 2,
           data: const [
-            [-3, 0],
-            [0, -3],
+            [1, 2],
+            [3, 4],
+            [5, 6],
           ],
-        ).singleValueDecomposition(),
-        isA<List<RealMatrix>>(),
-      );
+        );
 
-      expect(
-        RealMatrix.fromData(
-          rows: 2,
-          columns: 4,
-          data: const [
-            [0, 3, -5, 1],
-            [4, 0, -3, 9],
-          ],
-        ).singleValueDecomposition(),
-        isA<List<RealMatrix>>(),
-      );
-
-      expect(
-        RealMatrix.fromData(
-          rows: 3,
-          columns: 6,
-          data: const [
-            [0, 3, -5, 1, 0, -1],
-            [4, 0, -3, 9, 0, 0],
-            [4, 5, 0, -1, -2, 1],
-          ],
-        ).singleValueDecomposition(),
-        isA<List<RealMatrix>>(),
-      );
-
-      expect(
-        RealMatrix.fromData(
-          rows: 5,
-          columns: 5,
-          data: const [
-            [-1, 0, 0, 0, 1],
-            [0, -1, 0, 1, 0],
-            [0, 0, 1, 0, 0],
-            [0, 1, 0, -1, 0],
-            [1, 0, 0, 0, -1],
-          ],
-        ).singleValueDecomposition(),
-        isA<List<RealMatrix>>(),
-      );
-
-      // Small values precision
-      expect(
-        RealMatrix.fromData(
-          rows: 5,
-          columns: 4,
-          data: const [
-            [0, 0, 1.0e-4, 4],
-            [0, 0, 0, 0],
-            [0, 0, 1.0e-6, 0],
-            [0, 5, 0, 0],
-            [0, 0, 1.0e-4, 0],
-          ],
-        ).singleValueDecomposition(),
-        isA<List<RealMatrix>>(),
-      );
-
-      // Zeroes
-      final zeroes = RealMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [0, 0],
-          [0, 0],
-        ],
-      );
-      final zeroesSvd = zeroes.singleValueDecomposition();
-
-      expect(
-        zeroesSvd[0],
-        RealMatrix.fromFlattenedData(rows: 2, columns: 2, data: [0, 0, 0, 0]),
-      );
-      expect(
-        zeroesSvd[1],
-        RealMatrix.fromFlattenedData(rows: 2, columns: 2, data: [1, 0, 0, 1]),
-      );
-      expect(
-        zeroesSvd[2],
-        RealMatrix.fromFlattenedData(rows: 2, columns: 2, data: [-1, 0, 0, -1]),
-      );
-      expect(
-        zeroesSvd[0] * zeroesSvd[1] * zeroesSvd[2].transpose(),
-        equals(zeroes),
-      );
-
-      // Single element
-      final special1x1 = RealMatrix.fromData(
-        rows: 1,
-        columns: 1,
-        data: const [
-          [8],
-        ],
-      ).singleValueDecomposition();
-
-      expect(special1x1[0](0, 0), equals(8));
-      expect(special1x1[1](0, 0), equals(1));
-      expect(special1x1[2](0, 0), equals(1));
-    });
+        // Decomposition
+        expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
+      },
+    );
 
     test('Making sure that the transposed view is correct', () {
       final matrix = RealMatrix.fromData(
@@ -913,7 +702,7 @@ void main() {
       expect(matrix.transposedValue(2, 1), equals(8));
     });
 
-    test('Making sure that the transposed matrix is correct (2x2)', () {
+    test('Making sure that the transposed of a square matri is correct', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -930,7 +719,7 @@ void main() {
       expect(transposed(1, 1), equals(4));
     });
 
-    test('Making sure that the transposed matrix is correct (2x3)', () {
+    test('Making sure that the transposed of a rectang. matrix is correct', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -1034,34 +823,38 @@ void main() {
     });
 
     test(
-        'Making sure that the cofactor matrix is NOT computed if the source '
-        'matrix is NOT square', () {
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 1,
-        data: const [
-          [2],
-          [8],
-        ],
-      );
+      'Making sure that the cofactor matrix is NOT computed if the source '
+      'matrix is NOT square',
+      () {
+        final matrix = RealMatrix.fromData(
+          rows: 2,
+          columns: 1,
+          data: const [
+            [2],
+            [8],
+          ],
+        );
 
-      expect(() => matrix.cofactorMatrix(), throwsA(isA<MatrixException>()));
-    });
+        expect(matrix.cofactorMatrix, throwsA(isA<MatrixException>()));
+      },
+    );
 
     test(
-        'Making sure that the inverse matrix is NOT computed if the source '
-        'matrix is NOT square', () {
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 1,
-        data: const [
-          [2],
-          [8],
-        ],
-      );
+      'Making sure that the inverse matrix is NOT computed if the source '
+      'matrix is NOT square',
+      () {
+        final matrix = RealMatrix.fromData(
+          rows: 2,
+          columns: 1,
+          data: const [
+            [2],
+            [8],
+          ],
+        );
 
-      expect(() => matrix.inverse(), throwsA(isA<MatrixException>()));
-    });
+        expect(matrix.inverse, throwsA(isA<MatrixException>()));
+      },
+    );
 
     test('Making sure that the inverse of a 2x2 matrix is correct', () {
       final matrix = RealMatrix.fromData(
@@ -1163,7 +956,7 @@ void main() {
         ],
       );
 
-      expect(() => matrix.trace(), throwsA(isA<MatrixException>()));
+      expect(matrix.trace, throwsA(isA<MatrixException>()));
     });
 
     test('Making sure that symmetric matrices are correctly identified.', () {
@@ -1268,7 +1061,7 @@ void main() {
         ],
       );
 
-      expect(() => identity.isIdentity(), throwsA(isA<MatrixException>()));
+      expect(identity.isIdentity, throwsA(isA<MatrixException>()));
     });
 
     test('Making sure that the rank can correctly be computed.', () {
@@ -1287,7 +1080,7 @@ void main() {
         rows: 1,
         columns: 1,
         data: const [
-          [6]
+          [6],
         ],
       );
 
@@ -1297,11 +1090,34 @@ void main() {
         rows: 1,
         columns: 1,
         data: const [
-          [0]
+          [0],
         ],
       );
 
       expect(zeroRank.rank(), isZero);
+
+      final rectangularRank1 = RealMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [3, -6, 5],
+          [1, 9, 0],
+        ],
+      );
+
+      expect(rectangularRank1.rank(), equals(2));
+
+      final rectangularRank2 = RealMatrix.fromData(
+        rows: 3,
+        columns: 1,
+        data: const [
+          [3],
+          [4],
+          [8],
+        ],
+      );
+
+      expect(rectangularRank2.rank(), equals(1));
     });
 
     test('Making sure that eigenvalues can be computed (1x1 matrices)', () {
@@ -1313,7 +1129,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(1));
       expect(eigenvalues[0], equals(const Complex.fromReal(-16)));
@@ -1329,12 +1145,12 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(2));
       expect(
         eigenvalues[0].real,
-        const MoreOrLessEquals(5.7320, precision: 1.0e-4),
+        const MoreOrLessEquals(5.732, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].real,
@@ -1361,7 +1177,7 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenValues();
+      final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(3));
       expect(
@@ -1388,6 +1204,509 @@ void main() {
         eigenvalues[2].imaginary,
         const MoreOrLessEquals(0, precision: 1.0e-4),
       );
+    });
+
+    test('Batch tests - Minors', () {
+      final source = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 4,
+          data: const [
+            [2, -1, 5, 9],
+            [-12, 3, 2, 0],
+            [1, -1, 9, 8],
+          ],
+        ).minor(1, 2),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 4,
+          data: const [
+            [2, -1, 5, 9],
+            [-12, 3, 2, 0],
+            [1, -1, 9, 8],
+          ],
+        ).minor(2, 3),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [-6, 1],
+            [2, 7],
+          ],
+        ).minor(0, 1),
+        RealMatrix.fromData(
+          rows: 4,
+          columns: 2,
+          data: const [
+            [-6, 1],
+            [2, 2],
+            [8, -1],
+            [0, -10],
+          ],
+        ).minor(2, 0),
+      ];
+
+      final minors = [
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 3,
+          data: const [
+            [2, -1, 9],
+            [1, -1, 8],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 3,
+          data: const [
+            [2, -1, 5],
+            [-12, 3, 2],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [2],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 1,
+          data: const [
+            [1],
+            [2],
+            [-10],
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        expect(source[i], equals(minors[i]));
+      }
+
+      // Exception test
+      expect(
+        () => RealMatrix.fromData(
+          rows: 2,
+          columns: 1,
+          data: const [
+            [1],
+            [2],
+          ],
+        ).minor(1, 0),
+        throwsA(isA<MatrixException>()),
+      );
+    });
+
+    test('Batch tests - Cofactor matrix', () {
+      final source = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [1, 2, 3],
+            [0, 4, 5],
+            [1, 0, 6],
+          ],
+        ).cofactorMatrix(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [3, 1, 2],
+            [-2, 4, 4],
+            [1, 3, 6],
+          ],
+        ).cofactorMatrix(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [-3, 6],
+            [7, 9],
+          ],
+        ).cofactorMatrix(),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [9],
+          ],
+        ).cofactorMatrix(),
+      ];
+
+      final cofactorMatrices = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [24, 5, -4],
+            [-12, 3, 2],
+            [-2, -5, 4],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [12, 16, -10],
+            [0, 16, -8],
+            [-4, -16, 14],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [9, -7],
+            [-6, -3],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [1],
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        expect(source[i], equals(cofactorMatrices[i]));
+      }
+    });
+
+    test('Batch tests - Inverse matrix', () {
+      final source = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [3, 0, 2],
+            [2, 0, -2],
+            [0, 1, 1],
+          ],
+        ).inverse(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [4, 7],
+            [2, 6],
+          ],
+        ).inverse(),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [13],
+          ],
+        ).inverse(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 0],
+            [0, 1],
+          ],
+        ).inverse(),
+      ];
+
+      final inverse = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [0.2, 0.2, 0],
+            [-0.2, 3 / 10, 1],
+            [0.2, -3 / 10, 0],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [0.6, -0.7],
+            [-0.2, 0.4],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [1 / 13],
+          ],
+        ),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 0],
+            [0, 1],
+          ],
+        ),
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        for (var j = 0; j < source[i].rowCount; ++j) {
+          for (var k = 0; k < source[i].rowCount; ++k) {
+            expect(
+              source[i](j, k),
+              MoreOrLessEquals(inverse[i](j, k), precision: 1.0e-2),
+            );
+          }
+        }
+      }
+    });
+
+    test('Batch tests - Rank of a matrix', () {
+      final source = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [3, 0, 2],
+            [2, 0, -2],
+            [0, 1, 1],
+          ],
+        ).rank(),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [4],
+          ],
+        ).rank(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [4, 7],
+            [2, 6],
+          ],
+        ).rank(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 2,
+          data: const [
+            [1, 6],
+            [-2, 9],
+            [0, 1],
+          ],
+        ).rank(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 2,
+          data: const [
+            [1, 3],
+            [2, 6],
+            [3, 9],
+          ],
+        ).rank(),
+      ];
+
+      final ranks = [
+        3,
+        1,
+        2,
+        2,
+        1,
+      ];
+
+      for (var i = 0; i < source.length; ++i) {
+        expect(source[i], equals(ranks[i]));
+      }
+    });
+
+    test('Batch tests - Characteristic polynomial', () {
+      final polynomials = [
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [3, 1, 5],
+            [3, 3, 1],
+            [4, 6, 4],
+          ],
+        ).characteristicPolynomial(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [2, -1, 1],
+            [-1, 2, 1],
+            [1, -1, 2],
+          ],
+        ).characteristicPolynomial(),
+        RealMatrix.fromData(
+          rows: 4,
+          columns: 4,
+          data: const [
+            [8, -1, 3, -1],
+            [-1, 6, 2, 0],
+            [3, 2, 9, 1],
+            [-1, 0, 1, 7],
+          ],
+        ).characteristicPolynomial(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [3, 9],
+            [-7, 2],
+          ],
+        ).characteristicPolynomial(),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: const [
+            [12],
+          ],
+        ).characteristicPolynomial(),
+      ];
+
+      final expectedSolutions = <Algebraic>[
+        Algebraic.fromReal([1, -10, 4, -40]),
+        Algebraic.fromReal([1, -6, 11, -6]),
+        Algebraic.fromReal([1, -30, 319, -1410, 2138]),
+        Algebraic.fromReal([1, -5, 69]),
+        Algebraic.fromReal([1, -12]),
+      ];
+
+      for (var i = 0; i < polynomials.length; ++i) {
+        expect(polynomials[i].degree, equals(expectedSolutions[i].degree));
+
+        for (var j = 0; j < polynomials[i].coefficients.length; ++j) {
+          expect(
+            polynomials[i].coefficients[j].real,
+            MoreOrLessEquals(
+              expectedSolutions[i].coefficients[j].real,
+              precision: 1.0e-3,
+            ),
+          );
+          expect(
+            polynomials[i].coefficients[j].imaginary,
+            MoreOrLessEquals(
+              expectedSolutions[i].coefficients[j].imaginary,
+              precision: 1.0e-3,
+            ),
+          );
+        }
+      }
+    });
+
+    test('Batch tests - Eigenvalues', () {
+      final eigenvalues = [
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [2, -4],
+            [-1, -1],
+          ],
+        ).eigenvalues(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [5, 8, 16],
+            [4, 1, 8],
+            [6, -4, -11],
+          ],
+        ).eigenvalues(),
+        RealMatrix.fromData(
+          rows: 4,
+          columns: 4,
+          data: [
+            [1, 2, 3, 4],
+            [-1, 8, 3, 7],
+            [0, 0, 0, 0],
+            [9, 5, -7, 4],
+          ],
+        ).eigenvalues(),
+        RealMatrix.fromData(
+          rows: 1,
+          columns: 1,
+          data: [
+            [16],
+          ],
+        ).eigenvalues(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [9, 7, -6],
+            [5, 8, -1],
+            [5, 3, 2],
+          ],
+        ).eigenvalues(),
+        RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [1, -1],
+            [1, 1],
+          ],
+        ).eigenvalues(),
+        RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [1, 7, 3],
+            [7, 4, 5],
+            [3, 5, 0],
+          ],
+        ).eigenvalues(),
+      ];
+
+      final expected = <List<Complex>>[
+        const [
+          Complex.fromReal(3),
+          Complex.fromReal(-2),
+        ],
+        const [
+          Complex.fromReal(11.8062),
+          Complex.fromReal(-13.8062),
+          Complex.fromReal(-3),
+        ],
+        const [
+          Complex.fromReal(-4.039),
+          Complex.fromReal(3.1566),
+          Complex.fromReal(13.8824),
+          Complex.zero(),
+        ],
+        const [
+          Complex.fromReal(16),
+        ],
+        const [
+          Complex.fromReal(11.6784),
+          Complex(3.6607, 2.257),
+          Complex(3.6607, -2.257),
+        ],
+        const [
+          Complex(1, -1),
+          Complex(1, 1),
+        ],
+        const [
+          Complex.fromReal(-4.9095),
+          Complex.fromReal(-2.4546),
+          Complex.fromReal(12.3641),
+        ],
+      ];
+
+      for (var i = 0; i < eigenvalues.length; ++i) {
+        for (var j = 0; j < expected[i].length; ++j) {
+          expect(
+            eigenvalues[i][j].real,
+            MoreOrLessEquals(expected[i][j].real, precision: 1.0e-4),
+          );
+          expect(
+            eigenvalues[i][j].imaginary,
+            MoreOrLessEquals(expected[i][j].imaginary, precision: 1.0e-4),
+          );
+        }
+      }
     });
   });
 }

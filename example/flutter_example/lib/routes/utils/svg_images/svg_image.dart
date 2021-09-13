@@ -10,8 +10,9 @@ abstract class SvgImage extends StatelessWidget {
 
   /// Creates an [LogoSvg] widget,
   const SvgImage({
+    Key? key,
     this.size = 40,
-  });
+  }) : super(key: key);
 
   /// The name of the Svg asset file.
   String get assetName;

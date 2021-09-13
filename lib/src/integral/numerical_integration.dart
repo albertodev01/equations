@@ -17,6 +17,9 @@ abstract class NumericalIntegration {
   /// Internal functions evaluator.
   static const _evaluator = ExpressionParser();
 
+  /// The function to be integrated on the given interval.
+  final String function;
+
   /// The lower bound of the integral.
   final double lowerBound;
 
@@ -29,6 +32,7 @@ abstract class NumericalIntegration {
 
   /// Expects the [lowerBound] and [upperBound] of the integral.
   const NumericalIntegration({
+    required this.function,
     required this.lowerBound,
     required this.upperBound,
     required this.intervals,
@@ -42,6 +46,7 @@ abstract class NumericalIntegration {
 
     if (other is NumericalIntegration) {
       return runtimeType == other.runtimeType &&
+          function == other.function &&
           intervals == other.intervals &&
           lowerBound == other.lowerBound &&
           upperBound == other.upperBound;
@@ -54,9 +59,10 @@ abstract class NumericalIntegration {
   int get hashCode {
     var result = 17;
 
-    result = 37 * result + intervals.hashCode;
-    result = 37 * result + lowerBound.hashCode;
-    result = 37 * result + upperBound.hashCode;
+    result = result * 37 + function.hashCode;
+    result = result * 37 + intervals.hashCode;
+    result = result * 37 + lowerBound.hashCode;
+    result = result * 37 + upperBound.hashCode;
 
     return result;
   }
@@ -66,15 +72,15 @@ abstract class NumericalIntegration {
     final lower = lowerBound.toStringAsFixed(2);
     final upper = upperBound.toStringAsFixed(2);
 
-    return '[$lower, $upper] with $intervals intervals';
+    return '$function on [$lower, $upper]\nUsing $intervals intervals';
   }
 
   /// Evaluates the given [function] on the [x] point.
-  double evaluateFunction(String function, double x) {
+  double evaluateFunction(double x) {
     return _evaluator.evaluateOn(function, x);
   }
 
   /// Calculates the numerical value of the [function] **definite** integral
   /// between [lowerBound] and [upperBound].
-  IntegralResults integrate(String function);
+  IntegralResults integrate();
 }

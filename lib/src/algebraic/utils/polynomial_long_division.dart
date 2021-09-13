@@ -27,7 +27,8 @@ class PolynomialLongDivision {
   AlgebraicDivision divide() {
     if (polyNumerator.degree < polyDenominator.degree) {
       throw const PolynomialLongDivisionException(
-          'The degree of the denominator cannot exceed the degree of the numerator.');
+        'The degree of the denominator cannot exceed the degree of the numerator.',
+      );
     }
 
     // If both are equals, just return 1 with a remainder of 0
@@ -140,8 +141,9 @@ class PolynomialLongDivision {
   int get hashCode {
     var result = 2011;
 
-    result = 37 * result + polyNumerator.hashCode;
-    return 37 * result + polyDenominator.hashCode;
+    result = result * 37 + polyNumerator.hashCode;
+
+    return result * 37 + polyDenominator.hashCode;
   }
 
   @override

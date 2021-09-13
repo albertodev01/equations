@@ -13,12 +13,16 @@ class SylvesterMatrix {
   List<Complex> get coefficients => _coefficients;
 
   /// The constructor requires complex [coefficients] for the polynomial P(x).
-  SylvesterMatrix({required List<Complex> coefficients})
-      : _coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
+  SylvesterMatrix({
+    required List<Complex> coefficients,
+  }) : _coefficients = UnmodifiableListView(
+          List<Complex>.from(coefficients),
+        );
 
   /// The constructor requires real [coefficients] for the polynomial P(x).
-  SylvesterMatrix.fromReal({required List<double> coefficients})
-      : _coefficients = UnmodifiableListView(
+  SylvesterMatrix.fromReal({
+    required List<double> coefficients,
+  }) : _coefficients = UnmodifiableListView(
           coefficients.map((c) => Complex.fromReal(c)).toList(),
         );
 
@@ -60,7 +64,7 @@ class SylvesterMatrix {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < _coefficients.length; ++i) {
-      result = 37 * result + _coefficients[i].hashCode;
+      result = result * 37 + _coefficients[i].hashCode;
     }
 
     return result;

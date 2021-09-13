@@ -61,9 +61,9 @@ abstract class NonLinear {
   int get hashCode {
     var result = 17;
 
-    result = 37 * result + function.hashCode;
-    result = 37 * result + tolerance.hashCode;
-    result = 37 * result + maxSteps.hashCode;
+    result = result * 37 + function.hashCode;
+    result = result * 37 + tolerance.hashCode;
+    result = result * 37 + maxSteps.hashCode;
 
     return result;
   }
@@ -83,6 +83,7 @@ abstract class NonLinear {
           (guesses[size - 1] - guesses[size - 2]).abs();
       final denominator = (guesses[size - 1] - guesses[size - 2]).abs() /
           (guesses[size - 2] - guesses[size - 3]).abs();
+
       return math.log(numerator) / math.log(denominator);
     }
 
@@ -95,12 +96,14 @@ abstract class NonLinear {
   ///  - efficiency = convergenceRate <sup>1 / max_steps</sup>
   double efficiency(List<double> guesses, int steps) {
     final c = convergence(guesses, steps);
+
     return math.pow(c, 1.0 / steps) as double;
   }
 
   /// Evaluates the function on the given [x] value.
   num evaluateOn(double x) {
     const evaluator = ExpressionParser();
+
     return evaluator.evaluateOn(function, x);
   }
 
@@ -112,7 +115,7 @@ abstract class NonLinear {
     final upper = evaluateOn(x + h);
     final lower = evaluateOn(x - h);
 
-    return (upper - lower) / (2 * h);
+    return (upper - lower) / (h * 2);
   }
 
   /// Returns a [NonlinearResults] object which contains the data calculated by

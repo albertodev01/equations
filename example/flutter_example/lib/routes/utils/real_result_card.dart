@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
-import 'package:flutter/material.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// This widget shows a [double] value into a [Card] widget and optionally
 /// places the fractional representation at the bottom.
@@ -20,10 +20,11 @@ class RealResultCard extends StatelessWidget {
 
   /// Creates a [RealResultCard] widget.
   const RealResultCard({
+    Key? key,
     required this.value,
     this.leading = 'x =',
     this.withFraction = false,
-  });
+  }) : super(key: key);
 
   String _checkNan(BuildContext context, double value) {
     if (value.isNaN) {

@@ -16,14 +16,15 @@ void main() {
     });
 
     test(
-        'Making sure that real numbers are properly converted into complex ones.',
-        () {
-      expect(const Complex.fromReal(7.0).real, equals(7));
-      expect(const Complex.fromReal(7.0).imaginary, isZero);
+      'Making sure that real numbers are properly converted into complex ones.',
+      () {
+        expect(const Complex.fromReal(7.0).real, equals(7));
+        expect(const Complex.fromReal(7.0).imaginary, isZero);
 
-      expect(const Complex.fromImaginary(7.0).real, isZero);
-      expect(const Complex.fromImaginary(7.0).imaginary, equals(7));
-    });
+        expect(const Complex.fromImaginary(7.0).real, isZero);
+        expect(const Complex.fromImaginary(7.0).imaginary, equals(7));
+      },
+    );
 
     test("Making sure that named constructor for '0' and 'i' work.", () {
       const zero = Complex.zero();
@@ -36,59 +37,60 @@ void main() {
     });
 
     test(
-        'Making sure that const Complex objects are properly built from Fraction objects',
-        () {
-      final fromFraction = Complex.fromFraction(
-        Fraction(3, 5),
-        Fraction(1, 4),
-      );
-      expect(fromFraction.real, equals(0.6));
-      expect(fromFraction.imaginary, equals(0.25));
+      'Making sure that const Complex objects are properly built from Fraction objects',
+      () {
+        final fromFraction = Complex.fromFraction(
+          Fraction(3, 5),
+          Fraction(1, 4),
+        );
+        expect(fromFraction.real, equals(0.6));
+        expect(fromFraction.imaginary, equals(0.25));
 
-      final fromRealFraction = Complex.fromRealFraction(Fraction(3, 5));
-      expect(fromRealFraction.real, equals(0.6));
-      expect(fromRealFraction.imaginary, isZero);
+        final fromRealFraction = Complex.fromRealFraction(Fraction(3, 5));
+        expect(fromRealFraction.real, equals(0.6));
+        expect(fromRealFraction.imaginary, isZero);
 
-      final fromImaginaryFraction = Complex.fromImaginaryFraction(
-        Fraction(1, 4),
-      );
-      expect(fromImaginaryFraction.real, isZero);
-      expect(
-        fromImaginaryFraction.imaginary,
-        equals(0.25),
-      );
+        final fromImaginaryFraction = Complex.fromImaginaryFraction(
+          Fraction(1, 4),
+        );
+        expect(fromImaginaryFraction.real, isZero);
+        expect(
+          fromImaginaryFraction.imaginary,
+          equals(0.25),
+        );
 
-      final fromMixedFraction = Complex.fromMixedFraction(
-        MixedFraction.fromString('2 1/2'),
-        MixedFraction.fromString('1 3/5'),
-      );
-      expect(
-        fromMixedFraction.real,
-        equals(2.5),
-      );
-      expect(
-        fromMixedFraction.imaginary,
-        equals(1.6),
-      );
+        final fromMixedFraction = Complex.fromMixedFraction(
+          MixedFraction.fromString('2 1/2'),
+          MixedFraction.fromString('1 3/5'),
+        );
+        expect(
+          fromMixedFraction.real,
+          equals(2.5),
+        );
+        expect(
+          fromMixedFraction.imaginary,
+          equals(1.6),
+        );
 
-      final fromRealMixedFraction = Complex.fromRealMixedFraction(
-        MixedFraction.fromString('2 1/2'),
-      );
-      expect(
-        fromRealMixedFraction.real,
-        equals(2.5),
-      );
-      expect(fromRealMixedFraction.imaginary, isZero);
+        final fromRealMixedFraction = Complex.fromRealMixedFraction(
+          MixedFraction.fromString('2 1/2'),
+        );
+        expect(
+          fromRealMixedFraction.real,
+          equals(2.5),
+        );
+        expect(fromRealMixedFraction.imaginary, isZero);
 
-      final fromImaginaryMixedFraction = Complex.fromImaginaryMixedFraction(
-        MixedFraction.fromString('2 1/2'),
-      );
-      expect(fromImaginaryMixedFraction.real, isZero);
-      expect(
-        fromImaginaryMixedFraction.imaginary,
-        equals(2.5),
-      );
-    });
+        final fromImaginaryMixedFraction = Complex.fromImaginaryMixedFraction(
+          MixedFraction.fromString('2 1/2'),
+        );
+        expect(fromImaginaryMixedFraction.real, isZero);
+        expect(
+          fromImaginaryMixedFraction.imaginary,
+          equals(2.5),
+        );
+      },
+    );
 
     test('Polar coordinates conversions', () {
       // From polar
@@ -229,12 +231,14 @@ void main() {
     });
 
     test(
-        "Making sure that 'compareTo' returns 1, -1 or 0 according with the "
-        'natural sorting', () {
-      expect(const Complex(2, 1).compareTo(const Complex(3, 7)), equals(-1));
-      expect(const Complex(3, 7).compareTo(const Complex(2, 1)), equals(1));
-      expect(const Complex(3, 5).compareTo(const Complex(3, 5)), equals(0));
-    });
+      "Making sure that 'compareTo' returns 1, -1 or 0 according with the "
+      'natural sorting',
+      () {
+        expect(const Complex(2, 1).compareTo(const Complex(3, 7)), equals(-1));
+        expect(const Complex(3, 7).compareTo(const Complex(2, 1)), equals(1));
+        expect(const Complex(3, 5).compareTo(const Complex(3, 5)), equals(0));
+      },
+    );
 
     test("Making sure that 'copyWith' clones objects correctly", () {
       const complex = Complex(8, -11);
@@ -250,17 +254,18 @@ void main() {
 
   group('Testing the API of the const Complex class', () {
     test(
-        'Making sure that the conjugate changes the sign of the imaginary part',
-        () {
-      expect(
-        const Complex(3, 7).conjugate(),
-        equals(const Complex(3, -7)),
-      );
-      expect(
-        const Complex(3, -7).conjugate(),
-        equals(const Complex(3, 7)),
-      );
-    });
+      'Making sure that the conjugate changes the sign of the imaginary part',
+      () {
+        expect(
+          const Complex(3, 7).conjugate(),
+          equals(const Complex(3, -7)),
+        );
+        expect(
+          const Complex(3, -7).conjugate(),
+          equals(const Complex(3, 7)),
+        );
+      },
+    );
 
     test('Making sure that the reciprocal is actually 1/(a + bi)', () {
       expect(
@@ -279,13 +284,14 @@ void main() {
     });
 
     test(
-        "Making sure that modulus (or 'magnitude' or 'absolute' value) is correct",
-        () {
-      expect(
-        const Complex(3, 7).abs(),
-        MoreOrLessEquals(math.sqrt(58)),
-      );
-    });
+      "Making sure that modulus (or 'magnitude' or 'absolute' value) is correct",
+      () {
+        expect(
+          const Complex(3, 7).abs(),
+          MoreOrLessEquals(math.sqrt(58)),
+        );
+      },
+    );
 
     test('Making sure that the exponential works properly', () {
       final value = const Complex(3, 7).exp(); // e^(3 + 7i)
@@ -310,29 +316,30 @@ void main() {
     });
 
     test(
-        'Making sure that sine, cosine, tangent and cotangents work properly on const Complex',
-        () {
-      const i = Complex.i();
+      'Making sure that sine, cosine, tangent and cotangents work properly on const Complex',
+      () {
+        const i = Complex.i();
 
-      expect(i.sin().real, isZero);
-      expect(
-        i.sin().imaginary,
-        const MoreOrLessEquals(1.175201193644),
-      );
-      expect(
-        i.cos().real,
-        const MoreOrLessEquals(1.543080634815),
-      );
-      expect(i.cos().imaginary, isZero);
-      expect(
-        i.cos() / i.sin(),
-        equals(i.cot()),
-      );
-      expect(
-        i.sin() / i.cos(),
-        equals(i.tan()),
-      );
-    });
+        expect(i.sin().real, isZero);
+        expect(
+          i.sin().imaginary,
+          const MoreOrLessEquals(1.175201193644),
+        );
+        expect(
+          i.cos().real,
+          const MoreOrLessEquals(1.543080634815),
+        );
+        expect(i.cos().imaginary, isZero);
+        expect(
+          i.cos() / i.sin(),
+          equals(i.cot()),
+        );
+        expect(
+          i.sin() / i.cos(),
+          equals(i.tan()),
+        );
+      },
+    );
 
     test('Making sure that the n-th root of the complex number is correct', () {
       final sqrt = const Complex(5, 1).sqrt();
@@ -377,23 +384,24 @@ void main() {
     });
 
     test(
-        "Making sure that the 'nthRoot' method also works when the phase is negative",
-        () {
-      const negativePhase = Complex(-0.5, -1);
-      final negativePhaseRoot = negativePhase.nthRoot(2);
+      "Making sure that the 'nthRoot' method also works when the phase is negative",
+      () {
+        const negativePhase = Complex(-0.5, -1);
+        final negativePhaseRoot = negativePhase.nthRoot(2);
 
-      expect(negativePhase.phase(), isNegative);
-      expect(
-        negativePhase.phase(),
-        const MoreOrLessEquals(-2.03444, precision: 1.0e-5),
-      );
+        expect(negativePhase.phase(), isNegative);
+        expect(
+          negativePhase.phase(),
+          const MoreOrLessEquals(-2.03444, precision: 1.0e-5),
+        );
 
-      expect(negativePhaseRoot.real.round(), -1);
-      expect(
-        negativePhaseRoot.imaginary,
-        const MoreOrLessEquals(0.899453719973),
-      );
-    });
+        expect(negativePhaseRoot.real.round(), -1);
+        expect(
+          negativePhaseRoot.imaginary,
+          const MoreOrLessEquals(0.899453719973),
+        );
+      },
+    );
 
     test("Making sure that the 'power' operation properly works", () {
       final pow1 = const Complex(2, 7).pow(4);
@@ -423,29 +431,32 @@ void main() {
     });
 
     test(
-        'Making sure that the difference between two complex numbers is correct',
-        () {
-      final value = const Complex(3, -5) - const Complex(-8, 13);
-      expect(value.real, equals(11));
-      expect(value.imaginary, equals(-18));
+      'Making sure that the difference between two complex numbers is correct',
+      () {
+        final value = const Complex(3, -5) - const Complex(-8, 13);
+        expect(value.real, equals(11));
+        expect(value.imaginary, equals(-18));
 
-      final value2 =
-          const Complex.fromReal(5) - const Complex.fromImaginary(-16);
-      expect(value2.real, equals(5));
-      expect(value2.imaginary, equals(16));
-    });
+        final value2 =
+            const Complex.fromReal(5) - const Complex.fromImaginary(-16);
+        expect(value2.real, equals(5));
+        expect(value2.imaginary, equals(16));
+      },
+    );
 
-    test('Making sure that the product between two complex numbers is correct',
-        () {
-      final value = const Complex(3, -5) * const Complex(-8, 13);
-      expect(value.real, equals(41));
-      expect(value.imaginary, equals(79));
+    test(
+      'Making sure that the product between two complex numbers is correct',
+      () {
+        final value = const Complex(3, -5) * const Complex(-8, 13);
+        expect(value.real, equals(41));
+        expect(value.imaginary, equals(79));
 
-      final value2 =
-          const Complex.fromReal(5) * const Complex.fromImaginary(-16);
-      expect(value2.real, equals(0));
-      expect(value2.imaginary, equals(-80));
-    });
+        final value2 =
+            const Complex.fromReal(5) * const Complex.fromImaginary(-16);
+        expect(value2.real, equals(0));
+        expect(value2.imaginary, equals(-80));
+      },
+    );
 
     test('Making sure that complex objects are properly compared', () {
       const five = Complex.fromReal(5);
@@ -457,21 +468,23 @@ void main() {
       expect(five <= ten, isTrue);
     });
 
-    test('Making sure that the quotient between two complex numbers is correct',
-        () {
-      final value = const Complex(3, -5) / const Complex(-8, 13);
-      final realValue = Fraction(-89, 233).toDouble();
-      final imagValue = Fraction(1, 233).toDouble();
+    test(
+      'Making sure that the quotient between two complex numbers is correct',
+      () {
+        final value = const Complex(3, -5) / const Complex(-8, 13);
+        final realValue = Fraction(-89, 233).toDouble();
+        final imagValue = Fraction(1, 233).toDouble();
 
-      // Equality of a double is hard to achieve due to approximations, so I
-      // prefer checking the strings with a fixed precision which works better
-      expect(value.real, MoreOrLessEquals(realValue));
-      expect(value.imaginary, MoreOrLessEquals(imagValue));
+        // Equality of a double is hard to achieve due to approximations, so I
+        // prefer checking the strings with a fixed precision which works better
+        expect(value.real, MoreOrLessEquals(realValue));
+        expect(value.imaginary, MoreOrLessEquals(imagValue));
 
-      final v2 = const Complex.fromReal(5) / const Complex.fromImaginary(-16);
-      expect(v2.real, equals(0));
-      expect(v2.imaginary, equals(0.3125));
-    });
+        final v2 = const Complex.fromReal(5) / const Complex.fromImaginary(-16);
+        expect(v2.real, equals(0));
+        expect(v2.imaginary, equals(0.3125));
+      },
+    );
 
     test('Making sure that the negation works properly.', () {
       const value = Complex(3, -5);

@@ -74,33 +74,37 @@ void main() {
     });
 
     test(
-        'Making sure that an exception is thrown if the coeff. of the '
-        'highest degree is zero', () {
-      expect(
-        () => Quadratic(
-          a: const Complex.zero(),
-          b: const Complex.i(),
-          c: const Complex.fromReal(4),
-        ),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+      'Making sure that an exception is thrown if the coeff. of the '
+      'highest degree is zero',
+      () {
+        expect(
+          () => Quadratic(
+            a: const Complex.zero(),
+            b: const Complex.i(),
+            c: const Complex.fromReal(4),
+          ),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test(
-        "Making sure that a correct 'Quadratic' instance is created from a "
-        "list of 'double' (real) values", () {
-      final quadratic = Quadratic.realEquation(a: -3, b: 2, c: 1);
+      "Making sure that a correct 'Quadratic' instance is created from a "
+      "list of 'double' (real) values",
+      () {
+        final quadratic = Quadratic.realEquation(a: -3, b: 2, c: 1);
 
-      expect(quadratic.a, equals(const Complex.fromReal(-3)));
-      expect(quadratic.b, equals(const Complex.fromReal(2)));
-      expect(quadratic.c, equals(const Complex.fromReal(1)));
+        expect(quadratic.a, equals(const Complex.fromReal(-3)));
+        expect(quadratic.b, equals(const Complex.fromReal(2)));
+        expect(quadratic.c, equals(const Complex.fromReal(1)));
 
-      // There must be an exception is the first coeff. is zero
-      expect(
-        () => Quadratic.realEquation(a: 0),
-        throwsA(isA<AlgebraicException>()),
-      );
-    });
+        // There must be an exception is the first coeff. is zero
+        expect(
+          () => Quadratic.realEquation(a: 0),
+          throwsA(isA<AlgebraicException>()),
+        );
+      },
+    );
 
     test('Making sure that objects comparison works properly', () {
       final fx = Quadratic(
@@ -167,7 +171,7 @@ void main() {
         ],
         const [
           Complex.zero(),
-          Complex(0.1000, 2.3000),
+          Complex(0.1, 2.3),
         ],
         const [
           Complex.zero(),
