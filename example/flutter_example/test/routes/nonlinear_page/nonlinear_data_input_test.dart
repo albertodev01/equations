@@ -3,8 +3,8 @@ import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
-import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
+import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -60,7 +60,7 @@ void main() {
         ));
 
         expect(find.byType(NonlinearDataInput), findsOneWidget);
-        expect(find.byType(NonlinearInput), findsNWidgets(2));
+        expect(find.byType(EquationInput), findsNWidgets(2));
         expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
         expect(find.byType(PrecisionSlider), findsOneWidget);
 
@@ -85,7 +85,7 @@ void main() {
         ));
 
         expect(find.byType(NonlinearDataInput), findsOneWidget);
-        expect(find.byType(NonlinearInput), findsNWidgets(3));
+        expect(find.byType(EquationInput), findsNWidgets(3));
         expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
         expect(find.byType(PrecisionSlider), findsOneWidget);
 
@@ -140,8 +140,8 @@ void main() {
           ),
         ));
 
-        final equationInput = find.byKey(const Key('NonlinearInput-function'));
-        final paramInput = find.byKey(const Key('NonlinearInput-first-param'));
+        final equationInput = find.byKey(const Key('EquationInput-function'));
+        final paramInput = find.byKey(const Key('EquationInput-first-param'));
         final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
 
         // Filling the forms
@@ -178,10 +178,9 @@ void main() {
           ),
         ));
 
-        final equationInput = find.byKey(const Key('NonlinearInput-function'));
-        final paramInput1 = find.byKey(const Key('NonlinearInput-first-param'));
-        final paramInput2 =
-            find.byKey(const Key('NonlinearInput-second-param'));
+        final equationInput = find.byKey(const Key('EquationInput-function'));
+        final paramInput1 = find.byKey(const Key('EquationInput-first-param'));
+        final paramInput2 = find.byKey(const Key('EquationInput-second-param'));
         final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
 
         // Filling the forms

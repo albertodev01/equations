@@ -82,7 +82,7 @@ void main() {
         );
 
         expect(
-          () => results.divide(),
+          results.divide,
           throwsA(isA<PolynomialLongDivisionException>()),
         );
       },

@@ -11,7 +11,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
   /// Creates a [PolynomialResults] widget.
-  const PolynomialResults({Key? key}) : super(key: key);
+  const PolynomialResults({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +57,9 @@ class PolynomialResults extends StatelessWidget {
   }
 }
 
-class _PolynomialSolutions extends StatefulWidget {
+class _PolynomialSolutions extends StatelessWidget {
   const _PolynomialSolutions();
 
-  @override
-  __PolynomialSolutionsState createState() => __PolynomialSolutionsState();
-}
-
-class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
@@ -93,17 +90,12 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
 
 /// Shows the discriminant of the polynomial equation to be solved.
 @visibleForTesting
-class PolynomialDiscriminant extends StatefulWidget {
+class PolynomialDiscriminant extends StatelessWidget {
   /// Creates a [PolynomialDiscriminant] widget.
   const PolynomialDiscriminant({
     Key? key,
   }) : super(key: key);
 
-  @override
-  _PolynomialDiscriminantState createState() => _PolynomialDiscriminantState();
-}
-
-class _PolynomialDiscriminantState extends State<PolynomialDiscriminant> {
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].

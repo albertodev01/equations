@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart' as equations;
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
-import 'package:equations_solver/routes/nonlinear_page/real_result_card.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +101,6 @@ void main() {
           ),
         ));
 
-        expect(find.byType(ListView), findsOneWidget);
         expect(find.text('No solutions to display.'), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(3));
       },

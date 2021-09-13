@@ -25,7 +25,7 @@ class JacobiVectorInput extends StatefulWidget {
 }
 
 class _JacobiVectorInputState extends State<JacobiVectorInput> {
-  /// Caching the input widget
+  /// Caching the input widget.
   late Widget inputWidget = buildInput();
 
   /// Builds the input widget.

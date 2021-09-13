@@ -36,7 +36,7 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
   }
 
   List<double> _valueParser(List<String> source) {
-    return source.map((value) => _parser.evaluate(value)).toList();
+    return source.map(_parser.evaluate).toList();
   }
 
   Stream<SystemState> _rowReductionHandler(RowReductionMethod event) async* {

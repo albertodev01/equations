@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -55,25 +56,12 @@ void main() {
       'the correct values',
       () {
         expect(
-          SinglePointMethod.resolve('newton'),
+          SinglePointMethod.resolve(NonlinearDropdownItems.newton),
           equals(SinglePointMethods.newton),
         );
         expect(
-          SinglePointMethod.resolve('NewTOn'),
-          equals(SinglePointMethods.newton),
-        );
-        expect(
-          SinglePointMethod.resolve('steffensen'),
+          SinglePointMethod.resolve(NonlinearDropdownItems.steffensen),
           equals(SinglePointMethods.steffensen),
-        );
-        expect(
-          SinglePointMethod.resolve('stefFenSEn'),
-          equals(SinglePointMethods.steffensen),
-        );
-
-        expect(
-          () => SinglePointMethod.resolve('abc'),
-          throwsA(isA<ArgumentError>()),
         );
       },
     );
@@ -83,21 +71,16 @@ void main() {
       'the correct values',
       () {
         expect(
-          BracketingMethod.resolve('secant'),
+          BracketingMethod.resolve(NonlinearDropdownItems.secant),
           equals(BracketingMethods.secant),
         );
         expect(
-          BracketingMethod.resolve('brent'),
+          BracketingMethod.resolve(NonlinearDropdownItems.brent),
           equals(BracketingMethods.brent),
         );
         expect(
-          BracketingMethod.resolve('bisection'),
+          BracketingMethod.resolve(NonlinearDropdownItems.bisection),
           equals(BracketingMethods.bisection),
-        );
-
-        expect(
-          () => BracketingMethod.resolve(''),
-          throwsA(isA<ArgumentError>()),
         );
       },
     );

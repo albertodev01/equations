@@ -145,6 +145,7 @@ class _ScaffoldContents extends StatelessWidget {
   /// another background image
   final bool extraBackground;
 
+  /// Creates a [_ScaffoldContents] widget.
   const _ScaffoldContents({
     required this.body,
     required this.extraBackground,
@@ -186,6 +187,7 @@ class _ScaffoldForeground extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
 
+  /// Creates a [_ScaffoldForeground] widget.
   const _ScaffoldForeground({
     required this.body,
   });
@@ -205,6 +207,7 @@ class _ScaffoldForeground extends StatelessWidget {
 
 /// The contents of the scaffold in the background.
 class _ScaffoldBackground extends StatelessWidget {
+  /// Creates a [_ScaffoldBackground] widget.
   const _ScaffoldBackground();
 
   @override
@@ -225,6 +228,7 @@ class _ScaffoldBackground extends StatelessWidget {
 
 /// The contents of the scaffold in the background.
 class _ScaffoldExtraBackground extends StatelessWidget {
+  /// Creates a [_ScaffoldExtraBackground] widget.
   const _ScaffoldExtraBackground();
 
   @override

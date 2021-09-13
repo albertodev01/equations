@@ -11,7 +11,7 @@ class SystemInputField extends StatelessWidget {
   /// The placeholder text to show in the input field.
   final String placeholder;
 
-  /// Creates a [PolynomialBody] widget.
+  /// Creates a [SystemInputField] widget.
   const SystemInputField({
     Key? key,
     required this.controller,

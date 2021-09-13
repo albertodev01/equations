@@ -11,7 +11,7 @@ class PolynomialInputField extends StatelessWidget {
   /// The placeholder text to show in the input field.
   final String placeholder;
 
-  /// Creates a [PolynomialBody] widget.
+  /// Creates a [PolynomialInputField] widget.
   const PolynomialInputField({
     Key? key,
     required this.controller,

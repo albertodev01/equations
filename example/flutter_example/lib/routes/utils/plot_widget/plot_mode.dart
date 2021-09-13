@@ -14,7 +14,9 @@ abstract class PlotMode<T> extends Equatable {
   double evaluateOn(double x);
 
   @override
-  List<Object?> get props => [equation];
+  List<Object?> get props => [
+        equation,
+      ];
 }
 
 /// Polynomial functions evaluator.

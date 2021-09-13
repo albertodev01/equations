@@ -39,37 +39,61 @@ abstract class RouteGenerator {
   /// instantiated.
   const RouteGenerator._();
 
+  /// The transition animation between two pages.
+  static Widget _slideTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final tween = Tween(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    );
+
+    return SlideTransition(
+      position: animation.drive(tween),
+      child: child,
+    );
+  }
+
   /// The "dispatcher" that assigns a route name to a particular widget.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homePage:
-        return MaterialPageRoute<HomePage>(
-          builder: (_) => const HomePage(),
+        return PageRouteBuilder<HomePage>(
+          pageBuilder: (_, __, ___) => const HomePage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case polynomialPage:
-        return MaterialPageRoute<PolynomialPage>(
-          builder: (_) => const PolynomialPage(),
+        return PageRouteBuilder<PolynomialPage>(
+          pageBuilder: (_, __, ___) => const PolynomialPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case nonlinearPage:
-        return MaterialPageRoute<NonlinearPage>(
-          builder: (_) => const NonlinearPage(),
+        return PageRouteBuilder<NonlinearPage>(
+          pageBuilder: (_, __, ___) => const NonlinearPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case systemPage:
-        return MaterialPageRoute<SystemPage>(
-          builder: (_) => const SystemPage(),
+        return PageRouteBuilder<SystemPage>(
+          pageBuilder: (_, __, ___) => const SystemPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case integralPage:
-        return MaterialPageRoute<IntegralPage>(
-          builder: (_) => const IntegralPage(),
+        return PageRouteBuilder<IntegralPage>(
+          pageBuilder: (_, __, ___) => const IntegralPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case interpolationPage:
-        return MaterialPageRoute<InterpolationPage>(
-          builder: (_) => const InterpolationPage(),
+        return PageRouteBuilder<InterpolationPage>(
+          pageBuilder: (_, __, ___) => const InterpolationPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       default:

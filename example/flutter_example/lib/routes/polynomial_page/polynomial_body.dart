@@ -55,7 +55,7 @@ class _ResponsiveBody extends StatefulWidget {
 class __ResponsiveBodyState extends State<_ResponsiveBody> {
   /// Manually caching the page title
   late final Widget pageTitleWidget = PageTitle(
-    pageTitle: getLocalizedName(context),
+    pageTitle: getLocalizedName(),
     pageLogo: const PolynomialLogo(
       size: 50,
     ),
@@ -63,7 +63,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
   /// Getting the title of the page according with the type of polynomial that
   /// is going to be solved.
-  String getLocalizedName(BuildContext context) {
+  String getLocalizedName() {
     final polynomialType = context.read<PolynomialBloc>().polynomialType;
 
     switch (polynomialType) {
@@ -134,15 +134,10 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 }
 
 /// Puts on the screen a widget that draws mathematical functions.
-class _PolynomialPlot extends StatefulWidget {
+class _PolynomialPlot extends StatelessWidget {
   /// Creates a [_PolynomialPlot] widget.
   const _PolynomialPlot();
 
-  @override
-  __PolynomialPlotState createState() => __PolynomialPlotState();
-}
-
-class __PolynomialPlotState extends State<_PolynomialPlot> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolynomialBloc, PolynomialState>(
@@ -150,7 +145,9 @@ class __PolynomialPlotState extends State<_PolynomialPlot> {
         PolynomialPlot? plotMode;
 
         if (state is PolynomialRoots) {
-          plotMode = PolynomialPlot(algebraic: state.algebraic);
+          plotMode = PolynomialPlot(
+            algebraic: state.algebraic,
+          );
         }
 
         return Center(

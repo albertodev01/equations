@@ -957,7 +957,7 @@ void main() {
           ],
         );
 
-        expect(() => matrix.cofactorMatrix(), throwsA(isA<MatrixException>()));
+        expect(matrix.cofactorMatrix, throwsA(isA<MatrixException>()));
       },
     );
 
@@ -974,7 +974,7 @@ void main() {
           ],
         );
 
-        expect(() => matrix.inverse(), throwsA(isA<MatrixException>()));
+        expect(matrix.inverse, throwsA(isA<MatrixException>()));
       },
     );
 
@@ -1221,7 +1221,7 @@ void main() {
         ],
       );
 
-      expect(() => identity.isIdentity(), throwsA(isA<MatrixException>()));
+      expect(identity.isIdentity, throwsA(isA<MatrixException>()));
     });
 
     test('Making sure that the rank can correctly be computed.', () {
@@ -1290,7 +1290,7 @@ void main() {
         ],
       );
 
-      expect(() => matrix.trace(), throwsA(isA<MatrixException>()));
+      expect(matrix.trace, throwsA(isA<MatrixException>()));
     });
 
     test('Making sure that eigenvalues can be computed (1x1 matrices)', () {

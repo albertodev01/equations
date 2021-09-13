@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Sets the precision of the currently selected algorithm.
 class PrecisionSlider extends StatelessWidget {
   /// Creates a [PrecisionSlider] widget.
-  const PrecisionSlider({Key? key}) : super(key: key);
+  const PrecisionSlider({
+    Key? key,
+  }) : super(key: key);
 
   void _update(BuildContext context, double value) =>
       context.read<SliderCubit>().updateSlider(value);
@@ -52,8 +54,9 @@ class PrecisionSlider extends StatelessWidget {
 
                     // The label representing the precision
                     BlocBuilder<SliderCubit, double>(
-                      builder: (context, state) =>
-                          Text('1.0e-${state.round()}'),
+                      builder: (_, state) {
+                        return Text('1.0e-${state.round()}');
+                      },
                     ),
                   ],
                 ),

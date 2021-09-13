@@ -9,7 +9,7 @@ class PageTitle extends StatelessWidget {
   /// a 50 x 50 square.
   final Widget pageLogo;
 
-  /// Creates a [PageTItle] widget.
+  /// Creates a [PageTitle] widget.
   const PageTitle({
     Key? key,
     required this.pageTitle,

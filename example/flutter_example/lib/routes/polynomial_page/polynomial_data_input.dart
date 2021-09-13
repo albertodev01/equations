@@ -76,7 +76,9 @@ class __InputWidget extends State<_InputWidget> {
   /// This is displayed at the top of the input box
   late final cachedEquationTitle = Padding(
     padding: const EdgeInsets.only(bottom: 20),
-    child: EquationTextFormatter(equation: widget.equationTemplate),
+    child: EquationTextFormatter(
+      equation: widget.equationTemplate,
+    ),
   );
 
   /// Form validation key
@@ -88,6 +90,8 @@ class __InputWidget extends State<_InputWidget> {
   ///
   /// This is cached because the number of input fields won't change.
   late final cachedWrapBody = _generateWrapBody();
+
+  /// Generates the input fields of the coefficients.
   List<PolynomialInputField> _generateWrapBody() {
     final body = <PolynomialInputField>[];
     var placeholderLetter = 'a';
@@ -110,7 +114,7 @@ class __InputWidget extends State<_InputWidget> {
   }
 
   /// Validates the input and, if it's valid, sends the data to the bloc
-  void _processInput(BuildContext context) {
+  void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
       final event = PolynomialSolve(
         coefficients: controllers.map<String>((c) => c.text).toList(),
@@ -130,11 +134,12 @@ class __InputWidget extends State<_InputWidget> {
   }
 
   /// Form and chart cleanup
-  void _cleanInput(BuildContext context) {
+  void _cleanInput() {
     for (final controller in controllers) {
       controller.clear();
     }
 
+    formKey.currentState?.reset();
     context.read<PolynomialBloc>().add(const PolynomialClean());
   }
 
@@ -181,7 +186,7 @@ class __InputWidget extends State<_InputWidget> {
             // Solving the polynomial
             ElevatedButton(
               key: const Key('Polynomial-button-solve'),
-              onPressed: () => _processInput(context),
+              onPressed: _processInput,
               child: Text(context.l10n.solve),
             ),
 
@@ -191,7 +196,7 @@ class __InputWidget extends State<_InputWidget> {
             // Cleaning the inputs
             ElevatedButton(
               key: const Key('Polynomial-button-clean'),
-              onPressed: () => _cleanInput(context),
+              onPressed: _cleanInput,
               child: Text(context.l10n.clean),
             ),
           ],

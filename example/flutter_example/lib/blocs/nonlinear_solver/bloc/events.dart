@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 
 /// Events for the [NonlinearBloc] bloc.
 abstract class NonlinearEvent extends Equatable {
@@ -56,19 +57,14 @@ class SinglePointMethod extends NonlinearEvent {
         precision,
       ];
 
-  /// Tries to return a [SinglePointMethods] value from a string value.
-  static SinglePointMethods resolve(String name) {
-    if (name.toLowerCase() == 'newton') {
+  /// Tries to return a [SinglePointMethods] value from a [NonlinearDropdownItems]
+  /// value.
+  static SinglePointMethods resolve(NonlinearDropdownItems item) {
+    if (item == NonlinearDropdownItems.newton) {
       return SinglePointMethods.newton;
     }
 
-    if (name.toLowerCase() == 'steffensen') {
-      return SinglePointMethods.steffensen;
-    }
-
-    throw ArgumentError(
-      "The given string doesn't map to a valid 'SinglePointMethods value.'",
-    );
+    return SinglePointMethods.steffensen;
   }
 }
 
@@ -112,23 +108,18 @@ class BracketingMethod extends NonlinearEvent {
         precision,
       ];
 
-  /// Tries to return a [BracketingMethods] value from a string value.
-  static BracketingMethods resolve(String name) {
-    if (name.toLowerCase() == 'secant') {
+  /// Tries to return a [BracketingMethods] value from a [NonlinearDropdownItems]
+  /// value.
+  static BracketingMethods resolve(NonlinearDropdownItems item) {
+    if (item == NonlinearDropdownItems.secant) {
       return BracketingMethods.secant;
     }
 
-    if (name.toLowerCase() == 'brent') {
+    if (item == NonlinearDropdownItems.brent) {
       return BracketingMethods.brent;
     }
 
-    if (name.toLowerCase() == 'bisection') {
-      return BracketingMethods.bisection;
-    }
-
-    throw ArgumentError(
-      "The given string doesn't map to a valid 'BracketingMethods value.'",
-    );
+    return BracketingMethods.bisection;
   }
 }
 

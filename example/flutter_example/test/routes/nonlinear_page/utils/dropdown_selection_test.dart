@@ -58,8 +58,14 @@ void main() {
             tester.state(widgetFinder) as NonlinearDropdownSelectionState;
 
         expect(state.dropdownItems.length, equals(2));
-        expect(state.dropdownItems[0].value, equals('Newton'));
-        expect(state.dropdownItems[1].value, equals('Steffensen'));
+        expect(
+          state.dropdownItems[0].value,
+          equals(NonlinearDropdownItems.newton),
+        );
+        expect(
+          state.dropdownItems[1].value,
+          equals(NonlinearDropdownItems.steffensen),
+        );
       },
     );
 
@@ -92,9 +98,18 @@ void main() {
             tester.state(widgetFinder) as NonlinearDropdownSelectionState;
 
         expect(state.dropdownItems.length, equals(3));
-        expect(state.dropdownItems[0].value, equals('Bisection'));
-        expect(state.dropdownItems[1].value, equals('Secant'));
-        expect(state.dropdownItems[2].value, equals('Brent'));
+        expect(
+          state.dropdownItems[0].value,
+          equals(NonlinearDropdownItems.bisection),
+        );
+        expect(
+          state.dropdownItems[1].value,
+          equals(NonlinearDropdownItems.secant),
+        );
+        expect(
+          state.dropdownItems[2].value,
+          equals(NonlinearDropdownItems.brent),
+        );
       },
     );
 

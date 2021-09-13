@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 /// The vectorial logo of the app.
 class AppLogo extends StatelessWidget {
   /// Creates a [AppLogo] widget.
-  const AppLogo({Key? key}) : super(key: key);
+  const AppLogo({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

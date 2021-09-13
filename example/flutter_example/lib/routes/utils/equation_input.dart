@@ -1,10 +1,9 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:flutter/material.dart';
 
-/// A [TextFormField] used in a [NonlinearDataInput] widget to receive the
-/// parameters of the root finding algorithm.
-class NonlinearInput extends StatelessWidget {
+/// A wrapper of a [TextFormField] that allows the input of either an equation
+/// or simple real numbers.
+class EquationInput extends StatelessWidget {
   /// The controller of the [TextFormField].
   final TextEditingController controller;
 
@@ -28,7 +27,7 @@ class NonlinearInput extends StatelessWidget {
   final bool onlyRealValues;
 
   /// Creates a [NonlinearInput] instance.
-  const NonlinearInput({
+  const EquationInput({
     Key? key,
     required this.controller,
     required this.placeholderText,
@@ -40,7 +39,7 @@ class NonlinearInput extends StatelessWidget {
   String? _validator(String? value) {
     if (value != null) {
       if (onlyRealValues) {
-        return value.isRealFunction ? null : 'Uh! :(';
+        return value.isNumericalExpression ? null : 'Uh! :(';
       }
 
       return value.isRealFunction ? null : 'Uh! :(';

@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Dropdown button used to choose which system solving algorithm has to be used.
 class SystemDropdownSelection extends StatefulWidget {
   /// Creates a [SystemDropdownSelection] widget.
-  const SystemDropdownSelection({Key? key}) : super(key: key);
+  const SystemDropdownSelection({
+    Key? key,
+  }) : super(key: key);
 
   @override
   SystemDropdownSelectionState createState() => SystemDropdownSelectionState();
@@ -19,37 +21,37 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
   /// The items of the dropdown.
   late final dropdownItems = _dropdownValues();
 
-  List<DropdownMenuItem<String>> _dropdownValues() {
+  List<DropdownMenuItem<SystemDropdownItems>> _dropdownValues() {
     return systemType == SystemType.factorization
         ? const [
-            DropdownMenuItem<String>(
+            DropdownMenuItem<SystemDropdownItems>(
               key: Key('LU-Dropdown'),
-              value: 'LU',
+              value: SystemDropdownItems.lu,
               child: Text('LU'),
             ),
-            DropdownMenuItem<String>(
+            DropdownMenuItem<SystemDropdownItems>(
               key: Key('Cholesky-Dropdown'),
-              value: 'Cholesky',
+              value: SystemDropdownItems.cholesky,
               child: Text('Cholesky'),
             ),
           ]
         : const [
-            DropdownMenuItem<String>(
+            DropdownMenuItem<SystemDropdownItems>(
               key: Key('SOR-Dropdown'),
-              value: 'SOR',
+              value: SystemDropdownItems.sor,
               child: Text('SOR'),
             ),
-            DropdownMenuItem<String>(
+            DropdownMenuItem<SystemDropdownItems>(
               key: Key('Jacobi-Dropdown'),
-              value: 'Jacobi',
+              value: SystemDropdownItems.jacobi,
               child: Text('Jacobi'),
             ),
           ];
   }
 
   /// Updates the currently selected value in the dropdown.
-  void changeSelected(String newValue) =>
-      context.read<DropdownCubit>().changeValue(newValue);
+  void changeSelected(SystemDropdownItems newValue) =>
+      context.read<DropdownCubit>().changeValue(newValue.asString());
 
   /// The currently selected system type.
   SystemType get systemType => context.read<SystemBloc>().systemType;
@@ -74,10 +76,10 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
             width: 250,
             child: BlocBuilder<DropdownCubit, String>(
               builder: (context, state) {
-                return DropdownButtonFormField<String>(
+                return DropdownButtonFormField<SystemDropdownItems>(
                   key: const Key('System-Dropdown-Button-Selection'),
                   isExpanded: true,
-                  value: state,
+                  value: state.toSystemDropdownItems(),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -92,5 +94,59 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
         ],
       ),
     );
+  }
+}
+
+/// The possible values of the [SystemDropdownSelection] dropdown.
+enum SystemDropdownItems {
+  /// LU factorization.
+  lu,
+
+  /// Cholesky factorization.
+  cholesky,
+
+  /// SOR iterative method.
+  sor,
+
+  /// Jacobi iterative method.
+  jacobi,
+}
+
+/// Extension method on [SystemDropdownItems] to convert a value to a string.
+extension SystemDropdownItemsExt on SystemDropdownItems {
+  /// Converts the enum into a [String].
+  String asString() {
+    switch (this) {
+      case SystemDropdownItems.lu:
+        return 'LU';
+      case SystemDropdownItems.cholesky:
+        return 'Cholesky';
+      case SystemDropdownItems.sor:
+        return 'SOR';
+      case SystemDropdownItems.jacobi:
+        return 'Jacobi';
+    }
+  }
+}
+
+/// Extension method on [String] to convert into a [SystemDropdownItems] the
+/// string value.
+extension StringExt on String {
+  /// Converts a [String] into a [SystemDropdownItems] value.
+  SystemDropdownItems toSystemDropdownItems() {
+    switch (toLowerCase()) {
+      case 'lu':
+        return SystemDropdownItems.lu;
+      case 'cholesky':
+        return SystemDropdownItems.cholesky;
+      case 'sor':
+        return SystemDropdownItems.sor;
+      case 'jacobi':
+        return SystemDropdownItems.jacobi;
+      default:
+        throw ArgumentError(
+          'The given string does NOT map to a SystemDropdownItems value',
+        );
+    }
   }
 }

@@ -13,12 +13,16 @@ class SylvesterMatrix {
   List<Complex> get coefficients => _coefficients;
 
   /// The constructor requires complex [coefficients] for the polynomial P(x).
-  SylvesterMatrix({required List<Complex> coefficients})
-      : _coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
+  SylvesterMatrix({
+    required List<Complex> coefficients,
+  }) : _coefficients = UnmodifiableListView(
+          List<Complex>.from(coefficients),
+        );
 
   /// The constructor requires real [coefficients] for the polynomial P(x).
-  SylvesterMatrix.fromReal({required List<double> coefficients})
-      : _coefficients = UnmodifiableListView(
+  SylvesterMatrix.fromReal({
+    required List<double> coefficients,
+  }) : _coefficients = UnmodifiableListView(
           coefficients.map((c) => Complex.fromReal(c)).toList(),
         );
 

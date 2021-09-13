@@ -1,5 +1,6 @@
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/home_page/home_contents.dart';
+import 'package:equations_solver/routes/integral_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
@@ -80,7 +81,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Expecting to be on the new page
-        // TODO: expect(find.byType(IntegralPage), findsOneWidget);
+        expect(find.byType(IntegralPage), findsOneWidget);
       },
     );
 

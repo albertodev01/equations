@@ -10,7 +10,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// The result vector of the system of equations.
 class SystemResults extends StatelessWidget {
   /// Creates a [SystemResults] widget.
-  const SystemResults({Key? key}) : super(key: key);
+  const SystemResults({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +43,9 @@ class SystemResults extends StatelessWidget {
   }
 }
 
-class _SystemSolutions extends StatefulWidget {
+class _SystemSolutions extends StatelessWidget {
   const _SystemSolutions();
 
-  @override
-  _SystemSolutionsState createState() => _SystemSolutionsState();
-}
-
-class _SystemSolutionsState extends State<_SystemSolutions> {
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [NonlinearGuesses] or [NonlinearNone].

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 /// results to display.
 class NoResults extends StatelessWidget {
   /// Creates a [NoResults] widget.
-  const NoResults({Key? key}) : super(key: key);
+  const NoResults({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

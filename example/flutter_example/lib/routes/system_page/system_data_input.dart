@@ -17,7 +17,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// parse the values of the matrix of the system in the `Ax = b` equation.
 class SystemDataInput extends StatefulWidget {
   /// Creates a [SystemDataInput] widget.
-  const SystemDataInput({Key? key}) : super(key: key);
+  const SystemDataInput({
+    Key? key,
+  }) : super(key: key);
 
   @override
   SystemDataInputState createState() => SystemDataInputState();
@@ -56,7 +58,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   );
 
   /// A controller for the relaxation factor `w` of the SOR algorithm.
-  late final wSorController = TextEditingController();
+  final wSorController = TextEditingController();
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
@@ -119,7 +121,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   }
 
   /// Solves a system of equations.
-  void solve(BuildContext context) {
+  void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final algorithm = context.read<DropdownCubit>().state;
       final bloc = context.read<SystemBloc>();
@@ -169,7 +171,7 @@ class SystemDataInputState extends State<SystemDataInput> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.polynomial_error),
+          content: Text(context.l10n.invalid_values),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -269,7 +271,7 @@ class SystemDataInputState extends State<SystemDataInput> {
                 // Solving the equation
                 ElevatedButton(
                   key: const Key('System-button-solve'),
-                  onPressed: () => solve(context),
+                  onPressed: solve,
                   child: Text(context.l10n.solve),
                 ),
 

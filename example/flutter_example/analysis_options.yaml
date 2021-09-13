@@ -36,6 +36,10 @@ linter:
     # is relevant code there. This is especially important for early returns.
     always_put_control_body_on_new_line: true
 
+    # This practice improves code readability and helps protect against unintentionally
+    # overriding superclass members.
+    annotate_overrides: true
+
     # Highlights boolean expressions which can be simplified
     avoid_bool_literals_in_conditional_expressions: true
 
@@ -49,15 +53,25 @@ linter:
     # Flutter Web.
     avoid_double_and_int_checks: true
 
+    # Do not use empty else statements.
+    avoid_empty_else: true
+
     # Use different quotes instead of escaping
     avoid_escaping_inner_quotes: true
 
     # Prevents unnecessary allocation of a field
     avoid_field_initializers_in_const_classes: true
 
+    # When using implements, you do not inherit the method body of ==, making
+    # it nearly impossible to follow the contract of ==.
+    avoid_implementing_value_types: true
+
     # Good APIs don't use ambiguous boolean parameters. Instead use named
     # parameters
     avoid_positional_boolean_parameters: true
+
+    # Do not use 'print' in production code.
+    avoid_print: true
 
     # Always prefer function references over typedefs.
     # Jumping twice in code to see the signature of a lambda sucks.
@@ -73,6 +87,25 @@ linter:
     # Prevents logical inconsistencies. It's good practice to define getters for
     # all existing setters.
     avoid_setters_without_getters: true
+
+    # Do not use the following asynchronous file I/O methods because they are
+    # much slower than their synchronous counterparts.
+    #
+    # - Directory.exists
+    # - Directory.stat
+    # - File.lastModified
+    # - File.exists
+    # - File.stat
+    # - FileSystemEntity.isDirectory
+    # - FileSystemEntity.isFile
+    # - FileSystemEntity.isLink
+    # - FileSystemEntity.type
+    avoid_slow_async_io: true
+
+    # Avoid calls to '.toString()' in production code, since it does not
+    # contractually return the user-defined name of the Type. Prefer the
+    # 'is' operator to check the type.
+    avoid_type_to_string: true
 
     # Unused parameters should be removed
     avoid_unused_constructor_parameters: true
@@ -187,6 +220,9 @@ linter:
     # Remove async/await clutter when not required
     unnecessary_await_in_return: true
 
+    # Do not create lambdas when a tear-off will do.
+    unnecessary_lambdas: true
+
     # Don't assign `null` when value is already `null`
     unnecessary_null_aware_assignments: true
 
@@ -217,3 +253,6 @@ linter:
     # In most cases, using a string buffer is preferred for composing strings
     # due to its improved performance
     use_string_buffers: true
+
+    # A raw string can be used to avoid escaping only backslashes and dollars.
+    use_raw_strings: true
