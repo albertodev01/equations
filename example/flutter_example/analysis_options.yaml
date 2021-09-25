@@ -155,21 +155,21 @@ linter:
     # Discussion: https://github.com/passsy/dart-lint/issues/2
     one_member_abstracts: true
 
-    # Only relevant for packages, not applications or general dart code
+    # Only relevant for packages, not applications or general Dart code.
     package_api_docs: true
 
-    # Most likely a mistake, if not: bad practice
+    # Most likely a mistake, if not: bad practice.
     parameter_assignments: true
 
-    # Makes it easier to migrate to const constructors and to have final fields
+    # Makes it easier to migrate to const constructors and to have final fields.
     prefer_asserts_in_initializer_lists: true
 
     # Assertions blocks don't require a message because they throw simple to
-    # understand errors
+    # understand errors.
     prefer_asserts_with_message: true
 
-    # Dart has named constructors. Static methods in other languages (java) are
-    # a workaround which don't have named constructors.
+    # Dart has named constructors. Static methods in other languages (Java) are
+    # a workaround for languages that don't have named constructors.
     prefer_constructors_over_static_methods: true
 
     # Helps avoid accidental reassignments and allows the compiler to do
@@ -183,75 +183,75 @@ linter:
     # Dense code isn't necessarily better code. But it's nice.
     prefer_foreach: true
 
-    # Allows potential usage of const
+    # Allows potential usage of const.
     prefer_if_elements_to_conditional_expressions: true
 
-    # Interpolate, use less "", '' and +
+    # Interpolate, use less "", '' and +.
     prefer_interpolation_to_compose_strings: true
 
-    # Use whatever makes you happy. noexcuse doesn't define a style
+    # Use whatever makes you happy.
     prefer_single_quotes: true
 
     # Definitely not a rule for standard dart code. Maybe relevant for packages
     # It's relevant here.
     public_member_api_docs: true
 
-    # Hints accidental recursions
+    # Hints accidental recursions.
     recursive_getters: true
 
-    # Flutter only, always put child last
+    # Flutter only, always put child last.
     sort_child_properties_last: true
 
-    # Any sorting is better than no sorting
+    # Any sorting is better than no sorting.
     sort_pub_dependencies: true
 
-    # Default constructor comes first
+    # Default constructor comes first.
     sort_unnamed_constructors_first: true
 
-    # First test, then cast
+    # First test, then cast.
     test_types_in_equals: true
 
-    # Hard to debug and bad style
+    # Hard to debug and bad style.
     throw_in_finally: true
 
-    # Type annotations make the compiler intelligent, use them
+    # Type annotations make the compiler intelligent, use them.
     type_annotate_public_apis: true
 
-    # Remove async/await clutter when not required
+    # Remove async/await clutter when not required.
     unnecessary_await_in_return: true
 
     # Do not create lambdas when a tear-off will do.
     unnecessary_lambdas: true
 
-    # Don't assign `null` when value is already `null`
+    # Don't assign `null` when value is already `null`.
     unnecessary_null_aware_assignments: true
 
-    # If a variable doesn't change and is initialized, no need to define it as nullable
+    # If a variable doesn't change and is initialized, no need to define it as nullable.
     unnecessary_nullable_for_final_variable_declarations: true
 
-    # Remove clutter where possible
+    # Remove clutter where possible.
     unnecessary_parenthesis: true
 
-    # Use raw string only when needed
+    # Use raw string only when needed.
     unnecessary_raw_strings: true
 
-    # Avoid magic overloads of + operators
+    # Avoid magic overloads of + operators.
     unnecessary_statements: true
 
-    # Web only
+    # Web only.
     unsafe_html: true
 
     # The use of intValue.isOdd/isEven to check for evenness.
     use_is_even_rather_than_modulo: true
 
-    # Still unsure if `late` is always better than `!` (NNBD)
+    # Still unsure if `late` is always better than `!` (NNBD).
     use_late_for_private_fields_and_variables: true
 
-    # Use the setter syntax
+    # Use the setter syntax.
     use_setters_to_change_properties: true
 
     # In most cases, using a string buffer is preferred for composing strings
-    # due to its improved performance
+    # due to its improved performance.
     use_string_buffers: true
 
     # A raw string can be used to avoid escaping only backslashes and dollars.

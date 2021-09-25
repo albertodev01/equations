@@ -13,8 +13,8 @@ import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// This widget contains a series of [PolynomialInputField] widgets needed to
-/// parse the values of the matrix of the system in the `Ax = b` equation.
+/// This widget contains a [MatrixInput] widgets needed to parse the values of
+/// the matrix of the system in the `Ax = b` equation.
 class SystemDataInput extends StatefulWidget {
   /// Creates a [SystemDataInput] widget.
   const SystemDataInput({
@@ -36,7 +36,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///  - `b` is the known values vector
   late final matrixControllers = List<TextEditingController>.generate(
     16,
-    (_) => _generateTextController(),
+    (_) => TextEditingController(),
   );
 
   /// The text input controllers for the vector.
@@ -47,14 +47,14 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///  - `b` is the known values vector
   late final vectorControllers = List<TextEditingController>.generate(
     4,
-    (_) => _generateTextController(),
+    (_) => TextEditingController(),
   );
 
   /// The text input controllers for the initial guess vector of the Jacobi
   /// algorithm.
   late final jacobiControllers = List<TextEditingController>.generate(
     4,
-    (_) => _generateTextController(),
+    (_) => TextEditingController(),
   );
 
   /// A controller for the relaxation factor `w` of the SOR algorithm.
@@ -81,9 +81,6 @@ class SystemDataInputState extends State<SystemDataInput> {
   /// This is required to figure out which system solving algorithm has to be
   /// used.
   SystemType get _getType => context.read<SystemBloc>().systemType;
-
-  /// Returns a [TextEditingController] for the list generator.
-  TextEditingController _generateTextController() => TextEditingController();
 
   /// Builds a grey [Text] widget that describes what some parts of the UI do.
   Widget descriptionText(String description) {

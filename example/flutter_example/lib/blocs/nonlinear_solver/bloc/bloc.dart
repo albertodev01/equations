@@ -13,26 +13,13 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
   final NonlinearType nonlinearType;
 
   /// Initializes a [NonlinearBloc] with [NonlinearNone].
-  NonlinearBloc(this.nonlinearType) : super(const NonlinearNone());
-
-  @override
-  Stream<NonlinearState> mapEventToState(NonlinearEvent event) async* {
-    if (event is SinglePointMethod) {
-      yield* _nonlinearSinglePointHandler(event);
-    }
-
-    if (event is BracketingMethod) {
-      yield* _bracketingHandlerHandler(event);
-    }
-
-    if (event is NonlinearClean) {
-      yield const NonlinearNone();
-    }
+  NonlinearBloc(this.nonlinearType) : super(const NonlinearNone()) {
+    on<NonlinearClean>(_onNonlinearClean);
+    on<BracketingMethod>(_onBracketingMethod);
+    on<SinglePointMethod>(_onSinglePtMethod);
   }
 
-  Stream<NonlinearState> _bracketingHandlerHandler(
-    BracketingMethod evt,
-  ) async* {
+  void _onBracketingMethod(BracketingMethod evt, Emitter<NonlinearState> emit) {
     try {
       late final NonLinear solver;
 
@@ -69,18 +56,18 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
           break;
       }
 
-      yield NonlinearGuesses(
-        nonLinear: solver,
-        nonlinearResults: solver.solve(),
+      emit(
+        NonlinearGuesses(
+          nonLinear: solver,
+          nonlinearResults: solver.solve(),
+        ),
       );
     } on Exception {
-      yield const NonlinearError();
+      emit(const NonlinearError());
     }
   }
 
-  Stream<NonlinearState> _nonlinearSinglePointHandler(
-    SinglePointMethod evt,
-  ) async* {
+  void _onSinglePtMethod(SinglePointMethod evt, Emitter<NonlinearState> emit) {
     try {
       late final NonLinear solver;
       final x0 = _parser.evaluate(evt.initialGuess);
@@ -104,12 +91,18 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
           break;
       }
 
-      yield NonlinearGuesses(
-        nonLinear: solver,
-        nonlinearResults: solver.solve(),
+      emit(
+        NonlinearGuesses(
+          nonLinear: solver,
+          nonlinearResults: solver.solve(),
+        ),
       );
     } on Exception {
-      yield const NonlinearError();
+      emit(const NonlinearError());
     }
+  }
+
+  void _onNonlinearClean(_, Emitter<NonlinearState> emit) {
+    emit(const NonlinearNone());
   }
 }

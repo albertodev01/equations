@@ -36,3 +36,15 @@ class ToolsMatrix extends SvgImage {
   @override
   String get assetName => 'tools_matrix';
 }
+
+/// A square matrix whose entries are blue numbers.
+class SquareMatrix extends SvgImage {
+  /// Creates a [SquareMatrix] widget.
+  const SquareMatrix({
+    Key? key,
+    double size = 40,
+  }) : super(key: key, size: size);
+
+  @override
+  String get assetName => 'square_matrix';
+}

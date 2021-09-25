@@ -3,9 +3,9 @@ import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
 import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
+import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
-import 'package:equations_solver/routes/tools_page.dart';
 import 'package:flutter/material.dart';
 
 /// Route management class that handles the navigation among various pages of the
@@ -36,8 +36,8 @@ abstract class RouteGenerator {
   /// Route name for the systems page.
   static const systemPage = '/system';
 
-  /// Route name for the tools page.
-  static const toolsPage = '/tools';
+  /// Route name for the page containing various utilities.
+  static const otherPage = '/other';
 
   /// Making the constructor private since this class is not meant to be
   /// instantiated.
@@ -100,9 +100,9 @@ abstract class RouteGenerator {
           transitionsBuilder: _slideTransition,
         );
 
-      case toolsPage:
-        return PageRouteBuilder<ToolsPage>(
-          pageBuilder: (_, __, ___) => const ToolsPage(),
+      case otherPage:
+        return PageRouteBuilder<OtherPage>(
+          pageBuilder: (_, __, ___) => const OtherPage(),
           transitionsBuilder: _slideTransition,
         );
 

@@ -60,11 +60,11 @@ class HomeContents extends StatelessWidget {
             ),
           ),
           CardContainer(
-            key: const Key('ToolsLogo-Container'),
-            title: context.l10n.tools,
-            image: const ToolsLogo(),
+            key: const Key('OtherLogo-Container'),
+            title: context.l10n.other,
+            image: const OtherLogo(),
             onTap: () => Navigator.of(context).pushNamed(
-              RouteGenerator.toolsPage,
+              RouteGenerator.otherPage,
             ),
           ),
         ],
