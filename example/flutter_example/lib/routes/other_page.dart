@@ -1,16 +1,15 @@
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/other_page/complex_numbers_body.dart';
 import 'package:equations_solver/routes/other_page/matrix_body.dart';
-import 'package:equations_solver/routes/other_page/polynomial_page.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This page contains a series of utilities to analyze matrices (determinant,
-/// eigenvalues, trace, decompositions...) and polyomials (roots, derivative,
-/// degree, operations...).
+/// eigenvalues, trace, decompositions...) and complex numbers.
 class OtherPage extends StatefulWidget {
   /// Creates a [OtherPage] widget.
   const OtherPage({
@@ -35,14 +34,8 @@ class _OtherPageState extends State<OtherPage> {
       ),
     ),
     NavigationItem(
-      title: context.l10n.polynomials,
-      content: BlocProvider<NumberSwitcherCubit>(
-        create: (_) => NumberSwitcherCubit(
-          min: 0,
-          max: 6,
-        ),
-        child: const PolynomialOtherBody(),
-      ),
+      title: context.l10n.complex_numbers,
+      content: const ComplexNumberOtherBody(),
     ),
   ];
 

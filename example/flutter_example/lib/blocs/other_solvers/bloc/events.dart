@@ -31,19 +31,24 @@ class MatrixAnalyze extends OtherEvent {
       ];
 }
 
-/// Event fired when there's a polynomial to be analyzed.
-class PolynomialAnalyze extends OtherEvent {
-  /// The coefficients of the polynomial.
-  final List<String> coefficients;
+/// Event fired when there's a complex number to be analyzed.
+class ComplexNumberAnalyze extends OtherEvent {
+  /// The real part.
+  final String realPart;
 
-  /// Requires the coefficients of the polynomial to be analyzed.
-  const PolynomialAnalyze({
-    required this.coefficients,
+  /// The imaginary part
+  final String imaginaryPart;
+
+  /// Requires the real and imaginary part of the complex number to be analyzed.
+  const ComplexNumberAnalyze({
+    required this.realPart,
+    required this.imaginaryPart,
   });
 
   @override
   List<Object?> get props => [
-        coefficients,
+        realPart,
+        imaginaryPart,
       ];
 }
 

@@ -59,5 +59,12 @@
   "inverse": "Inverse",
   "cofactor": "Comatrice",
   "characteristicPolynomial": "Polynôme caractéristique",
-  "eigenvalues": "Valeurs propre"
+  "eigenvalues": "Valeurs propre",
+  "properties": "Propriétés",
+  "complex_numbers": "Nombres complexes",
+  "phase": "Phase",
+  "abs": "Module / valeur absolue",
+  "conjugate": "Conjugué",
+  "reciprocal": "Inverse",
+  "sqrt": "Racine carrée"
 }

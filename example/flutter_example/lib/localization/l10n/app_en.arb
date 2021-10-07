@@ -59,5 +59,12 @@
   "inverse": "Inverse",
   "cofactor": "Cofactor",
   "characteristicPolynomial": "Characteristic polynomial",
-  "eigenvalues": "Eigenvalues"
+  "eigenvalues": "Eigenvalues",
+  "properties": "Properties",
+  "complex_numbers": "Complex numbers",
+  "phase": "Phase",
+  "abs": "Modulus / absolute value",
+  "conjugate": "Conjugate",
+  "reciprocal": "Reciprocal",
+  "sqrt": "Square root"
 }

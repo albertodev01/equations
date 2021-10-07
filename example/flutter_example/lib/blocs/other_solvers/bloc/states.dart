@@ -62,30 +62,45 @@ class AnalyzedMatrix extends OtherState {
       ];
 }
 
-/// State emitted when the polynomial has been analyzed and results are
+/// State emitted when the complex number has been analyzed and results are
 /// available.
-class AnalyzedPolynomial extends OtherState {
-  /// The roots of the polynomial.
-  final List<Complex> roots;
+class AnalyzedComplexNumber extends OtherState {
+  /// The polar representation of the complex number.
+  final PolarComplex polarComplex;
 
-  /// The derivative of the polynomial.
-  final Algebraic derivative;
+  /// The complex conjugate.
+  final Complex conjugate;
 
-  /// The discriminant of the polynomial.
-  final Complex discriminant;
+  /// The complex reciprocal.
+  final Complex reciprocal;
 
-  /// Requires the coefficients of the polynomial to be analyzed.
-  const AnalyzedPolynomial({
-    required this.roots,
-    required this.derivative,
-    required this.discriminant,
+  /// The modulus/aboslute value.
+  final double abs;
+
+  /// The square root of the complex number.
+  final Complex sqrt;
+
+  /// The phase.
+  final double phase;
+
+  /// Creates an [AnalyzedComplexNumber] object..
+  const AnalyzedComplexNumber({
+    required this.polarComplex,
+    required this.conjugate,
+    required this.reciprocal,
+    required this.abs,
+    required this.sqrt,
+    required this.phase,
   });
 
   @override
   List<Object?> get props => [
-        roots,
-        derivative,
-        discriminant,
+        polarComplex,
+        conjugate,
+        reciprocal,
+        abs,
+        sqrt,
+        phase,
       ];
 }
 

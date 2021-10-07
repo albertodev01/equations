@@ -14,23 +14,13 @@ AnalyzedMatrix _useMatrixAnalyzer(MatrixAnalyze event) {
   return analyzer.process();
 }
 
-/// This is a top-level function because it has to be passed to the [compute]
-/// method for the concurrent analysis of the polynomial.
-AnalyzedPolynomial _usePolynomialAnalyzer(PolynomialAnalyze event) {
-  final analyzer = PolynomialDataAnalyzer(
-    polynomial: event.coefficients,
-  );
-
-  return analyzer.process();
-}
-
 /// This bloc handles the contents of a [OtherPage] widget by analyzing matrices
 /// or polynomials and returning various properties.
 class OtherBloc extends Bloc<OtherEvent, OtherState> {
   /// Initializes an [OtherBloc] with [OtherNone]
   OtherBloc() : super(const OtherNone()) {
     on<MatrixAnalyze>(_onMatrixAnalyze);
-    on<PolynomialAnalyze>(_onPolynomialAnalyze);
+    on<ComplexNumberAnalyze>(_onComplexNumberAnalyze);
     on<OtherClean>(_onOtherClean);
   }
 
@@ -53,20 +43,17 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
     emit(state);
   }
 
-  Future<void> _onPolynomialAnalyze(
-    PolynomialAnalyze event,
+  Future<void> _onComplexNumberAnalyze(
+    ComplexNumberAnalyze event,
     Emitter<OtherState> emit,
   ) async {
     emit(const OtherLoading());
 
     // Analyzing the matrix.
-    final state = await compute<PolynomialAnalyze, AnalyzedPolynomial>(
-      _usePolynomialAnalyzer,
-      event,
-    );
-
-    // Adding some time to make sure that the user can see the loading indicator.
-    await Future.delayed(const Duration(milliseconds: 250));
+    final state = ComplexNumberAnalyzer(
+      realPart: event.realPart,
+      imaginaryPart: event.imaginaryPart,
+    ).process();
 
     // Returning data
     emit(state);

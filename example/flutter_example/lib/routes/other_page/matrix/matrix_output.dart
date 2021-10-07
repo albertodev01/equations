@@ -9,6 +9,9 @@ class MatrixOutput extends StatefulWidget {
   /// The matrix to print.
   final RealMatrix matrix;
 
+  /// The description of the matrix.
+  final String description;
+
   /// The precision to use when printing the value. This parameter is passed to
   /// the `toStringAsPrecision(double)` method.
   ///
@@ -19,6 +22,7 @@ class MatrixOutput extends StatefulWidget {
   const MatrixOutput({
     Key? key,
     required this.matrix,
+    required this.description,
     this.decimalDigits = 3,
   }) : super(key: key);
 
@@ -80,11 +84,38 @@ class _MatrixOutputState extends State<MatrixOutput> {
   Widget build(BuildContext context) {
     final boxWidth = widget.matrix.rowCount * 70.0;
 
-    return Center(
-      child: SizedBox(
-        width: boxWidth,
-        child: Table(
-          children: children,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+      ),
+      child: Center(
+        child: SizedBox(
+          width: boxWidth,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // The description
+              Text(
+                widget.description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.blueGrey,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+
+              // Some spacing
+              const SizedBox(
+                height: 10,
+              ),
+
+              // The matrix
+              Table(
+                children: children,
+              ),
+            ],
+          ),
         ),
       ),
     );

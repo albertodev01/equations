@@ -1,38 +1,35 @@
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
-import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
+import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// This widget contains a [MatrixInput] needed to parse the values of the matrix
-/// to be analyzed.
-class MatrixAnalyzerInput extends StatefulWidget {
-  /// Creates a [MatrixAnalyzerInput] widget.
-  const MatrixAnalyzerInput({
+/// This widget contains a [ComplexNumberInput] needed to parse the values of
+/// the complex number to be analyzed.
+class ComplexAnalyzerInput extends StatefulWidget {
+  /// Creates a [ComplexAnalyzerInput] widget.
+  const ComplexAnalyzerInput({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<MatrixAnalyzerInput> createState() => _MatrixAnalyzerInputState();
+  State<ComplexAnalyzerInput> createState() => _ComplexAnalyzerInputState();
 }
 
-class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
-  /// The text input controllers for the matrix.
-  late final matrixControllers = List<TextEditingController>.generate(
-    25,
-    (_) => TextEditingController(),
-  );
+class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
+  /// The [TextEditingController] for the real part of the complex number.
+  final realController = TextEditingController();
+
+  /// The [TextEditingController] for the real part of the complex number.
+  final imaginaryController = TextEditingController();
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
   /// Form and results cleanup.
   void cleanInput() {
-    for (final controller in matrixControllers) {
-      controller.clear();
-    }
+    realController.clear();
+    imaginaryController.clear();
 
     context.read<OtherBloc>().add(const OtherClean());
   }
@@ -41,17 +38,11 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
   void matrixAnalyze() {
     if (formKey.currentState?.validate() ?? false) {
       final bloc = context.read<OtherBloc>();
-      final size = context.read<NumberSwitcherCubit>().state;
-
-      // Getting the inputs
-      final matrixInputs = matrixControllers.sublist(0, size * size).map((c) {
-        return c.text;
-      }).toList();
 
       // Analyze the input
-      bloc.add(MatrixAnalyze(
-        matrix: matrixInputs,
-        size: size,
+      bloc.add(ComplexNumberAnalyze(
+        realPart: realController.text,
+        imaginaryPart: imaginaryController.text,
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,9 +56,8 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
 
   @override
   void dispose() {
-    for (final controller in matrixControllers) {
-      controller.dispose();
-    }
+    realController.dispose();
+    imaginaryController.dispose();
 
     super.dispose();
   }
@@ -83,20 +73,10 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
             height: 60,
           ),
 
-          // Size changer
-          const SizePicker(),
-
-          // Some spacing
-          const SizedBox(
-            height: 35,
-          ),
-
-          // Matrix input
-          BlocBuilder<NumberSwitcherCubit, int>(
-            builder: (context, state) => MatrixInput(
-              matrixControllers: matrixControllers,
-              matrixSize: state,
-            ),
+          // Complex number input
+          ComplexNumberInput(
+            realController: realController,
+            imaginaryController: imaginaryController,
           ),
 
           // Some spacing
@@ -110,7 +90,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
             children: [
               // Solving the equation
               ElevatedButton(
-                key: const Key('MatrixAnalyze-button-analyze'),
+                key: const Key('ComplexAnalyze-button-analyze'),
                 onPressed: matrixAnalyze,
                 child: Text(context.l10n.analyze),
               ),
@@ -120,7 +100,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
 
               // Cleaning the inputs
               ElevatedButton(
-                key: const Key('MatrixAnalyze-button-clean'),
+                key: const Key('ComplexAnalyze-button-clean'),
                 onPressed: cleanInput,
                 child: Text(context.l10n.clean),
               ),

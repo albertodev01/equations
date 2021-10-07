@@ -32,16 +32,16 @@ void main() {
       await screenMatchesGolden(tester, 'vectorial_arrow_up');
     });
 
-    testGoldens('ToolsSquareX', (tester) async {
+    testGoldens('ToolsComplexNumbers', (tester) async {
       final builder = GoldenBuilder.column()
-        ..addScenario('', const ToolsSquareX());
+        ..addScenario('', const ToolsComplexNumbers());
 
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
         surfaceSize: const Size(100, 100),
       );
-      await screenMatchesGolden(tester, 'tools_square_x');
+      await screenMatchesGolden(tester, 'tools_complex_numbers');
     });
 
     testGoldens('ToolsMatrix', (tester) async {
@@ -54,6 +54,30 @@ void main() {
         surfaceSize: const Size(100, 100),
       );
       await screenMatchesGolden(tester, 'tools_matrix');
+    });
+
+    testGoldens('SquareRoot', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const SquareRoot());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'square_root');
+    });
+
+    testGoldens('SquareMatrix', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const SquareMatrix());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'square_matrix');
     });
   });
 }

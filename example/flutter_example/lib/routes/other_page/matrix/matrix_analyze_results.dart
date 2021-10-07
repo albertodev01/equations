@@ -26,7 +26,7 @@ class MatrixAnalyzerResults extends StatelessWidget {
           height: 80,
         ),
 
-        // Showing the solutions of the nonlinear equation
+        // Showing the analysis results
         _SystemSolutions(),
 
         // Additional spacing
@@ -125,118 +125,72 @@ class _Results extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Rank
+        // Properties
         SectionTitle(
-          pageTitle: context.l10n.rank,
+          pageTitle: context.l10n.properties,
           icon: const SquareMatrix(),
         ),
 
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: 35,
-          ),
-          child: DoubleResultCard(
-            value: rank * 1.0,
-            leading: 'rk(A) = ',
-          ),
+        DoubleResultCard(
+          value: rank * 1.0,
+          leading: '${context.l10n.rank}: ',
         ),
 
-        // Trace
-        SectionTitle(
-          pageTitle: context.l10n.trace,
-          icon: const SquareMatrix(),
+        DoubleResultCard(
+          value: trace,
+          leading: '${context.l10n.trace}: ',
         ),
 
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: 35,
-          ),
-          child: DoubleResultCard(
-            value: trace,
-            leading: 'Tr(A) = ',
-          ),
-        ),
-
-        // Determinant
-        SectionTitle(
-          pageTitle: context.l10n.determinant,
-          icon: const SquareMatrix(),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: 35,
-          ),
-          child: DoubleResultCard(
-            value: determinant,
-            leading: 'det(A) = ',
-          ),
+        DoubleResultCard(
+          value: determinant,
+          leading: '${context.l10n.determinant}: ',
         ),
 
         // Eigenvalues
-        SectionTitle(
-          pageTitle: context.l10n.eigenvalues,
-          icon: const SquareMatrix(),
-        ),
-
         Padding(
           padding: const EdgeInsets.only(
-            bottom: 35,
+            top: 50,
           ),
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: eigenvalues.length,
-            itemBuilder: (context, index) => ComplexResultCard(
-              value: eigenvalues[index],
-              leading: 'x$index = ',
-            ),
+          child: SectionTitle(
+            pageTitle: context.l10n.eigenvalues,
+            icon: const SquareMatrix(),
+          ),
+        ),
+
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: eigenvalues.length,
+          itemBuilder: (context, index) => ComplexResultCard(
+            value: eigenvalues[index],
+            leading: 'x$index = ',
           ),
         ),
 
         // Transpose
-        SectionTitle(
-          pageTitle: context.l10n.transpose,
-          icon: const SquareMatrix(),
-        ),
-
         Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 35,
+          padding: const EdgeInsets.only(
+            top: 50,
           ),
-          child: MatrixOutput(
-            matrix: transpose,
-          ),
-        ),
-
-        // Inverse
-        SectionTitle(
-          pageTitle: context.l10n.inverse,
-          icon: const SquareMatrix(),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 35,
-          ),
-          child: MatrixOutput(
-            matrix: inverse,
+          child: SectionTitle(
+            pageTitle: context.l10n.transpose,
+            icon: const SquareMatrix(),
           ),
         ),
 
-        // Cofactor
-        SectionTitle(
-          pageTitle: context.l10n.cofactor,
-          icon: const SquareMatrix(),
+        MatrixOutput(
+          matrix: transpose,
+          description: context.l10n.transpose,
         ),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 35,
-          ),
-          child: MatrixOutput(
-            matrix: cofactorMatrix,
-          ),
+        MatrixOutput(
+          matrix: inverse,
+          description: context.l10n.inverse,
+        ),
+
+        MatrixOutput(
+          matrix: cofactorMatrix,
+          description: context.l10n.cofactor,
         ),
       ],
     );
