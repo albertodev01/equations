@@ -1,6 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
@@ -128,6 +129,47 @@ class _Results extends StatelessWidget {
         DoubleResultCard(
           value: phase,
           leading: '${context.l10n.phase}: ',
+        ),
+
+        ComplexResultCard(
+          value: sqrt,
+          leading: '${context.l10n.sqrt}: ',
+        ),
+
+        ComplexResultCard(
+          value: conjugate,
+          leading: '${context.l10n.conjugate}: ',
+        ),
+
+        ComplexResultCard(
+          value: reciprocal,
+          leading: '${context.l10n.reciprocal}: ',
+        ),
+
+        // Eigenvalues
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 50,
+          ),
+          child: SectionTitle(
+            pageTitle: context.l10n.polar_coordinates,
+            icon: const HalfRightAngle(),
+          ),
+        ),
+
+        DoubleResultCard(
+          value: polarComplex.r,
+          leading: '${context.l10n.length}: ',
+        ),
+
+        DoubleResultCard(
+          value: polarComplex.phiDegrees,
+          leading: '${context.l10n.angle_deg}: ',
+        ),
+
+        DoubleResultCard(
+          value: polarComplex.phiRadians,
+          leading: '${context.l10n.angle_rad}: ',
         ),
       ],
     );

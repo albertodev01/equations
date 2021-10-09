@@ -60,3 +60,15 @@ class SquareRoot extends SvgImage {
   @override
   String get assetName => 'square-root-simple';
 }
+
+/// A 45 degree angle image.
+class HalfRightAngle extends SvgImage {
+  /// Creates a [HalfRightAngle] widget.
+  const HalfRightAngle({
+    Key? key,
+    double size = 40,
+  }) : super(key: key, size: size);
+
+  @override
+  String get assetName => 'angle';
+}

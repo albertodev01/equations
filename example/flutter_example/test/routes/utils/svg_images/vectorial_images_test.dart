@@ -79,5 +79,17 @@ void main() {
       );
       await screenMatchesGolden(tester, 'square_matrix');
     });
+
+    testGoldens('HalfRightAngle', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const HalfRightAngle());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'half_right_angle');
+    });
   });
 }

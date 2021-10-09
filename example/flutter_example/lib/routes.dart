@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
-import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
@@ -23,9 +22,6 @@ abstract class RouteGenerator {
 
   /// Route name for the integrals page.
   static const integralPage = '/integral';
-
-  /// Route name for the interpolation page.
-  static const interpolationPage = '/interpolation';
 
   /// Route name for the nonlinear equations solver page.
   static const nonlinearPage = '/nonlinear';
@@ -91,12 +87,6 @@ abstract class RouteGenerator {
       case integralPage:
         return PageRouteBuilder<IntegralPage>(
           pageBuilder: (_, __, ___) => const IntegralPage(),
-          transitionsBuilder: _slideTransition,
-        );
-
-      case interpolationPage:
-        return PageRouteBuilder<InterpolationPage>(
-          pageBuilder: (_, __, ___) => const InterpolationPage(),
           transitionsBuilder: _slideTransition,
         );
 

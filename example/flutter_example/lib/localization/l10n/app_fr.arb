@@ -66,5 +66,9 @@
   "abs": "Module / valeur absolue",
   "conjugate": "Conjugué",
   "reciprocal": "Inverse",
-  "sqrt": "Racine carrée"
+  "sqrt": "Racine carrée",
+  "length": "Rayon",
+  "angle_deg": "Angle (degrés)",
+  "angle_rad": "Angle (radians)",
+  "polar_coordinates": "Coordonnées polaires"
 }
