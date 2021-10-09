@@ -46,4 +46,10 @@ class MatrixDataAnalyzer extends Analyzer<AnalyzedMatrix> {
       determinant: matrix.determinant(),
     );
   }
+
+  @override
+  List<Object?> get props => [
+        size,
+        flatMatrix,
+      ];
 }

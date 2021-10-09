@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/main.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
@@ -84,6 +85,13 @@ void main() {
       expect(
         PolynomialDiscriminant(),
         isA<PolynomialDiscriminant>(),
+      );
+    });
+
+    test('Widgets constructors', () {
+      expect(
+        EquationsApp(),
+        isA<EquationsApp>(),
       );
     });
   });

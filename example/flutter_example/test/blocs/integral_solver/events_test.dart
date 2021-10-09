@@ -30,6 +30,8 @@ void main() {
         const IntegralClean(),
         equals(const IntegralClean()),
       );
+
+      expect(const IntegralClean().props.length, isZero);
     });
   });
 }

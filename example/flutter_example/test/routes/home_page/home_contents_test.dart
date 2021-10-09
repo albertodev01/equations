@@ -22,7 +22,7 @@ void main() {
     testWidgets('Making sure that the widget is rendered', (tester) async {
       await tester.pumpWidget(widgetToTest);
 
-      expect(find.byType(CardContainer), findsNWidgets(6));
+      expect(find.byType(CardContainer), findsNWidgets(5));
       expect(find.byType(PolynomialLogo), findsOneWidget);
       expect(find.byType(NonlinearLogo), findsOneWidget);
     });

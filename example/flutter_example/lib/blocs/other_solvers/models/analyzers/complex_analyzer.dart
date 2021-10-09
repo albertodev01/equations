@@ -27,9 +27,9 @@ class ComplexNumberAnalyzer extends Analyzer<AnalyzedComplexNumber> {
   AnalyzedComplexNumber process() {
     // Building the matrix
     final real = valueParser(realPart);
-    final imag = valueParser(imaginaryPart);
+    final imaginary = valueParser(imaginaryPart);
 
-    final complex = Complex(real, imag);
+    final complex = Complex(real, imaginary);
 
     return AnalyzedComplexNumber(
       abs: complex.abs(),
@@ -40,4 +40,10 @@ class ComplexNumberAnalyzer extends Analyzer<AnalyzedComplexNumber> {
       polarComplex: complex.toPolarCoordinates(),
     );
   }
+
+  @override
+  List<Object?> get props => [
+        realPart,
+        imaginaryPart,
+      ];
 }

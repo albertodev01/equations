@@ -1,3 +1,4 @@
+
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page.dart';
 import 'package:flutter/foundation.dart';
@@ -30,17 +31,21 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
   ) async {
     emit(const OtherLoading());
 
-    // Analyzing the matrix.
-    final state = await compute<MatrixAnalyze, AnalyzedMatrix>(
-      _useMatrixAnalyzer,
-      event,
-    );
+    try {
+      // Analyzing the matrix.
+      final state = await compute<MatrixAnalyze, AnalyzedMatrix>(
+        _useMatrixAnalyzer,
+        event,
+      );
 
-    // Adding some time to make sure that the user can see the loading indicator.
-    await Future.delayed(const Duration(milliseconds: 250));
+      // Adding some time to make sure that the user can see the loading indicator.
+      await Future.delayed(const Duration(milliseconds: 250));
 
-    // Returning data
-    emit(state);
+      // Returning data
+      emit(state);
+    } catch (_) {
+      emit(const OtherError());
+    }
   }
 
   Future<void> _onComplexNumberAnalyze(
@@ -49,14 +54,18 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
   ) async {
     emit(const OtherLoading());
 
-    // Analyzing the matrix.
-    final state = ComplexNumberAnalyzer(
-      realPart: event.realPart,
-      imaginaryPart: event.imaginaryPart,
-    ).process();
+    try {
+      // Analyzing the matrix.
+      final state = ComplexNumberAnalyzer(
+        realPart: event.realPart,
+        imaginaryPart: event.imaginaryPart,
+      ).process();
 
-    // Returning data
-    emit(state);
+      // Returning data
+      emit(state);
+    } catch (_) {
+      emit(const OtherError());
+    }
   }
 
   Future<void> _onOtherClean(_, Emitter<OtherState> emit) async {
