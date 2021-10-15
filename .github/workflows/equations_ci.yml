@@ -24,7 +24,7 @@ jobs:
         run: flutter pub get
 
       - name: Making sure the package is formatted
-        run: flutter format --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed lib test
 
       - name: Making sure that there are no analysis warnings or errors
         run: flutter analyze --fatal-infos --fatal-warnings

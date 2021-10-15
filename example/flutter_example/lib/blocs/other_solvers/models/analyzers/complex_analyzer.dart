@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/models/analyzer.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 
 /// Analyzes a complex number and computes various results:

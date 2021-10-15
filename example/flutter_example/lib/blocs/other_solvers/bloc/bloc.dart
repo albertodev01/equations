@@ -1,4 +1,3 @@
-
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page.dart';
 import 'package:flutter/foundation.dart';
