@@ -12,7 +12,6 @@ import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// This widget contains the input of the function (along with the integration
 /// bounds), the result and a cartesian plane that highlights the area.
@@ -79,7 +78,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
             children: [
               pageTitleWidget,
               const IntegralDataInput(),
-              const IntegralResults(),
+              const IntegralResultsWidget(),
               const Padding(
                 padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
                 child: _IntegralPlot(),
@@ -104,7 +103,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                   children: [
                     pageTitleWidget,
                     const IntegralDataInput(),
-                    const IntegralResults(),
+                    const IntegralResultsWidget(),
                   ],
                 ),
               ),
@@ -158,10 +157,7 @@ class _IntegralPlot extends StatelessWidget {
                 // Title
                 SectionTitle(
                   pageTitle: context.l10n.chart,
-                  icon: SvgPicture.asset(
-                    'assets/plot.svg',
-                    height: 40,
-                  ),
+                  icon: const InterpolationLogo(),
                 ),
 
                 // The actual plot

@@ -41,18 +41,20 @@ void main() {
       expect(analyzer.props.length, equals(2));
     });
 
-    test('Making sure that ax exception is thrown in case of malformed input',
-        () {
-      const analyzer = ComplexNumberAnalyzer(
-        realPart: '',
-        imaginaryPart: '2',
-      );
+    test(
+      'Making sure that ax exception is thrown in case of malformed input',
+      () {
+        const analyzer = ComplexNumberAnalyzer(
+          realPart: '',
+          imaginaryPart: '2',
+        );
 
-      expect(
-        () => analyzer.process(),
-        throwsA(isA<Exception>()),
-      );
-    });
+        expect(
+          () => analyzer.process(),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
     test('Making sure that a Complex number is correctly analyzed', () {
       final result = const ComplexNumberAnalyzer(

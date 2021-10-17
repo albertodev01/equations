@@ -32,7 +32,7 @@ void main() {
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(IntegralDataInput), findsOneWidget);
-      expect(find.byType(IntegralResults), findsOneWidget);
+      expect(find.byType(IntegralResultsWidget), findsOneWidget);
     });
 
     testWidgets(

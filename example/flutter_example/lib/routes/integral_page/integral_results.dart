@@ -8,9 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// The results of the numerical integration.
-class IntegralResults extends StatelessWidget {
-  /// Creates an [IntegralResults] widget.
-  const IntegralResults({
+class IntegralResultsWidget extends StatelessWidget {
+  /// Creates an [IntegralResultsWidget] widget.
+  const IntegralResultsWidget({
     Key? key,
   }) : super(key: key);
 

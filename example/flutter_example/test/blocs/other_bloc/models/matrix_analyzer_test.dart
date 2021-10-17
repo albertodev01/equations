@@ -41,24 +41,26 @@ void main() {
       expect(analyzer.props.length, equals(2));
     });
 
-    test('Making sure that ax exception is thrown in case of malformed input',
-        () {
-      expect(
-        () => const MatrixDataAnalyzer(
-          size: 2,
-          flatMatrix: ['1', '2', '3', ''],
-        ).process(),
-        throwsA(isA<Exception>()),
-      );
+    test(
+      'Making sure that ax exception is thrown in case of malformed input',
+      () {
+        expect(
+          () => const MatrixDataAnalyzer(
+            size: 2,
+            flatMatrix: ['1', '2', '3', ''],
+          ).process(),
+          throwsA(isA<Exception>()),
+        );
 
-      expect(
-        () => const MatrixDataAnalyzer(
-          size: 1,
-          flatMatrix: ['1', '2'],
-        ).process(),
-        throwsA(isA<Exception>()),
-      );
-    });
+        expect(
+          () => const MatrixDataAnalyzer(
+            size: 1,
+            flatMatrix: ['1', '2'],
+          ).process(),
+          throwsA(isA<Exception>()),
+        );
+      },
+    );
 
     test('Making sure that a matrix correctly analyzed', () {
       final result = const MatrixDataAnalyzer(

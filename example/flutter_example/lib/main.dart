@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// TODO in 'SectionTitle', replace 'SvgAsset' calls with vector classes
 void main() {
   // Registering fonts licences
   LicenseRegistry.addLicense(() async* {
