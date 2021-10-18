@@ -19,7 +19,7 @@ dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/flutter_bloc
-  flutter_bloc: ^7.2.0
+  flutter_bloc: ^7.3.1
 
   flutter_localizations:
     sdk: flutter
@@ -35,10 +35,10 @@ dependencies:
 
 dev_dependencies:
   # https://pub.dev/packages/bloc_test
-  bloc_test: ^8.1.0
+  bloc_test: ^8.3.0
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.2.1
+  dart_code_metrics: ^4.4.0
 
   # https://pub.dev/packages/flutter_lints
   flutter_lints: ^1.0.4
@@ -47,7 +47,7 @@ dev_dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/golden_toolkit
-  golden_toolkit: ^0.10.0
+  golden_toolkit: ^0.11.0
 
   # https://pub.dev/packages/mocktail
   mocktail: ^0.1.4

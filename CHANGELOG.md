@@ -7,6 +7,7 @@
  - Added the `eigenDecomposition()` method on `Matrix<T>` to implement the "Eigendecomposition" algorithm
  - Added the `Matrix.diagonal()` constructor on `Matrix<T>` to create diagonal matrices
  - Added more lints and stricter rules in `analysis_options.yaml`
+ - Dependencies versions update
 
 ## [3.0.0]
 
