@@ -8,7 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// in a [NonlinearDataInput] widget.
 class NonlinearDropdownSelection extends StatefulWidget {
   /// Creates a [NonlinearDropdownSelection] widget.
-  const NonlinearDropdownSelection({Key? key}) : super(key: key);
+  const NonlinearDropdownSelection({
+    Key? key,
+  }) : super(key: key);
 
   @override
   NonlinearDropdownSelectionState createState() =>

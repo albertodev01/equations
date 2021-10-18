@@ -2,6 +2,7 @@ import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/home_page/home_contents.dart';
 import 'package:equations_solver/routes/integral_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
+import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
@@ -88,6 +89,22 @@ void main() {
 
         // Expecting to be on the new page
         expect(find.byType(IntegralPage), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Making sure that tapping on the CardContainer widget for '
+      'the analyzers ("Other" page) opens a new route',
+      (tester) async {
+        await tester.pumpWidget(widgetToTest);
+        final finder = find.byKey(const Key('OtherLogo-Container'));
+
+        // Tapping an waiting for the animations to complete
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+
+        // Expecting to be on the new page
+        expect(find.byType(OtherPage), findsOneWidget);
       },
     );
 

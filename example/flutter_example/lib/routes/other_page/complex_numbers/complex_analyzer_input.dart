@@ -34,8 +34,8 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
     context.read<OtherBloc>().add(const OtherClean());
   }
 
-  /// Analyzes the matrix.
-  void matrixAnalyze() {
+  /// Analyzes the complex number.
+  void complexAnalyze() {
     if (formKey.currentState?.validate() ?? false) {
       final bloc = context.read<OtherBloc>();
 
@@ -91,7 +91,7 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
               // Solving the equation
               ElevatedButton(
                 key: const Key('ComplexAnalyze-button-analyze'),
-                onPressed: matrixAnalyze,
+                onPressed: complexAnalyze,
                 child: Text(context.l10n.analyze),
               ),
 

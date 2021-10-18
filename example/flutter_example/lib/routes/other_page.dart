@@ -12,9 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// eigenvalues, trace, decompositions...) and complex numbers.
 class OtherPage extends StatefulWidget {
   /// Creates a [OtherPage] widget.
-  const OtherPage({
-    Key? key,
-  }) : super(key: key);
+  const OtherPage({Key? key}) : super(key: key);
 
   @override
   State<OtherPage> createState() => _OtherPageState();
