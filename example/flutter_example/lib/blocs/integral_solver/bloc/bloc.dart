@@ -13,22 +13,12 @@ class IntegralBloc extends Bloc<IntegralEvent, IntegralState> {
   final _parser = const ExpressionParser();
 
   /// Initializes an [IntegralBloc] with [IntegralNone].
-  IntegralBloc() : super(const IntegralNone());
-
-  @override
-  Stream<IntegralState> mapEventToState(IntegralEvent event) async* {
-    if (event is IntegralSolve) {
-      yield* _integralSolveHandler(event);
-    }
-
-    if (event is IntegralClean) {
-      yield const IntegralNone();
-    }
+  IntegralBloc() : super(const IntegralNone()) {
+    on<IntegralSolve>(_onIntegralSolve);
+    on<IntegralClean>(_onIntegralClean);
   }
 
-  Stream<IntegralState> _integralSolveHandler(
-    IntegralSolve event,
-  ) async* {
+  void _onIntegralSolve(IntegralSolve event, Emitter<IntegralState> emit) {
     try {
       late final NumericalIntegration integration;
 
@@ -65,12 +55,20 @@ class IntegralBloc extends Bloc<IntegralEvent, IntegralState> {
       // Integrating and returning the result
       final integrationResult = integration.integrate();
 
-      yield IntegralResult(
-        numericalIntegration: integration,
-        result: integrationResult.result,
+      emit(
+        IntegralResult(
+          numericalIntegration: integration,
+          result: integrationResult.result,
+        ),
       );
     } on Exception {
-      yield const IntegralError();
+      emit(
+        const IntegralError(),
+      );
     }
+  }
+
+  void _onIntegralClean(_, Emitter<IntegralState> emit) {
+    emit(const IntegralNone());
   }
 }

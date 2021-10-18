@@ -13,24 +13,41 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
   /// strings.
   final _parser = const ExpressionParser();
 
-  /// Initializes a [PolynomialBloc] with [PolynomialNone]
-  PolynomialBloc(this.polynomialType) : super(const PolynomialNone());
+  /// Initializes a [PolynomialBloc] with [PolynomialNone].
+  PolynomialBloc(this.polynomialType) : super(const PolynomialNone()) {
+    on<PolynomialSolve>(_onPolySolve);
+    on<PolynomialClean>(_onPolyClean);
+  }
 
-  @override
-  Stream<PolynomialState> mapEventToState(PolynomialEvent event) async* {
-    if (event is PolynomialSolve) {
-      yield* _polynomialSolveHandler(event);
-    }
+  void _onPolySolve(PolynomialSolve evt, Emitter<PolynomialState> emit) {
+    try {
+      // Parsing coefficients
+      final params = _parseCoefficients(evt.coefficients);
+      final solver = Algebraic.from(params);
 
-    if (event is PolynomialClean) {
-      yield const PolynomialNone();
+      // Determines whether the given equation is valid or not
+      emit(
+        PolynomialRoots(
+          roots: solver.solutions(),
+          discriminant: solver.discriminant(),
+          algebraic: solver,
+        ),
+      );
+    } on Exception {
+      emit(const PolynomialError());
     }
+  }
+
+  void _onPolyClean(_, Emitter<PolynomialState> emit) {
+    emit(const PolynomialNone());
   }
 
   List<Complex> _parseCoefficients(List<String> rawInput) {
     if (rawInput.length != _coefficientsListLength) {
-      throw const FormatException("'The coefficients list length doesn't match "
-          'the coefficients number expected from the given degree.');
+      throw const FormatException(
+        "The coefficients list length doesn't match the coefficients number "
+        'expected from the given degree.',
+      );
     }
 
     // Fractions are accepted so this method throws only if the given string is
@@ -54,23 +71,6 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
         return 4;
       case PolynomialType.quartic:
         return 5;
-    }
-  }
-
-  Stream<PolynomialState> _polynomialSolveHandler(PolynomialSolve evt) async* {
-    try {
-      // Parsing coefficients
-      final params = _parseCoefficients(evt.coefficients);
-      final solver = Algebraic.from(params);
-
-      // Determines whether the given equation is valid or not
-      yield PolynomialRoots(
-        roots: solver.solutions(),
-        discriminant: solver.discriminant(),
-        algebraic: solver,
-      );
-    } on Exception {
-      yield const PolynomialError();
     }
   }
 }

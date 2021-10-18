@@ -41,7 +41,7 @@ class EquationScaffold extends StatefulWidget {
   })  : navigationItems = const [],
         super(key: key);
 
-  /// Creates a custom [Scaffold] widget with built-in, tabbed navigation. There
+  /// Creates a custom [Scaffold] widget with built-in tabbed navigation. There
   /// must be at least 1 navigation item.
   const EquationScaffold.navigation({
     Key? key,
@@ -189,8 +189,9 @@ class _ScaffoldForeground extends StatelessWidget {
 
   /// Creates a [_ScaffoldForeground] widget.
   const _ScaffoldForeground({
+    Key? key,
     required this.body,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +209,7 @@ class _ScaffoldForeground extends StatelessWidget {
 /// The contents of the scaffold in the background.
 class _ScaffoldBackground extends StatelessWidget {
   /// Creates a [_ScaffoldBackground] widget.
-  const _ScaffoldBackground();
+  const _ScaffoldBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +230,7 @@ class _ScaffoldBackground extends StatelessWidget {
 /// The contents of the scaffold in the background.
 class _ScaffoldExtraBackground extends StatelessWidget {
   /// Creates a [_ScaffoldExtraBackground] widget.
-  const _ScaffoldExtraBackground();
+  const _ScaffoldExtraBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

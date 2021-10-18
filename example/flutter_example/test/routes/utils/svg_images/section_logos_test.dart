@@ -104,25 +104,25 @@ void main() {
       await screenMatchesGolden(tester, 'section_logo_integral');
     });
 
-    testWidgets("Making sure that 'ToolsLogo' can be rendered", (tester) async {
+    testWidgets("Making sure that 'OtherLogo' can be rendered", (tester) async {
       await tester.pumpWidget(const MockWrapper(
-        child: ToolsLogo(),
+        child: OtherLogo(),
       ));
 
-      expect(find.byType(ToolsLogo), findsOneWidget);
+      expect(find.byType(OtherLogo), findsOneWidget);
       expect(find.byType(SvgPicture), findsOneWidget);
     });
 
-    testGoldens('ToolsLogo', (tester) async {
+    testGoldens('OtherLogo', (tester) async {
       final builder = GoldenBuilder.column()
-        ..addScenario('', const ToolsLogo());
+        ..addScenario('', const OtherLogo());
 
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
         surfaceSize: const Size(100, 100),
       );
-      await screenMatchesGolden(tester, 'section_logo_tools');
+      await screenMatchesGolden(tester, 'section_logo_other');
     });
   });
 }

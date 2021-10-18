@@ -17,9 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// on two columns according with the available width.
 class SystemBody extends StatelessWidget {
   /// Creates a [SystemBody] widget.
-  const SystemBody({
-    Key? key,
-  }) : super(key: key);
+  const SystemBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

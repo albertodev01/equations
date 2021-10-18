@@ -23,18 +23,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// on two columns according with the available width.
 class NonlinearBody extends StatefulWidget {
   /// Creates a [PolynomialBody] widget.
-  const NonlinearBody({
-    Key? key,
-  }) : super(key: key);
+  const NonlinearBody({Key? key}) : super(key: key);
 
   @override
   _NonlinearBodyState createState() => _NonlinearBodyState();
 }
 
 class _NonlinearBodyState extends State<NonlinearBody> {
-  late final initialValue = _initialValue(context);
+  /// Manually caching the initial value.
+  late final initialValue = _initialValue();
 
-  String _initialValue(BuildContext context) {
+  String _initialValue() {
     final type = context.read<NonlinearBloc>().nonlinearType;
 
     return type == NonlinearType.singlePoint
@@ -90,15 +89,13 @@ class _ResponsiveBody extends StatefulWidget {
 class __ResponsiveBodyState extends State<_ResponsiveBody> {
   /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
-    pageTitle: getLocalizedName(context),
+    pageTitle: getLocalizedName(),
     pageLogo: const NonlinearLogo(
       size: 50,
     ),
   );
 
-  /// Getting the title of the page according with the kind of algorithms that
-  /// are going to be used.
-  String getLocalizedName(BuildContext context) {
+  String getLocalizedName() {
     final nonlinearType = context.read<NonlinearBloc>().nonlinearType;
 
     return nonlinearType == NonlinearType.singlePoint

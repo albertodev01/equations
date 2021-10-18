@@ -11,9 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// equation and the integration bounds.
 class IntegralDataInput extends StatefulWidget {
   /// Creates an [IntegralDataInput] widget.
-  const IntegralDataInput({
-    Key? key,
-  }) : super(key: key);
+  const IntegralDataInput({Key? key}) : super(key: key);
 
   @override
   _IntegralDataInputState createState() => _IntegralDataInputState();

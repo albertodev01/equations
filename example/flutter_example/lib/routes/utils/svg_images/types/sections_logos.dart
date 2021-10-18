@@ -49,26 +49,14 @@ class IntegralLogo extends SvgImage {
   String get assetName => 'integral';
 }
 
-/// Vectorial logo for interpolation.
-class InterpolationLogo extends SvgImage {
-  /// Creates an [InterpolationLogo] widget.
-  const InterpolationLogo({
+/// Vectorial logo for the "other" section.
+class OtherLogo extends SvgImage {
+  /// Creates an [OtherLogo] widget.
+  const OtherLogo({
     Key? key,
     double size = 40,
   }) : super(key: key, size: size);
 
   @override
-  String get assetName => 'plot';
-}
-
-/// Vectorial logo for the tools section.
-class ToolsLogo extends SvgImage {
-  /// Creates an [ToolsLogo] widget.
-  const ToolsLogo({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
-
-  @override
-  String get assetName => 'tools';
+  String get assetName => 'wrench';
 }

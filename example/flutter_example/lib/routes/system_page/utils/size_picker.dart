@@ -7,9 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// held in the state of the [NumberSwitcherCubit] bloc.
 class SizePicker extends StatelessWidget {
   /// Creates a [SizePicker] widget.
-  const SizePicker({
-    Key? key,
-  }) : super(key: key);
+  const SizePicker({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +33,9 @@ class SizePicker extends StatelessWidget {
             late final String text;
 
             switch (state) {
+              case 1:
+                text = context.l10n.matrix_size1;
+                break;
               case 2:
                 text = context.l10n.matrix_size2;
                 break;
@@ -44,8 +45,11 @@ class SizePicker extends StatelessWidget {
               case 4:
                 text = context.l10n.matrix_size4;
                 break;
+              case 5:
+                text = context.l10n.matrix_size5;
+                break;
               default:
-                throw RangeError("'state' is not in 2 <= state <= 4!");
+                throw RangeError("'state' is not in the range!");
             }
 
             return Text(

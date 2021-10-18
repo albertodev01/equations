@@ -53,6 +53,7 @@ class PlotterPainter<T> extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2.0;
 
+    // Draws the main X and Y axis
     canvas
       ..drawLine(
         Offset(0, size.height / 2),
@@ -71,7 +72,7 @@ class PlotterPainter<T> extends CustomPainter {
       ..color = Colors.blueGrey
       ..strokeWidth = 1.0;
 
-    // Drawing X and Y axis
+    // X and Y axis
     final scale = range;
     final distX = (size.width / 2) / scale;
     final distY = (size.height / 2) / scale;

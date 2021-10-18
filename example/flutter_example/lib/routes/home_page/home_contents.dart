@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 /// route the user to the desired pages.
 class HomeContents extends StatelessWidget {
   /// Creates a [HomeContents] widget.
-  const HomeContents({
-    Key? key,
-  }) : super(key: key);
+  const HomeContents({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +50,12 @@ class HomeContents extends StatelessWidget {
             ),
           ),
           CardContainer(
-            key: const Key('InterpolationLogo-Container'),
-            title: context.l10n.interpolation,
-            image: const InterpolationLogo(),
-            onTap: () {},
+            key: const Key('OtherLogo-Container'),
+            title: context.l10n.other,
+            image: const OtherLogo(),
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.otherPage,
+            ),
           ),
         ],
       ),

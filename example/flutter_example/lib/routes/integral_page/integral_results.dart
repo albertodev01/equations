@@ -3,16 +3,14 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// The results of the numerical integration.
-class IntegralResults extends StatelessWidget {
-  /// Creates an [IntegralResults] widget.
-  const IntegralResults({
-    Key? key,
-  }) : super(key: key);
+class IntegralResultsWidget extends StatelessWidget {
+  /// Creates an [IntegralResultsWidget] widget.
+  const IntegralResultsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +23,7 @@ class IntegralResults extends StatelessWidget {
 
         SectionTitle(
           pageTitle: context.l10n.solutions,
-          icon: SvgPicture.asset(
-            'assets/solutions.svg',
-            height: 40,
-          ),
+          icon: const EquationSolution(),
         ),
 
         // Showing the solutions of the nonlinear equation

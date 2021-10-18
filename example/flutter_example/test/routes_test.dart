@@ -1,8 +1,8 @@
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
-import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
+import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ void main() {
       expect(RouteGenerator.nonlinearPage, equals('/nonlinear'));
       expect(RouteGenerator.systemPage, equals('/system'));
       expect(RouteGenerator.integralPage, equals('/integral'));
-      expect(RouteGenerator.interpolationPage, equals('/interpolation'));
+      expect(RouteGenerator.otherPage, equals('/other'));
     });
 
     test('Checking routes health', () {
@@ -31,7 +31,7 @@ void main() {
         RouteGenerator.nonlinearPage,
         RouteGenerator.systemPage,
         RouteGenerator.integralPage,
-        RouteGenerator.interpolationPage,
+        RouteGenerator.otherPage,
       ];
 
       try {
@@ -85,9 +85,9 @@ void main() {
 
       expect(
         RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.interpolationPage,
+          name: RouteGenerator.otherPage,
         )),
-        isA<PageRouteBuilder<InterpolationPage>>(),
+        isA<PageRouteBuilder<OtherPage>>(),
       );
     });
 

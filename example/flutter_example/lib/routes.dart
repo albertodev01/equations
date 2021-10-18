@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
-import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
+import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
 import 'package:flutter/material.dart';
@@ -20,20 +20,20 @@ abstract class RouteGenerator {
   /// Route name for the home page of the app.
   static const homePage = '/';
 
-  /// Route name for the polynomial equations solver.
-  static const polynomialPage = '/polynomials';
+  /// Route name for the integrals page.
+  static const integralPage = '/integral';
 
-  /// Route name for the nonlinear equations solver.
+  /// Route name for the nonlinear equations solver page.
   static const nonlinearPage = '/nonlinear';
+
+  /// Route name for the polynomial equations solver page.
+  static const polynomialPage = '/polynomials';
 
   /// Route name for the systems page.
   static const systemPage = '/system';
 
-  /// Route name for the integrals page.
-  static const integralPage = '/integral';
-
-  /// Route name for the interpolation page.
-  static const interpolationPage = '/interpolation';
+  /// Route name for the page containing various utilities.
+  static const otherPage = '/other';
 
   /// Making the constructor private since this class is not meant to be
   /// instantiated.
@@ -90,9 +90,9 @@ abstract class RouteGenerator {
           transitionsBuilder: _slideTransition,
         );
 
-      case interpolationPage:
-        return PageRouteBuilder<InterpolationPage>(
-          pageBuilder: (_, __, ___) => const InterpolationPage(),
+      case otherPage:
+        return PageRouteBuilder<OtherPage>(
+          pageBuilder: (_, __, ___) => const OtherPage(),
           transitionsBuilder: _slideTransition,
         );
 

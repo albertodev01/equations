@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 /// This button simply goes back to the previous page.
 class GoBackButton extends StatelessWidget {
   /// Creates a [GoBackButton] widget.
-  const GoBackButton({
-    Key? key,
-  }) : super(key: key);
+  const GoBackButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
