@@ -8,7 +8,7 @@ class NumberSwitcherCubit extends Cubit<int> {
   /// The maximum allowed value.
   final int max;
 
-  /// Creates a [NumberSwitcherCubit] instance.
+  /// Creates a [NumberSwitcherCubit] instance and sets [min] as initial state.
   NumberSwitcherCubit({
     required this.min,
     required this.max,

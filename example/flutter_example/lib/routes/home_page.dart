@@ -3,8 +3,8 @@ import 'package:equations_solver/routes/utils/app_logo.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
-/// This widget is the home page which shows a series of cards representing the
-/// various solvers implemented in the app.
+/// The home page shows a series of cards representing the various solvers
+/// implemented in the app.
 class HomePage extends StatelessWidget {
   /// Creates a [HomePage] widget.
   const HomePage({

@@ -91,5 +91,28 @@ void main() {
       );
       await screenMatchesGolden(tester, 'half_right_angle');
     });
+
+    testGoldens('PlotIcon', (tester) async {
+      final builder = GoldenBuilder.column()..addScenario('', const PlotIcon());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'plot_icon');
+    });
+
+    testGoldens('EquationSolution', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const EquationSolution());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'equation_solution');
+    });
   });
 }

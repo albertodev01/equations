@@ -10,6 +10,7 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,9 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// on two columns according with the available width.
 class IntegralBody extends StatelessWidget {
   /// Creates an [IntegralBody] widget.
-  const IntegralBody({
-    Key? key,
-  }) : super(key: key);
+  const IntegralBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +156,7 @@ class _IntegralPlot extends StatelessWidget {
                 // Title
                 SectionTitle(
                   pageTitle: context.l10n.chart,
-                  icon: const InterpolationLogo(),
+                  icon: const PlotIcon(),
                 ),
 
                 // The actual plot

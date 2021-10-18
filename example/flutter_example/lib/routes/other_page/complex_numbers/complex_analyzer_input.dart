@@ -8,9 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// the complex number to be analyzed.
 class ComplexAnalyzerInput extends StatefulWidget {
   /// Creates a [ComplexAnalyzerInput] widget.
-  const ComplexAnalyzerInput({
-    Key? key,
-  }) : super(key: key);
+  const ComplexAnalyzerInput({Key? key}) : super(key: key);
 
   @override
   State<ComplexAnalyzerInput> createState() => _ComplexAnalyzerInputState();

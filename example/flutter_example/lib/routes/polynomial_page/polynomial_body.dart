@@ -8,9 +8,9 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// This widget contains the solutions of the polynomial equation and a chart
 /// which plots the function.
@@ -19,9 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// on two columns according with the available width.
 class PolynomialBody extends StatelessWidget {
   /// Creates a [PolynomialBody] widget.
-  const PolynomialBody({
-    Key? key,
-  }) : super(key: key);
+  const PolynomialBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,10 +160,7 @@ class _PolynomialPlot extends StatelessWidget {
                 // Title
                 SectionTitle(
                   pageTitle: context.l10n.chart,
-                  icon: SvgPicture.asset(
-                    'assets/plot.svg',
-                    height: 40,
-                  ),
+                  icon: const PlotIcon(),
                 ),
 
                 // The actual plot

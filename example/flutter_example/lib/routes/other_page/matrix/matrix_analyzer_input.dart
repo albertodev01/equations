@@ -10,9 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// to be analyzed.
 class MatrixAnalyzerInput extends StatefulWidget {
   /// Creates a [MatrixAnalyzerInput] widget.
-  const MatrixAnalyzerInput({
-    Key? key,
-  }) : super(key: key);
+  const MatrixAnalyzerInput({Key? key}) : super(key: key);
 
   @override
   State<MatrixAnalyzerInput> createState() => _MatrixAnalyzerInputState();
@@ -20,7 +18,7 @@ class MatrixAnalyzerInput extends StatefulWidget {
 
 class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
   /// The text input controllers for the matrix.
-  late final matrixControllers = List<TextEditingController>.generate(
+  final matrixControllers = List<TextEditingController>.generate(
     25,
     (_) => TextEditingController(),
   );

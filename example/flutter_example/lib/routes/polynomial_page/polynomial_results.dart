@@ -4,6 +4,7 @@ import 'package:equations_solver/routes/polynomial_page/utils/complex_result_car
 import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,9 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
   /// Creates a [PolynomialResults] widget.
-  const PolynomialResults({
-    Key? key,
-  }) : super(key: key);
+  const PolynomialResults({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +25,7 @@ class PolynomialResults extends StatelessWidget {
 
         SectionTitle(
           pageTitle: context.l10n.solutions,
-          icon: SvgPicture.asset(
-            'assets/solutions.svg',
-            height: 40,
-          ),
+          icon: const EquationSolution(),
         ),
 
         // Showing the solutions of the polynomial
@@ -92,9 +88,7 @@ class _PolynomialSolutions extends StatelessWidget {
 @visibleForTesting
 class PolynomialDiscriminant extends StatelessWidget {
   /// Creates a [PolynomialDiscriminant] widget.
-  const PolynomialDiscriminant({
-    Key? key,
-  }) : super(key: key);
+  const PolynomialDiscriminant({Key? key}) : super(key: key);
 
   /// Listen condition for the [BlocBuilder].
   ///

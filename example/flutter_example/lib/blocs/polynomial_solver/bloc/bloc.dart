@@ -44,8 +44,10 @@ class PolynomialBloc extends Bloc<PolynomialEvent, PolynomialState> {
 
   List<Complex> _parseCoefficients(List<String> rawInput) {
     if (rawInput.length != _coefficientsListLength) {
-      throw const FormatException("'The coefficients list length doesn't match "
-          'the coefficients number expected from the given degree.');
+      throw const FormatException(
+        "The coefficients list length doesn't match the coefficients number "
+        'expected from the given degree.',
+      );
     }
 
     // Fractions are accepted so this method throws only if the given string is

@@ -28,7 +28,10 @@ class SectionTitle extends StatelessWidget {
         ),
         Text(
           pageTitle,
-          style: const TextStyle(fontSize: 26, color: Colors.blueGrey),
+          style: const TextStyle(
+            fontSize: 26,
+            color: Colors.blueGrey,
+          ),
         ),
       ],
     );

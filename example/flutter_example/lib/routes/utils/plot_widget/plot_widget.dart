@@ -96,11 +96,12 @@ class _PlotBody<T> extends StatelessWidget {
 
   /// Creates a [_PLotBody] widget.
   const _PlotBody({
+    Key? key,
     required this.plotMode,
     required this.areaColor,
     required this.lowerAreaLimit,
     required this.upperAreaLimit,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +138,7 @@ class _PlotBody<T> extends StatelessWidget {
 }
 
 class _PlotSlider extends StatelessWidget {
-  const _PlotSlider();
+  const _PlotSlider({Key? key}) : super(key: key);
 
   void update(BuildContext context, double value) =>
       context.read<SliderCubit>().updateSlider(value);

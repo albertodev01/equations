@@ -11,9 +11,6 @@ abstract class Analyzer<T extends OtherState> extends Equatable {
   /// Creates an [Analyzer] instance.
   const Analyzer();
 
-  @override
-  List<Object?> get props => [];
-
   /// Converts a list of [String] into a list of [double].
   ///
   /// Throws if a string doesn't represent a valid fraction or number.

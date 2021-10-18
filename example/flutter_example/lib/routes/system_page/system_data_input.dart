@@ -17,9 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// the matrix of the system in the `Ax = b` equation.
 class SystemDataInput extends StatefulWidget {
   /// Creates a [SystemDataInput] widget.
-  const SystemDataInput({
-    Key? key,
-  }) : super(key: key);
+  const SystemDataInput({Key? key}) : super(key: key);
 
   @override
   SystemDataInputState createState() => SystemDataInputState();
@@ -34,7 +32,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
-  late final matrixControllers = List<TextEditingController>.generate(
+  final matrixControllers = List<TextEditingController>.generate(
     16,
     (_) => TextEditingController(),
   );
@@ -45,14 +43,14 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
-  late final vectorControllers = List<TextEditingController>.generate(
+  final vectorControllers = List<TextEditingController>.generate(
     4,
     (_) => TextEditingController(),
   );
 
   /// The text input controllers for the initial guess vector of the Jacobi
   /// algorithm.
-  late final jacobiControllers = List<TextEditingController>.generate(
+  final jacobiControllers = List<TextEditingController>.generate(
     4,
     (_) => TextEditingController(),
   );
@@ -111,9 +109,10 @@ class SystemDataInputState extends State<SystemDataInput> {
       controller.clear();
     }
 
-    formKey.currentState?.reset();
     wSorController.clear();
 
+    // Making sure to also clear the form completely
+    formKey.currentState?.reset();
     context.read<SystemBloc>().add(const SystemClean());
   }
 
@@ -166,6 +165,7 @@ class SystemDataInputState extends State<SystemDataInput> {
           break;
       }
     } else {
+      // The user entered invalid values
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.invalid_values),

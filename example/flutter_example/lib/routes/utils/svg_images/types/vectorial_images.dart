@@ -72,3 +72,27 @@ class HalfRightAngle extends SvgImage {
   @override
   String get assetName => 'angle';
 }
+
+/// A cartesian plane with a stylized gaussian curve.
+class PlotIcon extends SvgImage {
+  /// Creates an [PlotIcon] widget.
+  const PlotIcon({
+    Key? key,
+    double size = 40,
+  }) : super(key: key, size: size);
+
+  @override
+  String get assetName => 'plot';
+}
+
+/// A simple equation in the 'x' variable
+class EquationSolution extends SvgImage {
+  /// Creates an [EquationSolution] widget.
+  const EquationSolution({
+    Key? key,
+    double size = 40,
+  }) : super(key: key, size: size);
+
+  @override
+  String get assetName => 'solutions';
+}

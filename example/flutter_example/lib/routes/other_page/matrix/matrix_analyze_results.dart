@@ -13,9 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// This widget shows the matrix analysis results produced by an [OtherBloc].
 class MatrixAnalyzerResults extends StatelessWidget {
   /// Creates a [MatrixAnalyzerResults] widget.
-  const MatrixAnalyzerResults({
-    Key? key,
-  }) : super(key: key);
+  const MatrixAnalyzerResults({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -178,14 +176,29 @@ class _Results extends StatelessWidget {
           ),
         ),
 
+        // Spacing
+        const SizedBox(
+          height: 20,
+        ),
+
         MatrixOutput(
           matrix: transpose,
           description: context.l10n.transpose,
         ),
 
+        // Spacing
+        const SizedBox(
+          height: 20,
+        ),
+
         MatrixOutput(
           matrix: inverse,
           description: context.l10n.inverse,
+        ),
+
+        // Spacing
+        const SizedBox(
+          height: 20,
         ),
 
         MatrixOutput(

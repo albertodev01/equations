@@ -113,7 +113,7 @@ class __InputWidget extends State<_InputWidget> {
     return body;
   }
 
-  /// Validates the input and, if it's valid, sends the data to the bloc
+  /// Validates the input and, if it's valid, sends the data to the bloc.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
       final event = PolynomialSolve(
@@ -133,7 +133,7 @@ class __InputWidget extends State<_InputWidget> {
     }
   }
 
-  /// Form and chart cleanup
+  /// Form and chart cleanup.
   void _cleanInput() {
     for (final controller in controllers) {
       controller.clear();

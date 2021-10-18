@@ -197,7 +197,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(500, 1700),
+        surfaceSize: const Size(500, 1800),
       );
       await screenMatchesGolden(tester, 'matrix_analyze_results');
     });
