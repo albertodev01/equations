@@ -171,7 +171,7 @@ class _Results extends StatelessWidget {
             top: 50,
           ),
           child: SectionTitle(
-            pageTitle: context.l10n.transpose,
+            pageTitle: context.l10n.matrices,
             icon: const SquareMatrix(),
           ),
         ),

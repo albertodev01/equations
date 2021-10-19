@@ -209,8 +209,6 @@ class ExpressionParser {
     // and 'double'). Since it is a compile-time error for any type other than
     // 'int' or 'double' to attempt to extend or implement 'num', we can safely
     // assume that a 'num' can always be an integer OR a double.
-    //
-    // See the doc: https://api.dart.dev/stable/2.12.2/dart-core/num-class.html
     if (value is int) {
       // Converting 'int' into 'double'
       return value * 1.0;
