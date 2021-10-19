@@ -8,6 +8,7 @@ void main() {
 
   setUpAll(() {
     trapezoid = const TrapezoidalRule(
+      function: 'x^3+2*x',
       lowerBound: 1,
       upperBound: 3,
     );
@@ -20,19 +21,20 @@ void main() {
       expect(trapezoid.intervals, equals(20));
 
       // Actual approximation
-      final results = trapezoid.integrate('x^3+2*x');
+      final results = trapezoid.integrate();
 
       expect(results.result, const MoreOrLessEquals(28, precision: 1.0e-0));
       expect(results.guesses.length, equals(trapezoid.intervals));
     });
 
     test("Making sure that TrapezoidalRule's toString() method works.", () {
-      const strResult = '[1.00, 3.00] with 20 intervals';
+      const strResult = 'x^3+2*x on [1.00, 3.00]\nUsing 20 intervals';
       expect(trapezoid.toString(), equals(strResult));
     });
 
     test('Making sure that TrapezoidalRule can be properly compared.', () {
       const trapezoid2 = TrapezoidalRule(
+        function: 'x^3+2*x',
         lowerBound: 1,
         upperBound: 3,
       );
@@ -43,6 +45,7 @@ void main() {
       expect(
         trapezoid ==
             const TrapezoidalRule(
+              function: 'x^3+2*x',
               lowerBound: 1,
               upperBound: 3,
             ),
@@ -52,6 +55,7 @@ void main() {
       expect(
         trapezoid ==
             const TrapezoidalRule(
+              function: 'x^3+2*x',
               lowerBound: 0,
               upperBound: 3,
             ),
@@ -61,6 +65,7 @@ void main() {
       expect(
         trapezoid ==
             const TrapezoidalRule(
+              function: 'x^3+2*x',
               lowerBound: 1,
               upperBound: 0,
             ),
@@ -69,7 +74,12 @@ void main() {
 
       expect(
         trapezoid ==
-            const TrapezoidalRule(lowerBound: 1, upperBound: 3, intervals: 0),
+            const TrapezoidalRule(
+              function: 'x^3+2*x',
+              lowerBound: 1,
+              upperBound: 3,
+              intervals: 0,
+            ),
         isFalse,
       );
     });
@@ -93,10 +103,11 @@ void main() {
 
       for (var i = 0; i < equations.length; ++i) {
         final result = TrapezoidalRule(
+          function: equations[i],
           lowerBound: solution[i][0],
           upperBound: solution[i][1],
           intervals: 500,
-        ).integrate(equations[i]);
+        ).integrate();
 
         expect(
           result.result,

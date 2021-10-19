@@ -118,15 +118,15 @@ void main() {
 
     test('Numerical integration constructors', () {
       expect(
-        TrapezoidalRule(lowerBound: 0, upperBound: 0),
+        TrapezoidalRule(function: 'x', lowerBound: 0, upperBound: 0),
         isA<TrapezoidalRule>(),
       );
       expect(
-        SimpsonRule(lowerBound: 0, upperBound: 0),
+        SimpsonRule(function: 'x', lowerBound: 0, upperBound: 0),
         isA<SimpsonRule>(),
       );
       expect(
-        MidpointRule(lowerBound: 0, upperBound: 0),
+        MidpointRule(function: 'x', lowerBound: 0, upperBound: 0),
         isA<MidpointRule>(),
       );
     });

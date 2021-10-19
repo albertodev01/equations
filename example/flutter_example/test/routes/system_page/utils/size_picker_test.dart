@@ -77,7 +77,9 @@ void main() {
         ..addScenario(
           'VectorInput - 4v4',
           BlocProvider<NumberSwitcherCubit>.value(
-            value: numberSwitchCubit..increase()..increase(),
+            value: numberSwitchCubit
+              ..increase()
+              ..increase(),
             child: const SizePicker(),
           ),
         );

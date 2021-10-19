@@ -18,19 +18,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1
+      - uses: subosito/flutter-action@v1.5.3
 
       - name: Installing the dependencies
-        run: dart pub get
+        run: flutter pub get
 
       - name: Making sure the package is formatted
-        run: dart format --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed lib test
 
       - name: Making sure that there are no analysis warnings or errors
-        run: dart analyze --fatal-infos --fatal-warnings
+        run: flutter analyze --fatal-infos --fatal-warnings
 
-      - name: Runing unit tests
-        run: dart test --coverage=coverage && dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
+      - name: Runing unit and widget tests
+        run: flutter test --coverage
 
       - name: Making sure that code coverage is at least 95
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1

@@ -1,11 +1,13 @@
 import 'package:equations_solver/routes/utils/svg_images/svg_image.dart';
+import 'package:flutter/material.dart';
 
 /// Vectorial logo for polynomial equations.
 class PolynomialLogo extends SvgImage {
   /// Creates an [PolynomialLogo] widget.
   const PolynomialLogo({
+    Key? key,
     double size = 40,
-  }) : super(size: size);
+  }) : super(key: key, size: size);
 
   @override
   String get assetName => 'polynomial';
@@ -15,8 +17,9 @@ class PolynomialLogo extends SvgImage {
 class NonlinearLogo extends SvgImage {
   /// Creates an [NonlinearLogo] widget.
   const NonlinearLogo({
+    Key? key,
     double size = 40,
-  }) : super(size: size);
+  }) : super(key: key, size: size);
 
   @override
   String get assetName => 'function';
@@ -26,8 +29,9 @@ class NonlinearLogo extends SvgImage {
 class SystemsLogo extends SvgImage {
   /// Creates an [SystemsLogo] widget.
   const SystemsLogo({
+    Key? key,
     double size = 40,
-  }) : super(size: size);
+  }) : super(key: key, size: size);
 
   @override
   String get assetName => 'matrix';
@@ -37,31 +41,22 @@ class SystemsLogo extends SvgImage {
 class IntegralLogo extends SvgImage {
   /// Creates an [IntegralLogo] widget.
   const IntegralLogo({
+    Key? key,
     double size = 40,
-  }) : super(size: size);
+  }) : super(key: key, size: size);
 
   @override
   String get assetName => 'integral';
 }
 
-/// Vectorial logo for interpolation.
-class InterpolationLogo extends SvgImage {
-  /// Creates an [InterpolationLogo] widget.
-  const InterpolationLogo({
+/// Vectorial logo for the "other" section.
+class OtherLogo extends SvgImage {
+  /// Creates an [OtherLogo] widget.
+  const OtherLogo({
+    Key? key,
     double size = 40,
-  }) : super(size: size);
+  }) : super(key: key, size: size);
 
   @override
-  String get assetName => 'plot';
-}
-
-/// Vectorial logo for the tools section.
-class ToolsLogo extends SvgImage {
-  /// Creates an [ToolsLogo] widget.
-  const ToolsLogo({
-    double size = 40,
-  }) : super(size: size);
-
-  @override
-  String get assetName => 'tools';
+  String get assetName => 'wrench';
 }

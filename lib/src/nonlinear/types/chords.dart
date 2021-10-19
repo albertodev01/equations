@@ -54,8 +54,8 @@ class Chords extends NonLinear {
   int get hashCode {
     var result = super.hashCode;
 
-    result = 37 * result + a.hashCode;
-    result = 37 * result + b.hashCode;
+    result = result * 37 + a.hashCode;
+    result = result * 37 + b.hashCode;
 
     return result;
   }

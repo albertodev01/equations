@@ -4,9 +4,9 @@ import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
-import 'package:equations_solver/routes/nonlinear_page/real_result_card.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -40,53 +40,57 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that the widget is responsive - small screens '
-        'test', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NonlinearBloc>(
-          create: (_) => NonlinearBloc(NonlinearType.bracketing),
-          child: const Scaffold(
-            body: SizedBox(
-              width: 800,
-              child: NonlinearBody(),
+      'Making sure that the widget is responsive - small screens '
+      'test',
+      (tester) async {
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<NonlinearBloc>(
+            create: (_) => NonlinearBloc(NonlinearType.bracketing),
+            child: const Scaffold(
+              body: SizedBox(
+                width: 800,
+                child: NonlinearBody(),
+              ),
             ),
           ),
-        ),
-      ));
+        ));
 
-      expect(
-        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
-        findsNothing,
-      );
-    });
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsNothing,
+        );
+      },
+    );
 
     testWidgets(
-        'Making sure that the widget is responsive - large screens '
-        'test', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(2000, 2000));
+      'Making sure that the widget is responsive - large screens '
+      'test',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NonlinearBloc>(
-          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-          child: const Scaffold(
-            body: NonlinearBody(),
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<NonlinearBloc>(
+            create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+            child: const Scaffold(
+              body: NonlinearBody(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(
-        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
-        findsNothing,
-      );
-      expect(
-        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
-        findsOneWidget,
-      );
-    });
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsNothing,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('Making sure that solving equations works', (tester) async {
       when(() => dropdownCubit.state).thenReturn('Newton');
@@ -118,8 +122,8 @@ void main() {
         ),
       ));
 
-      final equationInput = find.byKey(const Key('NonlinearInput-function'));
-      final paramInput = find.byKey(const Key('NonlinearInput-first-param'));
+      final equationInput = find.byKey(const Key('EquationInput-function'));
+      final paramInput = find.byKey(const Key('EquationInput-first-param'));
       final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
 
       // Filling the forms

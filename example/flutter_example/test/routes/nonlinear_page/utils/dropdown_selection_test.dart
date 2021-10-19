@@ -30,67 +30,88 @@ void main() {
     });
 
     testWidgets(
-        "Making sure that when the bloc is of type 'singlePoint' the "
-        'dropdown only contains single point algorithms', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>(
-              create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+      "Making sure that when the bloc is of type 'singlePoint' the "
+      'dropdown only contains single point algorithms',
+      (tester) async {
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>(
+                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+              ),
+              BlocProvider<DropdownCubit>(
+                create: (_) => DropdownCubit(initialValue: 'Newton'),
+              ),
+            ],
+            child: const Scaffold(
+              body: NonlinearDropdownSelection(),
             ),
-            BlocProvider<DropdownCubit>(
-              create: (_) => DropdownCubit(initialValue: 'Newton'),
-            ),
-          ],
-          child: const Scaffold(
-            body: NonlinearDropdownSelection(),
           ),
-        ),
-      ));
+        ));
 
-      final dropdownFinder = find.byKey(const Key('Dropdown-Button-Selection'));
-      expect(dropdownFinder, findsOneWidget);
+        final dropdownFinder =
+            find.byKey(const Key('Dropdown-Button-Selection'));
+        expect(dropdownFinder, findsOneWidget);
 
-      final widgetFinder = find.byType(NonlinearDropdownSelection);
-      final state =
-          tester.state(widgetFinder) as NonlinearDropdownSelectionState;
+        final widgetFinder = find.byType(NonlinearDropdownSelection);
+        final state =
+            tester.state(widgetFinder) as NonlinearDropdownSelectionState;
 
-      expect(state.dropdownItems.length, equals(2));
-      expect(state.dropdownItems[0].value, equals('Newton'));
-      expect(state.dropdownItems[1].value, equals('Steffensen'));
-    });
+        expect(state.dropdownItems.length, equals(2));
+        expect(
+          state.dropdownItems[0].value,
+          equals(NonlinearDropdownItems.newton),
+        );
+        expect(
+          state.dropdownItems[1].value,
+          equals(NonlinearDropdownItems.steffensen),
+        );
+      },
+    );
 
     testWidgets(
-        "Making sure that when the bloc is of type 'bracketing' the "
-        'dropdown only contains single point algorithms', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>(
-              create: (_) => NonlinearBloc(NonlinearType.bracketing),
+      "Making sure that when the bloc is of type 'bracketing' the "
+      'dropdown only contains single point algorithms',
+      (tester) async {
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>(
+                create: (_) => NonlinearBloc(NonlinearType.bracketing),
+              ),
+              BlocProvider<DropdownCubit>(
+                create: (_) => DropdownCubit(initialValue: 'Bisection'),
+              ),
+            ],
+            child: const Scaffold(
+              body: NonlinearDropdownSelection(),
             ),
-            BlocProvider<DropdownCubit>(
-              create: (_) => DropdownCubit(initialValue: 'Bisection'),
-            ),
-          ],
-          child: const Scaffold(
-            body: NonlinearDropdownSelection(),
           ),
-        ),
-      ));
+        ));
 
-      final dropdownFinder = find.byKey(const Key('Dropdown-Button-Selection'));
-      expect(dropdownFinder, findsOneWidget);
+        final dropdownFinder =
+            find.byKey(const Key('Dropdown-Button-Selection'));
+        expect(dropdownFinder, findsOneWidget);
 
-      final widgetFinder = find.byType(NonlinearDropdownSelection);
-      final state =
-          tester.state(widgetFinder) as NonlinearDropdownSelectionState;
+        final widgetFinder = find.byType(NonlinearDropdownSelection);
+        final state =
+            tester.state(widgetFinder) as NonlinearDropdownSelectionState;
 
-      expect(state.dropdownItems.length, equals(3));
-      expect(state.dropdownItems[0].value, equals('Bisection'));
-      expect(state.dropdownItems[1].value, equals('Secant'));
-      expect(state.dropdownItems[2].value, equals('Brent'));
-    });
+        expect(state.dropdownItems.length, equals(3));
+        expect(
+          state.dropdownItems[0].value,
+          equals(NonlinearDropdownItems.bisection),
+        );
+        expect(
+          state.dropdownItems[1].value,
+          equals(NonlinearDropdownItems.secant),
+        );
+        expect(
+          state.dropdownItems[2].value,
+          equals(NonlinearDropdownItems.brent),
+        );
+      },
+    );
 
     testGoldens('DropdownSelection', (tester) async {
       final widget = SizedBox(

@@ -15,9 +15,10 @@ class MatrixInput extends StatefulWidget {
   ///
   /// The size of the matrix (`N`) is determined by [matrixSize].
   const MatrixInput({
+    Key? key,
     required this.matrixControllers,
     required this.matrixSize,
-  });
+  }) : super(key: key);
 
   @override
   _MatrixInputState createState() => _MatrixInputState();
@@ -63,7 +64,7 @@ class _MatrixInputState extends State<MatrixInput> {
 
   @override
   Widget build(BuildContext context) {
-    final boxWidth = 65.0 * widget.matrixSize;
+    final boxWidth = widget.matrixSize * 65.0;
 
     return Center(
       child: SizedBox(

@@ -3,21 +3,21 @@ import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
 import 'package:equations_solver/blocs/system_solver/bloc/events.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/system_page/utils/jacobi_initial_vector.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:equations_solver/routes/system_page/utils/sor_relaxation_factor.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// This widget contains a series of [PolynomialInputField] widgets needed to
-/// parse the values of the matrix of the system in the `Ax = b` equation.
+/// This widget contains a [MatrixInput] widgets needed to parse the values of
+/// the matrix of the system in the `Ax = b` equation.
 class SystemDataInput extends StatefulWidget {
   /// Creates a [SystemDataInput] widget.
-  const SystemDataInput();
+  const SystemDataInput({Key? key}) : super(key: key);
 
   @override
   SystemDataInputState createState() => SystemDataInputState();
@@ -32,9 +32,10 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
-  late final matrixControllers = List<TextEditingController>.generate(16, (_) {
-    return TextEditingController();
-  });
+  final matrixControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+  );
 
   /// The text input controllers for the vector.
   ///
@@ -42,18 +43,20 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
-  late final vectorControllers = List<TextEditingController>.generate(4, (_) {
-    return TextEditingController();
-  });
+  final vectorControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+  );
 
   /// The text input controllers for the initial guess vector of the Jacobi
   /// algorithm.
-  late final jacobiControllers = List<TextEditingController>.generate(4, (_) {
-    return TextEditingController();
-  });
+  final jacobiControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+  );
 
   /// A controller for the relaxation factor `w` of the SOR algorithm.
-  late final wSorController = TextEditingController();
+  final wSorController = TextEditingController();
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
@@ -106,14 +109,15 @@ class SystemDataInputState extends State<SystemDataInput> {
       controller.clear();
     }
 
-    formKey.currentState?.reset();
     wSorController.clear();
 
+    // Making sure to also clear the form completely
+    formKey.currentState?.reset();
     context.read<SystemBloc>().add(const SystemClean());
   }
 
   /// Solves a system of equations.
-  void solve(BuildContext context) {
+  void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final algorithm = context.read<DropdownCubit>().state;
       final bloc = context.read<SystemBloc>();
@@ -161,9 +165,10 @@ class SystemDataInputState extends State<SystemDataInput> {
           break;
       }
     } else {
+      // The user entered invalid values
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.polynomial_error),
+          content: Text(context.l10n.invalid_values),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -263,7 +268,7 @@ class SystemDataInputState extends State<SystemDataInput> {
                 // Solving the equation
                 ElevatedButton(
                   key: const Key('System-button-solve'),
-                  onPressed: () => solve(context),
+                  onPressed: solve,
                   child: Text(context.l10n.solve),
                 ),
 

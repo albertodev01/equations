@@ -147,10 +147,10 @@ class JacobiSolver extends SystemSolver {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < x0.length; ++i) {
-      result = 37 * result + x0[i].hashCode;
+      result = result * 37 + x0[i].hashCode;
     }
 
-    return 37 * result + maxSteps.hashCode;
+    return result * 37 + maxSteps.hashCode;
   }
 
   @override
@@ -203,6 +203,7 @@ class JacobiSolver extends SystemSolver {
 
     // Computing the euclidean norm
     final sum = difference.map((xi) => xi * xi).reduce((a, b) => a + b);
+
     return math.sqrt(sum);
   }
 }

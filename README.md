@@ -286,6 +286,7 @@ Other than the integration bounds (called `lowerBound` and `lowerBound`), the cl
 
 ```dart
 const simpson = SimpsonRule(
+  function: 'sin(x)*e^x',
   lowerBound: 2,
   upperBound: 4,
 );
@@ -295,7 +296,7 @@ const simpson = SimpsonRule(
 //   ∫ sin(x) * e^x dx
 //
 // ... between 2 and 4.
-final results = simpson.integrate('sin(x)*e^x');
+final results = simpson.integrate();
 
 // Prints '-7.713'
 print('${results.result.toStringAsFixed(3)}');
@@ -304,7 +305,7 @@ print('${results.result.toStringAsFixed(3)}');
 print('${results.guesses.length}');
 ```
 
-The `integrate(String)` function returns an `IntegralResults` which is a simple wrapper for 2 values:
+The `integrate()` function returns an `IntegralResults` which is a simple wrapper for 2 values:
 
   1. `result`: the actual result, which is the value of the definite integral evaluated within `lowerBound` and `lowerBound`,
   2. `guesses`: the various intermetiate values that brought to the final result.

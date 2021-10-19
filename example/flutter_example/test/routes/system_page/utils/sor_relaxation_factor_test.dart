@@ -35,22 +35,24 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that the widget does NOT show an input field '
-        "when the system solving algorithm isn't SOR", (tester) async {
-      when(() => dropdownCubit.state).thenReturn('Jacobi');
+      'Making sure that the widget does NOT show an input field '
+      "when the system solving algorithm isn't SOR",
+      (tester) async {
+        when(() => dropdownCubit.state).thenReturn('Jacobi');
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<DropdownCubit>.value(
-          value: dropdownCubit,
-          child: RelaxationFactorInput(
-            textEditingController: TextEditingController(),
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<DropdownCubit>.value(
+            value: dropdownCubit,
+            child: RelaxationFactorInput(
+              textEditingController: TextEditingController(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(find.byType(RelaxationFactorInput), findsOneWidget);
-      expect(find.byType(SystemInputField), findsNothing);
-    });
+        expect(find.byType(RelaxationFactorInput), findsOneWidget);
+        expect(find.byType(SystemInputField), findsNothing);
+      },
+    );
 
     testGoldens('RelaxationFactorInput', (tester) async {
       when(() => dropdownCubit.state).thenReturn('SOR');

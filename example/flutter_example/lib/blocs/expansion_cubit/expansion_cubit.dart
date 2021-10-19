@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// For example, this cubit can handle the open/closed status of an
 /// [ExpansionPanel] or a [Collapsible] widget.
 class ExpansionCubit extends Cubit<bool> {
-  /// Creates an instance of [ExpansionCubit].
+  /// Creates an instance of [ExpansionCubit] and sets the initial value to
+  /// `false`.
   ExpansionCubit() : super(false);
 
   /// Toggles the open/closed state of the cubit.

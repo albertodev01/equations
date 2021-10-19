@@ -69,34 +69,49 @@ class _CollapsibleState extends State<Collapsible>
     curve: Curves.ease,
   );
 
-  /// Caching the two regions of the [Collapsible] widget..
-  late final regions = <Widget>[
-    GestureDetector(
-      onTap: toggleExpansion,
-      behavior: HitTestBehavior.opaque,
-      child: PrimaryRegion(
-        key: const Key('Collapsible-Primary-region'),
-        animation: rotationAnimation,
-        child: widget.header,
+  /// Caching the two regions of the [Collapsible] widget.
+  late List<Widget> regions = buildRegions();
+
+  /// Builds the contents of the visible and hidden parts of the widget.
+  List<Widget> buildRegions() {
+    return [
+      GestureDetector(
+        onTap: toggleExpansion,
+        behavior: HitTestBehavior.opaque,
+        child: PrimaryRegion(
+          key: const Key('Collapsible-Primary-region'),
+          animation: rotationAnimation,
+          child: widget.header,
+        ),
       ),
-    ),
-    SizeTransition(
-      key: const Key('Collapsible-SizeTransition'),
-      sizeFactor: controller,
-      axisAlignment: 1.0,
-      child: SecondaryRegion(
-        key: const Key('Collapsible-Secondary-region'),
-        heightBetweenRegions: widget.heightBetweenRegions,
-        child: widget.content,
+      SizeTransition(
+        key: const Key('Collapsible-SizeTransition'),
+        sizeFactor: controller,
+        axisAlignment: 1.0,
+        child: SecondaryRegion(
+          key: const Key('Collapsible-Secondary-region'),
+          heightBetweenRegions: widget.heightBetweenRegions,
+          child: widget.content,
+        ),
       ),
-    ),
-  ];
+    ];
+  }
 
   /// Determines whether the secondary region is visible or not.
   bool get isExpanded => context.read<ExpansionCubit>().state;
 
   /// Open or closes the secondary region.
   void toggleExpansion() => context.read<ExpansionCubit>().toggle();
+
+  @override
+  void didUpdateWidget(covariant Collapsible oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.header != oldWidget.header ||
+        widget.content != oldWidget.content) {
+      regions = buildRegions();
+    }
+  }
 
   @override
   void dispose() {

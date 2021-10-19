@@ -7,7 +7,13 @@ import '../../double_approximation_matcher.dart';
 
 void main() {
   group('Testing the behaviors of the SylvesterMatrix class.', () {
-    final matrix = SylvesterMatrix.fromReal(coefficients: [1, -7, 8]);
+    final matrix = SylvesterMatrix.fromReal(
+      coefficients: [
+        1,
+        -7,
+        8,
+      ],
+    );
 
     test('Making sure that values are properly constructed.', () {
       expect(

@@ -1,32 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
-import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
 /// Contains a series of tiles, represented by a [CardContainer] widget, that
-/// route the user to various pages
+/// route the user to the desired pages.
 class HomeContents extends StatelessWidget {
   /// Creates a [HomeContents] widget.
-  const HomeContents();
-
-  /// Shows an [AlertDialog] stating that the page is under development and it
-  /// will be ready soon.
-  void _comingSoonDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.appTitle),
-        content: const Text('Coming soon!'),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
+  const HomeContents({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,13 +45,17 @@ class HomeContents extends StatelessWidget {
             key: const Key('IntegralsLogo-Container'),
             title: context.l10n.integrals,
             image: const IntegralLogo(),
-            onTap: () => _comingSoonDialog(context),
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.integralPage,
+            ),
           ),
           CardContainer(
-            key: const Key('InterpolationLogo-Container'),
-            title: context.l10n.interpolation,
-            image: const InterpolationLogo(),
-            onTap: () => _comingSoonDialog(context),
+            key: const Key('OtherLogo-Container'),
+            title: context.l10n.other,
+            image: const OtherLogo(),
+            onTap: () => Navigator.of(context).pushNamed(
+              RouteGenerator.otherPage,
+            ),
           ),
         ],
       ),

@@ -171,9 +171,9 @@ class DurandKerner extends Algebraic with MathUtils {
   int get hashCode {
     var result = super.hashCode;
 
-    result = 37 * result + initialGuess.hashCode;
-    result = 37 * result + precision.hashCode;
-    result = 37 * result + maxSteps.hashCode;
+    result = result * 37 + initialGuess.hashCode;
+    result = result * 37 + precision.hashCode;
+    result = result * 37 + maxSteps.hashCode;
 
     return result;
   }
@@ -217,7 +217,7 @@ class DurandKerner extends Algebraic with MathUtils {
           e: coefficients[4],
         ).derivative();
       case 6:
-        final coeffs = _derivativeOf(coefficients);
+        final coeffs = _derivativeOf();
         return Quartic(
           a: coeffs[0],
           b: coeffs[1],
@@ -227,7 +227,7 @@ class DurandKerner extends Algebraic with MathUtils {
         );
       default:
         return DurandKerner(
-          coefficients: _derivativeOf(coefficients),
+          coefficients: _derivativeOf(),
           precision: precision,
           maxSteps: maxSteps,
         );
@@ -341,7 +341,7 @@ class DurandKerner extends Algebraic with MathUtils {
   ///
   /// The [poly] parameter contains the coefficients of the polynomial whose
   /// derivative has to be computed.
-  List<Complex> _derivativeOf(List<Complex> poly) {
+  List<Complex> _derivativeOf() {
     final newLength = coefficients.length - 1;
 
     // The derivative

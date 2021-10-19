@@ -28,19 +28,21 @@ void main() {
     });
 
     test(
-        "Making sure that 'ExpressionParser' throws when 'evaluate' has the "
-        "'x' variable in the string.", () {
-      const parser = ExpressionParser();
+      "Making sure that 'ExpressionParser' throws when 'evaluate' has the "
+      "'x' variable in the string.",
+      () {
+        const parser = ExpressionParser();
 
-      expect(
-        () => parser.evaluate('5*x*3-4'),
-        throwsA(isA<ExpressionParserException>()),
-      );
-      expect(
-        () => parser.evaluate('x-3'),
-        throwsA(isA<ExpressionParserException>()),
-      );
-    });
+        expect(
+          () => parser.evaluate('5*x*3-4'),
+          throwsA(isA<ExpressionParserException>()),
+        );
+        expect(
+          () => parser.evaluate('x-3'),
+          throwsA(isA<ExpressionParserException>()),
+        );
+      },
+    );
 
     test("Making sure that 'ExpressionParser' works with functions.", () {
       const parser = ExpressionParser();
@@ -84,19 +86,23 @@ void main() {
     });
 
     test(
-        "Making sure that 'ExpressionParser' correctly recognizes with the 'x'"
-        ' variable.', () {
-      const parser = ExpressionParser();
+      "Making sure that 'ExpressionParser' correctly recognizes with the 'x'"
+      ' variable.',
+      () {
+        const parser = ExpressionParser();
 
-      expect(parser.evaluateOn('6*x + 4', 3), equals(22));
-      expect(parser.evaluateOn('sqrt(x) - 3', 81), equals(6));
-    });
+        expect(parser.evaluateOn('6*x + 4', 3), equals(22));
+        expect(parser.evaluateOn('sqrt(x) - 3', 81), equals(6));
+      },
+    );
 
     test(
-        "Making sure that 'ExpressionParser' works with the 'x' variable "
-        "even if 'x' is not present.", () {
-      expect(const ExpressionParser().evaluateOn('6*3 + 4', 0), equals(22));
-    });
+      "Making sure that 'ExpressionParser' works with the 'x' variable "
+      "even if 'x' is not present.",
+      () {
+        expect(const ExpressionParser().evaluateOn('6*3 + 4', 0), equals(22));
+      },
+    );
 
     test("Making sure that the 'String' extension method works correctly.", () {
       expect('6*3 + 4'.isRealFunction, isTrue);

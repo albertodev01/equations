@@ -14,15 +14,18 @@ class DoubleResultCard extends StatelessWidget {
 
   /// Creates a [DoubleResultCard] widget.
   const DoubleResultCard({
+    Key? key,
     required this.value,
     this.leading = 'x =',
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 35),
+        padding: const EdgeInsets.only(
+          top: 35,
+        ),
         child: SizedBox(
           width: 250,
           child: Card(

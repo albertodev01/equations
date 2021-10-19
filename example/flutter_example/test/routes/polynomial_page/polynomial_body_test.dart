@@ -37,50 +37,54 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that the widget is responsive - small screens '
-        'test', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>(
-          create: (_) => PolynomialBloc(PolynomialType.quadratic),
-          child: const Scaffold(
-            body: PolynomialBody(),
+      'Making sure that the widget is responsive - small screens '
+      'test',
+      (tester) async {
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<PolynomialBloc>(
+            create: (_) => PolynomialBloc(PolynomialType.quadratic),
+            child: const Scaffold(
+              body: PolynomialBody(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(
-        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
-        findsNothing,
-      );
-    });
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsNothing,
+        );
+      },
+    );
 
     testWidgets(
-        'Making sure that the widget is responsive - large screens '
-        'test', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(2000, 2000));
+      'Making sure that the widget is responsive - large screens '
+      'test',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>(
-          create: (_) => PolynomialBloc(PolynomialType.cubic),
-          child: const Scaffold(
-            body: PolynomialBody(),
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<PolynomialBloc>(
+            create: (_) => PolynomialBloc(PolynomialType.cubic),
+            child: const Scaffold(
+              body: PolynomialBody(),
+            ),
           ),
-        ),
-      ));
+        ));
 
-      expect(
-        find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
-        findsNothing,
-      );
-      expect(
-        find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
-        findsOneWidget,
-      );
-    });
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsNothing,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsOneWidget,
+        );
+      },
+    );
 
     testWidgets('Making sure that solving equations works', (tester) async {
       final bloc = PolynomialBloc(PolynomialType.linear);

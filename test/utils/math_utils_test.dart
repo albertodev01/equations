@@ -47,7 +47,7 @@ void main() {
       );
       expect(
         hypot.real,
-        const MoreOrLessEquals(-1.43370, precision: 1.0e-5),
+        const MoreOrLessEquals(-1.4337, precision: 1.0e-5),
       );
       expect(
         hypot.imaginary,

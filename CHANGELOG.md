@@ -1,3 +1,14 @@
+## [3.1.0]
+
+ - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (earlier it was passed to the `integrate()` function)
+ - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
+ - Fixed an issue in the `eigenvalue()` method
+ - Fixed an issue in the `rank()` method
+ - Added the `eigenDecomposition()` method on `Matrix<T>` to implement the "Eigendecomposition" algorithm
+ - Added the `Matrix.diagonal()` constructor on `Matrix<T>` to create diagonal matrices
+ - Added more lints and stricter rules in `analysis_options.yaml`
+ - Dependencies versions update
+
 ## [3.0.0]
 
  - **BREAKING**: Replaced the `Laguerre` type with `DurandKerner` (the latter is a more reliable root-finding algorithm for polynomials)

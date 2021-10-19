@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:flutter/material.dart';
 
-/// A very simple widget that simply states inside a [Text] that there is no
-/// discriminant value to display.
+/// A very simple widget stating that there is no discriminant value to display.
 class NoDiscriminant extends StatelessWidget {
   /// Creates a [NoDiscriminant] widget.
-  const NoDiscriminant();
+  const NoDiscriminant({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

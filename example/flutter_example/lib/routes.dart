@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
-import 'package:equations_solver/routes/interpolation_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
+import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
 import 'package:flutter/material.dart';
@@ -17,61 +17,89 @@ import 'package:flutter/material.dart';
 ///
 /// No differences since both ways are valid.
 abstract class RouteGenerator {
+  /// Route name for the home page of the app.
+  static const homePage = '/';
+
+  /// Route name for the integrals page.
+  static const integralPage = '/integral';
+
+  /// Route name for the nonlinear equations solver page.
+  static const nonlinearPage = '/nonlinear';
+
+  /// Route name for the polynomial equations solver page.
+  static const polynomialPage = '/polynomials';
+
+  /// Route name for the systems page.
+  static const systemPage = '/system';
+
+  /// Route name for the page containing various utilities.
+  static const otherPage = '/other';
+
+  /// Making the constructor private since this class is not meant to be
+  /// instantiated.
+  const RouteGenerator._();
+
+  /// The transition animation between two pages.
+  static Widget _slideTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    final tween = Tween(
+      begin: const Offset(1.0, 0.0),
+      end: Offset.zero,
+    );
+
+    return SlideTransition(
+      position: animation.drive(tween),
+      child: child,
+    );
+  }
+
   /// The "dispatcher" that assigns a route name to a particular widget.
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homePage:
-        return MaterialPageRoute<HomePage>(
-          builder: (_) => const HomePage(),
+        return PageRouteBuilder<HomePage>(
+          pageBuilder: (_, __, ___) => const HomePage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case polynomialPage:
-        return MaterialPageRoute<PolynomialPage>(
-          builder: (_) => const PolynomialPage(),
+        return PageRouteBuilder<PolynomialPage>(
+          pageBuilder: (_, __, ___) => const PolynomialPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case nonlinearPage:
-        return MaterialPageRoute<NonlinearPage>(
-          builder: (_) => const NonlinearPage(),
+        return PageRouteBuilder<NonlinearPage>(
+          pageBuilder: (_, __, ___) => const NonlinearPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case systemPage:
-        return MaterialPageRoute<SystemPage>(
-          builder: (_) => const SystemPage(),
+        return PageRouteBuilder<SystemPage>(
+          pageBuilder: (_, __, ___) => const SystemPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       case integralPage:
-        return MaterialPageRoute<IntegralPage>(
-          builder: (_) => const IntegralPage(),
+        return PageRouteBuilder<IntegralPage>(
+          pageBuilder: (_, __, ___) => const IntegralPage(),
+          transitionsBuilder: _slideTransition,
         );
 
-      case interpolationPage:
-        return MaterialPageRoute<InterpolationPage>(
-          builder: (_) => const InterpolationPage(),
+      case otherPage:
+        return PageRouteBuilder<OtherPage>(
+          pageBuilder: (_, __, ___) => const OtherPage(),
+          transitionsBuilder: _slideTransition,
         );
 
       default:
         throw const RouteException('Route not found');
     }
   }
-
-  /// Route name for the home page of the app.
-  static const homePage = '/';
-
-  /// Route name for the polynomial equations solver.
-  static const polynomialPage = '/polynomials';
-
-  /// Route name for the nonlinear equations solver.
-  static const nonlinearPage = '/nonlinear';
-
-  /// Route name for the systems page.
-  static const systemPage = '/system';
-
-  /// Route name for the integrals page.
-  static const integralPage = '/integral';
-
-  /// Route name for the interpolation page.
-  static const interpolationPage = '/interpolation';
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.

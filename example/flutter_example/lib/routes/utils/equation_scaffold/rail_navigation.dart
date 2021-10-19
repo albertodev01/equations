@@ -15,9 +15,10 @@ class RailNavigation extends StatefulWidget {
 
   /// Creates a [RailNavigation] widget..
   const RailNavigation({
+    Key? key,
     required this.navigationItems,
     required this.tabController,
-  });
+  }) : super(key: key);
 
   @override
   _RailNavigationState createState() => _RailNavigationState();
@@ -25,12 +26,11 @@ class RailNavigation extends StatefulWidget {
 
 class _RailNavigationState extends State<RailNavigation> {
   /// Converts a [NavigationItem] into a [BottomNavigationBarItem].
-  late final rails =
-      widget.navigationItems.map<NavigationRailDestination>((item) {
+  late final rails = widget.navigationItems.map<NavigationRailDestination>((i) {
     return NavigationRailDestination(
-      icon: item.icon,
-      selectedIcon: item.activeIcon,
-      label: Text(item.title),
+      icon: i.icon,
+      selectedIcon: i.activeIcon,
+      label: Text(i.title),
     );
   }).toList(growable: false);
 
@@ -60,8 +60,9 @@ class _RailNavigationState extends State<RailNavigation> {
             destinations: rails,
             selectedIndex: state,
             labelType: NavigationRailLabelType.all,
-            onDestinationSelected: (newIndex) =>
-                context.read<NavigationCubit>().emit(newIndex),
+            onDestinationSelected: (newIndex) {
+              context.read<NavigationCubit>().emit(newIndex);
+            },
           ),
         ),
       ],

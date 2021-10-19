@@ -14,32 +14,14 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
   final _parser = const ExpressionParser();
 
   /// Initializes a [NonlinearBloc] with [NonlinearNone].
-  SystemBloc(this.systemType) : super(const SystemNone());
-
-  @override
-  Stream<SystemState> mapEventToState(SystemEvent event) async* {
-    if (event is RowReductionMethod) {
-      yield* _rowReductionHandler(event);
-    }
-
-    if (event is FactorizationMethod) {
-      yield* _factorizationHandler(event);
-    }
-
-    if (event is IterativeMethod) {
-      yield* _iterativeHandler(event);
-    }
-
-    if (event is SystemClean) {
-      yield* _systemCleanHandler(event);
-    }
+  SystemBloc(this.systemType) : super(const SystemNone()) {
+    on<RowReductionMethod>(_onRowReduction);
+    on<FactorizationMethod>(_onFactorization);
+    on<IterativeMethod>(_onIterative);
+    on<SystemClean>(_onSystemClean);
   }
 
-  List<double> _valueParser(List<String> source) {
-    return source.map((value) => _parser.evaluate(value)).toList();
-  }
-
-  Stream<SystemState> _rowReductionHandler(RowReductionMethod event) async* {
+  void _onRowReduction(RowReductionMethod event, Emitter<SystemState> emit) {
     try {
       // Parsing the system
       final matrix = _valueParser(event.matrix);
@@ -51,19 +33,21 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       );
 
       if (solver.hasSolution()) {
-        yield SystemGuesses(
-          solution: solver.solve(),
-          systemSolver: solver,
+        emit(
+          SystemGuesses(
+            solution: solver.solve(),
+            systemSolver: solver,
+          ),
         );
       } else {
-        yield const SingularSystemError();
+        emit(const SingularSystemError());
       }
     } on Exception {
-      yield const SystemError();
+      emit(const SystemError());
     }
   }
 
-  Stream<SystemState> _factorizationHandler(FactorizationMethod event) async* {
+  void _onFactorization(FactorizationMethod event, Emitter<SystemState> emit) {
     try {
       late final SystemSolver solver;
 
@@ -87,19 +71,21 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       }
 
       if (solver.hasSolution()) {
-        yield SystemGuesses(
-          solution: solver.solve(),
-          systemSolver: solver,
+        emit(
+          SystemGuesses(
+            solution: solver.solve(),
+            systemSolver: solver,
+          ),
         );
       } else {
-        yield const SingularSystemError();
+        emit(const SingularSystemError());
       }
     } on Exception {
-      yield const SystemError();
+      emit(const SystemError());
     }
   }
 
-  Stream<SystemState> _iterativeHandler(IterativeMethod event) async* {
+  void _onIterative(IterativeMethod event, Emitter<SystemState> emit) {
     try {
       late final SystemSolver solver;
 
@@ -131,19 +117,25 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       }
 
       if (solver.hasSolution()) {
-        yield SystemGuesses(
-          solution: solver.solve(),
-          systemSolver: solver,
+        emit(
+          SystemGuesses(
+            solution: solver.solve(),
+            systemSolver: solver,
+          ),
         );
       } else {
-        yield const SingularSystemError();
+        emit(const SingularSystemError());
       }
     } on Exception {
-      yield const SystemError();
+      emit(const SystemError());
     }
   }
 
-  Stream<SystemState> _systemCleanHandler(SystemClean evt) async* {
-    yield const SystemNone();
+  void _onSystemClean(_, Emitter<SystemState> emit) {
+    emit(const SystemNone());
+  }
+
+  List<double> _valueParser(List<String> source) {
+    return source.map(_parser.evaluate).toList();
   }
 }

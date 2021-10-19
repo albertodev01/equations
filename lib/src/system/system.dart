@@ -118,11 +118,11 @@ abstract class SystemSolver {
     // Like we did in operator== iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < _knownValues.length; ++i) {
-      result = 37 * result + _knownValues[i].hashCode;
+      result = result * 37 + _knownValues[i].hashCode;
     }
 
-    result = 37 * result + equations.hashCode;
-    result = 37 * result + precision.hashCode;
+    result = result * 37 + equations.hashCode;
+    result = result * 37 + precision.hashCode;
 
     return result;
   }
@@ -166,7 +166,9 @@ abstract class SystemSolver {
       }
 
       // Adding the known value associated to the current equation
-      buffer..write(' | ')..write(knownValues[i]);
+      buffer
+        ..write(' | ')
+        ..write(knownValues[i]);
 
       // Ending closing ]
       if (i < equations.rowCount - 1) {

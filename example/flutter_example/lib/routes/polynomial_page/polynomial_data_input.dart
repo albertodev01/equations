@@ -1,15 +1,15 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 /// This widget contains a series of [PolynomialInputField] widgets needed to
 /// parse the coefficients of the polynomial to be solved.
 class PolynomialDataInput extends StatelessWidget {
   /// Creates a [PolynomialDataInput] widget.
-  const PolynomialDataInput();
+  const PolynomialDataInput({Key? key}) : super(key: key);
 
   /// This is required to figure out how many inputs are required for the
   /// polynomial to be solved.
@@ -76,7 +76,9 @@ class __InputWidget extends State<_InputWidget> {
   /// This is displayed at the top of the input box
   late final cachedEquationTitle = Padding(
     padding: const EdgeInsets.only(bottom: 20),
-    child: EquationTextFormatter(equation: widget.equationTemplate),
+    child: EquationTextFormatter(
+      equation: widget.equationTemplate,
+    ),
   );
 
   /// Form validation key
@@ -88,6 +90,8 @@ class __InputWidget extends State<_InputWidget> {
   ///
   /// This is cached because the number of input fields won't change.
   late final cachedWrapBody = _generateWrapBody();
+
+  /// Generates the input fields of the coefficients.
   List<PolynomialInputField> _generateWrapBody() {
     final body = <PolynomialInputField>[];
     var placeholderLetter = 'a';
@@ -109,8 +113,8 @@ class __InputWidget extends State<_InputWidget> {
     return body;
   }
 
-  /// Validates the input and, if it's valid, sends the data to the bloc
-  void _processInput(BuildContext context) {
+  /// Validates the input and, if it's valid, sends the data to the bloc.
+  void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
       final event = PolynomialSolve(
         coefficients: controllers.map<String>((c) => c.text).toList(),
@@ -129,12 +133,13 @@ class __InputWidget extends State<_InputWidget> {
     }
   }
 
-  /// Form and chart cleanup
-  void _cleanInput(BuildContext context) {
+  /// Form and chart cleanup.
+  void _cleanInput() {
     for (final controller in controllers) {
       controller.clear();
     }
 
+    formKey.currentState?.reset();
     context.read<PolynomialBloc>().add(const PolynomialClean());
   }
 
@@ -181,7 +186,7 @@ class __InputWidget extends State<_InputWidget> {
             // Solving the polynomial
             ElevatedButton(
               key: const Key('Polynomial-button-solve'),
-              onPressed: () => _processInput(context),
+              onPressed: _processInput,
               child: Text(context.l10n.solve),
             ),
 
@@ -191,11 +196,11 @@ class __InputWidget extends State<_InputWidget> {
             // Cleaning the inputs
             ElevatedButton(
               key: const Key('Polynomial-button-clean'),
-              onPressed: () => _cleanInput(context),
+              onPressed: _cleanInput,
               child: Text(context.l10n.clean),
             ),
           ],
-        )
+        ),
       ],
     );
   }

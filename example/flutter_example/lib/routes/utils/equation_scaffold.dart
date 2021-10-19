@@ -35,20 +35,24 @@ class EquationScaffold extends StatefulWidget {
 
   /// Creates a custom [Scaffold] widget with no built-in navigation.
   const EquationScaffold({
+    Key? key,
     required this.body,
     this.fab,
-  }) : navigationItems = const [];
+  })  : navigationItems = const [],
+        super(key: key);
 
-  /// Creates a custom [Scaffold] widget with built-in, tabbed navigation. There
+  /// Creates a custom [Scaffold] widget with built-in tabbed navigation. There
   /// must be at least 1 navigation item.
   const EquationScaffold.navigation({
+    Key? key,
     required this.navigationItems,
     this.fab,
   })  : body = const SizedBox.shrink(),
         assert(
           navigationItems.length > 0,
           _assertionError,
-        );
+        ),
+        super(key: key);
 
   @override
   _EquationScaffoldState createState() => _EquationScaffoldState();
@@ -141,6 +145,7 @@ class _ScaffoldContents extends StatelessWidget {
   /// another background image
   final bool extraBackground;
 
+  /// Creates a [_ScaffoldContents] widget.
   const _ScaffoldContents({
     required this.body,
     required this.extraBackground,
@@ -182,9 +187,11 @@ class _ScaffoldForeground extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;
 
+  /// Creates a [_ScaffoldForeground] widget.
   const _ScaffoldForeground({
+    Key? key,
     required this.body,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +208,8 @@ class _ScaffoldForeground extends StatelessWidget {
 
 /// The contents of the scaffold in the background.
 class _ScaffoldBackground extends StatelessWidget {
-  const _ScaffoldBackground();
+  /// Creates a [_ScaffoldBackground] widget.
+  const _ScaffoldBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +229,8 @@ class _ScaffoldBackground extends StatelessWidget {
 
 /// The contents of the scaffold in the background.
 class _ScaffoldExtraBackground extends StatelessWidget {
-  const _ScaffoldExtraBackground();
+  /// Creates a [_ScaffoldExtraBackground] widget.
+  const _ScaffoldExtraBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

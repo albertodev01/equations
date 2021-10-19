@@ -8,24 +8,111 @@ import '../../mock_wrapper.dart';
 
 void main() {
   group('Making sure that sections logos can be rendered', () {
-    testWidgets("Making sure that 'ArrowUpSvg' can be rendered",
-        (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: ArrowUpSvg(),
-      ));
+    testWidgets(
+      "Making sure that 'ArrowUpSvg' can be rendered",
+      (tester) async {
+        await tester.pumpWidget(const MockWrapper(
+          child: ArrowUpSvg(),
+        ));
 
-      expect(find.byType(ArrowUpSvg), findsOneWidget);
-      expect(find.byType(SvgPicture), findsOneWidget);
-    });
+        expect(find.byType(ArrowUpSvg), findsOneWidget);
+        expect(find.byType(SvgPicture), findsOneWidget);
+      },
+    );
 
     testGoldens('ArrowUpSvg', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario('', const ArrowUpSvg());
 
-      await tester.pumpWidgetBuilder(builder.build(),
-          wrapper: (child) => MockWrapper(child: child),
-          surfaceSize: const Size(100, 100));
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
       await screenMatchesGolden(tester, 'vectorial_arrow_up');
+    });
+
+    testGoldens('ToolsComplexNumbers', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const ToolsComplexNumbers());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'tools_complex_numbers');
+    });
+
+    testGoldens('ToolsMatrix', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const ToolsMatrix());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'tools_matrix');
+    });
+
+    testGoldens('SquareRoot', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const SquareRoot());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'square_root');
+    });
+
+    testGoldens('SquareMatrix', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const SquareMatrix());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'square_matrix');
+    });
+
+    testGoldens('HalfRightAngle', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const HalfRightAngle());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'half_right_angle');
+    });
+
+    testGoldens('PlotIcon', (tester) async {
+      final builder = GoldenBuilder.column()..addScenario('', const PlotIcon());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'plot_icon');
+    });
+
+    testGoldens('EquationSolution', (tester) async {
+      final builder = GoldenBuilder.column()
+        ..addScenario('', const EquationSolution());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'equation_solution');
     });
   });
 }

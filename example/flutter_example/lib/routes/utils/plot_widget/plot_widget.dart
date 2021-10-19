@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,10 +18,33 @@ class PlotWidget<T> extends StatelessWidget {
   /// Provides the ability to evaluate a real function on a point.
   final PlotMode<T>? plotMode;
 
+  /// The color that highlights the area below a function.
+  ///
+  /// By default, this is set to [Colors.transparent] so nothing will be colored.
+  final Color areaColor;
+
+  /// The lower limit that indicates from which point in the x axis the area
+  /// below the function has to be colored.
+  ///
+  /// By default, this is `null` meaning that no lower limits are applied (so
+  /// the entire region on the left is colored).
+  final double? lowerAreaLimit;
+
+  /// The upper limit that indicates up to which point in the x axis the area
+  /// below the function has to be colored.
+  ///
+  /// By default, this is `null` meaning that no upper limits are applied (so
+  /// the entire region on the right is colored).
+  final double? upperAreaLimit;
+
   /// Creates a [PlotWidget] instance.
   const PlotWidget({
+    Key? key,
+    this.areaColor = Colors.transparent,
     this.plotMode,
-  });
+    this.lowerAreaLimit,
+    this.upperAreaLimit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +62,9 @@ class PlotWidget<T> extends StatelessWidget {
             // The plot
             _PlotBody<T>(
               plotMode: plotMode,
+              areaColor: areaColor,
+              lowerAreaLimit: lowerAreaLimit,
+              upperAreaLimit: upperAreaLimit,
             ),
 
             // Some spacing
@@ -53,10 +80,28 @@ class PlotWidget<T> extends StatelessWidget {
 }
 
 class _PlotBody<T> extends StatelessWidget {
+  /// The [PlotMode] object.
   final PlotMode<T>? plotMode;
+
+  /// The color that highlights the area below a function.
+  final Color areaColor;
+
+  /// The lower limit that indicates from which point in the x axis the area
+  /// below the function has to be colored.
+  final double? lowerAreaLimit;
+
+  /// The upper limit that indicates up to which point in the x axis the area
+  /// below the function has to be colored.
+  final double? upperAreaLimit;
+
+  /// Creates a [_PLotBody] widget.
   const _PlotBody({
+    Key? key,
     required this.plotMode,
-  });
+    required this.areaColor,
+    required this.lowerAreaLimit,
+    required this.upperAreaLimit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +120,11 @@ class _PlotBody<T> extends StatelessWidget {
                   painter: PlotterPainter<T>(
                     plotMode: plotMode,
                     range: state.round(),
+                    colorArea: ColorArea(
+                      color: areaColor,
+                      startPoint: lowerAreaLimit ?? -state,
+                      endPoint: upperAreaLimit ?? state,
+                    ),
                   ),
                   size: Size.square(normalized),
                 );
@@ -88,7 +138,7 @@ class _PlotBody<T> extends StatelessWidget {
 }
 
 class _PlotSlider extends StatelessWidget {
-  const _PlotSlider();
+  const _PlotSlider({Key? key}) : super(key: key);
 
   void update(BuildContext context, double value) =>
       context.read<SliderCubit>().updateSlider(value);

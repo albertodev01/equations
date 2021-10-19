@@ -23,31 +23,33 @@ void main() {
     });
 
     testWidgets(
-        'Making sure that a PolynomialInputField has a validator '
-        'function to validate inputs', (tester) async {
-      final controller = TextEditingController();
+      'Making sure that a PolynomialInputField has a validator '
+      'function to validate inputs',
+      (tester) async {
+        final controller = TextEditingController();
 
-      await tester.pumpWidget(MockWrapper(
-        child: PolynomialInputField(
-          controller: controller,
-          placeholder: 'Demo',
-        ),
-      ));
+        await tester.pumpWidget(MockWrapper(
+          child: PolynomialInputField(
+            controller: controller,
+            placeholder: 'Demo',
+          ),
+        ));
 
-      final finder =
-          find.byKey(const Key('PolynomialInputField-TextFormField'));
-      expect(finder, findsOneWidget);
+        final finder =
+            find.byKey(const Key('PolynomialInputField-TextFormField'));
+        expect(finder, findsOneWidget);
 
-      // Testing the validator. Making sure that is accepts numbers and fractions
-      final textField = tester.firstWidget(finder) as TextFormField;
-      final validatorFunction = textField.validator!;
+        // Testing the validator. Making sure that is accepts numbers and fractions
+        final textField = tester.firstWidget(finder) as TextFormField;
+        final validatorFunction = textField.validator!;
 
-      expect(validatorFunction('1'), isNull);
-      expect(validatorFunction('-2/3'), isNull);
-      expect(validatorFunction('2.2587'), isNull);
+        expect(validatorFunction('1'), isNull);
+        expect(validatorFunction('-2/3'), isNull);
+        expect(validatorFunction('2.2587'), isNull);
 
-      expect(validatorFunction(''), isNotNull);
-    });
+        expect(validatorFunction(''), isNotNull);
+      },
+    );
 
     testGoldens('PolynomialInputField', (tester) async {
       final builder = GoldenBuilder.column()

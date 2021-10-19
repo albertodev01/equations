@@ -12,9 +12,10 @@ class SectionTitle extends StatelessWidget {
 
   /// Creates a [SectionTitle] widget.
   const SectionTitle({
+    Key? key,
     required this.pageTitle,
     required this.icon,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,10 @@ class SectionTitle extends StatelessWidget {
         ),
         Text(
           pageTitle,
-          style: const TextStyle(fontSize: 26, color: Colors.blueGrey),
+          style: const TextStyle(
+            fontSize: 26,
+            color: Colors.blueGrey,
+          ),
         ),
       ],
     );

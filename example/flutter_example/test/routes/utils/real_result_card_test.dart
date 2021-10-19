@@ -1,4 +1,4 @@
-import 'package:equations_solver/routes/nonlinear_page/real_result_card.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -19,32 +19,35 @@ void main() {
     });
 
     testWidgets(
-        "Making sure that when the value is 'NaN', an error message "
-        'actually appears', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: RealResultCard(
-          value: double.nan,
-        ),
-      ));
+      "Making sure that when the value is 'NaN', an error message "
+      'actually appears',
+      (tester) async {
+        await tester.pumpWidget(const MockWrapper(
+          child: RealResultCard(
+            value: double.nan,
+          ),
+        ));
 
-      expect(find.byType(RealResultCard), findsOneWidget);
-      expect(find.text('x = Not computed'), findsOneWidget);
-    });
+        expect(find.byType(RealResultCard), findsOneWidget);
+        expect(find.text('x = Not computed'), findsOneWidget);
+      },
+    );
 
     testWidgets(
-        "Making sure that when the 'withFraction' value is set to true. "
-        'the fractional value of the number appears at the bottom.',
-        (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: RealResultCard(
-          value: 0.5,
-          withFraction: true,
-        ),
-      ));
+      "Making sure that when the 'withFraction' value is set to true. "
+      'the fractional value of the number appears at the bottom.',
+      (tester) async {
+        await tester.pumpWidget(const MockWrapper(
+          child: RealResultCard(
+            value: 0.5,
+            withFraction: true,
+          ),
+        ));
 
-      expect(find.byType(RealResultCard), findsOneWidget);
-      expect(find.byKey(const Key('Fraction-ResultCard')), findsOneWidget);
-    });
+        expect(find.byType(RealResultCard), findsOneWidget);
+        expect(find.byKey(const Key('Fraction-ResultCard')), findsOneWidget);
+      },
+    );
 
     testGoldens('RealResultCard', (tester) async {
       final builder = GoldenBuilder.column()

@@ -13,7 +13,7 @@ void main() {
           rows: 1,
           columns: 1,
           data: [
-            [1]
+            [1],
           ],
         ),
       );
@@ -23,7 +23,7 @@ void main() {
           rows: 1,
           columns: 1,
           data: const [
-            [Complex.i()]
+            [Complex.i()],
           ],
         ),
       );
@@ -34,7 +34,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: [
-              [1]
+              [1],
             ],
           ),
         ),
@@ -47,7 +47,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: [
-              [1]
+              [1],
             ],
           ),
         ).hashCode,
@@ -60,7 +60,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: const [
-              [Complex.i()]
+              [Complex.i()],
             ],
           ),
         ),
@@ -73,7 +73,7 @@ void main() {
             rows: 1,
             columns: 1,
             data: const [
-              [Complex.i()]
+              [Complex.i()],
             ],
           ),
         ).hashCode,

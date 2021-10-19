@@ -13,9 +13,12 @@ void main() {
     blocTest<ExpansionCubit, bool>(
       'Making sure that the bloc emits states',
       build: () => ExpansionCubit(),
-      act: (cubit) => cubit..toggle()..toggle()..toggle(),
+      act: (cubit) => cubit
+        ..toggle()
+        ..toggle()
+        ..toggle(),
       expect: () => const [true, false, true],
-      verify: (cubit) => cubit.state == true,
+      verify: (cubit) => cubit.state,
     );
   });
 }

@@ -1,19 +1,20 @@
 import 'dart:math' as math;
+
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
-import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a series of input widgets needed to parse the
 /// coefficients of the nonlinear equation to be solved.
 class NonlinearDataInput extends StatefulWidget {
   /// Creates a [NonlinearDataInput] widget.
-  const NonlinearDataInput();
+  const NonlinearDataInput({Key? key}) : super(key: key);
 
   @override
   _NonlinearDataInputState createState() => _NonlinearDataInputState();
@@ -28,8 +29,8 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   );
 
   /// Manually caching the equation input field.
-  late final functionInput = NonlinearInput(
-    key: const Key('NonlinearInput-function'),
+  late final functionInput = EquationInput(
+    key: const Key('EquationInput-function'),
     controller: controllers[0],
     placeholderText: 'f(x)',
   );
@@ -51,7 +52,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   int get fieldsCount => _getType == NonlinearType.singlePoint ? 2 : 3;
 
   /// Form and chart cleanup.
-  void cleanInput(BuildContext context) {
+  void cleanInput() {
     for (final controller in controllers) {
       controller.clear();
     }
@@ -61,11 +62,12 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   }
 
   /// Solves a nonlinear equation.
-  void solve(BuildContext context) {
+  void solve() {
     if (formKey.currentState?.validate() ?? false) {
-      final precision = context.read<SliderCubit>().state;
-      final algorithm = context.read<DropdownCubit>().state;
       final bloc = context.read<NonlinearBloc>();
+      final precision = context.read<SliderCubit>().state;
+      final algorithm =
+          context.read<DropdownCubit>().state.toNonlinearDropdownItems();
 
       if (_getType == NonlinearType.singlePoint) {
         bloc.add(
@@ -90,7 +92,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.polynomial_error),
+          content: Text(context.l10n.invalid_values),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -136,7 +138,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
               // Solving the equation
               ElevatedButton(
                 key: const Key('Nonlinear-button-solve'),
-                onPressed: () => solve(context),
+                onPressed: solve,
                 child: Text(context.l10n.solve),
               ),
 
@@ -146,7 +148,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
               // Cleaning the inputs
               ElevatedButton(
                 key: const Key('Nonlinear-button-clean'),
-                onPressed: () => cleanInput(context),
+                onPressed: cleanInput,
                 child: Text(context.l10n.clean),
               ),
             ],
@@ -180,8 +182,8 @@ class _GuessesInput extends StatelessWidget {
       alignment: WrapAlignment.center,
       spacing: 30,
       children: [
-        NonlinearInput(
-          key: const Key('NonlinearInput-first-param'),
+        EquationInput(
+          key: const Key('EquationInput-first-param'),
           controller: controllers[1],
           placeholderText: 'x0',
           baseWidth: 80,
@@ -189,8 +191,8 @@ class _GuessesInput extends StatelessWidget {
           onlyRealValues: true,
         ),
         if (type == NonlinearType.bracketing)
-          NonlinearInput(
-            key: const Key('NonlinearInput-second-param'),
+          EquationInput(
+            key: const Key('EquationInput-second-param'),
             controller: controllers[2],
             placeholderText: 'x1',
             baseWidth: 80,

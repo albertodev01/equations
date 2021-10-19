@@ -1,8 +1,8 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///  - Quartic
 class PolynomialPage extends StatefulWidget {
   /// Creates a [PolynomialPage] widget.
-  const PolynomialPage();
+  const PolynomialPage({Key? key}) : super(key: key);
 
   @override
   _PolynomialPageState createState() => _PolynomialPageState();

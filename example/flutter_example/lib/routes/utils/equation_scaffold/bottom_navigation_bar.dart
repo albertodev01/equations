@@ -11,8 +11,9 @@ class BottomNavigation extends StatefulWidget {
 
   /// Creates a [BottomNavigation] widget.
   const BottomNavigation({
+    Key? key,
     required this.navigationItems,
-  });
+  }) : super(key: key);
 
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
@@ -23,15 +24,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
   /// to be displayed on the navigation bar.
   ///
   /// Since these items will always be the same, we manually cache the list.
-  late final _bottom = widget.navigationItems
-      .map<BottomNavigationBarItem>(
-        (item) => BottomNavigationBarItem(
-          icon: item.icon,
-          activeIcon: item.activeIcon,
-          label: item.title,
-        ),
-      )
-      .toList(growable: false);
+  late final _bottom = widget.navigationItems.map<BottomNavigationBarItem>((i) {
+    return BottomNavigationBarItem(
+      icon: i.icon,
+      activeIcon: i.activeIcon,
+      label: i.title,
+    );
+  }).toList(growable: false);
 
   @override
   Widget build(BuildContext context) {

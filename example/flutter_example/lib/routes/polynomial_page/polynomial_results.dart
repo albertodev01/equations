@@ -1,17 +1,18 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:equations_solver/localization/localization.dart';
 
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
   /// Creates a [PolynomialResults] widget.
-  const PolynomialResults();
+  const PolynomialResults({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,7 @@ class PolynomialResults extends StatelessWidget {
 
         SectionTitle(
           pageTitle: context.l10n.solutions,
-          icon: SvgPicture.asset(
-            'assets/solutions.svg',
-            height: 40,
-          ),
+          icon: const EquationSolution(),
         ),
 
         // Showing the solutions of the polynomial
@@ -55,14 +53,9 @@ class PolynomialResults extends StatelessWidget {
   }
 }
 
-class _PolynomialSolutions extends StatefulWidget {
+class _PolynomialSolutions extends StatelessWidget {
   const _PolynomialSolutions();
 
-  @override
-  __PolynomialSolutionsState createState() => __PolynomialSolutionsState();
-}
-
-class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
@@ -93,17 +86,10 @@ class __PolynomialSolutionsState extends State<_PolynomialSolutions> {
 
 /// Shows the discriminant of the polynomial equation to be solved.
 @visibleForTesting
-class PolynomialDiscriminant extends StatefulWidget {
+class PolynomialDiscriminant extends StatelessWidget {
   /// Creates a [PolynomialDiscriminant] widget.
-  const PolynomialDiscriminant({
-    Key? key,
-  }) : super(key: key);
+  const PolynomialDiscriminant({Key? key}) : super(key: key);
 
-  @override
-  _PolynomialDiscriminantState createState() => _PolynomialDiscriminantState();
-}
-
-class _PolynomialDiscriminantState extends State<PolynomialDiscriminant> {
   /// Listen condition for the [BlocBuilder].
   ///
   /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].

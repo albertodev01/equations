@@ -1,3 +1,5 @@
+import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
@@ -6,11 +8,9 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/localization/localization.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// This widget contains the solutions of the polynomial equation and a chart
 /// which plots the function.
@@ -19,9 +19,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// on two columns according with the available width.
 class PolynomialBody extends StatelessWidget {
   /// Creates a [PolynomialBody] widget.
-  const PolynomialBody({
-    Key? key,
-  }) : super(key: key);
+  const PolynomialBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +51,9 @@ class _ResponsiveBody extends StatefulWidget {
 }
 
 class __ResponsiveBodyState extends State<_ResponsiveBody> {
-  /// Manually caching the page title
+  /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
-    pageTitle: getLocalizedName(context),
+    pageTitle: getLocalizedName(),
     pageLogo: const PolynomialLogo(
       size: 50,
     ),
@@ -63,7 +61,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
   /// Getting the title of the page according with the type of polynomial that
   /// is going to be solved.
-  String getLocalizedName(BuildContext context) {
+  String getLocalizedName() {
     final polynomialType = context.read<PolynomialBloc>().polynomialType;
 
     switch (polynomialType) {
@@ -134,15 +132,10 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 }
 
 /// Puts on the screen a widget that draws mathematical functions.
-class _PolynomialPlot extends StatefulWidget {
+class _PolynomialPlot extends StatelessWidget {
   /// Creates a [_PolynomialPlot] widget.
   const _PolynomialPlot();
 
-  @override
-  __PolynomialPlotState createState() => __PolynomialPlotState();
-}
-
-class __PolynomialPlotState extends State<_PolynomialPlot> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolynomialBloc, PolynomialState>(
@@ -150,7 +143,9 @@ class __PolynomialPlotState extends State<_PolynomialPlot> {
         PolynomialPlot? plotMode;
 
         if (state is PolynomialRoots) {
-          plotMode = PolynomialPlot(algebraic: state.algebraic);
+          plotMode = PolynomialPlot(
+            algebraic: state.algebraic,
+          );
         }
 
         return Center(
@@ -165,10 +160,7 @@ class __PolynomialPlotState extends State<_PolynomialPlot> {
                 // Title
                 SectionTitle(
                   pageTitle: context.l10n.chart,
-                  icon: SvgPicture.asset(
-                    'assets/plot.svg',
-                    height: 40,
-                  ),
+                  icon: const PlotIcon(),
                 ),
 
                 // The actual plot
