@@ -104,7 +104,7 @@ void main() {
       for (var i = 0; i < equations.length; ++i) {
         final result = TrapezoidalRule(
           function: equations[i],
-          lowerBound: solution[i][0],
+          lowerBound: solution[i].first,
           upperBound: solution[i][1],
           intervals: 500,
         ).integrate();

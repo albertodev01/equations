@@ -99,7 +99,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 
     final V = RealMatrix.fromData(
       rows: eigenVectors.length,
-      columns: eigenVectors[0].length,
+      columns: eigenVectors.first.length,
       data: eigenVectors,
     );
 
@@ -221,7 +221,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
       eigenVectors.set(matrix.rowCount - 1, j, 0);
     }
     eigenVectors.set(matrix.rowCount - 1, matrix.rowCount - 1, 1);
-    complexEigenvalues[0] = 0.0;
+    complexEigenvalues.first = 0.0;
   }
 
   /// Applying the tridiagonal QL algorithm, which is an efficient method to

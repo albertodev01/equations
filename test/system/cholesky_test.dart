@@ -184,9 +184,55 @@ void main() {
 
       expect(cholesky, equals(cholesky2));
       expect(cholesky == cholesky2, isTrue);
+      expect(cholesky2, equals(cholesky));
+      expect(cholesky2 == cholesky, isTrue);
       expect(cholesky.hashCode, equals(cholesky2.hashCode));
       expect(cholesky == different, isFalse);
       expect(cholesky.hashCode == different.hashCode, isFalse);
+    });
+
+    test('Batch tests', () {
+      final systems = [
+        CholeskySolver(
+          equations: const [
+            [25, 15, -5],
+            [15, 18, 0],
+            [-5, 0, 11],
+          ],
+          constants: [35, 33, 6],
+        ).solve(),
+        CholeskySolver(
+          equations: const [
+            [4, 12, -16],
+            [12, 37, -43],
+            [-16, -43, 98],
+          ],
+          constants: [9, 1, 0],
+        ).solve(),
+        CholeskySolver(
+          equations: const [
+            [1, 0, 1],
+            [0, 2, 0],
+            [1, 0, 3],
+          ],
+          constants: [6, 5, -2],
+        ).solve(),
+      ];
+
+      const solutions = <List<double>>[
+        [1, 1, 1],
+        [430.6944, -118.2222, 18.4444],
+        [10, 2.5, -4],
+      ];
+
+      for (var i = 0; i < systems.length; ++i) {
+        for (var j = 0; j < 2; ++j) {
+          expect(
+            systems[i][j],
+            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
+          );
+        }
+      }
     });
   });
 }

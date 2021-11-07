@@ -50,7 +50,7 @@ class NewtonInterpolation extends Interpolation {
   /// table.
   double _forwardEvaluation(RealMatrix differencesTable, double x) {
     var sum = differencesTable(0, 0);
-    final u = (x - nodes[0].x) / (nodes[1].x - nodes[0].x);
+    final u = (x - nodes.first.x) / (nodes[1].x - nodes.first.x);
 
     for (var i = 1; i < differencesTable.rowCount; i++) {
       final fact = _factorial.compute(i);
@@ -65,7 +65,7 @@ class NewtonInterpolation extends Interpolation {
   double _backwardEvaluation(RealMatrix differencesTable, double x) {
     final size = nodes.length - 1;
     var sum = differencesTable(size, 0);
-    final u = (x - nodes[size].x) / (nodes[1].x - nodes[0].x);
+    final u = (x - nodes[size].x) / (nodes[1].x - nodes.first.x);
 
     for (var i = 1; i < differencesTable.rowCount; i++) {
       final fact = _factorial.compute(i);
@@ -87,7 +87,7 @@ class NewtonInterpolation extends Interpolation {
     // Initializing the column
     var index = 0;
     for (final node in nodes) {
-      table[index++][0] = node.y;
+      table[index++].first = node.y;
     }
 
     // Forward difference table
@@ -112,7 +112,7 @@ class NewtonInterpolation extends Interpolation {
     // Initializing the column
     var index = 0;
     for (final node in nodes) {
-      table[index++][0] = node.y;
+      table[index++].first = node.y;
     }
 
     // Forward difference table

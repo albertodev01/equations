@@ -109,29 +109,29 @@ abstract class Algebraic {
     switch (coefficients.length) {
       case 1:
         return Constant(
-          a: coefficients[0],
+          a: coefficients.first,
         );
       case 2:
         return Linear(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
         );
       case 3:
         return Quadratic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
         );
       case 4:
         return Cubic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
         );
       case 5:
         return Quartic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
@@ -227,7 +227,7 @@ abstract class Algebraic {
   /// the best approximation possible.
   String _convertToString({bool asFraction = false}) {
     if (coefficients.length == 1) {
-      final value = coefficients[0];
+      final value = coefficients.first;
 
       if (asFraction) {
         return 'f(x) = ${value.toStringAsFraction()}';
@@ -336,7 +336,7 @@ abstract class Algebraic {
   ///
   /// A [Constant] is an exception because a constant value has no variables with
   /// a degree.
-  bool get isValid => this is Constant || !coefficients[0].isZero;
+  bool get isValid => this is Constant || !coefficients.first.isZero;
 
   /// Returns the coefficient of the polynomial at the given [index] position.
   /// For example:

@@ -34,7 +34,7 @@ class LUSolver extends SystemSolver {
     final lu = equations.luDecomposition();
 
     // Solving Ly = b
-    final L = lu[0].toListOfList();
+    final L = lu.first.toListOfList();
     final b = knownValues;
     final y = SystemSolver.forwardSubstitution(L, b);
 

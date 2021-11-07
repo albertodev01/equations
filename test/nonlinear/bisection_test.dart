@@ -48,7 +48,14 @@ void main() {
         b: 2,
       );
 
-      expect(const Bisection(function: 'x-2', a: 1, b: 2), equals(bisection));
+      expect(
+        const Bisection(function: 'x-2', a: 1, b: 2),
+        equals(bisection),
+      );
+      expect(
+        bisection,
+        equals(const Bisection(function: 'x-2', a: 1, b: 2)),
+      );
       expect(
         const Bisection(function: 'x-2', a: 0, b: 2) == bisection,
         isFalse,
@@ -105,7 +112,7 @@ void main() {
         for (var j = 0; j < equations[i].length; ++j) {
           final solutions = Bisection(
             function: equations[i],
-            a: initialGuesses[i][0],
+            a: initialGuesses[i].first,
             b: initialGuesses[i][1],
           ).solve();
 

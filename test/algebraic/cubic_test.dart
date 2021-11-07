@@ -63,8 +63,9 @@ void main() {
       expect(solutions[2].imaginary, const MoreOrLessEquals(1.055514309999));
       expect(solutions[1].real, const MoreOrLessEquals(-2.855196539321));
       expect(solutions[1].imaginary.round(), isZero);
-      expect(solutions[0].real, const MoreOrLessEquals(1.42759826966));
-      expect(solutions[0].imaginary, const MoreOrLessEquals(-1.055514309999));
+      expect(solutions.first.real, const MoreOrLessEquals(1.42759826966));
+      expect(
+          solutions.first.imaginary, const MoreOrLessEquals(-1.055514309999));
 
       // Evaluation
       final eval = equation.realEvaluateOn(0.5);

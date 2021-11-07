@@ -23,12 +23,12 @@ class LinearSpline extends SplineFunction {
       return x;
     }
 
-    if (x < nodes[0].x) {
-      return nodes[0].y;
+    if (x < nodes.first.x) {
+      return nodes.first.y;
     }
 
-    if (x >= nodes[nodes.length - 1].x) {
-      return nodes[nodes.length - 1].y;
+    if (x >= nodes.last.x) {
+      return nodes.last.y;
     }
 
     // Finding the i-th element of the last point with smaller 'x'.

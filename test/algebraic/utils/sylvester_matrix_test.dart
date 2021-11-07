@@ -30,7 +30,7 @@ void main() {
 
     test('Making sure that the list of coefficients is unmodifiable.', () {
       expect(
-        () => matrix.coefficients[0] = const Complex.zero(),
+        () => matrix.coefficients.first = const Complex.zero(),
         throwsA(isA<UnsupportedError>()),
       );
     });

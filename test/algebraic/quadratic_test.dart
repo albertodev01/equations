@@ -62,8 +62,8 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real, const MoreOrLessEquals(2.151387818866));
-      expect(solutions[0].imaginary, isZero);
+      expect(solutions.first.real, const MoreOrLessEquals(2.151387818866));
+      expect(solutions.first.imaginary, isZero);
       expect(solutions[1].real, const MoreOrLessEquals(0.348612181134));
       expect(solutions[1].imaginary, isZero);
 

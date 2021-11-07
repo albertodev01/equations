@@ -290,7 +290,9 @@ void main() {
 
       // Equality tests
       expect(ComplexMatrix(columns: 2, rows: 2), equals(matrix));
+      expect(matrix, equals(ComplexMatrix(columns: 2, rows: 2)));
       expect(ComplexMatrix(columns: 2, rows: 2) == matrix, isTrue);
+      expect(matrix == ComplexMatrix(columns: 2, rows: 2), isTrue);
       expect(
         ComplexMatrix(columns: 2, rows: 2).hashCode,
         equals(matrix.hashCode),
@@ -299,6 +301,14 @@ void main() {
       // Inequality tests
       expect(
         ComplexMatrix(columns: 2, rows: 2, identity: true) == matrix,
+        isFalse,
+      );
+      expect(
+        ComplexMatrix(columns: 2, rows: 1).hashCode == matrix.hashCode,
+        isFalse,
+      );
+      expect(
+        matrix == ComplexMatrix(columns: 2, rows: 2, identity: true),
         isFalse,
       );
       expect(
@@ -655,7 +665,7 @@ void main() {
         expect(lu.length, equals(2));
 
         // Checking L
-        final L = lu[0];
+        final L = lu.first;
         expect(L.rowCount, equals(matrix.rowCount));
         expect(L.columnCount, equals(matrix.columnCount));
         expect(L.isSquareMatrix, isTrue);
@@ -737,7 +747,7 @@ void main() {
         expect(cholesky.length, equals(2));
 
         // Checking L
-        final L = cholesky[0];
+        final L = cholesky.first;
         expect(
           L.flattenData,
           orderedEquals(
@@ -1305,7 +1315,7 @@ void main() {
       final eigenvalues = matrix.eigenvalues();
 
       expect(eigenvalues.length, equals(1));
-      expect(eigenvalues[0], equals(const Complex.fromReal(-16)));
+      expect(eigenvalues.first, equals(const Complex.fromReal(-16)));
     });
 
     test('Making sure that eigenvalues can be computed (2x2 matrices)', () {
@@ -1322,7 +1332,7 @@ void main() {
 
       expect(eigenvalues.length, equals(2));
       expect(
-        eigenvalues[0].real,
+        eigenvalues.first.real,
         const MoreOrLessEquals(2.4328, precision: 1.0e-4),
       );
       expect(
@@ -1330,7 +1340,7 @@ void main() {
         const MoreOrLessEquals(-2.4328, precision: 1.0e-4),
       );
       expect(
-        eigenvalues[0].imaginary,
+        eigenvalues.first.imaginary,
         const MoreOrLessEquals(0.0889, precision: 1.0e-4),
       );
       expect(
@@ -1354,7 +1364,7 @@ void main() {
 
       expect(eigenvalues.length, equals(3));
       expect(
-        eigenvalues[0].real,
+        eigenvalues.first.real,
         const MoreOrLessEquals(2.4328, precision: 1.0e-4),
       );
       expect(
@@ -1366,7 +1376,7 @@ void main() {
         const MoreOrLessEquals(3, precision: 1.0e-4),
       );
       expect(
-        eigenvalues[0].imaginary,
+        eigenvalues.first.imaginary,
         const MoreOrLessEquals(0.0889, precision: 1.0e-4),
       );
       expect(

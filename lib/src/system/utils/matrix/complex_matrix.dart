@@ -426,7 +426,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // If it's a square matrix, we can use the LU decomposition which is faster
     if (isSquareMatrix) {
-      final lower = luDecomposition()[0];
+      final lower = luDecomposition().first;
 
       // Linearly independent columns
       var independentCols = 0;
@@ -717,13 +717,13 @@ class ComplexMatrix extends Matrix<Complex> {
 
   /// Computes the determinant of a 2x2 matrix
   Complex _compute2x2Determinant(ComplexMatrix source) {
-    return source.flattenData[0] * source.flattenData[3] -
+    return source.flattenData.first * source.flattenData[3] -
         source.flattenData[1] * source.flattenData[2];
   }
 
   /// Computes the determinant of a 3x3 matrix
   Complex _compute3x3Determinant(ComplexMatrix source) {
-    final x = source.flattenData[0] *
+    final x = source.flattenData.first *
         ((source.flattenData[4] * source.flattenData[8]) -
             (source.flattenData[5] * source.flattenData[7]));
     final y = source.flattenData[1] *
@@ -738,11 +738,11 @@ class ComplexMatrix extends Matrix<Complex> {
 
   /// Computes the determinant of a 4x4 matrix
   Complex _compute4x4Determinant(ComplexMatrix source) {
-    final det2_01_01 = source.flattenData[0] * source.flattenData[5] -
+    final det2_01_01 = source.flattenData.first * source.flattenData[5] -
         source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 = source.flattenData[0] * source.flattenData[6] -
+    final det2_01_02 = source.flattenData.first * source.flattenData[6] -
         source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 = source.flattenData[0] * source.flattenData[7] -
+    final det2_01_03 = source.flattenData.first * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[4];
     final det2_01_12 = source.flattenData[1] * source.flattenData[6] -
         source.flattenData[2] * source.flattenData[5];
@@ -781,7 +781,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // In case there were an 1x1 matrix, just return the value
     if (source.rowCount * source.columnCount == 1) {
-      return source.flattenData[0];
+      return source.flattenData.first;
     }
 
     // For efficiency, manually computing a 2x2 matrix
@@ -817,7 +817,7 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // The determinant of L and U is the product of the elements on the diagonal
     for (var i = 0; i < rowCount; ++i) {
-      prodL *= lu[0](i, i);
+      prodL *= lu.first(i, i);
       prodU *= lu[1](i, i);
     }
 

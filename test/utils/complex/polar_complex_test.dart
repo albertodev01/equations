@@ -3,7 +3,11 @@ import 'package:test/test.dart';
 
 void main() {
   group('Testing the behaviors of the PolarComplex class.', () {
-    const polar = PolarComplex(r: 10, phiRadians: 2 * 3.14, phiDegrees: 360);
+    const polar = PolarComplex(
+      r: 10,
+      phiRadians: 2 * 3.14,
+      phiDegrees: 360,
+    );
 
     test('Making that PolarComplex values are properly constructed.', () {
       expect(polar.r, equals(10));
@@ -23,19 +27,41 @@ void main() {
     });
 
     test('Making that PolarComplex can be properly compared.', () {
-      const polar2 = PolarComplex(r: -4, phiRadians: 3.14, phiDegrees: 180);
+      const polar2 = PolarComplex(
+        r: -4,
+        phiRadians: 3.14,
+        phiDegrees: 180,
+      );
 
       expect(polar2 == polar, isFalse);
+      expect(polar == polar2, isFalse);
       expect(
-        polar2 == const PolarComplex(r: -4, phiRadians: 3.14, phiDegrees: 180),
+        polar2 ==
+            const PolarComplex(
+              r: -4,
+              phiRadians: 3.14,
+              phiDegrees: 180,
+            ),
+        isTrue,
+      );
+      expect(
+        const PolarComplex(
+              r: -4,
+              phiRadians: 3.14,
+              phiDegrees: 180,
+            ) ==
+            polar2,
         isTrue,
       );
 
       expect(
         polar.hashCode,
         equals(
-          const PolarComplex(r: 10, phiRadians: 2 * 3.14, phiDegrees: 360)
-              .hashCode,
+          const PolarComplex(
+            r: 10,
+            phiRadians: 2 * 3.14,
+            phiDegrees: 360,
+          ).hashCode,
         ),
       );
       expect(
@@ -52,7 +78,11 @@ void main() {
     });
 
     test('Making sure that copyWith clones objects correctly', () {
-      const polarComplex = PolarComplex(r: 9, phiRadians: 1, phiDegrees: 2);
+      const polarComplex = PolarComplex(
+        r: 9,
+        phiRadians: 1,
+        phiDegrees: 2,
+      );
 
       // Objects equality
       expect(
@@ -64,13 +94,21 @@ void main() {
       expect(
         polarComplex,
         equals(
-          polarComplex.copyWith(r: 9, phiRadians: 1, phiDegrees: 2),
+          polarComplex.copyWith(
+            r: 9,
+            phiRadians: 1,
+            phiDegrees: 2,
+          ),
         ),
       );
 
       // Objects inequality
       expect(
         polarComplex == polarComplex.copyWith(r: 0),
+        isFalse,
+      );
+      expect(
+        polarComplex.copyWith(r: 0) == polarComplex,
         isFalse,
       );
     });

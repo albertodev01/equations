@@ -40,6 +40,20 @@ void main() {
         ),
         equals(real),
       );
+      expect(
+        real,
+        equals(
+          EigendecompositionReal(
+            matrix: RealMatrix.fromData(
+              rows: 1,
+              columns: 1,
+              data: [
+                [1],
+              ],
+            ),
+          ),
+        ),
+      );
 
       expect(
         EigendecompositionReal(
@@ -65,6 +79,21 @@ void main() {
           ),
         ),
         equals(complex),
+      );
+
+      expect(
+        complex,
+        equals(
+          EigendecompositionComplex(
+            matrix: ComplexMatrix.fromData(
+              rows: 1,
+              columns: 1,
+              data: const [
+                [Complex.i()],
+              ],
+            ),
+          ),
+        ),
       );
 
       expect(
@@ -97,7 +126,7 @@ void main() {
         );
 
         final results = realEigen.decompose();
-        final matrixV = results[0];
+        final matrixV = results.first;
         final matrixD = results[1];
         final matrixVinverse = results[2];
 
@@ -194,7 +223,7 @@ void main() {
         );
 
         final results = realEigen.decompose();
-        final matrixV = results[0];
+        final matrixV = results.first;
         final matrixD = results[1];
         final matrixVinverse = results[2];
 

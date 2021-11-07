@@ -32,7 +32,7 @@ class Constant extends Algebraic {
   List<Complex> solutions() => [];
 
   /// The constant coefficient.
-  Complex get a => coefficients[0];
+  Complex get a => coefficients.first;
 
   /// Creates a **deep** copy of this object with the given fields replaced
   /// with the new values.

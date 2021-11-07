@@ -67,11 +67,11 @@ void main() {
           const MoreOrLessEquals(-1.4914, precision: 1.0e-4),
         );
         expect(
-          solutions[0].real,
+          solutions.first.real,
           const MoreOrLessEquals(0.8357, precision: 1.0e-4),
         );
         expect(
-          solutions[0].imaginary,
+          solutions.first.imaginary,
           const MoreOrLessEquals(4.4914, precision: 1.0e-4),
         );
 

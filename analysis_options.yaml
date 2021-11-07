@@ -17,6 +17,7 @@ dart_code_metrics:
     - test/**
     - example/**
   rules:
+    - avoid-nested-conditional-expressions
     - avoid-unused-parameters
     - avoid-wrapping-in-padding
     - binary-expression-operand-order
@@ -25,6 +26,9 @@ dart_code_metrics:
     - no-boolean-literal-compare
     - no-equal-then-else
     - no-object-declaration
+    - prefer-correct-type-name
+    - prefer-first
+    - prefer-last
     - prefer-trailing-comma
   rules-exclude:
     - example/**

@@ -195,7 +195,7 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     // and rectangular matrices.
     for (var k = matrix.columnCount - 1; k >= 0; k--) {
       if ((k < nrt) && (arrayE[k] != const Complex.zero())) {
-        for (var j = k + 1; j < matrixV[0].length; j++) {
+        for (var j = k + 1; j < matrixV.first.length; j++) {
           var t = const Complex.zero();
           for (var i = k + 1; i < matrix.columnCount; i++) {
             t += matrixV[i][k] * matrixV[i][j];

@@ -46,7 +46,7 @@ class CholeskySolver extends SystemSolver {
     final cholesky = equations.choleskyDecomposition();
 
     // Solving Ly = b
-    final L = cholesky[0].toListOfList();
+    final L = cholesky.first.toListOfList();
     final b = knownValues;
     final y = SystemSolver.forwardSubstitution(L, b);
 

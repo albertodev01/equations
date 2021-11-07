@@ -44,7 +44,7 @@ void main() {
         expect(sor.determinant(), equals(20));
 
         final solutions = sor.solve();
-        expect(solutions[0], const MoreOrLessEquals(1, precision: 1.0e-2));
+        expect(solutions.first, const MoreOrLessEquals(1, precision: 1.0e-2));
         expect(solutions[1], const MoreOrLessEquals(2, precision: 1.0e-2));
         expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
       },
@@ -154,7 +154,56 @@ void main() {
 
       expect(sor, equals(sor2));
       expect(sor == sor2, isTrue);
+      expect(sor2, equals(sor));
+      expect(sor2 == sor, isTrue);
       expect(sor.hashCode, equals(sor2.hashCode));
+    });
+
+    test('Batch tests', () {
+      final systems = [
+        SORSolver(
+          equations: const [
+            [3, -1, 1],
+            [-1, 3, -1],
+            [1, -1, 3],
+          ],
+          constants: [-1, 7, -7],
+          w: 1.25,
+        ).solve(),
+        SORSolver(
+          equations: const [
+            [4, -2, 0],
+            [-2, 6, -5],
+            [0, -5, 11],
+          ],
+          constants: [8, -29, 43],
+          w: 1.2,
+        ).solve(),
+        SORSolver(
+          equations: const [
+            [3, -1, 1],
+            [-1, 3, -1],
+            [1, -1, 3],
+          ],
+          constants: [-1, 7, -7],
+          w: 1.65,
+        ).solve(),
+      ];
+
+      const solutions = <List<double>>[
+        [1, 2, -2],
+        [1, -2, 3],
+        [1, 2, -2],
+      ];
+
+      for (var i = 0; i < systems.length; ++i) {
+        for (var j = 0; j < 2; ++j) {
+          expect(
+            systems[i][j],
+            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
+          );
+        }
+      }
     });
   });
 }

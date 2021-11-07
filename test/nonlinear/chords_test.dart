@@ -103,7 +103,7 @@ void main() {
         for (var j = 0; j < equations[i].length; ++j) {
           final solutions = Chords(
             function: equations[i],
-            a: initialGuesses[i][0],
+            a: initialGuesses[i].first,
             b: initialGuesses[i][1],
             maxSteps: 20,
           ).solve();

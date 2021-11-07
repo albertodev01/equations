@@ -40,6 +40,16 @@ void main() {
             ),
         isTrue,
       );
+      expect(results == results2, isTrue);
+      expect(
+        const NonlinearResults(
+              guesses: [1.0, 2.0, 3.0],
+              convergence: 10.0,
+              efficiency: -7.0,
+            ) ==
+            results,
+        isTrue,
+      );
 
       expect(
         results.hashCode,

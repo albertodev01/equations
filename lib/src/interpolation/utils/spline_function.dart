@@ -99,7 +99,7 @@ abstract class SplineFunction {
     }
 
     // The "comparison" node.
-    var prev = nodes[0].x;
+    var prev = nodes.first.x;
 
     // Making sure that all of the 'X' coordinates of the nodes are increasing
     for (var i = 1; i < nodes.length; ++i) {
@@ -118,7 +118,7 @@ abstract class SplineFunction {
   /// Determines whether the function is monotonic or not.
   static bool _isMonotonic(List<InterpolationNode> nodes) {
     // The "comparison" node.
-    var prev = nodes[0].y;
+    var prev = nodes.first.y;
 
     // Making sure that all of the 'y' coordinates of the nodes are increasing
     for (var i = 1; i < nodes.length; ++i) {

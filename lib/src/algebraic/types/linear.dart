@@ -50,7 +50,7 @@ class Linear extends Algebraic {
   List<Complex> solutions() => [b.negate / a];
 
   /// The first coefficient of the equation in the form _f(x) = ab + b_.
-  Complex get a => coefficients[0];
+  Complex get a => coefficients.first;
 
   /// The second coefficient of the equation in the form _f(x) = ab + b_.
   Complex get b => coefficients[1];
