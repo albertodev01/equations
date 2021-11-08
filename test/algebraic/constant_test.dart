@@ -18,7 +18,11 @@ void main() {
       );
       expect(equation.solutions().length, isZero);
       expect(equation.isRealEquation, isFalse);
-      expect(equation.coefficients, equals(const [Complex(3, 7)]));
+      expect(
+          equation.coefficients,
+          equals(
+            const [Complex(3, 7)],
+          ));
 
       // Making sure that coefficients can be accessed via index
       expect(equation[0], equals(const Complex(3, 7)));
@@ -62,7 +66,9 @@ void main() {
       final fx = Constant(a: const Complex.fromReal(6));
 
       expect(fx, equals(Constant(a: const Complex.fromReal(6))));
+      expect(Constant(a: const Complex.fromReal(6)), equals(fx));
       expect(fx == Constant(a: const Complex.fromReal(6)), isTrue);
+      expect(Constant(a: const Complex.fromReal(6)) == fx, isTrue);
       expect(
         fx.hashCode,
         equals(Constant(a: const Complex.fromReal(6)).hashCode),

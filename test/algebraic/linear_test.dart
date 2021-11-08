@@ -124,11 +124,26 @@ void main() {
         )),
       );
       expect(
+        Linear(
+          a: const Complex(2, 3),
+          b: const Complex.i(),
+        ),
+        equals(fx),
+      );
+      expect(
         fx ==
             Linear(
               a: const Complex(2, 3),
               b: const Complex.i(),
             ),
+        isTrue,
+      );
+      expect(
+        Linear(
+              a: const Complex(2, 3),
+              b: const Complex.i(),
+            ) ==
+            fx,
         isTrue,
       );
       expect(

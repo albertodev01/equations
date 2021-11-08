@@ -40,6 +40,84 @@ void main() {
       },
     );
 
+    test('Making sure that objects comparison works properly', () {
+      const interpolation = NewtonInterpolation(
+        nodes: [
+          InterpolationNode(x: 1, y: 3),
+          InterpolationNode(x: -2, y: 5),
+        ],
+      );
+
+      expect(
+        interpolation,
+        equals(
+          const NewtonInterpolation(
+            nodes: [
+              InterpolationNode(x: 1, y: 3),
+              InterpolationNode(x: -2, y: 5),
+            ],
+          ),
+        ),
+      );
+      expect(
+        const NewtonInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: -2, y: 5),
+          ],
+        ),
+        equals(interpolation),
+      );
+
+      expect(
+        interpolation ==
+            const NewtonInterpolation(
+              nodes: [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: -2, y: 5),
+              ],
+            ),
+        isTrue,
+      );
+
+      expect(
+        const NewtonInterpolation(
+              nodes: [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: -2, y: 5),
+              ],
+            ) ==
+            interpolation,
+        isTrue,
+      );
+
+      expect(
+        interpolation ==
+            const NewtonInterpolation(
+              nodes: [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: 2, y: 5),
+              ],
+            ),
+        isFalse,
+      );
+
+      expect(
+        interpolation == interpolation,
+        isTrue,
+      );
+
+      expect(
+        interpolation.hashCode,
+        equals(const NewtonInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: -2, y: 5),
+          ],
+        ).hashCode),
+      );
+    });
+
     test(
       "Making sure that a 'NewtonInterpolation' object is properly "
       'constructed with backward differences table',

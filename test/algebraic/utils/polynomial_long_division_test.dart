@@ -35,12 +35,23 @@ void main() {
       );
 
       expect(results2 == results, isTrue);
+      expect(results == results2, isTrue);
+      expect(results, equals(results2));
+      expect(results2, equals(results));
       expect(
         results ==
             PolynomialLongDivision(
               polyNumerator: Algebraic.fromReal([1, -3, 6, 7.8]),
               polyDenominator: Algebraic.fromReal([2, -9]),
             ),
+        isTrue,
+      );
+      expect(
+        PolynomialLongDivision(
+              polyNumerator: Algebraic.fromReal([1, -3, 6, 7.8]),
+              polyDenominator: Algebraic.fromReal([2, -9]),
+            ) ==
+            results,
         isTrue,
       );
 

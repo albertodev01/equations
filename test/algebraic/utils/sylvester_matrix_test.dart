@@ -86,6 +86,33 @@ void main() {
       );
 
       expect(matrix == matrix2, isTrue);
+      expect(matrix2 == matrix, isTrue);
+      expect(matrix, equals(matrix2));
+      expect(matrix2, equals(matrix));
+
+      expect(
+        matrix ==
+            SylvesterMatrix(
+              coefficients: const [
+                Complex.fromReal(1),
+                Complex.fromReal(-7),
+                Complex.fromReal(8),
+              ],
+            ),
+        isTrue,
+      );
+      expect(
+        SylvesterMatrix(
+              coefficients: const [
+                Complex.fromReal(1),
+                Complex.fromReal(-7),
+                Complex.fromReal(8),
+              ],
+            ) ==
+            matrix,
+        isTrue,
+      );
+
       expect(matrix.hashCode, equals(matrix2.hashCode));
     });
 

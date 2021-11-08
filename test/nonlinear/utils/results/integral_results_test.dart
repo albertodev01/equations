@@ -56,6 +56,14 @@ void main() {
       );
 
       expect(
+        const IntegralResults(
+              guesses: [1.0, 2.001, 3.0],
+              result: 5.28,
+            ) ==
+            results,
+        isFalse,
+      );
+      expect(
         results ==
             const IntegralResults(
               guesses: [1.0, 2.0],

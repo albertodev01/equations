@@ -67,8 +67,16 @@ void main() {
         equals(secant),
       );
       expect(
-        const Secant(function: 'x-2', a: 0, b: 2) == secant,
-        isFalse,
+        secant,
+        equals(const Secant(function: 'x-2', a: -1, b: 2)),
+      );
+      expect(
+        const Secant(function: 'x-2', a: -1, b: 2) == secant,
+        isTrue,
+      );
+      expect(
+        secant == const Secant(function: 'x-2', a: -1, b: 2),
+        isTrue,
       );
       expect(
         const Secant(function: 'x-2', a: -1, b: 0) == secant,

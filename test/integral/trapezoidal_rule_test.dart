@@ -40,6 +40,9 @@ void main() {
       );
 
       expect(trapezoid == trapezoid2, isTrue);
+      expect(trapezoid2 == trapezoid, isTrue);
+      expect(trapezoid, equals(trapezoid2));
+      expect(trapezoid2, equals(trapezoid));
       expect(trapezoid.hashCode, equals(trapezoid2.hashCode));
 
       expect(

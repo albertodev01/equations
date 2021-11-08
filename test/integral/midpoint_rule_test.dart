@@ -40,6 +40,9 @@ void main() {
       );
 
       expect(midpoint == midpoint2, isTrue);
+      expect(midpoint2 == midpoint, isTrue);
+      expect(midpoint, equals(midpoint2));
+      expect(midpoint2, equals(midpoint));
       expect(midpoint.hashCode, equals(midpoint2.hashCode));
 
       expect(
@@ -49,6 +52,16 @@ void main() {
               lowerBound: 2,
               upperBound: -3,
             ),
+        isTrue,
+      );
+
+      expect(
+        const MidpointRule(
+              function: 'sin(x)-3',
+              lowerBound: 2,
+              upperBound: -3,
+            ) ==
+            midpoint,
         isTrue,
       );
 

@@ -43,8 +43,13 @@ void main() {
 
         final solutions = jacobi.solve();
         expect(
-            solutions.first, const MoreOrLessEquals(7.11, precision: 1.0e-2));
-        expect(solutions[1], const MoreOrLessEquals(-3.22, precision: 1.0e-2));
+          solutions.first,
+          const MoreOrLessEquals(7.11, precision: 1.0e-2),
+        );
+        expect(
+          solutions[1],
+          const MoreOrLessEquals(-3.22, precision: 1.0e-2),
+        );
       },
     );
 

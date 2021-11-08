@@ -70,6 +70,16 @@ void main() {
       );
 
       expect(
+        LinearInterpolation(
+          nodes: const [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: -2, y: 5),
+          ],
+        ),
+        equals(interpolation),
+      );
+
+      expect(
         interpolation ==
             LinearInterpolation(
               nodes: const [
@@ -77,6 +87,17 @@ void main() {
                 InterpolationNode(x: -2, y: 5),
               ],
             ),
+        isTrue,
+      );
+
+      expect(
+        LinearInterpolation(
+              nodes: const [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: -2, y: 5),
+              ],
+            ) ==
+            interpolation,
         isTrue,
       );
 

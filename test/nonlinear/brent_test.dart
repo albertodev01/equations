@@ -48,6 +48,8 @@ void main() {
 
       expect(const Brent(function: 'x-10', a: 8, b: 12), equals(brent));
       expect(const Brent(function: 'x-10', a: 8, b: 12) == brent, isTrue);
+      expect(brent, equals(const Brent(function: 'x-10', a: 8, b: 12)));
+      expect(brent == const Brent(function: 'x-10', a: 8, b: 12), isTrue);
       expect(const Brent(function: 'x-10', a: 1, b: 12) == brent, isFalse);
       expect(const Brent(function: 'x-10', a: 8, b: -12) == brent, isFalse);
       expect(const Brent(function: 'x', a: 8, b: 12) == brent, isFalse);

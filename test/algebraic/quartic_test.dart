@@ -124,6 +124,52 @@ void main() {
 
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
+      expect(otherFx, equals(fx));
+      expect(otherFx == fx, isTrue);
+
+      expect(
+        fx,
+        equals(Quartic(
+          a: const Complex(3, -6),
+          b: const Complex.fromImaginary(-2),
+          c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
+          d: const Complex.i(),
+          e: const Complex.fromReal(9),
+        )),
+      );
+      expect(
+        Quartic(
+          a: const Complex(3, -6),
+          b: const Complex.fromImaginary(-2),
+          c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
+          d: const Complex.i(),
+          e: const Complex.fromReal(9),
+        ),
+        equals(fx),
+      );
+      expect(
+        fx ==
+            Quartic(
+              a: const Complex(3, -6),
+              b: const Complex.fromImaginary(-2),
+              c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
+              d: const Complex.i(),
+              e: const Complex.fromReal(9),
+            ),
+        isTrue,
+      );
+      expect(
+        Quartic(
+              a: const Complex(3, -6),
+              b: const Complex.fromImaginary(-2),
+              c: Complex.fromFraction(Fraction(1, 2), Fraction(1, 5)),
+              d: const Complex.i(),
+              e: const Complex.fromReal(9),
+            ) ==
+            fx,
+        isTrue,
+      );
+
       expect(fx.hashCode, equals(otherFx.hashCode));
     });
 
