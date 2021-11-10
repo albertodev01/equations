@@ -19,10 +19,11 @@ void main() {
       expect(equation.solutions().length, isZero);
       expect(equation.isRealEquation, isFalse);
       expect(
-          equation.coefficients,
-          equals(
-            const [Complex(3, 7)],
-          ));
+        equation.coefficients,
+        equals(
+          const [Complex(3, 7)],
+        ),
+      );
 
       // Making sure that coefficients can be accessed via index
       expect(equation[0], equals(const Complex(3, 7)));

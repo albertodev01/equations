@@ -23,8 +23,8 @@ void main() {
   late final Widget widgetWithMocks;
 
   setUpAll(() {
-    registerFallbackValue<SystemEvent>(MockSystemEvent());
-    registerFallbackValue<SystemState>(MockSystemState());
+    registerFallbackValue(MockSystemEvent());
+    registerFallbackValue(MockSystemState());
 
     systemBloc = MockSystemBloc();
     dropdownCubit = MockDropdownCubit();

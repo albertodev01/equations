@@ -17,8 +17,8 @@ void main() {
   late final IntegralBloc integralBloc;
 
   setUpAll(() {
-    registerFallbackValue<IntegralEvent>(MockIntegralEvent());
-    registerFallbackValue<IntegralState>(MockIntegralState());
+    registerFallbackValue(MockIntegralEvent());
+    registerFallbackValue(MockIntegralState());
 
     integralBloc = MockIntegralBloc();
   });

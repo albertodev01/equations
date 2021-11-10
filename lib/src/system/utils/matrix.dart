@@ -16,10 +16,7 @@ abstract class Matrix<T> {
   final int columnCount;
 
   /// The internal representation of the matrix.
-  late final List<T> _data;
-
-  /// A flattened representation of the data of the matrix
-  late final List<T> flattenData;
+  final List<T> _data;
 
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with zeroes.
@@ -33,17 +30,12 @@ abstract class Matrix<T> {
     required T identityOneValue,
     bool identity = false,
   })  : rowCount = rows,
-        columnCount = columns {
+        columnCount = columns,
+        _data = List<T>.filled(rows * columns, defaultValue) {
     // Making sure the user entered valid dimensions for the matrix
     if ((rows == 0) || (columns == 0)) {
       throw const MatrixException('The rows or column count cannot be zero.');
     }
-
-    // Creating a new FIXED length list
-    _data = List<T>.filled(rows * columns, defaultValue);
-
-    // Exposing data to the outside in read-only mode
-    flattenData = UnmodifiableListView<T>(_data);
 
     // The identity matrix has 1 in the diagonal
     if (identity) {
@@ -64,13 +56,8 @@ abstract class Matrix<T> {
     required int columns,
     required List<List<T>> data,
   })  : rowCount = rows,
-        columnCount = columns {
-    // "Flattening" the source into a single list
-    _data = data.expand((e) => e).toList();
-
-    // Exposing data to the outside in read-only mode
-    flattenData = UnmodifiableListView<T>(_data);
-
+        columnCount = columns,
+        _data = data.expand((e) => e).toList() {
     // Making sure the size is correct
     if (_data.length != (rows * columns)) {
       throw const MatrixException(
@@ -89,18 +76,13 @@ abstract class Matrix<T> {
     required int columns,
     required List<T> data,
   })  : rowCount = rows,
-        columnCount = columns {
+        columnCount = columns,
+        _data = List<T>.from(data) {
     // Making sure the size is correct
     if (data.length != (rows * columns)) {
       throw const MatrixException("The given sizes don't match the size of the "
           'data to be inserted.');
     }
-
-    // Making a deep copy of the data
-    _data = List<T>.from(data);
-
-    // Exposing data to the outside in read-only mode
-    flattenData = UnmodifiableListView<T>(_data);
   }
 
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
@@ -112,17 +94,12 @@ abstract class Matrix<T> {
     required T defaultValue,
     required T diagonalValue,
   })  : rowCount = rows,
-        columnCount = columns {
+        columnCount = columns,
+        _data = List<T>.filled(rows * columns, defaultValue) {
     // Making sure the user entered valid dimensions for the matrix
     if ((rows == 0) || (columns == 0)) {
       throw const MatrixException('The rows or column count cannot be zero.');
     }
-
-    // Creating a new FIXED length list
-    _data = List<T>.filled(rows * columns, defaultValue);
-
-    // Exposing data to the outside in read-only mode
-    flattenData = UnmodifiableListView<T>(_data);
 
     // Putting the given value in the diagonal
     for (var i = 0; i < rowCount; ++i) {
@@ -224,6 +201,9 @@ abstract class Matrix<T> {
       growable: false,
     );
   }
+
+  /// A flattened representation of the matrix data.
+  List<T> get flattenData => UnmodifiableListView<T>(_data);
 
   /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.
   List<T> toList() => List<T>.from(_data);

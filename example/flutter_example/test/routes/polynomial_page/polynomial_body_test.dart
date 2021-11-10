@@ -16,8 +16,8 @@ import '../mock_wrapper.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue<PolynomialEvent>(MockPolynomialEvent());
-    registerFallbackValue<PolynomialState>(MockPolynomialState());
+    registerFallbackValue(MockPolynomialEvent());
+    registerFallbackValue(MockPolynomialState());
   });
 
   group("Testing the 'PolynomialBody' widget", () {

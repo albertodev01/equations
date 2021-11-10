@@ -18,8 +18,8 @@ void main() {
   late final AnalyzedMatrix analyzedMatrix;
 
   setUpAll(() {
-    registerFallbackValue<OtherEvent>(MockOtherEvent());
-    registerFallbackValue<OtherState>(MockOtherState());
+    registerFallbackValue(MockOtherEvent());
+    registerFallbackValue(MockOtherState());
 
     bloc = MockOtherBloc();
 

@@ -1,6 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/polynomial_solver/bloc/events.dart';
 import 'package:equations_solver/blocs/polynomial_solver/bloc/states.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
@@ -19,8 +18,8 @@ void main() {
   late final MockPolynomialBloc polynomialBloc;
 
   setUpAll(() {
-    registerFallbackValue<PolynomialEvent>(MockPolynomialEvent());
-    registerFallbackValue<PolynomialState>(MockPolynomialState());
+    registerFallbackValue(MockPolynomialEvent());
+    registerFallbackValue(MockPolynomialState());
 
     polynomialBloc = MockPolynomialBloc();
   });

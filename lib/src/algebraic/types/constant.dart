@@ -13,7 +13,9 @@ import 'package:equations/equations.dart';
 class Constant extends Algebraic {
   /// The only coefficient of the polynomial is represented by a [Complex]
   /// number [a].
-  Constant({Complex a = const Complex.fromReal(1)}) : super([a]);
+  Constant({
+    Complex a = const Complex.fromReal(1),
+  }) : super([a]);
 
   /// The only coefficient of the polynomial is represented by a [double]
   /// (real) number [a].

@@ -15,8 +15,8 @@ void main() {
   late final DropdownCubit dropdownCubit;
 
   setUpAll(() {
-    registerFallbackValue<SystemEvent>(MockSystemEvent());
-    registerFallbackValue<SystemState>(MockSystemState());
+    registerFallbackValue(MockSystemEvent());
+    registerFallbackValue(MockSystemState());
 
     systemBloc = MockSystemBloc();
     dropdownCubit = MockDropdownCubit();

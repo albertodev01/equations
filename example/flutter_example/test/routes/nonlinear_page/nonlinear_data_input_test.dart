@@ -20,8 +20,8 @@ void main() {
   late final DropdownCubit dropdownCubit;
 
   setUpAll(() {
-    registerFallbackValue<NonlinearEvent>(MockNonlinearEvent());
-    registerFallbackValue<NonlinearState>(MockNonlinearState());
+    registerFallbackValue(MockNonlinearEvent());
+    registerFallbackValue(MockNonlinearState());
 
     nonlinearBloc = MockNonlinearBloc();
     dropdownCubit = MockDropdownCubit();

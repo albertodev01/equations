@@ -18,8 +18,8 @@ void main() {
   late final SystemBloc systemBloc;
 
   setUpAll(() {
-    registerFallbackValue<SystemEvent>(MockSystemEvent());
-    registerFallbackValue<SystemState>(MockSystemState());
+    registerFallbackValue(MockSystemEvent());
+    registerFallbackValue(MockSystemState());
 
     systemBloc = MockSystemBloc();
   });

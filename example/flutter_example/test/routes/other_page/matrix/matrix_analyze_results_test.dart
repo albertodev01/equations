@@ -19,8 +19,8 @@ void main() {
   late final OtherBloc bloc;
 
   setUpAll(() {
-    registerFallbackValue<OtherEvent>(MockOtherEvent());
-    registerFallbackValue<OtherState>(MockOtherState());
+    registerFallbackValue(MockOtherEvent());
+    registerFallbackValue(MockOtherState());
 
     bloc = MockOtherBloc();
   });
