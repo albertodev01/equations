@@ -64,7 +64,8 @@ class _InputWidget extends StatefulWidget {
   __InputWidget createState() => __InputWidget();
 }
 
-class __InputWidget extends State<_InputWidget> {
+class __InputWidget extends State<_InputWidget>
+    with AutomaticKeepAliveClientMixin {
   /// Controllers of the various input fields are "cached" because they'll never
   /// change during the lifetime of the widget.
   late final controllers = List<TextEditingController>.generate(
@@ -154,6 +155,8 @@ class __InputWidget extends State<_InputWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -204,4 +207,7 @@ class __InputWidget extends State<_InputWidget> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

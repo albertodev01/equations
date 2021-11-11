@@ -20,12 +20,18 @@ class NonlinearPage extends StatefulWidget {
 }
 
 class _NonlinearPageState extends State<NonlinearPage> {
+  /// The [NonlinearBloc] instance for single point root finding algorithms.
+  final singlePointBloc = NonlinearBloc(NonlinearType.singlePoint);
+
+  /// The [NonlinearBloc] instance for bracketing root finding algorithms.
+  final bracketingBloc = NonlinearBloc(NonlinearType.bracketing);
+
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.single_point,
-      content: BlocProvider<NonlinearBloc>(
-        create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+      content: BlocProvider<NonlinearBloc>.value(
+        value: singlePointBloc,
         child: const NonlinearBody(
           key: Key('NonlinearPage-SinglePoint-Body'),
         ),
@@ -33,8 +39,8 @@ class _NonlinearPageState extends State<NonlinearPage> {
     ),
     NavigationItem(
       title: context.l10n.bracketing,
-      content: BlocProvider<NonlinearBloc>(
-        create: (_) => NonlinearBloc(NonlinearType.bracketing),
+      content: BlocProvider<NonlinearBloc>.value(
+        value: bracketingBloc,
         child: const NonlinearBody(
           key: Key('NonlinearPage-Bracketing-Body'),
         ),

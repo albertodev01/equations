@@ -19,31 +19,44 @@ class OtherPage extends StatefulWidget {
 }
 
 class _OtherPageState extends State<OtherPage> {
+  /// The [OtherBloc] instance for matrix analysis.
+  final matrixBloc = OtherBloc();
+
+  /// The [OtherBloc] instance for complex numbers analysis.
+  final complexBloc = OtherBloc();
+
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.matrices,
-      content: BlocProvider<NumberSwitcherCubit>(
-        create: (_) => NumberSwitcherCubit(
-          min: 1,
-          max: 5,
-        ),
+      content: MultiBlocProvider(
+        providers: [
+          BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 1,
+              max: 5,
+            ),
+          ),
+          BlocProvider<OtherBloc>.value(
+            value: matrixBloc,
+          ),
+        ],
         child: const MatrixOtherBody(),
       ),
     ),
     NavigationItem(
       title: context.l10n.complex_numbers,
-      content: const ComplexNumberOtherBody(),
+      content: BlocProvider<OtherBloc>.value(
+        value: complexBloc,
+        child: const ComplexNumberOtherBody(),
+      ),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OtherBloc>(
-      create: (_) => OtherBloc(),
-      child: EquationScaffold.navigation(
-        navigationItems: cachedItems,
-      ),
+    return EquationScaffold.navigation(
+      navigationItems: cachedItems,
     );
   }
 }

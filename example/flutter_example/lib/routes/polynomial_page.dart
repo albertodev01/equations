@@ -22,33 +22,45 @@ class PolynomialPage extends StatefulWidget {
 }
 
 class _PolynomialPageState extends State<PolynomialPage> {
+  /// The [PolynomialBloc] instance used to manage linear polynomials.
+  final linearBloc = PolynomialBloc(PolynomialType.linear);
+
+  /// The [PolynomialBloc] instance used to manage quadratic polynomials.
+  final quadraticBloc = PolynomialBloc(PolynomialType.quadratic);
+
+  /// The [PolynomialBloc] instance used to manage cubic polynomials.
+  final cubicBloc = PolynomialBloc(PolynomialType.cubic);
+
+  /// The [PolynomialBloc] instance used to manage quartic polynomials.
+  final quarticBloc = PolynomialBloc(PolynomialType.quartic);
+
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.firstDegree,
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.linear),
+      content: BlocProvider<PolynomialBloc>.value(
+        value: linearBloc,
         child: const PolynomialBody(),
       ),
     ),
     NavigationItem(
       title: context.l10n.secondDegree,
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.quadratic),
+      content: BlocProvider<PolynomialBloc>.value(
+        value: quadraticBloc,
         child: const PolynomialBody(),
       ),
     ),
     NavigationItem(
       title: context.l10n.thirdDegree,
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.cubic),
+      content: BlocProvider<PolynomialBloc>.value(
+        value: cubicBloc,
         child: const PolynomialBody(),
       ),
     ),
     NavigationItem(
       title: context.l10n.fourthDegree,
-      content: BlocProvider<PolynomialBloc>(
-        create: (_) => PolynomialBloc(PolynomialType.quartic),
+      content: BlocProvider<PolynomialBloc>.value(
+        value: quarticBloc,
         child: const PolynomialBody(),
       ),
     ),

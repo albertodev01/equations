@@ -152,11 +152,6 @@ class _PolynomialPlot extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // Some spacing
-                const SizedBox(
-                  height: 50,
-                ),
-
                 // Title
                 SectionTitle(
                   pageTitle: context.l10n.chart,
