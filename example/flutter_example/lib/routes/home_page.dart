@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 /// implemented in the app.
 class HomePage extends StatelessWidget {
   /// Creates a [HomePage] widget.
-  const HomePage({
-    Key? key,
-  }) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

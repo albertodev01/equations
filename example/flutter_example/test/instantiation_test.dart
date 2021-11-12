@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
+import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -92,6 +93,10 @@ void main() {
       expect(
         EquationsApp(),
         isA<EquationsApp>(),
+      );
+      expect(
+        NoResults(),
+        isA<NoResults>(),
       );
     });
   });
