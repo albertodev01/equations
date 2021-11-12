@@ -10,6 +10,7 @@ import 'package:equations_solver/routes/utils/collapsible/collapsible.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -159,7 +160,10 @@ void main() {
         isA<EquationSolution>(),
       );
       expect(
-        Collapsible,
+        Collapsible(
+          content: const SizedBox.shrink(),
+          header: const Text(''),
+        ),
         isA<Collapsible>(),
       );
     });

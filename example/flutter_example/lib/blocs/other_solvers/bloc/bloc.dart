@@ -1,18 +1,6 @@
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-/// This is a top-level function because it has to be passed to the [compute]
-/// method for the concurrent analysis of the matrix.
-AnalyzedMatrix _useMatrixAnalyzer(MatrixAnalyze event) {
-  final analyzer = MatrixDataAnalyzer(
-    flatMatrix: event.matrix,
-    size: event.size,
-  );
-
-  return analyzer.process();
-}
 
 /// This bloc handles the contents of a [OtherPage] widget by analyzing matrices
 /// or polynomials and returning various properties.
@@ -32,13 +20,10 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
 
     try {
       // Analyzing the matrix.
-      final state = await compute<MatrixAnalyze, AnalyzedMatrix>(
-        _useMatrixAnalyzer,
-        event,
-      );
-
-      // Adding some time to make sure that the user can see the loading indicator.
-      await Future.delayed(const Duration(milliseconds: 250));
+      final state = MatrixDataAnalyzer(
+        flatMatrix: event.matrix,
+        size: event.size,
+      ).process();
 
       // Returning data
       emit(state);
