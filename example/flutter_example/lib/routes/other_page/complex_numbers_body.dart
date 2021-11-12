@@ -45,7 +45,7 @@ class _PageBodyState extends State<_PageBody> {
   /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
     pageTitle: context.l10n.complex_numbers,
-    pageLogo: const ToolsComplexNumbers(),
+    pageLogo: const OtherComplexNumbers(),
   );
 
   @override

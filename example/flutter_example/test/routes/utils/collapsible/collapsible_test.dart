@@ -60,6 +60,14 @@ void main() {
       // Making sure the secondary region is visible
       expect(bloc.state, isTrue);
       expect(sizeTransition.sizeFactor.value, equals(1));
+
+      // Tapping again to close
+      await tester.tap(find.byType(PrimaryRegion));
+      await tester.pumpAndSettle();
+
+      // Making sure the secondary region is not visible anymore
+      expect(bloc.state, isFalse);
+      expect(sizeTransition.sizeFactor.value, isZero);
     });
 
     testGoldens('Collapsible', (tester) async {

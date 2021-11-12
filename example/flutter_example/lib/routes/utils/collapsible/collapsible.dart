@@ -97,9 +97,6 @@ class _CollapsibleState extends State<Collapsible>
     ];
   }
 
-  /// Determines whether the secondary region is visible or not.
-  bool get isExpanded => context.read<ExpansionCubit>().state;
-
   /// Open or closes the secondary region.
   void toggleExpansion() => context.read<ExpansionCubit>().toggle();
 

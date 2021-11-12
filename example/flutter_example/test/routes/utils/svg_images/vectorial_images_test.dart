@@ -34,7 +34,7 @@ void main() {
 
     testGoldens('ToolsComplexNumbers', (tester) async {
       final builder = GoldenBuilder.column()
-        ..addScenario('', const ToolsComplexNumbers());
+        ..addScenario('', const OtherComplexNumbers());
 
       await tester.pumpWidgetBuilder(
         builder.build(),
@@ -46,7 +46,7 @@ void main() {
 
     testGoldens('ToolsMatrix', (tester) async {
       final builder = GoldenBuilder.column()
-        ..addScenario('', const ToolsMatrix());
+        ..addScenario('', const OtherMatrix());
 
       await tester.pumpWidgetBuilder(
         builder.build(),
