@@ -9,6 +9,41 @@ import '../../mock_wrapper.dart';
 
 void main() {
   group("Testing the 'DropdownSelection' widget", () {
+    test("Testing the 'NonlinearDropdownItemsExt' extension method", () {
+      expect(NonlinearDropdownItems.newton.asString(), equals('Newton'));
+      expect(
+        NonlinearDropdownItems.steffensen.asString(),
+        equals('Steffensen'),
+      );
+      expect(NonlinearDropdownItems.bisection.asString(), equals('Bisection'));
+      expect(NonlinearDropdownItems.secant.asString(), equals('Secant'));
+      expect(NonlinearDropdownItems.brent.asString(), equals('Brent'));
+    });
+
+    test("Testing the 'StringExt' extension method", () {
+      expect(
+        'newton'.toNonlinearDropdownItems(),
+        equals(NonlinearDropdownItems.newton),
+      );
+      expect(
+        'steffensen'.toNonlinearDropdownItems(),
+        equals(NonlinearDropdownItems.steffensen),
+      );
+      expect(
+        'bisection'.toNonlinearDropdownItems(),
+        equals(NonlinearDropdownItems.bisection),
+      );
+      expect(
+        'secant'.toNonlinearDropdownItems(),
+        equals(NonlinearDropdownItems.secant),
+      );
+      expect(
+        'brent'.toNonlinearDropdownItems(),
+        equals(NonlinearDropdownItems.brent),
+      );
+      expect(''.toNonlinearDropdownItems, throwsArgumentError);
+    });
+
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(MockWrapper(
         child: MultiBlocProvider(
@@ -110,6 +145,36 @@ void main() {
           state.dropdownItems[2].value,
           equals(NonlinearDropdownItems.brent),
         );
+      },
+    );
+
+    testWidgets(
+      'Making sure that dropdown values can be changed',
+      (tester) async {
+        final cubit = DropdownCubit(initialValue: 'Newton');
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>(
+                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+              ),
+              BlocProvider<DropdownCubit>.value(
+                value: cubit,
+              ),
+            ],
+            child: const Scaffold(
+              body: NonlinearDropdownSelection(),
+            ),
+          ),
+        ));
+
+        expect(cubit.state, equals('Newton'));
+        await tester.tap(find.text('Newton'));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Steffensen').last);
+        await tester.pumpAndSettle();
+        expect(cubit.state, equals('Steffensen'));
       },
     );
 

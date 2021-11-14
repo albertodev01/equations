@@ -23,6 +23,33 @@ void main() {
   });
 
   group("Testing the 'SystemDropdownSelection' widget", () {
+    test("Testing the 'SystemDropdownItemsExt' extension method", () {
+      expect(SystemDropdownItems.lu.asString(), equals('LU'));
+      expect(SystemDropdownItems.cholesky.asString(), equals('Cholesky'));
+      expect(SystemDropdownItems.sor.asString(), equals('SOR'));
+      expect(SystemDropdownItems.jacobi.asString(), equals('Jacobi'));
+    });
+
+    test("Testing the 'StringExt' extension method", () {
+      expect(
+        'lu'.toSystemDropdownItems(),
+        equals(SystemDropdownItems.lu),
+      );
+      expect(
+        'cholesky'.toSystemDropdownItems(),
+        equals(SystemDropdownItems.cholesky),
+      );
+      expect(
+        'sor'.toSystemDropdownItems(),
+        equals(SystemDropdownItems.sor),
+      );
+      expect(
+        'jacobi'.toSystemDropdownItems(),
+        equals(SystemDropdownItems.jacobi),
+      );
+      expect(''.toSystemDropdownItems, throwsArgumentError);
+    });
+
     testWidgets(
       'Making sure that the widget shows no dropdown when row '
       'reduction type is selected',
@@ -97,6 +124,37 @@ void main() {
           findsOneWidget,
         );
         expect(find.text('SOR'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Making sure that dropdown values can be changed',
+      (tester) async {
+        final cubit = DropdownCubit(initialValue: 'LU');
+
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<SystemBloc>(
+                create: (_) => SystemBloc(SystemType.factorization),
+              ),
+              BlocProvider<DropdownCubit>.value(
+                value: cubit,
+              ),
+            ],
+            child: const Scaffold(
+              body: SystemDropdownSelection(),
+            ),
+          ),
+        ));
+
+        expect(cubit.state, equals('LU'));
+        await tester.tap(find.text('LU'));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Cholesky').last);
+        await tester.pumpAndSettle();
+        expect(cubit.state, equals('Cholesky'));
       },
     );
 
