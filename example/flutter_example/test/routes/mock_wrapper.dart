@@ -13,10 +13,10 @@ class MockWrapper extends StatelessWidget {
   /// or popped.
   final List<NavigatorObserver> navigatorObservers;
 
-  /// The [child] to be tested.
+  /// Creates a [MockWrapper] widget.
   const MockWrapper({
-    required this.child,
     Key? key,
+    required this.child,
     this.navigatorObservers = const [],
   }) : super(key: key);
 
@@ -27,7 +27,9 @@ class MockWrapper extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: navigatorObservers,
-      theme: ThemeData.light().copyWith(textTheme: GoogleFonts.latoTextTheme()),
+      theme: ThemeData.light().copyWith(
+        textTheme: GoogleFonts.latoTextTheme(),
+      ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: child,

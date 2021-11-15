@@ -25,6 +25,48 @@ void main() {
       },
     );
 
+    testWidgets(
+      "Making sure that 'didUpdateWidget' is executed",
+      (tester) async {
+        var matrixSize = 2;
+
+        await tester.pumpWidget(MockWrapper(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MatrixOutput(
+                    matrix: RealMatrix.diagonal(
+                      rows: matrixSize,
+                      columns: matrixSize,
+                      diagonalValue: 3,
+                    ),
+                    description: 'Demo',
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        matrixSize = matrixSize == 2 ? 3 : 2;
+                      });
+                    },
+                    child: const Text('Rebuild'),
+                  ),
+                ],
+              );
+            },
+          ),
+        ));
+
+        expect(find.byType(TextFormField), findsNWidgets(4));
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(TextFormField), findsNWidgets(9));
+      },
+    );
+
     testGoldens('MatrixOutput', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
