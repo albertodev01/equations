@@ -13,8 +13,10 @@ class MoreOrLessEquals extends Matcher {
 
   /// The accuracy of the test
   final double precision;
-  const MoreOrLessEquals(this.value, {this.precision = 1.0e-12})
-      : assert(precision >= 0, 'The precision must be >= 0');
+  const MoreOrLessEquals(
+    this.value, {
+    this.precision = 1.0e-12,
+  }) : assert(precision >= 0, 'The precision must be >= 0');
 
   @override
   bool matches(dynamic object, Map<dynamic, dynamic> matchState) {

@@ -47,11 +47,28 @@ void main() {
       );
 
       expect(
+        const InterpolationNode(
+          x: 1.5,
+          y: 3,
+        ),
+        equals(node),
+      );
+
+      expect(
         node ==
             const InterpolationNode(
               x: 1.5,
               y: 3,
             ),
+        isTrue,
+      );
+
+      expect(
+        const InterpolationNode(
+              x: 1.5,
+              y: 3,
+            ) ==
+            node,
         isTrue,
       );
 

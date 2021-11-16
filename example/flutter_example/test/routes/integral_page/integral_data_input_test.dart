@@ -64,8 +64,9 @@ void main() {
       (tester) async {
         final integralBloc = IntegralBloc();
 
-        when(() => dropdownCubit.state)
-            .thenReturn(IntegralDropdownItems.simpson.asString());
+        when(
+          () => dropdownCubit.state,
+        ).thenReturn(IntegralDropdownItems.simpson.asString());
 
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(

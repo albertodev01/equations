@@ -60,6 +60,17 @@ void main() {
       );
 
       expect(
+        const SplineInterpolation(
+          nodes: [
+            InterpolationNode(x: 3, y: -2),
+            InterpolationNode(x: 4, y: 1),
+            InterpolationNode(x: 7, y: 0),
+          ],
+        ),
+        equals(interpolation),
+      );
+
+      expect(
         interpolation ==
             const SplineInterpolation(
               nodes: [
@@ -68,6 +79,18 @@ void main() {
                 InterpolationNode(x: 7, y: 0),
               ],
             ),
+        isTrue,
+      );
+
+      expect(
+        const SplineInterpolation(
+              nodes: [
+                InterpolationNode(x: 3, y: -2),
+                InterpolationNode(x: 4, y: 1),
+                InterpolationNode(x: 7, y: 0),
+              ],
+            ) ==
+            interpolation,
         isTrue,
       );
 

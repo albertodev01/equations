@@ -37,7 +37,8 @@ void main() {
     });
 
     test(
-      'Making sure that const Complex objects are properly built from Fraction objects',
+      'Making sure that const Complex objects are properly built from Fraction '
+      'objects',
       () {
         final fromFraction = Complex.fromFraction(
           Fraction(3, 5),
@@ -218,7 +219,9 @@ void main() {
   group('Testing objects equality', () {
     test('Making sure that complex comparison is made via cross product', () {
       expect(const Complex(3, 12) == const Complex(3, 12), isTrue);
+      expect(const Complex(3, 12) == const Complex(3, 12), isTrue);
       expect(const Complex(-3, -12) == const Complex(6, 13), isFalse);
+      expect(const Complex(6, 13) == const Complex(-3, -12), isFalse);
 
       expect(
         const Complex(3, 12).hashCode == const Complex(3, 12).hashCode,

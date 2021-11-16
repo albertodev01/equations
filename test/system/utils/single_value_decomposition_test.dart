@@ -42,6 +42,21 @@ void main() {
       );
 
       expect(
+        real,
+        equals(
+          SVDReal(
+            realMatrix: RealMatrix.fromData(
+              rows: 1,
+              columns: 1,
+              data: [
+                [1],
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(
         SVDReal(
           realMatrix: RealMatrix.fromData(
             rows: 1,
@@ -65,6 +80,21 @@ void main() {
           ),
         ),
         equals(complex),
+      );
+
+      expect(
+        complex,
+        equals(
+          SVDComplex(
+            complexMatrix: ComplexMatrix.fromData(
+              rows: 1,
+              columns: 1,
+              data: const [
+                [Complex.i()],
+              ],
+            ),
+          ),
+        ),
       );
 
       expect(
@@ -97,7 +127,7 @@ void main() {
         expect(svd.length, equals(3));
 
         // Checking E
-        final E = svd[0];
+        final E = svd.first;
         expect(E.isSquareMatrix, isTrue);
         expect(
           E(0, 0),
@@ -196,7 +226,7 @@ void main() {
           expect(svd.length, equals(3));
 
           // Checking E
-          final E = svd[0];
+          final E = svd.first;
           expect(E.isSquareMatrix, isFalse);
           expect(E.rowCount, equals(3));
           expect(E.columnCount, equals(2));
@@ -412,7 +442,7 @@ void main() {
           final zeroesSvd = zeroes.singleValueDecomposition();
 
           expect(
-            zeroesSvd[0],
+            zeroesSvd.first,
             RealMatrix.fromFlattenedData(
               rows: 2,
               columns: 2,
@@ -436,7 +466,7 @@ void main() {
             ),
           );
           expect(
-            zeroesSvd[0] * zeroesSvd[1] * zeroesSvd[2].transpose(),
+            zeroesSvd.first * zeroesSvd[1] * zeroesSvd[2].transpose(),
             equals(zeroes),
           );
 
@@ -449,7 +479,7 @@ void main() {
             ],
           ).singleValueDecomposition();
 
-          expect(special1x1[0](0, 0), equals(8));
+          expect(special1x1.first(0, 0), equals(8));
           expect(special1x1[1](0, 0), equals(1));
           expect(special1x1[2](0, 0), equals(1));
         },
@@ -472,7 +502,7 @@ void main() {
         expect(svd.length, equals(3));
 
         // Checking E
-        final E = svd[0];
+        final E = svd.first;
         expect(E.isSquareMatrix, isTrue);
         expect(
           E(0, 0).real,
@@ -571,7 +601,7 @@ void main() {
           expect(svd.length, equals(3));
 
           // Checking E
-          final E = svd[0];
+          final E = svd.first;
           expect(E.isSquareMatrix, isFalse);
           expect(E.rowCount, equals(3));
           expect(E.columnCount, equals(2));
@@ -880,7 +910,7 @@ void main() {
           ).singleValueDecomposition();
 
           final matrix =
-              complexSvd[1] * complexSvd[0] * complexSvd[2].transpose();
+              complexSvd[1] * complexSvd.first * complexSvd[2].transpose();
           expect(
             matrix(0, 0).real,
             const MoreOrLessEquals(0, precision: 1.0e-5),
@@ -923,7 +953,7 @@ void main() {
             ],
           ).singleValueDecomposition();
 
-          expect(special1x1[0](0, 0), equals(const Complex.fromReal(3)));
+          expect(special1x1.first(0, 0), equals(const Complex.fromReal(3)));
           expect(special1x1[1](0, 0), equals(const Complex.fromReal(1)));
           expect(special1x1[2](0, 0), equals(const Complex.fromReal(1)));
         },

@@ -14,6 +14,7 @@
 <!-- - New feature (non-breaking change which adds functionality) -->
 <!-- - Breaking change (fix or feature that would cause existing functionality to change) -->
 <!-- - Documentation change (change to update documentation) -->
+<!-- - General improvements (quality updates to improve the stability of the project) -->
 
 ## Notes
 

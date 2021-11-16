@@ -41,6 +41,13 @@ void main() {
           ),
         ),
       ],
+      verify: (bloc) {
+        expect(bloc.state, isA<IntegralResult>());
+        expect(
+          (bloc.state as IntegralResult).numericalIntegration,
+          isA<SimpsonRule>(),
+        );
+      },
     );
 
     blocTest<IntegralBloc, IntegralState>(
@@ -64,6 +71,13 @@ void main() {
           ),
         ),
       ],
+      verify: (bloc) {
+        expect(bloc.state, isA<IntegralResult>());
+        expect(
+          (bloc.state as IntegralResult).numericalIntegration,
+          isA<TrapezoidalRule>(),
+        );
+      },
     );
 
     blocTest<IntegralBloc, IntegralState>(
@@ -87,6 +101,13 @@ void main() {
           ),
         ),
       ],
+      verify: (bloc) {
+        expect(bloc.state, isA<IntegralResult>());
+        expect(
+          (bloc.state as IntegralResult).numericalIntegration,
+          isA<MidpointRule>(),
+        );
+      },
     );
 
     blocTest<IntegralBloc, IntegralState>(

@@ -40,6 +40,9 @@ void main() {
       );
 
       expect(simpson == simpson2, isTrue);
+      expect(simpson2 == simpson, isTrue);
+      expect(simpson, equals(simpson2));
+      expect(simpson2, equals(simpson));
       expect(simpson.hashCode, equals(simpson2.hashCode));
 
       expect(
@@ -104,7 +107,7 @@ void main() {
       for (var i = 0; i < equations.length; ++i) {
         final result = SimpsonRule(
           function: equations[i],
-          lowerBound: solution[i][0],
+          lowerBound: solution[i].first,
           upperBound: solution[i][1],
           intervals: 60,
         ).integrate();

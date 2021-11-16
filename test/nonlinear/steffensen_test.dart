@@ -58,7 +58,15 @@ void main() {
         equals(steffensen),
       );
       expect(
+        steffensen,
+        equals(const Steffensen(function: 'e^x-3', x0: 3)),
+      );
+      expect(
         const Steffensen(function: 'e^x-3', x0: 3) == steffensen,
+        isTrue,
+      );
+      expect(
+        steffensen == const Steffensen(function: 'e^x-3', x0: 3),
         isTrue,
       );
       expect(

@@ -63,8 +63,11 @@ void main() {
       expect(solutions[2].imaginary, const MoreOrLessEquals(1.055514309999));
       expect(solutions[1].real, const MoreOrLessEquals(-2.855196539321));
       expect(solutions[1].imaginary.round(), isZero);
-      expect(solutions[0].real, const MoreOrLessEquals(1.42759826966));
-      expect(solutions[0].imaginary, const MoreOrLessEquals(-1.055514309999));
+      expect(solutions.first.real, const MoreOrLessEquals(1.42759826966));
+      expect(
+        solutions.first.imaginary,
+        const MoreOrLessEquals(-1.055514309999),
+      );
 
       // Evaluation
       final eval = equation.realEvaluateOn(0.5);
@@ -117,7 +120,29 @@ void main() {
       );
 
       expect(fx, equals(otherFx));
+      expect(otherFx, equals(fx));
       expect(fx == otherFx, isTrue);
+      expect(otherFx == fx, isTrue);
+
+      expect(
+        fx,
+        equals(Cubic(
+          a: const Complex(2, -3),
+          b: Complex.fromImaginaryFraction(Fraction(6, 5)),
+          c: const Complex(5, -1),
+          d: const Complex(-9, -6),
+        )),
+      );
+      expect(
+        Cubic(
+          a: const Complex(2, -3),
+          b: Complex.fromImaginaryFraction(Fraction(6, 5)),
+          c: const Complex(5, -1),
+          d: const Complex(-9, -6),
+        ),
+        equals(fx),
+      );
+
       expect(fx.hashCode, equals(otherFx.hashCode));
     });
 

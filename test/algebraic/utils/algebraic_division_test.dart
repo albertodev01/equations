@@ -35,12 +35,21 @@ void main() {
       );
 
       expect(results2 == results, isTrue);
+      expect(results == results2, isTrue);
       expect(
         results ==
             AlgebraicDivision(
               remainder: Algebraic.fromReal([1, -3, 6, 7.8]),
               quotient: Algebraic.fromReal([2, -9]),
             ),
+        isTrue,
+      );
+      expect(
+        AlgebraicDivision(
+              remainder: Algebraic.fromReal([1, -3, 6, 7.8]),
+              quotient: Algebraic.fromReal([2, -9]),
+            ) ==
+            results,
         isTrue,
       );
 

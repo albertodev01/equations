@@ -42,7 +42,7 @@ void main() {
         expect(gaussSeidel.determinant(), equals(20));
 
         final solutions = gaussSeidel.solve();
-        expect(solutions[0], const MoreOrLessEquals(1, precision: 1.0e-2));
+        expect(solutions.first, const MoreOrLessEquals(1, precision: 1.0e-2));
         expect(solutions[1], const MoreOrLessEquals(2, precision: 1.0e-2));
         expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
       },
@@ -141,7 +141,53 @@ void main() {
 
       expect(gaussSeidel, equals(gaussSeidel2));
       expect(gaussSeidel == gaussSeidel2, isTrue);
+      expect(gaussSeidel2, equals(gaussSeidel));
+      expect(gaussSeidel2 == gaussSeidel, isTrue);
       expect(gaussSeidel.hashCode, equals(gaussSeidel2.hashCode));
+    });
+
+    test('Batch tests', () {
+      final systems = [
+        GaussSeidelSolver(
+          equations: const [
+            [25, 15, -5],
+            [15, 18, 0],
+            [-5, 0, 11],
+          ],
+          constants: [35, 33, 6],
+        ).solve(),
+        GaussSeidelSolver(
+          equations: const [
+            [1, 0, 1],
+            [0, 2, 0],
+            [1, 0, 3],
+          ],
+          constants: [6, 5, -2],
+        ).solve(),
+        GaussSeidelSolver(
+          equations: const [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+          ],
+          constants: [5, -2, 3],
+        ).solve(),
+      ];
+
+      const solutions = <List<double>>[
+        [1, 1, 1],
+        [10, 2.5, -4],
+        [5, -2, 3],
+      ];
+
+      for (var i = 0; i < systems.length; ++i) {
+        for (var j = 0; j < 2; ++j) {
+          expect(
+            systems[i][j],
+            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
+          );
+        }
+      }
     });
   });
 }

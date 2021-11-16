@@ -42,8 +42,14 @@ void main() {
         expect(jacobi.determinant(), equals(9));
 
         final solutions = jacobi.solve();
-        expect(solutions[0], const MoreOrLessEquals(7.11, precision: 1.0e-2));
-        expect(solutions[1], const MoreOrLessEquals(-3.22, precision: 1.0e-2));
+        expect(
+          solutions.first,
+          const MoreOrLessEquals(7.11, precision: 1.0e-2),
+        );
+        expect(
+          solutions[1],
+          const MoreOrLessEquals(-3.22, precision: 1.0e-2),
+        );
       },
     );
 
@@ -171,7 +177,56 @@ void main() {
 
       expect(jacobi, equals(jacobi2));
       expect(jacobi == jacobi2, isTrue);
+      expect(jacobi2, equals(jacobi));
+      expect(jacobi2 == jacobi, isTrue);
       expect(jacobi.hashCode, equals(jacobi2.hashCode));
+    });
+
+    test('Batch tests', () {
+      final systems = [
+        JacobiSolver(
+          equations: const [
+            [25, 15, -5],
+            [15, 18, 0],
+            [-5, 0, 11],
+          ],
+          constants: [35, 33, 6],
+          x0: [3, 1, -1],
+        ).solve(),
+        JacobiSolver(
+          equations: const [
+            [1, 0, 1],
+            [0, 2, 0],
+            [1, 0, 3],
+          ],
+          constants: [6, 5, -2],
+          x0: [0, 0, 0],
+        ).solve(),
+        JacobiSolver(
+          equations: const [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+          ],
+          constants: [5, -2, 3],
+          x0: [3, 3, 3],
+        ).solve(),
+      ];
+
+      const solutions = <List<double>>[
+        [1, 1, 1],
+        [10, 2.5, -4],
+        [5, -2, 3],
+      ];
+
+      for (var i = 0; i < systems.length; ++i) {
+        for (var j = 0; j < 2; ++j) {
+          expect(
+            systems[i][j].round(),
+            solutions[i][j].round(),
+          );
+        }
+      }
     });
   });
 }

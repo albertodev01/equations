@@ -38,6 +38,7 @@ void main() {
       ));
 
       expect(numberSwitchCubit.state, equals(2));
+      expect(find.text('2x2 matrix'), findsOneWidget);
 
       // Moving forward
       await tester.tap(find.byKey(const Key('SizePicker-Forward-Button')));
@@ -54,30 +55,47 @@ void main() {
     });
 
     testGoldens('SizePicker', (tester) async {
-      final numberSwitchCubit = NumberSwitcherCubit(
-        min: 2,
-        max: 4,
-      );
-
       final builder = GoldenBuilder.column()
         ..addScenario(
-          'VectorInput - 2x2',
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: numberSwitchCubit,
+          '2x2 matrix',
+          BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 2,
+              max: 5,
+            ),
             child: const SizePicker(),
           ),
         )
         ..addScenario(
-          'VectorInput - 3x3',
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: numberSwitchCubit..increase(),
+          '3x3 matrix',
+          BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 2,
+              max: 5,
+            )..increase(),
             child: const SizePicker(),
           ),
         )
         ..addScenario(
-          'VectorInput - 4v4',
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: numberSwitchCubit
+          '4x4 matrix',
+          BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 2,
+              max: 5,
+            )
+              ..increase()
+              ..increase(),
+            child: const SizePicker(),
+          ),
+        )
+        ..addScenario(
+          '5x5 matrix',
+          BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 2,
+              max: 5,
+            )
+              ..increase()
               ..increase()
               ..increase(),
             child: const SizePicker(),
@@ -89,7 +107,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(300, 300),
+        surfaceSize: const Size(300, 400),
       );
       await screenMatchesGolden(tester, 'size_picker');
     });

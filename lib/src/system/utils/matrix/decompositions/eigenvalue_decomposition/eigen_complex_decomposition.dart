@@ -99,7 +99,7 @@ class EigendecompositionComplex
 
     final V = ComplexMatrix.fromData(
       rows: eigenVectors.length,
-      columns: eigenVectors[0].length,
+      columns: eigenVectors.first.length,
       data: eigenVectors,
     );
 
@@ -225,7 +225,7 @@ class EigendecompositionComplex
       matrix.rowCount - 1,
       const Complex.fromReal(1),
     );
-    complexEigenvalues[0] = const Complex.zero();
+    complexEigenvalues.first = const Complex.zero();
   }
 
   /// Applying the tridiagonal QL algorithm, which is an efficient method to

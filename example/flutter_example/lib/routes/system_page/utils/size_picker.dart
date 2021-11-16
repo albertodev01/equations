@@ -48,8 +48,6 @@ class SizePicker extends StatelessWidget {
               case 5:
                 text = context.l10n.matrix_size5;
                 break;
-              default:
-                throw RangeError("'state' is not in the range!");
             }
 
             return Text(

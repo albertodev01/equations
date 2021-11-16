@@ -55,6 +55,9 @@ void main() {
       );
 
       expect(const Chords(function: 'x^2-2', a: 1, b: 2), equals(chords));
+      expect(const Chords(function: 'x^2-2', a: 1, b: 2) == chords, isTrue);
+      expect(chords, equals(const Chords(function: 'x^2-2', a: 1, b: 2)));
+      expect(chords == const Chords(function: 'x^2-2', a: 1, b: 2), isTrue);
       expect(const Chords(function: 'x^2-2', a: 0, b: 2) == chords, isFalse);
       expect(
         const Chords(function: 'x^2-2', a: 1, b: 2).hashCode,
@@ -103,7 +106,7 @@ void main() {
         for (var j = 0; j < equations[i].length; ++j) {
           final solutions = Chords(
             function: equations[i],
-            a: initialGuesses[i][0],
+            a: initialGuesses[i].first,
             b: initialGuesses[i][1],
             maxSteps: 20,
           ).solve();

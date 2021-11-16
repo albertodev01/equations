@@ -16,8 +16,8 @@ void main() {
   late final PolynomialBloc polynomialBloc;
 
   setUpAll(() {
-    registerFallbackValue<PolynomialEvent>(MockPolynomialEvent());
-    registerFallbackValue<PolynomialState>(MockPolynomialState());
+    registerFallbackValue(MockPolynomialEvent());
+    registerFallbackValue(MockPolynomialState());
 
     polynomialBloc = MockPolynomialBloc();
 

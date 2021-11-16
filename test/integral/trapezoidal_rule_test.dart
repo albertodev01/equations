@@ -40,6 +40,9 @@ void main() {
       );
 
       expect(trapezoid == trapezoid2, isTrue);
+      expect(trapezoid2 == trapezoid, isTrue);
+      expect(trapezoid, equals(trapezoid2));
+      expect(trapezoid2, equals(trapezoid));
       expect(trapezoid.hashCode, equals(trapezoid2.hashCode));
 
       expect(
@@ -104,7 +107,7 @@ void main() {
       for (var i = 0; i < equations.length; ++i) {
         final result = TrapezoidalRule(
           function: equations[i],
-          lowerBound: solution[i][0],
+          lowerBound: solution[i].first,
           upperBound: solution[i][1],
           intervals: 500,
         ).integrate();

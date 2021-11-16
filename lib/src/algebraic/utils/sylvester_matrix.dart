@@ -153,7 +153,7 @@ class SylvesterMatrix {
       */
       final degree = _coefficients.length - 1;
       final sign = math.pow(-1, degree * (degree - 1) / 2) as double;
-      final denominator = _coefficients[0];
+      final denominator = _coefficients.first;
 
       // Returning the determinant with the correct sign
       return Complex.fromReal(sign) / denominator * determinant;

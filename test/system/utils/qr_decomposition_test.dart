@@ -42,6 +42,21 @@ void main() {
       );
 
       expect(
+        real,
+        equals(
+          QRDecompositionReal(
+            realMatrix: RealMatrix.fromData(
+              rows: 1,
+              columns: 1,
+              data: [
+                [1],
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(
         QRDecompositionReal(
           realMatrix: RealMatrix.fromData(
             rows: 1,
@@ -55,16 +70,18 @@ void main() {
       );
 
       expect(
-        QRDecompositionComplex(
-          complexMatrix: ComplexMatrix.fromData(
-            rows: 1,
-            columns: 1,
-            data: const [
-              [Complex.i()],
-            ],
+        complex,
+        equals(
+          QRDecompositionComplex(
+            complexMatrix: ComplexMatrix.fromData(
+              rows: 1,
+              columns: 1,
+              data: const [
+                [Complex.i()],
+              ],
+            ),
           ),
         ),
-        equals(complex),
       );
 
       expect(
@@ -97,7 +114,7 @@ void main() {
         );
 
         final results = realQR.decompose();
-        final matrixQ = results[0];
+        final matrixQ = results.first;
         final matrixR = results[1];
 
         // Matrices must be square
@@ -167,7 +184,7 @@ void main() {
         );
 
         final results = realQR.decompose();
-        final matrixQ = results[0];
+        final matrixQ = results.first;
         final matrixR = results[1];
 
         // Matrices must be square
@@ -232,7 +249,7 @@ void main() {
         );
 
         final results = complexQR.decompose();
-        final matrixQ = results[0];
+        final matrixQ = results.first;
         final matrixR = results[1];
 
         // Matrices must be square

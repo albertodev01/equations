@@ -33,7 +33,7 @@ class MonotoneCubicSpline extends SplineFunction with MathUtils {
     }
 
     // Initializing tangents as the average of the secants.
-    nodesM[0] = pointsD[0];
+    nodesM.first = pointsD.first;
 
     for (var i = 1; i < nodes.length - 1; i++) {
       nodesM[i] = (pointsD[i - 1] + pointsD[i]) * 0.5;
@@ -72,12 +72,12 @@ class MonotoneCubicSpline extends SplineFunction with MathUtils {
       return x;
     }
 
-    if (x < nodes[0].x) {
-      return nodes[0].y;
+    if (x < nodes.first.x) {
+      return nodes.first.y;
     }
 
-    if (x >= nodes[nodes.length - 1].x) {
-      return nodes[nodes.length - 1].y;
+    if (x >= nodes.last.x) {
+      return nodes.last.y;
     }
 
     // Finding the i-th element of the last point with smaller 'x'.

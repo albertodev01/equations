@@ -60,7 +60,101 @@ void main() {
       // Making sure the secondary region is visible
       expect(bloc.state, isTrue);
       expect(sizeTransition.sizeFactor.value, equals(1));
+
+      // Tapping again to close
+      await tester.tap(find.byType(PrimaryRegion));
+      await tester.pumpAndSettle();
+
+      // Making sure the secondary region is not visible anymore
+      expect(bloc.state, isFalse);
+      expect(sizeTransition.sizeFactor.value, isZero);
     });
+
+    testWidgets(
+      "Making sure that 'didUpdateWidget' is executed to update the header",
+      (tester) async {
+        var headerValue = 0;
+
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<ExpansionCubit>(
+            create: (_) => ExpansionCubit(),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Collapsible(
+                      header: Text('header-$headerValue'),
+                      content: const Text('Contents'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          headerValue = headerValue == 0 ? 1 : 0;
+                        });
+                      },
+                      child: const Text('Rebuild'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ));
+
+        expect(find.text('header-0'), findsOneWidget);
+        expect(find.text('header-1'), findsNothing);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        expect(find.text('header-1'), findsOneWidget);
+        expect(find.text('header-0'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      "Making sure that 'didUpdateWidget' is executed to update the contents",
+      (tester) async {
+        var contentValue = 0;
+
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<ExpansionCubit>(
+            create: (_) => ExpansionCubit(),
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Collapsible(
+                      header: const Text('Header'),
+                      content: Text('contents-$contentValue'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          contentValue = contentValue == 0 ? 1 : 0;
+                        });
+                      },
+                      child: const Text('Rebuild'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ));
+
+        expect(find.text('contents-0'), findsOneWidget);
+        expect(find.text('contents-1'), findsNothing);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        expect(find.text('contents-1'), findsOneWidget);
+        expect(find.text('contents-0'), findsNothing);
+      },
+    );
 
     testGoldens('Collapsible', (tester) async {
       final builder = GoldenBuilder.column()

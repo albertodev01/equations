@@ -67,11 +67,11 @@ void main() {
           const MoreOrLessEquals(-1.4914, precision: 1.0e-4),
         );
         expect(
-          solutions[0].real,
+          solutions.first.real,
           const MoreOrLessEquals(0.8357, precision: 1.0e-4),
         );
         expect(
-          solutions[0].imaginary,
+          solutions.first.imaginary,
           const MoreOrLessEquals(4.4914, precision: 1.0e-4),
         );
 
@@ -97,7 +97,9 @@ void main() {
       "Making sure that a correct 'DurandKerner' instance is created from a"
       " list of 'double' (real) values",
       () {
-        final durandKerner = DurandKerner.realEquation(coefficients: [1, 2, 3]);
+        final durandKerner = DurandKerner.realEquation(
+          coefficients: [1, 2, 3],
+        );
 
         expect(durandKerner[0], equals(const Complex.fromReal(1)));
         expect(durandKerner[1], equals(const Complex.fromReal(2)));
@@ -105,7 +107,9 @@ void main() {
 
         // There must be an exception is the first coeff. is zero
         expect(
-          () => DurandKerner.realEquation(coefficients: [0, 3, 6]),
+          () => DurandKerner.realEquation(
+            coefficients: [0, 3, 6],
+          ),
           throwsA(isA<AlgebraicException>()),
         );
       },
@@ -116,7 +120,9 @@ void main() {
       'highest degree is zero',
       () {
         expect(
-          () => DurandKerner(coefficients: const [Complex.zero()]),
+          () => DurandKerner(
+            coefficients: const [Complex.zero()],
+          ),
           throwsA(isA<AlgebraicException>()),
         );
       },
@@ -199,8 +205,12 @@ void main() {
     );
 
     test('Making sure that objects comparison works properly', () {
-      final fx = DurandKerner.realEquation(coefficients: [1, 2, 3, 4, 5]);
-      final otherFx = DurandKerner.realEquation(coefficients: [1, 2, 3, 4, 5]);
+      final fx = DurandKerner.realEquation(
+        coefficients: [1, 2, 3, 4, 5],
+      );
+      final otherFx = DurandKerner.realEquation(
+        coefficients: [1, 2, 3, 4, 5],
+      );
 
       final notEqual = DurandKerner.realEquation(
         coefficients: [1, 2, 3, 4, 5],
@@ -209,6 +219,22 @@ void main() {
 
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
+      expect(otherFx, equals(fx));
+      expect(otherFx == fx, isTrue);
+
+      expect(
+        fx,
+        equals(DurandKerner.realEquation(
+          coefficients: [1, 2, 3, 4, 5],
+        )),
+      );
+      expect(
+        DurandKerner.realEquation(
+          coefficients: [1, 2, 3, 4, 5],
+        ),
+        equals(fx),
+      );
+
       expect(fx.hashCode, equals(otherFx.hashCode));
 
       expect(fx == notEqual, isFalse);
@@ -284,20 +310,24 @@ void main() {
           coefficients: [2, 1, -2, 1, 7],
           precision: 1.0e-15,
         ).solutions(),
-        DurandKerner(coefficients: const [
-          Complex(3, -2),
-          Complex.zero(),
-          Complex.fromReal(7),
-          Complex.fromReal(-1),
-        ]).solutions(),
-        DurandKerner(coefficients: const [
-          Complex.fromReal(1),
-          Complex.zero(),
-          Complex.i(),
-          Complex.zero(),
-          Complex.zero(),
-          Complex(1, -6),
-        ]).solutions(),
+        DurandKerner(
+          coefficients: const [
+            Complex(3, -2),
+            Complex.zero(),
+            Complex.fromReal(7),
+            Complex.fromReal(-1),
+          ],
+        ).solutions(),
+        DurandKerner(
+          coefficients: const [
+            Complex.fromReal(1),
+            Complex.zero(),
+            Complex.i(),
+            Complex.zero(),
+            Complex.zero(),
+            Complex(1, -6),
+          ],
+        ).solutions(),
         DurandKerner.realEquation(
           coefficients: [
             1,

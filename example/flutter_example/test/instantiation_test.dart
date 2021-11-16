@@ -1,10 +1,16 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/main.dart';
+import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
+import 'package:equations_solver/routes/utils/collapsible/collapsible.dart';
+import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:test/test.dart';
 
 // ignore_for_file: prefer_const_constructors
@@ -92,6 +98,73 @@ void main() {
       expect(
         EquationsApp(),
         isA<EquationsApp>(),
+      );
+      expect(
+        NoResults(),
+        isA<NoResults>(),
+      );
+      expect(
+        HomePage(),
+        isA<HomePage>(),
+      );
+      expect(
+        PolynomialLogo(),
+        isA<PolynomialLogo>(),
+      );
+      expect(
+        NonlinearLogo(),
+        isA<NonlinearLogo>(),
+      );
+      expect(
+        SystemsLogo(),
+        isA<SystemsLogo>(),
+      );
+      expect(
+        IntegralLogo(),
+        isA<IntegralLogo>(),
+      );
+      expect(
+        OtherLogo(),
+        isA<OtherLogo>(),
+      );
+      expect(
+        ArrowUpSvg(),
+        isA<ArrowUpSvg>(),
+      );
+      expect(
+        OtherComplexNumbers(),
+        isA<OtherComplexNumbers>(),
+      );
+      expect(
+        OtherMatrix(),
+        isA<OtherMatrix>(),
+      );
+      expect(
+        SquareMatrix(),
+        isA<SquareMatrix>(),
+      );
+      expect(
+        SquareRoot(),
+        isA<SquareRoot>(),
+      );
+      expect(
+        HalfRightAngle(),
+        isA<HalfRightAngle>(),
+      );
+      expect(
+        PlotIcon(),
+        isA<PlotIcon>(),
+      );
+      expect(
+        EquationSolution(),
+        isA<EquationSolution>(),
+      );
+      expect(
+        Collapsible(
+          content: const SizedBox.shrink(),
+          header: const Text(''),
+        ),
+        isA<Collapsible>(),
       );
     });
   });

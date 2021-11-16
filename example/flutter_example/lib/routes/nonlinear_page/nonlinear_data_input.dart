@@ -20,7 +20,8 @@ class NonlinearDataInput extends StatefulWidget {
   _NonlinearDataInputState createState() => _NonlinearDataInputState();
 }
 
-class _NonlinearDataInputState extends State<NonlinearDataInput> {
+class _NonlinearDataInputState extends State<NonlinearDataInput>
+    with AutomaticKeepAliveClientMixin {
   /// The controllers needed by the [TextFormField]s of the widget.
   late final controllers = List<TextEditingController>.generate(
     fieldsCount,
@@ -101,6 +102,8 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Form(
       key: formKey,
       child: Column(
@@ -157,6 +160,9 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 /// Either 1 or 2 [TextFormField] widgets asking for the initial values of the

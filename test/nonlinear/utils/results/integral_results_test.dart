@@ -35,6 +35,15 @@ void main() {
             ),
         isTrue,
       );
+      expect(results == results2, isTrue);
+      expect(
+        const IntegralResults(
+              guesses: [1.0, 2.0, 3.0],
+              result: 5.28,
+            ) ==
+            results,
+        isTrue,
+      );
 
       expect(
         results.hashCode,
@@ -46,6 +55,14 @@ void main() {
         ),
       );
 
+      expect(
+        const IntegralResults(
+              guesses: [1.0, 2.001, 3.0],
+              result: 5.28,
+            ) ==
+            results,
+        isFalse,
+      );
       expect(
         results ==
             const IntegralResults(

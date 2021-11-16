@@ -114,7 +114,6 @@ class _PlotBody<T> extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           child: ClipRRect(
             child: BlocBuilder<SliderCubit, double>(
-              buildWhen: (prev, curr) => prev != curr,
               builder: (context, state) {
                 return CustomPaint(
                   painter: PlotterPainter<T>(

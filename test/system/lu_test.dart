@@ -1,6 +1,8 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
+import '../double_approximation_matcher.dart';
+
 void main() {
   group("Testing the 'LUSolver' class.", () {
     test(
@@ -84,6 +86,30 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
+    test('Making sure that objects comparison works properly.', () {
+      final lu = LUSolver(
+        equations: const [
+          [1, 2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+      );
+
+      final lu2 = LUSolver(
+        equations: const [
+          [1, 2],
+          [3, 4],
+        ],
+        constants: [0, -6],
+      );
+
+      expect(lu, equals(lu2));
+      expect(lu == lu2, isTrue);
+      expect(lu2, equals(lu));
+      expect(lu2 == lu, isTrue);
+      expect(lu.hashCode, equals(lu2.hashCode));
+    });
+
     test(
       'Making sure that the matrix is squared because this method is only '
       "able to solve systems of 'N' equations in 'N' variables.",
@@ -131,5 +157,49 @@ void main() {
         );
       },
     );
+
+    test('Batch tests', () {
+      final systems = [
+        LUSolver(
+          equations: const [
+            [25, 15, -5],
+            [15, 18, 0],
+            [-5, 0, 11],
+          ],
+          constants: [35, 33, 6],
+        ).solve(),
+        LUSolver(
+          equations: const [
+            [1, 0, 1],
+            [0, 2, 0],
+            [1, 0, 3],
+          ],
+          constants: [6, 5, -2],
+        ).solve(),
+        LUSolver(
+          equations: const [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1],
+          ],
+          constants: [5, -2, 3],
+        ).solve(),
+      ];
+
+      const solutions = <List<double>>[
+        [1, 1, 1],
+        [10, 2.5, -4],
+        [5, -2, 3],
+      ];
+
+      for (var i = 0; i < systems.length; ++i) {
+        for (var j = 0; j < 2; ++j) {
+          expect(
+            systems[i][j],
+            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
+          );
+        }
+      }
+    });
   });
 }

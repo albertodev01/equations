@@ -15,8 +15,8 @@ import '../mock_wrapper.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue<IntegralEvent>(MockIntegralEvent());
-    registerFallbackValue<IntegralState>(MockIntegralState());
+    registerFallbackValue(MockIntegralEvent());
+    registerFallbackValue(MockIntegralState());
   });
 
   group("Testing the 'IntegralBody' widget", () {

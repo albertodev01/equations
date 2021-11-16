@@ -61,6 +61,8 @@ void main() {
 
       expect(const RegulaFalsi(function: 'x-2', a: 1, b: 2), equals(regula));
       expect(const RegulaFalsi(function: 'x-2', a: 0, b: 2) == regula, isFalse);
+      expect(regula, equals(const RegulaFalsi(function: 'x-2', a: 1, b: 2)));
+      expect(const RegulaFalsi(function: 'x-2', a: 0, b: 2) == regula, isFalse);
       expect(
         const RegulaFalsi(function: 'x-2', a: 1, b: 2).hashCode,
         equals(regula.hashCode),
@@ -101,7 +103,7 @@ void main() {
         for (var j = 0; j < equations[i].length; ++j) {
           final solutions = RegulaFalsi(
             function: equations[i],
-            a: initialGuesses[i][0],
+            a: initialGuesses[i].first,
             b: initialGuesses[i][1],
             tolerance: 1.0e-15,
             maxSteps: 20,

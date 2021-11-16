@@ -16,7 +16,7 @@ import 'package:equations/equations.dart';
 /// **highest** degree.
 abstract class Algebraic {
   /// An unmodifiable list with the coefficients of the polynomial.
-  late final List<Complex> coefficients;
+  final UnmodifiableListView<Complex> coefficients;
 
   /// Creates a new algebraic equation by taking the coefficients of the
   /// polynomial starting from the one with the highest degree.
@@ -38,11 +38,8 @@ abstract class Algebraic {
   /// If the coefficients of the polynomial are all real numbers, consider using
   /// the [Algebraic.realEquation(coefficients)] constructor which is more
   /// convenient.
-  Algebraic(List<Complex> coefficients) {
-    // Making a deep copy but there's no need to call 'copyWith' on the complex
-    // coefficients because 'Complex' is an immutable type.
-    this.coefficients = UnmodifiableListView(List<Complex>.from(coefficients));
-
+  Algebraic(List<Complex> coefficients)
+      : coefficients = UnmodifiableListView(List<Complex>.from(coefficients)) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!isValid) {
@@ -64,11 +61,10 @@ abstract class Algebraic {
   ///
   /// Use this constructor when the coefficients are all real numbers. If there
   /// were complex numbers as well, use the [Algebraic(coefficients)] constructor.
-  Algebraic.realEquation(List<double> coefficients) {
-    this.coefficients = UnmodifiableListView(
-      coefficients.map((c) => Complex.fromReal(c)).toList(),
-    );
-
+  Algebraic.realEquation(List<double> coefficients)
+      : coefficients = UnmodifiableListView(
+          coefficients.map((c) => Complex.fromReal(c)),
+        ) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!isValid) {
@@ -109,29 +105,29 @@ abstract class Algebraic {
     switch (coefficients.length) {
       case 1:
         return Constant(
-          a: coefficients[0],
+          a: coefficients.first,
         );
       case 2:
         return Linear(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
         );
       case 3:
         return Quadratic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
         );
       case 4:
         return Cubic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
         );
       case 5:
         return Quartic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
@@ -227,7 +223,7 @@ abstract class Algebraic {
   /// the best approximation possible.
   String _convertToString({bool asFraction = false}) {
     if (coefficients.length == 1) {
-      final value = coefficients[0];
+      final value = coefficients.first;
 
       if (asFraction) {
         return 'f(x) = ${value.toStringAsFraction()}';
@@ -336,7 +332,7 @@ abstract class Algebraic {
   ///
   /// A [Constant] is an exception because a constant value has no variables with
   /// a degree.
-  bool get isValid => this is Constant || !coefficients[0].isZero;
+  bool get isValid => this is Constant || !coefficients.first.isZero;
 
   /// Returns the coefficient of the polynomial at the given [index] position.
   /// For example:

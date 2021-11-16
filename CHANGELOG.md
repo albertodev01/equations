@@ -1,3 +1,8 @@
+## [3.1.1]
+ - Dependencies versions update
+ - Added more tests cases
+ - Updated the Flutter demo in the `example/` folder
+
 ## [3.1.0]
 
  - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (earlier it was passed to the `integrate()` function)

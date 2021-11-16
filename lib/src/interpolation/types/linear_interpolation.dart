@@ -18,7 +18,7 @@ class LinearInterpolation extends Interpolation {
 
   @override
   double compute(double x) {
-    final node1 = nodes[0];
+    final node1 = nodes.first;
     final node2 = nodes[1];
 
     return node1.y +

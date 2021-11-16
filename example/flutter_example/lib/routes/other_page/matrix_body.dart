@@ -45,7 +45,7 @@ class _PageBodyState extends State<_PageBody> {
   /// Manually caching the page title.
   late final Widget pageTitleWidget = PageTitle(
     pageTitle: context.l10n.matrices,
-    pageLogo: const ToolsMatrix(
+    pageLogo: const OtherMatrix(
       size: 50,
     ),
   );

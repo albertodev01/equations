@@ -14,9 +14,9 @@ class ArrowUpSvg extends SvgImage {
 }
 
 /// The "i" symbol of the complex unit in imaginary numbers.
-class ToolsComplexNumbers extends SvgImage {
-  /// Creates a [ToolsComplexNumbers] widget.
-  const ToolsComplexNumbers({
+class OtherComplexNumbers extends SvgImage {
+  /// Creates a [OtherComplexNumbers] widget.
+  const OtherComplexNumbers({
     Key? key,
     double size = 40,
   }) : super(key: key, size: size);
@@ -26,9 +26,9 @@ class ToolsComplexNumbers extends SvgImage {
 }
 
 /// A 3x4 matrix with a linear gradient going from green to blue.
-class ToolsMatrix extends SvgImage {
-  /// Creates a [ToolsMatrix] widget.
-  const ToolsMatrix({
+class OtherMatrix extends SvgImage {
+  /// Creates a [OtherMatrix] widget.
+  const OtherMatrix({
     Key? key,
     double size = 40,
   }) : super(key: key, size: size);

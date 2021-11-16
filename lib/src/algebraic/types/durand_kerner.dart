@@ -188,29 +188,29 @@ class DurandKerner extends Algebraic with MathUtils {
     switch (coefficients.length) {
       case 1:
         return Constant(
-          a: coefficients[0],
+          a: coefficients.first,
         ).derivative();
       case 2:
         return Linear(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
         ).derivative();
       case 3:
         return Quadratic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
         ).derivative();
       case 4:
         return Cubic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
         ).derivative();
       case 5:
         return Quartic(
-          a: coefficients[0],
+          a: coefficients.first,
           b: coefficients[1],
           c: coefficients[2],
           d: coefficients[3],
@@ -219,7 +219,7 @@ class DurandKerner extends Algebraic with MathUtils {
       case 6:
         final coeffs = _derivativeOf();
         return Quartic(
-          a: coeffs[0],
+          a: coeffs.first,
           b: coeffs[1],
           c: coeffs[2],
           d: coeffs[3],

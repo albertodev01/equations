@@ -62,8 +62,8 @@ void main() {
 
       // Checking solutions
       final solutions = equation.solutions();
-      expect(solutions[0].real, const MoreOrLessEquals(2.151387818866));
-      expect(solutions[0].imaginary, isZero);
+      expect(solutions.first.real, const MoreOrLessEquals(2.151387818866));
+      expect(solutions.first.imaginary, isZero);
       expect(solutions[1].real, const MoreOrLessEquals(0.348612181134));
       expect(solutions[1].imaginary, isZero);
 
@@ -121,6 +121,44 @@ void main() {
 
       expect(fx, equals(otherFx));
       expect(fx == otherFx, isTrue);
+      expect(otherFx, equals(fx));
+      expect(otherFx == fx, isTrue);
+
+      expect(
+        fx,
+        equals(Quadratic(
+          a: const Complex(2, 3),
+          b: const Complex.i(),
+          c: const Complex(-1, 0),
+        )),
+      );
+      expect(
+        Quadratic(
+          a: const Complex(2, 3),
+          b: const Complex.i(),
+          c: const Complex(-1, 0),
+        ),
+        equals(fx),
+      );
+      expect(
+        fx ==
+            Quadratic(
+              a: const Complex(2, 3),
+              b: const Complex.i(),
+              c: const Complex(-1, 0),
+            ),
+        isTrue,
+      );
+      expect(
+        Quadratic(
+              a: const Complex(2, 3),
+              b: const Complex.i(),
+              c: const Complex(-1, 0),
+            ) ==
+            fx,
+        isTrue,
+      );
+
       expect(fx.hashCode, equals(otherFx.hashCode));
     });
 

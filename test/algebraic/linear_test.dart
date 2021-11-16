@@ -52,10 +52,10 @@ void main() {
       // Checking solutions
       final solutions = equation.solutions();
       expect(
-        solutions[0].real,
+        solutions.first.real,
         const MoreOrLessEquals(-0.4, precision: 1.0e-1),
       );
-      expect(solutions[0].imaginary, isZero);
+      expect(solutions.first.imaginary, isZero);
 
       // Evaluation
       expect(
@@ -124,11 +124,26 @@ void main() {
         )),
       );
       expect(
+        Linear(
+          a: const Complex(2, 3),
+          b: const Complex.i(),
+        ),
+        equals(fx),
+      );
+      expect(
         fx ==
             Linear(
               a: const Complex(2, 3),
               b: const Complex.i(),
             ),
+        isTrue,
+      );
+      expect(
+        Linear(
+              a: const Complex(2, 3),
+              b: const Complex.i(),
+            ) ==
+            fx,
         isTrue,
       );
       expect(

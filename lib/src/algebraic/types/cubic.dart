@@ -93,7 +93,7 @@ class Cubic extends Algebraic {
 
   /// The first coefficient of the equation in the form
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_
-  Complex get a => coefficients[0];
+  Complex get a => coefficients.first;
 
   /// The second coefficient of the equation in the form
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_

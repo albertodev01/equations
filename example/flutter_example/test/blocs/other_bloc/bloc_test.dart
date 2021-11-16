@@ -1,6 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../double_approximation_matcher.dart';
 
 void main() {
   group("Testing the 'OtherBloc' bloc", () {
@@ -18,7 +21,7 @@ void main() {
       verify: (bloc) => bloc.state == const OtherNone(),
     );
 
-    /*blocTest<OtherBloc, OtherState>(
+    blocTest<OtherBloc, OtherState>(
       'Making sure that an exception is thrown if one (or more) matrix input '
       'values are malformed strings',
       build: () => OtherBloc(),
@@ -49,8 +52,37 @@ void main() {
     );
 
     blocTest<OtherBloc, OtherState>(
-      'Making sure that an exception is thrown if the matrix size does NOT '
-      'match the actual list length',
+      'Making sure that an exception is thrown if the complex number has a '
+      'malformed real input',
+      build: () => OtherBloc(),
+      act: (bloc) => bloc.add(const ComplexNumberAnalyze(
+        realPart: '',
+        imaginaryPart: '1',
+      )),
+      expect: () => const [
+        OtherLoading(),
+        OtherError(),
+      ],
+      verify: (bloc) => bloc.state == const OtherError(),
+    );
+
+    blocTest<OtherBloc, OtherState>(
+      'Making sure that an exception is thrown if the complex number has a '
+      'malformed complex input',
+      build: () => OtherBloc(),
+      act: (bloc) => bloc.add(const ComplexNumberAnalyze(
+        realPart: '2',
+        imaginaryPart: '...',
+      )),
+      expect: () => const [
+        OtherLoading(),
+        OtherError(),
+      ],
+      verify: (bloc) => bloc.state == const OtherError(),
+    );
+
+    blocTest<OtherBloc, OtherState>(
+      'Making sure that matrices can be analyzed',
       build: () => OtherBloc(),
       act: (bloc) => bloc.add(const MatrixAnalyze(
         size: 2,
@@ -106,13 +138,62 @@ void main() {
               rows: 2,
               columns: 2,
               data: [
-                [5, -3],
-                [-2, 1],
+                [1, 3],
+                [2, 5],
               ],
             ),
           ),
         );
       },
-    );*/
+    );
+
+    blocTest<OtherBloc, OtherState>(
+      'Making sure that complex numbers can be analyzed',
+      build: () => OtherBloc(),
+      act: (bloc) => bloc.add(const ComplexNumberAnalyze(
+        realPart: '3',
+        imaginaryPart: '2',
+      )),
+      verify: (bloc) {
+        expect(bloc.state, isA<AnalyzedComplexNumber>());
+
+        final state = bloc.state as AnalyzedComplexNumber;
+
+        expect(
+          state.phase,
+          const MoreOrLessEquals(0.588, precision: 1.0e-4),
+        );
+        expect(
+          state.sqrt.real,
+          const MoreOrLessEquals(1.8173, precision: 1.0e-4),
+        );
+        expect(
+          state.sqrt.imaginary,
+          const MoreOrLessEquals(0.5502, precision: 1.0e-4),
+        );
+        expect(
+          state.reciprocal.real,
+          const MoreOrLessEquals(0.2307, precision: 1.0e-4),
+        );
+        expect(
+          state.reciprocal.imaginary,
+          const MoreOrLessEquals(-0.1538, precision: 1.0e-4),
+        );
+        expect(
+          state.polarComplex.r,
+          const MoreOrLessEquals(3.6055, precision: 1.0e-4),
+        );
+        expect(
+          state.polarComplex.phiDegrees,
+          const MoreOrLessEquals(33.69, precision: 1.0e-4),
+        );
+        expect(
+          state.polarComplex.phiRadians,
+          const MoreOrLessEquals(0.588, precision: 1.0e-4),
+        );
+        expect(state.abs, const MoreOrLessEquals(3.6055, precision: 1.0e-4));
+        expect(state.conjugate, equals(const Complex(3, -2)));
+      },
+    );
   });
 }

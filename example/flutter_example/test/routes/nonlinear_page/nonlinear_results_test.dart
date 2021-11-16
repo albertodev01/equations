@@ -17,8 +17,8 @@ void main() {
   late final MockNonlinearBloc nonlinearBloc;
 
   setUpAll(() {
-    registerFallbackValue<NonlinearEvent>(MockNonlinearEvent());
-    registerFallbackValue<NonlinearState>(MockNonlinearState());
+    registerFallbackValue(MockNonlinearEvent());
+    registerFallbackValue(MockNonlinearState());
 
     nonlinearBloc = MockNonlinearBloc();
   });

@@ -124,6 +124,15 @@ void main() {
           ),
         ),
       );
+      expect(
+        const PolynomialInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: -2, y: 5),
+          ],
+        ),
+        equals(interpolation),
+      );
 
       expect(
         interpolation ==
@@ -133,6 +142,17 @@ void main() {
                 InterpolationNode(x: -2, y: 5),
               ],
             ),
+        isTrue,
+      );
+
+      expect(
+        const PolynomialInterpolation(
+              nodes: [
+                InterpolationNode(x: 1, y: 3),
+                InterpolationNode(x: -2, y: 5),
+              ],
+            ) ==
+            interpolation,
         isTrue,
       );
 
