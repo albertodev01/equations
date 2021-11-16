@@ -1,7 +1,7 @@
 ## [3.1.1]
  - Dependencies versions update
  - Added more tests cases
- - Updated the Dart and Flutter demos in the `example/` folder
+ - Updated the Flutter demo in the `example/` folder
 
 ## [3.1.0]
 
