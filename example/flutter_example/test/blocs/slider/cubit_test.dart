@@ -8,7 +8,7 @@ void main() {
       final bloc = SliderCubit(
         minValue: 1,
         maxValue: 10,
-        current: 5,
+        initial: 5,
       );
 
       expect(bloc.state, equals(5));
@@ -21,7 +21,7 @@ void main() {
       build: () => SliderCubit(
         minValue: 1,
         maxValue: 10,
-        current: 5,
+        initial: 5,
       ),
       act: (cubit) => cubit
         ..updateSlider(1)
@@ -29,6 +29,20 @@ void main() {
         ..updateSlider(12)
         ..updateSlider(6),
       expect: () => const [1, 10, 6],
+    );
+
+    blocTest<SliderCubit, double>(
+      'Making sure that the bloc can be resetted',
+      build: () => SliderCubit(
+        minValue: 1,
+        maxValue: 10,
+        initial: 5,
+      ),
+      act: (cubit) => cubit
+        ..updateSlider(1)
+        ..updateSlider(10)
+        ..reset(),
+      expect: () => const [1, 10, 5],
     );
   });
 }

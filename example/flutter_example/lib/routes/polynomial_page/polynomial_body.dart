@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
@@ -79,7 +82,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= 950) {
+      if (size.maxWidth <= polynomialPageBreakpoint) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
           key: const Key('SingleChildScrollView-mobile-responsive'),
@@ -89,8 +92,12 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
               const PolynomialDataInput(),
               const PolynomialResults(),
               const Padding(
-                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
-                child: _PolynomialPlot(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 50,
+                ),
+                child: _PolynomialPlot(
+                  isSingleColumn: true,
+                ),
               ),
             ],
           ),
@@ -123,7 +130,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
           SizedBox(
             width: size.maxWidth / 2.3,
             height: double.infinity,
-            child: const _PolynomialPlot(),
+            child: const _PolynomialPlot(
+              isSingleColumn: false,
+            ),
           ),
         ],
       );
@@ -133,8 +142,13 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
 /// Puts on the screen a widget that draws mathematical functions.
 class _PolynomialPlot extends StatelessWidget {
+  /// Whether the widget is on a single column or not.
+  final bool isSingleColumn;
+
   /// Creates a [_PolynomialPlot] widget.
-  const _PolynomialPlot();
+  const _PolynomialPlot({
+    required this.isSingleColumn,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -153,14 +167,23 @@ class _PolynomialPlot extends StatelessWidget {
             child: Column(
               children: [
                 // Title
-                SectionTitle(
+                PageTitle(
                   pageTitle: context.l10n.chart,
-                  icon: const PlotIcon(),
+                  pageLogo: const PlotIcon(),
                 ),
 
                 // The actual plot
-                PlotWidget(
-                  plotMode: plotMode,
+                LayoutBuilder(
+                  builder: (context, dimensions) {
+                    final width = min<double>(dimensions.maxWidth, maxWidthPlot,);
+
+                    return SizedBox(
+                      width: width,
+                      child: PlotWidget(
+                        plotMode: plotMode,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

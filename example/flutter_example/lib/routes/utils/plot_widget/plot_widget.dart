@@ -52,7 +52,7 @@ class PlotWidget<T> extends StatelessWidget {
       create: (_) => SliderCubit(
         minValue: 2,
         maxValue: 10,
-        current: 3,
+        initial: 3,
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(50, 45, 50, 40),

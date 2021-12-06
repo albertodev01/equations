@@ -10,15 +10,15 @@ class SliderCubit extends Cubit<double> {
   /// The maximum value of the slider.
   final double maxValue;
 
-  /// The default value of the slider.
-  final double current;
+  /// The initial value of the slider.
+  final double initial;
 
   /// Creates a [Cubit] that keeps track of the state of a slider widget.
   SliderCubit({
     required this.minValue,
     required this.maxValue,
-    required this.current,
-  }) : super(current);
+    required this.initial,
+  }) : super(initial);
 
   /// Updates the current slider position.
   void updateSlider(double newValue) {
@@ -26,4 +26,7 @@ class SliderCubit extends Cubit<double> {
       emit(newValue);
     }
   }
+
+  /// Resets the slider setting the current state to [initial].
+  void reset() => emit(initial);
 }

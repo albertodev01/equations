@@ -15,7 +15,7 @@ void main() {
           create: (_) => SliderCubit(
             minValue: 1,
             maxValue: 10,
-            current: 5,
+            initial: 5,
           ),
           child: const Scaffold(
             body: PrecisionSlider(),
@@ -35,7 +35,7 @@ void main() {
             create: (_) => SliderCubit(
               minValue: 1,
               maxValue: 10,
-              current: 5,
+              initial: 5,
             ),
             child: const Scaffold(
               body: PrecisionSlider(),
@@ -54,13 +54,13 @@ void main() {
     );
 
     testWidgets(
-      'Making sure that the slider updates the bloc state when its current '
+      'Making sure that the slider updates the bloc state when its initial '
       'value changes',
       (tester) async {
         final bloc = SliderCubit(
           minValue: 1,
           maxValue: 10,
-          current: 5,
+          initial: 5,
         );
 
         await tester.pumpWidget(MockWrapper(
@@ -90,7 +90,7 @@ void main() {
             create: (_) => SliderCubit(
               minValue: 1,
               maxValue: 10,
-              current: 5,
+              initial: 5,
             ),
             child: const PrecisionSlider(),
           ),

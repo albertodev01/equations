@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
@@ -142,6 +143,7 @@ class __InputWidget extends State<_InputWidget>
 
     formKey.currentState?.reset();
     context.read<PolynomialBloc>().add(const PolynomialClean());
+    context.read<SliderCubit>().reset();
   }
 
   @override

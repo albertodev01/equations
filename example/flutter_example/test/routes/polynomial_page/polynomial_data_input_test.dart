@@ -29,7 +29,7 @@ void main() {
         create: (_) => SliderCubit(
           minValue: 1,
           maxValue: 10,
-          current: 5,
+          initial: 5,
         ),
       ),
     ];

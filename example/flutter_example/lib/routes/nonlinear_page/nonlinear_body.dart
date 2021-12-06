@@ -49,7 +49,7 @@ class _NonlinearBodyState extends State<NonlinearBody> {
           create: (_) => SliderCubit(
             minValue: 2,
             maxValue: 15,
-            current: 8,
+            initial: 8,
           ),
         ),
         BlocProvider<DropdownCubit>(
