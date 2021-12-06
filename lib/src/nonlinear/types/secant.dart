@@ -10,10 +10,10 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   - The secant method does not require the root to remain bracketed, like
 ///   the bisection method does for example, so it doesn't always converge.
 class Secant extends NonLinear {
-  /// The first guess
+  /// The first guess.
   final double a;
 
-  /// The second guess
+  /// The second guess.
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the

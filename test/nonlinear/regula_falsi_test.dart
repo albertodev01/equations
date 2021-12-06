@@ -46,7 +46,11 @@ void main() {
     test('Making sure that a malformed equation string throws.', () {
       expect(
         () {
-          const RegulaFalsi(function: '3x^2 + 5x - 1', a: 1, b: 8).solve();
+          const RegulaFalsi(
+            function: '3x^2 + 5x - 1',
+            a: 1,
+            b: 8,
+          ).solve();
         },
         throwsA(isA<ExpressionParserException>()),
       );

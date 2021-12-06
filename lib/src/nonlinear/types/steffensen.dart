@@ -13,7 +13,7 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   - If _x0_ is too far from the root, the method might fail so the convergence
 ///   is not guaranteed.
 class Steffensen extends NonLinear {
-  /// The initial guess x<sub>0</sub>
+  /// The initial guess x<sub>0</sub>.
   final double x0;
 
   /// Instantiates a new object to find the root of an equation by using the

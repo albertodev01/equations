@@ -1,3 +1,9 @@
+## [3.1.2]
+ - Dependencies versions update
+ - Updated the README file with some fixes
+ - Added a new root-finding algorithm (`Riddler` which implements the Riddler's method)
+ - Updated the Flutter demo in the `example/` folder
+
 ## [3.1.1]
  - Dependencies versions update
  - Added more tests cases
@@ -116,7 +122,7 @@
 
 ## 2.0.0-nullsafety.1
 
-  - Added a new root-finding algorithm (`Brent` which implements the Brent's method method)
+  - Added a new root-finding algorithm (`Brent` which implements the Brent's method)
   - Added `Laguerre` (which implements Laguerre's method for polynomials root finding)
   - Minor on various `Nonlinear` subtypes
   - Documentation fixes

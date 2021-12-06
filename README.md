@@ -47,7 +47,7 @@ Use one of the following classes to find the roots of a polynomial equation (als
 | `Quartic`   | <em>f(x) = ax<sup>4</sup> + bx<sup>3</sup> + cx<sup>2</sup> + dx + e</em> | a, b, c, d, e ∈ C |
 | `DurandKerner` | Any polynomial P(x<sub>i</sub>) where x<sub>i</sub> are coefficients      | x<sub>i</sub> ∈ C |
 
-There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of polynomials whose degree is 5 or higher, must be seeked using DurandKerner's method or any other root-finding algorithm. For this reason, we suggest to go for the following approach:
+There's a formula for polynomials up to the fourth degree, as explained by [Galois Theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of polynomials whose degree is 5 or higher must be seeked using DurandKerner's method (or any other root-finding algorithm). For this reason, we suggest to go for the following approach:
 
   - Use `Linear` to find the roots of a polynomial whose degree is 1.
   - Use `Quadratic` to find the roots of a polynomial whose degree is 2.
@@ -55,7 +55,7 @@ There's a formula for polynomials up to the fourth degree, as explained by [Galo
   - Use `Quartic` to find the roots of a polynomial whose degree is 4.
   - Use `DurandKerner` to find the roots of a polynomial whose degree is 5 or higher.
 
-Note that `DurandKerner` can be used with any polynomials, so you could use it (for example) to solve a cubic equation as well. However, `DurandKerner` internally uses loops, derivatives, and other mechanics to approximate the actual roots. When trying to solve a polynomial equation whose degree is 4 or lower, prefer using `Quartic`, `Cubic`, `Quadratic` and `Linear` since they use direct formulas to find the roots. Here's how you can solve a cubic:
+Note that `DurandKerner` works with any polynomials, so you could use it (for example) to solve a cubic equation as well. However, `DurandKerner` internally uses loops, derivatives, and other mechanics to approximate the actual roots. When the degree is 4 or lower, prefer using `Quartic`, `Cubic`, `Quadratic` and `Linear` because they use direct formulas to find the roots and thus they're more precise. Here's an example on how to find the roots of a cubic:
 
 ```dart
 // f(x) = (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i)
@@ -143,7 +143,7 @@ Use one of the following classes, representing a root-finding algorithm, to find
 | `Brent`      | a, b ∈ R          |
 | `RegulaFalsi`| a, b ∈ R          |
 
-Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/), a fasts, stable and well tested grammar parser. These algorithms only work with real numbers. Here's a simple example of how you can find the roots of an equation:
+Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/): a fast, stable and well tested grammar parser. Here's a simple example of how you can find the roots of an equation using the Newton's method:
 
 ```dart
 final newton = Newton("2*x+cos(x)", -1, maxSteps: 5);
@@ -170,7 +170,7 @@ final solutions = solutions.efficiency.round(); // 1
 final List<double> guesses = solutions.guesses;
 ```
 
-Note that certain algorithms don't always guarantee t converge to a correct root so read the documentation carefully before choosing the method.
+Note that certain algorithms don't always guarantee to converge to the correct root so read the documentation carefully before choosing the method.
 
 
 # Systems of equations
@@ -186,7 +186,7 @@ Use one of the following classes to solve systems of linear equations. Note that
 | `LUSolver`            | :x:                |
 | `SORSolver`           | :heavy_check_mark: |
 
-In any case, solvers only work with square matrices so `N` equations in `N` variables. These solvers are used to find the `x` in the `Ax = b` equation. Methods require at least the equation system matrix `A` and the vector `b` containing the unknowns. Iterative methods may require additional parameters such as an initial guess or a particular configuration value.
+These solvers are used to find the `x` in the `Ax = b` equation. Methods require, at least, the system matrix `A` and the known values vector `b`. Iterative methods may require additional parameters such as an initial guess or a particular configuration value.
 
 ```dart
 // Solve a system using LU decomposition
@@ -203,7 +203,7 @@ final solutions = luSolver.solve(); // [-1, 4, 3]
 final determinant = luSolver.determinant(); // -84.0
 ```
 
-If you just want to work with matrices (for operations, LU/Cholesky/QR/SVD decompositions, etc...) you can consider using either `RealMatrix` (to work with the `double` data type) or `ComplexMatrix` (to work with the `Complex` data type). Both classes are of type `Matrix<T>` so they have the same public API.
+If you just want to work with matrices (for operations, decompositions, eigenvalues, etc...) you can consider using either `RealMatrix` (to work with the `double` data type) or `ComplexMatrix` (to work with the `Complex` data type). Both classes are of type `Matrix<T>` so they have the same public API.
 
 ```dart
 final matrixA = RealMatrix.fromData(
@@ -236,7 +236,10 @@ final qr = matrixA.qrDecomposition();
 final svd = matrixA.singleValueDecomposition();
 
 final det = matrixA.determinant();
-finak rank = matrixA.rank();
+final rank = matrixA.rank();
+
+final eigenvalues = matrixA.eigenvalues();
+final characPolynomial = matrixA.characteristicPolynomial();
 ```
 
 You can use `toString()` to print the content of the matrix but there's also the possibility to use `toStringAugmented()` which prints the augmented matrix (the matrix + one extra column with the known values vector).
@@ -346,7 +349,7 @@ print(y.toStringAsFixed(3));
 print('\n${newton.forwardDifferenceTable()}');
 ```
 
-Since the newtown interpolation algorithm internally builds the "divided differences table", the API exposes two methods (`forwardDifferenceTable()` and `forwardDifferenceTable()`) to print those tables. Of course, you won't find `forwardDifferenceTable()` in other interpolation types because they just don't use it. By default, `NewtonInterpolation` uses the forward difference method but if you want the backwards one, just pass `forwardDifference: false` in the constructor.
+Since the newtown interpolation algorithm internally builds the "divided differences table", the API exposes two methods (`forwardDifferenceTable()` and `backwardDifferenceTable()`) to print those tables. Of course, you won't find `forwardDifferenceTable()` in other interpolation types because they just don't use it. By default, `NewtonInterpolation` uses the forward difference method but if you want the backwards one, just pass `forwardDifference: false` in the constructor.
 
 ```dart
 const polynomial = PolynomialInterpolation(
@@ -365,4 +368,4 @@ print(y.toStringAsFixed(2));
 print('\n${polynomial.buildPolynomial()}');
 ```
 
-This is another example with a different interpolation strategy. The `buildPolynomial()` returns the interpolation polynomial (as an `Algebraic` type) internally used to interpolate `x`.
+This is another example with a different interpolation strategy. The `buildPolynomial()` method returns the interpolation polynomial (as an `Algebraic` type) internally used to interpolate `x`.

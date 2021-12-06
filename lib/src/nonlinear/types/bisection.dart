@@ -10,10 +10,10 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///
 ///   - The values of `f(a)` and `f(b)` must have opposite signs.
 class Bisection extends NonLinear {
-  /// The starting point of the interval
+  /// The starting point of the interval.
   final double a;
 
-  /// The ending point of the interval
+  /// The ending point of the interval.
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the

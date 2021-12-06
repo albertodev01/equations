@@ -13,10 +13,10 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   function, then applying this method method could result in worse results
 ///   than the bisection method.
 class RegulaFalsi extends NonLinear {
-  /// The starting point of the interval
+  /// The starting point of the interval.
   final double a;
 
-  /// The ending point of the interval
+  /// The ending point of the interval.
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the

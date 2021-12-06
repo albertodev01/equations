@@ -12,7 +12,7 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   evaluated at a certain value is 0, or because the initial guess is too far
 ///   from the solution.
 class Newton extends NonLinear {
-  /// The initial guess x<sub>0</sub>
+  /// The initial guess x<sub>0</sub>.
   final double x0;
 
   /// Instantiates a new object to find the root of an equation by using the

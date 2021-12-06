@@ -17,6 +17,7 @@ import 'package:equations/equations.dart';
 ///   - [Steffensen]
 ///   - [Brent]
 ///   - [RegulaFalsi]
+///   - [Riddler]
 ///
 /// Each subclass of [NonLinear] has to define the [solve] method which is
 /// required in order to build the scalar succession with a certain logic.
