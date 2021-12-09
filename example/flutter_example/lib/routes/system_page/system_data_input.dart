@@ -1,7 +1,5 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
-import 'package:equations_solver/blocs/system_solver/bloc/events.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';

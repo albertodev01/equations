@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/nonlinear/nonlinear.dart';
 
 /// Implements the regula falsi method (also known as "_false position method_")
 /// to find the roots of a given equation.

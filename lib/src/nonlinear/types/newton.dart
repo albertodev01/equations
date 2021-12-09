@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/nonlinear/nonlinear.dart';
 
 /// Implements the Newton method to find the roots of a given equation.
 ///

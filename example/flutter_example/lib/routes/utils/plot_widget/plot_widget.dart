@@ -2,7 +2,6 @@ import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
