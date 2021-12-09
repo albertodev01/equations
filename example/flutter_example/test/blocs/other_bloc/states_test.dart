@@ -26,6 +26,9 @@ void main() {
           columns: 1,
           diagonalValue: 0,
         ),
+        isIdentity: true,
+        isDiagonal: true,
+        isSymmetric: false,
       );
 
       const complex = AnalyzedComplexNumber(
@@ -60,6 +63,9 @@ void main() {
             columns: 1,
             diagonalValue: 0,
           ),
+          isIdentity: true,
+          isDiagonal: true,
+          isSymmetric: false,
         )),
       );
 
@@ -86,6 +92,9 @@ void main() {
             columns: 1,
             diagonalValue: 0,
           ),
+          isIdentity: true,
+          isDiagonal: true,
+          isSymmetric: false,
         )),
       );
 
@@ -112,6 +121,9 @@ void main() {
             columns: 1,
             diagonalValue: 0,
           ),
+          isIdentity: true,
+          isDiagonal: true,
+          isSymmetric: false,
         )),
       );
 
@@ -138,6 +150,9 @@ void main() {
             columns: 1,
             diagonalValue: 0,
           ),
+          isIdentity: true,
+          isDiagonal: true,
+          isSymmetric: false,
         )),
       );
 
@@ -164,6 +179,38 @@ void main() {
             columns: 1,
             diagonalValue: 0,
           ),
+          isIdentity: true,
+          isDiagonal: true,
+          isSymmetric: false,
+        )),
+      );
+
+      expect(
+        matrix,
+        isNot(AnalyzedMatrix(
+          determinant: 1,
+          eigenvalues: const [Complex.fromReal(1)],
+          characteristicPolynomial: Algebraic.fromReal([2]),
+          rank: 1,
+          trace: 1,
+          transpose: RealMatrix.diagonal(
+            rows: 1,
+            columns: 1,
+            diagonalValue: 0,
+          ),
+          cofactorMatrix: RealMatrix.diagonal(
+            rows: 1,
+            columns: 1,
+            diagonalValue: 0,
+          ),
+          inverse: RealMatrix.diagonal(
+            rows: 1,
+            columns: 1,
+            diagonalValue: 0,
+          ),
+          isIdentity: true,
+          isDiagonal: false,
+          isSymmetric: false,
         )),
       );
 
@@ -218,7 +265,7 @@ void main() {
         equals(const OtherNone()),
       );
 
-      expect(matrix.props.length, equals(8));
+      expect(matrix.props.length, equals(11));
       expect(complex.props.length, equals(6));
       expect(const OtherClean().props.length, isZero);
       expect(const OtherClean().props.length, isZero);

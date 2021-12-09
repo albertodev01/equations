@@ -3,7 +3,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

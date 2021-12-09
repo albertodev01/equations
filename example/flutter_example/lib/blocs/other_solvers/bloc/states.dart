@@ -37,6 +37,15 @@ class AnalyzedMatrix extends OtherState {
   /// The determinant of the matrix.
   final double determinant;
 
+  /// Whether the matrix is diagonal or not.
+  final bool isDiagonal;
+
+  /// Whether the matrix is symmetric or not.
+  final bool isSymmetric;
+
+  /// Whether it's an identity matrix or not.
+  final bool isIdentity;
+
   /// Creates an [AnalyzedMatrix] object.
   const AnalyzedMatrix({
     required this.transpose,
@@ -47,6 +56,9 @@ class AnalyzedMatrix extends OtherState {
     required this.characteristicPolynomial,
     required this.eigenvalues,
     required this.determinant,
+    required this.isDiagonal,
+    required this.isSymmetric,
+    required this.isIdentity,
   });
 
   @override
@@ -59,6 +71,9 @@ class AnalyzedMatrix extends OtherState {
         characteristicPolynomial,
         eigenvalues,
         determinant,
+        isDiagonal,
+        isSymmetric,
+        isIdentity,
       ];
 }
 

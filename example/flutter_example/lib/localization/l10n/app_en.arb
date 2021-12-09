@@ -24,7 +24,7 @@
   "wrong_input": "Invalid input",
   "tap_more": "Tap to see more details",
   "discriminant": "Discriminant",
-  "fraction": "Fraction:",
+  "fraction": "Fraction",
   "single_point": "Single point",
   "bracketing": "Bracketing",
   "precision": "Precision",
@@ -70,5 +70,10 @@
   "length": "Length",
   "angle_deg": "Angle (degree)",
   "angle_rad": "Angle (radians)",
-  "polar_coordinates": "Polar coordinates"
+  "polar_coordinates": "Polar coordinates",
+  "yes": "Yes",
+  "no": "No",
+  "diagonal": "Diagonal",
+  "symmetric": "Symmetric",
+  "identity": "Identity"
 }

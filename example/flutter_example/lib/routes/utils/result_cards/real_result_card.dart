@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// This widget shows a [double] value into a [Card] widget and optionally
@@ -44,7 +45,7 @@ class RealResultCard extends StatelessWidget {
       final fraction = Fraction.fromDouble(value);
 
       subtitle = Text(
-        '${context.l10n.fraction} $fraction',
+        '${context.l10n.fraction}: $fraction',
         key: const Key('Fraction-ResultCard'),
       );
     }
@@ -55,7 +56,7 @@ class RealResultCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 35),
         child: SizedBox(
-          width: 250,
+          width: cardWidgetsWidth,
           child: Card(
             elevation: 5,
             child: ListTile(

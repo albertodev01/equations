@@ -23,7 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// This widget is responsive: contents may be laid out on a single column or
 /// on two columns according with the available width.
 class NonlinearBody extends StatefulWidget {
-  /// Creates a [PolynomialBody] widget.
+  /// Creates a [NonlinearBody] widget.
   const NonlinearBody({Key? key}) : super(key: key);
 
   @override
@@ -107,7 +107,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= 950) {
+      if (size.maxWidth <= doubleColumnPageBreakpoint) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
           key: const Key('SingleChildScrollView-mobile-responsive'),

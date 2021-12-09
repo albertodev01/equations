@@ -81,7 +81,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= polynomialPageBreakpoint) {
+      if (size.maxWidth <= doubleColumnPageBreakpoint) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
           key: const Key('SingleChildScrollView-mobile-responsive'),
@@ -101,7 +101,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
         );
       }
 
-      // For wider screens - plot on the right and results on the right
+      // For wider screens - plot on the right and results on the left
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

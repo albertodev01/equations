@@ -24,7 +24,7 @@
   "wrong_input": "Entrée invalide",
   "tap_more": "Appuyez pour voir plus de détails ",
   "discriminant": "Discriminant",
-  "fraction": "Fraction:",
+  "fraction": "Fraction",
   "single_point": "Point fixe",
   "bracketing": "Intervalle",
   "precision": "Précision",
@@ -70,5 +70,10 @@
   "length": "Rayon",
   "angle_deg": "Angle (degrés)",
   "angle_rad": "Angle (radians)",
-  "polar_coordinates": "Coordonnées polaires"
+  "polar_coordinates": "Coordonnées polaires",
+  "yes": "Oui",
+  "no": "Non",
+  "diagonal": "Diagonale",
+  "symmetric": "Symétrique",
+  "identity": "Identité"
 }

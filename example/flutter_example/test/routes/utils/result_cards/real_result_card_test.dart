@@ -1,9 +1,9 @@
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
-import '../mock_wrapper.dart';
+import '../../mock_wrapper.dart';
 
 void main() {
   group("Testing the 'RealResultCard' widget", () {

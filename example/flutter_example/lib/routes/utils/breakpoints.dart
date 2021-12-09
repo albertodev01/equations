@@ -1,5 +1,4 @@
-import 'package:equations_solver/routes/utils/equation_scaffold.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
 
 /// When the viewport is horizontally smaller than [bottomNavigationBreakpoint],
 /// tabs are used. When larger, a navigation rail is shown.
@@ -10,7 +9,21 @@ const bottomNavigationBreakpoint = 950.0;
 const extraBackgroundBreakpoint = 1300.0;
 
 /// Determines whether the contents should stay on one or two column(s).
-const polynomialPageBreakpoint = 1100.0;
+const doubleColumnPageBreakpoint = 1100.0;
 
 /// The maximum size (width and height) of a [PlotWidget].
 const maxWidthPlot = 600.0;
+
+/// Determines whether the [MatrixAnalyzerResults] widget should show data in
+/// one or two columns.
+const matricesPageDoubleColumn = 1200.0;
+
+/// The width of a single column in the [MatrixAnalyzerResults] page when there
+/// are multiple columns in the page.
+///
+/// We want to add a padding of `30` on both sides, hence the `30 * 2`.
+const matricesPageColumnWidth = cardWidgetsWidth + 30 * 2;
+
+/// The width of the cards widgets: [RealResultCard], [ComplexResultCard] and
+/// [BoolResultCard].
+const cardWidgetsWidth = 275.0;

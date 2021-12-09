@@ -3,9 +3,9 @@ import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
-import 'package:equations_solver/routes/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -44,7 +44,6 @@ void main() {
           ),
         ));
 
-        expect(find.byType(NoResults), findsOneWidget);
         expect(find.byType(RealResultCard), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsNothing);
       },
@@ -102,6 +101,9 @@ void main() {
             diagonalValue: 1,
           ),
           characteristicPolynomial: Algebraic.fromReal([1]),
+          isIdentity: false,
+          isDiagonal: false,
+          isSymmetric: false,
         ));
 
         await tester.pumpWidget(MockWrapper(
@@ -183,6 +185,9 @@ void main() {
                 ],
               ),
               characteristicPolynomial: Algebraic.fromReal([1, -5, -2]),
+              isIdentity: true,
+              isDiagonal: true,
+              isSymmetric: false,
             ));
 
             return BlocProvider<OtherBloc>.value(
@@ -197,7 +202,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(500, 1800),
+        surfaceSize: const Size(500, 2200),
       );
       await screenMatchesGolden(tester, 'matrix_analyze_results');
     });

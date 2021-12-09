@@ -43,6 +43,9 @@ class MatrixDataAnalyzer extends Analyzer<AnalyzedMatrix> {
       characteristicPolynomial: matrix.characteristicPolynomial(),
       eigenvalues: matrix.eigenvalues(),
       determinant: matrix.determinant(),
+      isDiagonal: matrix.isDiagonal(),
+      isSymmetric: matrix.isSymmetric(),
+      isIdentity: matrix.isIdentity(),
     );
   }
 

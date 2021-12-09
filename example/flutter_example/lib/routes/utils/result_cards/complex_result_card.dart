@@ -1,4 +1,6 @@
 import 'package:equations/equations.dart';
+import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// This widget shows a [Complex] value into a [Card] widget and places the
@@ -14,28 +16,40 @@ class ComplexResultCard extends StatelessWidget {
   /// By default, this value is an empty string.
   final String leading;
 
+  /// Decides whether a fraction has to appear at the bottom.
+  ///
+  /// This is `true` by default.
+  final bool withFraction;
+
   /// Creates a [ComplexResultCard] widget.
   const ComplexResultCard({
     Key? key,
     required this.value,
     this.leading = '',
+    this.withFraction = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Widget? subtitle;
+
+    if (withFraction) {
+      subtitle = Text(
+        '${context.l10n.fraction}: ${value.toStringAsFraction()}',
+        key: const Key('Fraction-ComplexResultCard'),
+      );
+    }
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 35),
         child: SizedBox(
-          width: 250,
+          width: cardWidgetsWidth,
           child: Card(
             elevation: 5,
             child: ListTile(
-              title: Text('$leading ${value.toStringAsFixed(8)}'),
-              subtitle: Text(
-                value.toStringAsFraction(),
-                key: const Key('Fraction-ComplexResultCard'),
-              ),
+              title: Text('$leading${value.toStringAsFixed(8)}'),
+              subtitle: subtitle,
             ),
           ),
         ),

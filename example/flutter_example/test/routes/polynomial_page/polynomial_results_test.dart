@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
-import 'package:equations_solver/routes/utils/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
