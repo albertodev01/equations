@@ -1,4 +1,5 @@
-import 'package:equations/equations.dart' as equations;
+import 'dart:math';
+
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/slider/slider.dart';
@@ -8,13 +9,13 @@ import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
-import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// This widget contains the solutions of the nonlinear equation and a chart
 /// which plots the function.
@@ -116,7 +117,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
               const NonlinearDataInput(),
               const NonlinearResults(),
               const Padding(
-                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 50,
+                ),
                 child: _NonlinearPlot(),
               ),
             ],
@@ -140,6 +143,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                     pageTitleWidget,
                     const NonlinearDataInput(),
                     const NonlinearResults(),
+                    const SizedBox(
+                      height: 40,
+                    ),
                   ],
                 ),
               ),
@@ -185,17 +191,26 @@ class _NonlinearPlotState extends State<_NonlinearPlot> {
             child: Column(
               children: [
                 // Title
-                SectionTitle(
+                PageTitle(
                   pageTitle: context.l10n.chart,
-                  icon: SvgPicture.asset(
-                    'assets/plot.svg',
-                    height: 40,
-                  ),
+                  pageLogo: const PlotIcon(),
                 ),
 
                 // The actual plot
-                PlotWidget<equations.NonLinear>(
-                  plotMode: plotMode,
+                LayoutBuilder(
+                  builder: (context, dimensions) {
+                    final width = min<double>(
+                      dimensions.maxWidth,
+                      maxWidthPlot,
+                    );
+
+                    return SizedBox(
+                      width: width,
+                      child: PlotWidget(
+                        plotMode: plotMode,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

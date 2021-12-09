@@ -149,7 +149,6 @@ class _PlotSlider extends StatelessWidget {
         return Slider(
           min: 2,
           max: 10,
-          divisions: 8,
           value: state,
           onChanged: (value) => update(context, value),
           label: '${state.round()}',

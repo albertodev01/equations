@@ -83,11 +83,6 @@ class _NonlinearSolutions extends StatelessWidget {
                 leading: '${context.l10n.efficiency}: ',
                 value: efficiency,
               ),
-
-              // Some spacing
-              const SizedBox(
-                height: 65,
-              ),
             ],
           );
         }

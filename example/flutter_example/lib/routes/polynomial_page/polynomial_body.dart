@@ -9,7 +9,6 @@ import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
-import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
@@ -95,9 +94,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                 padding: EdgeInsets.symmetric(
                   horizontal: 50,
                 ),
-                child: _PolynomialPlot(
-                  isSingleColumn: true,
-                ),
+                child: _PolynomialPlot(),
               ),
             ],
           ),
@@ -120,6 +117,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                     pageTitleWidget,
                     const PolynomialDataInput(),
                     const PolynomialResults(),
+                    const SizedBox(
+                      height: 40,
+                    ),
                   ],
                 ),
               ),
@@ -130,9 +130,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
           SizedBox(
             width: size.maxWidth / 2.3,
             height: double.infinity,
-            child: const _PolynomialPlot(
-              isSingleColumn: false,
-            ),
+            child: const _PolynomialPlot(),
           ),
         ],
       );
@@ -142,13 +140,8 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
 /// Puts on the screen a widget that draws mathematical functions.
 class _PolynomialPlot extends StatelessWidget {
-  /// Whether the widget is on a single column or not.
-  final bool isSingleColumn;
-
   /// Creates a [_PolynomialPlot] widget.
-  const _PolynomialPlot({
-    required this.isSingleColumn,
-  });
+  const _PolynomialPlot();
 
   @override
   Widget build(BuildContext context) {
@@ -175,7 +168,10 @@ class _PolynomialPlot extends StatelessWidget {
                 // The actual plot
                 LayoutBuilder(
                   builder: (context, dimensions) {
-                    final width = min<double>(dimensions.maxWidth, maxWidthPlot,);
+                    final width = min<double>(
+                      dimensions.maxWidth,
+                      maxWidthPlot,
+                    );
 
                     return SizedBox(
                       width: width,

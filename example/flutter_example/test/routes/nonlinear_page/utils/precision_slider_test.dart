@@ -77,7 +77,7 @@ void main() {
 
         // Moving the slider
         await tester.drag(find.byType(Slider), const Offset(-10, 0));
-        expect(bloc.state, equals(8));
+        expect(bloc.state.round(), equals(8));
       },
     );
 

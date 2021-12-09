@@ -3,9 +3,9 @@ import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
-import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
+import 'package:equations_solver/routes/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -45,7 +45,7 @@ void main() {
         ));
 
         expect(find.byType(NoResults), findsOneWidget);
-        expect(find.byType(DoubleResultCard), findsNothing);
+        expect(find.byType(RealResultCard), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsNothing);
       },
     );
@@ -70,7 +70,7 @@ void main() {
         ));
 
         expect(find.byType(NoResults), findsNothing);
-        expect(find.byType(DoubleResultCard), findsNothing);
+        expect(find.byType(RealResultCard), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
       },
     );
@@ -122,7 +122,7 @@ void main() {
 
         expect(find.byType(NoResults), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsNothing);
-        expect(find.byType(DoubleResultCard), findsNWidgets(3));
+        expect(find.byType(RealResultCard), findsNWidgets(3));
         expect(find.byType(ComplexResultCard), findsNWidgets(2));
         expect(find.byType(MatrixOutput), findsNWidgets(3));
       },

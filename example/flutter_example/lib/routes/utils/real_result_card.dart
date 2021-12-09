@@ -6,47 +6,50 @@ import 'package:flutter/material.dart';
 /// places the fractional representation at the bottom.
 class RealResultCard extends StatelessWidget {
   /// The number to be displayed.
+  ///
+  /// This value is printed with 10 decimal digits.
   final double value;
 
   /// Text to be displayed in front of the complex number.
   ///
-  /// By default, this value is `x =`.
+  /// By default, this value is an empty string.
   final String leading;
 
   /// Decides whether a fraction has to appear at the bottom.
   ///
-  /// This is `false` by default.
+  /// This is `true` by default.
   final bool withFraction;
 
   /// Creates a [RealResultCard] widget.
   const RealResultCard({
     Key? key,
     required this.value,
-    this.leading = 'x =',
-    this.withFraction = false,
+    this.leading = '',
+    this.withFraction = true,
   }) : super(key: key);
 
-  String _checkNan(BuildContext context, double value) {
-    if (value.isNaN) {
+  String _nanToString(BuildContext context, double value) {
+    if (!value.isFinite) {
       return context.l10n.not_computed;
     }
 
-    return '$value';
+    return value.toStringAsFixed(10);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget? subtitle;
 
-    if (withFraction) {
+    if (withFraction && value.isFinite) {
       final fraction = Fraction.fromDouble(value);
+
       subtitle = Text(
-        '${context.l10n.fraction}: $fraction',
+        '${context.l10n.fraction} $fraction',
         key: const Key('Fraction-ResultCard'),
       );
     }
 
-    final valueString = _checkNan(context, value);
+    final valueString = _nanToString(context, value);
 
     return Center(
       child: Padding(
@@ -56,7 +59,7 @@ class RealResultCard extends StatelessWidget {
           child: Card(
             elevation: 5,
             child: ListTile(
-              title: Text('$leading $valueString'),
+              title: Text('$leading$valueString'),
               subtitle: subtitle,
             ),
           ),

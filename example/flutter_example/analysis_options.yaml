@@ -6,14 +6,15 @@ analyzer:
 
 dart_code_metrics:
   metrics:
-    cyclomatic-complexity: 20
     number-of-parameters: 4
     maximum-nesting: 5
   metrics-exclude:
     - test/**
   rules:
-    - avoid-unused-parameters
-    - avoid-wrapping-in-padding
+    - avoid-missing-enum-constant-in-map
+    - avoid-nested-conditional-expressions
+    - avoid-unnecessary-type-assertions
+    - avoid-unnecessary-type-casts
     - binary-expression-operand-order
     - double-literal-format
     - newline-before-return

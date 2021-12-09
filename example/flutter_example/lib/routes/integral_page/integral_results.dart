@@ -59,7 +59,7 @@ class _IntegralSolutions extends StatelessWidget {
       builder: (context, state) {
         if (state is IntegralResult) {
           return RealResultCard(
-            leading: 'x0: ',
+            leading: 'x = ',
             value: state.result,
           );
         }

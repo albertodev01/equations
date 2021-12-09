@@ -213,6 +213,18 @@ void main() {
         const Complex.fromImaginary(13.345678).toStringAsFixed(3),
         equals('13.346i'),
       );
+      expect(
+        const Complex.fromImaginary(13.345678).toStringAsFixed(0),
+        equals('13i'),
+      );
+      expect(
+        const Complex.fromImaginary(13.2).toStringAsFixed(3),
+        equals('13.200i'),
+      );
+      expect(
+        const Complex.fromReal(13.47).toStringAsFixed(5),
+        equals('13.47000'),
+      );
     });
   });
 

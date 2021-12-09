@@ -1,7 +1,7 @@
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +77,7 @@ class _SystemSolutions extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.solution.length,
-            itemBuilder: (context, index) => DoubleResultCard(
+            itemBuilder: (context, index) => RealResultCard(
               value: state.solution[index],
               leading: 'x[$index] = ',
             ),

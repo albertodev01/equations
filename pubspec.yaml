@@ -22,7 +22,7 @@ dev_dependencies:
   coverage: ^1.0.3
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.6.0
+  dart_code_metrics: ^4.8.1
 
   # https://pub.dev/packages/lints
   lints: ^1.0.1

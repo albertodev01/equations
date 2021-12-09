@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
@@ -6,9 +8,9 @@ import 'package:equations_solver/routes/integral_page/integral_results.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
-import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +81,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
               const IntegralDataInput(),
               const IntegralResultsWidget(),
               const Padding(
-                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 50,
+                ),
                 child: _IntegralPlot(),
               ),
             ],
@@ -103,6 +107,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                     pageTitleWidget,
                     const IntegralDataInput(),
                     const IntegralResultsWidget(),
+                    const SizedBox(
+                      height: 40,
+                    ),
                   ],
                 ),
               ),
@@ -149,17 +156,30 @@ class _IntegralPlot extends StatelessWidget {
             child: Column(
               children: [
                 // Title
-                SectionTitle(
+                PageTitle(
                   pageTitle: context.l10n.chart,
-                  icon: const PlotIcon(),
+                  pageLogo: const PlotIcon(),
                 ),
 
                 // The actual plot
-                PlotWidget(
-                  plotMode: plotMode,
-                  areaColor: Colors.amber.withAlpha(60),
-                  lowerAreaLimit: lowerLimit,
-                  upperAreaLimit: upperLimit,
+                // The actual plot
+                LayoutBuilder(
+                  builder: (context, dimensions) {
+                    final width = min<double>(
+                      dimensions.maxWidth,
+                      maxWidthPlot,
+                    );
+
+                    return SizedBox(
+                      width: width,
+                      child: PlotWidget(
+                        plotMode: plotMode,
+                        areaColor: Colors.amber.withAlpha(60),
+                        lowerAreaLimit: lowerLimit,
+                        upperAreaLimit: upperLimit,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

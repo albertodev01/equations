@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 /// fractional representation of the real/imaginary part at the bottom.
 class ComplexResultCard extends StatelessWidget {
   /// The complex number to be displayed.
+  ///
+  /// This value is printed with 10 decimal digits.
   final Complex value;
 
   /// Text to be displayed in front of the complex number.
   ///
-  /// By default, this value is `x =`.
+  /// By default, this value is an empty string.
   final String leading;
 
   /// Creates a [ComplexResultCard] widget.
   const ComplexResultCard({
     Key? key,
     required this.value,
-    this.leading = 'x =',
+    this.leading = '',
   }) : super(key: key);
 
   @override
@@ -29,9 +31,9 @@ class ComplexResultCard extends StatelessWidget {
           child: Card(
             elevation: 5,
             child: ListTile(
-              title: Text('$leading $value'),
+              title: Text('$leading ${value.toStringAsFixed(8)}'),
               subtitle: Text(
-                'Fraction: ${value.toStringAsFraction()}',
+                value.toStringAsFraction(),
                 key: const Key('Fraction-ComplexResultCard'),
               ),
             ),

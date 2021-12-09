@@ -1,9 +1,9 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
-import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
+import 'package:equations_solver/routes/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
@@ -119,12 +119,12 @@ class _Results extends StatelessWidget {
           icon: const SquareRoot(),
         ),
 
-        DoubleResultCard(
+        RealResultCard(
           value: abs,
           leading: '${context.l10n.abs}: ',
         ),
 
-        DoubleResultCard(
+        RealResultCard(
           value: phase,
           leading: '${context.l10n.phase}: ',
         ),
@@ -155,17 +155,17 @@ class _Results extends StatelessWidget {
           ),
         ),
 
-        DoubleResultCard(
+        RealResultCard(
           value: polarComplex.r,
           leading: '${context.l10n.length}: ',
         ),
 
-        DoubleResultCard(
+        RealResultCard(
           value: polarComplex.phiDegrees,
           leading: '${context.l10n.angle_deg}: ',
         ),
 
-        DoubleResultCard(
+        RealResultCard(
           value: polarComplex.phiRadians,
           leading: '${context.l10n.angle_rad}: ',
         ),

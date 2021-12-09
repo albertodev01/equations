@@ -33,7 +33,6 @@ class PrecisionSlider extends StatelessWidget {
                     min: 2,
                     max: 15,
                     value: state,
-                    divisions: 13,
                     onChanged: (value) => _update(context, value),
                   );
                 },

@@ -1,9 +1,9 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_analyzer_results.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
-import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
+import 'package:equations_solver/routes/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -49,7 +49,7 @@ void main() {
         ));
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        expect(find.byType(DoubleResultCard), findsNothing);
+        expect(find.byType(RealResultCard), findsNothing);
       },
     );
 
@@ -75,7 +75,7 @@ void main() {
         ));
 
         expect(find.byType(CircularProgressIndicator), findsNothing);
-        expect(find.byType(DoubleResultCard), findsNWidgets(5));
+        expect(find.byType(RealResultCard), findsNWidgets(5));
         expect(find.byType(ComplexResultCard), findsNWidgets(3));
       },
     );
