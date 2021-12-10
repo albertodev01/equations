@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
@@ -73,7 +73,7 @@ class _ComplexAnalysis extends StatelessWidget {
           );
         }
 
-        return const NoResults();
+        return const SizedBox.shrink();
       },
     );
   }
@@ -110,66 +110,99 @@ class _Results extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
+    return LayoutBuilder(
+      builder: (context, dimensions) {
         // Properties
-        SectionTitle(
-          pageTitle: context.l10n.properties,
-          icon: const SquareRoot(),
-        ),
+        final propertiesWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SectionTitle(
+              pageTitle: context.l10n.properties,
+              icon: const SquareRoot(),
+            ),
+            RealResultCard(
+              value: abs,
+              leading: '${context.l10n.abs}: ',
+            ),
+            RealResultCard(
+              value: phase,
+              leading: '${context.l10n.phase}: ',
+            ),
+            ComplexResultCard(
+              value: sqrt,
+              leading: '${context.l10n.sqrt}: ',
+            ),
+            ComplexResultCard(
+              value: conjugate,
+              leading: '${context.l10n.conjugate}: ',
+            ),
+            ComplexResultCard(
+              value: reciprocal,
+              leading: '${context.l10n.reciprocal}: ',
+            ),
+          ],
+        );
 
-        RealResultCard(
-          value: abs,
-          leading: '${context.l10n.abs}: ',
-        ),
+        // Polar coordinates
+        final coordinatesWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SectionTitle(
+              pageTitle: context.l10n.polar_coordinates,
+              icon: const HalfRightAngle(),
+            ),
+            RealResultCard(
+              value: polarComplex.r,
+              leading: '${context.l10n.length}: ',
+            ),
+            RealResultCard(
+              value: polarComplex.phiDegrees,
+              leading: '${context.l10n.angle_deg}: ',
+            ),
+            RealResultCard(
+              value: polarComplex.phiRadians,
+              leading: '${context.l10n.angle_rad}: ',
+            ),
+          ],
+        );
 
-        RealResultCard(
-          value: phase,
-          leading: '${context.l10n.phase}: ',
-        ),
+        // For mobile devices - all in a column
+        if (dimensions.maxWidth <= matricesPageDoubleColumn) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Numerical properties
+              propertiesWidget,
 
-        ComplexResultCard(
-          value: sqrt,
-          leading: '${context.l10n.sqrt}: ',
-        ),
+              // Some spacing
+              const SizedBox(
+                height: 80,
+              ),
 
-        ComplexResultCard(
-          value: conjugate,
-          leading: '${context.l10n.conjugate}: ',
-        ),
+              // Polar coordinates
+              coordinatesWidget,
+            ],
+          );
+        }
 
-        ComplexResultCard(
-          value: reciprocal,
-          leading: '${context.l10n.reciprocal}: ',
-        ),
-
-        // Eigenvalues
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 50,
-          ),
-          child: SectionTitle(
-            pageTitle: context.l10n.polar_coordinates,
-            icon: const HalfRightAngle(),
-          ),
-        ),
-
-        RealResultCard(
-          value: polarComplex.r,
-          leading: '${context.l10n.length}: ',
-        ),
-
-        RealResultCard(
-          value: polarComplex.phiDegrees,
-          leading: '${context.l10n.angle_deg}: ',
-        ),
-
-        RealResultCard(
-          value: polarComplex.phiRadians,
-          leading: '${context.l10n.angle_rad}: ',
-        ),
-      ],
+        // For wider screens - splitting numerical results in two columns
+        return Wrap(
+          spacing: 80,
+          runSpacing: 40,
+          alignment: WrapAlignment.spaceAround,
+          runAlignment: WrapAlignment.center,
+          children: [
+            SizedBox(
+              width: complexPageColumnWidth,
+              child: propertiesWidget,
+            ),
+            SizedBox(
+              width: complexPageColumnWidth,
+              child: coordinatesWidget,
+            ),
+          ],
+        );
+      },
     );
   }
 }

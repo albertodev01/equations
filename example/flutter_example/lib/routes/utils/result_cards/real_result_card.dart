@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class RealResultCard extends StatelessWidget {
   /// The number to be displayed.
   ///
-  /// This value is printed with 10 decimal digits.
+  /// This value is printed with 8 decimal digits.
   final double value;
 
   /// Text to be displayed in front of the complex number.
@@ -34,7 +34,7 @@ class RealResultCard extends StatelessWidget {
       return context.l10n.not_computed;
     }
 
-    return value.toStringAsFixed(10);
+    return value.toStringAsFixed(8);
   }
 
   @override

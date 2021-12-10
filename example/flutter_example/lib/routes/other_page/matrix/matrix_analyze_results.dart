@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/polynomial_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
@@ -186,8 +187,21 @@ class _Results extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SectionTitle(
-              pageTitle: context.l10n.eigenvalues,
+              pageTitle: context.l10n.characteristicPolynomial,
               icon: const PolynomialLogo(),
+            ),
+            PolynomialResultCard(
+              algebraic: characteristicPolynomial,
+            ),
+
+            // Spacing
+            const SizedBox(
+              height: 20,
+            ),
+
+            SectionTitle(
+              pageTitle: context.l10n.eigenvalues,
+              icon: const EquationSolution(),
             ),
             ListView.builder(
               shrinkWrap: true,

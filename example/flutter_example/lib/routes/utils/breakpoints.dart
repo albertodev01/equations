@@ -1,3 +1,4 @@
+import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_analyzer_results.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
 
 /// When the viewport is horizontally smaller than [bottomNavigationBreakpoint],
@@ -23,6 +24,12 @@ const matricesPageDoubleColumn = 1200.0;
 ///
 /// We want to add a padding of `30` on both sides, hence the `30 * 2`.
 const matricesPageColumnWidth = cardWidgetsWidth + 30 * 2;
+
+/// The width of a single column in the [ComplexNumberAnalyzerResult] page when
+/// there are multiple columns in the page.
+///
+/// We want to add a padding of `30` on both sides, hence the `30 * 2`.
+const complexPageColumnWidth = cardWidgetsWidth + 30 * 2;
 
 /// The width of the cards widgets: [RealResultCard], [ComplexResultCard] and
 /// [BoolResultCard].

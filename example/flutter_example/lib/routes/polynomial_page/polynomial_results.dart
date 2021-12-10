@@ -4,10 +4,10 @@ import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.da
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
@@ -38,10 +38,7 @@ class PolynomialResults extends StatelessWidget {
 
         SectionTitle(
           pageTitle: context.l10n.discriminant,
-          icon: SvgPicture.asset(
-            'assets/matrix.svg',
-            height: 40,
-          ),
+          icon: const SystemsLogo(),
         ),
 
         // Showing the solutions of the polynomial

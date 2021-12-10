@@ -15,7 +15,7 @@ class MatrixOutput extends StatefulWidget {
   /// The precision to use when printing the value. This parameter is passed to
   /// the `toStringAsPrecision(double)` method.
   ///
-  /// By default, this is set to 3.
+  /// By default, this is set to 2.
   final int decimalDigits;
 
   /// Creates a [MatrixOutput] widget.
@@ -23,7 +23,7 @@ class MatrixOutput extends StatefulWidget {
     Key? key,
     required this.matrix,
     required this.description,
-    this.decimalDigits = 3,
+    this.decimalDigits = 2,
   }) : super(key: key);
 
   @override
@@ -47,7 +47,7 @@ class _MatrixOutputState extends State<MatrixOutput> {
           padding: const EdgeInsets.all(5),
           child: TextFormField(
             readOnly: true,
-            initialValue: value.toStringAsPrecision(widget.decimalDigits),
+            initialValue: value.toStringAsFixed(widget.decimalDigits),
             textAlign: TextAlign.center,
             decoration: const InputDecoration(
               border: OutlineInputBorder(
