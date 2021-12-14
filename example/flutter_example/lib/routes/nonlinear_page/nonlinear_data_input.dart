@@ -2,7 +2,8 @@ import 'dart:math' as math;
 
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
+import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
@@ -32,7 +33,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
   /// Manually caching the equation input field.
   late final functionInput = EquationInput(
     key: const Key('EquationInput-function'),
-    controller: controllers[0],
+    controller: controllers.first,
     placeholderText: 'f(x)',
   );
 
@@ -60,13 +61,15 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
 
     formKey.currentState?.reset();
     context.read<NonlinearBloc>().add(const NonlinearClean());
+    context.read<PlotZoomCubit>().reset();
+    context.read<PrecisionSliderCubit>().reset();
   }
 
   /// Solves a nonlinear equation.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final bloc = context.read<NonlinearBloc>();
-      final precision = context.read<SliderCubit>().state;
+      final precision = context.read<PrecisionSliderCubit>().state;
       final algorithm =
           context.read<DropdownCubit>().state.toNonlinearDropdownItems();
 
@@ -75,7 +78,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
           SinglePointMethod(
             method: SinglePointMethod.resolve(algorithm),
             initialGuess: controllers[1].text,
-            function: controllers[0].text,
+            function: controllers.first.text,
             precision: 1.0 * math.pow(10, -precision),
           ),
         );
@@ -85,7 +88,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
             method: BracketingMethod.resolve(algorithm),
             lowerBound: controllers[1].text,
             upperBound: controllers[2].text,
-            function: controllers[0].text,
+            function: controllers.first.text,
             precision: 1.0 * math.pow(10, -precision),
           ),
         );

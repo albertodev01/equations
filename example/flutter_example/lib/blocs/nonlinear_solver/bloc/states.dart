@@ -39,8 +39,8 @@ class NonlinearError extends NonlinearState {
   const NonlinearError();
 }
 
-/// This is an initial state used to "clean" the page bringing it to a default
-/// aspect.
+/// Emitted when the state of the bloc has to be "reset". This is generally used
+/// to clean the UI to bring it to an initial state.
 class NonlinearNone extends NonlinearState {
   /// Initializes a [NonlinearNone].
   const NonlinearNone();

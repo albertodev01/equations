@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
-import 'package:equations_solver/blocs/integral_solver/models/integral_types.dart';
 
 /// Events for the [IntegralBloc] bloc.
 abstract class IntegralEvent extends Equatable {
@@ -47,8 +46,8 @@ class IntegralSolve extends IntegralEvent {
       ];
 }
 
-/// Event fired when the state of the bloc has to be "resetted". This is
-/// generally used to clean the UI to bring it to an initial state.
+/// Event fired when the state of the bloc has to be "reset". This is generally
+/// used to clean the UI to bring it to an initial state.
 class IntegralClean extends IntegralEvent {
   /// Instantiates a [IntegralClean] event.
   const IntegralClean();

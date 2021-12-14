@@ -3,9 +3,9 @@ import 'package:equations_solver/routes/other_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This bloc handles the contents of a [OtherPage] widget by analyzing matrices
-/// or polynomials and returning various properties.
+/// or complex numbers and returning various properties.
 class OtherBloc extends Bloc<OtherEvent, OtherState> {
-  /// Initializes an [OtherBloc] with [OtherNone]
+  /// Initializes an [OtherBloc] with [OtherNone].
   OtherBloc() : super(const OtherNone()) {
     on<MatrixAnalyze>(_onMatrixAnalyze);
     on<ComplexNumberAnalyze>(_onComplexNumberAnalyze);

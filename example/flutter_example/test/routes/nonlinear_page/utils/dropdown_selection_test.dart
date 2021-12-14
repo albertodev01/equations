@@ -94,7 +94,7 @@ void main() {
 
         expect(state.dropdownItems.length, equals(2));
         expect(
-          state.dropdownItems[0].value,
+          state.dropdownItems.first.value,
           equals(NonlinearDropdownItems.newton),
         );
         expect(
@@ -134,7 +134,7 @@ void main() {
 
         expect(state.dropdownItems.length, equals(3));
         expect(
-          state.dropdownItems[0].value,
+          state.dropdownItems.first.value,
           equals(NonlinearDropdownItems.bisection),
         );
         expect(

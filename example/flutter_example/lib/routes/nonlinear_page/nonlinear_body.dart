@@ -1,12 +1,9 @@
 import 'dart:math';
 
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
-import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
@@ -22,58 +19,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 ///
 /// This widget is responsive: contents may be laid out on a single column or
 /// on two columns according with the available width.
-class NonlinearBody extends StatefulWidget {
+class NonlinearBody extends StatelessWidget {
   /// Creates a [NonlinearBody] widget.
   const NonlinearBody({Key? key}) : super(key: key);
 
   @override
-  _NonlinearBodyState createState() => _NonlinearBodyState();
-}
-
-class _NonlinearBodyState extends State<NonlinearBody> {
-  /// Manually caching the initial value.
-  late final initialValue = _initialValue();
-
-  String _initialValue() {
-    final type = context.read<NonlinearBloc>().nonlinearType;
-
-    return type == NonlinearType.singlePoint
-        ? NonlinearDropdownItems.newton.asString()
-        : NonlinearDropdownItems.bisection.asString();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<SliderCubit>(
-          create: (_) => SliderCubit(
-            minValue: 2,
-            maxValue: 15,
-            initial: 8,
-          ),
+    return Stack(
+      children: const [
+        // Scrollable contents of the page
+        Positioned.fill(
+          child: _ResponsiveBody(),
         ),
-        BlocProvider<DropdownCubit>(
-          create: (_) => DropdownCubit(
-            initialValue: initialValue,
-          ),
+
+        // "Go back" button
+        Positioned(
+          top: 20,
+          left: 20,
+          child: GoBackButton(),
         ),
       ],
-      child: Stack(
-        children: const [
-          // Scrollable contents of the page
-          Positioned.fill(
-            child: _ResponsiveBody(),
-          ),
-
-          // "Go back" button
-          Positioned(
-            top: 20,
-            left: 20,
-            child: GoBackButton(),
-          ),
-        ],
-      ),
     );
   }
 }

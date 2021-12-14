@@ -1,4 +1,4 @@
-import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +9,7 @@ class PrecisionSlider extends StatelessWidget {
   const PrecisionSlider({Key? key}) : super(key: key);
 
   void _update(BuildContext context, double value) =>
-      context.read<SliderCubit>().updateSlider(value);
+      context.read<PrecisionSliderCubit>().updateSlider(value);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class PrecisionSlider extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Slider
-              BlocBuilder<SliderCubit, double>(
+              BlocBuilder<PrecisionSliderCubit, double>(
                 builder: (context, state) {
                   return Slider(
                     min: 2,
@@ -50,7 +50,7 @@ class PrecisionSlider extends StatelessWidget {
                     Text(context.l10n.precision),
 
                     // The label representing the precision
-                    BlocBuilder<SliderCubit, double>(
+                    BlocBuilder<PrecisionSliderCubit, double>(
                       builder: (_, state) {
                         return Text('1.0e-${state.round()}');
                       },

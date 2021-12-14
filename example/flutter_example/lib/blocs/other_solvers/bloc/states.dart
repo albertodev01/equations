@@ -4,7 +4,7 @@ import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 
 /// States for the [OtherBloc] bloc.
 abstract class OtherState extends Equatable {
-  /// Initializes a [PolynomialEvent].
+  /// Initializes a [OtherState].
   const OtherState();
 
   @override
@@ -131,8 +131,8 @@ class OtherError extends OtherState {
   const OtherError();
 }
 
-/// This is an initial state used to "clean" the page bringing it to a default
-/// aspect.
+/// Emitted when the state of the bloc has to be "reset". This is generally used
+/// to clean the UI to bring it to an initial state.
 class OtherNone extends OtherState {
   /// Initializes an [OtherNone] state.
   const OtherNone();

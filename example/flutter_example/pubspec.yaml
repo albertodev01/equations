@@ -52,9 +52,6 @@ dev_dependencies:
   # https://pub.dev/packages/mocktail
   mocktail: ^0.2.0
 
-  # https://pub.dev/packages/test
-  test: ^1.17.10
-
 flutter:
   uses-material-design: true
   generate: true

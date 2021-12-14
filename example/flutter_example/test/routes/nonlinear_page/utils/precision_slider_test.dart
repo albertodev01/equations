@@ -1,4 +1,4 @@
-import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,11 +11,10 @@ void main() {
   group("Testing the 'PrecisionSlider' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<SliderCubit>(
-          create: (_) => SliderCubit(
+        child: BlocProvider<PrecisionSliderCubit>(
+          create: (_) => PrecisionSliderCubit(
             minValue: 1,
             maxValue: 10,
-            initial: 5,
           ),
           child: const Scaffold(
             body: PrecisionSlider(),
@@ -27,15 +26,14 @@ void main() {
     });
 
     testWidgets(
-      'Making sure that when the slider has the same initial position defined '
+      'Making sure that when the plot_zoom has the same initial position defined '
       'by the state of the bloc.',
       (tester) async {
         await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SliderCubit>(
-            create: (_) => SliderCubit(
+          child: BlocProvider<PrecisionSliderCubit>(
+            create: (_) => PrecisionSliderCubit(
               minValue: 1,
               maxValue: 10,
-              initial: 5,
             ),
             child: const Scaffold(
               body: PrecisionSlider(),
@@ -54,17 +52,16 @@ void main() {
     );
 
     testWidgets(
-      'Making sure that the slider updates the bloc state when its initial '
+      'Making sure that the plot_zoom updates the bloc state when its initial '
       'value changes',
       (tester) async {
-        final bloc = SliderCubit(
+        final bloc = PrecisionSliderCubit(
           minValue: 1,
           maxValue: 10,
-          initial: 5,
         );
 
         await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SliderCubit>.value(
+          child: BlocProvider<PrecisionSliderCubit>.value(
             value: bloc,
             child: const Scaffold(
               body: PrecisionSlider(),
@@ -75,7 +72,7 @@ void main() {
         expect(find.byType(Slider), findsOneWidget);
         expect(bloc.state, equals(5));
 
-        // Moving the slider
+        // Moving the plot_zoom
         await tester.drag(find.byType(Slider), const Offset(-10, 0));
         expect(bloc.state.round(), equals(8));
       },
@@ -86,11 +83,10 @@ void main() {
         width: 300,
         height: 90,
         child: Scaffold(
-          body: BlocProvider<SliderCubit>(
-            create: (_) => SliderCubit(
+          body: BlocProvider<PrecisionSliderCubit>(
+            create: (_) => PrecisionSliderCubit(
               minValue: 1,
               maxValue: 10,
-              initial: 5,
             ),
             child: const PrecisionSlider(),
           ),

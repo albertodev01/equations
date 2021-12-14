@@ -7,14 +7,19 @@ analyzer:
 dart_code_metrics:
   metrics:
     number-of-parameters: 4
-    maximum-nesting: 5
+    maximum-nesting: 4
+    number-of-methods: 6
   metrics-exclude:
     - test/**
   rules:
+    - always-remove-listener
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
+    - avoid-throw-in-catch-block
+    - avoid-unnecessary-setstate
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
+    - avoid-unused-parameters
     - binary-expression-operand-order
     - double-literal-format
     - newline-before-return
@@ -24,6 +29,8 @@ dart_code_metrics:
     - prefer-extracting-callbacks:
         ignored-named-arguments:
           - listener
+    - prefer-first
+    - prefer-last
     - prefer-trailing-comma
 
 linter:

@@ -30,7 +30,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -80,7 +80,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -104,7 +104,7 @@ void main() {
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
         expect(
-          solutions[0],
+          solutions.first,
           const MoreOrLessEquals(25 / 21, precision: 1.0e-5),
         );
         expect(
@@ -157,7 +157,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -180,7 +180,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -204,7 +204,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );

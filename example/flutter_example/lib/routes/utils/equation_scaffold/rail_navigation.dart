@@ -60,9 +60,7 @@ class _RailNavigationState extends State<RailNavigation> {
             destinations: rails,
             selectedIndex: state,
             labelType: NavigationRailLabelType.all,
-            onDestinationSelected: (newIndex) {
-              context.read<NavigationCubit>().emit(newIndex);
-            },
+            onDestinationSelected: context.read<NavigationCubit>().pageIndex,
           ),
         ),
       ],

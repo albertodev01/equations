@@ -1,5 +1,5 @@
+import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
@@ -12,14 +12,9 @@ class PolynomialDataInput extends StatelessWidget {
   /// Creates a [PolynomialDataInput] widget.
   const PolynomialDataInput({Key? key}) : super(key: key);
 
-  /// This is required to figure out how many inputs are required for the
-  /// polynomial to be solved.
-  PolynomialType _getType(BuildContext context) =>
-      context.read<PolynomialBloc>().polynomialType;
-
   @override
   Widget build(BuildContext context) {
-    final polynomialType = _getType(context);
+    final polynomialType = context.read<PolynomialBloc>().polynomialType;
 
     switch (polynomialType) {
       case PolynomialType.linear:
@@ -143,7 +138,7 @@ class __InputWidget extends State<_InputWidget>
 
     formKey.currentState?.reset();
     context.read<PolynomialBloc>().add(const PolynomialClean());
-    context.read<SliderCubit>().reset();
+    context.read<PlotZoomCubit>().reset();
   }
 
   @override

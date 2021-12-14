@@ -13,7 +13,7 @@ abstract class Analyzer<T extends OtherState> extends Equatable {
 
   /// Converts a list of [String] into a list of [double].
   ///
-  /// Throws if a string doesn't represent a valid fraction or number.
+  /// Throws if one or more strings don't represent a valid fraction or number.
   List<double> valuesParser(List<String> source) {
     return source.map(_parser.evaluate).toList();
   }
@@ -21,10 +21,8 @@ abstract class Analyzer<T extends OtherState> extends Equatable {
   /// Converts a [String] into a [double].
   ///
   /// Throws if the string doesn't represent a valid fraction or number.
-  double valueParser(String source) {
-    return _parser.evaluate(source);
-  }
+  double valueParser(String source) => _parser.evaluate(source);
 
-  /// Processes the input and returns the results of the analysis
+  /// Processes data and returns the result [T] of the analysis.
   T process();
 }

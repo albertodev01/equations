@@ -41,7 +41,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         items: _bottom,
         type: BottomNavigationBarType.fixed,
         currentIndex: state,
-        onTap: (newIndex) => context.read<NavigationCubit>().emit(newIndex),
+        onTap: context.read<NavigationCubit>().pageIndex,
       ),
     );
   }
