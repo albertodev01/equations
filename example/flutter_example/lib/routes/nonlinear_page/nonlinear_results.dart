@@ -36,12 +36,6 @@ class NonlinearResults extends StatelessWidget {
 class _NonlinearSolutions extends StatelessWidget {
   const _NonlinearSolutions();
 
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [NonlinearGuesses] or [NonlinearNone].
-  bool buildCondition(NonlinearState previous, NonlinearState current) =>
-      (previous != current) && (current is! NonlinearError);
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NonlinearBloc, NonlinearState>(
@@ -55,7 +49,6 @@ class _NonlinearSolutions extends StatelessWidget {
           );
         }
       },
-      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is NonlinearGuesses) {
           // Computation results

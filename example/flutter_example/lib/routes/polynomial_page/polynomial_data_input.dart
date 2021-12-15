@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
@@ -50,7 +51,7 @@ class _InputWidget extends StatefulWidget {
   /// the case of a quadratic polynomial.
   final String equationTemplate;
 
-  /// Creates a [_InputWIdget] widget.
+  /// Creates a [_InputWidget] widget.
   const _InputWidget({
     required this.inputLength,
     required this.equationTemplate,
@@ -60,17 +61,16 @@ class _InputWidget extends StatefulWidget {
   __InputWidget createState() => __InputWidget();
 }
 
-class __InputWidget extends State<_InputWidget>
-    with AutomaticKeepAliveClientMixin {
+class __InputWidget extends State<_InputWidget> {
   /// Controllers of the various input fields are "cached" because they'll never
   /// change during the lifetime of the widget.
   late final controllers = List<TextEditingController>.generate(
     widget.inputLength,
-    (_) => TextEditingController(),
+    _generateTextController,
     growable: false,
   );
 
-  /// This is displayed at the top of the input box
+  /// This is displayed at the top of the input box.
   late final cachedEquationTitle = Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: EquationTextFormatter(
@@ -78,7 +78,7 @@ class __InputWidget extends State<_InputWidget>
     ),
   );
 
-  /// Form validation key
+  /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
   /// The input fields are placed inside a [Wrap] widget which will take care of
@@ -110,6 +110,25 @@ class __InputWidget extends State<_InputWidget>
     return body;
   }
 
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
+    );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+            index: index,
+            value: controller.text,
+          );
+    });
+
+    return controller;
+  }
+
   /// Validates the input and, if it's valid, sends the data to the bloc.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
@@ -117,10 +136,12 @@ class __InputWidget extends State<_InputWidget>
         coefficients: controllers.map<String>((c) => c.text).toList(),
       );
 
+      // Valid input
       context.read<PolynomialBloc>().add(event);
     } else {
       context.read<PolynomialBloc>().add(const PolynomialClean());
 
+      // Error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.polynomial_error),
@@ -130,8 +151,10 @@ class __InputWidget extends State<_InputWidget>
     }
   }
 
-  /// Form and chart cleanup.
+  /// Form cleanup.
   void _cleanInput() {
+    context.read<TextFieldValuesCubit>().reset();
+
     for (final controller in controllers) {
       controller.clear();
     }
@@ -152,8 +175,6 @@ class __InputWidget extends State<_InputWidget>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -161,6 +182,7 @@ class __InputWidget extends State<_InputWidget>
         // Some space from the top
         const SizedBox(height: 40),
 
+        // The title
         cachedEquationTitle,
 
         // Responsively placing input fields using 'Wrap'
@@ -204,7 +226,4 @@ class __InputWidget extends State<_InputWidget>
       ],
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

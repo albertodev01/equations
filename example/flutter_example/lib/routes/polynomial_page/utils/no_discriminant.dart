@@ -13,7 +13,9 @@ class NoDiscriminant extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(80, 35, 80, 15),
         child: Text(
           context.l10n.no_discriminant,
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(
+            fontSize: 16,
+          ),
         ),
       ),
     );

@@ -130,15 +130,10 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 }
 
 /// Puts on the screen a widget that draws mathematical functions.
-class _NonlinearPlot extends StatefulWidget {
+class _NonlinearPlot extends StatelessWidget {
   /// Creates a [_NonlinearPlot] widget.
   const _NonlinearPlot();
 
-  @override
-  _NonlinearPlotState createState() => _NonlinearPlotState();
-}
-
-class _NonlinearPlotState extends State<_NonlinearPlot> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonlinearBloc, NonlinearState>(

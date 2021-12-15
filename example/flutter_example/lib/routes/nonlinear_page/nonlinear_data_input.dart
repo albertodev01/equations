@@ -4,6 +4,7 @@ import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
@@ -21,12 +22,11 @@ class NonlinearDataInput extends StatefulWidget {
   _NonlinearDataInputState createState() => _NonlinearDataInputState();
 }
 
-class _NonlinearDataInputState extends State<NonlinearDataInput>
-    with AutomaticKeepAliveClientMixin {
+class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// The controllers needed by the [TextFormField]s of the widget.
   late final controllers = List<TextEditingController>.generate(
     fieldsCount,
-    (_) => TextEditingController(),
+    _generateTextController,
     growable: false,
   );
 
@@ -53,16 +53,42 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
   /// How many input fields the widget requires.
   int get fieldsCount => _getType == NonlinearType.singlePoint ? 2 : 3;
 
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
+    );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+            index: index,
+            value: controller.text,
+          );
+    });
+
+    return controller;
+  }
+
   /// Form and chart cleanup.
   void cleanInput() {
+    context.read<TextFieldValuesCubit>().reset();
+
     for (final controller in controllers) {
-      controller.clear();
+      controller.text = '';
     }
 
     formKey.currentState?.reset();
     context.read<NonlinearBloc>().add(const NonlinearClean());
     context.read<PlotZoomCubit>().reset();
     context.read<PrecisionSliderCubit>().reset();
+    context.read<DropdownCubit>().changeValue(
+          fieldsCount == 2
+              ? NonlinearDropdownItems.newton.asString()
+              : NonlinearDropdownItems.bisection.asString(),
+        );
   }
 
   /// Solves a nonlinear equation.
@@ -94,6 +120,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
         );
       }
     } else {
+      // Invalid input
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.invalid_values),
@@ -105,8 +132,6 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Form(
       key: formKey,
       child: Column(
@@ -163,9 +188,6 @@ class _NonlinearDataInputState extends State<NonlinearDataInput>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 /// Either 1 or 2 [TextFormField] widgets asking for the initial values of the

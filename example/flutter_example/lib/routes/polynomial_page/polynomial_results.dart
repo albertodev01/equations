@@ -18,7 +18,7 @@ class PolynomialResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Separator line
+        // Some spacing
         const SizedBox(
           height: 80,
         ),
@@ -53,16 +53,9 @@ class PolynomialResults extends StatelessWidget {
 class _PolynomialSolutions extends StatelessWidget {
   const _PolynomialSolutions();
 
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
-  bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) && (current is! PolynomialError);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolynomialBloc, PolynomialState>(
-      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is PolynomialRoots) {
           return ListView.builder(
@@ -87,12 +80,6 @@ class PolynomialDiscriminant extends StatelessWidget {
   /// Creates a [PolynomialDiscriminant] widget.
   const PolynomialDiscriminant({Key? key}) : super(key: key);
 
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
-  bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) && (current is! PolynomialError);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -103,17 +90,17 @@ class PolynomialDiscriminant extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(context.l10n.polynomial_error),
-                duration: const Duration(seconds: 2),
+                duration: const Duration(
+                  seconds: 2,
+                ),
               ),
             );
           }
         },
-        buildWhen: buildCondition,
         builder: (context, state) {
           if (state is PolynomialRoots) {
             return ComplexResultCard(
               value: state.discriminant,
-              leading: 'D(f) =',
             );
           }
 

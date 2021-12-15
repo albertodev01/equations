@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// This is just a wrapper of a [TextFormField] that parses and validates the
@@ -29,7 +30,7 @@ class PolynomialInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 70,
+      width: polynomialInputFieldWidth,
       child: TextFormField(
         key: const Key('PolynomialInputField-TextFormField'),
         controller: controller,

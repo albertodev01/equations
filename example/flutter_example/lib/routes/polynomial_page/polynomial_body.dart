@@ -15,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains the solutions of the polynomial equation and a chart
-/// which plots the function.
+/// to plot the function.
 ///
 /// This widget is responsive: contents may be laid out on a single column or
-/// on two columns according with the available width.
+/// on two columns according with the available space.
 class PolynomialBody extends StatelessWidget {
   /// Creates a [PolynomialBody] widget.
   const PolynomialBody({Key? key}) : super(key: key);

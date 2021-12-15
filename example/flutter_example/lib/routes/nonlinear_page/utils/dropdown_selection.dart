@@ -1,6 +1,7 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -67,7 +68,7 @@ class NonlinearDropdownSelectionState
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 200,
+        width: nonlinearDropdownWidth,
         child: BlocBuilder<DropdownCubit, String>(
           builder: (context, state) {
             return DropdownButtonFormField<NonlinearDropdownItems>(

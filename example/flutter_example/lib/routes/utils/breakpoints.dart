@@ -1,5 +1,10 @@
+import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_analyzer_results.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
+import 'package:equations_solver/routes/system_page/system_body.dart';
+import 'package:equations_solver/routes/system_page/system_input_field.dart';
+import 'package:flutter/material.dart';
 
 /// When the viewport is horizontally smaller than [bottomNavigationBreakpoint],
 /// tabs are used. When larger, a navigation rail is shown.
@@ -34,3 +39,18 @@ const complexPageColumnWidth = cardWidgetsWidth + 30 * 2;
 /// The width of the cards widgets: [RealResultCard], [ComplexResultCard] and
 /// [BoolResultCard].
 const cardWidgetsWidth = 275.0;
+
+/// The width of a [PolynomialInputField] widget.
+const polynomialInputFieldWidth = 70.0;
+
+/// The width of dropdown boxes in the [NonlinearBody] page
+const nonlinearDropdownWidth = 200.0;
+
+/// The width of dropdown boxes in the [SystemBody] page
+const systemDropdownWidth = 250.0;
+
+/// The width of a [PrecisionSlider] widget.
+const precisonSliderWidth = 300.0;
+
+/// The size of a [SystemInputField] widget.
+const systemInputFieldSize = Size(60, 50);
