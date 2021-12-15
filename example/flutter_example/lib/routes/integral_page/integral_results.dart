@@ -33,14 +33,10 @@ class IntegralResultsWidget extends StatelessWidget {
   }
 }
 
+/// The numerical value produced by the integral evaluation.
 class _IntegralSolutions extends StatelessWidget {
+  /// Creates an [_IntegralSolutions] widget.
   const _IntegralSolutions();
-
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [IntegralResult] or [IntegralNone].
-  bool buildCondition(IntegralState previous, IntegralState current) =>
-      (previous != current) && (current is! IntegralError);
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +51,9 @@ class _IntegralSolutions extends StatelessWidget {
           );
         }
       },
-      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is IntegralResult) {
           return RealResultCard(
-            leading: 'x = ',
             value: state.result,
           );
         }

@@ -36,6 +36,7 @@ class ComplexNumberAnalyzerResult extends StatelessWidget {
   }
 }
 
+/// Either prints nothing, a loading widget or the analysis results.
 class _ComplexAnalysis extends StatelessWidget {
   /// Creates a [_ComplexAnalysis] widget.
   const _ComplexAnalysis();
@@ -56,21 +57,7 @@ class _ComplexAnalysis extends StatelessWidget {
         }
 
         if (state is OtherLoading) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Loading indicator
-              const Padding(
-                padding: EdgeInsets.only(
-                  bottom: 20,
-                ),
-                child: CircularProgressIndicator(),
-              ),
-
-              // Waiting text
-              Text(context.l10n.wait_a_moment),
-            ],
-          );
+          return const _LoadingWidget();
         }
 
         return const SizedBox.shrink();
@@ -79,6 +66,32 @@ class _ComplexAnalysis extends StatelessWidget {
   }
 }
 
+/// Displayed while the bloc is processing data.
+class _LoadingWidget extends StatelessWidget {
+  /// Creates a [_LoadingWidget] widget.
+  const _LoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Loading indicator
+        const Padding(
+          padding: EdgeInsets.only(
+            bottom: 20,
+          ),
+          child: CircularProgressIndicator(),
+        ),
+
+        // Waiting text
+        Text(context.l10n.wait_a_moment),
+      ],
+    );
+  }
+}
+
+/// The complex number analysis results.
 class _Results extends StatelessWidget {
   /// The polar representation of the complex number.
   final PolarComplex polarComplex;
@@ -89,7 +102,7 @@ class _Results extends StatelessWidget {
   /// The complex reciprocal.
   final Complex reciprocal;
 
-  /// The modulus/aboslute value.
+  /// The modulus/absolute value.
   final double abs;
 
   /// The square root of the complex number.
@@ -100,13 +113,14 @@ class _Results extends StatelessWidget {
 
   /// Creates an [_Results] object..
   const _Results({
+    Key? key,
     required this.polarComplex,
     required this.conjugate,
     required this.reciprocal,
     required this.abs,
     required this.sqrt,
     required this.phase,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

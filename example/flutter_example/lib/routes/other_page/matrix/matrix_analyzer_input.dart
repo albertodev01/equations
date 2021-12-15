@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
@@ -18,13 +19,32 @@ class MatrixAnalyzerInput extends StatefulWidget {
 
 class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
   /// The text input controllers for the matrix.
-  final matrixControllers = List<TextEditingController>.generate(
+  late final matrixControllers = List<TextEditingController>.generate(
     25,
-    (_) => TextEditingController(),
+    _generateTextController,
   );
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
+
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
+    );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+        index: index,
+        value: controller.text,
+      );
+    });
+
+    return controller;
+  }
 
   /// Form and results cleanup.
   void cleanInput() {
@@ -33,6 +53,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
     }
 
     context.read<OtherBloc>().add(const OtherClean());
+    context.read<TextFieldValuesCubit>().reset();
   }
 
   /// Analyzes the matrix.
@@ -91,10 +112,12 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
 
           // Matrix input
           BlocBuilder<NumberSwitcherCubit, int>(
-            builder: (context, state) => MatrixInput(
-              matrixControllers: matrixControllers,
-              matrixSize: state,
-            ),
+            builder: (_, state) {
+              return MatrixInput(
+                matrixControllers: matrixControllers,
+                matrixSize: state,
+              );
+            },
           ),
 
           // Some spacing

@@ -5,7 +5,7 @@ import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// A rail navigation bar to be displayed within a a [EquationScaffold] widget.
+/// A rail navigation bar to be displayed within an [EquationScaffold] widget.
 class RailNavigation extends StatefulWidget {
   /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
@@ -13,7 +13,7 @@ class RailNavigation extends StatefulWidget {
   /// Controls the position of the currently visible page on the screen.
   final TabController tabController;
 
-  /// Creates a [RailNavigation] widget..
+  /// Creates a [RailNavigation] widget.
   const RailNavigation({
     Key? key,
     required this.navigationItems,
@@ -54,14 +54,15 @@ class _RailNavigationState extends State<RailNavigation> {
 
         // The rail
         BlocBuilder<NavigationCubit, int>(
-          buildWhen: (previous, current) => previous != current,
-          builder: (context, state) => NavigationRail(
-            groupAlignment: 0,
-            destinations: rails,
-            selectedIndex: state,
-            labelType: NavigationRailLabelType.all,
-            onDestinationSelected: context.read<NavigationCubit>().pageIndex,
-          ),
+          builder: (_, state) {
+            return NavigationRail(
+              groupAlignment: 0,
+              destinations: rails,
+              selectedIndex: state,
+              labelType: NavigationRailLabelType.all,
+              onDestinationSelected: context.read<NavigationCubit>().pageIndex,
+            );
+          },
         ),
       ],
     );

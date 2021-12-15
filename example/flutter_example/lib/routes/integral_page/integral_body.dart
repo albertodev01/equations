@@ -27,25 +27,20 @@ class IntegralBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DropdownCubit>(
-      create: (_) => DropdownCubit(
-        initialValue: IntegralDropdownItems.simpson.asString(),
-      ),
-      child: Stack(
-        children: const [
-          // Scrollable contents of the page
-          Positioned.fill(
-            child: _ResponsiveBody(),
-          ),
+    return Stack(
+      children: const [
+        // Scrollable contents of the page
+        Positioned.fill(
+          child: _ResponsiveBody(),
+        ),
 
-          // "Go back" button
-          Positioned(
-            top: 20,
-            left: 20,
-            child: GoBackButton(),
-          ),
-        ],
-      ),
+        // "Go back" button
+        Positioned(
+          top: 20,
+          left: 20,
+          child: GoBackButton(),
+        ),
+      ],
     );
   }
 }
@@ -71,7 +66,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= 950) {
+      if (size.maxWidth <= doubleColumnPageBreakpoint) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
           key: const Key('SingleChildScrollView-mobile-responsive'),
@@ -156,10 +151,7 @@ class _IntegralPlot extends StatelessWidget {
             child: Column(
               children: [
                 // Title
-                PageTitle(
-                  pageTitle: context.l10n.chart,
-                  pageLogo: const PlotIcon(),
-                ),
+                const _PlotTitle(),
 
                 // The actual plot
                 // The actual plot
@@ -186,6 +178,20 @@ class _IntegralPlot extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// A wrapper of [PageTitle] placed above a [PlotWidget].
+class _PlotTitle extends StatelessWidget {
+  /// Creates a [_PlotTitle] widget.
+  const _PlotTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageTitle(
+      pageTitle: context.l10n.chart,
+      pageLogo: const PlotIcon(),
     );
   }
 }

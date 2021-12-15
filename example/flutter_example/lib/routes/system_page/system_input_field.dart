@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// This is just a wrapper of a [TextFormField] that parses and validates the
@@ -22,8 +23,7 @@ class SystemInputField extends StatefulWidget {
   State<SystemInputField> createState() => _SystemInputFieldState();
 }
 
-class _SystemInputFieldState extends State<SystemInputField>
-    with AutomaticKeepAliveClientMixin {
+class _SystemInputFieldState extends State<SystemInputField> {
   String? _validationLogic(String? value, BuildContext context) {
     if (value != null) {
       if (!value.isNumericalExpression) {
@@ -34,11 +34,8 @@ class _SystemInputFieldState extends State<SystemInputField>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
-    return SizedBox(
-      width: 60,
-      height: 50,
+    return SizedBox.fromSize(
+      size: systemInputFieldSize,
       child: TextFormField(
         key: const Key('SystemInputField-TextFormField'),
         controller: widget.controller,
@@ -58,7 +55,4 @@ class _SystemInputFieldState extends State<SystemInputField>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -1,6 +1,9 @@
+import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/routes/integral_page/integral_body.dart';
+import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +30,14 @@ class IntegralPage extends StatelessWidget {
             maxValue: 10,
             initial: 3,
           ),
+        ),
+        BlocProvider<DropdownCubit>(
+          create: (_) => DropdownCubit(
+            initialValue: IntegralDropdownItems.simpson.asString(),
+          ),
+        ),
+        BlocProvider<TextFieldValuesCubit>(
+          create: (_) => TextFieldValuesCubit(),
         ),
       ],
       child: const EquationScaffold(

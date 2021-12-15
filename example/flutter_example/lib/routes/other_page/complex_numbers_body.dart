@@ -6,8 +6,8 @@ import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// This widget analyzes a matrix and outputs various results about its rank,
-/// determinant, eigenvalues and much more.
+/// This widget analyzes a complex number and outputs various results about the
+/// modulus, the polar coordinate conversions and much more.
 class ComplexNumberOtherBody extends StatelessWidget {
   /// Creates a [ComplexNumberOtherBody] widget.
   const ComplexNumberOtherBody({Key? key}) : super(key: key);

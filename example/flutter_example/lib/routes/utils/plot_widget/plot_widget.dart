@@ -103,8 +103,9 @@ class _PlotBody<T> extends StatelessWidget {
 
         return Material(
           elevation: 8,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.circular(20),
           child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
             child: BlocBuilder<PlotZoomCubit, double>(
               builder: (context, state) {
                 return CustomPaint(

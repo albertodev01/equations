@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,32 @@ class ComplexAnalyzerInput extends StatefulWidget {
 
 class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
   /// The [TextEditingController] for the real part of the complex number.
-  final realController = TextEditingController();
+  late final realController = _generateTextController(0);
 
   /// The [TextEditingController] for the real part of the complex number.
-  final imaginaryController = TextEditingController();
+  late final imaginaryController = _generateTextController(1);
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
+
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
+    );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+        index: index,
+        value: controller.text,
+      );
+    });
+
+    return controller;
+  }
 
   /// Form and results cleanup.
   void cleanInput() {
@@ -30,6 +50,7 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
     imaginaryController.clear();
 
     context.read<OtherBloc>().add(const OtherClean());
+    context.read<TextFieldValuesCubit>().reset();
   }
 
   /// Analyzes the complex number.

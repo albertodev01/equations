@@ -1,6 +1,7 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/system_page/utils/jacobi_initial_vector.dart';
@@ -30,9 +31,9 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
-  final matrixControllers = List<TextEditingController>.generate(
+  late final matrixControllers = List<TextEditingController>.generate(
     16,
-    (_) => TextEditingController(),
+    _generateTextController,
   );
 
   /// The text input controllers for the vector.
@@ -41,32 +42,46 @@ class SystemDataInputState extends State<SystemDataInput> {
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
-  final vectorControllers = List<TextEditingController>.generate(
+  late final vectorControllers = List<TextEditingController>.generate(
     4,
-    (_) => TextEditingController(),
+    (index) => _generateTextController(index + 16),
   );
 
   /// The text input controllers for the initial guess vector of the Jacobi
   /// algorithm.
-  final jacobiControllers = List<TextEditingController>.generate(
+  late final jacobiControllers = List<TextEditingController>.generate(
     4,
-    (_) => TextEditingController(),
+    (index) => _generateTextController(index + 16 + 4),
   );
 
   /// A controller for the relaxation factor `w` of the SOR algorithm.
-  final wSorController = TextEditingController();
+  late final wSorController = _generateTextController(16 + 4 + 4);
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
-  /// The text that describes what the matrix does.
-  late final matrixText = descriptionText(
-    context.l10n.matrix_description,
+  /// Caching the text that describes what the vector does.
+  late final vectorText = Padding(
+    padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
+    child: Text(
+      context.l10n.vector_description,
+      style: const TextStyle(
+        fontSize: 14,
+        color: Colors.grey,
+      ),
+    ),
   );
 
-  /// The text that describes what the vector does.
-  late final vectorText = descriptionText(
-    context.l10n.vector_description,
+  /// Caching the text that describes what the matrix does.
+  late final matrixText = Padding(
+    padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
+    child: Text(
+      context.l10n.matrix_description,
+      style: const TextStyle(
+        fontSize: 14,
+        color: Colors.grey,
+      ),
+    ),
   );
 
   /// The widget asking for the relaxation factor `w` of the SOR algorithm.
@@ -78,22 +93,26 @@ class SystemDataInputState extends State<SystemDataInput> {
   /// used.
   SystemType get _getType => context.read<SystemBloc>().systemType;
 
-  /// Builds a grey [Text] widget that describes what some parts of the UI do.
-  Widget descriptionText(String description) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 15),
-      // Row + Expanded can easily make the text go to a new line
-      child: Text(
-        description,
-        style: const TextStyle(
-          fontSize: 14,
-          color: Colors.grey,
-        ),
-      ),
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
     );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+        index: index,
+        value: controller.text,
+      );
+    });
+
+    return controller;
   }
 
-  /// Form and chart cleanup.
+  /// Form cleanup.
   void cleanInput() {
     for (final controller in matrixControllers) {
       controller.clear();
@@ -112,6 +131,7 @@ class SystemDataInputState extends State<SystemDataInput> {
     // Making sure to also clear the form completely
     formKey.currentState?.reset();
     context.read<SystemBloc>().add(const SystemClean());
+    context.read<NumberSwitcherCubit>().reset();
   }
 
   /// Solves a system of equations.
@@ -194,95 +214,97 @@ class SystemDataInputState extends State<SystemDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NumberSwitcherCubit, int>(
-      listenWhen: (prev, curr) => prev != curr,
-      listener: (context, state) => cleanInput(),
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            // Some spacing
-            const SizedBox(
-              height: 60,
-            ),
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          // Some spacing
+          const SizedBox(
+            height: 60,
+          ),
 
-            // Size changer
-            const SizePicker(),
+          // Size changer
+          const SizePicker(),
 
-            // Some spacing
-            const SizedBox(
-              height: 35,
-            ),
+          // Some spacing
+          const SizedBox(
+            height: 35,
+          ),
 
-            // Matrix input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (context, state) => MatrixInput(
+          // Matrix input
+          BlocBuilder<NumberSwitcherCubit, int>(
+            builder: (_, state) {
+              return MatrixInput(
                 matrixControllers: matrixControllers,
                 matrixSize: state,
-              ),
-            ),
+              );
+            },
+          ),
 
-            // The description associated to the matrix widget
-            matrixText,
+          // The description associated to the matrix widget
+          matrixText,
 
-            // Some spacing
-            const SizedBox(
-              height: 30,
-            ),
+          // Some spacing
+          const SizedBox(
+            height: 30,
+          ),
 
-            // Vector input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (context, state) => VectorInput(
+          // Vector input
+          BlocBuilder<NumberSwitcherCubit, int>(
+            builder: (_, state) {
+              return VectorInput(
                 vectorControllers: vectorControllers,
                 vectorSize: state,
-              ),
-            ),
+              );
+            },
+          ),
 
-            // The description associated to the matrix widget
-            vectorText,
+          // The description associated to the matrix widget
+          vectorText,
 
-            // Algorithm type picker
-            const SystemDropdownSelection(),
+          // Algorithm type picker
+          const SystemDropdownSelection(),
 
-            // The optional input for the relaxation value
-            wInput,
+          // The optional input for the relaxation value
+          wInput,
 
-            // The optional input for the initial guesses vector
-            // Vector input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (context, state) => JacobiVectorInput(
+          // The optional input for the initial guesses vector
+          // Vector input
+          BlocBuilder<NumberSwitcherCubit, int>(
+            builder: (_, state) {
+              return JacobiVectorInput(
                 controllers: jacobiControllers,
                 vectorSize: state,
+              );
+            },
+          ),
+
+          // Spacing
+          const SizedBox(height: 45),
+
+          // Two buttons needed to "solve" and "clear" the system
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the equation
+              ElevatedButton(
+                key: const Key('System-button-solve'),
+                onPressed: solve,
+                child: Text(context.l10n.solve),
               ),
-            ),
 
-            // Spacing
-            const SizedBox(height: 45),
+              // Some spacing
+              const SizedBox(width: 30),
 
-            // Two buttons needed to "solve" and "clear" the system
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Solving the equation
-                ElevatedButton(
-                  key: const Key('System-button-solve'),
-                  onPressed: solve,
-                  child: Text(context.l10n.solve),
-                ),
-
-                // Some spacing
-                const SizedBox(width: 30),
-
-                // Cleaning the inputs
-                ElevatedButton(
-                  key: const Key('System-button-clean'),
-                  onPressed: cleanInput,
-                  child: Text(context.l10n.clean),
-                ),
-              ],
-            ),
-          ],
-        ),
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('System-button-clean'),
+                onPressed: cleanInput,
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

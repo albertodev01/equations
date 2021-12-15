@@ -1,6 +1,7 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
@@ -39,6 +40,11 @@ class _SystemPageState extends State<SystemPage> {
   final factorizationBloc = SystemBloc(SystemType.factorization);
   final iterativeBloc = SystemBloc(SystemType.iterative);
 
+  // TextFields values blocs
+  final rowReductionTextFields = TextFieldValuesCubit();
+  final factorizationTextFields = TextFieldValuesCubit();
+  final iterativeTextFields = TextFieldValuesCubit();
+
   // Bloc for the matrix size
   final matrixSizeRowReduction = NumberSwitcherCubit(
     min: 1,
@@ -73,6 +79,9 @@ class _SystemPageState extends State<SystemPage> {
           BlocProvider<NumberSwitcherCubit>.value(
             value: matrixSizeRowReduction,
           ),
+          BlocProvider<TextFieldValuesCubit>.value(
+            value: rowReductionTextFields,
+          ),
           BlocProvider<DropdownCubit>(
             create: (_) => DropdownCubit(
               initialValue: '',
@@ -92,6 +101,9 @@ class _SystemPageState extends State<SystemPage> {
           BlocProvider<NumberSwitcherCubit>.value(
             value: matrixSizeFactorization,
           ),
+          BlocProvider<TextFieldValuesCubit>.value(
+            value: factorizationTextFields,
+          ),
           BlocProvider<DropdownCubit>.value(
             value: dropdownFactorization,
           ),
@@ -108,6 +120,9 @@ class _SystemPageState extends State<SystemPage> {
           ),
           BlocProvider<NumberSwitcherCubit>.value(
             value: matrixSizeIterative,
+          ),
+          BlocProvider<TextFieldValuesCubit>.value(
+            value: iterativeTextFields,
           ),
           BlocProvider<DropdownCubit>.value(
             value: dropdownIterative,

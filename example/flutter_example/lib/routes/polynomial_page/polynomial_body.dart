@@ -160,10 +160,7 @@ class _PolynomialPlot extends StatelessWidget {
             child: Column(
               children: [
                 // Title
-                PageTitle(
-                  pageTitle: context.l10n.chart,
-                  pageLogo: const PlotIcon(),
-                ),
+                const _PlotTitle(),
 
                 // The actual plot
                 LayoutBuilder(
@@ -186,6 +183,20 @@ class _PolynomialPlot extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// A wrapper of [PageTitle] placed above a [PlotWidget].
+class _PlotTitle extends StatelessWidget {
+  /// Creates a [_PlotTitle] widget.
+  const _PlotTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageTitle(
+      pageTitle: context.l10n.chart,
+      pageLogo: const PlotIcon(),
     );
   }
 }

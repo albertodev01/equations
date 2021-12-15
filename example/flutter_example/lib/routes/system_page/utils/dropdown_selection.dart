@@ -12,7 +12,7 @@ class SystemDropdownSelection extends StatefulWidget {
   SystemDropdownSelectionState createState() => SystemDropdownSelectionState();
 }
 
-/// The state of the [NonlinearDropdownSelection] class.
+/// The state of the [SystemDropdownSelection] class.
 @visibleForTesting
 class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
   /// The items of the dropdown.

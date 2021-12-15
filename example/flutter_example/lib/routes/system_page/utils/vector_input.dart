@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// Creates a column of [SystemInputField] to input the known values vector
@@ -25,18 +26,17 @@ class _VectorInputState extends State<VectorInput> {
   /// The children of the [Column] widget, representing the vector.
   late List<Widget> children = _vectorChildren();
 
-  /// Builds the [Column] widget that will contain the input fields for the
+  /// Builds the [Column]'s children that will contain the input fields for the
   /// known values vector
   List<Widget> _vectorChildren() {
     final entry = <Widget>[];
 
     for (var i = 0; i < widget.vectorSize; ++i) {
-      final padding =
-          i == 0 ? const EdgeInsets.all(0) : const EdgeInsets.only(top: 10);
-
       entry.add(
         Padding(
-          padding: padding,
+          padding: i == 0
+              ? const EdgeInsets.all(0)
+              : const EdgeInsets.only(top: 10),
           child: SystemInputField(
             controller: widget.vectorControllers[i],
           ),
@@ -58,7 +58,9 @@ class _VectorInputState extends State<VectorInput> {
 
   @override
   Widget build(BuildContext context) {
-    const boxWidth = 65.0;
+    // We're adding '5' to the overall width to make sure that tiles aren't too
+    // close each other.
+    final boxWidth = systemInputFieldSize.width + 5;
 
     return Center(
       child: SizedBox(

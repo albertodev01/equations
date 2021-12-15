@@ -39,7 +39,6 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<NavigationCubit, int>(
-      listenWhen: (previous, current) => previous != current,
       listener: (context, state) => changePage(state),
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),

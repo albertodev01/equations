@@ -39,6 +39,7 @@ class MatrixAnalyzerResults extends StatelessWidget {
   }
 }
 
+/// Either prints nothing, a loading widget or the analysis results.
 class _SystemSolutions extends StatelessWidget {
   /// Creates a [_SystemSolutions] widget.
   const _SystemSolutions();
@@ -64,21 +65,7 @@ class _SystemSolutions extends StatelessWidget {
         }
 
         if (state is OtherLoading) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Loading indicator
-              const Padding(
-                padding: EdgeInsets.only(
-                  bottom: 20,
-                ),
-                child: CircularProgressIndicator(),
-              ),
-
-              // Waiting text
-              Text(context.l10n.wait_a_moment),
-            ],
-          );
+          return const _LoadingWidget();
         }
 
         return const SizedBox.shrink();
@@ -87,6 +74,32 @@ class _SystemSolutions extends StatelessWidget {
   }
 }
 
+/// Displayed while the bloc is processing the matrix.
+class _LoadingWidget extends StatelessWidget {
+  /// Creates a [_LoadingWidget] widget.
+  const _LoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Loading indicator
+        const Padding(
+          padding: EdgeInsets.only(
+            bottom: 20,
+          ),
+          child: CircularProgressIndicator(),
+        ),
+
+        // Waiting text
+        Text(context.l10n.wait_a_moment),
+      ],
+    );
+  }
+}
+
+/// The matrix analysis results.
 class _Results extends StatelessWidget {
   /// The transposed matrix.
   final RealMatrix transpose;

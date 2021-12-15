@@ -10,7 +10,7 @@ class BoolResultCard extends StatelessWidget {
   /// Text to be displayed in front of the boolean value.
   final String leading;
 
-  /// Creates a [RealResultCard] widget.
+  /// Creates a [BoolResultCard] widget.
   const BoolResultCard({
     Key? key,
     required this.value,

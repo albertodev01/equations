@@ -20,7 +20,7 @@ class SizePicker extends StatelessWidget {
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
-          onPressed: () => context.read<NumberSwitcherCubit>().decrease(),
+          onPressed: context.read<NumberSwitcherCubit>().decrease,
           child: const Icon(Icons.arrow_back),
         ),
 
@@ -68,7 +68,7 @@ class SizePicker extends StatelessWidget {
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
-          onPressed: () => context.read<NumberSwitcherCubit>().increase(),
+          onPressed: context.read<NumberSwitcherCubit>().increase,
           child: const Icon(Icons.arrow_forward),
         ),
       ],

@@ -1,8 +1,10 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,13 +21,13 @@ class IntegralDataInput extends StatefulWidget {
 
 class _IntegralDataInputState extends State<IntegralDataInput> {
   /// The [TextEditingController] of the function to integrate.
-  final functionController = TextEditingController();
+  late final functionController = _generateTextController(0);
 
   /// The [TextEditingController] of the lower integration bound.
-  final lowerBoundController = TextEditingController();
+  late final lowerBoundController = _generateTextController(1);
 
   /// The [TextEditingController] of the upper integration bound.
-  final upperBoundController = TextEditingController();
+  late final upperBoundController = _generateTextController(2);
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
@@ -43,6 +45,25 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     upperBound: upperBoundController,
   );
 
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
+    );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+        index: index,
+        value: controller.text,
+      );
+    });
+
+    return controller;
+  }
+
   /// Form and chart cleanup.
   void cleanInput() {
     functionController.clear();
@@ -52,6 +73,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     formKey.currentState?.reset();
     context.read<IntegralBloc>().add(const IntegralClean());
     context.read<PlotZoomCubit>().reset();
+    context.read<TextFieldValuesCubit>().reset();
   }
 
   /// Solves a nonlinear equation.
@@ -83,6 +105,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
         ),
       );
     } else {
+      // Malformed inputs
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.invalid_values),
@@ -171,7 +194,7 @@ class _GuessesInput extends StatelessWidget {
           key: const Key('IntegralInput-lower-bound'),
           controller: lowerBound,
           placeholderText: 'a',
-          baseWidth: 80,
+          baseWidth: integrationBoundsWidth,
           maxLength: 8,
           onlyRealValues: true,
         ),
@@ -179,7 +202,7 @@ class _GuessesInput extends StatelessWidget {
           key: const Key('IntegralInput-upper-bound'),
           controller: upperBound,
           placeholderText: 'b',
-          baseWidth: 80,
+          baseWidth: integrationBoundsWidth,
           maxLength: 8,
           onlyRealValues: true,
         ),
