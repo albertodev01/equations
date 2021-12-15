@@ -132,6 +132,7 @@ class SystemDataInputState extends State<SystemDataInput> {
     formKey.currentState?.reset();
     context.read<SystemBloc>().add(const SystemClean());
     context.read<NumberSwitcherCubit>().reset();
+    context.read<TextFieldValuesCubit>().reset();
   }
 
   /// Solves a system of equations.
@@ -214,97 +215,114 @@ class SystemDataInputState extends State<SystemDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          // Some spacing
-          const SizedBox(
-            height: 60,
-          ),
+    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
+      listener: (context, state) {
+        for (final controller in matrixControllers) {
+          controller.clear();
+        }
 
-          // Size changer
-          const SizePicker(),
+        for (final controller in vectorControllers) {
+          controller.clear();
+        }
 
-          // Some spacing
-          const SizedBox(
-            height: 35,
-          ),
+        for (final controller in jacobiControllers) {
+          controller.clear();
+        }
 
-          // Matrix input
-          BlocBuilder<NumberSwitcherCubit, int>(
-            builder: (_, state) {
-              return MatrixInput(
-                matrixControllers: matrixControllers,
-                matrixSize: state,
-              );
-            },
-          ),
+        wSorController.clear();
+      },
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            // Some spacing
+            const SizedBox(
+              height: 60,
+            ),
 
-          // The description associated to the matrix widget
-          matrixText,
+            // Size changer
+            const SizePicker(),
 
-          // Some spacing
-          const SizedBox(
-            height: 30,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 35,
+            ),
 
-          // Vector input
-          BlocBuilder<NumberSwitcherCubit, int>(
-            builder: (_, state) {
-              return VectorInput(
-                vectorControllers: vectorControllers,
-                vectorSize: state,
-              );
-            },
-          ),
+            // Matrix input
+            BlocBuilder<NumberSwitcherCubit, int>(
+              builder: (_, state) {
+                return MatrixInput(
+                  matrixControllers: matrixControllers,
+                  matrixSize: state,
+                );
+              },
+            ),
 
-          // The description associated to the matrix widget
-          vectorText,
+            // The description associated to the matrix widget
+            matrixText,
 
-          // Algorithm type picker
-          const SystemDropdownSelection(),
+            // Some spacing
+            const SizedBox(
+              height: 30,
+            ),
 
-          // The optional input for the relaxation value
-          wInput,
+            // Vector input
+            BlocBuilder<NumberSwitcherCubit, int>(
+              builder: (_, state) {
+                return VectorInput(
+                  vectorControllers: vectorControllers,
+                  vectorSize: state,
+                );
+              },
+            ),
 
-          // The optional input for the initial guesses vector
-          // Vector input
-          BlocBuilder<NumberSwitcherCubit, int>(
-            builder: (_, state) {
-              return JacobiVectorInput(
-                controllers: jacobiControllers,
-                vectorSize: state,
-              );
-            },
-          ),
+            // The description associated to the matrix widget
+            vectorText,
 
-          // Spacing
-          const SizedBox(height: 45),
+            // Algorithm type picker
+            const SystemDropdownSelection(),
 
-          // Two buttons needed to "solve" and "clear" the system
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the equation
-              ElevatedButton(
-                key: const Key('System-button-solve'),
-                onPressed: solve,
-                child: Text(context.l10n.solve),
-              ),
+            // The optional input for the relaxation value
+            wInput,
 
-              // Some spacing
-              const SizedBox(width: 30),
+            // The optional input for the initial guesses vector
+            // Vector input
+            BlocBuilder<NumberSwitcherCubit, int>(
+              builder: (_, state) {
+                return JacobiVectorInput(
+                  controllers: jacobiControllers,
+                  vectorSize: state,
+                );
+              },
+            ),
 
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('System-button-clean'),
-                onPressed: cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
+            // Spacing
+            const SizedBox(height: 45),
+
+            // Two buttons needed to "solve" and "clear" the system
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Solving the equation
+                ElevatedButton(
+                  key: const Key('System-button-solve'),
+                  onPressed: solve,
+                  child: Text(context.l10n.solve),
+                ),
+
+                // Some spacing
+                const SizedBox(width: 30),
+
+                // Cleaning the inputs
+                ElevatedButton(
+                  key: const Key('System-button-clean'),
+                  onPressed: cleanInput,
+                  child: Text(context.l10n.clean),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -83,49 +83,57 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          // Some spacing
-          const SizedBox(
-            height: 60,
-          ),
+    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
+      listener: (_, state) {
+        if (state.isEmpty) {
+          realController.clear();
+          imaginaryController.clear();
+        }
+      },
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            // Some spacing
+            const SizedBox(
+              height: 60,
+            ),
 
-          // Complex number input
-          ComplexNumberInput(
-            realController: realController,
-            imaginaryController: imaginaryController,
-          ),
+            // Complex number input
+            ComplexNumberInput(
+              realController: realController,
+              imaginaryController: imaginaryController,
+            ),
 
-          // Some spacing
-          const SizedBox(
-            height: 30,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 30,
+            ),
 
-          // Two buttons needed to "solve" and "clear" the system
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the equation
-              ElevatedButton(
-                key: const Key('ComplexAnalyze-button-analyze'),
-                onPressed: complexAnalyze,
-                child: Text(context.l10n.analyze),
-              ),
+            // Two buttons needed to "solve" and "clear" the system
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Solving the equation
+                ElevatedButton(
+                  key: const Key('ComplexAnalyze-button-analyze'),
+                  onPressed: complexAnalyze,
+                  child: Text(context.l10n.analyze),
+                ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+                // Some spacing
+                const SizedBox(width: 30),
 
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('ComplexAnalyze-button-clean'),
-                onPressed: cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
+                // Cleaning the inputs
+                ElevatedButton(
+                  key: const Key('ComplexAnalyze-button-clean'),
+                  onPressed: cleanInput,
+                  child: Text(context.l10n.clean),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

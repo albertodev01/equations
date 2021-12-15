@@ -60,5 +60,20 @@ void main() {
       expect: () => const [],
       verify: (cubit) => cubit.state == 2,
     );
+
+    blocTest<NumberSwitcherCubit, int>(
+      'Making sure that the bloc can be reset',
+      build: () => NumberSwitcherCubit(
+        min: 2,
+        max: 7,
+      ),
+      act: (cubit) => cubit
+        ..increase()
+        ..increase()
+        ..decrease()
+        ..reset(),
+      expect: () => const [3, 4, 3, 2],
+      verify: (cubit) => cubit.state == 2,
+    );
   });
 }

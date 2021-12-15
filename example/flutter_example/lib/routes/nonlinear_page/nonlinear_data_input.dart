@@ -74,16 +74,15 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 
   /// Form and chart cleanup.
   void cleanInput() {
-    context.read<TextFieldValuesCubit>().reset();
-
     for (final controller in controllers) {
-      controller.text = '';
+      controller.clear();
     }
 
     formKey.currentState?.reset();
     context.read<NonlinearBloc>().add(const NonlinearClean());
     context.read<PlotZoomCubit>().reset();
     context.read<PrecisionSliderCubit>().reset();
+    context.read<TextFieldValuesCubit>().reset();
     context.read<DropdownCubit>().changeValue(
           fieldsCount == 2
               ? NonlinearDropdownItems.newton.asString()
@@ -132,59 +131,68 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Some space from the top
-          const SizedBox(height: 40),
+    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
+      listener: (_, state) {
+        if (state.isEmpty) {
+          for (final controller in controllers) {
+            controller.clear();
+          }
+        }
+      },
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Some space from the top
+            const SizedBox(height: 40),
 
-          // The equation input
-          functionInput,
+            // The equation input
+            functionInput,
 
-          // The guesses required by the app
-          guessesInput,
+            // The guesses required by the app
+            guessesInput,
 
-          // Some spacing
-          const SizedBox(height: 40),
+            // Some spacing
+            const SizedBox(height: 40),
 
-          // Which algorithm has to be used
-          const NonlinearDropdownSelection(),
+            // Which algorithm has to be used
+            const NonlinearDropdownSelection(),
 
-          // Some spacing
-          const SizedBox(height: 40),
+            // Some spacing
+            const SizedBox(height: 40),
 
-          // The slider
-          const PrecisionSlider(),
+            // The slider
+            const PrecisionSlider(),
 
-          // Some spacing
-          const SizedBox(height: 50),
+            // Some spacing
+            const SizedBox(height: 50),
 
-          // Two buttons needed to "solve" and "clear" the equation
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the equation
-              ElevatedButton(
-                key: const Key('Nonlinear-button-solve'),
-                onPressed: solve,
-                child: Text(context.l10n.solve),
-              ),
+            // Two buttons needed to "solve" and "clear" the equation
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Solving the equation
+                ElevatedButton(
+                  key: const Key('Nonlinear-button-solve'),
+                  onPressed: solve,
+                  child: Text(context.l10n.solve),
+                ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+                // Some spacing
+                const SizedBox(width: 30),
 
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('Nonlinear-button-clean'),
-                onPressed: cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
+                // Cleaning the inputs
+                ElevatedButton(
+                  key: const Key('Nonlinear-button-clean'),
+                  onPressed: cleanInput,
+                  child: Text(context.l10n.clean),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

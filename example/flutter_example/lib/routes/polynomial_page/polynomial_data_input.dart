@@ -153,8 +153,6 @@ class __InputWidget extends State<_InputWidget> {
 
   /// Form cleanup.
   void _cleanInput() {
-    context.read<TextFieldValuesCubit>().reset();
-
     for (final controller in controllers) {
       controller.clear();
     }
@@ -162,6 +160,7 @@ class __InputWidget extends State<_InputWidget> {
     formKey.currentState?.reset();
     context.read<PolynomialBloc>().add(const PolynomialClean());
     context.read<PlotZoomCubit>().reset();
+    context.read<TextFieldValuesCubit>().reset();
   }
 
   @override
@@ -175,55 +174,64 @@ class __InputWidget extends State<_InputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Some space from the top
-        const SizedBox(height: 40),
+    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
+      listener: (_, state) {
+        if (state.isEmpty) {
+          for (final controller in controllers) {
+            controller.clear();
+          }
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Some space from the top
+          const SizedBox(height: 40),
 
-        // The title
-        cachedEquationTitle,
+          // The title
+          cachedEquationTitle,
 
-        // Responsively placing input fields using 'Wrap'
-        Padding(
-          padding: const EdgeInsets.only(left: 60, right: 60),
-          child: Form(
-            key: formKey,
-            child: Wrap(
-              spacing: 30,
-              alignment: WrapAlignment.center,
-              children: cachedWrapBody,
+          // Responsively placing input fields using 'Wrap'
+          Padding(
+            padding: const EdgeInsets.only(left: 60, right: 60),
+            child: Form(
+              key: formKey,
+              child: Wrap(
+                spacing: 30,
+                alignment: WrapAlignment.center,
+                children: cachedWrapBody,
+              ),
             ),
           ),
-        ),
 
-        // A "spacer" widget
-        const SizedBox(height: 40),
+          // A "spacer" widget
+          const SizedBox(height: 40),
 
-        // Two buttons needed to "solve" and "clear" the equation
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Solving the polynomial
-            ElevatedButton(
-              key: const Key('Polynomial-button-solve'),
-              onPressed: _processInput,
-              child: Text(context.l10n.solve),
-            ),
+          // Two buttons needed to "solve" and "clear" the equation
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the polynomial
+              ElevatedButton(
+                key: const Key('Polynomial-button-solve'),
+                onPressed: _processInput,
+                child: Text(context.l10n.solve),
+              ),
 
-            // Some spacing
-            const SizedBox(width: 30),
+              // Some spacing
+              const SizedBox(width: 30),
 
-            // Cleaning the inputs
-            ElevatedButton(
-              key: const Key('Polynomial-button-clean'),
-              onPressed: _cleanInput,
-              child: Text(context.l10n.clean),
-            ),
-          ],
-        ),
-      ],
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('Polynomial-button-clean'),
+                onPressed: _cleanInput,
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

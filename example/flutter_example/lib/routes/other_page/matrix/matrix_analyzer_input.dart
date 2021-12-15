@@ -93,61 +93,70 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          // Some spacing
-          const SizedBox(
-            height: 60,
-          ),
+    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
+      listener: (_, state) {
+        if (state.isEmpty) {
+          for (final controller in matrixControllers) {
+            controller.clear();
+          }
+        }
+      },
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            // Some spacing
+            const SizedBox(
+              height: 60,
+            ),
 
-          // Size changer
-          const SizePicker(),
+            // Size changer
+            const SizePicker(),
 
-          // Some spacing
-          const SizedBox(
-            height: 35,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 35,
+            ),
 
-          // Matrix input
-          BlocBuilder<NumberSwitcherCubit, int>(
-            builder: (_, state) {
-              return MatrixInput(
-                matrixControllers: matrixControllers,
-                matrixSize: state,
-              );
-            },
-          ),
+            // Matrix input
+            BlocBuilder<NumberSwitcherCubit, int>(
+              builder: (_, state) {
+                return MatrixInput(
+                  matrixControllers: matrixControllers,
+                  matrixSize: state,
+                );
+              },
+            ),
 
-          // Some spacing
-          const SizedBox(
-            height: 30,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 30,
+            ),
 
-          // Two buttons needed to "solve" and "clear" the system
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the equation
-              ElevatedButton(
-                key: const Key('MatrixAnalyze-button-analyze'),
-                onPressed: matrixAnalyze,
-                child: Text(context.l10n.analyze),
-              ),
+            // Two buttons needed to "solve" and "clear" the system
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Solving the equation
+                ElevatedButton(
+                  key: const Key('MatrixAnalyze-button-analyze'),
+                  onPressed: matrixAnalyze,
+                  child: Text(context.l10n.analyze),
+                ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+                // Some spacing
+                const SizedBox(width: 30),
 
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('MatrixAnalyze-button-clean'),
-                onPressed: cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
+                // Cleaning the inputs
+                ElevatedButton(
+                  key: const Key('MatrixAnalyze-button-clean'),
+                  onPressed: cleanInput,
+                  child: Text(context.l10n.clean),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -13,7 +13,7 @@ class HomeContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 40, 25, 10),
+      padding: const EdgeInsets.fromLTRB(25, 50, 25, 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
