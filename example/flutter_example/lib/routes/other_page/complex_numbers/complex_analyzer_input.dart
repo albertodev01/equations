@@ -36,9 +36,9 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
     // Listener that updates the value
     controller.addListener(() {
       context.read<TextFieldValuesCubit>().setValue(
-        index: index,
-        value: controller.text,
-      );
+            index: index,
+            value: controller.text,
+          );
     });
 
     return controller;

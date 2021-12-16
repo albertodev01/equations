@@ -64,6 +64,23 @@ void main() {
     );
 
     blocTest<SystemBloc, SystemState>(
+      'Making sure that the bloc state can be cleared/reset',
+      build: () => SystemBloc(SystemType.rowReduction),
+      act: (bloc) => bloc
+        ..add(
+          const RowReductionMethod(
+            matrix: ['1', '2', '6', '3'],
+            knownValues: ['4', '-1'],
+            size: 2,
+          ),
+        )
+        ..add(const SystemClean()),
+      verify: (bloc) {
+        expect(bloc.state, isA<SystemNone>());
+      },
+    );
+
+    blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using LU',
       build: () => SystemBloc(SystemType.factorization),
       act: (bloc) => bloc.add(const FactorizationMethod(

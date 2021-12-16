@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// This cubit is used to remember the values of [TextFormField] widgets to that
 /// the input can persist even if the widget rebuilt.
 class TextFieldValuesCubit extends Cubit<Map<int, String>> {
-  /// Creates a [TextfieldValuesCubit] with an empty map as initial state.
+  /// Creates a [TextFieldValuesCubit] with an empty map as initial state.
   TextFieldValuesCubit() : super(const {});
 
   /// Stores the value at the given TextField index.

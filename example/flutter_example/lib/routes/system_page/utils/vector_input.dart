@@ -34,9 +34,8 @@ class _VectorInputState extends State<VectorInput> {
     for (var i = 0; i < widget.vectorSize; ++i) {
       entry.add(
         Padding(
-          padding: i == 0
-              ? const EdgeInsets.all(0)
-              : const EdgeInsets.only(top: 10),
+          padding:
+              i == 0 ? const EdgeInsets.all(0) : const EdgeInsets.only(top: 10),
           child: SystemInputField(
             controller: widget.vectorControllers[i],
           ),

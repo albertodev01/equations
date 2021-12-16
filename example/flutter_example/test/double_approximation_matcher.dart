@@ -2,8 +2,9 @@ import 'package:test/test.dart';
 
 /// A [Matcher] used to compare two [double]s value within some tolerated error.
 ///
-/// Comparing floating point values using `operator==` can fail due to precision
-/// loss given by floating point arithmetics.
+/// Comparing floating point values using `operator==` is dangerous since
+/// floating point arithmetic is not precise Values close to zero or with too
+/// much decimal digits may cause unexpected behaviors.
 ///
 /// This matcher makes sure that at least the first [precision] digits of the
 /// tested value are equal.
@@ -13,8 +14,12 @@ class MoreOrLessEquals extends Matcher {
 
   /// The accuracy of the test
   final double precision;
-  const MoreOrLessEquals(this.value, {this.precision = 1.0e-12})
-      : assert(precision >= 0, 'The precision must be >= 0');
+
+  /// Matches a value with another using the given [precision].
+  const MoreOrLessEquals(
+    this.value, {
+    this.precision = 1.0e-12,
+  }) : assert(precision >= 0, 'The precision must be >= 0');
 
   @override
   bool matches(dynamic object, Map<dynamic, dynamic> matchState) {
@@ -26,8 +31,9 @@ class MoreOrLessEquals extends Matcher {
   }
 
   @override
-  Description describe(Description description) =>
-      description.add('$value (±$precision)');
+  Description describe(Description description) {
+    return description.add('$value (±$precision)');
+  }
 
   @override
   Description describeMismatch(

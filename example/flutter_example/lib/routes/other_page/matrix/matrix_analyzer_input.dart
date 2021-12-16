@@ -38,9 +38,9 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
     // Listener that updates the value
     controller.addListener(() {
       context.read<TextFieldValuesCubit>().setValue(
-        index: index,
-        value: controller.text,
-      );
+            index: index,
+            value: controller.text,
+          );
     });
 
     return controller;

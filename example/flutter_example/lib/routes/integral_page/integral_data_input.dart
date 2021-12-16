@@ -56,9 +56,9 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     // Listener that updates the value
     controller.addListener(() {
       context.read<TextFieldValuesCubit>().setValue(
-        index: index,
-        value: controller.text,
-      );
+            index: index,
+            value: controller.text,
+          );
     });
 
     return controller;

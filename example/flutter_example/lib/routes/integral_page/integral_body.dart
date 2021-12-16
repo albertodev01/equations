@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/integral_page/integral_results.dart';
-import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
