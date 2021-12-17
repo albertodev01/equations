@@ -74,7 +74,8 @@ class _JacobiVectorInputState extends State<JacobiVectorInput> {
     return Center(
       child: BlocBuilder<DropdownCubit, String>(
         builder: (context, state) {
-          if (state.toLowerCase() == SystemDropdownItems.jacobi.asString()) {
+          if (state.toLowerCase() ==
+              SystemDropdownItems.jacobi.asString().toLowerCase()) {
             return inputWidget;
           }
 

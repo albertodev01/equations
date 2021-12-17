@@ -1,9 +1,8 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
@@ -16,18 +15,15 @@ import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
 
 void main() {
-  late final DropdownCubit dropdownCubit;
-
   setUpAll(() {
     registerFallbackValue(MockNonlinearEvent());
     registerFallbackValue(MockNonlinearState());
-
-    dropdownCubit = MockDropdownCubit();
   });
 
   group("Testing the 'NonlinearBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(MockWrapper(
+        dropdownInitial: NonlinearDropdownItems.newton.asString(),
         child: BlocProvider<NonlinearBloc>(
           create: (_) => NonlinearBloc(NonlinearType.singlePoint),
           child: const Scaffold(body: NonlinearBody()),
@@ -44,6 +40,7 @@ void main() {
       'test',
       (tester) async {
         await tester.pumpWidget(MockWrapper(
+          dropdownInitial: NonlinearDropdownItems.secant.asString(),
           child: BlocProvider<NonlinearBloc>(
             create: (_) => NonlinearBloc(NonlinearType.bracketing),
             child: const Scaffold(
@@ -73,6 +70,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(MockWrapper(
+          dropdownInitial: NonlinearDropdownItems.newton.asString(),
           child: BlocProvider<NonlinearBloc>(
             create: (_) => NonlinearBloc(NonlinearType.singlePoint),
             child: const Scaffold(
@@ -93,30 +91,14 @@ void main() {
     );
 
     testWidgets('Making sure that solving equations works', (tester) async {
-      when(() => dropdownCubit.state).thenReturn('Newton');
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
       await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-            ),
-            BlocProvider<DropdownCubit>.value(
-              value: dropdownCubit,
-            ),
-            BlocProvider<PrecisionSliderCubit>(
-              create: (_) => PrecisionSliderCubit(
-                minValue: 1,
-                maxValue: 10,
-              ),
-            ),
-          ],
-          child: Scaffold(
-            body: BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-              child: const NonlinearBody(),
-            ),
+        dropdownInitial: NonlinearDropdownItems.newton.asString(),
+        child: Scaffold(
+          body: BlocProvider<NonlinearBloc>.value(
+            value: bloc,
+            child: const NonlinearBody(),
           ),
         ),
       ));

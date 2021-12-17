@@ -64,9 +64,8 @@ void main() {
       (tester) async {
         final integralBloc = IntegralBloc();
 
-        when(
-          () => dropdownCubit.state,
-        ).thenReturn(IntegralDropdownItems.simpson.asString());
+        when(() => dropdownCubit.state)
+            .thenReturn(IntegralDropdownItems.simpson.asString());
 
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(
@@ -104,7 +103,7 @@ void main() {
         await tester.tap(finder);
         await tester.pumpAndSettle();
 
-        // Making sure that fields are filled
+        // Making sure that fields have been cleared
         expect(find.text('x^2-1'), findsNothing);
         expect(find.text('17'), findsNothing);
         expect(find.text('18'), findsNothing);

@@ -27,7 +27,9 @@ void main() {
         expect(find.byType(MaterialApp), findsOneWidget);
 
         // Checking MaterialApp's properties
-        final materialApp = tester.firstWidget<MaterialApp>(find.byType(MaterialApp),);
+        final materialApp = tester.firstWidget<MaterialApp>(
+          find.byType(MaterialApp),
+        );
 
         expect(materialApp.supportedLocales.length, equals(3));
         expect(materialApp.onGenerateRoute, isNotNull);

@@ -32,7 +32,7 @@ void main() {
         await tester.pumpWidget(MockWrapper(
           child: BlocProvider<PrecisionSliderCubit>(
             create: (_) => PrecisionSliderCubit(
-              minValue: 1,
+              minValue: 2,
               maxValue: 10,
             ),
             child: const Scaffold(
@@ -43,10 +43,10 @@ void main() {
 
         final finder = find.byType(Slider);
         final slider = tester.firstWidget(finder) as Slider;
-        expect(slider.value, equals(5));
+        expect(slider.value, equals(6));
 
         // State
-        expect(find.text('1.0e-5'), findsOneWidget);
+        expect(find.text('1.0e-6'), findsOneWidget);
         expect(find.byType(Slider), findsOneWidget);
       },
     );
@@ -56,7 +56,7 @@ void main() {
       'value changes',
       (tester) async {
         final bloc = PrecisionSliderCubit(
-          minValue: 1,
+          minValue: 2,
           maxValue: 10,
         );
 
@@ -70,7 +70,7 @@ void main() {
         ));
 
         expect(find.byType(Slider), findsOneWidget);
-        expect(bloc.state, equals(5));
+        expect(bloc.state, equals(6));
 
         // Moving the plot_zoom
         await tester.drag(find.byType(Slider), const Offset(-10, 0));

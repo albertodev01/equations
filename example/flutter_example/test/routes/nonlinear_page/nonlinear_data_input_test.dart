@@ -1,6 +1,5 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
@@ -32,12 +31,6 @@ void main() {
       ),
       BlocProvider<DropdownCubit>.value(
         value: dropdownCubit,
-      ),
-      BlocProvider<PrecisionSliderCubit>(
-        create: (_) => PrecisionSliderCubit(
-          minValue: 1,
-          maxValue: 10,
-        ),
       ),
     ];
   });
