@@ -103,10 +103,14 @@ class SystemDataInputState extends State<SystemDataInput> {
 
     // Listener that updates the value
     controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
+      debugPrint('called');
+
+      if (mounted) {
+        context.read<TextFieldValuesCubit>().setValue(
+              index: index,
+              value: controller.text,
+            );
+      }
     });
 
     return controller;
@@ -207,7 +211,7 @@ class SystemDataInputState extends State<SystemDataInput> {
     }
 
     for (final controller in jacobiControllers) {
-      controller.clear();
+      controller.dispose();
     }
 
     super.dispose();
@@ -216,20 +220,22 @@ class SystemDataInputState extends State<SystemDataInput> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (context, state) {
-        for (final controller in matrixControllers) {
-          controller.clear();
-        }
+      listener: (_, state) {
+        if (state.isEmpty) {
+          wSorController.clear();
 
-        for (final controller in vectorControllers) {
-          controller.clear();
-        }
+          for (final controller in matrixControllers) {
+            controller.clear();
+          }
 
-        for (final controller in jacobiControllers) {
-          controller.clear();
-        }
+          for (final controller in vectorControllers) {
+            controller.clear();
+          }
 
-        wSorController.clear();
+          for (final controller in jacobiControllers) {
+            controller.clear();
+          }
+        }
       },
       child: Form(
         key: formKey,

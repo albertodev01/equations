@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
 import 'package:equations_solver/blocs/system_solver/models/system_types.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/system_data_input.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
@@ -20,8 +21,11 @@ void main() {
         dropdownInitial: SystemDropdownItems.sor.asString(),
         child: BlocProvider<SystemBloc>(
           create: (_) => SystemBloc(SystemType.iterative),
-          child: const Scaffold(
-            body: SystemBody(),
+          child: Scaffold(
+            body: BlocProvider<TextFieldValuesCubit>(
+              create: (_) => TextFieldValuesCubit(),
+              child: const SystemBody(),
+            ),
           ),
         ),
       ));

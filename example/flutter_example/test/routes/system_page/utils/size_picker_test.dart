@@ -57,6 +57,16 @@ void main() {
     testGoldens('SizePicker', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
+          '1x1 matrix',
+          BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 1,
+              max: 5,
+            ),
+            child: const SizePicker(),
+          ),
+        )
+        ..addScenario(
           '2x2 matrix',
           BlocProvider<NumberSwitcherCubit>(
             create: (_) => NumberSwitcherCubit(
@@ -107,7 +117,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(300, 400),
+        surfaceSize: const Size(300, 500),
       );
       await screenMatchesGolden(tester, 'size_picker');
     });

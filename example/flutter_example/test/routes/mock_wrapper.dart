@@ -100,8 +100,8 @@ class MockWrapper extends StatelessWidget {
           BlocProvider<SystemBloc>(
             create: (_) => SystemBloc(SystemType.factorization),
           ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: TextFieldValuesCubit(),
+          BlocProvider<TextFieldValuesCubit>(
+            create: (_) => TextFieldValuesCubit(),
           ),
         ],
         child: Scaffold(

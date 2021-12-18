@@ -79,7 +79,6 @@ void main() {
         // Expecting to be on the new page
         expect(find.byType(SystemPage), findsOneWidget);
       },
-      skip: true,
     );
 
     testWidgets(
