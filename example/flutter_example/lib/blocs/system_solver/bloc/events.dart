@@ -1,18 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 
-/// Events for the [NonlinearBloc] bloc.
+/// Events for the [SystemBloc] bloc.
 abstract class SystemEvent extends Equatable {
-  /// A list of 'raw' strings representing the elements of the matrix
+  /// A list of 'raw' strings representing the elements of the matrix.
   final List<String> matrix;
 
-  /// A list of 'raw' strings representing the known values vector
+  /// A list of 'raw' strings representing the known values vector.
   final List<String> knownValues;
 
   /// The size of the square matrix.
   final int size;
 
-  /// Initializes a [NonlinearEvent] instance.
+  /// Initializes a [SystemEvent] instance.
   const SystemEvent({
     required this.matrix,
     required this.knownValues,
@@ -43,8 +43,9 @@ class RowReductionMethod extends SystemEvent {
       return RowReductionMethods.gauss;
     }
 
-    throw ArgumentError("The given string doesn't map to a valid "
-        'RowReductionMethods value.');
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'RowReductionMethods value.",
+    );
   }
 }
 
@@ -84,8 +85,9 @@ class FactorizationMethod extends SystemEvent {
       return FactorizationMethods.cholesky;
     }
 
-    throw ArgumentError("The given string doesn't map to a valid "
-        'FactorizationMethods value.');
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'FactorizationMethods value.",
+    );
   }
 }
 
@@ -108,7 +110,7 @@ class IterativeMethod extends SystemEvent {
   /// The input vector of the Jacobi method
   final List<String> jacobiInitialVector;
 
-  /// Creates a [FactorizationMethod] type.
+  /// Creates a [IterativeMethod] type.
   const IterativeMethod({
     required List<String> matrix,
     required List<String> knownValues,
@@ -146,15 +148,16 @@ class IterativeMethod extends SystemEvent {
       return IterativeMethods.jacobi;
     }
 
-    throw ArgumentError("The given string doesn't map to a valid "
-        'IterativeMethods value.');
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'IterativeMethod value.",
+    );
   }
 }
 
-/// Event fired when the state of the bloc has to be "resetted". This is  used
-/// to clean the UI and bring it to an initial state.
+/// Emitted when the state of the bloc has to be "reset". This is generally used
+/// to clean the UI to bring it to an initial state.
 class SystemClean extends SystemEvent {
-  /// Instantiates a [SystemEvent] event.
+  /// Instantiates a [SystemClean].
   const SystemClean()
       : super(
           matrix: const [],

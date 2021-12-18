@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/models/analyzer.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 
 /// Analyzes a matrix and computes various results:
@@ -12,6 +11,9 @@ import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 ///  - the characteristic polynomial
 ///  - the eigenvalues
 ///  - the determinant
+///  - whether it's diagonal or not
+///  - whether it's symmetric or not
+///  - whether it's identity or not
 class MatrixDataAnalyzer extends Analyzer<AnalyzedMatrix> {
   /// The size of the matrix.
   final int size;
@@ -27,12 +29,10 @@ class MatrixDataAnalyzer extends Analyzer<AnalyzedMatrix> {
 
   @override
   AnalyzedMatrix process() {
-    // Building the matrix
-    final data = valuesParser(flatMatrix);
     final matrix = RealMatrix.fromFlattenedData(
       rows: size,
       columns: size,
-      data: data,
+      data: valuesParser(flatMatrix),
     );
 
     return AnalyzedMatrix(
@@ -44,6 +44,9 @@ class MatrixDataAnalyzer extends Analyzer<AnalyzedMatrix> {
       characteristicPolynomial: matrix.characteristicPolynomial(),
       eigenvalues: matrix.eigenvalues(),
       determinant: matrix.determinant(),
+      isDiagonal: matrix.isDiagonal(),
+      isSymmetric: matrix.isSymmetric(),
+      isIdentity: matrix.isIdentity(),
     );
   }
 

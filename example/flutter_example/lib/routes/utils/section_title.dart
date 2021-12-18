@@ -26,11 +26,14 @@ class SectionTitle extends StatelessWidget {
           padding: const EdgeInsets.only(right: 20),
           child: icon,
         ),
-        Text(
-          pageTitle,
-          style: const TextStyle(
-            fontSize: 26,
-            color: Colors.blueGrey,
+        Flexible(
+          child: Text(
+            pageTitle,
+            style: const TextStyle(
+              fontSize: 26,
+              color: Colors.blueGrey,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
       ],

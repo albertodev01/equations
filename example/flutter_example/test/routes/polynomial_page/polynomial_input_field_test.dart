@@ -1,5 +1,4 @@
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';

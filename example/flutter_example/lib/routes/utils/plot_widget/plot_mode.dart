@@ -7,7 +7,7 @@ abstract class PlotMode<T> extends Equatable {
   /// The equation object that defines the [evaluateOn] method.
   final T equation;
 
-  /// Creates an instance of [PlotMode]
+  /// Creates an instance of [PlotMode].
   const PlotMode(this.equation);
 
   /// Evaluates the [equation] on the specified real number [x].

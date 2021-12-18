@@ -3,7 +3,7 @@ import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 
 /// Events for the [OtherBloc] bloc.
 abstract class OtherEvent extends Equatable {
-  /// Initializes a [PolynomialEvent].
+  /// Initializes an [OtherEvent] instance.
   const OtherEvent();
 
   @override
@@ -36,7 +36,7 @@ class ComplexNumberAnalyze extends OtherEvent {
   /// The real part.
   final String realPart;
 
-  /// The imaginary part
+  /// The imaginary part.
   final String imaginaryPart;
 
   /// Requires the real and imaginary part of the complex number to be analyzed.

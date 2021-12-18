@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,7 @@ class SystemDropdownSelection extends StatefulWidget {
   SystemDropdownSelectionState createState() => SystemDropdownSelectionState();
 }
 
-/// The state of the [NonlinearDropdownSelection] class.
+/// The state of the [SystemDropdownSelection] class.
 @visibleForTesting
 class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
   /// The items of the dropdown.

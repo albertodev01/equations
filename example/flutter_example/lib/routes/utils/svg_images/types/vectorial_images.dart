@@ -96,3 +96,15 @@ class EquationSolution extends SvgImage {
   @override
   String get assetName => 'solutions';
 }
+
+/// Some atoms linked by a grey line.
+class Atoms extends SvgImage {
+  /// Creates an [Atoms] widget.
+  const Atoms({
+    Key? key,
+    double size = 40,
+  }) : super(key: key, size: size);
+
+  @override
+  String get assetName => 'atoms';
+}

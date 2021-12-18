@@ -62,6 +62,9 @@ void main() {
         ],
       ),
       characteristicPolynomial: Algebraic.fromReal([1, -5, -2]),
+      isIdentity: true,
+      isDiagonal: true,
+      isSymmetric: false,
     );
   });
 

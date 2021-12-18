@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/algebraic/types/durand_kerner.dart';
 import 'package:test/test.dart';
 
 import '../double_approximation_matcher.dart';

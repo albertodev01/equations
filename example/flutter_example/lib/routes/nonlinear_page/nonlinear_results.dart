@@ -1,7 +1,7 @@
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
@@ -36,12 +36,6 @@ class NonlinearResults extends StatelessWidget {
 class _NonlinearSolutions extends StatelessWidget {
   const _NonlinearSolutions();
 
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [NonlinearGuesses] or [NonlinearNone].
-  bool buildCondition(NonlinearState previous, NonlinearState current) =>
-      (previous != current) && (current is! NonlinearError);
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<NonlinearBloc, NonlinearState>(
@@ -55,7 +49,6 @@ class _NonlinearSolutions extends StatelessWidget {
           );
         }
       },
-      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is NonlinearGuesses) {
           // Computation results
@@ -82,11 +75,6 @@ class _NonlinearSolutions extends StatelessWidget {
               RealResultCard(
                 leading: '${context.l10n.efficiency}: ',
                 value: efficiency,
-              ),
-
-              // Some spacing
-              const SizedBox(
-                height: 65,
               ),
             ],
           );

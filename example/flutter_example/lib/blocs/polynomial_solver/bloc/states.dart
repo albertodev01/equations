@@ -40,12 +40,12 @@ class PolynomialRoots extends PolynomialState {
 /// This state is emitted when the solver cannot find the roots of the polynomial
 /// equation.
 class PolynomialError extends PolynomialState {
-  /// Initializes a [PolynomialError]
+  /// Initializes a [PolynomialError].
   const PolynomialError();
 }
 
-/// This is an initial state used to "clean" the page bringing it to a default
-/// aspect.
+/// Emitted when the state of the bloc has to be "reset". This is generally used
+/// to clean the UI to bring it to an initial state.
 class PolynomialNone extends PolynomialState {
   /// Initializes a [PolynomialNone]
   const PolynomialNone();

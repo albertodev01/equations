@@ -1,7 +1,9 @@
 import 'package:equations/equations.dart';
+import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
@@ -38,9 +40,16 @@ void main() {
       final widget = SizedBox(
         width: 500,
         height: 580,
-        child: PlotWidget(
-          plotMode: PolynomialPlot(
-            algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+        child: BlocProvider<PlotZoomCubit>(
+          create: (_) => PlotZoomCubit(
+            minValue: 1,
+            maxValue: 10,
+            initial: 4,
+          ),
+          child: PlotWidget(
+            plotMode: PolynomialPlot(
+              algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+            ),
           ),
         ),
       );

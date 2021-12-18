@@ -1,9 +1,9 @@
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
-import '../mock_wrapper.dart';
+import '../../mock_wrapper.dart';
 
 void main() {
   group("Testing the 'RealResultCard' widget", () {
@@ -11,6 +11,18 @@ void main() {
       await tester.pumpWidget(const MockWrapper(
         child: RealResultCard(
           value: 0.5,
+        ),
+      ));
+
+      expect(find.byType(RealResultCard), findsOneWidget);
+      expect(find.byKey(const Key('Fraction-ResultCard')), findsOneWidget);
+    });
+
+    testWidgets('Making sure that the fraction can be hidden', (tester) async {
+      await tester.pumpWidget(const MockWrapper(
+        child: RealResultCard(
+          value: 0.5,
+          withFraction: false,
         ),
       ));
 
@@ -29,23 +41,7 @@ void main() {
         ));
 
         expect(find.byType(RealResultCard), findsOneWidget);
-        expect(find.text('x = Not computed'), findsOneWidget);
-      },
-    );
-
-    testWidgets(
-      "Making sure that when the 'withFraction' value is set to true. "
-      'the fractional value of the number appears at the bottom.',
-      (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: RealResultCard(
-            value: 0.5,
-            withFraction: true,
-          ),
-        ));
-
-        expect(find.byType(RealResultCard), findsOneWidget);
-        expect(find.byKey(const Key('Fraction-ResultCard')), findsOneWidget);
+        expect(find.text('Not computed'), findsOneWidget);
       },
     );
 
@@ -61,7 +57,6 @@ void main() {
           '',
           const RealResultCard(
             value: 0.5,
-            withFraction: true,
           ),
         );
 

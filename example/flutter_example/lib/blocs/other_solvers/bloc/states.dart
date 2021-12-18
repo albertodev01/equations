@@ -4,7 +4,7 @@ import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 
 /// States for the [OtherBloc] bloc.
 abstract class OtherState extends Equatable {
-  /// Initializes a [PolynomialEvent].
+  /// Initializes a [OtherState].
   const OtherState();
 
   @override
@@ -37,6 +37,15 @@ class AnalyzedMatrix extends OtherState {
   /// The determinant of the matrix.
   final double determinant;
 
+  /// Whether the matrix is diagonal or not.
+  final bool isDiagonal;
+
+  /// Whether the matrix is symmetric or not.
+  final bool isSymmetric;
+
+  /// Whether it's an identity matrix or not.
+  final bool isIdentity;
+
   /// Creates an [AnalyzedMatrix] object.
   const AnalyzedMatrix({
     required this.transpose,
@@ -47,6 +56,9 @@ class AnalyzedMatrix extends OtherState {
     required this.characteristicPolynomial,
     required this.eigenvalues,
     required this.determinant,
+    required this.isDiagonal,
+    required this.isSymmetric,
+    required this.isIdentity,
   });
 
   @override
@@ -59,6 +71,9 @@ class AnalyzedMatrix extends OtherState {
         characteristicPolynomial,
         eigenvalues,
         determinant,
+        isDiagonal,
+        isSymmetric,
+        isIdentity,
       ];
 }
 
@@ -116,8 +131,8 @@ class OtherError extends OtherState {
   const OtherError();
 }
 
-/// This is an initial state used to "clean" the page bringing it to a default
-/// aspect.
+/// Emitted when the state of the bloc has to be "reset". This is generally used
+/// to clean the UI to bring it to an initial state.
 class OtherNone extends OtherState {
   /// Initializes an [OtherNone] state.
   const OtherNone();

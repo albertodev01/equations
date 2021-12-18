@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/real_matrix.dart';
 import 'package:equations/src/utils/factorial.dart';
 
 /// Newton interpolation is an interpolation polynomial for a given set of data

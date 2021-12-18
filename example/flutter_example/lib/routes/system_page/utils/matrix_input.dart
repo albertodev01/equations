@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// Creates an NxN square matrix whose entries are [SystemInputField] widgets.
@@ -64,7 +65,9 @@ class _MatrixInputState extends State<MatrixInput> {
 
   @override
   Widget build(BuildContext context) {
-    final boxWidth = widget.matrixSize * 65.0;
+    // We're adding '5' to the overall width to make sure that tiles aren't too
+    // close each other.
+    final boxWidth = widget.matrixSize * (systemInputFieldSize.width + 5);
 
     return Center(
       child: SizedBox(

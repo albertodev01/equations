@@ -1,4 +1,6 @@
 import 'package:equations_solver/routes/integral_page.dart';
+import 'package:equations_solver/routes/integral_page/integral_body.dart';
+import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_wrapper.dart';
@@ -11,6 +13,8 @@ void main() {
       ));
 
       expect(find.byType(IntegralPage), findsOneWidget);
+      expect(find.byType(EquationScaffold), findsOneWidget);
+      expect(find.byType(IntegralBody), findsOneWidget);
     });
   });
 }

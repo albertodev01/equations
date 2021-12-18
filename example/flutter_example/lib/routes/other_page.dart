@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers_body.dart';
 import 'package:equations_solver/routes/other_page/matrix_body.dart';
@@ -19,11 +20,26 @@ class OtherPage extends StatefulWidget {
 }
 
 class _OtherPageState extends State<OtherPage> {
-  /// The [OtherBloc] instance for matrix analysis.
-  final matrixBloc = OtherBloc();
+  /*
+   * Caching blocs here in the state since `EquationScaffold` is creating a
+   * tab view and thus `BlocProvider`s might be destroyed when the body is not
+   * visible anymore.
+   *
+   */
 
-  /// The [OtherBloc] instance for complex numbers analysis.
+  // Bloc for working on matrices and complex numbers.
+  final matrixBloc = OtherBloc();
   final complexBloc = OtherBloc();
+
+  // TextFields values blocs
+  final matrixTextfields = TextFieldValuesCubit();
+  final complexTextfields = TextFieldValuesCubit();
+
+  // Bloc for the matrix size
+  final matrixSize = NumberSwitcherCubit(
+    min: 1,
+    max: 5,
+  );
 
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
@@ -31,14 +47,14 @@ class _OtherPageState extends State<OtherPage> {
       title: context.l10n.matrices,
       content: MultiBlocProvider(
         providers: [
-          BlocProvider<NumberSwitcherCubit>(
-            create: (_) => NumberSwitcherCubit(
-              min: 1,
-              max: 5,
-            ),
+          BlocProvider<NumberSwitcherCubit>.value(
+            value: matrixSize,
           ),
           BlocProvider<OtherBloc>.value(
             value: matrixBloc,
+          ),
+          BlocProvider<TextFieldValuesCubit>.value(
+            value: matrixTextfields,
           ),
         ],
         child: const MatrixOtherBody(),
@@ -46,8 +62,15 @@ class _OtherPageState extends State<OtherPage> {
     ),
     NavigationItem(
       title: context.l10n.complex_numbers,
-      content: BlocProvider<OtherBloc>.value(
-        value: complexBloc,
+      content: MultiBlocProvider(
+        providers: [
+          BlocProvider<OtherBloc>.value(
+            value: complexBloc,
+          ),
+          BlocProvider<TextFieldValuesCubit>.value(
+            value: matrixTextfields,
+          ),
+        ],
         child: const ComplexNumberOtherBody(),
       ),
     ),

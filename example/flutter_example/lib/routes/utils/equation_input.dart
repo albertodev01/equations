@@ -26,7 +26,7 @@ class EquationInput extends StatelessWidget {
   /// This is `false` by default.
   final bool onlyRealValues;
 
-  /// Creates a [NonlinearInput] instance.
+  /// Creates a [EquationInput] instance.
   const EquationInput({
     Key? key,
     required this.controller,

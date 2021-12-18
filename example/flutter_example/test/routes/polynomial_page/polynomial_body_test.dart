@@ -1,11 +1,11 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -95,11 +95,10 @@ void main() {
             BlocProvider<PolynomialBloc>.value(
               value: bloc,
             ),
-            BlocProvider<SliderCubit>(
-              create: (_) => SliderCubit(
+            BlocProvider<PrecisionSliderCubit>(
+              create: (_) => PrecisionSliderCubit(
                 minValue: 1,
                 maxValue: 10,
-                current: 5,
               ),
             ),
           ],

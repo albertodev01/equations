@@ -38,7 +38,9 @@ void main() {
         // Making sure no exceptions are thrown inside routes
         for (final route in routes) {
           final setting = RouteSettings(name: route);
-          RouteGenerator.generateRoute(setting);
+          final pageRouteBuilder = RouteGenerator.generateRoute(setting);
+
+          expect(pageRouteBuilder, isA<PageRouteBuilder>());
         }
       } on Exception {
         success = false;

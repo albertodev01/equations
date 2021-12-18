@@ -2,9 +2,10 @@ import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/routes/integral_page/integral_body.dart';
 import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/integral_page/integral_results.dart';
+import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,11 +23,9 @@ void main() {
   group("Testing the 'IntegralBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<IntegralBloc>(
-          create: (_) => IntegralBloc(),
-          child: const Scaffold(
-            body: IntegralBody(),
-          ),
+        dropdownInitial: IntegralDropdownItems.simpson.asString(),
+        child: const Scaffold(
+          body: IntegralBody(),
         ),
       ));
 
@@ -39,14 +38,9 @@ void main() {
       'Making sure that the widget is responsive - small screens test',
       (tester) async {
         await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<IntegralBloc>(
-            create: (_) => IntegralBloc(),
-            child: const Scaffold(
-              body: SizedBox(
-                width: 800,
-                child: IntegralBody(),
-              ),
-            ),
+          dropdownInitial: IntegralDropdownItems.simpson.asString(),
+          child: const Scaffold(
+            body: IntegralBody(),
           ),
         ));
 
@@ -67,11 +61,9 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<IntegralBloc>(
-            create: (_) => IntegralBloc(),
-            child: const Scaffold(
-              body: IntegralBody(),
-            ),
+          dropdownInitial: IntegralDropdownItems.simpson.asString(),
+          child: const Scaffold(
+            body: IntegralBody(),
           ),
         ));
 
@@ -86,10 +78,11 @@ void main() {
       },
     );
 
-    testWidgets('Making sure that solving equations works', (tester) async {
+    testWidgets('Making sure that solving integrals works', (tester) async {
       final bloc = IntegralBloc();
 
       await tester.pumpWidget(MockWrapper(
+        dropdownInitial: IntegralDropdownItems.simpson.asString(),
         child: BlocProvider<IntegralBloc>.value(
           value: bloc,
           child: const Scaffold(

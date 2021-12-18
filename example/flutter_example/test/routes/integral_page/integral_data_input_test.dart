@@ -2,7 +2,7 @@ import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -64,9 +64,8 @@ void main() {
       (tester) async {
         final integralBloc = IntegralBloc();
 
-        when(
-          () => dropdownCubit.state,
-        ).thenReturn(IntegralDropdownItems.simpson.asString());
+        when(() => dropdownCubit.state)
+            .thenReturn(IntegralDropdownItems.simpson.asString());
 
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(
@@ -104,7 +103,7 @@ void main() {
         await tester.tap(finder);
         await tester.pumpAndSettle();
 
-        // Making sure that fields are filled
+        // Making sure that fields have been cleared
         expect(find.text('x^2-1'), findsNothing);
         expect(find.text('17'), findsNothing);
         expect(find.text('18'), findsNothing);

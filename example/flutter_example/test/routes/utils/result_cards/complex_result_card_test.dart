@@ -1,5 +1,5 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -16,7 +16,7 @@ void main() {
       ));
 
       expect(find.byType(ComplexResultCard), findsOneWidget);
-      expect(find.text('x = 5 - 3i'), findsOneWidget);
+      expect(find.text('5.00000000 - 3.00000000i'), findsOneWidget);
       expect(
         find.byKey(const Key('Fraction-ComplexResultCard')),
         findsOneWidget,

@@ -20,8 +20,8 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-  /// Converts a list of [NavigationItem]s into a list of [BottomNavigationBarItem]s
-  /// to be displayed on the navigation bar.
+  /// Converts a list of [NavigationItem]s into a list of
+  /// [BottomNavigationBarItem]s to be displayed on the navigation bar.
   ///
   /// Since these items will always be the same, we manually cache the list.
   late final _bottom = widget.navigationItems.map<BottomNavigationBarItem>((i) {
@@ -36,13 +36,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationCubit, int>(
       buildWhen: (previous, current) => previous != current,
-      builder: (context, state) => BottomNavigationBar(
-        elevation: 6,
-        items: _bottom,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: state,
-        onTap: (newIndex) => context.read<NavigationCubit>().emit(newIndex),
-      ),
+      builder: (context, state) {
+        return BottomNavigationBar(
+          elevation: 6,
+          items: _bottom,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: state,
+          onTap: context.read<NavigationCubit>().pageIndex,
+        );
+      },
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// A widget containing the title of the page.
+/// A widget representing a section title in a page.
 class PageTitle extends StatelessWidget {
-  /// The title of the page.
+  /// The section title.
   final String pageTitle;
 
   /// A small image on the left of the text. Generally, this widget should be
@@ -29,7 +29,10 @@ class PageTitle extends StatelessWidget {
           ),
           Text(
             pageTitle,
-            style: const TextStyle(fontSize: 26, color: Colors.blueGrey),
+            style: const TextStyle(
+              fontSize: 26,
+              color: Colors.blueGrey,
+            ),
           ),
         ],
       ),

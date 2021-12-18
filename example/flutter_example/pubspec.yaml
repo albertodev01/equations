@@ -19,13 +19,13 @@ dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/flutter_bloc
-  flutter_bloc: ^7.3.3
+  flutter_bloc: ^8.0.0
 
   flutter_localizations:
     sdk: flutter
 
   # https://pub.dev/packages/flutter_svg
-  flutter_svg: ^0.23.0+1
+  flutter_svg: ^1.0.0
 
   # https://pub.dev/packages/google_fonts
   google_fonts: ^2.1.0
@@ -35,10 +35,10 @@ dependencies:
 
 dev_dependencies:
   # https://pub.dev/packages/bloc_test
-  bloc_test: ^8.5.0
+  bloc_test: ^9.0.1
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.6.0
+  dart_code_metrics: ^4.8.1
 
   # https://pub.dev/packages/flutter_lints
   flutter_lints: ^1.0.4
@@ -47,13 +47,10 @@ dev_dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/golden_toolkit
-  golden_toolkit: ^0.11.0
+  golden_toolkit: ^0.12.0
 
   # https://pub.dev/packages/mocktail
   mocktail: ^0.2.0
-
-  # https://pub.dev/packages/test
-  test: ^1.17.10
 
 flutter:
   uses-material-design: true

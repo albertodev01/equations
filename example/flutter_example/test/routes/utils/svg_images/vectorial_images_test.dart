@@ -114,5 +114,16 @@ void main() {
       );
       await screenMatchesGolden(tester, 'equation_solution');
     });
+
+    testGoldens('Atoms', (tester) async {
+      final builder = GoldenBuilder.column()..addScenario('', const Atoms());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'atoms');
+    });
   });
 }

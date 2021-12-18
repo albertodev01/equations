@@ -11,7 +11,7 @@ abstract class IntegralState extends Equatable {
   List<Object?> get props => [];
 }
 
-/// This state is emitted when the solver successfully finds the numerical value
+/// This state is emitted when the solver successfully found the numerical value
 /// of the definite integral.
 class IntegralResult extends IntegralState {
   /// The result of the integral.
@@ -34,14 +34,14 @@ class IntegralResult extends IntegralState {
 }
 
 /// This state is emitted when an error occurs while integrating the function
-/// (for example, the function might contain syntax errors).
+/// (for example, when the function string contains syntax errors).
 class IntegralError extends IntegralState {
   /// Creates an [IntegralError] instance.
   const IntegralError();
 }
 
-/// This is an initial state used to "clean" the page bringing it to a default
-/// aspect.
+/// Emitted when the state of the bloc has to be "reset". This is generally used
+/// to clean the UI to bring it to an initial state.
 class IntegralNone extends IntegralState {
   /// Creates an [IntegralNone] instance.
   const IntegralNone();

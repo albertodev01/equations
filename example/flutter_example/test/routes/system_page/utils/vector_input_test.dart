@@ -26,7 +26,7 @@ void main() {
     testGoldens('VectorInput', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
-          'MatrixInput - 2x2',
+          'VectorInput - 2x2',
           VectorInput(
             vectorControllers: [
               TextEditingController(text: '1'),
@@ -36,7 +36,7 @@ void main() {
           ),
         )
         ..addScenario(
-          'MatrixInput - 3x3',
+          'VectorInput - 3x3',
           VectorInput(
             vectorControllers: [
               TextEditingController(text: '1'),

@@ -1,10 +1,7 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page/system_data_input.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
-import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
@@ -72,48 +69,19 @@ class __SystemBodyContentsState extends State<_SystemBodyContents> {
     }
   }
 
-  /// The initial value of the dropdown.
-  String get dropdownInitialValue {
-    final systemType = context.read<SystemBloc>().systemType;
-
-    switch (systemType) {
-      case SystemType.rowReduction:
-        return '';
-      case SystemType.factorization:
-        return SystemDropdownItems.lu.asString();
-      case SystemType.iterative:
-        return SystemDropdownItems.sor.asString();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<DropdownCubit>(
-          create: (_) => DropdownCubit(
-            initialValue: dropdownInitialValue,
-          ),
-        ),
-        BlocProvider<NumberSwitcherCubit>(
-          create: (_) => NumberSwitcherCubit(
-            min: 2,
-            max: 4,
-          ),
-        ),
-      ],
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            pageTitleWidget,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          pageTitleWidget,
 
-            // Data input
-            const SystemDataInput(),
+          // Data input
+          const SystemDataInput(),
 
-            // Results
-            const SystemResults(),
-          ],
-        ),
+          // Results
+          const SystemResults(),
+        ],
       ),
     );
   }

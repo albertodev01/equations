@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,32 @@ class ComplexAnalyzerInput extends StatefulWidget {
 
 class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
   /// The [TextEditingController] for the real part of the complex number.
-  final realController = TextEditingController();
+  late final realController = _generateTextController(0);
 
   /// The [TextEditingController] for the real part of the complex number.
-  final imaginaryController = TextEditingController();
+  late final imaginaryController = _generateTextController(1);
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
+
+  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
+  /// order to cache the user input.
+  TextEditingController _generateTextController(int index) {
+    // Initializing with the cached value, if any
+    final controller = TextEditingController(
+      text: context.read<TextFieldValuesCubit>().getValue(index),
+    );
+
+    // Listener that updates the value
+    controller.addListener(() {
+      context.read<TextFieldValuesCubit>().setValue(
+            index: index,
+            value: controller.text,
+          );
+    });
+
+    return controller;
+  }
 
   /// Form and results cleanup.
   void cleanInput() {
@@ -30,6 +50,7 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
     imaginaryController.clear();
 
     context.read<OtherBloc>().add(const OtherClean());
+    context.read<TextFieldValuesCubit>().reset();
   }
 
   /// Analyzes the complex number.
@@ -62,49 +83,57 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          // Some spacing
-          const SizedBox(
-            height: 60,
-          ),
+    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
+      listener: (_, state) {
+        if (state.isEmpty) {
+          realController.clear();
+          imaginaryController.clear();
+        }
+      },
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            // Some spacing
+            const SizedBox(
+              height: 60,
+            ),
 
-          // Complex number input
-          ComplexNumberInput(
-            realController: realController,
-            imaginaryController: imaginaryController,
-          ),
+            // Complex number input
+            ComplexNumberInput(
+              realController: realController,
+              imaginaryController: imaginaryController,
+            ),
 
-          // Some spacing
-          const SizedBox(
-            height: 30,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 30,
+            ),
 
-          // Two buttons needed to "solve" and "clear" the system
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the equation
-              ElevatedButton(
-                key: const Key('ComplexAnalyze-button-analyze'),
-                onPressed: complexAnalyze,
-                child: Text(context.l10n.analyze),
-              ),
+            // Two buttons needed to "solve" and "clear" the system
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Solving the equation
+                ElevatedButton(
+                  key: const Key('ComplexAnalyze-button-analyze'),
+                  onPressed: complexAnalyze,
+                  child: Text(context.l10n.analyze),
+                ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+                // Some spacing
+                const SizedBox(width: 30),
 
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('ComplexAnalyze-button-clean'),
-                onPressed: cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
+                // Cleaning the inputs
+                ElevatedButton(
+                  key: const Key('ComplexAnalyze-button-clean'),
+                  onPressed: cleanInput,
+                  child: Text(context.l10n.clean),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

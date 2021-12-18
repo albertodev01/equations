@@ -4,7 +4,7 @@ import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.
 
 /// Events for the [NonlinearBloc] bloc.
 abstract class NonlinearEvent extends Equatable {
-  /// The maximum number of iterations possible.
+  /// The maximum number of iterations.
   final int maxIterations;
 
   /// The precision of the algorithm.
@@ -26,7 +26,7 @@ abstract class NonlinearEvent extends Equatable {
 /// Event fired when the bloc has to solve an equation using a root finding
 /// algorithm that requires a single starting point.
 class SinglePointMethod extends NonlinearEvent {
-  /// The real function `f(x)`
+  /// The real function `f(x)`.
   final String function;
 
   /// The 'raw' string representing the initial guess, which may be a fraction
@@ -71,7 +71,7 @@ class SinglePointMethod extends NonlinearEvent {
 /// Event fired when the bloc has to solve an equation using a root finding
 /// algorithm that brackets the root.
 class BracketingMethod extends NonlinearEvent {
-  /// The real function `f(x)`
+  /// The real function `f(x)`.
   final String function;
 
   /// The 'raw' string representing the lower bound, which may be a fraction
@@ -123,8 +123,8 @@ class BracketingMethod extends NonlinearEvent {
   }
 }
 
-/// Event fired when the state of the bloc has to be "resetted". This is generally
-/// used to clean the UI and bring it to an initial state.
+/// Event fired when the state of the bloc has to be "reset". This is generally
+/// used to clean the UI to bring it to an initial state.
 class NonlinearClean extends NonlinearEvent {
   /// Instantiates a [NonlinearClean] event.
   const NonlinearClean()

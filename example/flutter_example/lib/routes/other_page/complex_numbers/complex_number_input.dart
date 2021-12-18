@@ -28,8 +28,7 @@ class ComplexNumberInput extends StatefulWidget {
   State<ComplexNumberInput> createState() => _ComplexNumberInputState();
 }
 
-class _ComplexNumberInputState extends State<ComplexNumberInput>
-    with AutomaticKeepAliveClientMixin {
+class _ComplexNumberInputState extends State<ComplexNumberInput> {
   String? _validationLogic(String? value) {
     if (value != null) {
       if (!value.isNumericalExpression) {
@@ -38,6 +37,8 @@ class _ComplexNumberInputState extends State<ComplexNumberInput>
     }
   }
 
+  /// The decoration of the [TextFormField]s needed to receive the real and
+  /// imaginary part.
   InputDecoration get decoration {
     return const InputDecoration(
       border: OutlineInputBorder(
@@ -53,8 +54,6 @@ class _ComplexNumberInputState extends State<ComplexNumberInput>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -112,7 +111,4 @@ class _ComplexNumberInputState extends State<ComplexNumberInput>
       ],
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
-import 'package:equations_solver/blocs/integral_solver/models/integral_types.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

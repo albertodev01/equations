@@ -49,6 +49,7 @@ void main() {
       when(() => dropdownCubit.state).thenReturn('LU');
 
       await tester.pumpWidget(MockWrapper(
+        dropdownInitial: SystemDropdownItems.lu.asString(),
         child: widgetWithMocks,
       ));
 
@@ -127,11 +128,11 @@ void main() {
         final widget = find.byType(SystemDataInput);
         final state = tester.state<SystemDataInputState>(widget);
 
-        state.matrixControllers[0].text = '1';
+        state.matrixControllers.first.text = '1';
         state.matrixControllers[1].text = '2';
         state.matrixControllers[2].text = '3';
         state.matrixControllers[3].text = '4';
-        state.vectorControllers[0].text = '7';
+        state.vectorControllers.first.text = '7';
         state.vectorControllers[1].text = '8';
 
         expect(bloc.state, equals(const SystemNone()));
@@ -175,11 +176,11 @@ void main() {
         final widget = find.byType(SystemDataInput);
         final state = tester.state<SystemDataInputState>(widget);
 
-        state.matrixControllers[0].text = '1';
+        state.matrixControllers.first.text = '1';
         state.matrixControllers[1].text = '2';
         state.matrixControllers[2].text = '3';
         state.matrixControllers[3].text = '4';
-        state.vectorControllers[0].text = '7';
+        state.vectorControllers.first.text = '7';
         state.vectorControllers[1].text = '8';
 
         expect(bloc.state, equals(const SystemNone()));
@@ -223,11 +224,11 @@ void main() {
         final widget = find.byType(SystemDataInput);
         final state = tester.state<SystemDataInputState>(widget);
 
-        state.matrixControllers[0].text = '1';
+        state.matrixControllers.first.text = '1';
         state.matrixControllers[1].text = '2';
         state.matrixControllers[2].text = '3';
         state.matrixControllers[3].text = '4';
-        state.vectorControllers[0].text = '7';
+        state.vectorControllers.first.text = '7';
         state.vectorControllers[1].text = '8';
         state.wSorController.text = '1';
 
@@ -272,11 +273,11 @@ void main() {
         final widget = find.byType(SystemDataInput);
         final state = tester.state<SystemDataInputState>(widget);
 
-        state.matrixControllers[0].text = '1';
+        state.matrixControllers.first.text = '1';
         state.matrixControllers[1].text = '2';
         state.matrixControllers[2].text = '';
         state.matrixControllers[3].text = '4';
-        state.vectorControllers[0].text = 'abc';
+        state.vectorControllers.first.text = 'abc';
         state.vectorControllers[1].text = '8';
 
         expect(bloc.state, equals(const SystemNone()));

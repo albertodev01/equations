@@ -27,28 +27,31 @@ class CardContainer extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 35),
       child: SizedBox(
         width: 260,
-        child: GestureDetector(
-          onTap: onTap,
-          child: Card(
-            elevation: 8,
-            shadowColor: Colors.blueAccent,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: image,
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 18,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Card(
+              elevation: 8,
+              shadowColor: Colors.blueAccent,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: image,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -24,10 +24,8 @@ class ComplexNumberAnalyzer extends Analyzer<AnalyzedComplexNumber> {
 
   @override
   AnalyzedComplexNumber process() {
-    // Building the matrix
     final real = valueParser(realPart);
     final imaginary = valueParser(imaginaryPart);
-
     final complex = Complex(real, imaginary);
 
     return AnalyzedComplexNumber(

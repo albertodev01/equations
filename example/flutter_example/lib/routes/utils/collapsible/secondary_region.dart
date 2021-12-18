@@ -32,7 +32,9 @@ class SecondaryRegion extends StatelessWidget {
         // The contents of the second region.
         Row(
           children: [
-            Expanded(child: child),
+            Expanded(
+              child: child,
+            ),
           ],
         ),
       ],

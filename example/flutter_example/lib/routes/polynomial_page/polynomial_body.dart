@@ -1,22 +1,24 @@
+import 'dart:math';
+
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
-import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains the solutions of the polynomial equation and a chart
-/// which plots the function.
+/// to plot the function.
 ///
 /// This widget is responsive: contents may be laid out on a single column or
-/// on two columns according with the available width.
+/// on two columns according with the available space.
 class PolynomialBody extends StatelessWidget {
   /// Creates a [PolynomialBody] widget.
   const PolynomialBody({Key? key}) : super(key: key);
@@ -79,7 +81,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= 950) {
+      if (size.maxWidth <= doubleColumnPageBreakpoint) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
           key: const Key('SingleChildScrollView-mobile-responsive'),
@@ -89,7 +91,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
               const PolynomialDataInput(),
               const PolynomialResults(),
               const Padding(
-                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 50,
+                ),
                 child: _PolynomialPlot(),
               ),
             ],
@@ -97,7 +101,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
         );
       }
 
-      // For wider screens - plot on the right and results on the right
+      // For wider screens - plot on the right and results on the left
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -113,6 +117,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                     pageTitleWidget,
                     const PolynomialDataInput(),
                     const PolynomialResults(),
+                    const SizedBox(
+                      height: 40,
+                    ),
                   ],
                 ),
               ),
@@ -153,20 +160,43 @@ class _PolynomialPlot extends StatelessWidget {
             child: Column(
               children: [
                 // Title
-                SectionTitle(
-                  pageTitle: context.l10n.chart,
-                  icon: const PlotIcon(),
-                ),
+                const _PlotTitle(),
 
                 // The actual plot
-                PlotWidget(
-                  plotMode: plotMode,
+                LayoutBuilder(
+                  builder: (context, dimensions) {
+                    final width = min<double>(
+                      dimensions.maxWidth,
+                      maxWidthPlot,
+                    );
+
+                    return SizedBox(
+                      width: width,
+                      child: PlotWidget(
+                        plotMode: plotMode,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+/// A wrapper of [PageTitle] placed above a [PlotWidget].
+class _PlotTitle extends StatelessWidget {
+  /// Creates a [_PlotTitle] widget.
+  const _PlotTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageTitle(
+      pageTitle: context.l10n.chart,
+      pageLogo: const PlotIcon(),
     );
   }
 }

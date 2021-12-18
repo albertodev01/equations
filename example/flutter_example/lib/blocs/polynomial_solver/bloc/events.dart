@@ -6,13 +6,15 @@ abstract class PolynomialEvent extends Equatable {
   /// The coefficients of the polynomial.
   final List<String> coefficients;
 
-  /// Initializes a [PolynomialEvent].
+  /// Initializes a [PolynomialEvent] instance.
   const PolynomialEvent({
     this.coefficients = const [],
   });
 
   @override
-  List<Object?> get props => [coefficients];
+  List<Object?> get props => [
+        coefficients,
+      ];
 }
 
 /// Event fired when there's a polynomial equation to be solved.
