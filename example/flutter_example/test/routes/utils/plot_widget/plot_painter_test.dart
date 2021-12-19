@@ -157,7 +157,7 @@ void main() {
           'Polynomial - color right range',
           _buildPolynomialPainter(
             colorArea: ColorArea(
-              color: Colors.lightGreen.withAlpha(80),
+              color: Colors.lime.withAlpha(80),
               startPoint: -5,
               endPoint: 3.5,
             ),

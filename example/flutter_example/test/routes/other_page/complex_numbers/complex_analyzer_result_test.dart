@@ -14,12 +14,22 @@ import '../../mock_wrapper.dart';
 
 void main() {
   late final OtherBloc bloc;
+  late final AnalyzedComplexNumber mockResult;
 
   setUpAll(() {
     registerFallbackValue(MockOtherEvent());
     registerFallbackValue(MockOtherState());
 
     bloc = MockOtherBloc();
+
+    mockResult = const AnalyzedComplexNumber(
+      abs: 1,
+      phase: 1,
+      conjugate: Complex.zero(),
+      reciprocal: Complex.zero(),
+      sqrt: Complex.zero(),
+      polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
+    );
   });
 
   group("Testing the 'ComplexNumberAnalyzerResult' widget", () {
@@ -53,16 +63,53 @@ void main() {
     );
 
     testWidgets(
+      'Making sure that the widget is responsive - small screens test',
+      (tester) async {
+        when(() => bloc.state).thenReturn(mockResult);
+
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<OtherBloc>.value(
+            value: bloc,
+            child: const SingleChildScrollView(
+              child: ComplexNumberAnalyzerResult(),
+            ),
+          ),
+        ));
+
+        expect(
+          find.byType(Wrap),
+          findsNothing,
+        );
+      },
+    );
+
+    testWidgets(
+      'Making sure that the widget is responsive - large screens test',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(2000, 2000));
+
+        when(() => bloc.state).thenReturn(mockResult);
+
+        await tester.pumpWidget(MockWrapper(
+          child: BlocProvider<OtherBloc>.value(
+            value: bloc,
+            child: const SingleChildScrollView(
+              child: ComplexNumberAnalyzerResult(),
+            ),
+          ),
+        ));
+
+        expect(
+          find.byType(Wrap),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
       'Making sure that analysis results can correctly be displayed',
       (tester) async {
-        when(() => bloc.state).thenReturn(const AnalyzedComplexNumber(
-          abs: 1,
-          phase: 1,
-          conjugate: Complex.zero(),
-          reciprocal: Complex.zero(),
-          sqrt: Complex.zero(),
-          polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
-        ));
+        when(() => bloc.state).thenReturn(mockResult);
 
         await tester.pumpWidget(MockWrapper(
           child: BlocProvider<OtherBloc>.value(
@@ -95,14 +142,7 @@ void main() {
         ..addScenario(
           'Results',
           Builder(builder: (context) {
-            when(() => bloc.state).thenReturn(const AnalyzedComplexNumber(
-              abs: 1,
-              phase: 1,
-              conjugate: Complex.zero(),
-              reciprocal: Complex.zero(),
-              sqrt: Complex.zero(),
-              polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
-            ));
+            when(() => bloc.state).thenReturn(mockResult);
 
             return BlocProvider<OtherBloc>.value(
               value: bloc,

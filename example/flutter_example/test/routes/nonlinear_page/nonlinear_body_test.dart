@@ -96,59 +96,61 @@ void main() {
       },
     );
 
-    testWidgets('Making sure that single point equations works',
-        (tester) async {
-      when(() => dropdownCubit.state)
-          .thenReturn(NonlinearDropdownItems.newton.asString());
+    testWidgets(
+      'Making sure that single point equations works',
+      (tester) async {
+        when(() => dropdownCubit.state)
+            .thenReturn(NonlinearDropdownItems.newton.asString());
 
-      final bloc = NonlinearBloc(NonlinearType.singlePoint);
+        final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-            ),
-            BlocProvider<DropdownCubit>.value(
-              value: dropdownCubit,
-            ),
-            BlocProvider<PrecisionSliderCubit>(
-              create: (_) => PrecisionSliderCubit(
-                minValue: 1,
-                maxValue: 10,
+        await tester.pumpWidget(MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>.value(
+                value: bloc,
+              ),
+              BlocProvider<DropdownCubit>.value(
+                value: dropdownCubit,
+              ),
+              BlocProvider<PrecisionSliderCubit>(
+                create: (_) => PrecisionSliderCubit(
+                  minValue: 1,
+                  maxValue: 10,
+                ),
+              ),
+            ],
+            child: Scaffold(
+              body: BlocProvider<NonlinearBloc>.value(
+                value: bloc,
+                child: const NonlinearBody(),
               ),
             ),
-          ],
-          child: Scaffold(
-            body: BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-              child: const NonlinearBody(),
-            ),
           ),
-        ),
-      ));
+        ));
 
-      final equationInput = find.byKey(const Key('EquationInput-function'));
-      final paramInput = find.byKey(const Key('EquationInput-first-param'));
-      final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
+        final equationInput = find.byKey(const Key('EquationInput-function'));
+        final paramInput = find.byKey(const Key('EquationInput-first-param'));
+        final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
 
-      // Filling the forms
-      await tester.enterText(equationInput, 'x-3');
-      await tester.enterText(paramInput, '3');
+        // Filling the forms
+        await tester.enterText(equationInput, 'x-3');
+        await tester.enterText(paramInput, '3');
 
-      // Making sure that there are no results
-      expect(bloc.state, isA<NonlinearNone>());
-      expect(find.byType(NoResults), findsOneWidget);
+        // Making sure that there are no results
+        expect(bloc.state, isA<NonlinearNone>());
+        expect(find.byType(NoResults), findsOneWidget);
 
-      // Solving the equation
-      await tester.tap(solveButton);
-      await tester.pumpAndSettle();
+        // Solving the equation
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
 
-      // Solutions on the UI!
-      expect(bloc.state, isA<NonlinearGuesses>());
-      expect(find.byType(NoResults), findsNothing);
-      expect(find.byType(RealResultCard), findsNWidgets(3));
-    });
+        // Solutions on the UI!
+        expect(bloc.state, isA<NonlinearGuesses>());
+        expect(find.byType(NoResults), findsNothing);
+        expect(find.byType(RealResultCard), findsNWidgets(3));
+      },
+    );
 
     testWidgets('Making sure that bracketing equations works', (tester) async {
       when(() => dropdownCubit.state)
