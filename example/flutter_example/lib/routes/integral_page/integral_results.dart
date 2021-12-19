@@ -1,7 +1,7 @@
 import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
-import 'package:equations_solver/routes/utils/real_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
@@ -33,14 +33,10 @@ class IntegralResultsWidget extends StatelessWidget {
   }
 }
 
+/// The numerical value produced by the integral evaluation.
 class _IntegralSolutions extends StatelessWidget {
+  /// Creates an [_IntegralSolutions] widget.
   const _IntegralSolutions();
-
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [IntegralResult] or [IntegralNone].
-  bool buildCondition(IntegralState previous, IntegralState current) =>
-      (previous != current) && (current is! IntegralError);
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +51,9 @@ class _IntegralSolutions extends StatelessWidget {
           );
         }
       },
-      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is IntegralResult) {
           return RealResultCard(
-            leading: 'x0: ',
             value: state.result,
           );
         }

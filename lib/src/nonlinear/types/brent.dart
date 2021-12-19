@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/nonlinear/nonlinear.dart';
 
 /// Implements Brent's method to find the roots of a given equation.
 ///
@@ -11,10 +10,10 @@ import 'package:equations/src/nonlinear/nonlinear.dart';
 ///   - The root must be inside the [a, b] interval. For this reason, the method
 ///   will fail if `f(a) * f(b) >= 0`.
 class Brent extends NonLinear {
-  /// The starting point of the interval
+  /// The starting point of the interval.
   final double a;
 
-  /// The ending point of the interval
+  /// The ending point of the interval.
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the

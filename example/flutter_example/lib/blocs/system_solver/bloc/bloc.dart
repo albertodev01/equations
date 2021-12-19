@@ -13,7 +13,7 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
   /// strings.
   final _parser = const ExpressionParser();
 
-  /// Initializes a [NonlinearBloc] with [NonlinearNone].
+  /// Initializes a [SystemBloc] with [SystemNone].
   SystemBloc(this.systemType) : super(const SystemNone()) {
     on<RowReductionMethod>(_onRowReduction);
     on<FactorizationMethod>(_onFactorization);

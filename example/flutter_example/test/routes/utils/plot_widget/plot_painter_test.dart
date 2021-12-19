@@ -2,7 +2,6 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -17,18 +16,23 @@ void main() {
         startPoint: 5,
         endPoint: 5,
       ),
+      List<double> coefficients = const [1, 2, -3, -2],
     }) {
       return ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        child: CustomPaint(
-          painter: PlotterPainter(
-            plotMode: PolynomialPlot(
-              algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        child: Card(
+          color: Colors.white,
+          clipBehavior: Clip.antiAlias,
+          child: CustomPaint(
+            painter: PlotterPainter(
+              plotMode: PolynomialPlot(
+                algebraic: Algebraic.fromReal(coefficients),
+              ),
+              range: range,
+              colorArea: colorArea,
             ),
-            range: range,
-            colorArea: colorArea,
+            size: const Size.square(200),
           ),
-          size: const Size.square(200),
         ),
       );
     }
@@ -72,12 +76,18 @@ void main() {
           _buildPolynomialPainter(
             range: 9,
           ),
+        )
+        ..addScenario(
+          'Polynomial - plot edges',
+          _buildPolynomialPainter(
+            coefficients: [1, 0],
+          ),
         );
 
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 900),
+        surfaceSize: const Size(250, 1100),
       );
 
       await screenMatchesGolden(tester, 'polynomial_plot_painter');
@@ -105,7 +115,7 @@ void main() {
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 900),
+        surfaceSize: const Size(230, 750),
       );
 
       await screenMatchesGolden(tester, 'nonlinear_plot_painter');
@@ -147,7 +157,7 @@ void main() {
           'Polynomial - color right range',
           _buildPolynomialPainter(
             colorArea: ColorArea(
-              color: Colors.lightGreen.withAlpha(80),
+              color: Colors.lime.withAlpha(80),
               startPoint: -5,
               endPoint: 3.5,
             ),
@@ -157,7 +167,7 @@ void main() {
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 1000),
+        surfaceSize: const Size(280, 1070),
       );
 
       await screenMatchesGolden(tester, 'polynomial_plot_painter_with_area');

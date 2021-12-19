@@ -1,13 +1,13 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
@@ -18,7 +18,7 @@ class PolynomialResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Separator line
+        // Some spacing
         const SizedBox(
           height: 80,
         ),
@@ -38,10 +38,7 @@ class PolynomialResults extends StatelessWidget {
 
         SectionTitle(
           pageTitle: context.l10n.discriminant,
-          icon: SvgPicture.asset(
-            'assets/matrix.svg',
-            height: 40,
-          ),
+          icon: const SystemsLogo(),
         ),
 
         // Showing the solutions of the polynomial
@@ -56,16 +53,9 @@ class PolynomialResults extends StatelessWidget {
 class _PolynomialSolutions extends StatelessWidget {
   const _PolynomialSolutions();
 
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
-  bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) && (current is! PolynomialError);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PolynomialBloc, PolynomialState>(
-      buildWhen: buildCondition,
       builder: (context, state) {
         if (state is PolynomialRoots) {
           return ListView.builder(
@@ -90,12 +80,6 @@ class PolynomialDiscriminant extends StatelessWidget {
   /// Creates a [PolynomialDiscriminant] widget.
   const PolynomialDiscriminant({Key? key}) : super(key: key);
 
-  /// Listen condition for the [BlocBuilder].
-  ///
-  /// Listens **only** when the state is [PolynomialRoots] or [PolynomialNone].
-  bool buildCondition(PolynomialState previous, PolynomialState current) =>
-      (previous != current) && (current is! PolynomialError);
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -106,17 +90,17 @@ class PolynomialDiscriminant extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(context.l10n.polynomial_error),
-                duration: const Duration(seconds: 2),
+                duration: const Duration(
+                  seconds: 2,
+                ),
               ),
             );
           }
         },
-        buildWhen: buildCondition,
         builder: (context, state) {
           if (state is PolynomialRoots) {
             return ComplexResultCard(
               value: state.discriminant,
-              leading: 'D(f) =',
             );
           }
 

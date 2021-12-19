@@ -1,9 +1,10 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// Dropdown button used to choose which numerical integration algorithm has to
-/// be used.
+/// Dropdown button needed to choose which numerical integration algorithm has
+/// to be used.
 class IntegralDropdownSelection extends StatefulWidget {
   /// Creates a [IntegralDropdownSelection] widget.
   const IntegralDropdownSelection({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class IntegralDropdownSelection extends StatefulWidget {
 /// The state of the [IntegralDropdownSelection] class.
 @visibleForTesting
 class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
-  /// The items of the dropdown.
+  /// The dropdown items.
   final dropdownItems = const [
     DropdownMenuItem<IntegralDropdownItems>(
       key: Key('Simpson-Dropdown'),
@@ -43,7 +44,7 @@ class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
-        width: 200,
+        width: integralDropdownWidth,
         child: BlocBuilder<DropdownCubit, String>(
           builder: (context, state) {
             return DropdownButtonFormField<IntegralDropdownItems>(

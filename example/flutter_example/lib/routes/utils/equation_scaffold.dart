@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/bottom_navigation_bar.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/rail_navigation.dart';
@@ -15,7 +16,8 @@ const _assertionError = 'There must be at least 1 navigation item.';
 /// up of two parts:
 ///
 ///  - an [AppBar] with no title and a dark/light theme switcher;
-///  - the body of the [Scaffold].
+///  - the body of the [Scaffold];
+///  - an optional [FloatingActionButton].
 ///
 /// This widget also contains a responsive navigation bar which can be either a
 /// [BottomNavigationBar] or a [NavigationRail] according with the screen's size.
@@ -81,7 +83,7 @@ class _EquationScaffoldState extends State<EquationScaffold>
         builder: (context, dimensions) => Scaffold(
           body: _ScaffoldContents(
             body: widget.body,
-            extraBackground: dimensions.maxWidth >= 1300,
+            extraBackground: dimensions.maxWidth >= extraBackgroundBreakpoint,
           ),
           floatingActionButton: widget.fab,
         ),
@@ -94,11 +96,11 @@ class _EquationScaffoldState extends State<EquationScaffold>
       create: (_) => NavigationCubit(),
       child: LayoutBuilder(
         builder: (context, dimensions) {
-          final hasExtraBackground = dimensions.maxWidth >= 1300;
+          final hasExtra = dimensions.maxWidth >= extraBackgroundBreakpoint;
 
           // If the dimension of the screen is "small" enough, a bottom navigation
           // bar fits better
-          if (dimensions.maxWidth <= 950) {
+          if (dimensions.maxWidth <= bottomNavigationBreakpoint) {
             return Scaffold(
               key: const Key('TabbedNavigationLayout-Scaffold'),
               body: _ScaffoldContents(
@@ -106,7 +108,7 @@ class _EquationScaffoldState extends State<EquationScaffold>
                   tabController: tabController,
                   navigationItems: widget.navigationItems,
                 ),
-                extraBackground: hasExtraBackground,
+                extraBackground: hasExtra,
               ),
               bottomNavigationBar: BottomNavigation(
                 navigationItems: widget.navigationItems,
@@ -122,7 +124,7 @@ class _EquationScaffoldState extends State<EquationScaffold>
                 tabController: tabController,
                 navigationItems: widget.navigationItems,
               ),
-              extraBackground: hasExtraBackground,
+              extraBackground: hasExtra,
             ),
             floatingActionButton: widget.fab,
           );
@@ -137,6 +139,9 @@ class _EquationScaffoldState extends State<EquationScaffold>
 ///
 ///   - A background widget that draws an SVG image as background,
 ///   - A foreground widget which is the actual content of the page.
+///
+/// If there is enough space in the horizontal axis, an additional background
+/// image is added.
 class _ScaffoldContents extends StatelessWidget {
   /// The body of the [Scaffold]
   final Widget body;

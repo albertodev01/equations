@@ -27,9 +27,10 @@ void main() {
       build: () => DropdownCubit(initialValue: '0'),
       act: (cubit) => cubit
         ..changeValue('1')
-        ..changeValue('2'),
-      expect: () => const ['1', '2'],
-      verify: (cubit) => cubit.state == '2',
+        ..changeValue('1')
+        ..changeValue('1'),
+      expect: () => const ['1'],
+      verify: (cubit) => cubit.state == '1',
     );
   });
 }

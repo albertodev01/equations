@@ -2,10 +2,13 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/complex_result_card.dart';
-import 'package:equations_solver/routes/system_page/utils/double_result_card.dart';
-import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
+import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/polynomial_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +39,7 @@ class MatrixAnalyzerResults extends StatelessWidget {
   }
 }
 
+/// Either prints nothing, a loading widget or the analysis results.
 class _SystemSolutions extends StatelessWidget {
   /// Creates a [_SystemSolutions] widget.
   const _SystemSolutions();
@@ -54,33 +58,48 @@ class _SystemSolutions extends StatelessWidget {
             characteristicPolynomial: state.characteristicPolynomial,
             eigenvalues: state.eigenvalues,
             determinant: state.determinant,
+            isSymmetric: state.isSymmetric,
+            isDiagonal: state.isDiagonal,
+            isIdentity: state.isIdentity,
           );
         }
 
         if (state is OtherLoading) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Loading indicator
-              const Padding(
-                padding: EdgeInsets.only(
-                  bottom: 20,
-                ),
-                child: CircularProgressIndicator(),
-              ),
-
-              // Waiting text
-              Text(context.l10n.wait_a_moment),
-            ],
-          );
+          return const _LoadingWidget();
         }
 
-        return const NoResults();
+        return const SizedBox.shrink();
       },
     );
   }
 }
 
+/// Displayed while the bloc is processing the matrix.
+class _LoadingWidget extends StatelessWidget {
+  /// Creates a [_LoadingWidget] widget.
+  const _LoadingWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Loading indicator
+        const Padding(
+          padding: EdgeInsets.only(
+            bottom: 20,
+          ),
+          child: CircularProgressIndicator(),
+        ),
+
+        // Waiting text
+        Text(context.l10n.wait_a_moment),
+      ],
+    );
+  }
+}
+
+/// The matrix analysis results.
 class _Results extends StatelessWidget {
   /// The transposed matrix.
   final RealMatrix transpose;
@@ -106,6 +125,15 @@ class _Results extends StatelessWidget {
   /// The determinant of the matrix.
   final double determinant;
 
+  /// Whether the matrix is diagonal or not.
+  final bool isDiagonal;
+
+  /// Whether the matrix is symmetric or not.
+  final bool isSymmetric;
+
+  /// Whether it's an identity matrix or not.
+  final bool isIdentity;
+
   /// Creates a [_Results] widget.
   const _Results({
     required this.transpose,
@@ -116,96 +144,179 @@ class _Results extends StatelessWidget {
     required this.characteristicPolynomial,
     required this.eigenvalues,
     required this.determinant,
+    required this.isDiagonal,
+    required this.isSymmetric,
+    required this.isIdentity,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Properties
-        SectionTitle(
-          pageTitle: context.l10n.properties,
-          icon: const SquareMatrix(),
-        ),
+    return LayoutBuilder(
+      builder: (context, dimensions) {
+        // Numerical properties
+        final propertiesWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Properties
+            SectionTitle(
+              pageTitle: context.l10n.properties,
+              icon: const Atoms(),
+            ),
 
-        DoubleResultCard(
-          value: rank * 1.0,
-          leading: '${context.l10n.rank}: ',
-        ),
+            RealResultCard(
+              value: rank * 1.0,
+              leading: '${context.l10n.rank}: ',
+            ),
 
-        DoubleResultCard(
-          value: trace,
-          leading: '${context.l10n.trace}: ',
-        ),
+            RealResultCard(
+              value: trace,
+              leading: '${context.l10n.trace}: ',
+            ),
 
-        DoubleResultCard(
-          value: determinant,
-          leading: '${context.l10n.determinant}: ',
-        ),
+            RealResultCard(
+              value: determinant,
+              leading: '${context.l10n.determinant}: ',
+            ),
 
-        // Eigenvalues
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 50,
-          ),
-          child: SectionTitle(
-            pageTitle: context.l10n.eigenvalues,
-            icon: const SquareMatrix(),
-          ),
-        ),
+            BoolResultCard(
+              value: isDiagonal,
+              leading: '${context.l10n.diagonal}: ',
+            ),
 
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: eigenvalues.length,
-          itemBuilder: (context, index) => ComplexResultCard(
-            value: eigenvalues[index],
-            leading: 'x$index = ',
-          ),
-        ),
+            BoolResultCard(
+              value: isSymmetric,
+              leading: '${context.l10n.symmetric}: ',
+            ),
 
-        // Transpose
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 50,
-          ),
-          child: SectionTitle(
-            pageTitle: context.l10n.matrices,
-            icon: const SquareMatrix(),
-          ),
-        ),
+            BoolResultCard(
+              value: isIdentity,
+              leading: '${context.l10n.identity}: ',
+            ),
+          ],
+        );
 
-        // Spacing
-        const SizedBox(
-          height: 20,
-        ),
+        // Eigenvalues and characteristic polynomial
+        final eigenvaluesWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SectionTitle(
+              pageTitle: context.l10n.characteristicPolynomial,
+              icon: const PolynomialLogo(),
+            ),
+            PolynomialResultCard(
+              algebraic: characteristicPolynomial,
+            ),
 
-        MatrixOutput(
-          matrix: transpose,
-          description: context.l10n.transpose,
-        ),
+            // Spacing
+            const SizedBox(
+              height: 20,
+            ),
 
-        // Spacing
-        const SizedBox(
-          height: 20,
-        ),
+            SectionTitle(
+              pageTitle: context.l10n.eigenvalues,
+              icon: const EquationSolution(),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: eigenvalues.length,
+              itemBuilder: (context, index) => ComplexResultCard(
+                value: eigenvalues[index],
+              ),
+            ),
+          ],
+        );
 
-        MatrixOutput(
-          matrix: inverse,
-          description: context.l10n.inverse,
-        ),
+        // Operations on the matrix
+        final matricesWidget = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SectionTitle(
+              pageTitle: context.l10n.matrices,
+              icon: const SquareMatrix(),
+            ),
 
-        // Spacing
-        const SizedBox(
-          height: 20,
-        ),
+            // Spacing
+            const SizedBox(
+              height: 20,
+            ),
 
-        MatrixOutput(
-          matrix: cofactorMatrix,
-          description: context.l10n.cofactor,
-        ),
-      ],
+            MatrixOutput(
+              matrix: transpose,
+              description: context.l10n.transpose,
+            ),
+
+            // Spacing
+            const SizedBox(
+              height: 20,
+            ),
+
+            MatrixOutput(
+              matrix: inverse,
+              description: context.l10n.inverse,
+            ),
+
+            // Spacing
+            const SizedBox(
+              height: 20,
+            ),
+
+            MatrixOutput(
+              matrix: cofactorMatrix,
+              description: context.l10n.cofactor,
+            ),
+          ],
+        );
+
+        // For mobile devices - all in a column
+        if (dimensions.maxWidth <= matricesPageDoubleColumn) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Numerical properties
+              propertiesWidget,
+
+              // Some spacing
+              const SizedBox(
+                height: 80,
+              ),
+
+              // Char. polynomial & eigenvalues
+              eigenvaluesWidget,
+
+              // Spacing
+              const SizedBox(
+                height: 80,
+              ),
+
+              // Inverse, transpose, cofactors...
+              matricesWidget,
+            ],
+          );
+        }
+
+        // For wider screens - splitting numerical results in two columns
+        return Wrap(
+          spacing: 80,
+          runSpacing: 40,
+          alignment: WrapAlignment.spaceAround,
+          runAlignment: WrapAlignment.center,
+          children: [
+            SizedBox(
+              width: matricesPageColumnWidth,
+              child: propertiesWidget,
+            ),
+            SizedBox(
+              width: matricesPageColumnWidth,
+              child: eigenvaluesWidget,
+            ),
+            SizedBox(
+              width: matricesPageColumnWidth,
+              child: matricesWidget,
+            ),
+          ],
+        );
+      },
     );
   }
 }

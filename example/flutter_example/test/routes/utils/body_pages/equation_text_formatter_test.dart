@@ -22,8 +22,8 @@ void main() {
 
     testGoldens('EquationTextFormatter', (tester) async {
       const widget = SizedBox(
-        width: 300,
-        height: 150,
+        width: 200,
+        height: 100,
         child: Scaffold(
           body: EquationTextFormatter(
             equation: 'x^2 - 5',
@@ -36,7 +36,7 @@ void main() {
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 300),
+        surfaceSize: const Size(200, 170),
       );
       await screenMatchesGolden(tester, 'equation_text_formatter');
     });

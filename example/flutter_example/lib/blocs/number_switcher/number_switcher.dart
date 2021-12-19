@@ -20,7 +20,10 @@ class NumberSwitcherCubit extends Cubit<int> {
   /// Decreases the value by 1.
   void decrease() => _changeValue(state - 1);
 
-  /// Updates the currently selected item of the dropdown.
+  /// Brings the cubit to its initial state, which matches the [min] value.
+  void reset() => emit(min);
+
+  /// Updates the current value **only** when `min <= newValue <= max`.
   void _changeValue(int newValue) {
     if ((newValue >= min) && (newValue <= max)) {
       emit(newValue);

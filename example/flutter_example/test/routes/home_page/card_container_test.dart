@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/home_page/card_containers.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -41,18 +42,28 @@ void main() {
     });
 
     testGoldens('CardContainer', (tester) async {
-      final widget = CardContainer(
-        title: 'Title',
-        image: const SizedBox(),
-        onTap: () {},
-      );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
+      final builder = GoldenBuilder.column()
+        ..addScenario(
+          'No image',
+          CardContainer(
+            title: 'Title',
+            image: const SizedBox(),
+            onTap: () {},
+          ),
+        )
+        ..addScenario(
+          'With image',
+          CardContainer(
+            title: 'Title',
+            image: const Atoms(),
+            onTap: () {},
+          ),
+        );
 
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(800, 800),
+        surfaceSize: const Size(300, 290),
       );
       await screenMatchesGolden(tester, 'card_container');
     });

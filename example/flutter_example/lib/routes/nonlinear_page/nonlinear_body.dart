@@ -1,78 +1,44 @@
-import 'package:equations/equations.dart' as equations;
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'dart:math';
+
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/slider/slider.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
-import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
-import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// This widget contains the solutions of the nonlinear equation and a chart
 /// which plots the function.
 ///
 /// This widget is responsive: contents may be laid out on a single column or
 /// on two columns according with the available width.
-class NonlinearBody extends StatefulWidget {
-  /// Creates a [PolynomialBody] widget.
+class NonlinearBody extends StatelessWidget {
+  /// Creates a [NonlinearBody] widget.
   const NonlinearBody({Key? key}) : super(key: key);
 
   @override
-  _NonlinearBodyState createState() => _NonlinearBodyState();
-}
-
-class _NonlinearBodyState extends State<NonlinearBody> {
-  /// Manually caching the initial value.
-  late final initialValue = _initialValue();
-
-  String _initialValue() {
-    final type = context.read<NonlinearBloc>().nonlinearType;
-
-    return type == NonlinearType.singlePoint
-        ? NonlinearDropdownItems.newton.asString()
-        : NonlinearDropdownItems.bisection.asString();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<SliderCubit>(
-          create: (_) => SliderCubit(
-            minValue: 2,
-            maxValue: 15,
-            current: 8,
-          ),
+    return Stack(
+      children: const [
+        // Scrollable contents of the page
+        Positioned.fill(
+          child: _ResponsiveBody(),
         ),
-        BlocProvider<DropdownCubit>(
-          create: (_) => DropdownCubit(
-            initialValue: initialValue,
-          ),
+
+        // "Go back" button
+        Positioned(
+          top: 20,
+          left: 20,
+          child: GoBackButton(),
         ),
       ],
-      child: Stack(
-        children: const [
-          // Scrollable contents of the page
-          Positioned.fill(
-            child: _ResponsiveBody(),
-          ),
-
-          // "Go back" button
-          Positioned(
-            top: 20,
-            left: 20,
-            child: GoBackButton(),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -106,7 +72,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= 950) {
+      if (size.maxWidth <= doubleColumnPageBreakpoint) {
         // For mobile devices - all in a column
         return SingleChildScrollView(
           key: const Key('SingleChildScrollView-mobile-responsive'),
@@ -116,7 +82,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
               const NonlinearDataInput(),
               const NonlinearResults(),
               const Padding(
-                padding: EdgeInsets.fromLTRB(50, 60, 50, 0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 50,
+                ),
                 child: _NonlinearPlot(),
               ),
             ],
@@ -140,6 +108,9 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
                     pageTitleWidget,
                     const NonlinearDataInput(),
                     const NonlinearResults(),
+                    const SizedBox(
+                      height: 40,
+                    ),
                   ],
                 ),
               ),
@@ -159,15 +130,10 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 }
 
 /// Puts on the screen a widget that draws mathematical functions.
-class _NonlinearPlot extends StatefulWidget {
+class _NonlinearPlot extends StatelessWidget {
   /// Creates a [_NonlinearPlot] widget.
   const _NonlinearPlot();
 
-  @override
-  _NonlinearPlotState createState() => _NonlinearPlotState();
-}
-
-class _NonlinearPlotState extends State<_NonlinearPlot> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NonlinearBloc, NonlinearState>(
@@ -185,23 +151,43 @@ class _NonlinearPlotState extends State<_NonlinearPlot> {
             child: Column(
               children: [
                 // Title
-                SectionTitle(
-                  pageTitle: context.l10n.chart,
-                  icon: SvgPicture.asset(
-                    'assets/plot.svg',
-                    height: 40,
-                  ),
-                ),
+                const _PlotTitle(),
 
                 // The actual plot
-                PlotWidget<equations.NonLinear>(
-                  plotMode: plotMode,
+                LayoutBuilder(
+                  builder: (context, dimensions) {
+                    final width = min<double>(
+                      dimensions.maxWidth,
+                      maxWidthPlot,
+                    );
+
+                    return SizedBox(
+                      width: width,
+                      child: PlotWidget(
+                        plotMode: plotMode,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+/// A wrapper of [PageTitle] placed above a [PlotWidget].
+class _PlotTitle extends StatelessWidget {
+  /// Creates a [_PlotTitle] widget.
+  const _PlotTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageTitle(
+      pageTitle: context.l10n.chart,
+      pageLogo: const PlotIcon(),
     );
   }
 }

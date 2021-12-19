@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
-import 'package:equations/src/algebraic/utils/sylvester_matrix.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
 /// The Durand–Kerner method, also known as Weierstrass method, is a root

@@ -30,7 +30,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -64,6 +64,23 @@ void main() {
     );
 
     blocTest<SystemBloc, SystemState>(
+      'Making sure that the bloc state can be cleared/reset',
+      build: () => SystemBloc(SystemType.rowReduction),
+      act: (bloc) => bloc
+        ..add(
+          const RowReductionMethod(
+            matrix: ['1', '2', '6', '3'],
+            knownValues: ['4', '-1'],
+            size: 2,
+          ),
+        )
+        ..add(const SystemClean()),
+      verify: (bloc) {
+        expect(bloc.state, isA<SystemNone>());
+      },
+    );
+
+    blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using LU',
       build: () => SystemBloc(SystemType.factorization),
       act: (bloc) => bloc.add(const FactorizationMethod(
@@ -80,7 +97,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -104,7 +121,7 @@ void main() {
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
         expect(
-          solutions[0],
+          solutions.first,
           const MoreOrLessEquals(25 / 21, precision: 1.0e-5),
         );
         expect(
@@ -157,7 +174,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -180,7 +197,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );
@@ -204,7 +221,7 @@ void main() {
 
         // Checking solutions
         final solutions = (bloc.state as SystemGuesses).solution;
-        expect(solutions[0], const MoreOrLessEquals(3, precision: 1.0e-1));
+        expect(solutions.first, const MoreOrLessEquals(3, precision: 1.0e-1));
         expect(solutions[1], const MoreOrLessEquals(1, precision: 1.0e-1));
       },
     );

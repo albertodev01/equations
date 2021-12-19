@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,7 +74,8 @@ class _JacobiVectorInputState extends State<JacobiVectorInput> {
     return Center(
       child: BlocBuilder<DropdownCubit, String>(
         builder: (context, state) {
-          if (state.toLowerCase() == 'jacobi') {
+          if (state.toLowerCase() ==
+              SystemDropdownItems.jacobi.asString().toLowerCase()) {
             return inputWidget;
           }
 

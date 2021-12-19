@@ -1,5 +1,5 @@
 import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/blocs/slider/slider.dart';
+import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +25,10 @@ void main() {
       BlocProvider<PolynomialBloc>.value(
         value: polynomialBloc,
       ),
-      BlocProvider<SliderCubit>(
-        create: (_) => SliderCubit(
+      BlocProvider<PrecisionSliderCubit>(
+        create: (_) => PrecisionSliderCubit(
           minValue: 1,
           maxValue: 10,
-          current: 5,
         ),
       ),
     ];

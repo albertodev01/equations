@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/system.dart';
 
 /// Implementation of the "Gaussian elimination" algorithm, also known as "row
 /// reduction", for solving a system of linear equations.

@@ -152,6 +152,10 @@ void main() {
         isA<HalfRightAngle>(),
       );
       expect(
+        Atoms(),
+        isA<Atoms>(),
+      );
+      expect(
         PlotIcon(),
         isA<PlotIcon>(),
       );

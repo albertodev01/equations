@@ -24,8 +24,17 @@ void main() {
       ' it is correctly initialized',
       (tester) async {
         await tester.pumpWidget(const app_main.EquationsApp());
-
         expect(find.byType(MaterialApp), findsOneWidget);
+
+        // Checking MaterialApp's properties
+        final materialApp = tester.firstWidget<MaterialApp>(
+          find.byType(MaterialApp),
+        );
+
+        expect(materialApp.supportedLocales.length, equals(3));
+        expect(materialApp.onGenerateRoute, isNotNull);
+        expect(materialApp.onGenerateTitle, isNotNull);
+        expect(materialApp.debugShowCheckedModeBanner, isFalse);
       },
     );
   });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// The vectorial logo of the app.
 class AppLogo extends StatelessWidget {
@@ -9,10 +10,9 @@ class AppLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 25),
-      child: Image.asset(
-        'assets/logo.png',
-        width: 285,
-        height: 95,
+      child: SvgPicture.asset(
+        'assets/logo.svg',
+        height: 90,
       ),
     );
   }

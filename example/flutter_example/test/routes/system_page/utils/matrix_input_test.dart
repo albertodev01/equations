@@ -29,6 +29,15 @@ void main() {
     testGoldens('MatrixInput', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
+          'MatrixInput - 1x1',
+          MatrixInput(
+            matrixControllers: [
+              TextEditingController(text: '1'),
+            ],
+            matrixSize: 1,
+          ),
+        )
+        ..addScenario(
           'MatrixInput - 2x2',
           MatrixInput(
             matrixControllers: [
@@ -63,7 +72,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(300, 400),
+        surfaceSize: const Size(300, 530),
       );
       await screenMatchesGolden(tester, 'matrix_input');
     });
