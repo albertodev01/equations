@@ -15,7 +15,7 @@ void main() {
     // Entering data
     final input = find.byType(TextFormField);
 
-    for(var i = 0; i < inputs.length; ++i) {
+    for (var i = 0; i < inputs.length; ++i) {
       await tester.enterText(input.at(i), inputs[i]);
     }
     await tester.pumpAndSettle();
@@ -39,7 +39,8 @@ void main() {
   }
 
   group('Integration tests on the polynomial solver page', () {
-    testWidgets('Making sure that linear equations can be solved', (tester) async {
+    testWidgets('Making sure that linear equations can be solved',
+        (tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -54,7 +55,8 @@ void main() {
       );
     });
 
-    testWidgets('Making sure that quadratic equations can be solved', (tester) async {
+    testWidgets('Making sure that quadratic equations can be solved',
+        (tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -72,7 +74,8 @@ void main() {
       );
     });
 
-    testWidgets('Making sure that cubic equations can be solved', (tester) async {
+    testWidgets('Making sure that cubic equations can be solved',
+        (tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -90,7 +93,8 @@ void main() {
       );
     });
 
-    testWidgets('Making sure that quartic equations can be solved', (tester) async {
+    testWidgets('Making sure that quartic equations can be solved',
+        (tester) async {
       app.main();
       await tester.pumpAndSettle();
 
