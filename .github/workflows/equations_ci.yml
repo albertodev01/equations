@@ -61,7 +61,7 @@ jobs:
         run: flutter format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings && flutter run dart_code_metrics:metrics analyze lib test
+        run: flutter analyze --fatal-infos --fatal-warnings && flutter pub run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
         run: flutter test --coverage
