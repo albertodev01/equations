@@ -197,6 +197,20 @@ void main() {
             ],
             child: const MatrixAnalyzerInput(),
           ),
+        )
+        ..addScenario(
+          '5x5',
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<NumberSwitcherCubit>(
+                create: (_) => NumberSwitcherCubit(min: 5, max: 6),
+              ),
+              BlocProvider<OtherBloc>(
+                create: (_) => OtherBloc(),
+              ),
+            ],
+            child: const MatrixAnalyzerInput(),
+          ),
         );
 
       await tester.pumpWidgetBuilder(
@@ -204,7 +218,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(500, 1700),
+        surfaceSize: const Size(700, 2300),
       );
       await screenMatchesGolden(tester, 'matrix_analyze_input');
     });

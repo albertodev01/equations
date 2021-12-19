@@ -63,7 +63,7 @@ void main() {
       expect(find.text(thirdDegree), findsNWidgets(2));
       expect(find.text(fourthDegree), findsOneWidget);
 
-      // Third degree page
+      // Fourth degree page
       await tester.tap(find.text(fourthDegree));
       await tester.pumpAndSettle();
       expect(find.text(firstDegree), findsOneWidget);

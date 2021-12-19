@@ -26,6 +26,15 @@ void main() {
     testGoldens('VectorInput', (tester) async {
       final builder = GoldenBuilder.column()
         ..addScenario(
+          'VectorInput - 1x1',
+          VectorInput(
+            vectorControllers: [
+              TextEditingController(text: '1'),
+            ],
+            vectorSize: 1,
+          ),
+        )
+        ..addScenario(
           'VectorInput - 2x2',
           VectorInput(
             vectorControllers: [
@@ -52,7 +61,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(300, 400),
+        surfaceSize: const Size(300, 500),
       );
       await screenMatchesGolden(tester, 'vector_input');
     });

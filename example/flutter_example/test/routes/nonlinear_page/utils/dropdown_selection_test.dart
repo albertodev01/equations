@@ -75,7 +75,9 @@ void main() {
                 create: (_) => NonlinearBloc(NonlinearType.singlePoint),
               ),
               BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(initialValue: 'Newton'),
+                create: (_) => DropdownCubit(
+                  initialValue: NonlinearDropdownItems.newton.asString(),
+                ),
               ),
             ],
             child: const Scaffold(
@@ -115,7 +117,9 @@ void main() {
                 create: (_) => NonlinearBloc(NonlinearType.bracketing),
               ),
               BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(initialValue: 'Bisection'),
+                create: (_) => DropdownCubit(
+                  initialValue: NonlinearDropdownItems.bisection.asString(),
+                ),
               ),
             ],
             child: const Scaffold(
@@ -151,7 +155,9 @@ void main() {
     testWidgets(
       'Making sure that dropdown values can be changed',
       (tester) async {
-        final cubit = DropdownCubit(initialValue: 'Newton');
+        final cubit = DropdownCubit(
+          initialValue: NonlinearDropdownItems.newton.asString(),
+        );
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(
             providers: [
@@ -189,7 +195,9 @@ void main() {
                 create: (_) => NonlinearBloc(NonlinearType.bracketing),
               ),
               BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(initialValue: 'Bisection'),
+                create: (_) => DropdownCubit(
+                  initialValue: NonlinearDropdownItems.bisection.asString(),
+                ),
               ),
             ],
             child: const NonlinearDropdownSelection(),

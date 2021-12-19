@@ -40,7 +40,8 @@ void main() {
       "Making sure that with a 'singlePoint' configuration type only "
       'has 2 input fields appear on the screen',
       (tester) async {
-        when(() => dropdownCubit.state).thenReturn('Newton');
+        when(() => dropdownCubit.state)
+            .thenReturn(NonlinearDropdownItems.newton.asString());
         when(() => nonlinearBloc.nonlinearType)
             .thenReturn(NonlinearType.singlePoint);
 
@@ -65,7 +66,8 @@ void main() {
       "Making sure that with a 'bracketing' configuration type only "
       'has 3 input fields appear on the screen',
       (tester) async {
-        when(() => dropdownCubit.state).thenReturn('Secant');
+        when(() => dropdownCubit.state)
+            .thenReturn(NonlinearDropdownItems.secant.asString());
         when(() => nonlinearBloc.nonlinearType)
             .thenReturn(NonlinearType.bracketing);
 
@@ -90,7 +92,8 @@ void main() {
       'Making sure that when trying to solve an equation, if at '
       'least one of the inputs is wrong, a snackbar appears',
       (tester) async {
-        when(() => dropdownCubit.state).thenReturn('Secant');
+        when(() => dropdownCubit.state)
+            .thenReturn(NonlinearDropdownItems.secant.asString());
         when(() => nonlinearBloc.nonlinearType)
             .thenReturn(NonlinearType.bracketing);
 
@@ -117,7 +120,8 @@ void main() {
     testWidgets(
       'Making sure that single point equations can be solved',
       (tester) async {
-        when(() => dropdownCubit.state).thenReturn('Newton');
+        when(() => dropdownCubit.state)
+            .thenReturn(NonlinearDropdownItems.newton.asString());
         final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
         await tester.pumpWidget(MockWrapper(
@@ -155,7 +159,8 @@ void main() {
     testWidgets(
       'Making sure that bracketing equations can be solved',
       (tester) async {
-        when(() => dropdownCubit.state).thenReturn('Bisection');
+        when(() => dropdownCubit.state)
+            .thenReturn(NonlinearDropdownItems.bisection.asString());
         final bloc = NonlinearBloc(NonlinearType.bracketing);
 
         await tester.pumpWidget(MockWrapper(
@@ -193,7 +198,8 @@ void main() {
     );
 
     testWidgets('Making sure that textfields can be cleared', (tester) async {
-      when(() => dropdownCubit.state).thenReturn('Newton');
+      when(() => dropdownCubit.state)
+          .thenReturn(NonlinearDropdownItems.newton.asString());
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
       await tester.pumpWidget(MockWrapper(
@@ -217,7 +223,8 @@ void main() {
     });
 
     testGoldens('NonlinearDataInput - Single point', (tester) async {
-      when(() => dropdownCubit.state).thenReturn('Newton');
+      when(() => dropdownCubit.state)
+          .thenReturn(NonlinearDropdownItems.newton.asString());
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
       final builder = GoldenBuilder.column()
@@ -247,7 +254,8 @@ void main() {
     });
 
     testGoldens('NonlinearDataInput - Bracketing', (tester) async {
-      when(() => dropdownCubit.state).thenReturn('Bisection');
+      when(() => dropdownCubit.state)
+          .thenReturn(NonlinearDropdownItems.bisection.asString());
       final bloc = NonlinearBloc(NonlinearType.bracketing);
 
       final builder = GoldenBuilder.column()

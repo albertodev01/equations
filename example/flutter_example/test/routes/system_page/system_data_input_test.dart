@@ -46,7 +46,8 @@ void main() {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
       when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      when(() => dropdownCubit.state)
+          .thenReturn(SystemDropdownItems.lu.asString());
 
       await tester.pumpWidget(MockWrapper(
         dropdownInitial: SystemDropdownItems.lu.asString(),
@@ -68,7 +69,8 @@ void main() {
       'text controllers and the bloc',
       (tester) async {
         when(() => numberSwitcherCubit.state).thenReturn(2);
-        when(() => dropdownCubit.state).thenReturn('LU');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.lu.asString());
 
         final bloc = SystemBloc(SystemType.factorization);
 
@@ -105,7 +107,8 @@ void main() {
       'system of equations with a row reduction method',
       (tester) async {
         when(() => numberSwitcherCubit.state).thenReturn(2);
-        when(() => dropdownCubit.state).thenReturn('LU');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.lu.asString());
 
         final bloc = SystemBloc(SystemType.rowReduction);
 
@@ -150,10 +153,11 @@ void main() {
 
     testWidgets(
       'Making sure that the "Solve" button actually solves the '
-      'system of equations with a factorization method',
+      'system of equations with a factorization method (LU)',
       (tester) async {
         when(() => numberSwitcherCubit.state).thenReturn(2);
-        when(() => dropdownCubit.state).thenReturn('LU');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.lu.asString());
 
         final bloc = SystemBloc(SystemType.factorization);
 
@@ -198,10 +202,60 @@ void main() {
 
     testWidgets(
       'Making sure that the "Solve" button actually solves the '
-      'system of equations with an iterative method',
+      'system of equations with a factorization method (Cholesky)',
       (tester) async {
         when(() => numberSwitcherCubit.state).thenReturn(2);
-        when(() => dropdownCubit.state).thenReturn('SOR');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.cholesky.asString());
+
+        final bloc = SystemBloc(SystemType.factorization);
+
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
+          ),
+        ));
+
+        // Filling the matrix with some data
+        final widget = find.byType(SystemDataInput);
+        final state = tester.state<SystemDataInputState>(widget);
+
+        state.matrixControllers.first.text = '4';
+        state.matrixControllers[1].text = '12';
+        state.matrixControllers[2].text = '12';
+        state.matrixControllers[3].text = '26';
+        state.vectorControllers.first.text = '4';
+        state.vectorControllers[1].text = '6';
+
+        expect(bloc.state, equals(const SystemNone()));
+
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
+
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
+
+        expect(bloc.state, isA<SystemGuesses>());
+      },
+    );
+
+    testWidgets(
+      'Making sure that the "Solve" button actually solves the '
+      'system of equations with an iterative method (SOR)',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.sor.asString());
 
         final bloc = SystemBloc(SystemType.iterative);
 
@@ -246,11 +300,63 @@ void main() {
     );
 
     testWidgets(
+      'Making sure that the "Solve" button actually solves the '
+      'system of equations with an iterative method (Jacobi)',
+      (tester) async {
+        when(() => numberSwitcherCubit.state).thenReturn(2);
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.jacobi.asString());
+
+        final bloc = SystemBloc(SystemType.iterative);
+
+        await tester.pumpWidget(MockWrapper(
+          child: SingleChildScrollView(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: bloc),
+                BlocProvider<NumberSwitcherCubit>.value(
+                  value: numberSwitcherCubit,
+                ),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDataInput(),
+            ),
+          ),
+        ));
+
+        // Filling the matrix with some data
+        final widget = find.byType(SystemDataInput);
+        final state = tester.state<SystemDataInputState>(widget);
+
+        state.matrixControllers.first.text = '1';
+        state.matrixControllers[1].text = '2';
+        state.matrixControllers[2].text = '3';
+        state.matrixControllers[3].text = '4';
+        state.vectorControllers.first.text = '7';
+        state.vectorControllers[1].text = '8';
+        state.jacobiControllers.first.text = '-5';
+        state.jacobiControllers[1].text = '7';
+
+        expect(bloc.state, equals(const SystemNone()));
+
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
+
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
+
+        expect(bloc.state, isA<SystemGuesses>());
+      },
+    );
+
+    testWidgets(
       'Making sure that the "Solve" button does NOT solve the '
       'system in case of malformed input',
       (tester) async {
         when(() => numberSwitcherCubit.state).thenReturn(2);
-        when(() => dropdownCubit.state).thenReturn('LU');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.lu.asString());
 
         final bloc = SystemBloc(SystemType.rowReduction);
 
@@ -299,9 +405,13 @@ void main() {
       'number of input tiles on the screen',
       (tester) async {
         when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
-        when(() => dropdownCubit.state).thenReturn('LU');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.lu.asString());
 
-        final bloc = NumberSwitcherCubit(min: 2, max: 4);
+        final bloc = NumberSwitcherCubit(
+          min: 2,
+          max: 4,
+        );
 
         await tester.pumpWidget(MockWrapper(
           child: SingleChildScrollView(
@@ -333,7 +443,8 @@ void main() {
     testGoldens('SystemDataInput - Factorization', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
       when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      when(() => dropdownCubit.state)
+          .thenReturn(SystemDropdownItems.lu.asString());
 
       final builder = GoldenBuilder.column()
         ..addScenario(
@@ -350,7 +461,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(600, 1200),
+        surfaceSize: const Size(530, 870),
       );
       await screenMatchesGolden(tester, 'system_data_input_factorization');
     });
@@ -358,7 +469,8 @@ void main() {
     testGoldens('SystemDataInput - Factorization', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.rowReduction);
       when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('LU');
+      when(() => dropdownCubit.state)
+          .thenReturn(SystemDropdownItems.lu.asString());
 
       final builder = GoldenBuilder.column()
         ..addScenario(
@@ -375,7 +487,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(600, 1200),
+        surfaceSize: const Size(530, 870),
       );
       await screenMatchesGolden(tester, 'system_data_input_row_reduction');
     });
@@ -383,14 +495,15 @@ void main() {
     testGoldens('SystemDataInput - Iterative - SOR', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
       when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('SOR');
+      when(() => dropdownCubit.state)
+          .thenReturn(SystemDropdownItems.sor.asString());
 
       final builder = GoldenBuilder.column()
         ..addScenario(
           'Iterative method (SOR)',
           SizedBox(
             width: 500,
-            height: 800,
+            height: 900,
             child: widgetWithMocks,
           ),
         );
@@ -400,7 +513,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(600, 1200),
+        surfaceSize: const Size(530, 970),
       );
       await screenMatchesGolden(tester, 'system_data_input_sor');
     });
@@ -408,7 +521,8 @@ void main() {
     testGoldens('SystemDataInput - Iterative - Jacobi', (tester) async {
       when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
       when(() => numberSwitcherCubit.state).thenReturn(2);
-      when(() => dropdownCubit.state).thenReturn('Jacobi');
+      when(() => dropdownCubit.state)
+          .thenReturn(SystemDropdownItems.jacobi.asString());
 
       final builder = GoldenBuilder.column()
         ..addScenario(
@@ -425,7 +539,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(600, 1200),
+        surfaceSize: const Size(530, 870),
       );
       await screenMatchesGolden(tester, 'system_data_input_jacobi');
     });

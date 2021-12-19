@@ -1,4 +1,6 @@
+import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
@@ -15,9 +17,13 @@ import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
 
 void main() {
+  late final DropdownCubit dropdownCubit;
+
   setUpAll(() {
     registerFallbackValue(MockNonlinearEvent());
     registerFallbackValue(MockNonlinearState());
+
+    dropdownCubit = MockDropdownCubit();
   });
 
   group("Testing the 'NonlinearBody' widget", () {
@@ -90,15 +96,34 @@ void main() {
       },
     );
 
-    testWidgets('Making sure that solving equations works', (tester) async {
+    testWidgets('Making sure that single point equations works',
+        (tester) async {
+      when(() => dropdownCubit.state)
+          .thenReturn(NonlinearDropdownItems.newton.asString());
+
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
       await tester.pumpWidget(MockWrapper(
-        dropdownInitial: NonlinearDropdownItems.newton.asString(),
-        child: Scaffold(
-          body: BlocProvider<NonlinearBloc>.value(
-            value: bloc,
-            child: const NonlinearBody(),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<NonlinearBloc>.value(
+              value: bloc,
+            ),
+            BlocProvider<DropdownCubit>.value(
+              value: dropdownCubit,
+            ),
+            BlocProvider<PrecisionSliderCubit>(
+              create: (_) => PrecisionSliderCubit(
+                minValue: 1,
+                maxValue: 10,
+              ),
+            ),
+          ],
+          child: Scaffold(
+            body: BlocProvider<NonlinearBloc>.value(
+              value: bloc,
+              child: const NonlinearBody(),
+            ),
           ),
         ),
       ));
@@ -110,6 +135,61 @@ void main() {
       // Filling the forms
       await tester.enterText(equationInput, 'x-3');
       await tester.enterText(paramInput, '3');
+
+      // Making sure that there are no results
+      expect(bloc.state, isA<NonlinearNone>());
+      expect(find.byType(NoResults), findsOneWidget);
+
+      // Solving the equation
+      await tester.tap(solveButton);
+      await tester.pumpAndSettle();
+
+      // Solutions on the UI!
+      expect(bloc.state, isA<NonlinearGuesses>());
+      expect(find.byType(NoResults), findsNothing);
+      expect(find.byType(RealResultCard), findsNWidgets(3));
+    });
+
+    testWidgets('Making sure that bracketing equations works', (tester) async {
+      when(() => dropdownCubit.state)
+          .thenReturn(NonlinearDropdownItems.bisection.asString());
+
+      final bloc = NonlinearBloc(NonlinearType.bracketing);
+
+      await tester.pumpWidget(MockWrapper(
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<NonlinearBloc>.value(
+              value: bloc,
+            ),
+            BlocProvider<DropdownCubit>.value(
+              value: dropdownCubit,
+            ),
+            BlocProvider<PrecisionSliderCubit>(
+              create: (_) => PrecisionSliderCubit(
+                minValue: 1,
+                maxValue: 10,
+              ),
+            ),
+          ],
+          child: Scaffold(
+            body: BlocProvider<NonlinearBloc>.value(
+              value: bloc,
+              child: const NonlinearBody(),
+            ),
+          ),
+        ),
+      ));
+
+      final equationInput = find.byKey(const Key('EquationInput-function'));
+      final paramInput1 = find.byKey(const Key('EquationInput-first-param'));
+      final paramInput2 = find.byKey(const Key('EquationInput-second-param'));
+      final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
+
+      // Filling the forms
+      await tester.enterText(equationInput, 'x-3.17263');
+      await tester.enterText(paramInput1, '2');
+      await tester.enterText(paramInput2, '4.3');
 
       // Making sure that there are no results
       expect(bloc.state, isA<NonlinearNone>());

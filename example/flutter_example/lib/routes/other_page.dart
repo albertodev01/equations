@@ -68,7 +68,7 @@ class _OtherPageState extends State<OtherPage> {
             value: complexBloc,
           ),
           BlocProvider<TextFieldValuesCubit>.value(
-            value: matrixTextfields,
+            value: complexTextfields,
           ),
         ],
         child: const ComplexNumberOtherBody(),

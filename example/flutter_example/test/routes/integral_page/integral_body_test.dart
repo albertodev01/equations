@@ -78,11 +78,83 @@ void main() {
       },
     );
 
-    testWidgets('Making sure that solving integrals works', (tester) async {
+    testWidgets('Making sure that simpson solver works', (tester) async {
       final bloc = IntegralBloc();
 
       await tester.pumpWidget(MockWrapper(
         dropdownInitial: IntegralDropdownItems.simpson.asString(),
+        child: BlocProvider<IntegralBloc>.value(
+          value: bloc,
+          child: const Scaffold(
+            body: IntegralBody(),
+          ),
+        ),
+      ));
+
+      final equationInput = find.byKey(const Key('EquationInput-function'));
+      final lowerInput = find.byKey(const Key('IntegralInput-lower-bound'));
+      final upperInput = find.byKey(const Key('IntegralInput-upper-bound'));
+
+      // Filling the forms
+      await tester.enterText(equationInput, 'x+2');
+      await tester.enterText(lowerInput, '1');
+      await tester.enterText(upperInput, '3');
+
+      // Initial state
+      expect(find.byType(NoResults), findsOneWidget);
+      expect(bloc.state, equals(const IntegralNone()));
+
+      // Evaluating the integral
+      await tester.tap(find.byKey(const Key('Integral-button-solve')));
+      await tester.pumpAndSettle();
+
+      // Results
+      expect(find.byType(NoResults), findsNothing);
+      expect(find.byType(RealResultCard), findsOneWidget);
+      expect(bloc.state, isA<IntegralResult>());
+    });
+
+    testWidgets('Making sure that midpoint solver works', (tester) async {
+      final bloc = IntegralBloc();
+
+      await tester.pumpWidget(MockWrapper(
+        dropdownInitial: IntegralDropdownItems.midpoint.asString(),
+        child: BlocProvider<IntegralBloc>.value(
+          value: bloc,
+          child: const Scaffold(
+            body: IntegralBody(),
+          ),
+        ),
+      ));
+
+      final equationInput = find.byKey(const Key('EquationInput-function'));
+      final lowerInput = find.byKey(const Key('IntegralInput-lower-bound'));
+      final upperInput = find.byKey(const Key('IntegralInput-upper-bound'));
+
+      // Filling the forms
+      await tester.enterText(equationInput, 'x+2');
+      await tester.enterText(lowerInput, '1');
+      await tester.enterText(upperInput, '3');
+
+      // Initial state
+      expect(find.byType(NoResults), findsOneWidget);
+      expect(bloc.state, equals(const IntegralNone()));
+
+      // Evaluating the integral
+      await tester.tap(find.byKey(const Key('Integral-button-solve')));
+      await tester.pumpAndSettle();
+
+      // Results
+      expect(find.byType(NoResults), findsNothing);
+      expect(find.byType(RealResultCard), findsOneWidget);
+      expect(bloc.state, isA<IntegralResult>());
+    });
+
+    testWidgets('Making sure that trapezoid solver works', (tester) async {
+      final bloc = IntegralBloc();
+
+      await tester.pumpWidget(MockWrapper(
+        dropdownInitial: IntegralDropdownItems.trapezoid.asString(),
         child: BlocProvider<IntegralBloc>.value(
           value: bloc,
           child: const Scaffold(

@@ -58,7 +58,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(400, 350),
+        surfaceSize: const Size(200, 330),
       );
       await screenMatchesGolden(tester, 'relaxation_factor_input');
     });

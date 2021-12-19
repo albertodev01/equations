@@ -117,7 +117,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(300, 500),
+        surfaceSize: const Size(300, 490),
       );
       await screenMatchesGolden(tester, 'size_picker');
     });

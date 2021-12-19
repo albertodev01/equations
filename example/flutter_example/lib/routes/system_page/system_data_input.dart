@@ -103,14 +103,10 @@ class SystemDataInputState extends State<SystemDataInput> {
 
     // Listener that updates the value
     controller.addListener(() {
-      debugPrint('called');
-
-      if (mounted) {
-        context.read<TextFieldValuesCubit>().setValue(
-              index: index,
-              value: controller.text,
-            );
-      }
+      context.read<TextFieldValuesCubit>().setValue(
+            index: index,
+            value: controller.text,
+          );
     });
 
     return controller;

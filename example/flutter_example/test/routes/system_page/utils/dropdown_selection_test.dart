@@ -80,7 +80,8 @@ void main() {
       'factorization type is selected',
       (tester) async {
         when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
-        when(() => dropdownCubit.state).thenReturn('LU');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.lu.asString());
 
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(
@@ -106,7 +107,8 @@ void main() {
       'iterative type is selected',
       (tester) async {
         when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
-        when(() => dropdownCubit.state).thenReturn('SOR');
+        when(() => dropdownCubit.state)
+            .thenReturn(SystemDropdownItems.sor.asString());
 
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(
@@ -130,7 +132,9 @@ void main() {
     testWidgets(
       'Making sure that dropdown values can be changed',
       (tester) async {
-        final cubit = DropdownCubit(initialValue: 'LU');
+        final cubit = DropdownCubit(
+          initialValue: SystemDropdownItems.lu.asString(),
+        );
 
         await tester.pumpWidget(MockWrapper(
           child: MultiBlocProvider(
@@ -159,21 +163,100 @@ void main() {
     );
 
     testGoldens('SystemDropdownSelection', (tester) async {
-      when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
-      when(() => dropdownCubit.state).thenReturn('SOR');
-
       final builder = GoldenBuilder.column()
         ..addScenario(
-          'SystemDropdownSelection',
+          'SOR',
           SizedBox(
-            width: 400,
-            height: 250,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: systemBloc),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDropdownSelection(),
+            width: 200,
+            height: 150,
+            child: Builder(
+              builder: (context) {
+                when(() => systemBloc.systemType)
+                    .thenReturn(SystemType.iterative);
+                when(() => dropdownCubit.state).thenReturn(
+                  SystemDropdownItems.sor.asString(),
+                );
+
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider<SystemBloc>.value(value: systemBloc),
+                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                  ],
+                  child: const SystemDropdownSelection(),
+                );
+              },
+            ),
+          ),
+        )
+        ..addScenario(
+          'Jacobi',
+          SizedBox(
+            width: 200,
+            height: 150,
+            child: Builder(
+              builder: (context) {
+                when(() => systemBloc.systemType)
+                    .thenReturn(SystemType.iterative);
+                when(() => dropdownCubit.state).thenReturn(
+                  SystemDropdownItems.jacobi.asString(),
+                );
+
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider<SystemBloc>.value(value: systemBloc),
+                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                  ],
+                  child: const SystemDropdownSelection(),
+                );
+              },
+            ),
+          ),
+        )
+        ..addScenario(
+          'LU',
+          SizedBox(
+            width: 200,
+            height: 150,
+            child: Builder(
+              builder: (context) {
+                when(() => systemBloc.systemType)
+                    .thenReturn(SystemType.factorization);
+                when(() => dropdownCubit.state).thenReturn(
+                  SystemDropdownItems.lu.asString(),
+                );
+
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider<SystemBloc>.value(value: systemBloc),
+                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                  ],
+                  child: const SystemDropdownSelection(),
+                );
+              },
+            ),
+          ),
+        )
+        ..addScenario(
+          'Cholesky',
+          SizedBox(
+            width: 200,
+            height: 150,
+            child: Builder(
+              builder: (context) {
+                when(() => systemBloc.systemType)
+                    .thenReturn(SystemType.factorization);
+                when(() => dropdownCubit.state).thenReturn(
+                  SystemDropdownItems.cholesky.asString(),
+                );
+
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider<SystemBloc>.value(value: systemBloc),
+                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                  ],
+                  child: const SystemDropdownSelection(),
+                );
+              },
             ),
           ),
         );
@@ -183,7 +266,7 @@ void main() {
         wrapper: (child) => MockWrapper(
           child: child,
         ),
-        surfaceSize: const Size(400, 350),
+        surfaceSize: const Size(230, 810),
       );
       await screenMatchesGolden(tester, 'system_dropdown_selection');
     });

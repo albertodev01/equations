@@ -120,7 +120,7 @@ void main() {
       await tester.pumpWidgetBuilder(
         builder.build(),
         wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(360, 710),
+        surfaceSize: const Size(350, 630),
       );
       await screenMatchesGolden(tester, 'home_contents');
     });
