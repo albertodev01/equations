@@ -27,15 +27,15 @@ jobs:
         run: flutter format --set-exit-if-changed lib test
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings
+        run: flutter analyze --fatal-infos --fatal-warnings && dart run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
         run: flutter test --coverage
 
-      - name: Making sure that code coverage is at least 95
+      - name: Making sure that code coverage is 100
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
-          min_coverage: 95
+          min_coverage: 100
           
       - name: Uploading coverage to Codecov
         uses: codecov/codecov-action@v1
@@ -46,7 +46,6 @@ jobs:
     name: Equations Flutter example - CI action
     needs: [verify_equation_package]
     runs-on: windows-latest
-    if: github.event.pull_request.draft == false
     defaults:
       run:
         working-directory: example/flutter_example
@@ -62,13 +61,13 @@ jobs:
         run: flutter format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings
+        run: flutter analyze --fatal-infos --fatal-warnings && flutter run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
         run: flutter test --coverage
 
-      - name: Making sure that code coverage is at least 90
+      - name: Making sure that code coverage is at least 98
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
         with:
           path: example/flutter_example/coverage/lcov.info
-          min_coverage: 90
+          min_coverage: 98

@@ -18,6 +18,7 @@ dart_code_metrics:
   rules:
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
+    - avoid-throw-in-catch-block
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
     - binary-expression-operand-order
