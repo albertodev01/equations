@@ -51,6 +51,8 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
 
     context.read<OtherBloc>().add(const OtherClean());
     context.read<TextFieldValuesCubit>().reset();
+
+    FocusScope.of(context).unfocus();
   }
 
   /// Analyzes the complex number.

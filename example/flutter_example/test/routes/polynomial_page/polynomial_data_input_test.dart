@@ -161,6 +161,7 @@ void main() {
     );
 
     testWidgets('Making sure that equations can be solved', (tester) async {
+      late FocusScopeNode focusScope;
       final bloc = PolynomialBloc(PolynomialType.quadratic);
 
       await tester.pumpWidget(MockWrapper(
@@ -169,7 +170,13 @@ void main() {
           child: Scaffold(
             body: BlocProvider<PolynomialBloc>.value(
               value: bloc,
-              child: const PolynomialDataInput(),
+              child: Builder(
+                builder: (context) {
+                  focusScope = FocusScope.of(context);
+
+                  return const PolynomialDataInput();
+                },
+              ),
             ),
           ),
         ),
@@ -196,8 +203,8 @@ void main() {
       await tester.enterText(coeffB, '1/2');
       await tester.enterText(coeffC, '3');
 
-      // Making sure that there are no results
       expect(bloc.state, isA<PolynomialNone>());
+      expect(focusScope.hasFocus, isTrue);
 
       // Solving the equation
       await tester.tap(solveButton);
@@ -211,10 +218,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(bloc.state, isA<PolynomialNone>());
-      tester
-          .widgetList<TextFormField>(find.byType(TextFormField))
-          .forEach((input) {
-        expect(input.controller!.text.length, isZero);
+      expect(focusScope.hasFocus, isFalse);
+      tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach((t) {
+        expect(t.controller!.text.length, isZero);
       });
     });
 

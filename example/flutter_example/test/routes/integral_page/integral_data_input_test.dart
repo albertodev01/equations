@@ -62,6 +62,7 @@ void main() {
     testWidgets(
       'Making sure that fields can be cleared',
       (tester) async {
+        late FocusScopeNode focusScope;
         final integralBloc = IntegralBloc();
 
         when(() => dropdownCubit.state)
@@ -77,8 +78,14 @@ void main() {
                 value: integralBloc,
               ),
             ],
-            child: const Scaffold(
-              body: IntegralDataInput(),
+            child: Scaffold(
+              body: Builder(
+                builder: (context) {
+                  focusScope = FocusScope.of(context);
+
+                  return IntegralDataInput();
+                },
+              ),
             ),
           ),
         ));
@@ -97,6 +104,7 @@ void main() {
         expect(find.text('x^2-1'), findsOneWidget);
         expect(find.text('17'), findsOneWidget);
         expect(find.text('18'), findsOneWidget);
+        expect(focusScope.hasFocus, isTrue);
 
         // Tap the 'Clear' button
         final finder = find.byKey(const Key('Integral-button-clean'));
@@ -107,6 +115,13 @@ void main() {
         expect(find.text('x^2-1'), findsNothing);
         expect(find.text('17'), findsNothing);
         expect(find.text('18'), findsNothing);
+        expect(focusScope.hasFocus, isFalse);
+
+        tester
+            .widgetList<TextFormField>(find.byType(TextFormField))
+            .forEach((t) {
+          expect(t.controller!.text.length, isZero);
+        });
       },
     );
 

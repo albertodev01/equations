@@ -105,6 +105,7 @@ void main() {
     testWidgets(
       'Making sure that the form can be cleared correctly',
       (tester) async {
+        late FocusScopeNode focusScope;
         when(() => bloc.state).thenReturn(const OtherNone());
 
         await tester.pumpWidget(MockWrapper(
@@ -117,7 +118,13 @@ void main() {
                 value: bloc,
               ),
             ],
-            child: const MatrixAnalyzerInput(),
+            child: Builder(
+              builder: (context) {
+                focusScope = FocusScope.of(context);
+
+                return const MatrixAnalyzerInput();
+              },
+            ),
           ),
         ));
 
@@ -129,6 +136,7 @@ void main() {
         // Entering some text
         await tester.enterText(find.byType(TextFormField), '435');
         await tester.tap(find.byKey(const Key('MatrixAnalyze-button-analyze')));
+        expect(focusScope.hasFocus, isTrue);
 
         // Now clearing
         expect(find.text('435'), findsOneWidget);
@@ -137,6 +145,13 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('435'), findsNothing);
+        expect(focusScope.hasFocus, isFalse);
+
+        tester
+            .widgetList<TextFormField>(find.byType(TextFormField))
+            .forEach((t) {
+          expect(t.controller!.text.length, isZero);
+        });
       },
     );
 

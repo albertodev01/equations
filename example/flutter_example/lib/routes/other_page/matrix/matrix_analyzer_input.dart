@@ -54,6 +54,8 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
 
     context.read<OtherBloc>().add(const OtherClean());
     context.read<TextFieldValuesCubit>().reset();
+
+    FocusScope.of(context).unfocus();
   }
 
   /// Analyzes the matrix.

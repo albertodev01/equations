@@ -200,6 +200,7 @@ void main() {
     testWidgets('Making sure that textfields can be cleared', (tester) async {
       when(() => dropdownCubit.state)
           .thenReturn(NonlinearDropdownItems.newton.asString());
+      late FocusScopeNode focusScope;
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
       await tester.pumpWidget(MockWrapper(
@@ -208,18 +209,42 @@ void main() {
           child: Scaffold(
             body: BlocProvider<NonlinearBloc>.value(
               value: bloc,
-              child: const NonlinearDataInput(),
+              child: Builder(
+                builder: (context) {
+                  focusScope = FocusScope.of(context);
+
+                  return const NonlinearDataInput();
+                },
+              ),
             ),
           ),
         ),
       ));
 
-      expect(find.byType(NonlinearDataInput), findsOneWidget);
+      final equationInput = find.byKey(const Key('EquationInput-function'));
+      final paramInput = find.byKey(const Key('EquationInput-first-param'));
+      final cleanButton = find.byKey(const Key('Nonlinear-button-clean'));
 
-      await tester.tap(find.byKey(const Key('Nonlinear-button-clean')));
+      // Filling the forms
+      await tester.enterText(equationInput, 'x-3');
+      await tester.enterText(paramInput, '3');
+
+      // Making sure that fields are filled
+      expect(find.text('x-3'), findsOneWidget);
+      expect(find.text('3'), findsOneWidget);
+      expect(focusScope.hasFocus, isTrue);
+
+      // Tap the 'Clear' button
+      await tester.tap(cleanButton);
       await tester.pumpAndSettle();
 
+      // Making sure that fields have been cleared
+      expect(focusScope.hasFocus, isFalse);
       expect(bloc.state, equals(const NonlinearNone()));
+
+      tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach((t) {
+        expect(t.controller!.text.length, isZero);
+      });
     });
 
     testGoldens('NonlinearDataInput - Single point', (tester) async {

@@ -68,6 +68,8 @@ void main() {
       'Making sure that the "Clear" button actually clears the '
       'text controllers and the bloc',
       (tester) async {
+        late FocusScopeNode focusScope;
+
         when(() => numberSwitcherCubit.state).thenReturn(2);
         when(() => dropdownCubit.state)
             .thenReturn(SystemDropdownItems.lu.asString());
@@ -84,12 +86,22 @@ void main() {
                 ),
                 BlocProvider<DropdownCubit>.value(value: dropdownCubit),
               ],
-              child: const SystemDataInput(),
+              child: Builder(
+                builder: (context) {
+                  focusScope = FocusScope.of(context);
+
+                  return const SystemDataInput();
+                },
+              ),
             ),
           ),
         ));
 
         expect(bloc.state, equals(const SystemNone()));
+
+        // Entering some text to make sure that there is focus
+        await tester.enterText(find.byType(TextFormField).first, '1');
+        expect(focusScope.hasFocus, isTrue);
 
         // Cleaning
         final clearButton = find.byKey(const Key('System-button-clean'));
@@ -99,6 +111,13 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(bloc.state, equals(const SystemNone()));
+        expect(focusScope.hasFocus, isFalse);
+
+        tester
+            .widgetList<TextFormField>(find.byType(TextFormField))
+            .forEach((t) {
+          expect(t.controller!.text.length, isZero);
+        });
       },
     );
 

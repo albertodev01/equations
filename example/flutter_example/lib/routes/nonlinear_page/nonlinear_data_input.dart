@@ -88,6 +88,8 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
               ? NonlinearDropdownItems.newton.asString()
               : NonlinearDropdownItems.bisection.asString(),
         );
+
+    FocusScope.of(context).unfocus();
   }
 
   /// Solves a nonlinear equation.

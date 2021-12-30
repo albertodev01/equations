@@ -161,6 +161,8 @@ class __InputWidget extends State<_InputWidget> {
     context.read<PolynomialBloc>().add(const PolynomialClean());
     context.read<PlotZoomCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
+
+    FocusScope.of(context).unfocus();
   }
 
   @override
