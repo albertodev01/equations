@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/main.dart';
 import 'package:equations_solver/routes/home_page.dart';
@@ -91,6 +92,31 @@ void main() {
       expect(
         PolynomialDiscriminant(),
         isA<PolynomialDiscriminant>(),
+      );
+      expect(
+        PolynomialDiscriminant(),
+        isA<PolynomialDiscriminant>(),
+      );
+      expect(
+        NonlinearClean(),
+        isA<NonlinearClean>(),
+      );
+      expect(
+        BracketingMethod(
+          function: 'x',
+          upperBound: '1',
+          lowerBound: '2',
+          method: BracketingMethods.bisection,
+        ),
+        isA<BracketingMethod>(),
+      );
+      expect(
+        SinglePointMethod(
+          function: 'x',
+          initialGuess: '1',
+          method: SinglePointMethods.newton,
+        ),
+        isA<SinglePointMethod>(),
       );
     });
 

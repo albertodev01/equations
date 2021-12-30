@@ -1,6 +1,8 @@
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
 
+@immutable
+
 /// Used in [PlotterPainter] to color a portion of area below the function.
 class ColorArea {
   /// The [Color] of the area below the function.

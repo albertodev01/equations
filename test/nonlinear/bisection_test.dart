@@ -103,9 +103,9 @@ void main() {
       final expectedSolutions = <double>[
         0.856,
         0.901,
-        5.0,
+        5,
         3.605,
-        -1.0,
+        -1,
       ];
 
       for (var i = 0; i < equations.length; ++i) {

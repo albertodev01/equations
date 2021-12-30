@@ -12,14 +12,12 @@ class TextFieldValuesCubit extends Cubit<Map<int, String>> {
     required int index,
     required String value,
   }) {
-    final newState = Map<int, String>.from(state);
-
-    // Adding or updating
-    newState.update(
-      index,
-      (_) => value,
-      ifAbsent: () => value,
-    );
+    final newState = Map<int, String>.from(state)
+      ..update(
+        index,
+        (_) => value,
+        ifAbsent: () => value,
+      );
 
     emit(newState);
   }

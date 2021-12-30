@@ -35,7 +35,7 @@ class CardContainer extends StatelessWidget {
               elevation: 8,
               shadowColor: Colors.blueAccent,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   children: [
                     Expanded(

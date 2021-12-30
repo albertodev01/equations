@@ -203,7 +203,7 @@ class ExpressionParser {
     }
 
     // The evaluator returns 'num' so this cast is safe
-    final value = _parser.parse(expression).value(evaluationPoint) as num;
+    final value = _parser.parse(expression).value(evaluationPoint);
 
     // NOTE: The following code is safe because 'num' has only 2 subtypes ('int'
     // and 'double'). Since it is a compile-time error for any type other than

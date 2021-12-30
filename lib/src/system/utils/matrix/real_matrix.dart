@@ -86,7 +86,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
           rows: rows,
           columns: columns,
           diagonalValue: diagonalValue,
-          defaultValue: 0.0,
+          defaultValue: 0,
         );
 
   void _setDataAt(List<double> flatMatrix, int row, int col, double value) =>

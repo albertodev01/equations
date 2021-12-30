@@ -59,7 +59,7 @@ class _CollapsibleState extends State<Collapsible>
 
   /// The rotation animation of the button.
   late final rotationAnimation = Tween<double>(
-    begin: 0.0,
+    begin: 0,
     end: math.pi,
   ).animate(controller);
 
@@ -87,7 +87,7 @@ class _CollapsibleState extends State<Collapsible>
       SizeTransition(
         key: const Key('Collapsible-SizeTransition'),
         sizeFactor: controller,
-        axisAlignment: 1.0,
+        axisAlignment: 1,
         child: SecondaryRegion(
           key: const Key('Collapsible-Secondary-region'),
           heightBetweenRegions: widget.heightBetweenRegions,

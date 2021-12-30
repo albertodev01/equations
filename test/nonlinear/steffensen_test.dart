@@ -43,8 +43,7 @@ void main() {
     test('Making sure that a malformed equation string throws.', () {
       expect(
         () {
-          const steffensen = Steffensen(function: '', x0: 1);
-          steffensen.solve();
+          Steffensen(function: '', x0: 1).solve();
         },
         throwsA(isA<ExpressionParserException>()),
       );

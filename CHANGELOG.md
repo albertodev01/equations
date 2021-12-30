@@ -1,3 +1,8 @@
+## [3.1.3]
+ - Dependencies versions update
+ - Added some more rules in `analysis_options.yaml`
+ - Minor fixes for the `example/flutter_example` app
+
 ## [3.1.2]
  - Dependencies versions update
  - Updated the README file with some fixes

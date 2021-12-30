@@ -10,7 +10,7 @@ void main() {
 
   group('Testing the behaviors of the IntegralResults class.', () {
     test('Making that IntegralResults values are properly constructed.', () {
-      expect(results.guesses, orderedEquals(<double>[1.0, 2.0, 3.0]));
+      expect(results.guesses, orderedEquals(<double>[1, 2, 3]));
       expect(results.result, equals(5.28));
     });
 

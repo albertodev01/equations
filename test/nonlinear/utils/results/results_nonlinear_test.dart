@@ -5,12 +5,12 @@ void main() {
   group('Testing the behaviors of the NonlinearResults class.', () {
     const results = NonlinearResults(
       guesses: [1.0, 2.0, 3.0],
-      convergence: 10.0,
-      efficiency: -7.0,
+      convergence: 10,
+      efficiency: -7,
     );
 
     test('Making that NonlinearResults values are properly constructed.', () {
-      expect(results.guesses, orderedEquals(<double>[1.0, 2.0, 3.0]));
+      expect(results.guesses, orderedEquals(<double>[1, 2, 3]));
       expect(results.convergence, equals(10.0));
       expect(results.efficiency, equals(-7.0));
     });
@@ -26,8 +26,8 @@ void main() {
     test('Making sure that NonlinearResults can be properly compared.', () {
       const results2 = NonlinearResults(
         guesses: [1.0, 2.0, 3.0],
-        convergence: 10.0,
-        efficiency: -7.0,
+        convergence: 10,
+        efficiency: -7,
       );
 
       expect(results2 == results, isTrue);
@@ -35,8 +35,8 @@ void main() {
         results ==
             const NonlinearResults(
               guesses: [1.0, 2.0, 3.0],
-              convergence: 10.0,
-              efficiency: -7.0,
+              convergence: 10,
+              efficiency: -7,
             ),
         isTrue,
       );
@@ -44,8 +44,8 @@ void main() {
       expect(
         const NonlinearResults(
               guesses: [1.0, 2.0, 3.0],
-              convergence: 10.0,
-              efficiency: -7.0,
+              convergence: 10,
+              efficiency: -7,
             ) ==
             results,
         isTrue,
@@ -53,8 +53,8 @@ void main() {
       expect(
         const NonlinearResults(
               guesses: [1.0, 2.0, 3.1],
-              convergence: 10.0,
-              efficiency: -7.0,
+              convergence: 10,
+              efficiency: -7,
             ) ==
             results,
         isFalse,
@@ -64,8 +64,8 @@ void main() {
         results.hashCode,
         equals(const NonlinearResults(
           guesses: [1.0, 2.0, 3.0],
-          convergence: 10.0,
-          efficiency: -7.0,
+          convergence: 10,
+          efficiency: -7,
         ).hashCode),
       );
 
@@ -73,8 +73,8 @@ void main() {
         results ==
             const NonlinearResults(
               guesses: [1.0, 2.0],
-              convergence: 10.0,
-              efficiency: -7.0,
+              convergence: 10,
+              efficiency: -7,
             ),
         isFalse,
       );
@@ -83,8 +83,8 @@ void main() {
         results ==
             const NonlinearResults(
               guesses: [1.0, 2.0, 5.0],
-              convergence: 10.0,
-              efficiency: -7.0,
+              convergence: 10,
+              efficiency: -7,
             ),
         isFalse,
       );
@@ -93,8 +93,8 @@ void main() {
         results ==
             const NonlinearResults(
               guesses: [1.0, 2.0, 3.0],
-              convergence: 10.0,
-              efficiency: 7.0,
+              convergence: 10,
+              efficiency: 7,
             ),
         isFalse,
       );

@@ -34,7 +34,7 @@ void main() {
         final results = choleskySolver.solve();
 
         for (final sol in results) {
-          expect(sol, const MoreOrLessEquals(1.0, precision: 1.0e-1));
+          expect(sol, const MoreOrLessEquals(1, precision: 1.0e-1));
         }
 
         // Checking the "state" of the object

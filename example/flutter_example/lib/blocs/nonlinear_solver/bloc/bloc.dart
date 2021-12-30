@@ -92,10 +92,7 @@ class NonlinearBloc extends Bloc<NonlinearEvent, NonlinearState> {
       }
 
       emit(
-        NonlinearGuesses(
-          nonLinear: solver,
-          nonlinearResults: solver.solve(),
-        ),
+        NonlinearGuesses(nonLinear: solver, nonlinearResults: solver.solve()),
       );
     } on Exception {
       emit(const NonlinearError());
