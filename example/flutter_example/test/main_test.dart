@@ -11,7 +11,7 @@ void main() {
 
         try {
           app_main.main();
-        } catch (_) {
+        } on Exception {
           throws = true;
         }
 

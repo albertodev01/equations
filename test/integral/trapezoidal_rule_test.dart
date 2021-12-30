@@ -23,7 +23,7 @@ void main() {
       // Actual approximation
       final results = trapezoid.integrate();
 
-      expect(results.result, const MoreOrLessEquals(28, precision: 1.0e-0));
+      expect(results.result, const MoreOrLessEquals(28, precision: 1));
       expect(results.guesses.length, equals(trapezoid.intervals));
     });
 

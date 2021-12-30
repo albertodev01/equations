@@ -74,6 +74,8 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     context.read<IntegralBloc>().add(const IntegralClean());
     context.read<PlotZoomCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
+
+    FocusScope.of(context).unfocus();
   }
 
   /// Solves a nonlinear equation.

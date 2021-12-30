@@ -60,12 +60,19 @@ void main() {
     testWidgets(
       'Making sure that complex numbers can be analyzed',
       (tester) async {
+        late FocusScopeNode focusScope;
         final bloc = OtherBloc();
 
         await tester.pumpWidget(MockWrapper(
           child: BlocProvider<OtherBloc>.value(
             value: bloc,
-            child: const ComplexAnalyzerInput(),
+            child: Builder(
+              builder: (context) {
+                focusScope = FocusScope.of(context);
+
+                return const ComplexAnalyzerInput();
+              },
+            ),
           ),
         ));
 
@@ -77,11 +84,27 @@ void main() {
 
         await tester.enterText(find.byKey(realKey), '-1/2');
         await tester.enterText(find.byKey(imagKey), '5');
+        expect(focusScope.hasFocus, isTrue);
+
         await tester.tap(
           find.byKey(const Key('ComplexAnalyze-button-analyze')),
         );
+        await tester.pumpAndSettle();
 
         expect(bloc.state, isA<AnalyzedComplexNumber>());
+
+        // Cleaning
+        final finder = find.byKey(const Key('ComplexAnalyze-button-clean'));
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+
+        expect(focusScope.hasFocus, isFalse);
+
+        tester
+            .widgetList<TextFormField>(find.byType(TextFormField))
+            .forEach((t) {
+          expect(t.controller!.text.length, isZero);
+        });
       },
     );
 

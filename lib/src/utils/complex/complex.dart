@@ -426,7 +426,8 @@ class Complex implements Comparable<Complex> {
   /// Computes the complex n-th root of the complex number. The returned root is
   /// the one with the smallest positive argument.
   Complex nthRoot(int nth) {
-    var a = 0.0, b = 0.0;
+    var a = 0.0;
+    var b = 0.0;
     var neg = false;
     var n = nth;
 

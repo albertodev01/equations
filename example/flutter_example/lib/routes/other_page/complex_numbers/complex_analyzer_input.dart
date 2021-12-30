@@ -51,18 +51,20 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
 
     context.read<OtherBloc>().add(const OtherClean());
     context.read<TextFieldValuesCubit>().reset();
+
+    FocusScope.of(context).unfocus();
   }
 
   /// Analyzes the complex number.
   void complexAnalyze() {
     if (formKey.currentState?.validate() ?? false) {
-      final bloc = context.read<OtherBloc>();
-
-      // Analyze the input
-      bloc.add(ComplexNumberAnalyze(
-        realPart: realController.text,
-        imaginaryPart: imaginaryController.text,
-      ));
+      context.read<OtherBloc>()
+        ..add(
+          ComplexNumberAnalyze(
+            realPart: realController.text,
+            imaginaryPart: imaginaryController.text,
+          ),
+        );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

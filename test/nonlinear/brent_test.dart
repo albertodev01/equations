@@ -96,7 +96,7 @@ void main() {
       final expectedSolutions = <double>[
         0.856,
         0.901,
-        5.0,
+        5,
         3.605,
         -1,
       ];

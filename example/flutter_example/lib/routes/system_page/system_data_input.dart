@@ -133,6 +133,8 @@ class SystemDataInputState extends State<SystemDataInput> {
     context.read<SystemBloc>().add(const SystemClean());
     context.read<NumberSwitcherCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
+
+    FocusScope.of(context).unfocus();
   }
 
   /// Solves a system of equations.
