@@ -1,3 +1,7 @@
+## [3.1.3]
+ - Dependencies versions update
+ - Updated the `analysis_options.yaml` file with some more rules
+
 ## [3.1.2]
  - Dependencies versions update
  - Updated the README file with some fixes

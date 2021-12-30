@@ -17,11 +17,11 @@ void main() {
     test(
       'Making sure that real numbers are properly converted into complex ones.',
       () {
-        expect(const Complex.fromReal(7.0).real, equals(7));
-        expect(const Complex.fromReal(7.0).imaginary, isZero);
+        expect(const Complex.fromReal(7).real, equals(7));
+        expect(const Complex.fromReal(7).imaginary, isZero);
 
-        expect(const Complex.fromImaginary(7.0).real, isZero);
-        expect(const Complex.fromImaginary(7.0).imaginary, equals(7));
+        expect(const Complex.fromImaginary(7).real, isZero);
+        expect(const Complex.fromImaginary(7).imaginary, equals(7));
       },
     );
 

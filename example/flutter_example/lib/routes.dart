@@ -47,7 +47,7 @@ abstract class RouteGenerator {
     Widget child,
   ) {
     final tween = Tween(
-      begin: const Offset(1.0, 0.0),
+      begin: const Offset(1, 0),
       end: Offset.zero,
     );
 

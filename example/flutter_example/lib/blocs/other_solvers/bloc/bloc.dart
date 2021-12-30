@@ -27,7 +27,7 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
 
       // Returning data
       emit(state);
-    } catch (_) {
+    } on Exception {
       emit(const OtherError());
     }
   }
@@ -47,7 +47,7 @@ class OtherBloc extends Bloc<OtherEvent, OtherState> {
 
       // Returning data
       emit(state);
-    } catch (_) {
+    } on Exception {
       emit(const OtherError());
     }
   }

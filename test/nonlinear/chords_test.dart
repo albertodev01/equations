@@ -29,7 +29,7 @@ void main() {
         expect(solutions.guesses.last, const MoreOrLessEquals(5, precision: 1));
         expect(
           solutions.convergence,
-          const MoreOrLessEquals(0.5, precision: 1.0),
+          const MoreOrLessEquals(0.5, precision: 1),
         );
         expect(
           solutions.efficiency,
@@ -97,9 +97,9 @@ void main() {
       final expectedSolutions = <double>[
         0.856,
         0.901,
-        5.0,
+        5,
         3.605,
-        -1.0,
+        -1,
       ];
 
       for (var i = 0; i < equations.length; ++i) {
