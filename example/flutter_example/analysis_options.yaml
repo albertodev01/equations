@@ -12,6 +12,8 @@ dart_code_metrics:
   metrics-exclude:
     - test/**
   rules:
+    - avoid-global-state
+    - avoid-returning-widgets
     - always-remove-listener
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
@@ -19,13 +21,16 @@ dart_code_metrics:
     - avoid-unnecessary-setstate
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
+    - avoid-unrelated-type-assertions
     - avoid-unused-parameters
+    - avoid-wrapping-in-padding
     - binary-expression-operand-order
     - double-literal-format
     - newline-before-return
     - no-boolean-literal-compare
     - no-equal-then-else
     - no-object-declaration
+    - prefer-const-border-radius
     - prefer-extracting-callbacks:
         ignored-named-arguments:
           - listener
