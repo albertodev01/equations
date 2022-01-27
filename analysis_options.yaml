@@ -16,11 +16,13 @@ dart_code_metrics:
     - test/**
     - example/**
   rules:
+    - avoid-global-state
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
     - avoid-throw-in-catch-block
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
+    - avoid-unrelated-type-assertions
     - avoid-unused-parameters
     - binary-expression-operand-order
     - double-literal-format

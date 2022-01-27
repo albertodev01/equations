@@ -785,8 +785,8 @@ class RealMatrix extends Matrix<double> with MathUtils {
         det3_201_012 * source.flattenData[15];
   }
 
-  /// Recursively computes the determinant of a matrix. In case of 1x1, 2x2,
-  /// 3x3 and 4x4 matrices, the calculations are "manually" done.
+  /// Computes the determinant of a matrix. In case of 1x1, 2x2, 3x3 and 4x4
+  /// matrices, a direct formula is used for a more efficient computation.
   double _computeDeterminant(RealMatrix source) {
     // Computing the determinant only if the matrix is square
     if (!isSquareMatrix) {
