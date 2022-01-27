@@ -8,9 +8,6 @@ environment:
   sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
-  # https://pub.dev/packages/collection
-  collection: ^1.15.0
-
   # https://pub.dev/packages/fraction
   fraction: ^3.2.2
 
