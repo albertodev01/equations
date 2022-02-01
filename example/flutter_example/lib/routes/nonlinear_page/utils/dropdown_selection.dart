@@ -20,49 +20,45 @@ class NonlinearDropdownSelection extends StatefulWidget {
 @visibleForTesting
 class NonlinearDropdownSelectionState
     extends State<NonlinearDropdownSelection> {
-  /// The items of the dropdown.
-  late final dropdownItems = _dropdownValues();
-
-  List<DropdownMenuItem<NonlinearDropdownItems>> _dropdownValues() {
-    final type = context.read<NonlinearBloc>().nonlinearType;
-
-    if (type == NonlinearType.singlePoint) {
-      return const [
-        DropdownMenuItem<NonlinearDropdownItems>(
-          key: Key('Newton-Dropdown'),
-          value: NonlinearDropdownItems.newton,
-          child: Text('Newton'),
-        ),
-        DropdownMenuItem<NonlinearDropdownItems>(
-          key: Key('Steffensen-Dropdown'),
-          value: NonlinearDropdownItems.steffensen,
-          child: Text('Steffensen'),
-        ),
-      ];
-    } else {
-      return const [
-        DropdownMenuItem<NonlinearDropdownItems>(
-          key: Key('Bisection-Dropdown'),
-          value: NonlinearDropdownItems.bisection,
-          child: Text('Bisection'),
-        ),
-        DropdownMenuItem<NonlinearDropdownItems>(
-          key: Key('Secant-Dropdown'),
-          value: NonlinearDropdownItems.secant,
-          child: Text('Secant'),
-        ),
-        DropdownMenuItem<NonlinearDropdownItems>(
-          key: Key('Brent-Dropdown'),
-          value: NonlinearDropdownItems.brent,
-          child: Text('Brent'),
-        ),
-      ];
-    }
-  }
+  /// The cached dropdown items.
+  late final dropdownItems = nonlinearType == NonlinearType.singlePoint
+      ? const [
+          DropdownMenuItem<NonlinearDropdownItems>(
+            key: Key('Newton-Dropdown'),
+            value: NonlinearDropdownItems.newton,
+            child: Text('Newton'),
+          ),
+          DropdownMenuItem<NonlinearDropdownItems>(
+            key: Key('Steffensen-Dropdown'),
+            value: NonlinearDropdownItems.steffensen,
+            child: Text('Steffensen'),
+          ),
+        ]
+      : const [
+          DropdownMenuItem<NonlinearDropdownItems>(
+            key: Key('Bisection-Dropdown'),
+            value: NonlinearDropdownItems.bisection,
+            child: Text('Bisection'),
+          ),
+          DropdownMenuItem<NonlinearDropdownItems>(
+            key: Key('Secant-Dropdown'),
+            value: NonlinearDropdownItems.secant,
+            child: Text('Secant'),
+          ),
+          DropdownMenuItem<NonlinearDropdownItems>(
+            key: Key('Brent-Dropdown'),
+            value: NonlinearDropdownItems.brent,
+            child: Text('Brent'),
+          ),
+        ];
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(NonlinearDropdownItems newValue) =>
       context.read<DropdownCubit>().changeValue(newValue.asString());
+
+  /// The currently selected nonlinear type.
+  NonlinearType get nonlinearType =>
+      context.read<NonlinearBloc>().nonlinearType;
 
   @override
   Widget build(BuildContext context) {

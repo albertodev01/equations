@@ -15,38 +15,32 @@ class SystemDropdownSelection extends StatefulWidget {
 /// The state of the [SystemDropdownSelection] class.
 @visibleForTesting
 class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
-  /// The items of the dropdown.
-  late final dropdownItems = _dropdownValues();
-
-  List<DropdownMenuItem<SystemDropdownItems>> _dropdownValues() {
-    if (systemType == SystemType.factorization) {
-      return const [
-        DropdownMenuItem<SystemDropdownItems>(
-          key: Key('LU-Dropdown'),
-          value: SystemDropdownItems.lu,
-          child: Text('LU'),
-        ),
-        DropdownMenuItem<SystemDropdownItems>(
-          key: Key('Cholesky-Dropdown'),
-          value: SystemDropdownItems.cholesky,
-          child: Text('Cholesky'),
-        ),
-      ];
-    }
-
-    return const [
-      DropdownMenuItem<SystemDropdownItems>(
-        key: Key('SOR-Dropdown'),
-        value: SystemDropdownItems.sor,
-        child: Text('SOR'),
-      ),
-      DropdownMenuItem<SystemDropdownItems>(
-        key: Key('Jacobi-Dropdown'),
-        value: SystemDropdownItems.jacobi,
-        child: Text('Jacobi'),
-      ),
-    ];
-  }
+  /// The cached dropdown items.
+  late final dropdownItems = systemType == SystemType.factorization
+      ? const [
+          DropdownMenuItem<SystemDropdownItems>(
+            key: Key('LU-Dropdown'),
+            value: SystemDropdownItems.lu,
+            child: Text('LU'),
+          ),
+          DropdownMenuItem<SystemDropdownItems>(
+            key: Key('Cholesky-Dropdown'),
+            value: SystemDropdownItems.cholesky,
+            child: Text('Cholesky'),
+          ),
+        ]
+      : const [
+          DropdownMenuItem<SystemDropdownItems>(
+            key: Key('SOR-Dropdown'),
+            value: SystemDropdownItems.sor,
+            child: Text('SOR'),
+          ),
+          DropdownMenuItem<SystemDropdownItems>(
+            key: Key('Jacobi-Dropdown'),
+            value: SystemDropdownItems.jacobi,
+            child: Text('Jacobi'),
+          ),
+        ];
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(SystemDropdownItems newValue) =>

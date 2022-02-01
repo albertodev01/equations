@@ -86,29 +86,10 @@ class __InputWidget extends State<_InputWidget> {
   /// width.
   ///
   /// This is cached because the number of input fields won't change.
-  late final cachedWrapBody = _generateWrapBody();
-
-  /// Generates the input fields of the coefficients.
-  List<PolynomialInputField> _generateWrapBody() {
-    final body = <PolynomialInputField>[];
-    var placeholderLetter = 'a';
-
-    for (var i = 0; i < widget.inputLength; ++i) {
-      body.add(PolynomialInputField(
-        // This key is used for testing purposes
-        key: Key('PolynomialInputField-coefficient-$i'),
-        controller: controllers[i],
-        placeholder: placeholderLetter,
-      ));
-
-      // Increments by 1 the char code unit. Basically, with the below code we
-      // can move from 'a' to 'b' to 'c'...
-      final newChar = placeholderLetter.codeUnitAt(0) + 1;
-      placeholderLetter = String.fromCharCode(newChar);
-    }
-
-    return body;
-  }
+  late final Widget cachedWrap = _InputFieldsWrapWidget(
+    controllers: controllers,
+    inputLength: widget.inputLength,
+  );
 
   /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
   /// order to cache the user input.
@@ -199,11 +180,7 @@ class __InputWidget extends State<_InputWidget> {
             padding: const EdgeInsets.only(left: 60, right: 60),
             child: Form(
               key: formKey,
-              child: Wrap(
-                spacing: 30,
-                alignment: WrapAlignment.center,
-                children: cachedWrapBody,
-              ),
+              child: cachedWrap,
             ),
           ),
 
@@ -234,6 +211,51 @@ class __InputWidget extends State<_InputWidget> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Generates the input fields of the coefficients and puts them in a [Wrap].
+class _InputFieldsWrapWidget extends StatelessWidget {
+  /// The [TextEditingController]s of each input field.
+  final List<TextEditingController> controllers;
+
+  /// How many input fields the screen has to display.
+  final int inputLength;
+
+  const _InputFieldsWrapWidget({
+    Key? key,
+    required this.controllers,
+    required this.inputLength,
+  }) : super(key: key);
+
+  /// Increments by [index] the char code unit to get a specific letter. For
+  /// example:
+  ///
+  ///   - [index] = 0 -> 'a'
+  ///   - [index] = 1 -> 'b'
+  ///   - [index] = 2 -> 'c'
+  ///   - [index] = 6 -> 'g'
+  String placeholderLetter(int index) {
+    const firstLetter = 'a';
+
+    return String.fromCharCode(firstLetter.codeUnitAt(0) + index);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 30,
+      alignment: WrapAlignment.center,
+      children: [
+        for (var i = 0; i < inputLength; ++i)
+          PolynomialInputField(
+            // This key is used for testing purposes
+            key: Key('PolynomialInputField-coefficient-$i'),
+            controller: controllers[i],
+            placeholder: placeholderLetter(i),
+          ),
+      ],
     );
   }
 }

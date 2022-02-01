@@ -40,7 +40,7 @@ abstract class RouteGenerator {
   const RouteGenerator._();
 
   /// The transition animation between two pages.
-  static Widget _slideTransition(
+  static Widget _pageTransition(
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
@@ -63,37 +63,37 @@ abstract class RouteGenerator {
       case homePage:
         return PageRouteBuilder<HomePage>(
           pageBuilder: (_, __, ___) => const HomePage(),
-          transitionsBuilder: _slideTransition,
+          transitionsBuilder: _pageTransition,
         );
 
       case polynomialPage:
         return PageRouteBuilder<PolynomialPage>(
           pageBuilder: (_, __, ___) => const PolynomialPage(),
-          transitionsBuilder: _slideTransition,
+          transitionsBuilder: _pageTransition,
         );
 
       case nonlinearPage:
         return PageRouteBuilder<NonlinearPage>(
           pageBuilder: (_, __, ___) => const NonlinearPage(),
-          transitionsBuilder: _slideTransition,
+          transitionsBuilder: _pageTransition,
         );
 
       case systemPage:
         return PageRouteBuilder<SystemPage>(
           pageBuilder: (_, __, ___) => const SystemPage(),
-          transitionsBuilder: _slideTransition,
+          transitionsBuilder: _pageTransition,
         );
 
       case integralPage:
         return PageRouteBuilder<IntegralPage>(
           pageBuilder: (_, __, ___) => const IntegralPage(),
-          transitionsBuilder: _slideTransition,
+          transitionsBuilder: _pageTransition,
         );
 
       case otherPage:
         return PageRouteBuilder<OtherPage>(
           pageBuilder: (_, __, ___) => const OtherPage(),
-          transitionsBuilder: _slideTransition,
+          transitionsBuilder: _pageTransition,
         );
 
       default:
