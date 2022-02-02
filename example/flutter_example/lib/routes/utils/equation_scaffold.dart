@@ -177,36 +177,10 @@ class _ScaffoldContents extends StatelessWidget {
 
           // The actual contents in the foreground
           Positioned.fill(
-            child: _ScaffoldForeground(
-              body: body,
-            ),
+            child: body,
           ),
         ],
       ),
-    );
-  }
-}
-
-/// The contents of the scaffold in the foreground.
-class _ScaffoldForeground extends StatelessWidget {
-  /// The body of the [Scaffold]
-  final Widget body;
-
-  /// Creates a [_ScaffoldForeground] widget.
-  const _ScaffoldForeground({
-    Key? key,
-    required this.body,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // The body of the app
-        Expanded(
-          child: body,
-        ),
-      ],
     );
   }
 }

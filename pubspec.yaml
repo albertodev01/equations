@@ -19,7 +19,7 @@ dev_dependencies:
   coverage: ^1.1.0
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.9.1
+  dart_code_metrics: ^4.10.1
 
   # https://pub.dev/packages/lints
   lints: ^1.0.1

@@ -38,7 +38,10 @@ dev_dependencies:
   bloc_test: ^9.0.2
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.9.1
+  dart_code_metrics: ^4.10.1
+
+  integration_test:
+    sdk: flutter
 
   # https://pub.dev/packages/flutter_lints
   flutter_lints: ^1.0.4

@@ -5,12 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// The app's main entrypoint.
+///
+/// The [LicenseRegistry.addLicense] call cab be ignored by the code coverage
+/// tool since it will be tested by integration tests.
 void main() {
-  // Registering fonts licences
+  // coverage:ignore-start
   LicenseRegistry.addLicense(() async* {
     final license = await rootBundle.loadString('google_fonts/OFL.txt');
     yield LicenseEntryWithLineBreaks(['google_fonts'], license);
   });
+  // coverage:ignore-end
 
   // Running the app
   runApp(const EquationsApp());
