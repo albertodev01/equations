@@ -20,7 +20,7 @@ void main() {
     await tester.tap(solveBtn);
     await tester.pumpAndSettle();
 
-    // Expecting solutions: 1 card for the root and 1 for the discriminant
+    // Widgets: `degree` cards for the root and 1 for the discriminant
     expect(find.byType(ComplexResultCard), findsNWidgets(degree + 1));
 
     // Cleaning

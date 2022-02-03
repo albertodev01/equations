@@ -15,6 +15,9 @@ void main() {
     await tester.enterText(finder.last, '2');
 
     if (dropdownValue.isNotEmpty) {
+      await tester.ensureVisible(find.text('Newton'));
+      await tester.pumpAndSettle();
+
       // Changing the dropdown value
       await tester.tap(find.text('Newton'));
       await tester.pumpAndSettle();
@@ -62,6 +65,9 @@ void main() {
     await tester.enterText(finder.at(2), '3');
 
     if (dropdownValue.isNotEmpty) {
+      await tester.ensureVisible(find.text('Bisection'));
+      await tester.pumpAndSettle();
+
       // Changing the dropdown value
       await tester.tap(find.text('Bisection'));
       await tester.pumpAndSettle();

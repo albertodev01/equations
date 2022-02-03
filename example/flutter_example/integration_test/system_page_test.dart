@@ -21,7 +21,7 @@ void main() {
     -16,
     -4,
     14,
-    57
+    57,
   ];
   const knownValues = [7, 3, 6, -2];
 
@@ -53,7 +53,7 @@ void main() {
     var knownValuesCounter = 0;
     for (var i = matrixInputs; i < matrixInputs + size; ++i) {
       await tester.enterText(
-          finder.at(i), '${knownValues[knownValuesCounter]}');
+          finder.at(i), '${knownValues[knownValuesCounter]}',);
       knownValuesCounter++;
     }
 
@@ -110,11 +110,14 @@ void main() {
     var knownValuesCounter = 0;
     for (var i = matrixInputs; i < matrixInputs + size; ++i) {
       await tester.enterText(
-          finder.at(i), '${knownValues[knownValuesCounter]}');
+          finder.at(i), '${knownValues[knownValuesCounter]}',);
       knownValuesCounter++;
     }
 
     if (cholesky) {
+      await tester.ensureVisible(find.text('LU'));
+      await tester.pumpAndSettle();
+
       // Changing the dropdown value
       await tester.tap(find.text('LU'));
       await tester.pumpAndSettle();
@@ -176,11 +179,14 @@ void main() {
     var knownValuesCounter = 0;
     for (var i = matrixInputs; i < matrixInputs + size; ++i) {
       await tester.enterText(
-          finder.at(i), '${knownValues[knownValuesCounter]}');
+          finder.at(i), '${knownValues[knownValuesCounter]}',);
       knownValuesCounter++;
     }
 
     if (jacobi) {
+      await tester.ensureVisible(find.text('SOR'));
+      await tester.pumpAndSettle();
+
       // Changing the dropdown value
       await tester.tap(find.text('SOR'));
       await tester.pumpAndSettle();
@@ -188,8 +194,7 @@ void main() {
       await tester.tap(find.text('Jacobi').last);
       await tester.pumpAndSettle();
     } else {
-      final w =
-          find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor'));
+      final w = find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor'),);
 
       await tester.ensureVisible(w);
       await tester.pumpAndSettle();
