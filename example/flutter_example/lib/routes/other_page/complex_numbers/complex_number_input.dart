@@ -35,6 +35,8 @@ class _ComplexNumberInputState extends State<ComplexNumberInput> {
         return context.l10n.wrong_input;
       }
     }
+
+    return null;
   }
 
   /// The decoration of the [TextFormField]s needed to receive the real and

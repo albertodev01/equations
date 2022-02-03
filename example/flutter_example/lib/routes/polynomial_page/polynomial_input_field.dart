@@ -25,6 +25,8 @@ class PolynomialInputField extends StatelessWidget {
         return context.l10n.wrong_input;
       }
     }
+
+    return null;
   }
 
   @override

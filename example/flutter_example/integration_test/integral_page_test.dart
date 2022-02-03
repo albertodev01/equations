@@ -1,5 +1,4 @@
 import 'package:equations_solver/main.dart' as app;
-import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 
