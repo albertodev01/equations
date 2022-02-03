@@ -1,7 +1,6 @@
 import 'package:equations_solver/main.dart' as app;
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -23,15 +22,26 @@ void main() {
         await tester.enterText(finder.last, '2');
 
         // Solving
-        await tester.tap(find.byKey(const Key('Polynomial-button-solve')));
-        await tester.pump();
+        final solveBtn = find.byKey(const Key('Polynomial-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pumpAndSettle();
 
         // Expecting solutions: 1 card for the root and 1 for the discriminant
         expect(find.byType(ComplexResultCard), findsNWidgets(1 + 1));
 
         // Cleaning
-        await tester.tap(find.byKey(const Key('Polynomial-button-clean')));
-        await tester.pump();
+        final cleanBtn = find.byKey(const Key('Polynomial-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pumpAndSettle();
+
         expect(find.byType(ComplexResultCard), findsNothing);
       },
     );
@@ -55,15 +65,26 @@ void main() {
         await tester.enterText(finder.at(2), '3');
 
         // Solving
-        await tester.tap(find.byKey(const Key('Polynomial-button-solve')));
-        await tester.pump();
+        final solveBtn = find.byKey(const Key('Polynomial-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pumpAndSettle();
 
         // Expecting solutions: 2 cards for the root and 1 for the discriminant
         expect(find.byType(ComplexResultCard), findsNWidgets(2 + 1));
 
         // Cleaning
-        await tester.tap(find.byKey(const Key('Polynomial-button-clean')));
-        await tester.pump();
+        final cleanBtn = find.byKey(const Key('Polynomial-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pumpAndSettle();
+
         expect(find.byType(ComplexResultCard), findsNothing);
       },
     );
@@ -88,15 +109,26 @@ void main() {
         await tester.enterText(finder.at(3), '4');
 
         // Solving
-        await tester.tap(find.byKey(const Key('Polynomial-button-solve')));
-        await tester.pump();
+        final solveBtn = find.byKey(const Key('Polynomial-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pumpAndSettle();
 
         // Expecting solutions: 2 cards for the root and 1 for the discriminant
         expect(find.byType(ComplexResultCard), findsNWidgets(3 + 1));
 
         // Cleaning
-        await tester.tap(find.byKey(const Key('Polynomial-button-clean')));
-        await tester.pump();
+        final cleanBtn = find.byKey(const Key('Polynomial-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pumpAndSettle();
+
         expect(find.byType(ComplexResultCard), findsNothing);
       },
     );
@@ -122,15 +154,26 @@ void main() {
         await tester.enterText(finder.at(4), '5');
 
         // Solving
-        await tester.tap(find.byKey(const Key('Polynomial-button-solve')));
-        await tester.pump();
+        final solveBtn = find.byKey(const Key('Polynomial-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pumpAndSettle();
 
         // Expecting solutions: 2 cards for the root and 1 for the discriminant
         expect(find.byType(ComplexResultCard), findsNWidgets(4 + 1));
 
         // Cleaning
-        await tester.tap(find.byKey(const Key('Polynomial-button-clean')));
-        await tester.pump();
+        final cleanBtn = find.byKey(const Key('Polynomial-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pumpAndSettle();
+
         expect(find.byType(ComplexResultCard), findsNothing);
       },
     );

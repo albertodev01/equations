@@ -8,11 +8,11 @@ void main() {
   group('Integration tests on the Nonlinear page', () {
     testWidgets(
       'Testing nonlinear equations - Newton',
-          (tester) async {
+      (tester) async {
         app.main();
         await tester.pumpAndSettle();
 
-        // Opening the polynomial page
+        // Opening the nonlinear page
         await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
         await tester.pumpAndSettle();
 
@@ -22,15 +22,222 @@ void main() {
         await tester.enterText(finder.last, '2');
 
         // Solving
-        await tester.tap(find.byKey(const Key('Nonlinear-button-solve')));
+        final solveBtn = find.byKey(const Key('Nonlinear-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
         await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pump();
 
         // Expecting solutions
         expect(find.byType(RealResultCard), findsNWidgets(3));
 
         // Cleaning
-        await tester.tap(find.byKey(const Key('Nonlinear-button-clean')));
+        final cleanBtn = find.byKey(const Key('Nonlinear-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
         await tester.pump();
+
+        expect(find.byType(RealResultCard), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Testing nonlinear equations - Steffensen',
+      (tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        // Opening the nonlinear page
+        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
+        await tester.pumpAndSettle();
+
+        // Inserting data
+        final finder = find.byType(TextFormField);
+        await tester.enterText(finder.first, 'x-2.25');
+        await tester.enterText(finder.last, '2');
+
+        // Changing the dropdown value
+        await tester.tap(find.text('Newton'));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Steffensen').last);
+        await tester.pumpAndSettle();
+
+        // Solving
+        final solveBtn = find.byKey(const Key('Nonlinear-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pump();
+
+        // Expecting solutions
+        expect(find.byType(RealResultCard), findsNWidgets(3));
+
+        // Cleaning
+        final cleanBtn = find.byKey(const Key('Nonlinear-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pump();
+
+        expect(find.byType(RealResultCard), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Testing nonlinear equations - Bisection',
+      (tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        // Opening the nonlinear page
+        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
+        await tester.pumpAndSettle();
+
+        // Moving to the 'Bracketing' page
+        await tester.tap(find.text('Bracketing'));
+        await tester.pumpAndSettle();
+
+        // Inserting data
+        final finder = find.byType(TextFormField);
+        await tester.enterText(finder.at(0), 'x-2.25');
+        await tester.enterText(finder.at(1), '1');
+        await tester.enterText(finder.at(2), '3');
+
+        // Solving
+        final solveBtn = find.byKey(const Key('Nonlinear-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pump();
+
+        // Expecting solutions
+        expect(find.byType(RealResultCard), findsNWidgets(3));
+
+        // Cleaning
+        final cleanBtn = find.byKey(const Key('Nonlinear-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pump();
+
+        expect(find.byType(RealResultCard), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Testing nonlinear equations - Secant',
+      (tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        // Opening the nonlinear page
+        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
+        await tester.pumpAndSettle();
+
+        // Moving to the 'Bracketing' page
+        await tester.tap(find.text('Bracketing'));
+        await tester.pumpAndSettle();
+
+        // Inserting data
+        final finder = find.byType(TextFormField);
+        await tester.enterText(finder.at(0), 'x-2.25');
+        await tester.enterText(finder.at(1), '1');
+        await tester.enterText(finder.at(2), '3');
+
+        // Changing the dropdown value
+        await tester.tap(find.text('Bisection'));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Secant').last);
+        await tester.pumpAndSettle();
+
+        // Solving
+        final solveBtn = find.byKey(const Key('Nonlinear-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pump();
+
+        // Expecting solutions
+        expect(find.byType(RealResultCard), findsNWidgets(3));
+
+        // Cleaning
+        final cleanBtn = find.byKey(const Key('Nonlinear-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pump();
+
+        expect(find.byType(RealResultCard), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Testing nonlinear equations - Brent',
+      (tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        // Opening the nonlinear page
+        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
+        await tester.pumpAndSettle();
+
+        // Moving to the 'Bracketing' page
+        await tester.tap(find.text('Bracketing'));
+        await tester.pumpAndSettle();
+
+        // Inserting data
+        final finder = find.byType(TextFormField);
+        await tester.enterText(finder.at(0), 'x-2.25');
+        await tester.enterText(finder.at(1), '1');
+        await tester.enterText(finder.at(2), '3');
+
+        // Changing the dropdown value
+        await tester.tap(find.text('Bisection'));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Brent').last);
+        await tester.pumpAndSettle();
+
+        // Solving
+        final solveBtn = find.byKey(const Key('Nonlinear-button-solve'));
+
+        await tester.ensureVisible(solveBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(solveBtn);
+        await tester.pump();
+
+        // Expecting solutions
+        expect(find.byType(RealResultCard), findsNWidgets(3));
+
+        // Cleaning
+        final cleanBtn = find.byKey(const Key('Nonlinear-button-clean'));
+
+        await tester.ensureVisible(cleanBtn);
+        await tester.pumpAndSettle();
+
+        await tester.tap(cleanBtn);
+        await tester.pump();
+
         expect(find.byType(RealResultCard), findsNothing);
       },
     );
