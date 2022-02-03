@@ -2,6 +2,7 @@
  - Dependencies versions update
  - Updated the `analysis_options.yaml` file with some more rules
  - Updated the Flutter demo in the `example/` folder
+ - Updated the Dart demo in the `example/` folder
  - Minor documentation improvements
 
 ## [3.1.3]
