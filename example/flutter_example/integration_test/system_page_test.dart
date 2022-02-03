@@ -53,7 +53,9 @@ void main() {
     var knownValuesCounter = 0;
     for (var i = matrixInputs; i < matrixInputs + size; ++i) {
       await tester.enterText(
-          finder.at(i), '${knownValues[knownValuesCounter]}',);
+        finder.at(i),
+        '${knownValues[knownValuesCounter]}',
+      );
       knownValuesCounter++;
     }
 
@@ -110,7 +112,9 @@ void main() {
     var knownValuesCounter = 0;
     for (var i = matrixInputs; i < matrixInputs + size; ++i) {
       await tester.enterText(
-          finder.at(i), '${knownValues[knownValuesCounter]}',);
+        finder.at(i),
+        '${knownValues[knownValuesCounter]}',
+      );
       knownValuesCounter++;
     }
 
@@ -179,7 +183,9 @@ void main() {
     var knownValuesCounter = 0;
     for (var i = matrixInputs; i < matrixInputs + size; ++i) {
       await tester.enterText(
-          finder.at(i), '${knownValues[knownValuesCounter]}',);
+        finder.at(i),
+        '${knownValues[knownValuesCounter]}',
+      );
       knownValuesCounter++;
     }
 
@@ -194,7 +200,9 @@ void main() {
       await tester.tap(find.text('Jacobi').last);
       await tester.pumpAndSettle();
     } else {
-      final w = find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor'),);
+      final w = find.byKey(
+        const Key('SystemSolver-Iterative-RelaxationFactor'),
+      );
 
       await tester.ensureVisible(w);
       await tester.pumpAndSettle();
