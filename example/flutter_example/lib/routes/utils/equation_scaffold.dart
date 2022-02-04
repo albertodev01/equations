@@ -70,7 +70,13 @@ class _EquationScaffoldState extends State<EquationScaffold>
 
   @override
   void dispose() {
-    tabController.dispose();
+    // The 'tabController' is lazily initialized and it may never be used if
+    // there are no navigation items. For this reason, it has to be disposed
+    // only when a tabbed layout is used, which is when there are navigation
+    // items defined.
+    if (widget.navigationItems.isNotEmpty) {
+      tabController.dispose();
+    }
 
     super.dispose();
   }
