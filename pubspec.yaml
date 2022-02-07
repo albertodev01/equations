@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   # https://pub.dev/packages/fraction
-  fraction: ^3.2.2
+  fraction: ^4.0.1
 
   # https://pub.dev/packages/petitparser
   petitparser: ^4.4.0

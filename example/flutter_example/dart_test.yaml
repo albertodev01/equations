@@ -1,0 +1,6 @@
+# This will indicate that goldens are an expected test tag. All tests that use testGoldens() will
+# automatically be given this tag.
+#
+#  - For more info, see https://pub.dev/packages/golden_toolkit#getting-started
+tags:
+  golden:

@@ -18,7 +18,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
       - name: Installing the dependencies
         run: flutter pub get
@@ -43,7 +46,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   verify_equation_flutter_example:
-    name: Equations Flutter example - CI action
+    name: Flutter example
     needs: [verify_equation_package]
     runs-on: windows-latest
     defaults:
@@ -52,7 +55,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
       - name: Installing the dependencies
         run: flutter pub get
@@ -71,3 +77,30 @@ jobs:
         with:
           path: example/flutter_example/coverage/lcov.info
           min_coverage: 98
+
+  verify_equation_dart_example:
+    name: Dart example
+    needs: [verify_equation_flutter_example]
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: example/dart_example
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Installing the dependencies
+        run: flutter pub get
+
+      - name: Making sure the package is formatted
+        run: flutter format --set-exit-if-changed .
+
+      - name: Making sure that there are no analysis warnings or errors
+        run: flutter analyze --fatal-infos --fatal-warnings && flutter pub run dart_code_metrics:metrics analyze lib test
+
+      - name: Runing unit and widget tests
+        run: flutter test
