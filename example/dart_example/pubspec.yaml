@@ -1,9 +1,14 @@
 name: equation_solver_cli
 description: A sample command-line application.
 version: 1.0.0
+publish_to: none
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
+
+dependencies:
+  equations:
+    path: ../../
 
 dev_dependencies:
   # https://pub.dev/packages/coverage
