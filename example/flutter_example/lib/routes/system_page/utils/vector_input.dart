@@ -8,7 +8,7 @@ class VectorInput extends StatefulWidget {
   /// Determines the size of the vector.
   final List<TextEditingController> vectorControllers;
 
-  /// The size of the vector.
+  /// The actual size of the vector.
   final int vectorSize;
 
   /// Creates a [VectorInput] widget.
@@ -24,34 +24,20 @@ class VectorInput extends StatefulWidget {
 
 class _VectorInputState extends State<VectorInput> {
   /// The children of the [Column] widget, representing the vector.
-  late List<Widget> children = _vectorChildren();
-
-  /// Builds the [Column]'s children that will contain the input fields for the
-  /// known values vector
-  List<Widget> _vectorChildren() {
-    final entry = <Widget>[];
-
-    for (var i = 0; i < widget.vectorSize; ++i) {
-      entry.add(
-        Padding(
-          padding:
-              i == 0 ? const EdgeInsets.all(0) : const EdgeInsets.only(top: 10),
-          child: SystemInputField(
-            controller: widget.vectorControllers[i],
-          ),
-        ),
-      );
-    }
-
-    return entry;
-  }
+  late Widget vectorChildren = _VectorChildren(
+    vectorControllers: widget.vectorControllers,
+    vectorSize: widget.vectorSize,
+  );
 
   @override
   void didUpdateWidget(covariant VectorInput oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (widget.vectorSize != oldWidget.vectorSize) {
-      children = _vectorChildren();
+      vectorChildren = _VectorChildren(
+        vectorControllers: widget.vectorControllers,
+        vectorSize: widget.vectorSize,
+      );
     }
   }
 
@@ -64,11 +50,43 @@ class _VectorInputState extends State<VectorInput> {
     return Center(
       child: SizedBox(
         width: boxWidth,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: children,
-        ),
+        child: vectorChildren,
       ),
+    );
+  }
+}
+
+/// Returns the [Column]'s and the children that will contain the input fields
+/// for the known values vector.
+class _VectorChildren extends StatelessWidget {
+  /// Determines the size of the vector.
+  final List<TextEditingController> vectorControllers;
+
+  /// The actual size of the vector.
+  final int vectorSize;
+
+  /// Creates a [_VectorChildren] widget.
+  const _VectorChildren({
+    Key? key,
+    required this.vectorControllers,
+    required this.vectorSize,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < vectorSize; ++i)
+          Padding(
+            padding: i == 0
+                ? const EdgeInsets.all(0)
+                : const EdgeInsets.only(top: 10),
+            child: SystemInputField(
+              controller: vectorControllers[i],
+            ),
+          ),
+      ],
     );
   }
 }

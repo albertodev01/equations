@@ -1,4 +1,5 @@
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
+import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +29,13 @@ class SizePicker extends StatelessWidget {
         const SizedBox(width: 15),
 
         // The size
-        BlocBuilder<NumberSwitcherCubit, int>(
+        BlocConsumer<NumberSwitcherCubit, int>(
+          listenWhen: (prev, curr) => prev != curr,
+          listener: (context, _) {
+            // Making sure to reset the cached text field values when the
+            // matrix size changes
+            context.read<TextFieldValuesCubit>().reset();
+          },
           builder: (context, state) {
             late final String text;
 

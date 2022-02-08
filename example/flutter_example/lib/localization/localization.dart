@@ -19,5 +19,5 @@ export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// ```
 extension LocalizationContext on BuildContext {
   /// Returns an [AppLocalizations] instance associated to the current context.
-  AppLocalizations get l10n => AppLocalizations.of(this)!;
+  AppLocalizations get l10n => AppLocalizations.of(this);
 }

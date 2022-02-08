@@ -44,6 +44,8 @@ class EquationInput extends StatelessWidget {
 
       return value.isRealFunction ? null : 'Uh! :(';
     }
+
+    return null;
   }
 
   @override

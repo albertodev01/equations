@@ -70,7 +70,13 @@ class _EquationScaffoldState extends State<EquationScaffold>
 
   @override
   void dispose() {
-    tabController.dispose();
+    // The 'tabController' is lazily initialized and it may never be used if
+    // there are no navigation items. For this reason, it has to be disposed
+    // only when a tabbed layout is used, which is when there are navigation
+    // items defined.
+    if (widget.navigationItems.isNotEmpty) {
+      tabController.dispose();
+    }
 
     super.dispose();
   }
@@ -177,36 +183,10 @@ class _ScaffoldContents extends StatelessWidget {
 
           // The actual contents in the foreground
           Positioned.fill(
-            child: _ScaffoldForeground(
-              body: body,
-            ),
+            child: body,
           ),
         ],
       ),
-    );
-  }
-}
-
-/// The contents of the scaffold in the foreground.
-class _ScaffoldForeground extends StatelessWidget {
-  /// The body of the [Scaffold]
-  final Widget body;
-
-  /// Creates a [_ScaffoldForeground] widget.
-  const _ScaffoldForeground({
-    Key? key,
-    required this.body,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // The body of the app
-        Expanded(
-          child: body,
-        ),
-      ],
     );
   }
 }

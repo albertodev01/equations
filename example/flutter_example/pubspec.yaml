@@ -6,7 +6,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 dependencies:
   # https://pub.dev/packages/equatable
@@ -25,10 +25,10 @@ dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/flutter_svg
-  flutter_svg: ^1.0.0
+  flutter_svg: ^1.0.3
 
   # https://pub.dev/packages/google_fonts
-  google_fonts: ^2.2.0
+  google_fonts: ^2.3.1
 
   # https://pub.dev/packages/intl
   intl: ^0.17.0
@@ -38,7 +38,7 @@ dev_dependencies:
   bloc_test: ^9.0.2
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.8.1
+  dart_code_metrics: ^4.10.1
 
   # https://pub.dev/packages/flutter_lints
   flutter_lints: ^1.0.4
@@ -47,7 +47,10 @@ dev_dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/golden_toolkit
-  golden_toolkit: ^0.12.0
+  golden_toolkit: ^0.13.0
+
+  integration_test:
+    sdk: flutter
 
   # https://pub.dev/packages/mocktail
   mocktail: ^0.2.0

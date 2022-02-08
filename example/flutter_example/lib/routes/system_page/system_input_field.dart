@@ -30,6 +30,8 @@ class _SystemInputFieldState extends State<SystemInputField> {
         return context.l10n.wrong_input;
       }
     }
+
+    return null;
   }
 
   @override

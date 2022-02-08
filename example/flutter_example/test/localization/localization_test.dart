@@ -115,7 +115,7 @@ void main() {
       supportedLocales: AppLocalizations.supportedLocales,
       home: Builder(
         builder: (context) {
-          localizations = AppLocalizations.of(context)!;
+          localizations = AppLocalizations.of(context);
 
           return const SizedBox();
         },
@@ -135,7 +135,7 @@ void main() {
       locale: const Locale('it'),
       home: Builder(
         builder: (context) {
-          localizations = AppLocalizations.of(context)!;
+          localizations = AppLocalizations.of(context);
 
           return const SizedBox();
         },
@@ -155,7 +155,7 @@ void main() {
       locale: const Locale('fr'),
       home: Builder(
         builder: (context) {
-          localizations = AppLocalizations.of(context)!;
+          localizations = AppLocalizations.of(context);
 
           return const SizedBox();
         },

@@ -32,6 +32,7 @@ class _RelaxationFactorInputState extends State<RelaxationFactorInput> {
       children: [
         // Input
         SystemInputField(
+          key: const Key('SystemSolver-Iterative-RelaxationFactor'),
           controller: widget.textEditingController,
           placeholder: 'w',
         ),

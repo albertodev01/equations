@@ -1,6 +1,6 @@
 # Equations solver
 
-An equation solving application created with the Flutter framework that can run on Android, iOS, Windows, macOS and web. This project shows how the `equations` package can be used to solve equations, systems, integrals and much more. The app fully localized and it currently supports the following languages:
+An equation solving application created with the Flutter framework that can run on Android, iOS, Windows, macOS, Linux and web. This project shows how the `equations` package can be used to solve equations, systems, integrals and much more. The app fully localized and it currently supports the following languages:
 
   - English
   - Italian
