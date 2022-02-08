@@ -1,5 +1,6 @@
+import 'dart:collection';
 import 'dart:math' as math;
-import 'package:collection/collection.dart';
+
 import 'package:equations/equations.dart';
 
 /// A Sylvester matrix is used to compute the discriminant of a polynomial

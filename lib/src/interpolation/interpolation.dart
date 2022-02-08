@@ -1,4 +1,5 @@
-import 'package:collection/collection.dart';
+import 'dart:collection';
+
 import 'package:equations/equations.dart';
 
 /// Abstract class representing an **interpolation** strategy that finds new

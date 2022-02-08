@@ -1,4 +1,5 @@
-import 'package:collection/collection.dart';
+import 'dart:collection';
+
 import 'package:equations/equations.dart';
 
 /// A simple Dart implementation of a matrix whose size is `m x n`. Thanks to

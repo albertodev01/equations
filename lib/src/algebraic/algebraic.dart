@@ -1,6 +1,6 @@
+import 'dart:collection';
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:equations/equations.dart';
 
 /// Abstract class representing an _algebraic equation_, also know as

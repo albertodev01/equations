@@ -1,4 +1,5 @@
-import 'package:collection/collection.dart';
+import 'dart:collection';
+
 import 'package:equations/equations.dart';
 
 /// A solver for systems of linear equations whose coefficients are only real
