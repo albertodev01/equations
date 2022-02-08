@@ -45,7 +45,8 @@ class PolynomialOutput implements Output {
       ..write(' > Roots: ')
       ..writeln(polynomial.solutions());
 
-    stdout.writeln('===== POLYNOMIAL EQUATIONS =====\n');
-    stdout.writeln(output.toString());
+    stdout
+      ..writeln('===== POLYNOMIAL EQUATIONS =====\n')
+      ..writeln(output.toString());
   }
 }

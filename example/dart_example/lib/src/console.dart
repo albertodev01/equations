@@ -14,7 +14,7 @@ class Console {
     required this.args,
   });
 
-  /// Reads the input and analyzes a fraction or a mixed fraction.
+  /// Reads the input and uses [Output] to print to [stdout].
   void run() {
     stdout.encoding = utf8;
 
@@ -26,12 +26,22 @@ class Console {
         case '-p':
           output = const PolynomialOutput();
           break;
+        case '-n':
+          output = const NonlinearOutput();
+          break;
+        case '-i':
+          output = const IntegralOutput();
+          break;
+        case '-m':
+          output = const MatrixOutput();
+          break;
         default:
           output = const ErrorOutput();
       }
 
       output.processOutput();
     } else {
+      // Error message when 0 or more than 1 arguments are passed
       stdout.writeln(
         '\n > Error: exactly one argument is required but ${args.length} have '
         'been provided)\n',

@@ -21,7 +21,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          cache: true
 
       - name: Installing the dependencies
         run: flutter pub get
@@ -58,7 +57,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          cache: true
 
       - name: Installing the dependencies
         run: flutter pub get
@@ -91,7 +89,6 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          cache: true
 
       - name: Installing the dependencies
         run: flutter pub get
@@ -103,4 +100,10 @@ jobs:
         run: flutter analyze --fatal-infos --fatal-warnings && flutter pub run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
-        run: flutter test
+        run: flutter test --coverage
+
+      - name: Making sure that code coverage is at least 95
+        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        with:
+          path: example/flutter_example/coverage/lcov.info
+          min_coverage: 95

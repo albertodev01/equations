@@ -4,10 +4,8 @@ import 'package:equation_solver_cli/equation_solver_cli.dart'
 /// The main entrypoint expects only 1 argument, which is used to determine the
 /// kind of demo to be run.
 void main(List<String> arguments) {
-  final app = equation_solver_cli.Console(
-    args: arguments,
-  );
-
   // Parsing arguments and running the app.
-  app.run();
+  equation_solver_cli.Console(
+    args: arguments,
+  ).run();
 }
