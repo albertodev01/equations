@@ -15,16 +15,16 @@ void main() {
         );
 
         // Converting into a stream
-        final stream = process.stdout.transform(Utf8Decoder());
+        final stream =
+            process.stdout.transform(Utf8Decoder()).transform(LineSplitter());
 
         // Expected output
-        final expectedOutput = '\n > Error: the given argument is not valid!'
-            '\n\nPress any key to exit...';
+        final expectedOutput = ' > Error: the given argument is not valid!';
 
         expectLater(
           stream,
-          emitsInOrder(
-            [expectedOutput],
+          emitsAnyOf(
+            ['', expectedOutput, ''],
           ),
         );
       },

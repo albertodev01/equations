@@ -23,16 +23,19 @@ void main() {
         final process = await createProcess();
 
         // Converting into a stream
-        final stream = process.stdout.transform(Utf8Decoder());
+        final stream =
+            process.stdout.transform(Utf8Decoder()).transform(LineSplitter());
 
         // Expected output
-        final expectedOutput = '\n > Error: exactly one argument is required '
-            'but 0 have been provided)\n\nPress any key to exit...';
+        final expectedOutput = ' > Error: exactly one argument is required '
+            'but 0 have been provided).';
+
+        process.stdin.writeln('.');
 
         expectLater(
           stream,
-          emitsInOrder(
-            [expectedOutput],
+          emitsAnyOf(
+            ['', expectedOutput, ''],
           ),
         );
       },
