@@ -63,7 +63,7 @@ abstract class Algebraic {
   /// were complex numbers as well, use the [Algebraic(coefficients)] constructor.
   Algebraic.realEquation(List<double> coefficients)
       : coefficients = UnmodifiableListView(
-          coefficients.map((c) => Complex.fromReal(c)),
+          coefficients.map(Complex.fromReal),
         ) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -165,7 +165,7 @@ abstract class Algebraic {
   /// were complex numbers as well, use the [Algebraic.from(coefficients)]
   /// instead.
   factory Algebraic.fromReal(List<double> coefficients) =>
-      Algebraic.from(coefficients.map((c) => Complex.fromReal(c)).toList());
+      Algebraic.from(coefficients.map(Complex.fromReal).toList());
 
   @override
   bool operator ==(Object other) {

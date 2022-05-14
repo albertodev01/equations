@@ -50,8 +50,8 @@ class ExpressionParser {
 
   /// A "cached" instance of a parser to be used to evaluate expressions on a
   /// given point.
-  static late final Parser _parser = () {
-    final builder = ExpressionBuilder();
+  static final Parser<_Evaluator> _parser = () {
+    final builder = ExpressionBuilder<_Evaluator>();
 
     // This primitive is fundamental as it recognizes real numbers from the input
     // and parses them using 'parse'.

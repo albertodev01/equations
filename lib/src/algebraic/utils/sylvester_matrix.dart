@@ -24,7 +24,7 @@ class SylvesterMatrix {
   SylvesterMatrix.fromReal({
     required List<double> coefficients,
   }) : _coefficients = UnmodifiableListView(
-          coefficients.map((c) => Complex.fromReal(c)).toList(),
+          coefficients.map(Complex.fromReal).toList(),
         );
 
   @override

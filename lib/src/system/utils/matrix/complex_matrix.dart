@@ -37,16 +37,12 @@ class ComplexMatrix extends Matrix<Complex> {
   /// If [identity] is set to `true` (by default it's `false`) then the matrix
   /// is initialized with all zeroes **and** the diagonal is filled with ones.
   ComplexMatrix({
-    required int rows,
-    required int columns,
-    bool identity = false,
-  }) : super(
-          rows: rows,
-          columns: columns,
-          identity: identity,
-          defaultValue: const Complex.zero(),
-          identityOneValue: const Complex.fromReal(1),
-        );
+    required super.rows,
+    required super.columns,
+    super.identity = false,
+    super.defaultValue = const Complex.zero(),
+    super.identityOneValue = const Complex.fromReal(1),
+  });
 
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with values from [data].

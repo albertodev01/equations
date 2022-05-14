@@ -76,9 +76,7 @@ abstract class NumericalIntegration {
   }
 
   /// Evaluates the given [function] on the [x] point.
-  double evaluateFunction(double x) {
-    return _evaluator.evaluateOn(function, x);
-  }
+  double evaluateFunction(double x) => _evaluator.evaluateOn(function, x);
 
   /// Calculates the numerical value of the [function] **definite** integral
   /// between [lowerBound] and [upperBound].

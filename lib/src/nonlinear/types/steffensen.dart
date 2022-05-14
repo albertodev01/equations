@@ -23,15 +23,11 @@ class Steffensen extends NonLinear {
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Steffensen({
-    required String function,
+    required super.function,
     required this.x0,
-    double tolerance = 1.0e-10,
-    int maxSteps = 15,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 15,
+  });
 
   @override
   bool operator ==(Object other) {

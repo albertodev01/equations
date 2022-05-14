@@ -12,7 +12,7 @@ import 'package:equations/src/utils/math_utils.dart';
 ///  - when the polynomial degree is 5 or higher, use [DurandKerner];
 ///  - when the polynomial degree is 4, use [Quartic];
 ///  - when the polynomial degree is 3, use [Cubic];
-///  - when the polynomial degree is 2, use [Quadratoc];
+///  - when the polynomial degree is 2, use [Quadratic];
 ///  - when the polynomial degree is 1, use [Linear].
 ///
 /// This algorithm requires an initial set of values to find the roots. This
@@ -337,9 +337,6 @@ class DurandKerner extends Algebraic with MathUtils {
   }
 
   /// Returns the coefficients of the derivative of a given polynomial.
-  ///
-  /// The [poly] parameter contains the coefficients of the polynomial whose
-  /// derivative has to be computed.
   List<Complex> _derivativeOf() {
     final newLength = coefficients.length - 1;
 

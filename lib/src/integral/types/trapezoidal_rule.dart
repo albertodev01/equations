@@ -13,16 +13,11 @@ class TrapezoidalRule extends NumericalIntegration {
   /// The [intervals] variable represents the number of parts in which the
   /// [lowerBound, upperBound] interval has to be split by the algorithm.
   const TrapezoidalRule({
-    required String function,
-    required double lowerBound,
-    required double upperBound,
-    int intervals = 20,
-  }) : super(
-          function: function,
-          lowerBound: lowerBound,
-          upperBound: upperBound,
-          intervals: intervals,
-        );
+    required super.function,
+    required super.lowerBound,
+    required super.upperBound,
+    super.intervals = 20,
+  });
 
   @override
   IntegralResults integrate() {

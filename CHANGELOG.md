@@ -1,3 +1,10 @@
+## [3.3.0]
+ - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
+ - Migrated Dart code to 2.17 with super parameters
+ - Dependencies versions update
+ - Updated the `analysis_options.yaml` file with some more rules
+ - Updated the Flutter demo in the `example/` folder
+
 ## [3.2.0]
  - Dependencies versions update
  - Updated the `analysis_options.yaml` file with some more rules
