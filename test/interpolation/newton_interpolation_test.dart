@@ -109,12 +109,14 @@ void main() {
 
       expect(
         interpolation.hashCode,
-        equals(const NewtonInterpolation(
-          nodes: [
-            InterpolationNode(x: 1, y: 3),
-            InterpolationNode(x: -2, y: 5),
-          ],
-        ).hashCode,),
+        equals(
+          const NewtonInterpolation(
+            nodes: [
+              InterpolationNode(x: 1, y: 3),
+              InterpolationNode(x: -2, y: 5),
+            ],
+          ).hashCode,
+        ),
       );
     });
 

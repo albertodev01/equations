@@ -125,11 +125,13 @@ void main() {
 
       expect(
         fx,
-        equals(Quadratic(
-          a: const Complex(2, 3),
-          b: const Complex.i(),
-          c: const Complex(-1, 0),
-        ),),
+        equals(
+          Quadratic(
+            a: const Complex(2, 3),
+            b: const Complex.i(),
+            c: const Complex(-1, 0),
+          ),
+        ),
       );
       expect(
         Quadratic(

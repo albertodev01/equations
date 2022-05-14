@@ -228,11 +228,15 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     final maxRowCol = max(matrix.rowCount, matrix.columnCount);
 
     // Arrays for internal storage of U and V.
-    final matrixU = List<List<double>>.generate(matrix.rowCount, (_) => List<double>.generate(
+    final matrixU = List<List<double>>.generate(
+      matrix.rowCount,
+      (_) => List<double>.generate(
         maxRowCol,
         (_) => 0,
-      ),);
-    final matrixV = List<List<double>>.generate(matrix.columnCount, (_) => List<double>.generate(matrix.columnCount, (_) => 0));
+      ),
+    );
+    final matrixV = List<List<double>>.generate(matrix.columnCount,
+        (_) => List<double>.generate(matrix.columnCount, (_) => 0));
 
     // Array for internal storage of the singular values.
     final arrayS = List<double>.generate(
@@ -488,7 +492,8 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     }
 
     // Building the 'E' rectangular matrix, whose size is rowCount * columnCount
-    final sAsMatrix = List<List<double>>.generate(matrix.rowCount, (_) => List<double>.generate(matrix.columnCount, (_) => 0));
+    final sAsMatrix = List<List<double>>.generate(matrix.rowCount,
+        (_) => List<double>.generate(matrix.columnCount, (_) => 0));
     for (var i = 0; i < matrix.rowCount; i++) {
       for (var j = 0; j < matrix.columnCount; j++) {
         if (i == j) {

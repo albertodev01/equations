@@ -42,8 +42,10 @@ abstract class SystemSolver {
 
     // The vector of known values must match the size of the matrix
     if (equations.rowCount != b.length) {
-      throw const SystemSolverException('The known values vector must have the '
-          'same size as the matrix.',);
+      throw const SystemSolverException(
+        'The known values vector must have the '
+        'same size as the matrix.',
+      );
     }
 
     // Copying and storing internally the list of known values
@@ -71,8 +73,10 @@ abstract class SystemSolver {
 
     // The vector of known values must match the size of the matrix
     if (equations.rowCount != b.length) {
-      throw const SystemSolverException('The known values vector must have the '
-          'same size as the matrix.',);
+      throw const SystemSolverException(
+        'The known values vector must have the '
+        'same size as the matrix.',
+      );
     }
 
     // Copying and storing internally the list of known values

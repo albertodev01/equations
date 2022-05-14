@@ -29,56 +29,57 @@ class Complex implements Comparable<Complex> {
   /// real part is set to 0.
   const Complex.fromImaginary(this.imaginary) : real = 0;
 
+  /// This is the same as calling `Complex(0, 0)`.
+  const Complex.zero() : this(0, 0);
+
+  /// This is the same as calling `Complex(0, 1)`.
+  const Complex.i() : this(0, 1);
+
   /// Creates a complex number from [Fraction] objects as parameter for the real
   /// and imaginary part.
-  Complex.fromFraction(Fraction real, Fraction imaginary)
-      : real = real.toDouble(),
-        imaginary = imaginary.toDouble();
+  factory Complex.fromFraction(Fraction real, Fraction imaginary) =>
+      Complex(real.toDouble(), imaginary.toDouble());
 
   /// Creates a complex number from [MixedFraction] objects as parameter for the
   /// real and imaginary part.
-  Complex.fromMixedFraction(MixedFraction real, MixedFraction imaginary)
-      : real = real.toDouble(),
-        imaginary = imaginary.toDouble();
+  factory Complex.fromMixedFraction(MixedFraction real, MixedFraction imag) =>
+      Complex(real.toDouble(), imag.toDouble());
 
   /// Creates a complex number having only the real part, which is expressed as
   /// a [Fraction]. The imaginary part is set to 0.
-  Complex.fromRealFraction(Fraction real)
-      : real = real.toDouble(),
-        imaginary = 0;
+  factory Complex.fromRealFraction(Fraction real) =>
+      Complex(real.toDouble(), 0);
 
   /// Creates a complex number having only the imaginary part, which is expressed
   /// as a [Fraction]. The real part is set to 0.
-  Complex.fromImaginaryFraction(Fraction imaginary)
-      : real = 0,
-        imaginary = imaginary.toDouble();
+  factory Complex.fromImaginaryFraction(Fraction imaginary) =>
+      Complex(0, imaginary.toDouble());
 
   /// Creates a complex number having only the real part, which is expressed as
   /// a [MixedFraction]. The imaginary part is set to 0.
-  Complex.fromRealMixedFraction(MixedFraction real)
-      : real = real.toDouble(),
-        imaginary = 0;
+  factory Complex.fromRealMixedFraction(MixedFraction real) =>
+      Complex(real.toDouble(), 0);
 
   /// Creates a complex number having only the imaginary part, which is expressed
   /// as a [MixedFraction]. The real part is set to 0.
-  Complex.fromImaginaryMixedFraction(MixedFraction imaginary)
-      : real = 0,
-        imaginary = imaginary.toDouble();
+  factory Complex.fromImaginaryMixedFraction(MixedFraction imaginary) =>
+      Complex(0, imaginary.toDouble());
 
   /// Creates a complex number from the given polar coordinates where [r] is the
   /// radius and [theta] is the angle.
   ///
   /// By default the angle theta must be expressed in *radians* but setting
   /// `angleInRadians = false` allows the value to be in degrees.
-  Complex.fromPolar(double r, double theta, {bool angleInRadians = true})
-      : real = r * math.cos(angleInRadians ? theta : _degToRad(theta)),
-        imaginary = r * math.sin(angleInRadians ? theta : _degToRad(theta));
+  factory Complex.fromPolar({
+    required double r,
+    required double theta,
+    bool angleInRadians = true,
+  }) {
+    final real = r * math.cos(angleInRadians ? theta : _degToRad(theta));
+    final imaginary = r * math.sin(angleInRadians ? theta : _degToRad(theta));
 
-  /// This is the same as calling `Complex(0, 0)`.
-  const Complex.zero() : this(0, 0);
-
-  /// This is the same as calling `Complex(0, 1)`.
-  const Complex.i() : this(0, 1);
+    return Complex(real, imaginary);
+  }
 
   @override
   bool operator ==(Object other) {
@@ -96,14 +97,7 @@ class Complex implements Comparable<Complex> {
   }
 
   @override
-  int get hashCode {
-    var result = 83;
-
-    result = result * 37 + real.hashCode;
-    result = result * 37 + imaginary.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(real, imaginary);
 
   @override
   int compareTo(Complex other) {
@@ -177,10 +171,10 @@ class Complex implements Comparable<Complex> {
   /// Returns an instance of [PolarComplex] which contains the radius `r` and the
   /// angle `phi` of the complex number.
   PolarComplex toPolarCoordinates() => PolarComplex(
-      r: abs(),
-      phiRadians: phase(),
-      phiDegrees: _radToDeg(phase()),
-    );
+        r: abs(),
+        phiRadians: phase(),
+        phiDegrees: _radToDeg(phase()),
+      );
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions rather than
@@ -241,15 +235,15 @@ class Complex implements Comparable<Complex> {
 
   /// Calculates the sum between two complex numbers.
   Complex operator +(Complex other) => Complex(
-      real + other.real,
-      imaginary + other.imaginary,
-    );
+        real + other.real,
+        imaginary + other.imaginary,
+      );
 
   /// Calculates the difference between two complex numbers.
   Complex operator -(Complex other) => Complex(
-      real - other.real,
-      imaginary - other.imaginary,
-    );
+        real - other.real,
+        imaginary - other.imaginary,
+      );
 
   /// Calculates the product of two complex numbers.
   Complex operator *(Complex other) {
@@ -351,21 +345,21 @@ class Complex implements Comparable<Complex> {
   /// Calculates the _base-e_ exponential of a complex number z where _e_ is the
   /// famous Euler constant.
   Complex exp() => Complex(
-      math.exp(real) * math.cos(imaginary),
-      math.exp(real) * math.sin(imaginary),
-    );
+        math.exp(real) * math.cos(imaginary),
+        math.exp(real) * math.sin(imaginary),
+      );
 
   /// Calculates the sine of this complex number.
   Complex sin() => Complex(
-      math.sin(real) * _cosh(imaginary),
-      math.cos(real) * _sinh(imaginary),
-    );
+        math.sin(real) * _cosh(imaginary),
+        math.cos(real) * _sinh(imaginary),
+      );
 
   /// Calculates the cosine of this complex number.
   Complex cos() => Complex(
-      math.cos(real) * _cosh(imaginary),
-      -math.sin(real) * _sinh(imaginary),
-    );
+        math.cos(real) * _cosh(imaginary),
+        -math.sin(real) * _sinh(imaginary),
+      );
 
   /// Calculates the tangent of this complex number.
   Complex tan() => sin() / cos();

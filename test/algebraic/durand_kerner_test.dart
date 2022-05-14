@@ -169,9 +169,11 @@ void main() {
 
         expect(
           durandKerner1.derivative(),
-          equals(Algebraic.fromReal(
-            [10, 0, -6, 0, 7],
-          ),),
+          equals(
+            Algebraic.fromReal(
+              [10, 0, -6, 0, 7],
+            ),
+          ),
         );
         expect(
           durandKerner1.discriminant().real,
@@ -188,9 +190,11 @@ void main() {
 
         expect(
           durandKerner2.derivative(),
-          equals(Algebraic.fromReal(
-            [6, -25, 8, -6, 0, 7],
-          ),),
+          equals(
+            Algebraic.fromReal(
+              [6, -25, 8, -6, 0, 7],
+            ),
+          ),
         );
         expect(
           durandKerner2.discriminant().real.round(),
@@ -223,9 +227,11 @@ void main() {
 
       expect(
         fx,
-        equals(DurandKerner.realEquation(
-          coefficients: [1, 2, 3, 4, 5],
-        ),),
+        equals(
+          DurandKerner.realEquation(
+            coefficients: [1, 2, 3, 4, 5],
+          ),
+        ),
       );
       expect(
         DurandKerner.realEquation(

@@ -36,11 +36,13 @@ void main() {
         );
         expect(
           interpolation.buildPolynomial(),
-          equals(Quadratic.realEquation(
-            a: -1 / 2,
-            b: 5 / 2,
-            c: -1,
-          ),),
+          equals(
+            Quadratic.realEquation(
+              a: -1 / 2,
+              b: 5 / 2,
+              c: -1,
+            ),
+          ),
         );
       },
     );
@@ -174,12 +176,14 @@ void main() {
 
       expect(
         interpolation.hashCode,
-        equals(const PolynomialInterpolation(
-          nodes: [
-            InterpolationNode(x: 1, y: 3),
-            InterpolationNode(x: -2, y: 5),
-          ],
-        ).hashCode,),
+        equals(
+          const PolynomialInterpolation(
+            nodes: [
+              InterpolationNode(x: 1, y: 3),
+              InterpolationNode(x: -2, y: 5),
+            ],
+          ).hashCode,
+        ),
       );
     });
   });

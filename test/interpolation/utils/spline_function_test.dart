@@ -26,9 +26,11 @@ void main() {
       'control points in the nodes list.',
       () {
         expect(
-          () => SplineFunction.generate(nodes: const [
-            InterpolationNode(x: 3, y: 6),
-          ],),
+          () => SplineFunction.generate(
+            nodes: const [
+              InterpolationNode(x: 3, y: 6),
+            ],
+          ),
           throwsA(isA<InterpolationException>()),
         );
       },

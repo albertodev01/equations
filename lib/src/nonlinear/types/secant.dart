@@ -70,8 +70,10 @@ class Secant extends NonLinear {
       final den = fnew - fold;
 
       if ((den == 0) || (den.isNaN)) {
-        throw NonlinearException('Invalid denominator encountered. '
-            'The invalid value for the denominator was $den',);
+        throw NonlinearException(
+          'Invalid denominator encountered. '
+          'The invalid value for the denominator was $den',
+        );
       }
 
       diff = -(fnew * (x0 - xold)) / den;

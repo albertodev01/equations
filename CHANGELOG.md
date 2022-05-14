@@ -1,9 +1,11 @@
 ## [3.3.0]
  - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
+ - Added `csc` (cosecant) and `sec` (secant) trigonometric functions to the `ExpressionParser` type
+ - The `Complex.fromPolar` constructor now asks for required **named** parameters
  - Migrated Dart code to 2.17 with super parameters
+ - Updated the `analysis_options.yaml` file with more rules
+ - Updated the Flutter demo in the `example/` folder. Now the project can be run on mobile, web and desktop.
  - Dependencies versions update
- - Updated the `analysis_options.yaml` file with some more rules
- - Updated the Flutter demo in the `example/` folder
 
 ## [3.2.0]
  - Dependencies versions update

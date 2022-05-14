@@ -56,16 +56,18 @@ class ExpressionParser {
     // This primitive is fundamental as it recognizes real numbers from the input
     // and parses them using 'parse'.
     builder.group()
-      ..primitive(digit()
-          .plus()
-          .seq(char('.').seq(digit().plus()).optional())
-          .flatten()
-          .trim()
-          .map((a) {
-        final number = num.parse(a);
+      ..primitive(
+        digit()
+            .plus()
+            .seq(char('.').seq(digit().plus()).optional())
+            .flatten()
+            .trim()
+            .map((a) {
+          final number = num.parse(a);
 
-        return (value) => number;
-      }),)
+          return (value) => number;
+        }),
+      )
 
       // Recognze the 'x' variable
       ..primitive(char('x').trim().map((_) => (value) => value))
@@ -125,6 +127,16 @@ class ExpressionParser {
         string('atan(').trim(),
         char(')').trim(),
         (_, a, __) => (value) => math.atan(a(value)),
+      )
+      ..wrapper(
+        string('csc(').trim(),
+        char(')').trim(),
+        (_, a, __) => (value) => 1 / math.sin(a(value)),
+      )
+      ..wrapper(
+        string('sec(').trim(),
+        char(')').trim(),
+        (_, a, __) => (value) => 1 / math.cos(a(value)),
       );
 
     // Defining operations among operators.
@@ -134,8 +146,7 @@ class ExpressionParser {
         );
     builder.group().right(
           char('^').trim(),
-          (a, _, b) =>
-              (value) => math.pow(a(value), b(value)),
+          (a, _, b) => (value) => math.pow(a(value), b(value)),
         );
     builder.group()
       ..left(
@@ -171,7 +182,7 @@ class ExpressionParser {
   const ExpressionParser();
 
   /// Evaluates the mathematical [expression] and returns the result. This method
-  /// should be used to evaluate those expression that don't contain the `x`
+  /// has to be used to evaluate those expression that don't contain the `x`
   /// variable. For example:
   ///
   ///   - `"6 + 10 * 3 / 7"` // Good
@@ -180,11 +191,12 @@ class ExpressionParser {
   /// If you want to evaluate a function with the `x` variable, use [evaluateOn].
   double evaluate(String expression) {
     if (expression.contains('x') || (!_parser.accept(expression))) {
-      throw const ExpressionParserException('The given expression cannot be '
-          'parsed! Make sure that all operators are supported. Make also sure '
-          "that the product of two values explicitly has the '*' symbol.\n\n "
-          "There cannot be the 'x' variable in the expression because this "
-          'method only evaluates numbers.',);
+      throw const ExpressionParserException(
+        'The given expression cannot be parsed! Make sure that all operators '
+        'are supported. Make also sure that the product of two values '
+        "explicitly has the '*' symbol.\n\nThere cannot be the 'x' variable in "
+        'the expression because this method only evaluates numbers.',
+      );
     }
 
     return evaluateOn(expression, 0);
@@ -197,24 +209,16 @@ class ExpressionParser {
   /// consider using [evaluate].
   double evaluateOn(String expression, double evaluationPoint) {
     if (!_parser.accept(expression)) {
-      throw const ExpressionParserException('The given expression cannot be '
-          'parsed! Make sure that all operators are supported. Make also sure '
-          "that the product of two values explicitly has the '*' symbol.",);
+      throw const ExpressionParserException(
+        'The given expression cannot be parsed! Make sure that all operators '
+        'are supported. Make also sure that the product of two values '
+        "explicitly has the '*' symbol.",
+      );
     }
 
-    // The evaluator returns 'num' so this cast is safe
-    final value = _parser.parse(expression).value(evaluationPoint);
-
-    // NOTE: The following code is safe because 'num' has only 2 subtypes ('int'
-    // and 'double'). Since it is a compile-time error for any type other than
-    // 'int' or 'double' to attempt to extend or implement 'num', we can safely
-    // assume that a 'num' can always be an integer OR a double.
-    if (value is int) {
-      // Converting 'int' into 'double'
-      return value * 1.0;
-    }
-
-    return value as double;
+    // The evaluator returns 'num' so we multiply by 1.0 to convert the result
+    // into a double.
+    return _parser.parse(expression).value(evaluationPoint) * 1.0;
   }
 }
 

@@ -220,14 +220,20 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     final maxRowCol = max(matrix.rowCount, matrix.columnCount);
 
     // Arrays for internal storage of U and V.
-    final matrixU = List<List<Complex>>.generate(matrix.rowCount, (_) => List<Complex>.generate(
+    final matrixU = List<List<Complex>>.generate(
+      matrix.rowCount,
+      (_) => List<Complex>.generate(
         maxRowCol,
         (_) => const Complex.zero(),
-      ),);
-    final matrixV = List<List<Complex>>.generate(matrix.columnCount, (_) => List<Complex>.generate(
+      ),
+    );
+    final matrixV = List<List<Complex>>.generate(
+      matrix.columnCount,
+      (_) => List<Complex>.generate(
         matrix.columnCount,
         (_) => const Complex.zero(),
-      ),);
+      ),
+    );
 
     // Array for internal storage of the singular values.
     final arrayS = List<Complex>.generate(
@@ -481,10 +487,13 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     }
 
     // Building the 'E' rectangular matrix, whose size is rowCount*columnCount.
-    final sAsMatrix = List<List<Complex>>.generate(matrix.rowCount, (_) => List<Complex>.generate(
+    final sAsMatrix = List<List<Complex>>.generate(
+      matrix.rowCount,
+      (_) => List<Complex>.generate(
         matrix.columnCount,
         (_) => const Complex.zero(),
-      ),);
+      ),
+    );
     for (var i = 0; i < matrix.rowCount; i++) {
       for (var j = 0; j < matrix.columnCount; j++) {
         if (i == j) {

@@ -84,8 +84,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator +(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the sum
@@ -112,8 +114,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator -(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the difference
@@ -140,8 +144,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the product
@@ -173,8 +179,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator /(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the division
@@ -232,7 +240,8 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    final source = List<List<double>>.generate(rowCount - 1, (_) => List<double>.generate(columnCount - 1, (_) => 0.0));
+    final source = List<List<double>>.generate(rowCount - 1,
+        (_) => List<double>.generate(columnCount - 1, (_) => 0.0));
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; i != row && j < columnCount; ++j) {
@@ -267,7 +276,8 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    final source = List<List<double>>.generate(rowCount, (_) => List<double>.generate(columnCount, (_) => 0.0));
+    final source = List<List<double>>.generate(
+        rowCount, (_) => List<double>.generate(columnCount, (_) => 0.0));
 
     // Computing cofactors
     for (var i = 0; i < rowCount; ++i) {
@@ -328,7 +338,9 @@ class RealMatrix extends Matrix<double> with MathUtils {
 
     // Multiplying each number by 1/det(A)
     final multiplier = 1 / determinant();
-    final inverse = transpose.flattenData.map((value) => multiplier * value).toList(growable: false);
+    final inverse = transpose.flattenData
+        .map((value) => multiplier * value)
+        .toList(growable: false);
 
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
@@ -691,22 +703,23 @@ class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   List<RealMatrix> qrDecomposition() => QRDecompositionReal(
-      realMatrix: this,
-    ).decompose();
+        realMatrix: this,
+      ).decompose();
 
   @override
   List<RealMatrix> singleValueDecomposition() => SVDReal(
-      realMatrix: this,
-    ).decompose();
+        realMatrix: this,
+      ).decompose();
 
   @override
   List<RealMatrix> eigenDecomposition() => EigendecompositionReal(
-      matrix: this,
-    ).decompose();
+        matrix: this,
+      ).decompose();
 
   /// Computes the determinant of a 2x2 matrix.
-  double _compute2x2Determinant(RealMatrix source) => source.flattenData.first * source.flattenData[3] -
-        source.flattenData[1] * source.flattenData[2];
+  double _compute2x2Determinant(RealMatrix source) =>
+      source.flattenData.first * source.flattenData[3] -
+      source.flattenData[1] * source.flattenData[2];
 
   /// Computes the determinant of a 3x3 matrix.
   double _compute3x3Determinant(RealMatrix source) {
@@ -762,8 +775,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   double _computeDeterminant(RealMatrix source) {
     // Computing the determinant only if the matrix is square
     if (!isSquareMatrix) {
-      throw const MatrixException("Can't compute the determinant of this "
-          "matrix because it's not square.",);
+      throw const MatrixException(
+        "Can't compute the determinant of this "
+        "matrix because it's not square.",
+      );
     }
 
     // In case there were an 1x1 matrix, just return the value

@@ -83,8 +83,10 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator +(Matrix<Complex> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the sum
@@ -111,8 +113,10 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator -(Matrix<Complex> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the difference
@@ -139,8 +143,10 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator *(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the product
@@ -172,8 +178,10 @@ class ComplexMatrix extends Matrix<Complex> {
   @override
   Matrix<Complex> operator /(Matrix<Complex> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.',);
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the division
@@ -234,10 +242,13 @@ class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    final source = List<List<Complex>>.generate(rowCount - 1, (_) => List<Complex>.generate(
+    final source = List<List<Complex>>.generate(
+      rowCount - 1,
+      (_) => List<Complex>.generate(
         columnCount - 1,
         (_) => const Complex.zero(),
-      ),);
+      ),
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; i != row && j < columnCount; ++j) {
@@ -274,7 +285,10 @@ class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    final source = List<List<Complex>>.generate(rowCount, (_) => List<Complex>.generate(columnCount, (_) => const Complex.zero()));
+    final source = List<List<Complex>>.generate(
+        rowCount,
+        (_) =>
+            List<Complex>.generate(columnCount, (_) => const Complex.zero()));
 
     // Computing cofactors
     for (var i = 0; i < rowCount; ++i) {
@@ -337,7 +351,9 @@ class ComplexMatrix extends Matrix<Complex> {
 
     // Multiplying each number by 1/det(A)
     final multiplier = const Complex(1, 0) / determinant();
-    final inverse = transpose.flattenData.map((value) => multiplier * value).toList(growable: false);
+    final inverse = transpose.flattenData
+        .map((value) => multiplier * value)
+        .toList(growable: false);
 
     return ComplexMatrix.fromFlattenedData(
       rows: rowCount,
@@ -675,22 +691,23 @@ class ComplexMatrix extends Matrix<Complex> {
 
   @override
   List<ComplexMatrix> qrDecomposition() => QRDecompositionComplex(
-      complexMatrix: this,
-    ).decompose();
+        complexMatrix: this,
+      ).decompose();
 
   @override
   List<ComplexMatrix> singleValueDecomposition() => SVDComplex(
-      complexMatrix: this,
-    ).decompose();
+        complexMatrix: this,
+      ).decompose();
 
   @override
   List<ComplexMatrix> eigenDecomposition() => EigendecompositionComplex(
-      matrix: this,
-    ).decompose();
+        matrix: this,
+      ).decompose();
 
   /// Computes the determinant of a 2x2 matrix
-  Complex _compute2x2Determinant(ComplexMatrix source) => source.flattenData.first * source.flattenData[3] -
-        source.flattenData[1] * source.flattenData[2];
+  Complex _compute2x2Determinant(ComplexMatrix source) =>
+      source.flattenData.first * source.flattenData[3] -
+      source.flattenData[1] * source.flattenData[2];
 
   /// Computes the determinant of a 3x3 matrix
   Complex _compute3x3Determinant(ComplexMatrix source) {
@@ -746,8 +763,10 @@ class ComplexMatrix extends Matrix<Complex> {
   Complex _computeDeterminant(ComplexMatrix source) {
     // Computing the determinant only if the matrix is square
     if (source.rowCount != source.columnCount) {
-      throw const MatrixException("Can't compute the determinant of this "
-          "matrix because it's not square.",);
+      throw const MatrixException(
+        "Can't compute the determinant of this "
+        "matrix because it's not square.",
+      );
     }
 
     // In case there were an 1x1 matrix, just return the value

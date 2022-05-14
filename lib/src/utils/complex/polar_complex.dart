@@ -42,20 +42,12 @@ class PolarComplex implements Comparable<PolarComplex> {
   }
 
   @override
-  int get hashCode {
-    var result = 83;
-
-    result = result * 37 + r.hashCode;
-    result = result * 37 + phiDegrees.hashCode;
-    result = result * 37 + phiRadians.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(r, phiDegrees, phiRadians);
 
   @override
   int compareTo(PolarComplex other) {
-    final thisValue = Complex.fromPolar(r, phiRadians);
-    final otherValue = Complex.fromPolar(other.r, other.phiRadians);
+    final thisValue = Complex.fromPolar(r: r, theta: phiRadians);
+    final otherValue = Complex.fromPolar(r: other.r, theta: other.phiRadians);
 
     if (thisValue > otherValue) {
       return 1;

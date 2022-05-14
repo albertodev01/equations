@@ -94,7 +94,11 @@ void main() {
 
     test('Polar coordinates conversions', () {
       // From polar
-      final fromPolar = Complex.fromPolar(2, 60, angleInRadians: false);
+      final fromPolar = Complex.fromPolar(
+        r: 2,
+        theta: 60,
+        angleInRadians: false,
+      );
       expect(
         fromPolar.real.round(),
         equals(1),
@@ -104,12 +108,12 @@ void main() {
         equals(math.sqrt(3)),
       );
 
-      final fromPolar2 = Complex.fromPolar(0, 0);
+      final fromPolar2 = Complex.fromPolar(r: 0, theta: 0);
       expect(fromPolar2.real, isZero);
       expect(fromPolar2.imaginary, isZero);
 
       final oneOverSqrtTwo = 1 / math.sqrt(2);
-      final fromPolar3 = Complex.fromPolar(1, math.pi / 4);
+      final fromPolar3 = Complex.fromPolar(r: 1, theta: math.pi / 4);
       expect(
         fromPolar3.real,
         MoreOrLessEquals(oneOverSqrtTwo),

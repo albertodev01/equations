@@ -34,8 +34,10 @@ class JacobiSolver extends SystemSolver {
     // The initial vector with the guesses MUST have the same size as the matrix
     // of course
     if (x0.length != constants.length) {
-      throw const SystemSolverException('The length of the guesses vector '
-          'must match the size of the square matrix.',);
+      throw const SystemSolverException(
+        'The length of the guesses vector '
+        'must match the size of the square matrix.',
+      );
     }
 
     return JacobiSolver._(
@@ -67,8 +69,10 @@ class JacobiSolver extends SystemSolver {
     // The initial vector with the guesses MUST have the same size as the matrix
     // of course
     if (x0.length != constants.length) {
-      throw const SystemSolverException('The length of the guesses vector '
-          'must match the size of the square matrix.',);
+      throw const SystemSolverException(
+        'The length of the guesses vector '
+        'must match the size of the square matrix.',
+      );
     }
 
     return JacobiSolver._flatMatrix(

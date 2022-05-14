@@ -81,8 +81,10 @@ abstract class Matrix<T> {
         _data = List<T>.from(data) {
     // Making sure the size is correct
     if (data.length != (rows * columns)) {
-      throw const MatrixException("The given sizes don't match the size of the "
-          'data to be inserted.',);
+      throw const MatrixException(
+        "The given sizes don't match the size of the "
+        'data to be inserted.',
+      );
     }
   }
 
@@ -194,10 +196,10 @@ abstract class Matrix<T> {
 
   /// Returns a modifiable view of the matrix as a `List<List<T>>` object.
   List<List<T>> toListOfList() => List<List<T>>.generate(
-      rowCount,
-      (row) => List<T>.generate(columnCount, (col) => this(row, col)),
-      growable: false,
-    );
+        rowCount,
+        (row) => List<T>.generate(columnCount, (col) => this(row, col)),
+        growable: false,
+      );
 
   /// A flattened representation of the matrix data.
   List<T> get flattenData => UnmodifiableListView<T>(_data);

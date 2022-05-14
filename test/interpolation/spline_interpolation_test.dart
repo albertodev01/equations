@@ -113,13 +113,15 @@ void main() {
 
       expect(
         interpolation.hashCode,
-        equals(const SplineInterpolation(
-          nodes: [
-            InterpolationNode(x: 3, y: -2),
-            InterpolationNode(x: 4, y: 1),
-            InterpolationNode(x: 7, y: 0),
-          ],
-        ).hashCode,),
+        equals(
+          const SplineInterpolation(
+            nodes: [
+              InterpolationNode(x: 3, y: -2),
+              InterpolationNode(x: 4, y: 1),
+              InterpolationNode(x: 7, y: 0),
+            ],
+          ).hashCode,
+        ),
       );
     });
   });
