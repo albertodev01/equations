@@ -1,7 +1,7 @@
 import 'package:equations/src/interpolation/utils/spline_function.dart';
 
-/// Represents a linear spline from a given set of control points. The interpolated
-/// curve will be monotonic if the control points.
+/// Represents a linear spline from a given set of control points. The
+/// interpolated curve will be monotonic if the control points.
 class LinearSpline extends SplineFunction {
   /// Creates a [LinearSpline] instance from the given nodes.
   const LinearSpline({

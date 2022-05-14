@@ -11,10 +11,9 @@ class LinearInterpolation extends Interpolation {
   /// nodes.
   ///
   /// There **must** only be 2 nodes.
-  LinearInterpolation({
-    required List<InterpolationNode> nodes,
-  })  : assert(nodes.length == 2, 'There must exactly be 2 nodes!'),
-        super(nodes);
+  const LinearInterpolation({
+    required super.nodes,
+  }) : assert(nodes.length == 2, 'There must exactly be 2 nodes!');
 
   @override
   double compute(double x) {

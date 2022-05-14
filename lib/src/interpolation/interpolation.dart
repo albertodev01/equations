@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:equations/equations.dart';
 
 /// Abstract class representing an **interpolation** strategy that finds new
@@ -14,13 +12,12 @@ import 'package:equations/equations.dart';
 /// Subclasses of [Interpolation] should only override the `compute()` method.
 abstract class Interpolation {
   /// The interpolation nodes.
-  final List<InterpolationNode> _nodes;
+  final List<InterpolationNode> nodes;
 
   /// Creates an instance of [Interpolation] with the given nodes.
-  const Interpolation(this._nodes);
-
-  /// The interpolation nodes.
-  List<InterpolationNode> get nodes => UnmodifiableListView(_nodes);
+  const Interpolation({
+    required this.nodes,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -30,7 +27,7 @@ abstract class Interpolation {
 
     if (other is Interpolation) {
       // The lengths of the coefficients must match
-      if (_nodes.length != other._nodes.length) {
+      if (nodes.length != other.nodes.length) {
         return false;
       }
 
@@ -39,31 +36,21 @@ abstract class Interpolation {
       // list.
       var equalsCount = 0;
 
-      for (var i = 0; i < _nodes.length; ++i) {
-        if (_nodes[i] == other._nodes[i]) {
+      for (var i = 0; i < nodes.length; ++i) {
+        if (nodes[i] == other.nodes[i]) {
           ++equalsCount;
         }
       }
 
       // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType && equalsCount == _nodes.length;
+      return runtimeType == other.runtimeType && equalsCount == nodes.length;
     } else {
       return false;
     }
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < nodes.length; ++i) {
-      result = result * 37 + nodes[i].hashCode;
-    }
-
-    return result;
-  }
+  int get hashCode => Object.hashAll(nodes);
 
   /// Returns the `y` value of the `y = f(x)` equation where the function `f` is
   /// built by interpolating the given [nodes] nodes and [x] is the given point

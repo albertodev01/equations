@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
 
-/// Implements the Newton method to find the roots of a given equation.
+/// Implements Newton's method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
@@ -14,8 +14,8 @@ class Newton extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// Newton method.
+  /// Instantiates a new object to find the root of an equation using Newton's
+  /// method.
   ///
   ///   - [function]: the function f(x)
   ///   - [x0]: the initial guess x<sub>0</sub>
@@ -42,7 +42,7 @@ class Newton extends NonLinear {
   }
 
   @override
-  int get hashCode => 37 * super.hashCode + x0.hashCode;
+  int get hashCode => Object.hash(x0, function, tolerance, maxSteps);
 
   @override
   NonlinearResults solve() {

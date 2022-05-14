@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
 
-/// Implements the Secant method to find the roots of a given equation.
+/// Implements the secant method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
@@ -16,7 +16,7 @@ class Secant extends NonLinear {
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the
-  /// Secant method. Ideally, the two guesses should be close to the root.
+  /// secant method. Ideally, the two guesses should be close to the root.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate _f(a)_
@@ -45,14 +45,7 @@ class Secant extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(a, b, function, tolerance, maxSteps);
 
   @override
   NonlinearResults solve() {

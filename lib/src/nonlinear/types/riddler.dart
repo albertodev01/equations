@@ -18,8 +18,8 @@ class Riddler extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using
-  /// Riddler's method.
+  /// Instantiates a new object to find the root of an equation using Riddler's
+  /// method.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate `f(a)`
@@ -48,14 +48,7 @@ class Riddler extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(a, b, function, tolerance, maxSteps);
 
   @override
   NonlinearResults solve() {

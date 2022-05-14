@@ -30,13 +30,7 @@ class InterpolationNode {
   }
 
   @override
-  int get hashCode {
-    var result = 2011;
-
-    result = result * 37 + x.hashCode;
-
-    return result * 37 + y.hashCode;
-  }
+  int get hashCode => Object.hash(x, x);
 
   @override
   String toString() => '($x; $y)';
@@ -46,7 +40,7 @@ class InterpolationNode {
   /// same that would result in calling `toStringAsFixed` on a [double]:
   ///
   /// ```dart
-  /// final example = InterpolationNode(
+  /// const example = InterpolationNode(
   ///   x: 5.123,
   ///   y: 8.123,
   /// );

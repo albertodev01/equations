@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
 
-/// Implements the Steffensen method to find the roots of a given equation.
+/// Implements Seffensen's method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
@@ -15,8 +15,8 @@ class Steffensen extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// Steffensen method.
+  /// Instantiates a new object to find the root of an equation by using
+  /// Steffensen's method.
   ///
   ///   - [function]: the function f(x)
   ///   - [x0]: the initial guess x<sub>0</sub>
@@ -43,7 +43,7 @@ class Steffensen extends NonLinear {
   }
 
   @override
-  int get hashCode => 37 * super.hashCode + x0.hashCode;
+  int get hashCode => Object.hash(x0, function, tolerance, maxSteps);
 
   @override
   NonlinearResults solve() {

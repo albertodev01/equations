@@ -11,8 +11,8 @@ class PolynomialInterpolation extends Interpolation {
   /// Creates a [PolynomialInterpolation] instance from the given interpolation
   /// nodes.
   const PolynomialInterpolation({
-    required List<InterpolationNode> nodes,
-  }) : super(nodes);
+    required super.nodes,
+  });
 
   @override
   double compute(double x) {
@@ -31,7 +31,8 @@ class PolynomialInterpolation extends Interpolation {
     return result;
   }
 
-  /// Creates the interpolation polynomial of degree [maxDegree].
+  /// Computes the interpolation polynomial and returns it as an [Algebraic]
+  /// object.
   Algebraic buildPolynomial() {
     final length = nodes.length * nodes.length;
     final matrixSource = List<double>.generate(length, (_) => 0);

@@ -59,21 +59,14 @@ abstract class NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + function.hashCode;
-    result = result * 37 + tolerance.hashCode;
-    result = result * 37 + maxSteps.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, tolerance, maxSteps);
 
   @override
   String toString() => 'f(x) = $function';
 
   /// In order to get a meaningful result, it makes sense to compute the rate of
-  /// convergence only if the algorithm made **at least** 3 [steps] (iterations).
+  /// convergence only if the algorithm made **at least** 3 [steps]
+  /// (iterations).
   ///
   /// If [steps] is 2 or lower, `nan` is returned.
   double convergence(List<double> guesses, int steps) {

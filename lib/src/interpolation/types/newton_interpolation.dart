@@ -16,23 +16,19 @@ class NewtonInterpolation extends Interpolation {
   /// Creates a [NewtonInterpolation] instance from the given interpolation
   /// nodes.
   const NewtonInterpolation({
-    required List<InterpolationNode> nodes,
+    required super.nodes,
     this.forwardDifference = true,
-  }) : super(nodes);
+  });
 
   @override
   double compute(double x) {
-    late final RealMatrix matrix;
-
     if (forwardDifference) {
-      matrix = forwardDifferenceTable();
-
+      final matrix = forwardDifferenceTable();
       return _forwardEvaluation(matrix, x);
-    } else {
-      matrix = backwardDifferenceTable();
-
-      return _backwardEvaluation(matrix, x);
     }
+
+    final matrix = backwardDifferenceTable();
+    return _backwardEvaluation(matrix, x);
   }
 
   /// Computes the u of the formula, where `u = (x – a)/h`.

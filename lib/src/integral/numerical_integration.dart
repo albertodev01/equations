@@ -56,16 +56,7 @@ abstract class NumericalIntegration {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + function.hashCode;
-    result = result * 37 + intervals.hashCode;
-    result = result * 37 + lowerBound.hashCode;
-    result = result * 37 + upperBound.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, intervals, lowerBound, upperBound);
 
   @override
   String toString() {

@@ -17,7 +17,7 @@ class Chords extends NonLinear {
   final double b;
 
   /// Instantiates a new object to find the root of an equation by using the
-  /// Chords method.
+  /// chords method.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate `f(a)`
@@ -46,14 +46,7 @@ class Chords extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(a, b, function, tolerance, maxSteps);
 
   @override
   NonlinearResults solve() {

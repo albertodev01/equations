@@ -1,19 +1,25 @@
-/// Holds a series of results returned by [NumericalIntegration.integrate]:
+/// Holds a series of results returned by [NonLinear.solve]:
 ///
 ///  - the list of guesses computed by the algorithm,
-///  - the actual result (the value of the integral on an `[a, b]` interval).
-class IntegralResults {
+///  - the rate of convergence (if possible),
+///  - the efficiency of the algorithm (if possible).
+class NonlinearResults {
   /// List of values guessed by the algorithm.
   final List<double> guesses;
 
-  /// The result of the integral on an `[a, b]` interval.
-  final double result;
+  /// The rate of convergence.
+  final double convergence;
 
-  /// The list of [guesses] is iteratively built by the algorithm while the
-  /// final [result] is the actual value of the integral in the `[a, b]` interval.
-  const IntegralResults({
+  /// The efficiency of the algorithm.
+  final double efficiency;
+
+  /// [guesses] is the scalar succession built by the algorithm, [convergence]
+  /// represents the rate of convergence and [efficiency] is the efficiency of the
+  /// algorithm expressed as _p = convergence <sup>1 / max_steps</sup>_.
+  const NonlinearResults({
     required this.guesses,
-    required this.result,
+    required this.convergence,
+    required this.efficiency,
   });
 
   @override
@@ -22,7 +28,7 @@ class IntegralResults {
       return true;
     }
 
-    if (other is IntegralResults) {
+    if (other is NonlinearResults) {
       // The lengths of the coefficients must match
       if (guesses.length != other.guesses.length) {
         return false;
@@ -42,30 +48,23 @@ class IntegralResults {
       // They must have the same runtime type AND all items must be equal.
       return runtimeType == other.runtimeType &&
           equalsCount == guesses.length &&
-          result == other.result;
+          convergence == other.convergence &&
+          efficiency == other.efficiency;
     } else {
       return false;
     }
   }
 
   @override
-  int get hashCode {
-    var result = 2011;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < guesses.length; ++i) {
-      result = result * 37 + guesses[i].hashCode;
-    }
-
-    return result * 37 + result.hashCode;
-  }
+  int get hashCode => Object.hashAll([convergence, efficiency, ...guesses]);
 
   @override
   String toString() {
     final sb = StringBuffer()
-      ..write('Result: ')
-      ..writeln(result)
+      ..write('Convergence rate: ')
+      ..writeln(convergence)
+      ..write('Efficiency: ')
+      ..writeln(efficiency)
       ..write('Guesses: ')
       ..write(guesses.length)
       ..write(' computed');

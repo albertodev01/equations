@@ -16,8 +16,8 @@ class Brent extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// Chords method.
+  /// Instantiates a new object to find the root of an equation using Brent's
+  /// method.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate `f(a)`
@@ -46,14 +46,7 @@ class Brent extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(a, b, function, tolerance, maxSteps);
 
   bool _condition1(double s, double a, double b) {
     final lower = (a * 3 + b) / 4;
