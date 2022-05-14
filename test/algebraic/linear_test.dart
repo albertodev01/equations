@@ -120,7 +120,7 @@ void main() {
         equals(Linear(
           a: const Complex(2, 3),
           b: const Complex.i(),
-        )),
+        ),),
       );
       expect(
         Linear(
@@ -150,7 +150,7 @@ void main() {
         equals(Linear(
           a: const Complex(2, 3),
           b: const Complex.i(),
-        ).hashCode),
+        ).hashCode,),
       );
     });
 

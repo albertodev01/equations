@@ -17,8 +17,8 @@ class EigendecompositionComplex
     extends EigenDecomposition<Complex, ComplexMatrix> with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const EigendecompositionComplex({
-    required ComplexMatrix matrix,
-  }) : super(matrix: matrix);
+    required super.matrix,
+  });
 
   @override
   List<ComplexMatrix> decompose() {
@@ -249,7 +249,7 @@ class EigendecompositionComplex
       tst1 = Complex.fromReal(math.max(
         tst1.abs(),
         realEigenvalues[l].abs() + complexEigenvalues[l].abs(),
-      ));
+      ),);
       var m = l;
       while (m < matrix.rowCount) {
         if (complexEigenvalues[m].abs() <= eps.abs() * tst1.abs()) {
@@ -906,7 +906,7 @@ class EigendecompositionComplex
             t = Complex.fromReal(math.max(
               hessenbergCache.get(i, n - 1).abs(),
               hessenbergCache.get(i, n).abs(),
-            ));
+            ),);
             if ((eps * t) * t > const Complex.fromReal(1)) {
               for (var j = i; j <= n; j++) {
                 hessenbergCache
@@ -947,9 +947,7 @@ class EigendecompositionComplex
 /// the contents of a list of lists.
 extension _EigenHelper on List<List<Complex>> {
   /// Reads the data at the given ([row]; [col]) position.
-  Complex get(int row, int col) {
-    return this[row][col];
-  }
+  Complex get(int row, int col) => this[row][col];
 
   /// Writes the given [value] in the ([row]; [col]) position.
   void set(int row, int col, Complex value) {

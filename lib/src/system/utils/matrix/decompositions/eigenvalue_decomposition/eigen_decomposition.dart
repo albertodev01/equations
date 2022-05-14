@@ -13,10 +13,8 @@ abstract class EigenDecomposition<K, T extends Matrix<K>>
   /// Creates an instance of [EigenvalueDecomposition] to eigendecompose the
   /// given [matrix].
   const EigenDecomposition({
-    required T matrix,
-  }) : super(
-          matrix: matrix,
-        );
+    required super.matrix,
+  });
 
   /// Computes the `V`, `D` and `V^-1` matrices of the eigendecomposition
   /// algorithm. In particular, this method returns the `V`, `D and `V^-1`

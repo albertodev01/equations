@@ -40,7 +40,7 @@ void main() {
             a: -1 / 2,
             b: 5 / 2,
             c: -1,
-          )),
+          ),),
         );
       },
     );
@@ -179,7 +179,7 @@ void main() {
             InterpolationNode(x: 1, y: 3),
             InterpolationNode(x: -2, y: 5),
           ],
-        ).hashCode),
+        ).hashCode,),
       );
     });
   });

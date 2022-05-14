@@ -36,7 +36,7 @@ void main() {
       expect(
         () => LinearInterpolation(nodes: const [
           InterpolationNode(x: 1, y: 3),
-        ]),
+        ],),
         throwsA(isA<AssertionError>()),
       );
       expect(
@@ -44,7 +44,7 @@ void main() {
           InterpolationNode(x: 1, y: 3),
           InterpolationNode(x: 2, y: 4),
           InterpolationNode(x: 5, y: 6),
-        ]),
+        ],),
         throwsA(isA<AssertionError>()),
       );
     });
@@ -124,7 +124,7 @@ void main() {
             InterpolationNode(x: 1, y: 3),
             InterpolationNode(x: -2, y: 5),
           ],
-        ).hashCode),
+        ).hashCode,),
       );
     });
   });

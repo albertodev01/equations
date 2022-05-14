@@ -130,7 +130,7 @@ void main() {
           b: Complex.fromImaginaryFraction(Fraction(6, 5)),
           c: const Complex(5, -1),
           d: const Complex(-9, -6),
-        )),
+        ),),
       );
       expect(
         Cubic(

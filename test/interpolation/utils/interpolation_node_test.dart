@@ -91,7 +91,7 @@ void main() {
         equals(const InterpolationNode(
           x: 1.5,
           y: 3,
-        ).hashCode),
+        ).hashCode,),
       );
     });
   });

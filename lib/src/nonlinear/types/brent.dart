@@ -61,21 +61,13 @@ class Brent extends NonLinear {
     return !((s >= lower) && (s <= b));
   }
 
-  bool _condition2(double s, bool flag, double b, double c) {
-    return flag && ((s - b).abs() >= ((b - c).abs() / 2));
-  }
+  bool _condition2(double s, bool flag, double b, double c) => flag && ((s - b).abs() >= ((b - c).abs() / 2));
 
-  bool _condition3(double s, bool flag, double b, double c, double d) {
-    return !flag && ((s - b).abs() >= ((c - d).abs() / 2));
-  }
+  bool _condition3(double s, bool flag, double b, double c, double d) => !flag && ((s - b).abs() >= ((c - d).abs() / 2));
 
-  bool _condition4(bool flag, double b, double c) {
-    return flag && ((b - c).abs() <= tolerance.abs());
-  }
+  bool _condition4(bool flag, double b, double c) => flag && ((b - c).abs() <= tolerance.abs());
 
-  bool _condition5(bool flag, double c, double d) {
-    return !flag && ((c - d).abs() <= tolerance.abs());
-  }
+  bool _condition5(bool flag, double c, double d) => !flag && ((c - d).abs() <= tolerance.abs());
 
   @override
   NonlinearResults solve() {

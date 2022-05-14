@@ -27,12 +27,11 @@ class SORSolver extends SystemSolver {
     required List<double> constants,
     required this.w,
     this.maxSteps = 30,
-    double precision = 1.0e-10,
+    super.precision,
   }) : super(
           A: equations,
           b: constants,
           size: constants.length,
-          precision: precision,
         );
 
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
@@ -48,12 +47,11 @@ class SORSolver extends SystemSolver {
     required List<double> constants,
     required this.w,
     this.maxSteps = 30,
-    double precision = 1.0e-10,
+    super.precision,
   }) : super.flatMatrix(
           A: equations,
           b: constants,
           size: constants.length,
-          precision: precision,
         );
 
   @override

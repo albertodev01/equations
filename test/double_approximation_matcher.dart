@@ -19,7 +19,7 @@ class MoreOrLessEquals extends Matcher {
   }) : assert(precision >= 0, 'The precision must be >= 0');
 
   @override
-  bool matches(dynamic object, Map<dynamic, dynamic> matchState) {
+  bool matches(object, Map<dynamic, dynamic> matchState) {
     if (object is double) {
       return (object - value).abs() <= precision;
     }
@@ -33,16 +33,14 @@ class MoreOrLessEquals extends Matcher {
 
   @override
   Description describeMismatch(
-    dynamic item,
+    item,
     Description mismatchDescription,
     Map<dynamic, dynamic> matchState,
     bool verbose,
-  ) {
-    return super.describeMismatch(
+  ) => super.describeMismatch(
       item,
       mismatchDescription,
       matchState,
       verbose,
     )..add('$item is not in the range of $value (±$precision).');
-  }
 }

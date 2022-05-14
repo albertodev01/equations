@@ -119,7 +119,7 @@ void main() {
             InterpolationNode(x: 4, y: 1),
             InterpolationNode(x: 7, y: 0),
           ],
-        ).hashCode),
+        ).hashCode,),
       );
     });
   });

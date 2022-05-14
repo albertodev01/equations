@@ -17,8 +17,8 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
     with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const EigendecompositionReal({
-    required RealMatrix matrix,
-  }) : super(matrix: matrix);
+    required super.matrix,
+  });
 
   @override
   List<RealMatrix> decompose() {
@@ -929,9 +929,7 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
 /// the contents of a list of lists.
 extension _EigenHelper on List<List<double>> {
   /// Reads the data at the given ([row]; [col]) position.
-  double get(int row, int col) {
-    return this[row][col];
-  }
+  double get(int row, int col) => this[row][col];
 
   /// Writes the given [value] in the ([row]; [col]) position.
   void set(int row, int col, double value) {

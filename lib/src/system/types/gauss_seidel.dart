@@ -21,12 +21,11 @@ class GaussSeidelSolver extends SystemSolver {
     required List<List<double>> equations,
     required List<double> constants,
     this.maxSteps = 30,
-    double precision = 1.0e-10,
+    super.precision,
   }) : super(
           A: equations,
           b: constants,
           size: constants.length,
-          precision: precision,
         );
 
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
@@ -40,12 +39,11 @@ class GaussSeidelSolver extends SystemSolver {
     required List<double> equations,
     required List<double> constants,
     this.maxSteps = 30,
-    double precision = 1.0e-10,
+    super.precision,
   }) : super.flatMatrix(
           A: equations,
           b: constants,
           size: constants.length,
-          precision: precision,
         );
 
   @override

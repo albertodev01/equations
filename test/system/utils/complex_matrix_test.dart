@@ -93,7 +93,7 @@ void main() {
               [Complex(1, 2), Complex(3, 4)],
               [Complex(5, 6), Complex(7, 8)],
             ],
-          )),
+          ),),
         );
       },
     );
@@ -253,7 +253,7 @@ void main() {
       final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
         [Complex(1, 2), Complex(3, 4)],
         [Complex(5, 6), Complex(6, 7)],
-      ]);
+      ],);
 
       const expected = '[1 + 2i, 3 + 4i]\n[5 + 6i, 6 + 7i]';
       expect(matrix.toString(), equals(expected));
@@ -266,7 +266,7 @@ void main() {
         final matrix = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
           [Complex(1, 2), Complex(3, 4)],
           [Complex(5, 6), Complex(7, 8)],
-        ]);
+        ],);
 
         // Checking the sizes
         expect(matrix.rowCount, equals(2));
@@ -326,7 +326,7 @@ void main() {
     final matrixA = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
       [Complex.i(), Complex(3, -8)],
       [Complex(4, 7), Complex.zero()],
-    ]);
+    ],);
 
     /*
     * B = |   5   -7+i  |
@@ -335,7 +335,7 @@ void main() {
     final matrixB = ComplexMatrix.fromData(columns: 2, rows: 2, data: const [
       [Complex.fromReal(5), Complex(-7, 1)],
       [Complex.fromImaginary(6), Complex(1, 1)],
-    ]);
+    ],);
 
     test('Making sure that operator+ works properly.', () {
       final matrixSum = ComplexMatrix.fromData(

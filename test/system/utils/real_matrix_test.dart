@@ -112,7 +112,7 @@ void main() {
               [1, 2],
               [3, 4],
             ],
-          )),
+          ),),
         );
       },
     );
@@ -238,7 +238,7 @@ void main() {
         [1, 2, 3],
         [4, 5, 6],
         [7, 8, 9],
-      ]);
+      ],);
 
       const expected = '[1.0, 2.0, 3.0]\n'
           '[4.0, 5.0, 6.0]\n'
@@ -254,7 +254,7 @@ void main() {
           [1, 2, 3],
           [4, 5, 6],
           [7, 8, 9],
-        ]);
+        ],);
 
         // Checking the sizes
         expect(matrix.rowCount, equals(3));
@@ -308,7 +308,7 @@ void main() {
     final matrixA = RealMatrix.fromData(columns: 2, rows: 2, data: const [
       [2, 6],
       [-5, 0],
-    ]);
+    ],);
 
     /*
     * B = | -4  1  |
@@ -317,13 +317,13 @@ void main() {
     final matrixB = RealMatrix.fromData(columns: 2, rows: 2, data: const [
       [-4, 1],
       [7, -3],
-    ]);
+    ],);
 
     test('Making sure that operator+ works properly.', () {
       final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-2, 7],
         [2, -3],
-      ]);
+      ],);
       expect(matrixA + matrixB, equals(matrixSum));
     });
 
@@ -368,7 +368,7 @@ void main() {
       final matrixSub = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [6, 5],
         [-12, 3],
-      ]);
+      ],);
       expect(matrixA - matrixB, equals(matrixSub));
     });
 
@@ -413,7 +413,7 @@ void main() {
       final matrixMul = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [34, -16],
         [20, -5],
-      ]);
+      ],);
       expect(matrixA * matrixB, equals(matrixMul));
     });
 
@@ -452,7 +452,7 @@ void main() {
       final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
         [-1 / 2, 6],
         [-5 / 7, 0],
-      ]);
+      ],);
       expect(matrixA / matrixB, equals(matrixDiv));
     });
 

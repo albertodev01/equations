@@ -22,15 +22,11 @@ class Newton extends NonLinear {
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Newton({
-    required String function,
+    required super.function,
     required this.x0,
-    double tolerance = 1.0e-10,
-    int maxSteps = 10,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 10,
+  });
 
   @override
   bool operator ==(Object other) {

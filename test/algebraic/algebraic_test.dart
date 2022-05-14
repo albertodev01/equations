@@ -451,13 +451,13 @@ void main() {
             div.quotient,
             equals(Algebraic.fromReal(
               const [1, -3],
-            )),
+            ),),
           );
           expect(
             div.remainder,
             equals(Algebraic.from(
               const [Complex(4, -3)],
-            )),
+            ),),
           );
           expect(div.quotient, isA<Linear>());
           expect(div.remainder, isA<Constant>());
@@ -537,13 +537,13 @@ void main() {
             result.quotient,
             equals(Algebraic.fromReal(
               [1, -5],
-            )),
+            ),),
           );
           expect(
             result.remainder,
             equals(Algebraic.fromReal(
               [12],
-            )),
+            ),),
           );
           expect(result.quotient, isA<Linear>());
           expect(result.remainder, isA<Constant>());

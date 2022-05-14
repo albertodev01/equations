@@ -28,7 +28,7 @@ void main() {
         expect(
           () => SplineFunction.generate(nodes: const [
             InterpolationNode(x: 3, y: 6),
-          ]),
+          ],),
           throwsA(isA<InterpolationException>()),
         );
       },

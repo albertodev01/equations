@@ -24,16 +24,12 @@ class Secant extends NonLinear {
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Secant({
-    required String function,
+    required super.function,
     required this.a,
     required this.b,
-    double tolerance = 1.0e-10,
-    int maxSteps = 15,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 15,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -75,7 +71,7 @@ class Secant extends NonLinear {
 
       if ((den == 0) || (den.isNaN)) {
         throw NonlinearException('Invalid denominator encountered. '
-            'The invalid value for the denominator was $den');
+            'The invalid value for the denominator was $den',);
       }
 
       diff = -(fnew * (x0 - xold)) / den;

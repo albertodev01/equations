@@ -12,10 +12,8 @@ abstract class SingleValueDecomposition<K, T extends Matrix<K>>
   /// Creates an instance of [SingleValueDecomposition] to apply SVD on the
   /// given matrix.
   const SingleValueDecomposition({
-    required T matrix,
-  }) : super(
-          matrix: matrix,
-        );
+    required super.matrix,
+  });
 
   /// Computes the `E`, `U` and `V` matrices of the SVG algorithm. In particular,
   /// this method returns the `E`, `U` and `V` matrices of the

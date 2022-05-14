@@ -176,13 +176,11 @@ class Complex implements Comparable<Complex> {
 
   /// Returns an instance of [PolarComplex] which contains the radius `r` and the
   /// angle `phi` of the complex number.
-  PolarComplex toPolarCoordinates() {
-    return PolarComplex(
+  PolarComplex toPolarCoordinates() => PolarComplex(
       r: abs(),
       phiRadians: phase(),
       phiDegrees: _radToDeg(phase()),
     );
-  }
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions rather than
@@ -242,20 +240,16 @@ class Complex implements Comparable<Complex> {
   static double _degToRad(num value) => value * math.pi / 180;
 
   /// Calculates the sum between two complex numbers.
-  Complex operator +(Complex other) {
-    return Complex(
+  Complex operator +(Complex other) => Complex(
       real + other.real,
       imaginary + other.imaginary,
     );
-  }
 
   /// Calculates the difference between two complex numbers.
-  Complex operator -(Complex other) {
-    return Complex(
+  Complex operator -(Complex other) => Complex(
       real - other.real,
       imaginary - other.imaginary,
     );
-  }
 
   /// Calculates the product of two complex numbers.
   Complex operator *(Complex other) {
@@ -356,28 +350,22 @@ class Complex implements Comparable<Complex> {
 
   /// Calculates the _base-e_ exponential of a complex number z where _e_ is the
   /// famous Euler constant.
-  Complex exp() {
-    return Complex(
+  Complex exp() => Complex(
       math.exp(real) * math.cos(imaginary),
       math.exp(real) * math.sin(imaginary),
     );
-  }
 
   /// Calculates the sine of this complex number.
-  Complex sin() {
-    return Complex(
+  Complex sin() => Complex(
       math.sin(real) * _cosh(imaginary),
       math.cos(real) * _sinh(imaginary),
     );
-  }
 
   /// Calculates the cosine of this complex number.
-  Complex cos() {
-    return Complex(
+  Complex cos() => Complex(
       math.cos(real) * _cosh(imaginary),
       -math.sin(real) * _sinh(imaginary),
     );
-  }
 
   /// Calculates the tangent of this complex number.
   Complex tan() => sin() / cos();

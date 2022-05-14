@@ -146,7 +146,7 @@ void main() {
             InterpolationNode(x: 6, y: 7),
             InterpolationNode(x: 10, y: 15),
           ],
-        ).hashCode),
+        ).hashCode,),
       );
     });
   });

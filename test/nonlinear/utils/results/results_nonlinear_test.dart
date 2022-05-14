@@ -66,7 +66,7 @@ void main() {
           guesses: [1.0, 2.0, 3.0],
           convergence: 10,
           efficiency: -7,
-        ).hashCode),
+        ).hashCode,),
       );
 
       expect(

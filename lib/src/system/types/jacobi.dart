@@ -35,7 +35,7 @@ class JacobiSolver extends SystemSolver {
     // of course
     if (x0.length != constants.length) {
       throw const SystemSolverException('The length of the guesses vector '
-          'must match the size of the square matrix.');
+          'must match the size of the square matrix.',);
     }
 
     return JacobiSolver._(
@@ -68,7 +68,7 @@ class JacobiSolver extends SystemSolver {
     // of course
     if (x0.length != constants.length) {
       throw const SystemSolverException('The length of the guesses vector '
-          'must match the size of the square matrix.');
+          'must match the size of the square matrix.',);
     }
 
     return JacobiSolver._flatMatrix(
@@ -86,12 +86,11 @@ class JacobiSolver extends SystemSolver {
     required List<double> constants,
     required this.x0,
     this.maxSteps = 30,
-    double precision = 1.0e-10,
+    super.precision,
   }) : super(
           A: equations,
           b: constants,
           size: constants.length,
-          precision: precision,
         );
 
   /// Creates a [JacobiSolver] instance.
@@ -100,12 +99,11 @@ class JacobiSolver extends SystemSolver {
     required List<double> constants,
     required this.x0,
     this.maxSteps = 30,
-    double precision = 1.0e-10,
+    super.precision,
   }) : super.flatMatrix(
           A: equations,
           b: constants,
           size: constants.length,
-          precision: precision,
         );
 
   @override

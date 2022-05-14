@@ -114,7 +114,7 @@ void main() {
             InterpolationNode(x: 1, y: 3),
             InterpolationNode(x: -2, y: 5),
           ],
-        ).hashCode),
+        ).hashCode,),
       );
     });
 
