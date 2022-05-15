@@ -66,10 +66,11 @@ abstract class Algebraic {
   /// ... because the coefficient with the highest degree goes first.
   ///
   /// Use this constructor when the coefficients are all real numbers. If there
-  /// were complex numbers as well, use the [Algebraic(coefficients)]
-  /// constructor.
+  /// were complex numbers as well, use the [Algebraic] default constructor
+  /// instead.
   Algebraic.realEquation(List<double> coefficients)
-      : coefficients = coefficients.map(Complex.fromReal).toList() {
+      : coefficients =
+            coefficients.map(Complex.fromReal).toList(growable: false) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!_isValid) {
@@ -169,8 +170,9 @@ abstract class Algebraic {
   /// Use this method when the coefficients are all real numbers. If there
   /// were complex numbers as well, use the [Algebraic.from(coefficients)]
   /// instead.
-  factory Algebraic.fromReal(List<double> coefficients) =>
-      Algebraic.from(coefficients.map(Complex.fromReal).toList());
+  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
+        coefficients.map(Complex.fromReal).toList(growable: false),
+      );
 
   @override
   bool operator ==(Object other) {
@@ -363,7 +365,8 @@ abstract class Algebraic {
   /// final degreeTwo = quadratic.coefficient(2) // Complex(2, 0)
   /// ```
   ///
-  /// This method returns `null` if no coefficient of the given [degree] is found.
+  /// This method returns `null` if no coefficient of the given [degree] is
+  /// found.
   Complex? coefficient(int degree) {
     // The coefficient of the given degree doesn't exist
     if ((degree < 0) || (degree > coefficients.length - 1)) {

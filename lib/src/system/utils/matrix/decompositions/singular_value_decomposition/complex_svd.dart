@@ -285,7 +285,7 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
       // The 'convergenceStatus' variable works along with 'index' to determine
       // when the iterations should stop. In particular:
       //
-      //  - 'convergenceStatus' = 1: if s(p) && e[k-1] are small enough and k < p
+      //  - 'convergenceStatus' = 1: if s(p) && e[k-1] are small enough && k < p
       //  - 'convergenceStatus' = 2: if s(k) is small enough and k < p
       //  - 'convergenceStatus' = 3: if e[k-1] is small enough && k < p && a QR
       //                             step is required since values in s(*) are

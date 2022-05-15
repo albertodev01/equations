@@ -312,7 +312,8 @@ void main() {
     );
 
     test(
-      'Making sure "PolynomialLongDivisionException" prints the correct message',
+      'Making sure "PolynomialLongDivisionException" prints the correct '
+      'message',
       () {
         const exception = PolynomialLongDivisionException('Exception message');
 

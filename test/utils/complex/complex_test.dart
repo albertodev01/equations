@@ -302,7 +302,7 @@ void main() {
     });
 
     test(
-      "Making sure that modulus (or 'magnitude' or 'absolute' value) is correct",
+      "Making sure that modulus (or 'magnitude'/'absolute value') is correct",
       () {
         expect(
           const Complex(3, 7).abs(),
@@ -334,7 +334,8 @@ void main() {
     });
 
     test(
-      'Making sure that sine, cosine, tangent and cotangents work properly on const Complex',
+      'Making sure that sine, cosine, tangent and cotangents work properly on'
+      ' const Complex',
       () {
         const i = Complex.i();
 
@@ -402,7 +403,8 @@ void main() {
     });
 
     test(
-      "Making sure that the 'nthRoot' method also works when the phase is negative",
+      "Making sure that the 'nthRoot' method also works when the phase is "
+      'negative',
       () {
         const negativePhase = Complex(-0.5, -1);
         final negativePhaseRoot = negativePhase.nthRoot(2);

@@ -40,6 +40,7 @@ class SylvesterMatrix {
     final flatData = List<Complex>.generate(
       size * size,
       (_) => const Complex.zero(),
+      growable: false,
     );
 
     /* Iterating over the coefficients and placing them in the matrix. Since the
@@ -78,14 +79,14 @@ class SylvesterMatrix {
   /// The discriminant of a polynomial P(x) is the determinant of the Sylvester
   /// matrix of P and P' (where P' is the derivative of P).
   ///
-  /// By default, the [optimize] parameter is set to `true` so that the Sylvester
-  /// matrix is not computed for polynomials whose degree is 4 or lower. To be
-  /// more precise:
+  /// By default, the [optimize] parameter is set to `true` so that the
+  /// Sylvester matrix is not computed for polynomials whose degree is 4 or
+  /// lower. To be more precise:
   ///
   ///  - With `optimize = true`, if the degree of the polynomial is lower than
-  ///  4 then the Sylvester matrix is not built. The computation of its determinant
-  ///  can be computationally heavy so we can just avoid such complexity by
-  ///  using the simple formulas for lower degree polynomials.
+  ///  4 then the Sylvester matrix is not built. The computation of its
+  ///  determinant can be computationally heavy so we can just avoid such
+  ///  complexity by using the simple formulas for lower degree polynomials.
   ///
   /// - With `optimize = true`, the Sylvester matrix and its determinant are
   /// always computed regardless the degree of the polynomial.
@@ -107,16 +108,16 @@ class SylvesterMatrix {
       final determinant = matrixDeterminant();
 
       /*
-      * Once we got the determinant, we need to make the last calculation to also
-      * determine the sign. The formula is the following:
+      * Once we got the determinant, we need to make the last calculation to
+      * also determine the sign. The formula is the following:
       *
       *  Disc(A) = (-1)^(n*(n-1)/2) * 1/A[n] * Res(A, A')
       *
       * In the above formula, 'n' is the degree of the polynomial, A(x) is the
       * polynomial and A'(x) is the derivative of A(x).
       *
-      * Res(A, A') is the resultant of A(x) and A'(x), which is nothing more than
-      * the determinant of the Sylvester matrix.
+      * Res(A, A') is the resultant of A(x) and A'(x), which is nothing more
+      * than the determinant of the Sylvester matrix.
       */
       final coefficients = polynomial.coefficients;
       final degree = coefficients.length - 1;

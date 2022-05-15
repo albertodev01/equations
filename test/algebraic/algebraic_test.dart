@@ -14,9 +14,7 @@ void main() {
           'the length of the coefficients list is 1',
           () {
             final equation = Algebraic.from(
-              [
-                const Complex(1, 0),
-              ],
+              [const Complex(1, 0)],
             );
             expect(equation, isA<Constant>());
           },
@@ -117,9 +115,7 @@ void main() {
           "Making sure that a 'Constant' object is properly constructed when "
           'the length of the coefficients list is 1',
           () {
-            final equation = Algebraic.fromReal(
-              [1],
-            );
+            final equation = Algebraic.fromReal([1]);
             expect(equation, isA<Constant>());
           },
         );

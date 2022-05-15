@@ -22,8 +22,9 @@ void main() {
           knownValues: [-5, -5, -1],
         );
 
-        // This is needed because we want to make sure that the "original" matrix
-        // doesn't get side effects from the calculations (i.e. row swapping).
+        // This is needed because we want to make sure that the "original"
+        // matrix doesn't get side effects from the calculations (i.e. row
+        // swapping).
         final matrix = RealMatrix.fromData(
           rows: 3,
           columns: 3,
@@ -88,8 +89,9 @@ void main() {
           knownValues: [4, -8],
         );
 
-        // This is needed because we want to make sure that the "original" matrix
-        // doesn't get side effects from the calculations (i.e. row swapping).
+        // This is needed because we want to make sure that the "original"
+        // matrix doesn't get side effects from the calculations (i.e. row
+        // swapping).
         final matrix = RealMatrix.fromData(
           rows: 2,
           columns: 2,

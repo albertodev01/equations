@@ -6,7 +6,8 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
-/// A simple Dart implementation of an `m x n` matrix whose data type is [double].
+/// A simple Dart implementation of an `m x n` matrix whose data type is
+/// [double].
 ///
 /// ```dart
 /// final matrix = RealMatrix(

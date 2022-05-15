@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 /// another polynomial of the same or lower degree.
 ///
 /// The only constraint of this procedure is that the degree of the denominator
-/// cannot exceed the degree of the numerator. If this condition is not satisfied,
-/// an exception will be thrown.
+/// cannot exceed the degree of the numerator. If this condition is not
+/// satisfied, an exception will be thrown.
 class PolynomialLongDivision {
   /// The numerator.
   final Algebraic polyNumerator;
@@ -19,15 +19,15 @@ class PolynomialLongDivision {
     required this.polyDenominator,
   });
 
-  /// Divides [polyNumerator] by [polyDenominator] and wraps quotient and remainder
-  /// in the [AlgebraicDivision] class.
+  /// Divides [polyNumerator] by [polyDenominator] and wraps quotient and
+  /// remainder in the [AlgebraicDivision] class.
   ///
   /// An exception of type [PolynomialLongDivisionException] is thrown if the
   /// degree of the denominator cannot exceed the degree of the numerator.
   AlgebraicDivision divide() {
     if (polyNumerator.degree < polyDenominator.degree) {
       throw const PolynomialLongDivisionException(
-        'The degree of the denominator cannot exceed the degree of the numerator.',
+        'The denominator degree cannot exceed the numerator degree.',
       );
     }
 
@@ -53,6 +53,7 @@ class PolynomialLongDivision {
       );
     }
 
+    // Polynomial long division algorithm starts here!
     final numerator = polyNumerator.coefficients.reversed.toList(
       growable: false,
     );

@@ -4,13 +4,13 @@ import 'package:equations/equations.dart';
 ///
 /// **Characteristics**:
 ///
-///   - Similar to [Newton] as they use the same approach and both have a quadratic
-///   convergence.
+///   - Similar to [Newton] as they use the same approach and both have a
+///   quadratic convergence.
 ///
 ///   - This method does **not** use the derivative _f'(x)_ of the function
 ///
-///   - If _x0_ is too far from the root, the method might fail so the convergence
-///   is not guaranteed.
+///   - If _x0_ is too far from the root, the method might fail so the
+///   convergence is not guaranteed.
 class Steffensen extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;

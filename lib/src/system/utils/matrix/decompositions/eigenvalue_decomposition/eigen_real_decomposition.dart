@@ -925,8 +925,8 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
   }
 }
 
-/// Extension method on `List<List<double>>` with two shortcuts to read and write
-/// the contents of a list of lists.
+/// Extension method on `List<List<double>>` with two shortcuts to read and
+/// write the contents of a list of lists.
 extension _EigenHelper on List<List<double>> {
   /// Reads the data at the given ([row]; [col]) position.
   double get(int row, int col) => this[row][col];

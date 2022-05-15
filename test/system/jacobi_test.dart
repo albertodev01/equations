@@ -22,8 +22,9 @@ void main() {
           x0: [1, 1],
         );
 
-        // This is needed because we want to make sure that the "original" matrix
-        // doesn't get side effects from the calculations (i.e. row swapping).
+        // This is needed because we want to make sure that the "original"
+        // matrix doesn't get side effects from the calculations (i.e. row
+        // swapping).
         final matrix = RealMatrix.fromData(
           rows: 2,
           columns: 2,

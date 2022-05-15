@@ -947,8 +947,8 @@ class EigendecompositionComplex
   }
 }
 
-/// Extension method on `List<List<double>>` with two shortcuts to read and write
-/// the contents of a list of lists.
+/// Extension method on `List<List<double>>` with two shortcuts to read and
+/// write the contents of a list of lists.
 extension _EigenHelper on List<List<Complex>> {
   /// Reads the data at the given ([row]; [col]) position.
   Complex get(int row, int col) => this[row][col];

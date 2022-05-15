@@ -74,8 +74,8 @@ class DurandKerner extends Algebraic with MathUtils {
   /// ([Complex]) and real ([double]) values.
   ///
   ///   - [coefficients]: the coefficients of the polynomial;
-  ///   - [initialGuess]: the initial guess from which the algorithm has to start
-  ///   finding the roots;
+  ///   - [initialGuess]: the initial guess from which the algorithm has to
+  ///   start finding the roots;
   ///   - [precision]: the accuracy of the algorithm;
   ///   - [maxSteps]: the maximum steps to be made by the algorithm.
   ///
@@ -108,8 +108,8 @@ class DurandKerner extends Algebraic with MathUtils {
   /// ([Complex]) and real ([double]) values.
   ///
   ///   - [coefficients]: the coefficients of the polynomial;
-  ///   - [initialGuess]: the initial guess from which the algorithm has to start
-  ///   finding the roots;
+  ///   - [initialGuess]: the initial guess from which the algorithm has to
+  ///   start finding the roots;
   ///   - [precision]: the accuracy of the algorithm;
   ///   - [maxSteps]: the maximum steps to be made by the algorithm.
   ///
@@ -167,15 +167,12 @@ class DurandKerner extends Algebraic with MathUtils {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + initialGuess.hashCode;
-    result = result * 37 + precision.hashCode;
-    result = result * 37 + maxSteps.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hashAll([
+        initialGuess,
+        precision,
+        maxSteps,
+        ...coefficients,
+      ]);
 
   @override
   int get degree => coefficients.length - 1;
@@ -258,11 +255,15 @@ class DurandKerner extends Algebraic with MathUtils {
 
     // Proceeding with the setup since the polynomial degree is >= 1.
     final coefficientsLength = coefficients.length;
-    final reversedCoeffs = coefficients.reversed.toList();
+    final reversedCoeffs = coefficients.reversed.toList(growable: false);
 
     // Buffers for numerators and denominators or real and complex parts.
-    final realBuffer = reversedCoeffs.map((e) => e.real).toList();
-    final imaginaryBuffer = reversedCoeffs.map((e) => e.imaginary).toList();
+    final realBuffer = reversedCoeffs.map((e) => e.real).toList(
+          growable: false,
+        );
+    final imaginaryBuffer = reversedCoeffs.map((e) => e.imaginary).toList(
+          growable: false,
+        );
 
     // Scaling the various coefficients.
     var upperReal = realBuffer[coefficientsLength - 1];
@@ -292,8 +293,12 @@ class DurandKerner extends Algebraic with MathUtils {
     // Using default values to compute the solutions. If they aren't provided,
     // we will generate default ones.
     if (initialGuess.isNotEmpty) {
-      final real = initialGuess.map((e) => e.real).toList();
-      final complex = initialGuess.map((e) => e.imaginary).toList();
+      final real = initialGuess.map((e) => e.real).toList(
+            growable: false,
+          );
+      final complex = initialGuess.map((e) => e.imaginary).toList(
+            growable: false,
+          );
 
       return _solve(
         realValues: real,
@@ -307,10 +312,12 @@ class DurandKerner extends Algebraic with MathUtils {
       final real = List<double>.generate(
         coefficientsLength - 1,
         (_) => 0.0,
+        growable: false,
       );
       final complex = List<double>.generate(
         coefficientsLength - 1,
         (_) => 0.0,
+        growable: false,
       );
 
       final bound = _bound(
@@ -344,6 +351,7 @@ class DurandKerner extends Algebraic with MathUtils {
     final result = List<Complex>.generate(
       newLength,
       (_) => const Complex.zero(),
+      growable: false,
     );
 
     // Evaluation of the derivative

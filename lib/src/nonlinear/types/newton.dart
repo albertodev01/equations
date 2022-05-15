@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 ///
 /// **Characteristics**:
 ///
-///   - The method is extremely powerful but it's not guaranteed to converge to a
-/// root of `f(x)`.
+///   - The method is extremely powerful but it's not guaranteed to converge to
+///   a root of `f(x)`.
 ///
 ///   - It may fail for example due to a division by zero, if the derivative
 ///   evaluated at a certain value is 0, or because the initial guess is too far

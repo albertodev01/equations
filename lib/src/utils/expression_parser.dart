@@ -3,7 +3,8 @@ import 'dart:math' as math;
 import 'package:equations/equations.dart';
 import 'package:petitparser/petitparser.dart';
 
-/// This function alias is used to create a "callable" parser in [ExpressionParser].
+/// This function alias is used to create a "callable" parser in
+/// [ExpressionParser].
 typedef _Evaluator = num Function(num value);
 
 /// Parses mathematical expressions with real numbers and the `x` variable (if
@@ -53,8 +54,8 @@ class ExpressionParser {
   static final Parser<_Evaluator> _parser = () {
     final builder = ExpressionBuilder<_Evaluator>();
 
-    // This primitive is fundamental as it recognizes real numbers from the input
-    // and parses them using 'parse'.
+    // This primitive is fundamental as it recognizes real numbers from the
+    // input and parses them using 'parse'.
     builder.group()
       ..primitive(
         digit()
@@ -171,8 +172,8 @@ class ExpressionParser {
     return builder.build().end();
   }();
 
-  /// Builds a new expression parser accepting strings with a single `x` variable.
-  /// For example, valid expressions are:
+  /// Builds a new expression parser accepting strings with a single `x`
+  /// variable. For example, valid expressions are:
   ///
   ///   - `2 + x`
   ///   - `3 * x - 6`
@@ -181,14 +182,15 @@ class ExpressionParser {
   /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**.
   const ExpressionParser();
 
-  /// Evaluates the mathematical [expression] and returns the result. This method
-  /// has to be used to evaluate those expression that don't contain the `x`
-  /// variable. For example:
+  /// Evaluates the mathematical [expression] and returns the result. This
+  /// method has to be used to evaluate those expression that don't contain the
+  /// `x` variable. For example:
   ///
   ///   - `"6 + 10 * 3 / 7"` // Good
   ///   - `"6 + 10 * x / 7"` // Bad
   ///
-  /// If you want to evaluate a function with the `x` variable, use [evaluateOn].
+  /// If you want to evaluate a function with the `x` variable, use
+  /// [evaluateOn].
   double evaluate(String expression) {
     if (expression.contains('x') || (!_parser.accept(expression))) {
       throw const ExpressionParserException(

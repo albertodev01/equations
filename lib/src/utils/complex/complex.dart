@@ -50,8 +50,8 @@ class Complex implements Comparable<Complex> {
   factory Complex.fromRealFraction(Fraction real) =>
       Complex(real.toDouble(), 0);
 
-  /// Creates a complex number having only the imaginary part, which is expressed
-  /// as a [Fraction]. The real part is set to 0.
+  /// Creates a complex number having only the imaginary part, which is
+  /// expressed as a [Fraction]. The real part is set to 0.
   factory Complex.fromImaginaryFraction(Fraction imaginary) =>
       Complex(0, imaginary.toDouble());
 
@@ -60,8 +60,8 @@ class Complex implements Comparable<Complex> {
   factory Complex.fromRealMixedFraction(MixedFraction real) =>
       Complex(real.toDouble(), 0);
 
-  /// Creates a complex number having only the imaginary part, which is expressed
-  /// as a [MixedFraction]. The real part is set to 0.
+  /// Creates a complex number having only the imaginary part, which is
+  /// expressed as a [MixedFraction]. The real part is set to 0.
   factory Complex.fromImaginaryMixedFraction(MixedFraction imaginary) =>
       Complex(0, imaginary.toDouble());
 
@@ -168,8 +168,8 @@ class Complex implements Comparable<Complex> {
     return '($this)';
   }
 
-  /// Returns an instance of [PolarComplex] which contains the radius `r` and the
-  /// angle `phi` of the complex number.
+  /// Returns an instance of [PolarComplex] which contains the radius `r` and
+  /// the angle `phi` of the complex number.
   PolarComplex toPolarCoordinates() => PolarComplex(
         r: abs(),
         phiRadians: phase(),

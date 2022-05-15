@@ -50,14 +50,14 @@ class PolynomialInterpolation extends Interpolation {
     // Finding the coefficients by solving the system
     final lu = LUSolver(
       matrix: RealMatrix.fromFlattenedData(
-        rows: length,
-        columns: length,
+        rows: nodes.length,
+        columns: nodes.length,
         data: matrixSource,
       ),
       knownValues: knownValues,
     );
 
-    final coefficients = lu.solve();
-    return Algebraic.fromReal(coefficients.reversed.toList());
+    final coefficients = lu.solve().reversed.toList(growable: false);
+    return Algebraic.fromReal(coefficients);
   }
 }

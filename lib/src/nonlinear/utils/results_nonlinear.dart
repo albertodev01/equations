@@ -14,8 +14,8 @@ class NonlinearResults {
   final double efficiency;
 
   /// [guesses] is the scalar succession built by the algorithm, [convergence]
-  /// represents the rate of convergence and [efficiency] is the efficiency of the
-  /// algorithm expressed as _p = convergence <sup>1 / max_steps</sup>_.
+  /// represents the rate of convergence and [efficiency] is the efficiency of
+  /// the algorithm expressed as _p = convergence <sup>1 / max_steps</sup>_.
   const NonlinearResults({
     required this.guesses,
     required this.convergence,
@@ -34,9 +34,9 @@ class NonlinearResults {
         return false;
       }
 
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
+      // Each successful comparison increases a counter by 1. If all elements
+      // are equal, then the counter will match the actual length of the
+      // coefficients list.
       var equalsCount = 0;
 
       for (var i = 0; i < guesses.length; ++i) {

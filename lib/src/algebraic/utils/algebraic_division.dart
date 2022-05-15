@@ -1,8 +1,8 @@
 import 'package:equations/equations.dart';
 
-/// This utility class holds the quotient and the remainder of a division between
-/// two polynomials. When you use `operator/` on two [Algebraic] objects, this
-/// class is returned. For example:
+/// This utility class holds the quotient and the remainder of a division
+/// between two polynomials. When you use `operator/` on two [Algebraic]
+/// objects, this class is returned. For example:
 ///
 /// ```dart
 /// final numerator = Algebraic.fromReal([1, -3, 2]);

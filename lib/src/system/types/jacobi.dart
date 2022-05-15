@@ -71,9 +71,9 @@ class JacobiSolver extends SystemSolver {
         return false;
       }
 
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
+      // Each successful comparison increases a counter by 1. If all elements
+      // are equal, then the counter will match the actual length of the
+      // coefficients list.
       var equalsCount = 0;
 
       for (var i = 0; i < x0.length; ++i) {

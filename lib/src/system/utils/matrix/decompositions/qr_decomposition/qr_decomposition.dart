@@ -8,7 +8,8 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 ///   - an upper triangular matrix R
 abstract class QRDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates an instance of [QRDecomposition] to QR decompose the given [matrix].
+  /// Creates an instance of [QRDecomposition] to QR decompose the given
+  /// [matrix].
   const QRDecomposition({
     required super.matrix,
   });

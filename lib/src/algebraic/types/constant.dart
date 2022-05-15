@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 
-/// Concrete implementation of [Algebraic] which represents a constant value `a`.
-/// It can be real or complex.
+/// Concrete implementation of [Algebraic] which represents a constant value
+/// `a`. It can be real or complex.
 ///
 /// **Examples**:
 ///
