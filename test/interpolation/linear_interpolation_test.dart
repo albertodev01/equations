@@ -13,7 +13,7 @@ void main() {
         ],
       );
 
-      expect(() => interpolation.nodes.clear(), throwsUnsupportedError);
+      expect(interpolation.nodes.clear, throwsUnsupportedError);
       expect(interpolation.nodes.length, equals(2));
       expect(
         interpolation.nodes,

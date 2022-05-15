@@ -53,9 +53,12 @@ class PolynomialLongDivision {
       );
     }
 
-    final numerator = List<Complex>.from(polyNumerator.coefficients.reversed);
-    final denominator =
-        List<Complex>.from(polyDenominator.coefficients.reversed);
+    final numerator = polyNumerator.coefficients.reversed.toList(
+      growable: false,
+    );
+    final denominator = polyDenominator.coefficients.reversed.toList(
+      growable: false,
+    );
 
     var numDegree = polyNumerator.degree as int;
     final denomDegree = polyDenominator.degree as int;
@@ -138,13 +141,7 @@ class PolynomialLongDivision {
   }
 
   @override
-  int get hashCode {
-    var result = 2011;
-
-    result = result * 37 + polyNumerator.hashCode;
-
-    return result * 37 + polyDenominator.hashCode;
-  }
+  int get hashCode => Object.hash(polyNumerator, polyDenominator);
 
   @override
   String toString() {

@@ -41,13 +41,7 @@ class AlgebraicDivision {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + quotient.hashCode;
-
-    return result * 37 + remainder.hashCode;
-  }
+  int get hashCode => Object.hash(quotient, remainder);
 
   @override
   String toString() {

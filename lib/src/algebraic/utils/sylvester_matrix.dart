@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
@@ -6,26 +5,13 @@ import 'package:equations/equations.dart';
 /// A Sylvester matrix is used to compute the discriminant of a polynomial
 /// starting from its coefficients.
 class SylvesterMatrix {
-  /// Internally stores the coefficients of the polynomial
-  final List<Complex> _coefficients;
+  /// The polynomial object.
+  final Algebraic polynomial;
 
-  /// The coefficients of the polynomial from which the Sylvester matrix will
-  /// be built. The list is unmodifiable.
-  List<Complex> get coefficients => _coefficients;
-
-  /// The constructor requires complex [coefficients] for the polynomial P(x).
-  SylvesterMatrix({
-    required List<Complex> coefficients,
-  }) : _coefficients = UnmodifiableListView(
-          List<Complex>.from(coefficients),
-        );
-
-  /// The constructor requires real [coefficients] for the polynomial P(x).
-  SylvesterMatrix.fromReal({
-    required List<double> coefficients,
-  }) : _coefficients = UnmodifiableListView(
-          coefficients.map(Complex.fromReal).toList(),
-        );
+  /// Creates a [SylvesterMatrix] object.
+  const SylvesterMatrix({
+    required this.polynomial,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -34,49 +20,21 @@ class SylvesterMatrix {
     }
 
     if (other is SylvesterMatrix) {
-      // The lengths of the coefficients must match
-      if (_coefficients.length != other._coefficients.length) {
-        return false;
-      }
-
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
-      var equalsCount = 0;
-
-      for (var i = 0; i < _coefficients.length; ++i) {
-        if (_coefficients[i] == other._coefficients[i]) {
-          ++equalsCount;
-        }
-      }
-
-      // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType &&
-          equalsCount == _coefficients.length;
+      return runtimeType == other.runtimeType && polynomial == other.polynomial;
     } else {
       return false;
     }
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < _coefficients.length; ++i) {
-      result = result * 37 + _coefficients[i].hashCode;
-    }
-
-    return result;
-  }
+  int get hashCode => Object.hashAll([polynomial]);
 
   /// Builds the Sylvester matrix associated to the given polynomial.
   ComplexMatrix buildMatrix() {
     // Computing the derivative of the polynomial and the size of the matrix
-    final derivative = Algebraic.from(_coefficients).derivative().coefficients;
-    final size = (_coefficients.length - 1) + (derivative.length - 1);
-    var pos = 0;
+    final coefficients = polynomial.coefficients;
+    final derivative = polynomial.derivative().coefficients;
+    final size = (coefficients.length - 1) + (derivative.length - 1);
 
     // Building the matrix with FIXED length lists (optimization)
     final flatData = List<Complex>.generate(
@@ -92,12 +50,14 @@ class SylvesterMatrix {
      * which is equivalent to 'flatData[row][column]' if 'flatData' was a 2D
      * array.
      */
-    for (var i = 0; i < size - _coefficients.length + 1; ++i) {
-      for (var j = 0; j < _coefficients.length; ++j) {
-        flatData[size * i + (j + i)] = _coefficients[j];
+    for (var i = 0; i < size - coefficients.length + 1; ++i) {
+      for (var j = 0; j < coefficients.length; ++j) {
+        flatData[size * i + (j + i)] = coefficients[j];
       }
     }
-    for (var i = size - _coefficients.length + 1; i < size; ++i) {
+
+    var pos = 0;
+    for (var i = size - coefficients.length + 1; i < size; ++i) {
       for (var j = 0; j < derivative.length; ++j) {
         flatData[size * i + (j + pos)] = derivative[j];
       }
@@ -132,10 +92,16 @@ class SylvesterMatrix {
   ///
   /// You should keep the default value of [optimize].
   Complex polynomialDiscriminant({bool optimize = true}) {
+    final quarticOrLower = polynomial is Constant ||
+        polynomial is Linear ||
+        polynomial is Quadratic ||
+        polynomial is Cubic ||
+        polynomial is Quartic;
+
     // In case the optimization flag were 'true' and the degree of the
     // polynomial is <= 4, then go for the easy way.
-    if (optimize && (_coefficients.length <= 5)) {
-      return Algebraic.from(coefficients).discriminant();
+    if (optimize && quarticOrLower) {
+      return polynomial.discriminant();
     } else {
       // The determinant of the Sylvester matrix
       final determinant = matrixDeterminant();
@@ -152,9 +118,10 @@ class SylvesterMatrix {
       * Res(A, A') is the resultant of A(x) and A'(x), which is nothing more than
       * the determinant of the Sylvester matrix.
       */
-      final degree = _coefficients.length - 1;
+      final coefficients = polynomial.coefficients;
+      final degree = coefficients.length - 1;
       final sign = math.pow(-1, degree * (degree - 1) / 2) as double;
-      final denominator = _coefficients.first;
+      final denominator = coefficients.first;
 
       // Returning the determinant with the correct sign
       return Complex.fromReal(sign) / denominator * determinant;

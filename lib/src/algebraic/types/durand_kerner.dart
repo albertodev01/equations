@@ -240,7 +240,7 @@ class DurandKerner extends Algebraic with MathUtils {
     // a polynomial, we need to first compute the resultant Res(A, A') which
     // is equivalent to the determinant of the Sylvester matrix.
     final sylvester = SylvesterMatrix(
-      coefficients: coefficients,
+      polynomial: this,
     );
 
     // Computes Res(A, A') and then determines the sign according with the
@@ -313,12 +313,12 @@ class DurandKerner extends Algebraic with MathUtils {
         (_) => 0.0,
       );
 
-      final factor = 0.65 *
-          _bound(
-            value: coefficientsLength,
-            realBuffer: realBuffer,
-            imaginaryBuffer: imaginaryBuffer,
-          );
+      final bound = _bound(
+        value: coefficientsLength,
+        realBuffer: realBuffer,
+        imaginaryBuffer: imaginaryBuffer,
+      );
+      final factor = 0.65 * bound;
 
       final multiplier = math.cos(0.25 * 2 * math.pi);
 

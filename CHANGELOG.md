@@ -1,6 +1,7 @@
-## [3.3.0]
+## [4.0.0]
  - **BREAKING**: The `Complex.fromPolar` constructor now asks for required **named** parameters
  - **BREAKING**: The `Interpolation` constructor now asks for required **named** parameters
+ - **BREAKING**: The `SylvesterMatrix` type now accepts an `Algebraic` type rather than a `List<Complex>`. As such, the `SylvesterMatrix.fromReal` constructor has been removed because a real polynomial can be built using `Algebraic.fromReal` instead
  - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
  - Added `csc` (cosecant) and `sec` (secant) trigonometric functions to the `ExpressionParser` type
  - Migrated Dart code to 2.17 with super parameters
