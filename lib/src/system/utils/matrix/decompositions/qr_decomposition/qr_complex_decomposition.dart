@@ -11,10 +11,10 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
   static const _zero = Complex.zero();
 
-  /// Requires the [realMatrix] matrix to be decomposed.
+  /// Requires the [matrix] matrix to be decomposed.
   const QRDecompositionComplex({
-    required ComplexMatrix complexMatrix,
-  }) : super(matrix: complexMatrix);
+    required super.matrix,
+  });
 
   @override
   List<ComplexMatrix> decompose() {

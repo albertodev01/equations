@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:equations/equations.dart';
 
 /// Solves a system of linear equations using the Jacobi iterative method.
@@ -17,23 +18,23 @@ class JacobiSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [equations] is the matrix containing the equations
-  ///   - [constants] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values
   ///   - [x0] is the initial guess (which is a vector)
   ///   - [precision] tells how accurate the algorithm has to be
   ///   - [maxSteps] the maximum number of iterations the algorithm
   ///
   /// `A` must be strictly diagonally dominant.
   factory JacobiSolver({
-    required List<List<double>> equations,
-    required List<double> constants,
+    required RealMatrix matrix,
+    required List<double> knownValues,
     required List<double> x0,
     int maxSteps = 30,
     double precision = 1.0e-10,
   }) {
     // The initial vector with the guesses MUST have the same size as the matrix
     // of course
-    if (x0.length != constants.length) {
+    if (x0.length != knownValues.length) {
       throw const SystemSolverException(
         'The length of the guesses vector '
         'must match the size of the square matrix.',
@@ -41,43 +42,8 @@ class JacobiSolver extends SystemSolver {
     }
 
     return JacobiSolver._(
-      equations: equations,
-      constants: constants,
-      x0: x0,
-      maxSteps: maxSteps,
-      precision: precision,
-    );
-  }
-
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
-  ///
-  ///   - [equations] is the flattened matrix containing the equations
-  ///   - [constants] is the vector with the known values
-  ///   - [x0] is the initial guess (which is a vector)
-  ///   - [precision] tells how accurate the algorithm has to be
-  ///   - [maxSteps] the maximum number of iterations the algorithm
-  ///
-  /// `A` must be strictly diagonally dominant.
-  factory JacobiSolver.flatMatrix({
-    required List<double> equations,
-    required List<double> constants,
-    required List<double> x0,
-    int maxSteps = 30,
-    double precision = 1.0e-10,
-  }) {
-    // The initial vector with the guesses MUST have the same size as the matrix
-    // of course
-    if (x0.length != constants.length) {
-      throw const SystemSolverException(
-        'The length of the guesses vector '
-        'must match the size of the square matrix.',
-      );
-    }
-
-    return JacobiSolver._flatMatrix(
-      equations: equations,
-      constants: constants,
+      matrix: matrix,
+      knownValues: knownValues,
       x0: x0,
       maxSteps: maxSteps,
       precision: precision,
@@ -86,29 +52,12 @@ class JacobiSolver extends SystemSolver {
 
   /// Creates a [JacobiSolver] instance with
   JacobiSolver._({
-    required List<List<double>> equations,
-    required List<double> constants,
+    required super.matrix,
+    required super.knownValues,
     required this.x0,
-    this.maxSteps = 30,
     super.precision,
-  }) : super(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
-
-  /// Creates a [JacobiSolver] instance.
-  JacobiSolver._flatMatrix({
-    required List<double> equations,
-    required List<double> constants,
-    required this.x0,
     this.maxSteps = 30,
-    super.precision,
-  }) : super.flatMatrix(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
+  });
 
   @override
   bool operator ==(Object other) {
@@ -143,17 +92,13 @@ class JacobiSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < x0.length; ++i) {
-      result = result * 37 + x0[i].hashCode;
-    }
-
-    return result * 37 + maxSteps.hashCode;
-  }
+  int get hashCode => Object.hashAll([
+        precision,
+        matrix,
+        x0,
+        maxSteps,
+        ...knownValues,
+      ]);
 
   @override
   List<double> solve() {
@@ -179,11 +124,11 @@ class JacobiSolver extends SystemSolver {
             continue;
           }
 
-          solutions[i] = solutions[i] - equations(i, j) * oldSolutions[j];
+          solutions[i] = solutions[i] - matrix(i, j) * oldSolutions[j];
         }
 
         // New "refined" value of the solution
-        solutions[i] = solutions[i] / equations(i, i);
+        solutions[i] = solutions[i] / matrix(i, i);
       }
 
       ++k;

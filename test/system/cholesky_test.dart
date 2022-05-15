@@ -10,12 +10,16 @@ void main() {
       'system of linear equations.',
       () {
         final choleskySolver = CholeskySolver(
-          equations: const [
-            [6, 15, 55],
-            [15, 55, 255],
-            [55, 225, 979],
-          ],
-          constants: const [76, 295, 1259],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: [
+              [6, 15, 55],
+              [15, 55, 255],
+              [55, 225, 979],
+            ],
+          ),
+          knownValues: const [76, 295, 1259],
         );
 
         // This is needed because we want to make sure that the "original" matrix
@@ -38,47 +42,29 @@ void main() {
         }
 
         // Checking the "state" of the object
-        expect(choleskySolver.equations, equals(matrix));
+        expect(choleskySolver.matrix, equals(matrix));
         expect(choleskySolver.hasSolution(), isTrue);
         expect(
           choleskySolver.knownValues,
-          orderedEquals(<double>[76, 295, 1259]),
+          orderedEquals(const [76, 295, 1259]),
         );
         expect(choleskySolver.precision, equals(1.0e-10));
         expect(choleskySolver.size, equals(3));
       },
     );
 
-    test(
-      'Making sure that flat constructor produces the same object that '
-      'a non-flattened constructor does',
-      () {
-        final matrix = CholeskySolver(
-          equations: const [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-          ],
-          constants: const [1, 2, 3],
-        );
-
-        final flatMatrix = CholeskySolver.flatMatrix(
-          equations: const [1, 2, 3, 4, 5, 6, 7, 8, 9],
-          constants: const [1, 2, 3],
-        );
-
-        expect(matrix, equals(flatMatrix));
-      },
-    );
-
     test('Making sure that the string conversion works properly.', () {
       final solver = CholeskySolver(
-        equations: const [
-          [-6, 15, 55],
-          [15, 55, 255],
-          [55, 225, 979],
-        ],
-        constants: const [76, 295, 1259],
+        matrix: RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [-6, 15, 55],
+            [15, 55, 255],
+            [55, 225, 979],
+          ],
+        ),
+        knownValues: const [76, 295, 1259],
       );
 
       const toString = '[-6.0, 15.0, 55.0]\n'
@@ -97,12 +83,16 @@ void main() {
       'negative number is found while Cholesky-decomposing the matrix.',
       () {
         final solver = CholeskySolver(
-          equations: const [
-            [-6, 15, 55],
-            [15, 55, 255],
-            [55, 225, 979],
-          ],
-          constants: const [76, 295, 1259],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [-6, 15, 55],
+              [15, 55, 255],
+              [55, 225, 979],
+            ],
+          ),
+          knownValues: const [76, 295, 1259],
         );
 
         expect(solver.solve, throwsA(isA<SystemSolverException>()));
@@ -110,16 +100,20 @@ void main() {
     );
 
     test(
-      'Making sure that the matrix is squared because this method is only '
+      'Making sure that the matrix is square because this method is only '
       "able to solve systems of 'N' equations in 'N' variables.",
       () {
         expect(
           () => CholeskySolver(
-            equations: const [
-              [1, 2, 3],
-              [4, 5, 6],
-            ],
-            constants: [7, 8],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 3,
+              data: const [
+                [1, 2, 3],
+                [4, 5, 6],
+              ],
+            ),
+            knownValues: [7, 8],
           ),
           throwsA(isA<MatrixException>()),
         );
@@ -127,30 +121,20 @@ void main() {
     );
 
     test(
-      'Making sure that when the input is a flat matrix, the matrix must '
-      'be squared.',
-      () {
-        expect(
-          () => CholeskySolver.flatMatrix(
-            equations: const [1, 2, 3, 4, 5],
-            constants: [7, 8],
-          ),
-          throwsA(isA<MatrixException>()),
-        );
-      },
-    );
-
-    test(
-      'Making sure that the matrix is squared AND the dimension of the '
+      'Making sure that the matrix is square AND the dimension of the '
       'known values vector also matches the size of the matrix.',
       () {
         expect(
           () => CholeskySolver(
-            equations: const [
-              [1, 2],
-              [4, 5],
-            ],
-            constants: [7, 8, 9],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: const [
+                [1, 2],
+                [3, 4],
+              ],
+            ),
+            knownValues: [7, 8, 9],
           ),
           throwsA(isA<MatrixException>()),
         );
@@ -159,27 +143,39 @@ void main() {
 
     test('Making sure that objects comparison works properly.', () {
       final cholesky = CholeskySolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       final cholesky2 = CholeskySolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       final different = CholeskySolver(
-        equations: const [
-          [1, -2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, -2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       expect(cholesky, equals(cholesky2));
@@ -194,28 +190,40 @@ void main() {
     test('Batch tests', () {
       final systems = [
         CholeskySolver(
-          equations: const [
-            [25, 15, -5],
-            [15, 18, 0],
-            [-5, 0, 11],
-          ],
-          constants: [35, 33, 6],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [25, 15, -5],
+              [15, 18, 0],
+              [-5, 0, 11],
+            ],
+          ),
+          knownValues: [35, 33, 6],
         ).solve(),
         CholeskySolver(
-          equations: const [
-            [4, 12, -16],
-            [12, 37, -43],
-            [-16, -43, 98],
-          ],
-          constants: [9, 1, 0],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 12, -16],
+              [12, 37, -43],
+              [-16, -43, 98],
+            ],
+          ),
+          knownValues: [9, 1, 0],
         ).solve(),
         CholeskySolver(
-          equations: const [
-            [1, 0, 1],
-            [0, 2, 0],
-            [1, 0, 3],
-          ],
-          constants: [6, 5, -2],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 1],
+              [0, 2, 0],
+              [1, 0, 3],
+            ],
+          ),
+          knownValues: [6, 5, -2],
         ).solve(),
       ];
 

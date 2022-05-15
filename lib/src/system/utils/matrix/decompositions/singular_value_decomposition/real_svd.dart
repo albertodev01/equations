@@ -14,10 +14,10 @@ import 'package:equations/src/utils/math_utils.dart';
 /// This class performs the SVD procedure on [RealMatrix] types.
 class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     with MathUtils {
-  /// Requires the [realMatrix] matrix to be decomposed.
+  /// Requires the [matrix] matrix to be decomposed.
   const SVDReal({
-    required RealMatrix realMatrix,
-  }) : super(matrix: realMatrix);
+    required super.matrix,
+  });
 
   /// Reduces the source matrix a to bidiagonal form.
   ///

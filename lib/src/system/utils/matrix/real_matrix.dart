@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
@@ -31,10 +32,10 @@ import 'package:equations/src/utils/math_utils.dart';
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
 class RealMatrix extends Matrix<double> with MathUtils {
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
   /// matrix is filled with zeroes.
   ///
-  /// If [identity] is set to `true` (by default it's `false`) then the matrix
+  /// If `identity` is set to `true` (by default it's `false`) then the matrix
   /// is initialized with all zeroes **and** the diagonal is filled with ones.
   RealMatrix({
     required super.rows,
@@ -45,16 +46,16 @@ class RealMatrix extends Matrix<double> with MathUtils {
           identityOneValue: 1,
         );
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with values from [data].
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with values from `data`.
   RealMatrix.fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with values from [data].
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with values from `data`.
   ///
   /// The source matrix is expressed as an array whose size must **exactly** be
   /// `N` * `M`.
@@ -64,8 +65,8 @@ class RealMatrix extends Matrix<double> with MathUtils {
     required super.data,
   }) : super.fromFlattenedData();
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with `diagonalValue` in the main diagonal and zeroes
   /// otherwise.
   RealMatrix.diagonal({
     required super.rows,
@@ -240,8 +241,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    final source = List<List<double>>.generate(rowCount - 1,
-        (_) => List<double>.generate(columnCount - 1, (_) => 0.0));
+    final source = List<List<double>>.generate(
+      rowCount - 1,
+      (_) => List<double>.generate(columnCount - 1, (_) => 0.0),
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; i != row && j < columnCount; ++j) {
@@ -277,7 +280,9 @@ class RealMatrix extends Matrix<double> with MathUtils {
     }
 
     final source = List<List<double>>.generate(
-        rowCount, (_) => List<double>.generate(columnCount, (_) => 0.0));
+      rowCount,
+      (_) => List<double>.generate(columnCount, (_) => 0.0),
+    );
 
     // Computing cofactors
     for (var i = 0; i < rowCount; ++i) {
@@ -308,7 +313,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    // In case of a 2x2 matrix, we can directly compute it and save computational
+    // In case of 2x2 matrix, we can directly compute it and save computational
     // time. Note that, from here, we're sure that this matrix is square so no
     // need to check both the row count and the col count.
     if (rowCount == 2) {
@@ -702,19 +707,16 @@ class RealMatrix extends Matrix<double> with MathUtils {
   }
 
   @override
-  List<RealMatrix> qrDecomposition() => QRDecompositionReal(
-        realMatrix: this,
-      ).decompose();
+  List<RealMatrix> qrDecomposition() =>
+      QRDecompositionReal(matrix: this).decompose();
 
   @override
-  List<RealMatrix> singleValueDecomposition() => SVDReal(
-        realMatrix: this,
-      ).decompose();
+  List<RealMatrix> singleValueDecomposition() =>
+      SVDReal(matrix: this).decompose();
 
   @override
-  List<RealMatrix> eigenDecomposition() => EigendecompositionReal(
-        matrix: this,
-      ).decompose();
+  List<RealMatrix> eigenDecomposition() =>
+      EigendecompositionReal(matrix: this).decompose();
 
   /// Computes the determinant of a 2x2 matrix.
   double _compute2x2Determinant(RealMatrix source) =>
@@ -807,11 +809,12 @@ class RealMatrix extends Matrix<double> with MathUtils {
     //
     //  det(A) = det(L x U) = det(L) x det(U)
     //
-    // In particular, the determinant of a lower triangular and an upper triangular
-    // matrix is the product of the items in the diagonal.
+    // In particular, the determinant of a lower triangular and an upper
+    // triangular matrix is the product of the items in the diagonal.
     //
-    // For this reason, the computation of the determinant is O(n^3) which is way
-    // better than O(n!) from the Leibniz formula or the Laplace transformation!
+    // For this reason, the computation of the determinant is O(n^3) which is
+    // way better than O(n!) from the Leibniz formula or the Laplace
+    // transformation!
     final lu = luDecomposition();
 
     var prodL = 1.0;

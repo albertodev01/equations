@@ -13,38 +13,18 @@ class GaussSeidelSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [equations] is the matrix containing the equations
-  ///   - [constants] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values
   ///   - [precision] determines how accurate the algorithm has to be
   ///   - [maxSteps] the maximum number of iterations the algorithm
-  GaussSeidelSolver({
-    required List<List<double>> equations,
-    required List<double> constants,
-    this.maxSteps = 30,
-    super.precision,
-  }) : super(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
-
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [equations] is the flattened matrix containing the equations
-  ///   - [constants] is the vector with the known values
-  ///   - [precision] determines how accurate the algorithm has to be
-  ///   - [maxSteps] the maximum number of iterations the algorithm
-  GaussSeidelSolver.flatMatrix({
-    required List<double> equations,
-    required List<double> constants,
-    this.maxSteps = 30,
+  /// By default, [maxSteps] is set to `30`.
+  GaussSeidelSolver({
+    required super.matrix,
+    required super.knownValues,
     super.precision,
-  }) : super.flatMatrix(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
+    this.maxSteps = 30,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -60,14 +40,19 @@ class GaussSeidelSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode => 37 * super.hashCode + maxSteps.hashCode;
+  int get hashCode => Object.hashAll([
+        precision,
+        matrix,
+        maxSteps,
+        ...knownValues,
+      ]);
 
   @override
   List<double> solve() {
     // When 'w = 1', the SOR method simplifies to the Gauss-Seidel method.
     final sor = SORSolver(
-      equations: equations.toListOfList(),
-      constants: knownValues,
+      matrix: matrix,
+      knownValues: knownValues,
       w: 1,
     );
 

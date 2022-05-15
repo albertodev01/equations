@@ -48,14 +48,16 @@ class PolynomialInterpolation extends Interpolation {
     final knownValues = nodes.map((node) => node.y).toList(growable: false);
 
     // Finding the coefficients by solving the system
-    final lu = LUSolver.flatMatrix(
-      equations: matrixSource,
-      constants: knownValues,
+    final lu = LUSolver(
+      matrix: RealMatrix.fromFlattenedData(
+        rows: length,
+        columns: length,
+        data: matrixSource,
+      ),
+      knownValues: knownValues,
     );
 
-    final coefficients = lu.solve().reversed.toList();
-
-    // Buildng the polynomial
-    return Algebraic.fromReal(coefficients);
+    final coefficients = lu.solve();
+    return Algebraic.fromReal(coefficients.reversed.toList());
   }
 }

@@ -31,7 +31,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(gauss.equations, equals(matrix));
+        expect(gauss.matrix, equals(matrix));
         expect(gauss.knownValues, orderedEquals(<double>[-5, -5, -1]));
         expect(gauss.precision, equals(1.0e-10));
         expect(gauss.size, equals(3));
@@ -110,7 +110,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(gauss.equations, equals(matrix));
+        expect(gauss.matrix, equals(matrix));
         expect(gauss.knownValues, orderedEquals(<double>[4, -8]));
         expect(gauss.precision, equals(1.0e-10));
         expect(gauss.size, equals(2));
@@ -118,6 +118,8 @@ void main() {
         // Solutions
         expect(gauss.solve(), unorderedEquals(<double>[6, 7]));
         expect(gauss.determinant(), equals(-4));
+
+        expect(gauss.knownValues, orderedEquals(const [4, -8]));
       },
     );
 

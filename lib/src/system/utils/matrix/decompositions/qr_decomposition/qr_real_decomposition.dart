@@ -11,10 +11,10 @@ import 'package:equations/src/utils/math_utils.dart';
 /// This class performs the QR decomposition on [RealMatrix] types.
 class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
     with MathUtils {
-  /// Requires the [realMatrix] matrix to be decomposed.
+  /// Requires the [matrix] matrix to be decomposed.
   const QRDecompositionReal({
-    required RealMatrix realMatrix,
-  }) : super(matrix: realMatrix);
+    required super.matrix,
+  });
 
   @override
   List<RealMatrix> decompose() {

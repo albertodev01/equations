@@ -32,7 +32,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(sor.equations, equals(matrix));
+        expect(sor.matrix, equals(matrix));
         expect(sor.knownValues, orderedEquals(<double>[-1, 7, -7]));
         expect(sor.w, equals(1.25));
         expect(sor.maxSteps, equals(30));

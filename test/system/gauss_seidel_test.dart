@@ -31,7 +31,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(gaussSeidel.equations, equals(matrix));
+        expect(gaussSeidel.matrix, equals(matrix));
         expect(gaussSeidel.knownValues, orderedEquals(<double>[-1, 7, -7]));
         expect(gaussSeidel.maxSteps, equals(30));
         expect(gaussSeidel.precision, equals(1.0e-10));

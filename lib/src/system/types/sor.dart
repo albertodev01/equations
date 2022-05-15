@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:equations/equations.dart';
 
 /// Solves a system of linear equations using the SOR iterative method.
@@ -17,42 +18,18 @@ class SORSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [equations] is the matrix containing the equations
-  ///   - [constants] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values
   ///   - [precision] determines how accurate the algorithm has to be
   ///   - [w] is the relaxation factor
   ///   - [maxSteps] the maximum number of iterations the algorithm
   SORSolver({
-    required List<List<double>> equations,
-    required List<double> constants,
+    required super.matrix,
+    required super.knownValues,
     required this.w,
-    this.maxSteps = 30,
     super.precision,
-  }) : super(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
-
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
-  ///
-  ///   - [equations] is the flattened matrix containing the equations
-  ///   - [constants] is the vector with the known values
-  ///   - [precision] determines how accurate the algorithm has to be
-  ///   - [w] is the relaxation factor
-  ///   - [maxSteps] the maximum number of iterations the algorithm
-  SORSolver.flatMatrix({
-    required List<double> equations,
-    required List<double> constants,
-    required this.w,
     this.maxSteps = 30,
-    super.precision,
-  }) : super.flatMatrix(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
+  });
 
   @override
   bool operator ==(Object other) {
@@ -68,14 +45,13 @@ class SORSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + w.hashCode;
-    result = result * 37 + maxSteps.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hashAll([
+        precision,
+        matrix,
+        w,
+        maxSteps,
+        ...knownValues,
+      ]);
 
   @override
   List<double> solve() {
@@ -93,11 +69,11 @@ class SORSolver extends SystemSolver {
         var sigma = 0.0;
         for (var j = 0; j < size; ++j) {
           if (j != i) {
-            sigma += equations(i, j) * phi[j];
+            sigma += matrix(i, j) * phi[j];
           }
         }
         phi[i] =
-            (1 - w) * phi[i] + (w / equations(i, i)) * (knownValues[i] - sigma);
+            (1 - w) * phi[i] + (w / matrix(i, i)) * (knownValues[i] - sigma);
       }
 
       ++k;
@@ -112,12 +88,12 @@ class SORSolver extends SystemSolver {
   /// two vectors.
   double _euclideanNorm(List<double> phi) {
     // This is A*phi (where A is the source matrix)
-    final difference = List<double>.generate(equations.rowCount, (_) => 0);
+    final difference = List<double>.generate(matrix.rowCount, (_) => 0);
 
-    for (var i = 0; i < equations.rowCount; ++i) {
+    for (var i = 0; i < matrix.rowCount; ++i) {
       var sum = 0.0;
-      for (var j = 0; j < equations.columnCount; ++j) {
-        sum += equations(i, j) * phi[j];
+      for (var j = 0; j < matrix.columnCount; ++j) {
+        sum += matrix(i, j) * phi[j];
       }
       difference[i] = sum;
     }

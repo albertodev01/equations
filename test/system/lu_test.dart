@@ -35,7 +35,7 @@ void main() {
         expect(results, unorderedEquals(<double>[-1, 4, 3]));
 
         // Checking the "state" of the object
-        expect(luSolver.equations, equals(matrix));
+        expect(luSolver.matrix, equals(matrix));
         expect(luSolver.knownValues, orderedEquals(<double>[12, 17, 5]));
         expect(luSolver.precision, equals(1.0e-10));
         expect(luSolver.size, equals(3));

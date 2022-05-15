@@ -14,10 +14,10 @@ import 'package:equations/src/utils/math_utils.dart';
 /// This class performs the SVD procedure on [ComplexMatrix] types.
 class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     with MathUtils {
-  /// Requires the [realMatrix] matrix to be decomposed.
+  /// Requires the [matrix] matrix to be decomposed.
   const SVDComplex({
-    required ComplexMatrix complexMatrix,
-  }) : super(matrix: complexMatrix);
+    required super.matrix,
+  });
 
   /// Reduces the source matrix a to bidiagonal form.
   ///

@@ -30,7 +30,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(jacobi.equations, equals(matrix));
+        expect(jacobi.matrix, equals(matrix));
         expect(jacobi.knownValues, orderedEquals(<double>[11, 13]));
         expect(jacobi.x0, orderedEquals(<double>[1, 1]));
         expect(jacobi.maxSteps, equals(30));

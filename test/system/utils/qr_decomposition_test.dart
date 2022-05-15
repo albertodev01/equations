@@ -9,7 +9,7 @@ void main() {
   group('QRDecomposition class', () {
     test('Equality tests', () {
       final real = QRDecompositionReal(
-        realMatrix: RealMatrix.fromData(
+        matrix: RealMatrix.fromData(
           rows: 1,
           columns: 1,
           data: [
@@ -19,7 +19,7 @@ void main() {
       );
 
       final complex = QRDecompositionComplex(
-        complexMatrix: ComplexMatrix.fromData(
+        matrix: ComplexMatrix.fromData(
           rows: 1,
           columns: 1,
           data: const [
@@ -30,7 +30,7 @@ void main() {
 
       expect(
         QRDecompositionReal(
-          realMatrix: RealMatrix.fromData(
+          matrix: RealMatrix.fromData(
             rows: 1,
             columns: 1,
             data: [
@@ -45,7 +45,7 @@ void main() {
         real,
         equals(
           QRDecompositionReal(
-            realMatrix: RealMatrix.fromData(
+            matrix: RealMatrix.fromData(
               rows: 1,
               columns: 1,
               data: [
@@ -58,7 +58,7 @@ void main() {
 
       expect(
         QRDecompositionReal(
-          realMatrix: RealMatrix.fromData(
+          matrix: RealMatrix.fromData(
             rows: 1,
             columns: 1,
             data: [
@@ -73,7 +73,7 @@ void main() {
         complex,
         equals(
           QRDecompositionComplex(
-            complexMatrix: ComplexMatrix.fromData(
+            matrix: ComplexMatrix.fromData(
               rows: 1,
               columns: 1,
               data: const [
@@ -86,7 +86,7 @@ void main() {
 
       expect(
         QRDecompositionComplex(
-          complexMatrix: ComplexMatrix.fromData(
+          matrix: ComplexMatrix.fromData(
             rows: 1,
             columns: 1,
             data: const [
@@ -110,7 +110,7 @@ void main() {
         );
 
         final realQR = QRDecompositionReal(
-          realMatrix: sourceMatrix,
+          matrix: sourceMatrix,
         );
 
         final results = realQR.decompose();
@@ -171,7 +171,7 @@ void main() {
 
       test('Making sure that QRDecompositionReal works properly - Test 2', () {
         final realQR = QRDecompositionReal(
-          realMatrix: RealMatrix.fromData(
+          matrix: RealMatrix.fromData(
             rows: 4,
             columns: 3,
             data: [
@@ -245,7 +245,7 @@ void main() {
         );
 
         final complexQR = QRDecompositionComplex(
-          complexMatrix: sourceMatrix,
+          matrix: sourceMatrix,
         );
 
         final results = complexQR.decompose();

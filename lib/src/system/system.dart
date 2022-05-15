@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:equations/equations.dart';
 
 /// A solver for systems of linear equations whose coefficients are only real
@@ -13,10 +11,10 @@ import 'package:equations/equations.dart';
 /// The method [solve] returns the vector `x` of the `Ax = b` equation.
 abstract class SystemSolver {
   /// The equations of the system to be solved.
-  late final RealMatrix equations;
+  final RealMatrix matrix;
 
   /// The vector containing the known values of the equation.
-  late final List<double> _knownValues;
+  final List<double> knownValues;
 
   /// The accuracy of the algorithm.
   final double precision;
@@ -24,63 +22,28 @@ abstract class SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [size] is the total number of equations
-  ///   - [A] is the matrix containing the equations
-  ///   - [b] is the vector with the known values
-  SystemSolver({
-    required int size,
-    required List<List<double>> A,
-    required List<double> b,
-    this.precision = 1.0e-10,
-  }) {
-    // Building the matrix
-    equations = RealMatrix.fromData(
-      rows: size,
-      columns: size,
-      data: A,
-    );
-
-    // The vector of known values must match the size of the matrix
-    if (equations.rowCount != b.length) {
-      throw const SystemSolverException(
-        'The known values vector must have the '
-        'same size as the matrix.',
-      );
-    }
-
-    // Copying and storing internally the list of known values
-    _knownValues = b.map((value) => value).toList();
-  }
-
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values
   ///
-  ///   - [size] is the total number of equations
-  ///   - [A] is the flattened matrix containing the equations
-  ///   - [b] is the vector with the known values
-  SystemSolver.flatMatrix({
-    required int size,
-    required List<double> A,
-    required List<double> b,
+  /// An exception of type [SystemSolverException] is thrown if the matrix is
+  /// not square.
+  SystemSolver({
+    required this.matrix,
+    required this.knownValues,
     this.precision = 1.0e-10,
   }) {
-    // Building the matrix
-    equations = RealMatrix.fromFlattenedData(
-      rows: size,
-      columns: size,
-      data: A,
-    );
+    // Only square matrices are allowed
+    if (!matrix.isSquareMatrix) {
+      throw const SystemSolverException('The matrix must be square');
+    }
 
     // The vector of known values must match the size of the matrix
-    if (equations.rowCount != b.length) {
+    if (matrix.rowCount != knownValues.length) {
       throw const SystemSolverException(
         'The known values vector must have the '
         'same size as the matrix.',
       );
     }
-
-    // Copying and storing internally the list of known values
-    _knownValues = b.map((value) => value).toList();
   }
 
   @override
@@ -91,25 +54,25 @@ abstract class SystemSolver {
 
     if (other is SystemSolver) {
       // The lengths of the coefficients must match
-      if (_knownValues.length != other._knownValues.length) {
+      if (knownValues.length != other.knownValues.length) {
         return false;
       }
 
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
+      // Each successful comparison increases a counter by 1. If all elements
+      // are equal, then the counter will match the actual length of the
+      // coefficients list.
       var equalsCount = 0;
 
-      for (var i = 0; i < _knownValues.length; ++i) {
-        if (_knownValues[i] == other._knownValues[i]) {
+      for (var i = 0; i < knownValues.length; ++i) {
+        if (knownValues[i] == other.knownValues[i]) {
           ++equalsCount;
         }
       }
 
       // They must have the same runtime type AND all items must be equal.
       return runtimeType == other.runtimeType &&
-          equalsCount == _knownValues.length &&
-          equations == other.equations &&
+          equalsCount == knownValues.length &&
+          matrix == other.matrix &&
           precision == other.precision;
     } else {
       return false;
@@ -117,29 +80,13 @@ abstract class SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < _knownValues.length; ++i) {
-      result = result * 37 + _knownValues[i].hashCode;
-    }
-
-    result = result * 37 + equations.hashCode;
-    result = result * 37 + precision.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hashAll([precision, matrix, ...knownValues]);
 
   @override
-  String toString() => equations.toString();
+  String toString() => matrix.toString();
 
-  /// The vector containing the known values of the equation.
-  List<double> get knownValues => UnmodifiableListView<double>(_knownValues);
-
-  /// Prints the augmented matrix of this instance, which is the equations matrix
-  /// plus the known values vector to the right. For example, if...
+  /// Prints the augmented matrix of this instance, which is the equations
+  /// matrix plus the known values vector to the right. For example, if...
   ///
   /// A = [1, 2]
   ///     [4, 5]
@@ -157,15 +104,15 @@ abstract class SystemSolver {
     // Printing the augmented matrix in the following format:
     // [1, 2 | 3]
     // [4, 5 | 6]
-    for (var i = 0; i < equations.rowCount; ++i) {
+    for (var i = 0; i < matrix.rowCount; ++i) {
       // Leading opening [
       buffer.write('[');
 
-      for (var j = 0; j < equations.columnCount; ++j) {
-        buffer.write(equations(i, j));
+      for (var j = 0; j < matrix.columnCount; ++j) {
+        buffer.write(matrix(i, j));
 
         // Adding a comma only between two values
-        if (j < equations.columnCount - 1) {
+        if (j < matrix.columnCount - 1) {
           buffer.write(', ');
         }
       }
@@ -176,7 +123,7 @@ abstract class SystemSolver {
         ..write(knownValues[i]);
 
       // Ending closing ]
-      if (i < equations.rowCount - 1) {
+      if (i < matrix.rowCount - 1) {
         buffer.writeln(']');
       } else {
         buffer.write(']');
@@ -190,7 +137,7 @@ abstract class SystemSolver {
   ///
   /// A system can be solved (meaning that it has exactly ONE solution) if the
   /// determinant it not zero.
-  bool hasSolution() => equations.determinant() != 0;
+  bool hasSolution() => matrix.determinant() != 0;
 
   /// Back substitution is an iterative process that solves equation matrices
   /// in the form `Ux = b`, where `U` is an upper triangular matrix.
@@ -237,10 +184,10 @@ abstract class SystemSolver {
   }
 
   /// The dimension of the system (which is N equations in N unknowns).
-  int get size => _knownValues.length;
+  int get size => knownValues.length;
 
   /// Computes the determinant of the associated matrix.
-  double determinant() => equations.determinant();
+  double determinant() => matrix.determinant();
 
   /// Solves the `Ax = b` equation and returns the `x` vector containing the
   /// solutions of the system.

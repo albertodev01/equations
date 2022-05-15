@@ -5,7 +5,8 @@ import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_deco
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/complex_svd.dart';
 
-/// A simple Dart implementation of an `m x n` matrix whose data type is [double].
+/// A simple Dart implementation of an `m x n` matrix whose data type is
+/// [double].
 ///
 /// ```dart
 /// final matrix = ComplexMatrix(
@@ -31,10 +32,10 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
 class ComplexMatrix extends Matrix<Complex> {
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
   /// matrix is filled with zeroes.
   ///
-  /// If [identity] is set to `true` (by default it's `false`) then the matrix
+  /// If `identity` is set to `true` (by default it's `false`) then the matrix
   /// is initialized with all zeroes **and** the diagonal is filled with ones.
   ComplexMatrix({
     required super.rows,
@@ -44,16 +45,16 @@ class ComplexMatrix extends Matrix<Complex> {
     super.identityOneValue = const Complex.fromReal(1),
   });
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with values from [data].
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with values from `data`.
   ComplexMatrix.fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with values from [data].
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with values from `data`.
   ///
   /// The source matrix is expressed as an array whose size must **exactly** be
   /// `N` * `M`.
@@ -63,8 +64,8 @@ class ComplexMatrix extends Matrix<Complex> {
     required super.data,
   }) : super.fromFlattenedData();
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with `diagonalValue` in the main diagonal and zeroes
   /// otherwise.
   ComplexMatrix.diagonal({
     required super.rows,
@@ -286,9 +287,9 @@ class ComplexMatrix extends Matrix<Complex> {
     }
 
     final source = List<List<Complex>>.generate(
-        rowCount,
-        (_) =>
-            List<Complex>.generate(columnCount, (_) => const Complex.zero()));
+      rowCount,
+      (_) => List<Complex>.generate(columnCount, (_) => const Complex.zero()),
+    );
 
     // Computing cofactors
     for (var i = 0; i < rowCount; ++i) {
@@ -320,7 +321,7 @@ class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    // In case of a 2x2 matrix, we can directly compute it and save computational
+    // In case of 2x2 matrix, we can directly compute it and save computational
     // time. Note that, from here, we're sure that this matrix is square so no
     // need to check both the row count and the col count.
     if (rowCount == 2) {
@@ -690,19 +691,16 @@ class ComplexMatrix extends Matrix<Complex> {
   }
 
   @override
-  List<ComplexMatrix> qrDecomposition() => QRDecompositionComplex(
-        complexMatrix: this,
-      ).decompose();
+  List<ComplexMatrix> qrDecomposition() =>
+      QRDecompositionComplex(matrix: this).decompose();
 
   @override
-  List<ComplexMatrix> singleValueDecomposition() => SVDComplex(
-        complexMatrix: this,
-      ).decompose();
+  List<ComplexMatrix> singleValueDecomposition() =>
+      SVDComplex(matrix: this).decompose();
 
   @override
-  List<ComplexMatrix> eigenDecomposition() => EigendecompositionComplex(
-        matrix: this,
-      ).decompose();
+  List<ComplexMatrix> eigenDecomposition() =>
+      EigendecompositionComplex(matrix: this).decompose();
 
   /// Computes the determinant of a 2x2 matrix
   Complex _compute2x2Determinant(ComplexMatrix source) =>
@@ -795,11 +793,12 @@ class ComplexMatrix extends Matrix<Complex> {
     //
     //  det(A) = det(L x U) = det(L) x det(U)
     //
-    // In particular, the determinant of a lower triangular and an upper triangular
-    // matrix is the product of the items in the diagonal.
+    // In particular, the determinant of a lower triangular and an upper
+    // triangular matrix is the product of the items in the diagonal.
     //
-    // For this reason, the computation of the determinant is O(n^3) which is way
-    // better than O(n!) from the Leibniz formula or the Laplace transformation!
+    // For this reason, the computation of the determinant is O(n^3) which is
+    // way better than O(n!) from the Leibniz formula or the Laplace
+    // transformation!
     final lu = luDecomposition();
 
     var prodL = const Complex(1, 0);
