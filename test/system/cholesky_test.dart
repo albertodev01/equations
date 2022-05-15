@@ -115,7 +115,7 @@ void main() {
             ),
             knownValues: [7, 8],
           ),
-          throwsA(isA<MatrixException>()),
+          throwsA(isA<SystemSolverException>()),
         );
       },
     );
@@ -136,7 +136,7 @@ void main() {
             ),
             knownValues: [7, 8, 9],
           ),
-          throwsA(isA<MatrixException>()),
+          throwsA(isA<SystemSolverException>()),
         );
       },
     );

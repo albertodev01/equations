@@ -10,12 +10,16 @@ void main() {
       'system of linear equations.',
       () {
         final luSolver = LUSolver(
-          equations: const [
-            [7, -2, 1],
-            [14, -7, -3],
-            [-7, 11, 18],
-          ],
-          constants: const [12, 17, 5],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [7, -2, 1],
+              [14, -7, -3],
+              [-7, 11, 18],
+            ],
+          ),
+          knownValues: const [12, 17, 5],
         );
 
         // This is needed because we want to make sure that the "original" matrix
@@ -43,36 +47,18 @@ void main() {
       },
     );
 
-    test(
-      'Making sure that flat constructor produces the same object that '
-      'a non-flattened constructor does',
-      () {
-        final matrix = LUSolver(
-          equations: const [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-          ],
-          constants: const [1, 2, 3],
-        );
-
-        final flatMatrix = LUSolver.flatMatrix(
-          equations: const [1, 2, 3, 4, 5, 6, 7, 8, 9],
-          constants: const [1, 2, 3],
-        );
-
-        expect(matrix, equals(flatMatrix));
-      },
-    );
-
     test('Making sure that the string conversion works properly.', () {
       final solver = LUSolver(
-        equations: const [
-          [7, -2, 1],
-          [14, -7, -3],
-          [-7, 11, 18],
-        ],
-        constants: const [12, 17, 5],
+        matrix: RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            [7, -2, 1],
+            [14, -7, -3],
+            [-7, 11, 18],
+          ],
+        ),
+        knownValues: const [12, 17, 5],
       );
 
       const toString = '[7.0, -2.0, 1.0]\n'
@@ -88,19 +74,27 @@ void main() {
 
     test('Making sure that objects comparison works properly.', () {
       final lu = LUSolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       final lu2 = LUSolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       expect(lu, equals(lu2));
@@ -116,27 +110,17 @@ void main() {
       () {
         expect(
           () => LUSolver(
-            equations: const [
-              [7, -2, 1],
-              [14, -7, -3],
-            ],
-            constants: const [12, 17],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 3,
+              data: const [
+                [1, 2, 0],
+                [3, 4, -6],
+              ],
+            ),
+            knownValues: const [12, 17],
           ),
-          throwsA(isA<MatrixException>()),
-        );
-      },
-    );
-
-    test(
-      'Making sure that when the input is a flat matrix, the matrix must '
-      'be squared.',
-      () {
-        expect(
-          () => LUSolver.flatMatrix(
-            equations: const [1, 2, 3, 4, 5],
-            constants: [7, 8],
-          ),
-          throwsA(isA<MatrixException>()),
+          throwsA(isA<SystemSolverException>()),
         );
       },
     );
@@ -147,13 +131,17 @@ void main() {
       () {
         expect(
           () => LUSolver(
-            equations: const [
-              [7, -2],
-              [14, -7],
-            ],
-            constants: const [12, 17, 5],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: const [
+                [1, 2],
+                [3, 4],
+              ],
+            ),
+            knownValues: const [12, 17, 5],
           ),
-          throwsA(isA<MatrixException>()),
+          throwsA(isA<SystemSolverException>()),
         );
       },
     );
@@ -161,28 +149,40 @@ void main() {
     test('Batch tests', () {
       final systems = [
         LUSolver(
-          equations: const [
-            [25, 15, -5],
-            [15, 18, 0],
-            [-5, 0, 11],
-          ],
-          constants: [35, 33, 6],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [25, 15, -5],
+              [15, 18, 0],
+              [-5, 0, 11],
+            ],
+          ),
+          knownValues: [35, 33, 6],
         ).solve(),
         LUSolver(
-          equations: const [
-            [1, 0, 1],
-            [0, 2, 0],
-            [1, 0, 3],
-          ],
-          constants: [6, 5, -2],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 1],
+              [0, 2, 0],
+              [1, 0, 3],
+            ],
+          ),
+          knownValues: [6, 5, -2],
         ).solve(),
         LUSolver(
-          equations: const [
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-          ],
-          constants: [5, -2, 3],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1],
+            ],
+          ),
+          knownValues: [5, -2, 3],
         ).solve(),
       ];
 

@@ -24,13 +24,6 @@ void main() {
       );
     });
 
-    test('Making sure that the list of coefficients is unmodifiable.', () {
-      expect(
-        () => matrix.polynomial.coefficients.first = const Complex.zero(),
-        throwsA(isA<UnsupportedError>()),
-      );
-    });
-
     test('Making sure that the discriminant is properly computed.', () {
       expect(
         matrix.polynomialDiscriminant(),
@@ -74,7 +67,7 @@ void main() {
 
     test('Making sure that SylvesterMatrix instances can be compared.', () {
       final matrix2 = SylvesterMatrix(
-        polynomial: Algebraic.from([
+        polynomial: Algebraic.from(const [
           Complex.fromReal(1),
           Complex.fromReal(-7),
           Complex.fromReal(8),
@@ -89,7 +82,7 @@ void main() {
       expect(
         matrix ==
             SylvesterMatrix(
-              polynomial: Algebraic.from([
+              polynomial: Algebraic.from(const [
                 Complex.fromReal(1),
                 Complex.fromReal(-7),
                 Complex.fromReal(8),
@@ -99,7 +92,7 @@ void main() {
       );
       expect(
         SylvesterMatrix(
-              polynomial: Algebraic.from([
+              polynomial: Algebraic.from(const [
                 Complex.fromReal(1),
                 Complex.fromReal(-7),
                 Complex.fromReal(8),

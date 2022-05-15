@@ -19,12 +19,12 @@ class MoreOrLessEquals extends Matcher {
   }) : assert(precision >= 0, 'The precision must be >= 0');
 
   @override
-  bool matches(object, Map<dynamic, dynamic> matchState) {
-    if (object is double) {
-      return (object - value).abs() <= precision;
+  bool matches(item, Map<dynamic, dynamic> matchState) {
+    if (item is double) {
+      return (item - value).abs() <= precision;
     }
 
-    return object == value;
+    return item == value;
   }
 
   @override
