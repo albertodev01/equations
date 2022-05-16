@@ -13,15 +13,16 @@ class NonlinearOutput implements Output {
     const equation = 'x^3-cos(x)';
 
     // Root finding algorithms - single point
-    final newton = Newton(function: equation, x0: 1).solve();
-    final steffensen = Steffensen(function: equation, x0: 1).solve();
+    final newton = const Newton(function: equation, x0: 1).solve();
+    final steffensen = const Steffensen(function: equation, x0: 1).solve();
 
     // Root finding algorithms - bracketing
-    final bisection = Bisection(function: equation, a: 0.5, b: 1).solve();
-    final brent = Brent(function: equation, a: 0.5, b: 1).solve();
-    final chords = Chords(function: equation, a: 0.5, b: 1).solve();
-    final riddler = Riddler(function: equation, a: 0.5, b: 1).solve();
-    final regulaFalsi = RegulaFalsi(function: equation, a: 0.5, b: 1).solve();
+    final bisection = const Bisection(function: equation, a: 0.5, b: 1).solve();
+    final brent = const Brent(function: equation, a: 0.5, b: 1).solve();
+    final chords = const Chords(function: equation, a: 0.5, b: 1).solve();
+    final riddler = const Riddler(function: equation, a: 0.5, b: 1).solve();
+    final regulaFalsi =
+        const RegulaFalsi(function: equation, a: 0.5, b: 1).solve();
 
     final output = StringBuffer()
       ..write(' > Equation: ')

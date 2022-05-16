@@ -1,10 +1,10 @@
 name: equation_solver_cli
 description: A sample command-line application.
-version: 1.0.0
+version: 1.0.1
 publish_to: none
 
 environment:
-  sdk: '>=2.16.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   equations:
@@ -12,14 +12,14 @@ dependencies:
 
 dev_dependencies:
   # https://pub.dev/packages/coverage
-  coverage: ^1.1.0
+  coverage: ^1.3.1
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.10.1
+  dart_code_metrics: ^4.15.1
 
   # https://pub.dev/packages/lints
-  lints: ^1.0.1
+  lints: ^2.0.0
 
   # https://pub.dev/packages/test
-  test: ^1.20.1
+  test: ^1.21.1
   

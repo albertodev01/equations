@@ -8,16 +8,16 @@ import '../common_process.dart';
 void main() {
   Future<void> testProcess(Process process) async {
     // Converting into a stream
-    final stream = process.stdout.transform(Utf8Decoder());
+    final stream = process.stdout.transform(const Utf8Decoder());
 
     // What to NOT expect
-    final notExpectedOutput = '\n > Error: the given argument is not valid!'
+    const notExpectedOutput = '\n > Error: the given argument is not valid!'
         '\n\nPress any key to exit...';
 
     // This is required to 'press any key to continue'
     process.stdin.writeln('.');
 
-    expectLater(
+    await expectLater(
       stream,
       neverEmits(
         [notExpectedOutput],

@@ -1,7 +1,7 @@
-This is a very simple Dart CLI app that shows how the `equations` package can be used, for example, to solve equations, evaluate integrals or analyze matrices. You can run it using
+This is a very simple Dart CLI app that shows how the `equations` package can be used to solve equations, evaluate integrals or analyze matrices. You can run it using
 
 ```bash
- $ dart run equation_solver_cli -i
+ $ dart run equation_solver_cli <argument>
 ```
 
 from this location. You can pass various arguments:

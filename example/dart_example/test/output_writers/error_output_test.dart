@@ -15,13 +15,14 @@ void main() {
         );
 
         // Converting into a stream
-        final stream =
-            process.stdout.transform(Utf8Decoder()).transform(LineSplitter());
+        final stream = process.stdout
+            .transform(const Utf8Decoder())
+            .transform(const LineSplitter());
 
         // Expected output
-        final expectedOutput = ' > Error: the given argument is not valid!';
+        const expectedOutput = ' > Error: the given argument is not valid!';
 
-        expectLater(
+        await expectLater(
           stream,
           emitsAnyOf(
             ['', expectedOutput, ''],
