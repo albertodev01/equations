@@ -27,9 +27,13 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       final matrix = _valueParser(event.matrix);
       final vector = _valueParser(event.knownValues);
 
-      final solver = GaussianElimination.flatMatrix(
-        equations: matrix,
-        constants: vector,
+      final solver = GaussianElimination(
+        matrix: RealMatrix.fromFlattenedData(
+          rows: vector.length,
+          columns: vector.length,
+          data: matrix,
+        ),
+        knownValues: vector,
       );
 
       if (solver.hasSolution()) {
@@ -55,17 +59,23 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       final matrix = _valueParser(event.matrix);
       final vector = _valueParser(event.knownValues);
 
+      final realMatrix = RealMatrix.fromFlattenedData(
+        rows: vector.length,
+        columns: vector.length,
+        data: matrix,
+      );
+
       switch (event.method) {
         case FactorizationMethods.lu:
-          solver = LUSolver.flatMatrix(
-            equations: matrix,
-            constants: vector,
+          solver = LUSolver(
+            matrix: realMatrix,
+            knownValues: vector,
           );
           break;
         case FactorizationMethods.cholesky:
-          solver = CholeskySolver.flatMatrix(
-            equations: matrix,
-            constants: vector,
+          solver = CholeskySolver(
+            matrix: realMatrix,
+            knownValues: vector,
           );
           break;
       }
@@ -93,24 +103,30 @@ class SystemBloc extends Bloc<SystemEvent, SystemState> {
       final matrix = _valueParser(event.matrix);
       final vector = _valueParser(event.knownValues);
 
+      final realMatrix = RealMatrix.fromFlattenedData(
+        rows: vector.length,
+        columns: vector.length,
+        data: matrix,
+      );
+
       switch (event.method) {
         case IterativeMethods.sor:
-          solver = SORSolver.flatMatrix(
-            equations: matrix,
-            constants: vector,
+          solver = SORSolver(
+            matrix: realMatrix,
+            knownValues: vector,
             w: _parser.evaluate(event.w),
           );
           break;
         case IterativeMethods.gaussSeidel:
-          solver = GaussSeidelSolver.flatMatrix(
-            equations: matrix,
-            constants: vector,
+          solver = GaussSeidelSolver(
+            matrix: realMatrix,
+            knownValues: vector,
           );
           break;
         case IterativeMethods.jacobi:
-          solver = JacobiSolver.flatMatrix(
-            equations: matrix,
-            constants: vector,
+          solver = JacobiSolver(
+            matrix: realMatrix,
+            knownValues: vector,
             x0: _valueParser(event.jacobiInitialVector),
           );
           break;

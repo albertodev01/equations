@@ -77,9 +77,13 @@ void main() {
       'Making sure that, when there are solutions, solution widgets '
       'appear on the screen',
       (tester) async {
-        final solver = LUSolver.flatMatrix(
-          equations: [1, 2, 3, 4],
-          constants: [-3, 5],
+        final solver = LUSolver(
+          matrix: RealMatrix.fromFlattenedData(
+            rows: 2,
+            columns: 2,
+            data: [1, 2, 3, 4],
+          ),
+          knownValues: [-3, 5],
         );
 
         when(() => systemBloc.state).thenReturn(SystemGuesses(
@@ -159,9 +163,13 @@ void main() {
     );
 
     testGoldens('SystemResults', (tester) async {
-      final solver = LUSolver.flatMatrix(
-        equations: [1, 2, 3, 4],
-        constants: [-3, 5],
+      final solver = LUSolver(
+        matrix: RealMatrix.fromFlattenedData(
+          rows: 2,
+          columns: 2,
+          data: [1, 2, 3, 4],
+        ),
+        knownValues: [-3, 5],
       );
 
       when(() => systemBloc.state).thenReturn(SystemGuesses(

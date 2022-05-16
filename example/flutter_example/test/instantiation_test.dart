@@ -52,9 +52,9 @@ void main() {
       );
       expect(
         SystemGuesses(
-          systemSolver: LUSolver.flatMatrix(
-            equations: const [],
-            constants: const [],
+          systemSolver: LUSolver(
+            matrix: RealMatrix(rows: 1, columns: 1),
+            knownValues: const [],
           ),
           solution: const [],
         ),

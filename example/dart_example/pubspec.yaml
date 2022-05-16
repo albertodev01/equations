@@ -15,7 +15,7 @@ dev_dependencies:
   coverage: ^1.3.1
 
   # https://pub.dev/packages/dart_code_metrics
-  dart_code_metrics: ^4.15.1
+  dart_code_metrics: ^4.15.2
 
   # https://pub.dev/packages/test
   test: ^1.21.1
