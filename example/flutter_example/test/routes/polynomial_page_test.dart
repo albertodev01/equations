@@ -9,18 +9,22 @@ import 'mock_wrapper.dart';
 void main() {
   group("Testing the 'PolynomialPage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: PolynomialPage(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: PolynomialPage(),
+        ),
+      );
 
       expect(find.byType(PolynomialBody), findsOneWidget);
       expect(find.byType(PolynomialPage), findsOneWidget);
     });
 
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: PolynomialPage(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: PolynomialPage(),
+        ),
+      );
 
       expect(find.byType(PolynomialBody), findsOneWidget);
       expect(find.byType(PolynomialPage), findsOneWidget);
@@ -36,16 +40,20 @@ void main() {
       // navigation bar. To make sure we're on a certain page, we need to check
       // whether 2 text are present (one on the bottom bar AND one at the top
       // of the newly opened page).
-      await tester.pumpWidget(MockWrapper(
-        child: Builder(builder: (context) {
-          firstDegree = context.l10n.firstDegree;
-          secondDegree = context.l10n.secondDegree;
-          thirdDegree = context.l10n.thirdDegree;
-          fourthDegree = context.l10n.fourthDegree;
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Builder(
+            builder: (context) {
+              firstDegree = context.l10n.firstDegree;
+              secondDegree = context.l10n.secondDegree;
+              thirdDegree = context.l10n.thirdDegree;
+              fourthDegree = context.l10n.fourthDegree;
 
-          return const PolynomialPage();
-        }),
-      ));
+              return const PolynomialPage();
+            },
+          ),
+        ),
+      );
 
       // Second degree page
       await tester.tap(find.text(secondDegree));

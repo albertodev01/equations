@@ -14,10 +14,10 @@ class PrimaryRegion extends StatelessWidget {
 
   /// Creates a [PrimaryRegion] widget.
   const PrimaryRegion({
-    Key? key,
+    super.key,
     required this.animation,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -36,11 +36,11 @@ class MockWrapper extends StatelessWidget {
 
   /// Creates a [MockWrapper] widget.
   const MockWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.navigatorObservers = const [],
     this.dropdownInitial = '',
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

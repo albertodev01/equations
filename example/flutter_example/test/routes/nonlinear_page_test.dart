@@ -9,9 +9,11 @@ import 'mock_wrapper.dart';
 void main() {
   group("Testing the 'NonlinearPage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: NonlinearPage(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: NonlinearPage(),
+        ),
+      );
 
       expect(find.byType(NonlinearBody), findsOneWidget);
       expect(find.byType(NonlinearPage), findsOneWidget);
@@ -21,14 +23,18 @@ void main() {
       var bracketing = '';
       var singlePoint = '';
 
-      await tester.pumpWidget(MockWrapper(
-        child: Builder(builder: (context) {
-          bracketing = context.l10n.bracketing;
-          singlePoint = context.l10n.single_point;
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Builder(
+            builder: (context) {
+              bracketing = context.l10n.bracketing;
+              singlePoint = context.l10n.single_point;
 
-          return const NonlinearPage();
-        }),
-      ));
+              return const NonlinearPage();
+            },
+          ),
+        ),
+      );
 
       // Bracketing page
       await tester.tap(find.text(bracketing));

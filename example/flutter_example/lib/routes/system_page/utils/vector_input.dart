@@ -13,10 +13,10 @@ class VectorInput extends StatefulWidget {
 
   /// Creates a [VectorInput] widget.
   const VectorInput({
-    Key? key,
+    super.key,
     required this.vectorControllers,
     required this.vectorSize,
-  }) : super(key: key);
+  });
 
   @override
   _VectorInputState createState() => _VectorInputState();
@@ -67,10 +67,10 @@ class _VectorChildren extends StatelessWidget {
 
   /// Creates a [_VectorChildren] widget.
   const _VectorChildren({
-    Key? key,
+    super.key,
     required this.vectorControllers,
     required this.vectorSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

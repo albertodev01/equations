@@ -35,13 +35,13 @@ class Collapsible extends StatefulWidget {
 
   /// Creates a [Collapsible] widget.
   const Collapsible({
-    Key? key,
+    super.key,
     required this.header,
     required this.content,
     this.edgeInsets = EdgeInsets.zero,
     this.heightBetweenRegions = 0.0,
     this.initializeOpened = false,
-  }) : super(key: key);
+  });
 
   @override
   _CollapsibleState createState() => _CollapsibleState();

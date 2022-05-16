@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// to be used.
 class IntegralDropdownSelection extends StatefulWidget {
   /// Creates a [IntegralDropdownSelection] widget.
-  const IntegralDropdownSelection({Key? key}) : super(key: key);
+  const IntegralDropdownSelection({super.key});
 
   @override
   IntegralDropdownSelectionState createState() =>

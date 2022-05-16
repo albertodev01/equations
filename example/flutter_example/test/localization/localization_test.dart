@@ -92,17 +92,19 @@ void main() {
   testWidgets('Making sure that localization works on context', (tester) async {
     late final AppLocalizations? localizations;
 
-    await tester.pumpWidget(MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Builder(
-        builder: (context) {
-          localizations = AppLocalizations.of(context);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            localizations = AppLocalizations.of(context);
 
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
-    ));
+    );
 
     expect(localizations, isNotNull);
   });
@@ -110,17 +112,19 @@ void main() {
   testWidgets('Making sure that English is correctly loaded', (tester) async {
     late AppLocalizations localizations;
 
-    await tester.pumpWidget(MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: Builder(
-        builder: (context) {
-          localizations = AppLocalizations.of(context);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            localizations = AppLocalizations.of(context);
 
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
-    ));
+    );
 
     expect(localizations.localeName, equals('en'));
     checklocalizedStringsLengths(localizations);
@@ -129,18 +133,20 @@ void main() {
   testWidgets('Making sure that Italian is correctly loaded', (tester) async {
     late AppLocalizations localizations;
 
-    await tester.pumpWidget(MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('it'),
-      home: Builder(
-        builder: (context) {
-          localizations = AppLocalizations.of(context);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('it'),
+        home: Builder(
+          builder: (context) {
+            localizations = AppLocalizations.of(context);
 
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
-    ));
+    );
 
     expect(localizations.localeName, equals('it'));
     checklocalizedStringsLengths(localizations);
@@ -149,18 +155,20 @@ void main() {
   testWidgets('Making sure that French is correctly loaded', (tester) async {
     late AppLocalizations localizations;
 
-    await tester.pumpWidget(MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('fr'),
-      home: Builder(
-        builder: (context) {
-          localizations = AppLocalizations.of(context);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: const Locale('fr'),
+        home: Builder(
+          builder: (context) {
+            localizations = AppLocalizations.of(context);
 
-          return const SizedBox();
-        },
+            return const SizedBox();
+          },
+        ),
       ),
-    ));
+    );
 
     expect(localizations.localeName, equals('fr'));
     checklocalizedStringsLengths(localizations);

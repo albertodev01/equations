@@ -7,12 +7,14 @@ import '../mock_wrapper.dart';
 void main() {
   group('Making sure that sections logos can be rendered', () {
     testWidgets("Testing 'SectionTitle'", (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: SectionTitle(
-          icon: Icon(Icons.ac_unit),
-          pageTitle: 'Demo text',
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: SectionTitle(
+            icon: Icon(Icons.ac_unit),
+            pageTitle: 'Demo text',
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(SectionTitle), findsOneWidget);
       expect(find.text('Demo text'), findsOneWidget);

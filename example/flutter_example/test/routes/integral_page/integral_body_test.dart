@@ -22,12 +22,14 @@ void main() {
 
   group("Testing the 'IntegralBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: IntegralDropdownItems.simpson.asString(),
-        child: const Scaffold(
-          body: IntegralBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: IntegralDropdownItems.simpson.asString(),
+          child: const Scaffold(
+            body: IntegralBody(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(IntegralDataInput), findsOneWidget);
@@ -37,12 +39,14 @@ void main() {
     testWidgets(
       'Making sure that the widget is responsive - small screens test',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          dropdownInitial: IntegralDropdownItems.simpson.asString(),
-          child: const Scaffold(
-            body: IntegralBody(),
+        await tester.pumpWidget(
+          MockWrapper(
+            dropdownInitial: IntegralDropdownItems.simpson.asString(),
+            child: const Scaffold(
+              body: IntegralBody(),
+            ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
@@ -60,12 +64,14 @@ void main() {
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-        await tester.pumpWidget(MockWrapper(
-          dropdownInitial: IntegralDropdownItems.simpson.asString(),
-          child: const Scaffold(
-            body: IntegralBody(),
+        await tester.pumpWidget(
+          MockWrapper(
+            dropdownInitial: IntegralDropdownItems.simpson.asString(),
+            child: const Scaffold(
+              body: IntegralBody(),
+            ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
@@ -81,15 +87,17 @@ void main() {
     testWidgets('Making sure that simpson solver works', (tester) async {
       final bloc = IntegralBloc();
 
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: IntegralDropdownItems.simpson.asString(),
-        child: BlocProvider<IntegralBloc>.value(
-          value: bloc,
-          child: const Scaffold(
-            body: IntegralBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: IntegralDropdownItems.simpson.asString(),
+          child: BlocProvider<IntegralBloc>.value(
+            value: bloc,
+            child: const Scaffold(
+              body: IntegralBody(),
+            ),
           ),
         ),
-      ));
+      );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final lowerInput = find.byKey(const Key('IntegralInput-lower-bound'));
@@ -117,15 +125,17 @@ void main() {
     testWidgets('Making sure that midpoint solver works', (tester) async {
       final bloc = IntegralBloc();
 
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: IntegralDropdownItems.midpoint.asString(),
-        child: BlocProvider<IntegralBloc>.value(
-          value: bloc,
-          child: const Scaffold(
-            body: IntegralBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: IntegralDropdownItems.midpoint.asString(),
+          child: BlocProvider<IntegralBloc>.value(
+            value: bloc,
+            child: const Scaffold(
+              body: IntegralBody(),
+            ),
           ),
         ),
-      ));
+      );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final lowerInput = find.byKey(const Key('IntegralInput-lower-bound'));
@@ -153,15 +163,17 @@ void main() {
     testWidgets('Making sure that trapezoid solver works', (tester) async {
       final bloc = IntegralBloc();
 
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: IntegralDropdownItems.trapezoid.asString(),
-        child: BlocProvider<IntegralBloc>.value(
-          value: bloc,
-          child: const Scaffold(
-            body: IntegralBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: IntegralDropdownItems.trapezoid.asString(),
+          child: BlocProvider<IntegralBloc>.value(
+            value: bloc,
+            child: const Scaffold(
+              body: IntegralBody(),
+            ),
           ),
         ),
-      ));
+      );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final lowerInput = find.byKey(const Key('IntegralInput-lower-bound'));

@@ -20,12 +20,14 @@ void main() {
           end: 3.18,
         ).animate(controller);
 
-        await tester.pumpWidget(MockWrapper(
-          child: PrimaryRegion(
-            animation: animation,
-            child: Container(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: PrimaryRegion(
+              animation: animation,
+              child: Container(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(PrimaryRegion), findsOneWidget);
         expect(find.byType(Expanded), findsOneWidget);
@@ -36,7 +38,7 @@ void main() {
         );
 
         // Animation test
-        controller.forward();
+        await controller.forward();
         await tester.pumpAndSettle();
 
         expect(animation.value, equals(3.18));

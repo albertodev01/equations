@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// plane.
 class PolynomialPage extends StatefulWidget {
   /// Creates a [PolynomialPage] widget.
-  const PolynomialPage({Key? key}) : super(key: key);
+  const PolynomialPage({super.key});
 
   @override
   _PolynomialPageState createState() => _PolynomialPageState();

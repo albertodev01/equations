@@ -16,34 +16,42 @@ void main() {
 
       expect(
         matrixAnalyze,
-        equals(const MatrixAnalyze(
-          size: 2,
-          matrix: ['1', '2', '3', '4'],
-        )),
+        equals(
+          const MatrixAnalyze(
+            size: 2,
+            matrix: ['1', '2', '3', '4'],
+          ),
+        ),
       );
 
       expect(
         matrixAnalyze,
-        isNot(const MatrixAnalyze(
-          size: 2,
-          matrix: ['1', '2', '3', '4.'],
-        )),
+        isNot(
+          const MatrixAnalyze(
+            size: 2,
+            matrix: ['1', '2', '3', '4.'],
+          ),
+        ),
       );
 
       expect(
         complexAnalyze,
-        equals(const ComplexNumberAnalyze(
-          realPart: '2',
-          imaginaryPart: '4',
-        )),
+        equals(
+          const ComplexNumberAnalyze(
+            realPart: '2',
+            imaginaryPart: '4',
+          ),
+        ),
       );
 
       expect(
         complexAnalyze,
-        isNot(const ComplexNumberAnalyze(
-          realPart: '2',
-          imaginaryPart: '4,',
-        )),
+        isNot(
+          const ComplexNumberAnalyze(
+            realPart: '2',
+            imaginaryPart: '4,',
+          ),
+        ),
       );
 
       expect(

@@ -49,14 +49,16 @@ void main() {
           initialValue: IntegralDropdownItems.simpson.asString(),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<DropdownCubit>.value(
-            value: cubit,
-            child: const Scaffold(
-              body: IntegralDropdownSelection(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<DropdownCubit>.value(
+              value: cubit,
+              child: const Scaffold(
+                body: IntegralDropdownSelection(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Initial value
         expect(cubit.state, equals('Simpson'));

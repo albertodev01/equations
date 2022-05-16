@@ -17,18 +17,20 @@ import '../mock_wrapper.dart';
 void main() {
   group("Testing the 'SystemBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: SystemDropdownItems.sor.asString(),
-        child: BlocProvider<SystemBloc>(
-          create: (_) => SystemBloc(SystemType.iterative),
-          child: Scaffold(
-            body: BlocProvider<TextFieldValuesCubit>(
-              create: (_) => TextFieldValuesCubit(),
-              child: const SystemBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: SystemDropdownItems.sor.asString(),
+          child: BlocProvider<SystemBloc>(
+            create: (_) => SystemBloc(SystemType.iterative),
+            child: Scaffold(
+              body: BlocProvider<TextFieldValuesCubit>(
+                create: (_) => TextFieldValuesCubit(),
+                child: const SystemBody(),
+              ),
             ),
           ),
         ),
-      ));
+      );
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(SystemDataInput), findsOneWidget);

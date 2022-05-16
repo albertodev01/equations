@@ -14,10 +14,10 @@ class SecondaryRegion extends StatelessWidget {
 
   /// Creates a [SecondaryRegion] widget.
   const SecondaryRegion({
-    Key? key,
+    super.key,
     required this.child,
     required this.heightBetweenRegions,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

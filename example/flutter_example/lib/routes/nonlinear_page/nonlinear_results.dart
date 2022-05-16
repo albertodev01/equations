@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// The results of the nonlinear equation.
 class NonlinearResults extends StatelessWidget {
   /// Creates a [NonlinearResults] widget.
-  const NonlinearResults({Key? key}) : super(key: key);
+  const NonlinearResults({super.key});
 
   @override
   Widget build(BuildContext context) {

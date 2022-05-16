@@ -10,7 +10,7 @@ void main() {
 
     blocTest<TextFieldValuesCubit, Map<int, String>>(
       'Making sure that the bloc emits states',
-      build: () => TextFieldValuesCubit(),
+      build: TextFieldValuesCubit.new,
       act: (cubit) => cubit
         ..setValue(index: 1, value: 'A')
         ..setValue(index: 5, value: 'B'),
@@ -26,7 +26,7 @@ void main() {
 
     blocTest<TextFieldValuesCubit, Map<int, String>>(
       'Making sure that the bloc can be cleared',
-      build: () => TextFieldValuesCubit(),
+      build: TextFieldValuesCubit.new,
       act: (cubit) => cubit
         ..setValue(index: 1, value: 'A')
         ..setValue(index: 5, value: 'B')
@@ -42,7 +42,7 @@ void main() {
 
     blocTest<TextFieldValuesCubit, Map<int, String>>(
       'Making sure that values are updated when the index is the same',
-      build: () => TextFieldValuesCubit(),
+      build: TextFieldValuesCubit.new,
       act: (cubit) => cubit
         ..setValue(index: 1, value: 'A')
         ..setValue(index: 1, value: 'B')
@@ -57,7 +57,7 @@ void main() {
     blocTest<TextFieldValuesCubit, Map<int, String>>(
       'Making sure that, when asking for a non-existing key, an empty string '
       'is returned',
-      build: () => TextFieldValuesCubit(),
+      build: TextFieldValuesCubit.new,
       act: (cubit) => cubit..setValue(index: 1, value: 'A'),
       expect: () => const [
         {1: 'A'},

@@ -25,12 +25,14 @@ void main() {
 
   group("Testing the 'PolynomialResults' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>(
-          create: (_) => PolynomialBloc(PolynomialType.linear),
-          child: const PolynomialResults(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<PolynomialBloc>(
+            create: (_) => PolynomialBloc(PolynomialType.linear),
+            child: const PolynomialResults(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(PolynomialResults), findsOneWidget);
       expect(find.byType(SectionTitle), findsNWidgets(2));
@@ -43,12 +45,14 @@ void main() {
       (tester) async {
         when(() => polynomialBloc.state).thenReturn(const PolynomialNone());
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PolynomialBloc>.value(
-            value: polynomialBloc,
-            child: const PolynomialResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PolynomialBloc>.value(
+              value: polynomialBloc,
+              child: const PolynomialResults(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(ListView), findsNothing);
         expect(find.text('No solutions to display.'), findsOneWidget);
@@ -61,18 +65,22 @@ void main() {
       (tester) async {
         final linear = Algebraic.fromReal(const [1, 2]);
 
-        when(() => polynomialBloc.state).thenReturn(PolynomialRoots(
-          algebraic: linear,
-          roots: linear.solutions(),
-          discriminant: linear.discriminant(),
-        ));
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PolynomialBloc>.value(
-            value: polynomialBloc,
-            child: const PolynomialResults(),
+        when(() => polynomialBloc.state).thenReturn(
+          PolynomialRoots(
+            algebraic: linear,
+            roots: linear.solutions(),
+            discriminant: linear.discriminant(),
           ),
-        ));
+        );
+
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PolynomialBloc>.value(
+              value: polynomialBloc,
+              child: const PolynomialResults(),
+            ),
+          ),
+        );
 
         expect(find.byType(ListView), findsOneWidget);
         expect(find.text('No solutions to display.'), findsNothing);
@@ -96,12 +104,14 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PolynomialBloc>.value(
-            value: polynomialBloc,
-            child: const PolynomialResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PolynomialBloc>.value(
+              value: polynomialBloc,
+              child: const PolynomialResults(),
+            ),
           ),
-        ));
+        );
 
         // Refreshing to make the snackbar appear
         await tester.pumpAndSettle();
@@ -113,11 +123,13 @@ void main() {
     testGoldens('PolynomialResults', (tester) async {
       final linear = Algebraic.fromReal(const [1, 2]);
 
-      when(() => polynomialBloc.state).thenReturn(PolynomialRoots(
-        algebraic: linear,
-        roots: linear.solutions(),
-        discriminant: linear.discriminant(),
-      ));
+      when(() => polynomialBloc.state).thenReturn(
+        PolynomialRoots(
+          algebraic: linear,
+          roots: linear.solutions(),
+          discriminant: linear.discriminant(),
+        ),
+      );
 
       final widget = BlocProvider<PolynomialBloc>.value(
         value: polynomialBloc,

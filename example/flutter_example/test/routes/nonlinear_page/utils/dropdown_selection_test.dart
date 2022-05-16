@@ -45,21 +45,23 @@ void main() {
     });
 
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>(
-              create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>(
+                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+              ),
+              BlocProvider<DropdownCubit>(
+                create: (_) => DropdownCubit(initialValue: 'Newton'),
+              ),
+            ],
+            child: const Scaffold(
+              body: NonlinearDropdownSelection(),
             ),
-            BlocProvider<DropdownCubit>(
-              create: (_) => DropdownCubit(initialValue: 'Newton'),
-            ),
-          ],
-          child: const Scaffold(
-            body: NonlinearDropdownSelection(),
           ),
         ),
-      ));
+      );
 
       expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
     });
@@ -68,23 +70,25 @@ void main() {
       "Making sure that when the bloc is of type 'singlePoint' the "
       'dropdown only contains single point algorithms',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-              ),
-              BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(
-                  initialValue: NonlinearDropdownItems.newton.asString(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NonlinearBloc>(
+                  create: (_) => NonlinearBloc(NonlinearType.singlePoint),
                 ),
+                BlocProvider<DropdownCubit>(
+                  create: (_) => DropdownCubit(
+                    initialValue: NonlinearDropdownItems.newton.asString(),
+                  ),
+                ),
+              ],
+              child: const Scaffold(
+                body: NonlinearDropdownSelection(),
               ),
-            ],
-            child: const Scaffold(
-              body: NonlinearDropdownSelection(),
             ),
           ),
-        ));
+        );
 
         final dropdownFinder =
             find.byKey(const Key('Dropdown-Button-Selection'));
@@ -110,23 +114,25 @@ void main() {
       "Making sure that when the bloc is of type 'bracketing' the "
       'dropdown only contains single point algorithms',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.bracketing),
-              ),
-              BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(
-                  initialValue: NonlinearDropdownItems.bisection.asString(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NonlinearBloc>(
+                  create: (_) => NonlinearBloc(NonlinearType.bracketing),
                 ),
+                BlocProvider<DropdownCubit>(
+                  create: (_) => DropdownCubit(
+                    initialValue: NonlinearDropdownItems.bisection.asString(),
+                  ),
+                ),
+              ],
+              child: const Scaffold(
+                body: NonlinearDropdownSelection(),
               ),
-            ],
-            child: const Scaffold(
-              body: NonlinearDropdownSelection(),
             ),
           ),
-        ));
+        );
 
         final dropdownFinder =
             find.byKey(const Key('Dropdown-Button-Selection'));
@@ -158,21 +164,23 @@ void main() {
         final cubit = DropdownCubit(
           initialValue: NonlinearDropdownItems.newton.asString(),
         );
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NonlinearBloc>(
+                  create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+                ),
+                BlocProvider<DropdownCubit>.value(
+                  value: cubit,
+                ),
+              ],
+              child: const Scaffold(
+                body: NonlinearDropdownSelection(),
               ),
-              BlocProvider<DropdownCubit>.value(
-                value: cubit,
-              ),
-            ],
-            child: const Scaffold(
-              body: NonlinearDropdownSelection(),
             ),
           ),
-        ));
+        );
 
         expect(cubit.state, equals('Newton'));
         await tester.tap(find.text('Newton'));

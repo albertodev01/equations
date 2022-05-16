@@ -20,11 +20,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving row reduction system',
       build: () => SystemBloc(SystemType.rowReduction),
-      act: (bloc) => bloc.add(const RowReductionMethod(
-        matrix: ['3', '-5', '1', '-4'],
-        knownValues: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const RowReductionMethod(
+          matrix: ['3', '-5', '1', '-4'],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
 
@@ -53,11 +55,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws on malformed input data',
       build: () => SystemBloc(SystemType.rowReduction),
-      act: (bloc) => bloc.add(const RowReductionMethod(
-        matrix: ['1', 'a', 'x', ''],
-        knownValues: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const RowReductionMethod(
+          matrix: ['1', 'a', 'x', ''],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       expect: () => const [
         SystemError(),
       ],
@@ -83,11 +87,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using LU',
       build: () => SystemBloc(SystemType.factorization),
-      act: (bloc) => bloc.add(const FactorizationMethod(
-        matrix: ['3', '-5', '1', '-4'],
-        knownValues: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const FactorizationMethod(
+          matrix: ['3', '-5', '1', '-4'],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
         expect(
@@ -105,12 +111,14 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using Cholesky',
       build: () => SystemBloc(SystemType.factorization),
-      act: (bloc) => bloc.add(const FactorizationMethod(
-        matrix: ['6', '15', '15', '55'],
-        knownValues: ['5', '10'],
-        method: FactorizationMethods.cholesky,
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const FactorizationMethod(
+          matrix: ['6', '15', '15', '55'],
+          knownValues: ['5', '10'],
+          method: FactorizationMethods.cholesky,
+          size: 2,
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
         expect(
@@ -134,11 +142,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws if the matrix is singular (factor.)',
       build: () => SystemBloc(SystemType.factorization),
-      act: (bloc) => bloc.add(const FactorizationMethod(
-        matrix: ['1', '2', '1', '2'],
-        knownValues: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const FactorizationMethod(
+          matrix: ['1', '2', '1', '2'],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       expect: () => const [
         SingularSystemError(),
       ],
@@ -147,11 +157,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws on malformed input data',
       build: () => SystemBloc(SystemType.factorization),
-      act: (bloc) => bloc.add(const FactorizationMethod(
-        matrix: ['1', '2', '3', ''],
-        knownValues: ['2', '0'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const FactorizationMethod(
+          matrix: ['1', '2', '3', ''],
+          knownValues: ['2', '0'],
+          size: 2,
+        ),
+      ),
       expect: () => const [
         SystemError(),
       ],
@@ -160,11 +172,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using SOR',
       build: () => SystemBloc(SystemType.iterative),
-      act: (bloc) => bloc.add(const IterativeMethod(
-        matrix: ['3', '-5', '1', '-4'],
-        knownValues: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const IterativeMethod(
+          matrix: ['3', '-5', '1', '-4'],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
         expect(
@@ -182,12 +196,14 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using Gauss-Seidel',
       build: () => SystemBloc(SystemType.iterative),
-      act: (bloc) => bloc.add(const IterativeMethod(
-        matrix: ['3', '-5', '1', '-4'],
-        knownValues: ['4', '-1'],
-        method: IterativeMethods.gaussSeidel,
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const IterativeMethod(
+          matrix: ['3', '-5', '1', '-4'],
+          knownValues: ['4', '-1'],
+          method: IterativeMethods.gaussSeidel,
+          size: 2,
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
         expect(
@@ -205,13 +221,15 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc works when solving systems using Jacobi',
       build: () => SystemBloc(SystemType.iterative),
-      act: (bloc) => bloc.add(const IterativeMethod(
-        matrix: ['3', '-5', '1', '-4'],
-        knownValues: ['4', '-1'],
-        method: IterativeMethods.jacobi,
-        jacobiInitialVector: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const IterativeMethod(
+          matrix: ['3', '-5', '1', '-4'],
+          knownValues: ['4', '-1'],
+          method: IterativeMethods.jacobi,
+          jacobiInitialVector: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<SystemGuesses>());
         expect(
@@ -229,13 +247,15 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc can emit errors with iterative methods',
       build: () => SystemBloc(SystemType.iterative),
-      act: (bloc) => bloc.add(const IterativeMethod(
-        matrix: ['3', 'x', '1', '-4'],
-        knownValues: ['4', 'aa'],
-        method: IterativeMethods.jacobi,
-        jacobiInitialVector: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const IterativeMethod(
+          matrix: ['3', 'x', '1', '-4'],
+          knownValues: ['4', 'aa'],
+          method: IterativeMethods.jacobi,
+          jacobiInitialVector: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       expect: () => const [
         SystemError(),
       ],
@@ -244,11 +264,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws if the matrix is singular (iter.)',
       build: () => SystemBloc(SystemType.iterative),
-      act: (bloc) => bloc.add(const IterativeMethod(
-        matrix: ['1', '2', '1', '2'],
-        knownValues: ['4', '-1'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const IterativeMethod(
+          matrix: ['1', '2', '1', '2'],
+          knownValues: ['4', '-1'],
+          size: 2,
+        ),
+      ),
       expect: () => const [
         SingularSystemError(),
       ],
@@ -257,11 +279,13 @@ void main() {
     blocTest<SystemBloc, SystemState>(
       'Making sure that the bloc throws on malformed input data',
       build: () => SystemBloc(SystemType.factorization),
-      act: (bloc) => bloc.add(const FactorizationMethod(
-        matrix: ['1', '2', '3', ''],
-        knownValues: ['2', '0'],
-        size: 2,
-      )),
+      act: (bloc) => bloc.add(
+        const FactorizationMethod(
+          matrix: ['1', '2', '3', ''],
+          knownValues: ['2', '0'],
+          size: 2,
+        ),
+      ),
       expect: () => const [
         SystemError(),
       ],

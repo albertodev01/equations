@@ -8,13 +8,15 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'EquationTextFormatter' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: Scaffold(
-          body: EquationTextFormatter(
-            equation: 'x^2 - 5',
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: Scaffold(
+            body: EquationTextFormatter(
+              equation: 'x^2 - 5',
+            ),
           ),
         ),
-      ));
+      );
 
       expect(find.byType(EquationTextFormatter), findsOneWidget);
       expect(find.byType(RichText), findsOneWidget);

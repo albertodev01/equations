@@ -28,10 +28,10 @@ class PolynomialRoots extends PolynomialState {
 
   /// Requires the [roots] of the polynomial and the [discriminant].
   const PolynomialRoots({
-    required List<Complex> roots,
-    required Complex discriminant,
+    required super.roots,
+    required super.discriminant,
     required this.algebraic,
-  }) : super(roots: roots, discriminant: discriminant);
+  });
 
   @override
   List<Object?> get props => [algebraic, roots, discriminant];

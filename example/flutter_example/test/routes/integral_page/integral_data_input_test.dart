@@ -29,21 +29,23 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(IntegralDropdownItems.simpson.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<DropdownCubit>.value(
+                  value: dropdownCubit,
+                ),
+                BlocProvider<IntegralBloc>.value(
+                  value: integralBloc,
+                ),
+              ],
+              child: const Scaffold(
+                body: IntegralDataInput(),
               ),
-              BlocProvider<IntegralBloc>.value(
-                value: integralBloc,
-              ),
-            ],
-            child: const Scaffold(
-              body: IntegralDataInput(),
             ),
           ),
-        ));
+        );
 
         // No snackbar by default
         expect(find.byType(SnackBar), findsNothing);
@@ -68,27 +70,29 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(IntegralDropdownItems.simpson.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
-              ),
-              BlocProvider<IntegralBloc>.value(
-                value: integralBloc,
-              ),
-            ],
-            child: Scaffold(
-              body: Builder(
-                builder: (context) {
-                  focusScope = FocusScope.of(context);
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<DropdownCubit>.value(
+                  value: dropdownCubit,
+                ),
+                BlocProvider<IntegralBloc>.value(
+                  value: integralBloc,
+                ),
+              ],
+              child: Scaffold(
+                body: Builder(
+                  builder: (context) {
+                    focusScope = FocusScope.of(context);
 
-                  return IntegralDataInput();
-                },
+                    return const IntegralDataInput();
+                  },
+                ),
               ),
             ),
           ),
-        ));
+        );
 
         // Entering values
         final equationInput = find.byKey(const Key('EquationInput-function'));
@@ -133,21 +137,23 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(IntegralDropdownItems.simpson.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<DropdownCubit>.value(
+                  value: dropdownCubit,
+                ),
+                BlocProvider<IntegralBloc>.value(
+                  value: integralBloc,
+                ),
+              ],
+              child: const Scaffold(
+                body: IntegralDataInput(),
               ),
-              BlocProvider<IntegralBloc>.value(
-                value: integralBloc,
-              ),
-            ],
-            child: const Scaffold(
-              body: IntegralDataInput(),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(RealResultCard), findsNothing);
 
@@ -178,21 +184,23 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(IntegralDropdownItems.midpoint.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<DropdownCubit>.value(
+                  value: dropdownCubit,
+                ),
+                BlocProvider<IntegralBloc>.value(
+                  value: integralBloc,
+                ),
+              ],
+              child: const Scaffold(
+                body: IntegralDataInput(),
               ),
-              BlocProvider<IntegralBloc>.value(
-                value: integralBloc,
-              ),
-            ],
-            child: const Scaffold(
-              body: IntegralDataInput(),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(RealResultCard), findsNothing);
 
@@ -223,21 +231,23 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(IntegralDropdownItems.trapezoid.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<DropdownCubit>.value(
+                  value: dropdownCubit,
+                ),
+                BlocProvider<IntegralBloc>.value(
+                  value: integralBloc,
+                ),
+              ],
+              child: const Scaffold(
+                body: IntegralDataInput(),
               ),
-              BlocProvider<IntegralBloc>.value(
-                value: integralBloc,
-              ),
-            ],
-            child: const Scaffold(
-              body: IntegralDataInput(),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(RealResultCard), findsNothing);
 
@@ -266,60 +276,66 @@ void main() {
       final builder = GoldenBuilder.column()
         ..addScenario(
           'Simpson',
-          Builder(builder: (context) {
-            when(() => dropdownCubit.state)
-                .thenReturn(IntegralDropdownItems.simpson.asString());
+          Builder(
+            builder: (context) {
+              when(() => dropdownCubit.state)
+                  .thenReturn(IntegralDropdownItems.simpson.asString());
 
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<DropdownCubit>.value(
-                  value: dropdownCubit,
-                ),
-                BlocProvider<IntegralBloc>.value(
-                  value: integralBloc,
-                ),
-              ],
-              child: const IntegralDataInput(),
-            );
-          }),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DropdownCubit>.value(
+                    value: dropdownCubit,
+                  ),
+                  BlocProvider<IntegralBloc>.value(
+                    value: integralBloc,
+                  ),
+                ],
+                child: const IntegralDataInput(),
+              );
+            },
+          ),
         )
         ..addScenario(
           'Trapezoid',
-          Builder(builder: (context) {
-            when(() => dropdownCubit.state)
-                .thenReturn(IntegralDropdownItems.trapezoid.asString());
+          Builder(
+            builder: (context) {
+              when(() => dropdownCubit.state)
+                  .thenReturn(IntegralDropdownItems.trapezoid.asString());
 
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<DropdownCubit>.value(
-                  value: dropdownCubit,
-                ),
-                BlocProvider<IntegralBloc>.value(
-                  value: integralBloc,
-                ),
-              ],
-              child: const IntegralDataInput(),
-            );
-          }),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DropdownCubit>.value(
+                    value: dropdownCubit,
+                  ),
+                  BlocProvider<IntegralBloc>.value(
+                    value: integralBloc,
+                  ),
+                ],
+                child: const IntegralDataInput(),
+              );
+            },
+          ),
         )
         ..addScenario(
           'Midpoint',
-          Builder(builder: (context) {
-            when(() => dropdownCubit.state)
-                .thenReturn(IntegralDropdownItems.midpoint.asString());
+          Builder(
+            builder: (context) {
+              when(() => dropdownCubit.state)
+                  .thenReturn(IntegralDropdownItems.midpoint.asString());
 
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<DropdownCubit>.value(
-                  value: dropdownCubit,
-                ),
-                BlocProvider<IntegralBloc>.value(
-                  value: integralBloc,
-                ),
-              ],
-              child: const IntegralDataInput(),
-            );
-          }),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DropdownCubit>.value(
+                    value: dropdownCubit,
+                  ),
+                  BlocProvider<IntegralBloc>.value(
+                    value: integralBloc,
+                  ),
+                ],
+                child: const IntegralDataInput(),
+              );
+            },
+          ),
         );
 
       await tester.pumpWidgetBuilder(

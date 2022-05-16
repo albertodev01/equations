@@ -12,19 +12,21 @@ import '../mock_wrapper.dart';
 void main() {
   group("Testing the 'ComplexNumberOtherBody' widget", () {
     testWidgets('Making sure that the widget renders', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NumberSwitcherCubit>(
-              create: (_) => NumberSwitcherCubit(min: 2, max: 5),
-            ),
-            BlocProvider<OtherBloc>(
-              create: (_) => OtherBloc(),
-            ),
-          ],
-          child: const ComplexNumberOtherBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NumberSwitcherCubit>(
+                create: (_) => NumberSwitcherCubit(min: 2, max: 5),
+              ),
+              BlocProvider<OtherBloc>(
+                create: (_) => OtherBloc(),
+              ),
+            ],
+            child: const ComplexNumberOtherBody(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(ComplexNumberOtherBody), findsOneWidget);
       expect(find.byType(GoBackButton), findsOneWidget);

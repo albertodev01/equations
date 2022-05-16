@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// modulus, the polar coordinate conversions and much more.
 class ComplexNumberOtherBody extends StatelessWidget {
   /// Creates a [ComplexNumberOtherBody] widget.
-  const ComplexNumberOtherBody({Key? key}) : super(key: key);
+  const ComplexNumberOtherBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ComplexNumberOtherBody extends StatelessWidget {
 /// The actual contents of the [ComplexNumberOtherBody] widget.
 class _PageBody extends StatefulWidget {
   /// Creates a [_PageBody] widget.
-  const _PageBody({Key? key}) : super(key: key);
+  const _PageBody({super.key});
 
   @override
   State<_PageBody> createState() => _PageBodyState();

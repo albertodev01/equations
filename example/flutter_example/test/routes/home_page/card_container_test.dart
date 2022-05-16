@@ -9,13 +9,15 @@ import '../mock_wrapper.dart';
 void main() {
   group("Testing the 'HomePage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: CardContainer(
-          title: 'Title',
-          image: const SizedBox(),
-          onTap: () {},
+      await tester.pumpWidget(
+        MockWrapper(
+          child: CardContainer(
+            title: 'Title',
+            image: const SizedBox(),
+            onTap: () {},
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(CardContainer), findsOneWidget);
       expect(find.byType(GestureDetector), findsOneWidget);
@@ -25,13 +27,15 @@ void main() {
     testWidgets('Making sure that the widget is tappable', (tester) async {
       var counter = 0;
 
-      await tester.pumpWidget(MockWrapper(
-        child: CardContainer(
-          title: 'Title',
-          image: const SizedBox(),
-          onTap: () => counter++,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: CardContainer(
+            title: 'Title',
+            image: const SizedBox(),
+            onTap: () => counter++,
+          ),
         ),
-      ));
+      );
 
       final card = find.byType(CardContainer);
 

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// determinant, eigenvalues and much more.
 class MatrixOtherBody extends StatelessWidget {
   /// Creates a [MatrixBody] widget.
-  const MatrixOtherBody({Key? key}) : super(key: key);
+  const MatrixOtherBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class MatrixOtherBody extends StatelessWidget {
 /// The actual contents of the [MatrixOtherBody] widget.
 class _PageBody extends StatefulWidget {
   /// Creates a [_PageBody] widget.
-  const _PageBody({Key? key}) : super(key: key);
+  const _PageBody({super.key});
 
   @override
   State<_PageBody> createState() => _PageBodyState();

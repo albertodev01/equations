@@ -75,19 +75,21 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(const OtherNone());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-              ),
-              BlocProvider<OtherBloc>.value(
-                value: bloc,
-              ),
-            ],
-            child: const MatrixAnalyzerInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>.value(
+                  value: bloc,
+                ),
+              ],
+              child: const MatrixAnalyzerInput(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(SizePicker), findsOneWidget);
         expect(find.byType(MatrixInput), findsOneWidget);
@@ -108,25 +110,27 @@ void main() {
         late FocusScopeNode focusScope;
         when(() => bloc.state).thenReturn(const OtherNone());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-              ),
-              BlocProvider<OtherBloc>.value(
-                value: bloc,
-              ),
-            ],
-            child: Builder(
-              builder: (context) {
-                focusScope = FocusScope.of(context);
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>.value(
+                  value: bloc,
+                ),
+              ],
+              child: Builder(
+                builder: (context) {
+                  focusScope = FocusScope.of(context);
 
-                return const MatrixAnalyzerInput();
-              },
+                  return const MatrixAnalyzerInput();
+                },
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(SizePicker), findsOneWidget);
         expect(find.byType(MatrixInput), findsOneWidget);

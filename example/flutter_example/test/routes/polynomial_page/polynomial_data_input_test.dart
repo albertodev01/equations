@@ -42,14 +42,16 @@ void main() {
         when(() => polynomialBloc.polynomialType)
             .thenReturn(PolynomialType.linear);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(
-              body: PolynomialDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(
+                body: PolynomialDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(PolynomialDataInput), findsOneWidget);
         expect(find.byType(PolynomialInputField), findsNWidgets(2));
@@ -66,14 +68,16 @@ void main() {
         when(() => polynomialBloc.polynomialType)
             .thenReturn(PolynomialType.quadratic);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(
-              body: PolynomialDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(
+                body: PolynomialDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(PolynomialDataInput), findsOneWidget);
         expect(find.byType(PolynomialInputField), findsNWidgets(3));
@@ -90,14 +94,16 @@ void main() {
         when(() => polynomialBloc.polynomialType)
             .thenReturn(PolynomialType.cubic);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(
-              body: PolynomialDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(
+                body: PolynomialDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(PolynomialDataInput), findsOneWidget);
         expect(find.byType(PolynomialInputField), findsNWidgets(4));
@@ -114,14 +120,16 @@ void main() {
         when(() => polynomialBloc.polynomialType)
             .thenReturn(PolynomialType.quartic);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(
-              body: PolynomialDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(
+                body: PolynomialDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(PolynomialDataInput), findsOneWidget);
         expect(find.byType(PolynomialInputField), findsNWidgets(5));
@@ -138,14 +146,16 @@ void main() {
         when(() => polynomialBloc.polynomialType)
             .thenReturn(PolynomialType.linear);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(
-              body: PolynomialDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(
+                body: PolynomialDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // No snackbar by default
         expect(find.byType(SnackBar), findsNothing);
@@ -164,23 +174,25 @@ void main() {
       late FocusScopeNode focusScope;
       final bloc = PolynomialBloc(PolynomialType.quadratic);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: Scaffold(
-            body: BlocProvider<PolynomialBloc>.value(
-              value: bloc,
-              child: Builder(
-                builder: (context) {
-                  focusScope = FocusScope.of(context);
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: Scaffold(
+              body: BlocProvider<PolynomialBloc>.value(
+                value: bloc,
+                child: Builder(
+                  builder: (context) {
+                    focusScope = FocusScope.of(context);
 
-                  return const PolynomialDataInput();
-                },
+                    return const PolynomialDataInput();
+                  },
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       final coeffA = find.byKey(
         const Key('PolynomialInputField-coefficient-0'),

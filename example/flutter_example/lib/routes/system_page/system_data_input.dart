@@ -16,7 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// the matrix of the system in the `Ax = b` equation.
 class SystemDataInput extends StatefulWidget {
   /// Creates a [SystemDataInput] widget.
-  const SystemDataInput({Key? key}) : super(key: key);
+  const SystemDataInput({super.key});
 
   @override
   SystemDataInputState createState() => SystemDataInputState();
@@ -156,33 +156,39 @@ class SystemDataInputState extends State<SystemDataInput> {
       // Solving the system
       switch (_getType) {
         case SystemType.rowReduction:
-          bloc.add(RowReductionMethod(
-            matrix: systemInputs,
-            knownValues: vectorInputs,
-            size: size,
-          ));
+          bloc.add(
+            RowReductionMethod(
+              matrix: systemInputs,
+              knownValues: vectorInputs,
+              size: size,
+            ),
+          );
           break;
         case SystemType.factorization:
-          bloc.add(FactorizationMethod(
-            matrix: systemInputs,
-            knownValues: vectorInputs,
-            size: size,
-            method: FactorizationMethod.resolve(algorithm),
-          ));
+          bloc.add(
+            FactorizationMethod(
+              matrix: systemInputs,
+              knownValues: vectorInputs,
+              size: size,
+              method: FactorizationMethod.resolve(algorithm),
+            ),
+          );
           break;
         case SystemType.iterative:
           final initialGuesses = jacobiControllers.sublist(0, size).map((c) {
             return c.text;
           }).toList();
 
-          bloc.add(IterativeMethod(
-            matrix: systemInputs,
-            knownValues: vectorInputs,
-            size: size,
-            method: IterativeMethod.resolve(algorithm),
-            w: wSorController.text,
-            jacobiInitialVector: initialGuesses,
-          ));
+          bloc.add(
+            IterativeMethod(
+              matrix: systemInputs,
+              knownValues: vectorInputs,
+              size: size,
+              method: IterativeMethod.resolve(algorithm),
+              w: wSorController.text,
+              jacobiInitialVector: initialGuesses,
+            ),
+          );
           break;
       }
     } else {

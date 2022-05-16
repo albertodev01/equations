@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// The results of the numerical integration.
 class IntegralResultsWidget extends StatelessWidget {
   /// Creates an [IntegralResultsWidget] widget.
-  const IntegralResultsWidget({Key? key}) : super(key: key);
+  const IntegralResultsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -28,13 +28,15 @@ void main() {
 
   group("Testing the 'NonlinearBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: NonlinearDropdownItems.newton.asString(),
-        child: BlocProvider<NonlinearBloc>(
-          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-          child: const Scaffold(body: NonlinearBody()),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: NonlinearDropdownItems.newton.asString(),
+          child: BlocProvider<NonlinearBloc>(
+            create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+            child: const Scaffold(body: NonlinearBody()),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(NonlinearDataInput), findsOneWidget);
@@ -45,18 +47,20 @@ void main() {
       'Making sure that the widget is responsive - small screens '
       'test',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          dropdownInitial: NonlinearDropdownItems.secant.asString(),
-          child: BlocProvider<NonlinearBloc>(
-            create: (_) => NonlinearBloc(NonlinearType.bracketing),
-            child: const Scaffold(
-              body: SizedBox(
-                width: 800,
-                child: NonlinearBody(),
+        await tester.pumpWidget(
+          MockWrapper(
+            dropdownInitial: NonlinearDropdownItems.secant.asString(),
+            child: BlocProvider<NonlinearBloc>(
+              create: (_) => NonlinearBloc(NonlinearType.bracketing),
+              child: const Scaffold(
+                body: SizedBox(
+                  width: 800,
+                  child: NonlinearBody(),
+                ),
               ),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
@@ -75,15 +79,17 @@ void main() {
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-        await tester.pumpWidget(MockWrapper(
-          dropdownInitial: NonlinearDropdownItems.newton.asString(),
-          child: BlocProvider<NonlinearBloc>(
-            create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-            child: const Scaffold(
-              body: NonlinearBody(),
+        await tester.pumpWidget(
+          MockWrapper(
+            dropdownInitial: NonlinearDropdownItems.newton.asString(),
+            child: BlocProvider<NonlinearBloc>(
+              create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+              child: const Scaffold(
+                body: NonlinearBody(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
@@ -104,30 +110,32 @@ void main() {
 
         final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-              ),
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
-              ),
-              BlocProvider<PrecisionSliderCubit>(
-                create: (_) => PrecisionSliderCubit(
-                  minValue: 1,
-                  maxValue: 10,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NonlinearBloc>.value(
+                  value: bloc,
                 ),
-              ),
-            ],
-            child: Scaffold(
-              body: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearBody(),
+                BlocProvider<DropdownCubit>.value(
+                  value: dropdownCubit,
+                ),
+                BlocProvider<PrecisionSliderCubit>(
+                  create: (_) => PrecisionSliderCubit(
+                    minValue: 1,
+                    maxValue: 10,
+                  ),
+                ),
+              ],
+              child: Scaffold(
+                body: BlocProvider<NonlinearBloc>.value(
+                  value: bloc,
+                  child: const NonlinearBody(),
+                ),
               ),
             ),
           ),
-        ));
+        );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
         final paramInput = find.byKey(const Key('EquationInput-first-param'));
@@ -158,30 +166,32 @@ void main() {
 
       final bloc = NonlinearBloc(NonlinearType.bracketing);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-            ),
-            BlocProvider<DropdownCubit>.value(
-              value: dropdownCubit,
-            ),
-            BlocProvider<PrecisionSliderCubit>(
-              create: (_) => PrecisionSliderCubit(
-                minValue: 1,
-                maxValue: 10,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NonlinearBloc>.value(
+                value: bloc,
               ),
-            ),
-          ],
-          child: Scaffold(
-            body: BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-              child: const NonlinearBody(),
+              BlocProvider<DropdownCubit>.value(
+                value: dropdownCubit,
+              ),
+              BlocProvider<PrecisionSliderCubit>(
+                create: (_) => PrecisionSliderCubit(
+                  minValue: 1,
+                  maxValue: 10,
+                ),
+              ),
+            ],
+            child: Scaffold(
+              body: BlocProvider<NonlinearBloc>.value(
+                value: bloc,
+                child: const NonlinearBody(),
+              ),
             ),
           ),
         ),
-      ));
+      );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final paramInput1 = find.byKey(const Key('EquationInput-first-param'));

@@ -29,14 +29,16 @@ void main() {
       (tester) async {
         when(() => integralBloc.state).thenReturn(const IntegralNone());
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<IntegralBloc>.value(
-            value: integralBloc,
-            child: const Scaffold(
-              body: IntegralResultsWidget(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<IntegralBloc>.value(
+              value: integralBloc,
+              child: const Scaffold(
+                body: IntegralResultsWidget(),
+              ),
             ),
           ),
-        ));
+        );
 
         // No snackbar by default
         expect(find.byType(NoResults), findsOneWidget);
@@ -46,23 +48,27 @@ void main() {
     testWidgets(
       'Making sure that a result card appears when there is a solution to show',
       (tester) async {
-        when(() => integralBloc.state).thenReturn(const IntegralResult(
-          result: 1 / 2,
-          numericalIntegration: SimpsonRule(
-            function: 'x-1',
-            lowerBound: 1,
-            upperBound: 2,
-          ),
-        ));
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<IntegralBloc>.value(
-            value: integralBloc,
-            child: const Scaffold(
-              body: IntegralResultsWidget(),
+        when(() => integralBloc.state).thenReturn(
+          const IntegralResult(
+            result: 1 / 2,
+            numericalIntegration: SimpsonRule(
+              function: 'x-1',
+              lowerBound: 1,
+              upperBound: 2,
             ),
           ),
-        ));
+        );
+
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<IntegralBloc>.value(
+              value: integralBloc,
+              child: const Scaffold(
+                body: IntegralResultsWidget(),
+              ),
+            ),
+          ),
+        );
 
         // No snackbar by default
         expect(find.byType(NoResults), findsNothing);
@@ -83,14 +89,16 @@ void main() {
           ),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<IntegralBloc>.value(
-            value: integralBloc,
-            child: const Scaffold(
-              body: IntegralResultsWidget(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<IntegralBloc>.value(
+              value: integralBloc,
+              child: const Scaffold(
+                body: IntegralResultsWidget(),
+              ),
             ),
           ),
-        ));
+        );
         await tester.pumpAndSettle();
 
         // No snackbar by default
@@ -102,32 +110,38 @@ void main() {
       final builder = GoldenBuilder.column()
         ..addScenario(
           'No results',
-          Builder(builder: (context) {
-            when(() => integralBloc.state).thenReturn(const IntegralNone());
+          Builder(
+            builder: (context) {
+              when(() => integralBloc.state).thenReturn(const IntegralNone());
 
-            return BlocProvider<IntegralBloc>.value(
-              value: integralBloc,
-              child: const IntegralResultsWidget(),
-            );
-          }),
+              return BlocProvider<IntegralBloc>.value(
+                value: integralBloc,
+                child: const IntegralResultsWidget(),
+              );
+            },
+          ),
         )
         ..addScenario(
           'With results',
-          Builder(builder: (context) {
-            when(() => integralBloc.state).thenReturn(const IntegralResult(
-              result: 1 / 2,
-              numericalIntegration: SimpsonRule(
-                function: 'x-1',
-                lowerBound: 1,
-                upperBound: 2,
-              ),
-            ));
+          Builder(
+            builder: (context) {
+              when(() => integralBloc.state).thenReturn(
+                const IntegralResult(
+                  result: 1 / 2,
+                  numericalIntegration: SimpsonRule(
+                    function: 'x-1',
+                    lowerBound: 1,
+                    upperBound: 2,
+                  ),
+                ),
+              );
 
-            return BlocProvider<IntegralBloc>.value(
-              value: integralBloc,
-              child: const IntegralResultsWidget(),
-            );
-          }),
+              return BlocProvider<IntegralBloc>.value(
+                value: integralBloc,
+                child: const IntegralResultsWidget(),
+              );
+            },
+          ),
         );
 
       await tester.pumpWidgetBuilder(

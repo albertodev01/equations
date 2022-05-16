@@ -38,12 +38,12 @@ class PlotWidget<T> extends StatelessWidget {
 
   /// Creates a [PlotWidget] instance.
   const PlotWidget({
-    Key? key,
+    super.key,
     this.areaColor = Colors.transparent,
     this.plotMode,
     this.lowerAreaLimit,
     this.upperAreaLimit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +88,12 @@ class _PlotBody<T> extends StatelessWidget {
 
   /// Creates a [_PLotBody] widget.
   const _PlotBody({
-    Key? key,
+    super.key,
     required this.plotMode,
     required this.areaColor,
     required this.lowerAreaLimit,
     required this.upperAreaLimit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class _PlotBody<T> extends StatelessWidget {
 }
 
 class _PlotSlider extends StatelessWidget {
-  const _PlotSlider({Key? key}) : super(key: key);
+  const _PlotSlider({super.key});
 
   void update(BuildContext context, double value) =>
       context.read<PlotZoomCubit>().updateSlider(value);

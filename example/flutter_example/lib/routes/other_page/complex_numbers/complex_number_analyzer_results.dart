@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// [OtherBloc].
 class ComplexNumberAnalyzerResult extends StatelessWidget {
   /// Creates a [ComplexNumberAnalyzerResult] widget.
-  const ComplexNumberAnalyzerResult({Key? key}) : super(key: key);
+  const ComplexNumberAnalyzerResult({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class _ComplexAnalysis extends StatelessWidget {
 /// Displayed while the bloc is processing data.
 class _LoadingWidget extends StatelessWidget {
   /// Creates a [_LoadingWidget] widget.
-  const _LoadingWidget({Key? key}) : super(key: key);
+  const _LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -113,14 +113,14 @@ class _Results extends StatelessWidget {
 
   /// Creates an [_Results] object..
   const _Results({
-    Key? key,
+    super.key,
     required this.polarComplex,
     required this.conjugate,
     required this.reciprocal,
     required this.abs,
     required this.sqrt,
     required this.phase,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

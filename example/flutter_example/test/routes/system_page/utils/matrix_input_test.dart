@@ -9,17 +9,19 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'MatrixInput' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MatrixInput(
-          matrixControllers: [
-            TextEditingController(),
-            TextEditingController(),
-            TextEditingController(),
-            TextEditingController(),
-          ],
-          matrixSize: 2,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MatrixInput(
+            matrixControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            matrixSize: 2,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(MatrixInput), findsOneWidget);
       expect(find.byType(Table), findsOneWidget);

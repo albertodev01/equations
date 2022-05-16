@@ -51,44 +51,56 @@ void main() {
 
     test('Making sure that routes map to a PageRoute instance', () {
       expect(
-        RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.homePage,
-        )),
+        RouteGenerator.generateRoute(
+          const RouteSettings(
+            name: RouteGenerator.homePage,
+          ),
+        ),
         isA<PageRouteBuilder<HomePage>>(),
       );
 
       expect(
-        RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.polynomialPage,
-        )),
+        RouteGenerator.generateRoute(
+          const RouteSettings(
+            name: RouteGenerator.polynomialPage,
+          ),
+        ),
         isA<PageRouteBuilder<PolynomialPage>>(),
       );
 
       expect(
-        RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.nonlinearPage,
-        )),
+        RouteGenerator.generateRoute(
+          const RouteSettings(
+            name: RouteGenerator.nonlinearPage,
+          ),
+        ),
         isA<PageRouteBuilder<NonlinearPage>>(),
       );
 
       expect(
-        RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.systemPage,
-        )),
+        RouteGenerator.generateRoute(
+          const RouteSettings(
+            name: RouteGenerator.systemPage,
+          ),
+        ),
         isA<PageRouteBuilder<SystemPage>>(),
       );
 
       expect(
-        RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.integralPage,
-        )),
+        RouteGenerator.generateRoute(
+          const RouteSettings(
+            name: RouteGenerator.integralPage,
+          ),
+        ),
         isA<PageRouteBuilder<IntegralPage>>(),
       );
 
       expect(
-        RouteGenerator.generateRoute(const RouteSettings(
-          name: RouteGenerator.otherPage,
-        )),
+        RouteGenerator.generateRoute(
+          const RouteSettings(
+            name: RouteGenerator.otherPage,
+          ),
+        ),
         isA<PageRouteBuilder<OtherPage>>(),
       );
     });

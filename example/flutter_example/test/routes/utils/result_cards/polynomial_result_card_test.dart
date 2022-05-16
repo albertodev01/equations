@@ -9,13 +9,15 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'PolynomialResultCard' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: PolynomialResultCard(
-          algebraic: Algebraic.fromReal(
-            [1, 2, 3],
+      await tester.pumpWidget(
+        MockWrapper(
+          child: PolynomialResultCard(
+            algebraic: Algebraic.fromReal(
+              [1, 2, 3],
+            ),
           ),
         ),
-      ));
+      );
 
       expect(find.byType(PolynomialResultCard), findsOneWidget);
       expect(find.byType(ListView), findsOneWidget);

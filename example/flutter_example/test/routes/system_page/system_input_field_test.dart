@@ -7,11 +7,13 @@ import '../mock_wrapper.dart';
 void main() {
   group("Testing the 'SystemBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: SystemInputField(
-          controller: TextEditingController(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: SystemInputField(
+            controller: TextEditingController(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(SystemInputField), findsOneWidget);
       expect(find.byType(TextFormField), findsOneWidget);

@@ -25,8 +25,8 @@ void main() {
 class EquationsApp extends StatelessWidget {
   /// Creates an [EquationsApp] instance.
   const EquationsApp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

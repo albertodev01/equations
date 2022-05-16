@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// No complex numbers are allowed.
 class SystemPage extends StatefulWidget {
   /// Creates a [SystemPage] widget.
-  const SystemPage({Key? key}) : super(key: key);
+  const SystemPage({super.key});
 
   @override
   _SystemPageState createState() => _SystemPageState();

@@ -9,18 +9,20 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'PageTitle' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: Scaffold(
-          body: PageTitle(
-            pageLogo: SvgPicture.asset(
-              'assets/function.svg',
-              width: 50,
-              height: 50,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Scaffold(
+            body: PageTitle(
+              pageLogo: SvgPicture.asset(
+                'assets/function.svg',
+                width: 50,
+                height: 50,
+              ),
+              pageTitle: 'Demo title',
             ),
-            pageTitle: 'Demo title',
           ),
         ),
-      ));
+      );
 
       expect(find.byType(PageTitle), findsOneWidget);
       expect(find.text('Demo title'), findsOneWidget);

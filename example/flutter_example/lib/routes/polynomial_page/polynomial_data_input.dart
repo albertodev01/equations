@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// parse the coefficients of the polynomial to be solved.
 class PolynomialDataInput extends StatelessWidget {
   /// Creates a [PolynomialDataInput] widget.
-  const PolynomialDataInput({Key? key}) : super(key: key);
+  const PolynomialDataInput({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -224,10 +224,10 @@ class _InputFieldsWrapWidget extends StatelessWidget {
   final int inputLength;
 
   const _InputFieldsWrapWidget({
-    Key? key,
+    super.key,
     required this.controllers,
     required this.inputLength,
-  }) : super(key: key);
+  });
 
   /// Increments by [index] the char code unit to get a specific letter. For
   /// example:

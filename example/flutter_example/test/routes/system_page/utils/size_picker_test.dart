@@ -10,15 +10,17 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'SizePicker' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NumberSwitcherCubit>(
-          create: (_) => NumberSwitcherCubit(
-            min: 2,
-            max: 4,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<NumberSwitcherCubit>(
+            create: (_) => NumberSwitcherCubit(
+              min: 2,
+              max: 4,
+            ),
+            child: const SizePicker(),
           ),
-          child: const SizePicker(),
         ),
-      ));
+      );
 
       expect(find.byType(SizePicker), findsOneWidget);
       expect(find.byType(ElevatedButton), findsNWidgets(2));
@@ -30,12 +32,14 @@ void main() {
         max: 4,
       );
 
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NumberSwitcherCubit>.value(
-          value: numberSwitchCubit,
-          child: const SizePicker(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<NumberSwitcherCubit>.value(
+            value: numberSwitchCubit,
+            child: const SizePicker(),
+          ),
         ),
-      ));
+      );
 
       expect(numberSwitchCubit.state, equals(2));
       expect(find.text('2x2 matrix'), findsOneWidget);

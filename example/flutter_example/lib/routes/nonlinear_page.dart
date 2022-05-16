@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// plane.
 class NonlinearPage extends StatefulWidget {
   /// Creates a [NonlinearPage] widget.
-  const NonlinearPage({Key? key}) : super(key: key);
+  const NonlinearPage({super.key});
 
   @override
   _NonlinearPageState createState() => _NonlinearPageState();

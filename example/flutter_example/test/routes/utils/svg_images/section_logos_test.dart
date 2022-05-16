@@ -11,9 +11,11 @@ void main() {
     testWidgets(
       "Making sure that 'PolynomialLogo' can be rendered",
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: PolynomialLogo(),
-        ));
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: PolynomialLogo(),
+          ),
+        );
 
         expect(find.byType(PolynomialLogo), findsOneWidget);
         expect(find.byType(SvgPicture), findsOneWidget);
@@ -35,9 +37,11 @@ void main() {
     testWidgets(
       "Making sure that 'NonlinearLogo' can be rendered",
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: NonlinearLogo(),
-        ));
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: NonlinearLogo(),
+          ),
+        );
 
         expect(find.byType(NonlinearLogo), findsOneWidget);
         expect(find.byType(SvgPicture), findsOneWidget);
@@ -59,9 +63,11 @@ void main() {
     testWidgets(
       "Making sure that 'SystemsLogo' can be rendered",
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: SystemsLogo(),
-        ));
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: SystemsLogo(),
+          ),
+        );
 
         expect(find.byType(SystemsLogo), findsOneWidget);
         expect(find.byType(SvgPicture), findsOneWidget);
@@ -83,9 +89,11 @@ void main() {
     testWidgets(
       "Making sure that 'IntegralLogo' can be rendered",
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: IntegralLogo(),
-        ));
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: IntegralLogo(),
+          ),
+        );
 
         expect(find.byType(IntegralLogo), findsOneWidget);
         expect(find.byType(SvgPicture), findsOneWidget);
@@ -105,9 +113,11 @@ void main() {
     });
 
     testWidgets("Making sure that 'OtherLogo' can be rendered", (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: OtherLogo(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: OtherLogo(),
+        ),
+      );
 
       expect(find.byType(OtherLogo), findsOneWidget);
       expect(find.byType(SvgPicture), findsOneWidget);

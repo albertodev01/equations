@@ -15,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// The function is also plotted and the area is highlighted on the chart.
 class IntegralPage extends StatelessWidget {
   /// Creates a [IntegralPage] widget.
-  const IntegralPage({Key? key}) : super(key: key);
+  const IntegralPage({super.key});
 
   @override
   Widget build(BuildContext context) {

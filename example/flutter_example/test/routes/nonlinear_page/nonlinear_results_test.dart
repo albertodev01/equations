@@ -25,12 +25,14 @@ void main() {
 
   group("Testing the 'NonlinearResults' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NonlinearBloc>(
-          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-          child: const NonlinearResults(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<NonlinearBloc>(
+            create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+            child: const NonlinearResults(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(NonlinearResults), findsOneWidget);
       expect(find.byType(SectionTitle), findsOneWidget);
@@ -51,12 +53,14 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NonlinearBloc>.value(
-            value: nonlinearBloc,
-            child: const NonlinearResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<NonlinearBloc>.value(
+              value: nonlinearBloc,
+              child: const NonlinearResults(),
+            ),
           ),
-        ));
+        );
 
         // Refreshing to make the snackbar appear
         await tester.pumpAndSettle();
@@ -71,12 +75,14 @@ void main() {
       (tester) async {
         when(() => nonlinearBloc.state).thenReturn(const NonlinearNone());
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NonlinearBloc>.value(
-            value: nonlinearBloc,
-            child: const NonlinearResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<NonlinearBloc>.value(
+              value: nonlinearBloc,
+              child: const NonlinearResults(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(ListView), findsNothing);
         expect(find.text('No solutions to display.'), findsOneWidget);
@@ -89,17 +95,21 @@ void main() {
       (tester) async {
         const newton = equations.Newton(function: 'x-2', x0: 2);
 
-        when(() => nonlinearBloc.state).thenReturn(NonlinearGuesses(
-          nonLinear: newton,
-          nonlinearResults: newton.solve(),
-        ));
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NonlinearBloc>.value(
-            value: nonlinearBloc,
-            child: const NonlinearResults(),
+        when(() => nonlinearBloc.state).thenReturn(
+          NonlinearGuesses(
+            nonLinear: newton,
+            nonlinearResults: newton.solve(),
           ),
-        ));
+        );
+
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<NonlinearBloc>.value(
+              value: nonlinearBloc,
+              child: const NonlinearResults(),
+            ),
+          ),
+        );
 
         expect(find.text('No solutions to display.'), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(3));
@@ -109,10 +119,12 @@ void main() {
     testGoldens('PolynomialResults', (tester) async {
       const newton = equations.Newton(function: 'x-2', x0: 2);
 
-      when(() => nonlinearBloc.state).thenReturn(NonlinearGuesses(
-        nonLinear: newton,
-        nonlinearResults: newton.solve(),
-      ));
+      when(() => nonlinearBloc.state).thenReturn(
+        NonlinearGuesses(
+          nonLinear: newton,
+          nonlinearResults: newton.solve(),
+        ),
+      );
 
       final widget = BlocProvider<NonlinearBloc>.value(
         value: nonlinearBloc,

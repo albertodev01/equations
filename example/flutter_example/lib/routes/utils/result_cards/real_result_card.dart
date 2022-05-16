@@ -23,11 +23,11 @@ class RealResultCard extends StatelessWidget {
 
   /// Creates a [RealResultCard] widget.
   const RealResultCard({
-    Key? key,
+    super.key,
     required this.value,
     this.leading = '',
     this.withFraction = true,
-  }) : super(key: key);
+  });
 
   String _nanToString(BuildContext context, double value) {
     if (!value.isFinite) {

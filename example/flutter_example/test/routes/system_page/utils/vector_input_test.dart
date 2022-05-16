@@ -9,15 +9,17 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'VectorInput' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: VectorInput(
-          vectorControllers: [
-            TextEditingController(),
-            TextEditingController(),
-          ],
-          vectorSize: 2,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: VectorInput(
+            vectorControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            vectorSize: 2,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(VectorInput), findsOneWidget);
       expect(find.byType(SystemInputField), findsNWidgets(2));

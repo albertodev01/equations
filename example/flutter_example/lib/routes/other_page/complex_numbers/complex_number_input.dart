@@ -18,11 +18,11 @@ class ComplexNumberInput extends StatefulWidget {
 
   /// Creates a [ComplexNumberInput] widget.
   const ComplexNumberInput({
-    Key? key,
+    super.key,
     required this.realController,
     required this.imaginaryController,
     this.isReadOnly = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ComplexNumberInput> createState() => _ComplexNumberInputState();

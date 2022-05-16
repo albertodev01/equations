@@ -23,14 +23,16 @@ void main() {
 
   group("Testing the 'PolynomialBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PolynomialBloc>(
-          create: (_) => PolynomialBloc(PolynomialType.quartic),
-          child: const Scaffold(
-            body: PolynomialBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<PolynomialBloc>(
+            create: (_) => PolynomialBloc(PolynomialType.quartic),
+            child: const Scaffold(
+              body: PolynomialBody(),
+            ),
           ),
         ),
-      ));
+      );
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(PolynomialDataInput), findsOneWidget);
@@ -41,14 +43,16 @@ void main() {
       'Making sure that the widget is responsive - small screens '
       'test',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PolynomialBloc>(
-            create: (_) => PolynomialBloc(PolynomialType.quadratic),
-            child: const Scaffold(
-              body: PolynomialBody(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PolynomialBloc>(
+              create: (_) => PolynomialBloc(PolynomialType.quadratic),
+              child: const Scaffold(
+                body: PolynomialBody(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
@@ -67,14 +71,16 @@ void main() {
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PolynomialBloc>(
-            create: (_) => PolynomialBloc(PolynomialType.cubic),
-            child: const Scaffold(
-              body: PolynomialBody(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PolynomialBloc>(
+              create: (_) => PolynomialBloc(PolynomialType.cubic),
+              child: const Scaffold(
+                body: PolynomialBody(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
@@ -90,28 +96,30 @@ void main() {
     testWidgets('Making sure that solving linear eq. works', (tester) async {
       final bloc = PolynomialBloc(PolynomialType.linear);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<PolynomialBloc>.value(
-              value: bloc,
-            ),
-            BlocProvider<PlotZoomCubit>(
-              create: (_) => PlotZoomCubit(
-                minValue: 1,
-                maxValue: 10,
-                initial: 5,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<PolynomialBloc>.value(
+                value: bloc,
               ),
-            ),
-          ],
-          child: Scaffold(
-            body: BlocProvider<PolynomialBloc>.value(
-              value: bloc,
-              child: const PolynomialBody(),
+              BlocProvider<PlotZoomCubit>(
+                create: (_) => PlotZoomCubit(
+                  minValue: 1,
+                  maxValue: 10,
+                  initial: 5,
+                ),
+              ),
+            ],
+            child: Scaffold(
+              body: BlocProvider<PolynomialBloc>.value(
+                value: bloc,
+                child: const PolynomialBody(),
+              ),
             ),
           ),
         ),
-      ));
+      );
 
       final coeffA =
           find.byKey(const Key('PolynomialInputField-coefficient-0'));
@@ -142,34 +150,36 @@ void main() {
       final bloc = PolynomialBloc(PolynomialType.quadratic);
       var quadraticTabName = '';
 
-      await tester.pumpWidget(MockWrapper(
-        child: Builder(
-          builder: (context) {
-            quadraticTabName = context.l10n.secondDegree;
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Builder(
+            builder: (context) {
+              quadraticTabName = context.l10n.secondDegree;
 
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<PolynomialBloc>.value(
-                  value: bloc,
-                ),
-                BlocProvider<PlotZoomCubit>(
-                  create: (_) => PlotZoomCubit(
-                    minValue: 1,
-                    maxValue: 10,
-                    initial: 5,
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<PolynomialBloc>.value(
+                    value: bloc,
+                  ),
+                  BlocProvider<PlotZoomCubit>(
+                    create: (_) => PlotZoomCubit(
+                      minValue: 1,
+                      maxValue: 10,
+                      initial: 5,
+                    ),
+                  ),
+                ],
+                child: Scaffold(
+                  body: BlocProvider<PolynomialBloc>.value(
+                    value: bloc,
+                    child: const PolynomialBody(),
                   ),
                 ),
-              ],
-              child: Scaffold(
-                body: BlocProvider<PolynomialBloc>.value(
-                  value: bloc,
-                  child: const PolynomialBody(),
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ));
+      );
 
       // Moving to the second page
       await tester.tap(find.text(quadraticTabName));
@@ -208,34 +218,36 @@ void main() {
       final bloc = PolynomialBloc(PolynomialType.cubic);
       var cubicTabName = '';
 
-      await tester.pumpWidget(MockWrapper(
-        child: Builder(
-          builder: (context) {
-            cubicTabName = context.l10n.thirdDegree;
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Builder(
+            builder: (context) {
+              cubicTabName = context.l10n.thirdDegree;
 
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<PolynomialBloc>.value(
-                  value: bloc,
-                ),
-                BlocProvider<PlotZoomCubit>(
-                  create: (_) => PlotZoomCubit(
-                    minValue: 1,
-                    maxValue: 10,
-                    initial: 5,
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<PolynomialBloc>.value(
+                    value: bloc,
+                  ),
+                  BlocProvider<PlotZoomCubit>(
+                    create: (_) => PlotZoomCubit(
+                      minValue: 1,
+                      maxValue: 10,
+                      initial: 5,
+                    ),
+                  ),
+                ],
+                child: Scaffold(
+                  body: BlocProvider<PolynomialBloc>.value(
+                    value: bloc,
+                    child: const PolynomialBody(),
                   ),
                 ),
-              ],
-              child: Scaffold(
-                body: BlocProvider<PolynomialBloc>.value(
-                  value: bloc,
-                  child: const PolynomialBody(),
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ));
+      );
 
       // Moving to the second page
       await tester.tap(find.text(cubicTabName));
@@ -277,34 +289,36 @@ void main() {
       final bloc = PolynomialBloc(PolynomialType.quartic);
       var quarticTabName = '';
 
-      await tester.pumpWidget(MockWrapper(
-        child: Builder(
-          builder: (context) {
-            quarticTabName = context.l10n.fourthDegree;
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Builder(
+            builder: (context) {
+              quarticTabName = context.l10n.fourthDegree;
 
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<PolynomialBloc>.value(
-                  value: bloc,
-                ),
-                BlocProvider<PlotZoomCubit>(
-                  create: (_) => PlotZoomCubit(
-                    minValue: 1,
-                    maxValue: 10,
-                    initial: 5,
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<PolynomialBloc>.value(
+                    value: bloc,
+                  ),
+                  BlocProvider<PlotZoomCubit>(
+                    create: (_) => PlotZoomCubit(
+                      minValue: 1,
+                      maxValue: 10,
+                      initial: 5,
+                    ),
+                  ),
+                ],
+                child: Scaffold(
+                  body: BlocProvider<PolynomialBloc>.value(
+                    value: bloc,
+                    child: const PolynomialBody(),
                   ),
                 ),
-              ],
-              child: Scaffold(
-                body: BlocProvider<PolynomialBloc>.value(
-                  value: bloc,
-                  child: const PolynomialBody(),
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ));
+      );
 
       // Moving to the second page
       await tester.tap(find.text(quarticTabName));

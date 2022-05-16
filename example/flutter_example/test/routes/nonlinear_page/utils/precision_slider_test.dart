@@ -10,17 +10,19 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'PrecisionSlider' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<PrecisionSliderCubit>(
-          create: (_) => PrecisionSliderCubit(
-            minValue: 1,
-            maxValue: 10,
-          ),
-          child: const Scaffold(
-            body: PrecisionSlider(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<PrecisionSliderCubit>(
+            create: (_) => PrecisionSliderCubit(
+              minValue: 1,
+              maxValue: 10,
+            ),
+            child: const Scaffold(
+              body: PrecisionSlider(),
+            ),
           ),
         ),
-      ));
+      );
 
       expect(find.byType(PrecisionSlider), findsOneWidget);
     });
@@ -29,17 +31,19 @@ void main() {
       'Making sure that when the plot_zoom has the same initial position defined '
       'by the state of the bloc.',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PrecisionSliderCubit>(
-            create: (_) => PrecisionSliderCubit(
-              minValue: 2,
-              maxValue: 10,
-            ),
-            child: const Scaffold(
-              body: PrecisionSlider(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PrecisionSliderCubit>(
+              create: (_) => PrecisionSliderCubit(
+                minValue: 2,
+                maxValue: 10,
+              ),
+              child: const Scaffold(
+                body: PrecisionSlider(),
+              ),
             ),
           ),
-        ));
+        );
 
         final finder = find.byType(Slider);
         final slider = tester.firstWidget(finder) as Slider;
@@ -60,14 +64,16 @@ void main() {
           maxValue: 10,
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<PrecisionSliderCubit>.value(
-            value: bloc,
-            child: const Scaffold(
-              body: PrecisionSlider(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<PrecisionSliderCubit>.value(
+              value: bloc,
+              child: const Scaffold(
+                body: PrecisionSlider(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(Slider), findsOneWidget);
         expect(bloc.state, equals(6));

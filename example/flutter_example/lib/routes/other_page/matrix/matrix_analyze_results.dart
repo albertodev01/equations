@@ -16,7 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// This widget shows the matrix analysis results produced by an [OtherBloc].
 class MatrixAnalyzerResults extends StatelessWidget {
   /// Creates a [MatrixAnalyzerResults] widget.
-  const MatrixAnalyzerResults({Key? key}) : super(key: key);
+  const MatrixAnalyzerResults({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _SystemSolutions extends StatelessWidget {
 /// Displayed while the bloc is processing the matrix.
 class _LoadingWidget extends StatelessWidget {
   /// Creates a [_LoadingWidget] widget.
-  const _LoadingWidget({Key? key}) : super(key: key);
+  const _LoadingWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

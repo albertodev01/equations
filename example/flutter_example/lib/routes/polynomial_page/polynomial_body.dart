@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// on two columns according with the available space.
 class PolynomialBody extends StatelessWidget {
   /// Creates a [PolynomialBody] widget.
-  const PolynomialBody({Key? key}) : super(key: key);
+  const PolynomialBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -80,61 +80,63 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= doubleColumnPageBreakpoint) {
-        // For mobile devices - all in a column
-        return SingleChildScrollView(
-          key: const Key('SingleChildScrollView-mobile-responsive'),
-          child: Column(
-            children: [
-              pageTitleWidget,
-              const PolynomialDataInput(),
-              const PolynomialResults(),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 50,
+    return LayoutBuilder(
+      builder: (context, size) {
+        if (size.maxWidth <= doubleColumnPageBreakpoint) {
+          // For mobile devices - all in a column
+          return SingleChildScrollView(
+            key: const Key('SingleChildScrollView-mobile-responsive'),
+            child: Column(
+              children: [
+                pageTitleWidget,
+                const PolynomialDataInput(),
+                const PolynomialResults(),
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 50,
+                  ),
+                  child: _PolynomialPlot(),
                 ),
-                child: _PolynomialPlot(),
-              ),
-            ],
-          ),
-        );
-      }
+              ],
+            ),
+          );
+        }
 
-      // For wider screens - plot on the right and results on the left
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          // Input and results
-          SizedBox(
-            width: size.maxWidth / 3,
-            height: double.infinity,
-            child: Center(
-              child: SingleChildScrollView(
-                key: const Key('SingleChildScrollView-desktop-responsive'),
-                child: Column(
-                  children: [
-                    pageTitleWidget,
-                    const PolynomialDataInput(),
-                    const PolynomialResults(),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                  ],
+        // For wider screens - plot on the right and results on the left
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // Input and results
+            SizedBox(
+              width: size.maxWidth / 3,
+              height: double.infinity,
+              child: Center(
+                child: SingleChildScrollView(
+                  key: const Key('SingleChildScrollView-desktop-responsive'),
+                  child: Column(
+                    children: [
+                      pageTitleWidget,
+                      const PolynomialDataInput(),
+                      const PolynomialResults(),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // Plot
-          SizedBox(
-            width: size.maxWidth / 2.3,
-            height: double.infinity,
-            child: const _PolynomialPlot(),
-          ),
-        ],
-      );
-    });
+            // Plot
+            SizedBox(
+              width: size.maxWidth / 2.3,
+              height: double.infinity,
+              child: const _PolynomialPlot(),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -190,7 +192,7 @@ class _PolynomialPlot extends StatelessWidget {
 /// A wrapper of [PageTitle] placed above a [PlotWidget].
 class _PlotTitle extends StatelessWidget {
   /// Creates a [_PlotTitle] widget.
-  const _PlotTitle({Key? key}) : super(key: key);
+  const _PlotTitle({super.key});
 
   @override
   Widget build(BuildContext context) {

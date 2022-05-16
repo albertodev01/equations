@@ -16,7 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// coefficients of the nonlinear equation to be solved.
 class NonlinearDataInput extends StatefulWidget {
   /// Creates a [NonlinearDataInput] widget.
-  const NonlinearDataInput({Key? key}) : super(key: key);
+  const NonlinearDataInput({super.key});
 
   @override
   _NonlinearDataInputState createState() => _NonlinearDataInputState();

@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// The vector with the solutions of the system of equations.
 class SystemResults extends StatelessWidget {
   /// Creates a [SystemResults] widget.
-  const SystemResults({Key? key}) : super(key: key);
+  const SystemResults({super.key});
 
   @override
   Widget build(BuildContext context) {

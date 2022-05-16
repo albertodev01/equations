@@ -13,7 +13,7 @@ void main() {
 
     blocTest<IntegralBloc, IntegralState>(
       'Making sure that the bloc can be cleared',
-      build: () => IntegralBloc(),
+      build: IntegralBloc.new,
       act: (bloc) => bloc.add(const IntegralClean()),
       expect: () => const [
         IntegralNone(),
@@ -22,14 +22,16 @@ void main() {
 
     blocTest<IntegralBloc, IntegralState>(
       'Making sure that the bloc can integrate using the Simpson rule',
-      build: () => IntegralBloc(),
-      act: (bloc) => bloc.add(const IntegralSolve(
-        function: 'x+2',
-        lowerBound: '-2',
-        upperBound: '7',
-        integralType: IntegralType.simpson,
-        intervals: 32,
-      )),
+      build: IntegralBloc.new,
+      act: (bloc) => bloc.add(
+        const IntegralSolve(
+          function: 'x+2',
+          lowerBound: '-2',
+          upperBound: '7',
+          integralType: IntegralType.simpson,
+          intervals: 32,
+        ),
+      ),
       expect: () => const [
         IntegralResult(
           result: 40.5,
@@ -51,14 +53,16 @@ void main() {
 
     blocTest<IntegralBloc, IntegralState>(
       'Making sure that the bloc can integrate using the trapezoid rule',
-      build: () => IntegralBloc(),
-      act: (bloc) => bloc.add(const IntegralSolve(
-        function: 'x+2',
-        lowerBound: '-2',
-        upperBound: '7',
-        integralType: IntegralType.trapezoid,
-        intervals: 32,
-      )),
+      build: IntegralBloc.new,
+      act: (bloc) => bloc.add(
+        const IntegralSolve(
+          function: 'x+2',
+          lowerBound: '-2',
+          upperBound: '7',
+          integralType: IntegralType.trapezoid,
+          intervals: 32,
+        ),
+      ),
       expect: () => const [
         IntegralResult(
           result: 40.5,
@@ -81,14 +85,16 @@ void main() {
 
     blocTest<IntegralBloc, IntegralState>(
       'Making sure that the bloc can integrate using the midpoint rule',
-      build: () => IntegralBloc(),
-      act: (bloc) => bloc.add(const IntegralSolve(
-        function: 'x+2',
-        lowerBound: '-2',
-        upperBound: '7',
-        integralType: IntegralType.midPoint,
-        intervals: 32,
-      )),
+      build: IntegralBloc.new,
+      act: (bloc) => bloc.add(
+        const IntegralSolve(
+          function: 'x+2',
+          lowerBound: '-2',
+          upperBound: '7',
+          integralType: IntegralType.midPoint,
+          intervals: 32,
+        ),
+      ),
       expect: () => const [
         IntegralResult(
           result: 40.5,
@@ -111,14 +117,16 @@ void main() {
 
     blocTest<IntegralBloc, IntegralState>(
       'Making sure that an exception is thrown in case of invalid function',
-      build: () => IntegralBloc(),
-      act: (bloc) => bloc.add(const IntegralSolve(
-        function: 'x+2x',
-        lowerBound: '-2',
-        upperBound: '7',
-        integralType: IntegralType.simpson,
-        intervals: 32,
-      )),
+      build: IntegralBloc.new,
+      act: (bloc) => bloc.add(
+        const IntegralSolve(
+          function: 'x+2x',
+          lowerBound: '-2',
+          upperBound: '7',
+          integralType: IntegralType.simpson,
+          intervals: 32,
+        ),
+      ),
       expect: () => const [
         IntegralError(),
       ],
@@ -126,14 +134,16 @@ void main() {
 
     blocTest<IntegralBloc, IntegralState>(
       'Making sure that an exception is thrown in case of invalid values',
-      build: () => IntegralBloc(),
-      act: (bloc) => bloc.add(const IntegralSolve(
-        function: 'x+2',
-        lowerBound: '',
-        upperBound: '7',
-        integralType: IntegralType.simpson,
-        intervals: 32,
-      )),
+      build: IntegralBloc.new,
+      act: (bloc) => bloc.add(
+        const IntegralSolve(
+          function: 'x+2',
+          lowerBound: '',
+          upperBound: '7',
+          integralType: IntegralType.simpson,
+          intervals: 32,
+        ),
+      ),
       expect: () => const [
         IntegralError(),
       ],

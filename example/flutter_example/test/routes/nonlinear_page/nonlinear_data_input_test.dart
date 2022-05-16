@@ -45,12 +45,14 @@ void main() {
         when(() => nonlinearBloc.nonlinearType)
             .thenReturn(NonlinearType.singlePoint);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(body: NonlinearDataInput()),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(body: NonlinearDataInput()),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(NonlinearDataInput), findsOneWidget);
         expect(find.byType(EquationInput), findsNWidgets(2));
@@ -71,12 +73,14 @@ void main() {
         when(() => nonlinearBloc.nonlinearType)
             .thenReturn(NonlinearType.bracketing);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(body: NonlinearDataInput()),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(body: NonlinearDataInput()),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(NonlinearDataInput), findsOneWidget);
         expect(find.byType(EquationInput), findsNWidgets(3));
@@ -97,12 +101,14 @@ void main() {
         when(() => nonlinearBloc.nonlinearType)
             .thenReturn(NonlinearType.bracketing);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(body: NonlinearDataInput()),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: const Scaffold(body: NonlinearDataInput()),
+            ),
           ),
-        ));
+        );
 
         // No snackbar by default
         expect(find.byType(SnackBar), findsNothing);
@@ -124,17 +130,19 @@ void main() {
             .thenReturn(NonlinearDropdownItems.newton.asString());
         final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: Scaffold(
-              body: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: Scaffold(
+                body: BlocProvider<NonlinearBloc>.value(
+                  value: bloc,
+                  child: const NonlinearDataInput(),
+                ),
               ),
             ),
           ),
-        ));
+        );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
         final paramInput = find.byKey(const Key('EquationInput-first-param'));
@@ -163,17 +171,19 @@ void main() {
             .thenReturn(NonlinearDropdownItems.bisection.asString());
         final bloc = NonlinearBloc(NonlinearType.bracketing);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: Scaffold(
-              body: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: providers,
+              child: Scaffold(
+                body: BlocProvider<NonlinearBloc>.value(
+                  value: bloc,
+                  child: const NonlinearDataInput(),
+                ),
               ),
             ),
           ),
-        ));
+        );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
         final paramInput1 = find.byKey(const Key('EquationInput-first-param'));
@@ -203,23 +213,25 @@ void main() {
       late FocusScopeNode focusScope;
       final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: Scaffold(
-            body: BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-              child: Builder(
-                builder: (context) {
-                  focusScope = FocusScope.of(context);
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: providers,
+            child: Scaffold(
+              body: BlocProvider<NonlinearBloc>.value(
+                value: bloc,
+                child: Builder(
+                  builder: (context) {
+                    focusScope = FocusScope.of(context);
 
-                  return const NonlinearDataInput();
-                },
+                    return const NonlinearDataInput();
+                  },
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final paramInput = find.byKey(const Key('EquationInput-first-param'));

@@ -75,19 +75,21 @@ void main() {
       'Making sure that the widget renders nothing when there are no '
       'analysis results',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-              ),
-              BlocProvider<OtherBloc>(
-                create: (_) => OtherBloc(),
-              ),
-            ],
-            child: const MatrixAnalyzerResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>(
+                  create: (_) => OtherBloc(),
+                ),
+              ],
+              child: const MatrixAnalyzerResults(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(RealResultCard), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsNothing);
@@ -99,21 +101,23 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(mockResult);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>.value(
+                  value: bloc,
+                ),
+              ],
+              child: const SingleChildScrollView(
+                child: MatrixAnalyzerResults(),
               ),
-              BlocProvider<OtherBloc>.value(
-                value: bloc,
-              ),
-            ],
-            child: const SingleChildScrollView(
-              child: MatrixAnalyzerResults(),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byType(Wrap),
@@ -129,21 +133,23 @@ void main() {
 
         when(() => bloc.state).thenReturn(mockResult);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>.value(
+                  value: bloc,
+                ),
+              ],
+              child: const SingleChildScrollView(
+                child: MatrixAnalyzerResults(),
               ),
-              BlocProvider<OtherBloc>.value(
-                value: bloc,
-              ),
-            ],
-            child: const SingleChildScrollView(
-              child: MatrixAnalyzerResults(),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byType(Wrap),
@@ -157,19 +163,21 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(const OtherLoading());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-              ),
-              BlocProvider<OtherBloc>.value(
-                value: bloc,
-              ),
-            ],
-            child: const MatrixAnalyzerResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>.value(
+                  value: bloc,
+                ),
+              ],
+              child: const MatrixAnalyzerResults(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(NoResults), findsNothing);
         expect(find.byType(RealResultCard), findsNothing);
@@ -182,21 +190,23 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(mockResult);
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<NumberSwitcherCubit>(
+                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
+                ),
+                BlocProvider<OtherBloc>.value(
+                  value: bloc,
+                ),
+              ],
+              child: const SingleChildScrollView(
+                child: MatrixAnalyzerResults(),
               ),
-              BlocProvider<OtherBloc>.value(
-                value: bloc,
-              ),
-            ],
-            child: const SingleChildScrollView(
-              child: MatrixAnalyzerResults(),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(NoResults), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsNothing);
@@ -210,25 +220,29 @@ void main() {
       final builder = GoldenBuilder.column()
         ..addScenario(
           'No results',
-          Builder(builder: (context) {
-            when(() => bloc.state).thenReturn(const OtherNone());
+          Builder(
+            builder: (context) {
+              when(() => bloc.state).thenReturn(const OtherNone());
 
-            return BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const MatrixAnalyzerResults(),
-            );
-          }),
+              return BlocProvider<OtherBloc>.value(
+                value: bloc,
+                child: const MatrixAnalyzerResults(),
+              );
+            },
+          ),
         )
         ..addScenario(
           'Results',
-          Builder(builder: (context) {
-            when(() => bloc.state).thenReturn(mockResult);
+          Builder(
+            builder: (context) {
+              when(() => bloc.state).thenReturn(mockResult);
 
-            return BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const MatrixAnalyzerResults(),
-            );
-          }),
+              return BlocProvider<OtherBloc>.value(
+                value: bloc,
+                child: const MatrixAnalyzerResults(),
+              );
+            },
+          ),
         );
 
       await tester.pumpWidgetBuilder(

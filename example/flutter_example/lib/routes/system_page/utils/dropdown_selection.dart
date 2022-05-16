@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// Dropdown button used to choose which system solving algorithm has to be used.
 class SystemDropdownSelection extends StatefulWidget {
   /// Creates a [SystemDropdownSelection] widget.
-  const SystemDropdownSelection({Key? key}) : super(key: key);
+  const SystemDropdownSelection({super.key});
 
   @override
   SystemDropdownSelectionState createState() => SystemDropdownSelectionState();

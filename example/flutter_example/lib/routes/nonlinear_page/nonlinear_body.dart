@@ -21,7 +21,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// on two columns according with the available width.
 class NonlinearBody extends StatelessWidget {
   /// Creates a [NonlinearBody] widget.
-  const NonlinearBody({Key? key}) : super(key: key);
+  const NonlinearBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,61 +71,63 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, size) {
-      if (size.maxWidth <= doubleColumnPageBreakpoint) {
-        // For mobile devices - all in a column
-        return SingleChildScrollView(
-          key: const Key('SingleChildScrollView-mobile-responsive'),
-          child: Column(
-            children: [
-              pageTitleWidget,
-              const NonlinearDataInput(),
-              const NonlinearResults(),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 50,
+    return LayoutBuilder(
+      builder: (context, size) {
+        if (size.maxWidth <= doubleColumnPageBreakpoint) {
+          // For mobile devices - all in a column
+          return SingleChildScrollView(
+            key: const Key('SingleChildScrollView-mobile-responsive'),
+            child: Column(
+              children: [
+                pageTitleWidget,
+                const NonlinearDataInput(),
+                const NonlinearResults(),
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 50,
+                  ),
+                  child: _NonlinearPlot(),
                 ),
-                child: _NonlinearPlot(),
-              ),
-            ],
-          ),
-        );
-      }
+              ],
+            ),
+          );
+        }
 
-      // For wider screens - plot on the right and results on the right
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          // Input and results
-          SizedBox(
-            width: size.maxWidth / 3,
-            height: double.infinity,
-            child: Center(
-              child: SingleChildScrollView(
-                key: const Key('SingleChildScrollView-desktop-responsive'),
-                child: Column(
-                  children: [
-                    pageTitleWidget,
-                    const NonlinearDataInput(),
-                    const NonlinearResults(),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                  ],
+        // For wider screens - plot on the right and results on the right
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // Input and results
+            SizedBox(
+              width: size.maxWidth / 3,
+              height: double.infinity,
+              child: Center(
+                child: SingleChildScrollView(
+                  key: const Key('SingleChildScrollView-desktop-responsive'),
+                  child: Column(
+                    children: [
+                      pageTitleWidget,
+                      const NonlinearDataInput(),
+                      const NonlinearResults(),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // Plot
-          SizedBox(
-            width: size.maxWidth / 2.3,
-            height: double.infinity,
-            child: const _NonlinearPlot(),
-          ),
-        ],
-      );
-    });
+            // Plot
+            SizedBox(
+              width: size.maxWidth / 2.3,
+              height: double.infinity,
+              child: const _NonlinearPlot(),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -181,7 +183,7 @@ class _NonlinearPlot extends StatelessWidget {
 /// A wrapper of [PageTitle] placed above a [PlotWidget].
 class _PlotTitle extends StatelessWidget {
   /// Creates a [_PlotTitle] widget.
-  const _PlotTitle({Key? key}) : super(key: key);
+  const _PlotTitle({super.key});
 
   @override
   Widget build(BuildContext context) {

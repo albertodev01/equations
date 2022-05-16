@@ -12,7 +12,7 @@ void main() {
 
     blocTest<ExpansionCubit, bool>(
       'Making sure that the bloc emits states',
-      build: () => ExpansionCubit(),
+      build: ExpansionCubit.new,
       act: (cubit) => cubit
         ..toggle()
         ..toggle()

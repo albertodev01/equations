@@ -9,11 +9,13 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'ComplexResultCard' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: ComplexResultCard(
-          value: Complex(5, -3),
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: ComplexResultCard(
+            value: Complex(5, -3),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(ComplexResultCard), findsOneWidget);
       expect(find.text('5.00000000 - 3.00000000i'), findsOneWidget);

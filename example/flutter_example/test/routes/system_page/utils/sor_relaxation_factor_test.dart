@@ -10,12 +10,14 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'RelaxationFactorInput' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: SystemDropdownItems.sor.asString(),
-        child: RelaxationFactorInput(
-          textEditingController: TextEditingController(),
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: SystemDropdownItems.sor.asString(),
+          child: RelaxationFactorInput(
+            textEditingController: TextEditingController(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(RelaxationFactorInput), findsOneWidget);
       expect(find.byType(SystemInputField), findsOneWidget);
@@ -25,12 +27,14 @@ void main() {
       'Making sure that the widget does NOT show an input field '
       "when the system solving algorithm isn't SOR",
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          dropdownInitial: SystemDropdownItems.lu.asString(),
-          child: RelaxationFactorInput(
-            textEditingController: TextEditingController(),
+        await tester.pumpWidget(
+          MockWrapper(
+            dropdownInitial: SystemDropdownItems.lu.asString(),
+            child: RelaxationFactorInput(
+              textEditingController: TextEditingController(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(RelaxationFactorInput), findsOneWidget);
         expect(find.byType(SystemInputField), findsNothing);

@@ -26,12 +26,14 @@ void main() {
 
   group("Testing the 'PolynomialResults' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<SystemBloc>(
-          create: (_) => SystemBloc(SystemType.rowReduction),
-          child: const SystemResults(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<SystemBloc>(
+            create: (_) => SystemBloc(SystemType.rowReduction),
+            child: const SystemResults(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(SystemResults), findsOneWidget);
       expect(find.byType(SectionTitle), findsOneWidget);
@@ -43,12 +45,14 @@ void main() {
       (tester) async {
         when(() => systemBloc.state).thenReturn(const SystemError());
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SystemBloc>.value(
-            value: systemBloc,
-            child: const SystemResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<SystemBloc>.value(
+              value: systemBloc,
+              child: const SystemResults(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(ListView), findsNothing);
         expect(find.byType(NoResults), findsOneWidget);
@@ -61,12 +65,14 @@ void main() {
       (tester) async {
         when(() => systemBloc.state).thenReturn(const SingularSystemError());
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SystemBloc>.value(
-            value: systemBloc,
-            child: const SystemResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<SystemBloc>.value(
+              value: systemBloc,
+              child: const SystemResults(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(ListView), findsNothing);
         expect(find.byType(NoResults), findsOneWidget);
@@ -86,17 +92,21 @@ void main() {
           knownValues: [-3, 5],
         );
 
-        when(() => systemBloc.state).thenReturn(SystemGuesses(
-          solution: solver.solve(),
-          systemSolver: solver,
-        ));
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SystemBloc>.value(
-            value: systemBloc,
-            child: const SystemResults(),
+        when(() => systemBloc.state).thenReturn(
+          SystemGuesses(
+            solution: solver.solve(),
+            systemSolver: solver,
           ),
-        ));
+        );
+
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<SystemBloc>.value(
+              value: systemBloc,
+              child: const SystemResults(),
+            ),
+          ),
+        );
 
         expect(find.byType(ListView), findsOneWidget);
         expect(find.byType(NoResults), findsNothing);
@@ -119,12 +129,14 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SystemBloc>.value(
-            value: systemBloc,
-            child: const SystemResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<SystemBloc>.value(
+              value: systemBloc,
+              child: const SystemResults(),
+            ),
           ),
-        ));
+        );
 
         // Refreshing to make the Snackbar appear
         await tester.pumpAndSettle();
@@ -148,12 +160,14 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<SystemBloc>.value(
-            value: systemBloc,
-            child: const SystemResults(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<SystemBloc>.value(
+              value: systemBloc,
+              child: const SystemResults(),
+            ),
           ),
-        ));
+        );
 
         // Refreshing to make the Snackbar appear
         await tester.pumpAndSettle();
@@ -172,10 +186,12 @@ void main() {
         knownValues: [-3, 5],
       );
 
-      when(() => systemBloc.state).thenReturn(SystemGuesses(
-        solution: solver.solve(),
-        systemSolver: solver,
-      ));
+      when(() => systemBloc.state).thenReturn(
+        SystemGuesses(
+          solution: solver.solve(),
+          systemSolver: solver,
+        ),
+      );
 
       final widget = BlocProvider<SystemBloc>.value(
         value: systemBloc,

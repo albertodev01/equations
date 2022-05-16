@@ -10,22 +10,26 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'GoBackButton' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: Scaffold(
-          body: GoBackButton(),
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: Scaffold(
+            body: GoBackButton(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(IconButton), findsOneWidget);
     });
 
     testWidgets('Making sure that the button can be tapped', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: Scaffold(
-          body: HomePage(),
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: Scaffold(
+            body: HomePage(),
+          ),
         ),
-      ));
+      );
 
       // Opening a page
       await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));

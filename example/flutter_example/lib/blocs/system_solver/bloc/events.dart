@@ -28,14 +28,10 @@ abstract class SystemEvent extends Equatable {
 class RowReductionMethod extends SystemEvent {
   /// Creates a [RowReductionMethod] type.
   const RowReductionMethod({
-    required List<String> matrix,
-    required List<String> knownValues,
-    required int size,
-  }) : super(
-          matrix: matrix,
-          knownValues: knownValues,
-          size: size,
-        );
+    required super.matrix,
+    required super.knownValues,
+    required super.size,
+  });
 
   /// Tries to return a [RowReductionMethods] value from a string value.
   static RowReductionMethods resolve(String name) {
@@ -57,15 +53,11 @@ class FactorizationMethod extends SystemEvent {
 
   /// Creates a [FactorizationMethod] type.
   const FactorizationMethod({
-    required List<String> matrix,
-    required List<String> knownValues,
-    required int size,
+    required super.matrix,
+    required super.knownValues,
+    required super.size,
     this.method = FactorizationMethods.lu,
-  }) : super(
-          matrix: matrix,
-          knownValues: knownValues,
-          size: size,
-        );
+  });
 
   @override
   List<Object?> get props => [
@@ -112,19 +104,15 @@ class IterativeMethod extends SystemEvent {
 
   /// Creates a [IterativeMethod] type.
   const IterativeMethod({
-    required List<String> matrix,
-    required List<String> knownValues,
-    required int size,
+    required super.matrix,
+    required super.knownValues,
+    required super.size,
     this.method = IterativeMethods.sor,
     this.w = '1',
     this.jacobiInitialVector = const [],
     this.precision = 1.0e-10,
     this.maxSteps = 20,
-  }) : super(
-          matrix: matrix,
-          knownValues: knownValues,
-          size: size,
-        );
+  });
 
   @override
   List<Object?> get props => [

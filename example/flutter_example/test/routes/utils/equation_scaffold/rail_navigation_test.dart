@@ -21,24 +21,26 @@ void main() {
 
   group("Testing the 'RailNavigation' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NavigationCubit>(
-          create: (_) => NavigationCubit(),
-          child: RailNavigation(
-            tabController: controller,
-            navigationItems: const [
-              NavigationItem(
-                title: 'Test',
-                content: SizedBox(),
-              ),
-              NavigationItem(
-                title: 'Test',
-                content: SizedBox(),
-              ),
-            ],
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<NavigationCubit>(
+            create: (_) => NavigationCubit(),
+            child: RailNavigation(
+              tabController: controller,
+              navigationItems: const [
+                NavigationItem(
+                  title: 'Test',
+                  content: SizedBox(),
+                ),
+                NavigationItem(
+                  title: 'Test',
+                  content: SizedBox(),
+                ),
+              ],
+            ),
           ),
         ),
-      ));
+      );
 
       final finder = find.byType(RailNavigation);
       expect(finder, findsOneWidget);

@@ -11,12 +11,14 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'ComplexAnalyzerInput' widget", () {
     testWidgets('Making sure that the widget renders', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<OtherBloc>(
-          create: (_) => OtherBloc(),
-          child: const ComplexAnalyzerInput(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<OtherBloc>(
+            create: (_) => OtherBloc(),
+            child: const ComplexAnalyzerInput(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(ComplexAnalyzerInput), findsOneWidget);
       expect(find.byType(ComplexNumberInput), findsOneWidget);
@@ -27,12 +29,14 @@ void main() {
       'Making sure that when trying to evaluate a complex number, if at least '
       'one of the inputs is wrong, a snackbar appears',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>(
-            create: (_) => OtherBloc(),
-            child: const ComplexAnalyzerInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<OtherBloc>(
+              create: (_) => OtherBloc(),
+              child: const ComplexAnalyzerInput(),
+            ),
           ),
-        ));
+        );
 
         // Entering some text
         const realKey = Key('ComplexNumberInput-TextFormField-RealPart');
@@ -63,18 +67,20 @@ void main() {
         late FocusScopeNode focusScope;
         final bloc = OtherBloc();
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>.value(
-            value: bloc,
-            child: Builder(
-              builder: (context) {
-                focusScope = FocusScope.of(context);
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<OtherBloc>.value(
+              value: bloc,
+              child: Builder(
+                builder: (context) {
+                  focusScope = FocusScope.of(context);
 
-                return const ComplexAnalyzerInput();
-              },
+                  return const ComplexAnalyzerInput();
+                },
+              ),
             ),
           ),
-        ));
+        );
 
         expect(bloc.state, equals(const OtherNone()));
 

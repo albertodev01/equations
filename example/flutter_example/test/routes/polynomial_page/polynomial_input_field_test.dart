@@ -10,12 +10,14 @@ void main() {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       final controller = TextEditingController();
 
-      await tester.pumpWidget(MockWrapper(
-        child: PolynomialInputField(
-          controller: controller,
-          placeholder: 'Demo',
+      await tester.pumpWidget(
+        MockWrapper(
+          child: PolynomialInputField(
+            controller: controller,
+            placeholder: 'Demo',
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(PolynomialInputField), findsOneWidget);
       expect(find.byType(TextFormField), findsOneWidget);
@@ -27,12 +29,14 @@ void main() {
       (tester) async {
         final controller = TextEditingController();
 
-        await tester.pumpWidget(MockWrapper(
-          child: PolynomialInputField(
-            controller: controller,
-            placeholder: 'Demo',
+        await tester.pumpWidget(
+          MockWrapper(
+            child: PolynomialInputField(
+              controller: controller,
+              placeholder: 'Demo',
+            ),
           ),
-        ));
+        );
 
         final finder =
             find.byKey(const Key('PolynomialInputField-TextFormField'));

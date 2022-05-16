@@ -8,23 +8,27 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'RealResultCard' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: RealResultCard(
-          value: 0.5,
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: RealResultCard(
+            value: 0.5,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(RealResultCard), findsOneWidget);
       expect(find.byKey(const Key('Fraction-ResultCard')), findsOneWidget);
     });
 
     testWidgets('Making sure that the fraction can be hidden', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: RealResultCard(
-          value: 0.5,
-          withFraction: false,
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: RealResultCard(
+            value: 0.5,
+            withFraction: false,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(RealResultCard), findsOneWidget);
       expect(find.byKey(const Key('Fraction-ResultCard')), findsNothing);
@@ -34,11 +38,13 @@ void main() {
       "Making sure that when the value is 'NaN', an error message "
       'actually appears',
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: RealResultCard(
-            value: double.nan,
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: RealResultCard(
+              value: double.nan,
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(RealResultCard), findsOneWidget);
         expect(find.text('Not computed'), findsOneWidget);

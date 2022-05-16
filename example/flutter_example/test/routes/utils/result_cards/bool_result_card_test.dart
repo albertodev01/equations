@@ -8,12 +8,14 @@ import '../../mock_wrapper.dart';
 void main() {
   group("Testing the 'BoolResultCard' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: BoolResultCard(
-          leading: 'Test: ',
-          value: true,
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: BoolResultCard(
+            leading: 'Test: ',
+            value: true,
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(BoolResultCard), findsOneWidget);
       expect(find.text('Test: Yes'), findsOneWidget);

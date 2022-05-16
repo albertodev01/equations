@@ -27,9 +27,11 @@ void main() {
     blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that the bloc handles errors',
       build: () => PolynomialBloc(PolynomialType.linear),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialError(),
     );
@@ -37,9 +39,11 @@ void main() {
     blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that the bloc handles invalid polynomial types',
       build: () => PolynomialBloc(PolynomialType.linear),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['0', '1'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['0', '1'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialError(),
     );
@@ -48,9 +52,11 @@ void main() {
       'Making sure that an exception is thrown if the type of polynomial is '
       "'Linear' and the params list length is not 2",
       build: () => PolynomialBloc(PolynomialType.linear),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialNone(),
     );
@@ -59,9 +65,11 @@ void main() {
       'Making sure that an exception is thrown if the type of polynomial is '
       "'Linear' and the params list length is not 3",
       build: () => PolynomialBloc(PolynomialType.quadratic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialNone(),
     );
@@ -70,9 +78,11 @@ void main() {
       'Making sure that an exception is thrown if the type of polynomial is '
       "'Linear' and the params list length is not 4",
       build: () => PolynomialBloc(PolynomialType.cubic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2', '3'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2', '3'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialNone(),
     );
@@ -81,9 +91,11 @@ void main() {
       'Making sure that an exception is thrown if the type of polynomial is '
       "'Linear' and the params list length is not 5",
       build: () => PolynomialBloc(PolynomialType.quartic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2', '3', '4'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2', '3', '4'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialNone(),
     );
@@ -92,9 +104,11 @@ void main() {
       'Making sure that an exception is thrown if one (or more) coefficients '
       'are malformed strings',
       build: () => PolynomialBloc(PolynomialType.quadratic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['x', 'x', 'x'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['x', 'x', 'x'],
+        ),
+      ),
       expect: () => const [PolynomialError()],
       verify: (bloc) => bloc.state == const PolynomialNone(),
     );
@@ -102,9 +116,11 @@ void main() {
     blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that linear polynomials can be solved',
       build: () => PolynomialBloc(PolynomialType.linear),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2'],
+        ),
+      ),
       verify: (bloc) {
         // Making sure that results are yielded
         expect(bloc.state, isA<PolynomialRoots>());
@@ -125,9 +141,11 @@ void main() {
     blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that quadratic polynomials can be solved',
       build: () => PolynomialBloc(PolynomialType.quadratic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2', '3'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2', '3'],
+        ),
+      ),
       verify: (bloc) {
         // Making sure that results are yielded
         expect(bloc.state, isA<PolynomialRoots>());
@@ -149,9 +167,11 @@ void main() {
     blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that cubic polynomials can be solved',
       build: () => PolynomialBloc(PolynomialType.cubic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2', '3', '4'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2', '3', '4'],
+        ),
+      ),
       verify: (bloc) {
         // Making sure that results are yielded
         expect(bloc.state, isA<PolynomialRoots>());
@@ -174,9 +194,11 @@ void main() {
     blocTest<PolynomialBloc, PolynomialState>(
       'Making sure that quartic polynomials can be solved',
       build: () => PolynomialBloc(PolynomialType.quartic),
-      act: (bloc) => bloc.add(const PolynomialSolve(
-        coefficients: ['1', '2', '3', '4', '5'],
-      )),
+      act: (bloc) => bloc.add(
+        const PolynomialSolve(
+          coefficients: ['1', '2', '3', '4', '5'],
+        ),
+      ),
       verify: (bloc) {
         // Making sure that results are yielded
         expect(bloc.state, isA<PolynomialRoots>());

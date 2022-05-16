@@ -34,12 +34,14 @@ void main() {
 
   group("Testing the 'ComplexNumberAnalyzerResult' widget", () {
     testWidgets('Making sure that the widget renders', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<OtherBloc>(
-          create: (_) => OtherBloc(),
-          child: const ComplexNumberAnalyzerResult(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: BlocProvider<OtherBloc>(
+            create: (_) => OtherBloc(),
+            child: const ComplexNumberAnalyzerResult(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(ComplexNumberAnalyzerResult), findsOneWidget);
       expect(find.byType(RealResultCard), findsNothing);
@@ -50,12 +52,14 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(const OtherLoading());
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>.value(
-            value: bloc,
-            child: const ComplexNumberAnalyzerResult(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<OtherBloc>.value(
+              value: bloc,
+              child: const ComplexNumberAnalyzerResult(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         expect(find.byType(RealResultCard), findsNothing);
@@ -67,14 +71,16 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(mockResult);
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>.value(
-            value: bloc,
-            child: const SingleChildScrollView(
-              child: ComplexNumberAnalyzerResult(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<OtherBloc>.value(
+              value: bloc,
+              child: const SingleChildScrollView(
+                child: ComplexNumberAnalyzerResult(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byType(Wrap),
@@ -90,14 +96,16 @@ void main() {
 
         when(() => bloc.state).thenReturn(mockResult);
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>.value(
-            value: bloc,
-            child: const SingleChildScrollView(
-              child: ComplexNumberAnalyzerResult(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<OtherBloc>.value(
+              value: bloc,
+              child: const SingleChildScrollView(
+                child: ComplexNumberAnalyzerResult(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(
           find.byType(Wrap),
@@ -111,14 +119,16 @@ void main() {
       (tester) async {
         when(() => bloc.state).thenReturn(mockResult);
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>.value(
-            value: bloc,
-            child: const SingleChildScrollView(
-              child: ComplexNumberAnalyzerResult(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: BlocProvider<OtherBloc>.value(
+              value: bloc,
+              child: const SingleChildScrollView(
+                child: ComplexNumberAnalyzerResult(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(find.byType(CircularProgressIndicator), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(5));
@@ -130,25 +140,29 @@ void main() {
       final builder = GoldenBuilder.column()
         ..addScenario(
           'No results',
-          Builder(builder: (context) {
-            when(() => bloc.state).thenReturn(const OtherNone());
+          Builder(
+            builder: (context) {
+              when(() => bloc.state).thenReturn(const OtherNone());
 
-            return BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const ComplexNumberAnalyzerResult(),
-            );
-          }),
+              return BlocProvider<OtherBloc>.value(
+                value: bloc,
+                child: const ComplexNumberAnalyzerResult(),
+              );
+            },
+          ),
         )
         ..addScenario(
           'Results',
-          Builder(builder: (context) {
-            when(() => bloc.state).thenReturn(mockResult);
+          Builder(
+            builder: (context) {
+              when(() => bloc.state).thenReturn(mockResult);
 
-            return BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const ComplexNumberAnalyzerResult(),
-            );
-          }),
+              return BlocProvider<OtherBloc>.value(
+                value: bloc,
+                child: const ComplexNumberAnalyzerResult(),
+              );
+            },
+          ),
         );
 
       await tester.pumpWidgetBuilder(

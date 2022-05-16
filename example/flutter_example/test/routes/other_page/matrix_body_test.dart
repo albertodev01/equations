@@ -12,19 +12,21 @@ import '../mock_wrapper.dart';
 void main() {
   group("Testing the 'MatrixOtherBody' widget", () {
     testWidgets('Making sure that the widget renders', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NumberSwitcherCubit>(
-              create: (_) => NumberSwitcherCubit(min: 2, max: 5),
-            ),
-            BlocProvider<OtherBloc>(
-              create: (_) => OtherBloc(),
-            ),
-          ],
-          child: const MatrixOtherBody(),
+      await tester.pumpWidget(
+        MockWrapper(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<NumberSwitcherCubit>(
+                create: (_) => NumberSwitcherCubit(min: 2, max: 5),
+              ),
+              BlocProvider<OtherBloc>(
+                create: (_) => OtherBloc(),
+              ),
+            ],
+            child: const MatrixOtherBody(),
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(MatrixOtherBody), findsOneWidget);
       expect(find.byType(GoBackButton), findsOneWidget);

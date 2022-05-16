@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// to be analyzed.
 class MatrixAnalyzerInput extends StatefulWidget {
   /// Creates a [MatrixAnalyzerInput] widget.
-  const MatrixAnalyzerInput({Key? key}) : super(key: key);
+  const MatrixAnalyzerInput({super.key});
 
   @override
   State<MatrixAnalyzerInput> createState() => _MatrixAnalyzerInputState();
@@ -70,10 +70,12 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
       }).toList();
 
       // Analyze the input
-      bloc.add(MatrixAnalyze(
-        matrix: matrixInputs,
-        size: size,
-      ));
+      bloc.add(
+        MatrixAnalyze(
+          matrix: matrixInputs,
+          size: size,
+        ),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

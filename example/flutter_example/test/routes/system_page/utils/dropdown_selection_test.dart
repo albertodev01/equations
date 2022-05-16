@@ -57,15 +57,17 @@ void main() {
         when(() => systemBloc.systemType).thenReturn(SystemType.rowReduction);
         when(() => dropdownCubit.state).thenReturn('');
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: systemBloc),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDropdownSelection(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: systemBloc),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDropdownSelection(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(SystemDropdownSelection), findsOneWidget);
         expect(
@@ -83,15 +85,17 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(SystemDropdownItems.lu.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: systemBloc),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDropdownSelection(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: systemBloc),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDropdownSelection(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(SystemDropdownSelection), findsOneWidget);
         expect(
@@ -110,15 +114,17 @@ void main() {
         when(() => dropdownCubit.state)
             .thenReturn(SystemDropdownItems.sor.asString());
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>.value(value: systemBloc),
-              BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-            ],
-            child: const SystemDropdownSelection(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>.value(value: systemBloc),
+                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+              ],
+              child: const SystemDropdownSelection(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(SystemDropdownSelection), findsOneWidget);
         expect(
@@ -136,21 +142,23 @@ void main() {
           initialValue: SystemDropdownItems.lu.asString(),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<SystemBloc>(
-                create: (_) => SystemBloc(SystemType.factorization),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SystemBloc>(
+                  create: (_) => SystemBloc(SystemType.factorization),
+                ),
+                BlocProvider<DropdownCubit>.value(
+                  value: cubit,
+                ),
+              ],
+              child: const Scaffold(
+                body: SystemDropdownSelection(),
               ),
-              BlocProvider<DropdownCubit>.value(
-                value: cubit,
-              ),
-            ],
-            child: const Scaffold(
-              body: SystemDropdownSelection(),
             ),
           ),
-        ));
+        );
 
         expect(cubit.state, equals('LU'));
         await tester.tap(find.text('LU'));

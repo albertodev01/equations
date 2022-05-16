@@ -12,7 +12,7 @@ void main() {
 
     blocTest<NavigationCubit, int>(
       'Making sure that the bloc emits states',
-      build: () => NavigationCubit(),
+      build: NavigationCubit.new,
       act: (cubit) => cubit
         ..pageIndex(1)
         ..pageIndex(2),

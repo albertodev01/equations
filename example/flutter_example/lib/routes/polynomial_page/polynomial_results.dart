@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// The results of the polynomial equations.
 class PolynomialResults extends StatelessWidget {
   /// Creates a [PolynomialResults] widget.
-  const PolynomialResults({Key? key}) : super(key: key);
+  const PolynomialResults({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class _PolynomialSolutions extends StatelessWidget {
 @visibleForTesting
 class PolynomialDiscriminant extends StatelessWidget {
   /// Creates a [PolynomialDiscriminant] widget.
-  const PolynomialDiscriminant({Key? key}) : super(key: key);
+  const PolynomialDiscriminant({super.key});
 
   @override
   Widget build(BuildContext context) {

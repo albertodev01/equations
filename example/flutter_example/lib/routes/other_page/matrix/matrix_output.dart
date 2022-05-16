@@ -20,11 +20,11 @@ class MatrixOutput extends StatefulWidget {
 
   /// Creates a [MatrixOutput] widget.
   const MatrixOutput({
-    Key? key,
+    super.key,
     required this.matrix,
     required this.description,
     this.decimalDigits = 2,
-  }) : super(key: key);
+  });
 
   @override
   _MatrixOutputState createState() => _MatrixOutputState();
@@ -54,29 +54,33 @@ class _MatrixOutputState extends State<MatrixOutput> {
 
       for (var j = 0; j < widget.matrix.columnCount; ++j) {
         final value = widget.matrix(i, j);
-        children.add(Padding(
-          padding: const EdgeInsets.all(5),
-          child: TextFormField(
-            readOnly: true,
-            initialValue: value.toStringAsFixed(widget.decimalDigits),
-            textAlign: TextAlign.center,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
+        children.add(
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: TextFormField(
+              readOnly: true,
+              initialValue: value.toStringAsFixed(widget.decimalDigits),
+              textAlign: TextAlign.center,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
                 ),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 3,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 3,
+                ),
               ),
             ),
           ),
-        ));
+        );
       }
 
-      rows.add(TableRow(
-        children: children,
-      ));
+      rows.add(
+        TableRow(
+          children: children,
+        ),
+      );
     }
 
     return rows;

@@ -42,212 +42,230 @@ void main() {
 
       expect(
         matrix,
-        equals(AnalyzedMatrix(
-          determinant: 1,
-          eigenvalues: const [Complex.fromReal(1)],
-          characteristicPolynomial: Algebraic.fromReal([2]),
-          rank: 1,
-          trace: 1,
-          transpose: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
+        equals(
+          AnalyzedMatrix(
+            determinant: 1,
+            eigenvalues: const [Complex.fromReal(1)],
+            characteristicPolynomial: Algebraic.fromReal([2]),
+            rank: 1,
+            trace: 1,
+            transpose: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            cofactorMatrix: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            inverse: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            isIdentity: true,
+            isDiagonal: true,
+            isSymmetric: false,
           ),
-          cofactorMatrix: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          inverse: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          isIdentity: true,
-          isDiagonal: true,
-          isSymmetric: false,
-        )),
+        ),
       );
 
       expect(
         matrix,
-        isNot(AnalyzedMatrix(
-          determinant: 2,
-          eigenvalues: const [Complex.fromReal(1)],
-          characteristicPolynomial: Algebraic.fromReal([2]),
-          rank: 1,
-          trace: 1,
-          transpose: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
+        isNot(
+          AnalyzedMatrix(
+            determinant: 2,
+            eigenvalues: const [Complex.fromReal(1)],
+            characteristicPolynomial: Algebraic.fromReal([2]),
+            rank: 1,
+            trace: 1,
+            transpose: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            cofactorMatrix: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            inverse: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            isIdentity: true,
+            isDiagonal: true,
+            isSymmetric: false,
           ),
-          cofactorMatrix: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          inverse: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          isIdentity: true,
-          isDiagonal: true,
-          isSymmetric: false,
-        )),
+        ),
       );
 
       expect(
         matrix,
-        isNot(AnalyzedMatrix(
-          determinant: 1,
-          eigenvalues: const [Complex.fromReal(2)],
-          characteristicPolynomial: Algebraic.fromReal([2]),
-          rank: 1,
-          trace: 1,
-          transpose: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
+        isNot(
+          AnalyzedMatrix(
+            determinant: 1,
+            eigenvalues: const [Complex.fromReal(2)],
+            characteristicPolynomial: Algebraic.fromReal([2]),
+            rank: 1,
+            trace: 1,
+            transpose: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            cofactorMatrix: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            inverse: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            isIdentity: true,
+            isDiagonal: true,
+            isSymmetric: false,
           ),
-          cofactorMatrix: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          inverse: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          isIdentity: true,
-          isDiagonal: true,
-          isSymmetric: false,
-        )),
+        ),
       );
 
       expect(
         matrix,
-        isNot(AnalyzedMatrix(
-          determinant: 2,
-          eigenvalues: const [Complex.fromReal(1)],
-          characteristicPolynomial: Algebraic.fromReal([1]),
-          rank: 1,
-          trace: 1,
-          transpose: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
+        isNot(
+          AnalyzedMatrix(
+            determinant: 2,
+            eigenvalues: const [Complex.fromReal(1)],
+            characteristicPolynomial: Algebraic.fromReal([1]),
+            rank: 1,
+            trace: 1,
+            transpose: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            cofactorMatrix: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            inverse: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            isIdentity: true,
+            isDiagonal: true,
+            isSymmetric: false,
           ),
-          cofactorMatrix: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          inverse: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          isIdentity: true,
-          isDiagonal: true,
-          isSymmetric: false,
-        )),
+        ),
       );
 
       expect(
         matrix,
-        isNot(AnalyzedMatrix(
-          determinant: 2,
-          eigenvalues: const [Complex.fromReal(1)],
-          characteristicPolynomial: Algebraic.fromReal([2]),
-          rank: 1,
-          trace: 1,
-          transpose: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
+        isNot(
+          AnalyzedMatrix(
+            determinant: 2,
+            eigenvalues: const [Complex.fromReal(1)],
+            characteristicPolynomial: Algebraic.fromReal([2]),
+            rank: 1,
+            trace: 1,
+            transpose: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            cofactorMatrix: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 1,
+            ),
+            inverse: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            isIdentity: true,
+            isDiagonal: true,
+            isSymmetric: false,
           ),
-          cofactorMatrix: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 1,
-          ),
-          inverse: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          isIdentity: true,
-          isDiagonal: true,
-          isSymmetric: false,
-        )),
+        ),
       );
 
       expect(
         matrix,
-        isNot(AnalyzedMatrix(
-          determinant: 1,
-          eigenvalues: const [Complex.fromReal(1)],
-          characteristicPolynomial: Algebraic.fromReal([2]),
-          rank: 1,
-          trace: 1,
-          transpose: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
+        isNot(
+          AnalyzedMatrix(
+            determinant: 1,
+            eigenvalues: const [Complex.fromReal(1)],
+            characteristicPolynomial: Algebraic.fromReal([2]),
+            rank: 1,
+            trace: 1,
+            transpose: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            cofactorMatrix: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            inverse: RealMatrix.diagonal(
+              rows: 1,
+              columns: 1,
+              diagonalValue: 0,
+            ),
+            isIdentity: true,
+            isDiagonal: false,
+            isSymmetric: false,
           ),
-          cofactorMatrix: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          inverse: RealMatrix.diagonal(
-            rows: 1,
-            columns: 1,
-            diagonalValue: 0,
-          ),
-          isIdentity: true,
-          isDiagonal: false,
-          isSymmetric: false,
-        )),
+        ),
       );
 
       expect(
         complex,
-        equals(const AnalyzedComplexNumber(
-          polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
-          sqrt: Complex.fromReal(1),
-          reciprocal: Complex.fromReal(2),
-          conjugate: Complex.fromReal(3),
-          phase: 1,
-          abs: 2,
-        )),
+        equals(
+          const AnalyzedComplexNumber(
+            polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
+            sqrt: Complex.fromReal(1),
+            reciprocal: Complex.fromReal(2),
+            conjugate: Complex.fromReal(3),
+            phase: 1,
+            abs: 2,
+          ),
+        ),
       );
 
       expect(
         complex,
-        isNot(const AnalyzedComplexNumber(
-          polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
-          sqrt: Complex.fromReal(1),
-          reciprocal: Complex.fromReal(1),
-          conjugate: Complex.fromReal(3),
-          phase: 1,
-          abs: 2,
-        )),
+        isNot(
+          const AnalyzedComplexNumber(
+            polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
+            sqrt: Complex.fromReal(1),
+            reciprocal: Complex.fromReal(1),
+            conjugate: Complex.fromReal(3),
+            phase: 1,
+            abs: 2,
+          ),
+        ),
       );
 
       expect(
         complex,
-        isNot(const AnalyzedComplexNumber(
-          polarComplex: PolarComplex(r: 1, phiRadians: 2, phiDegrees: 1),
-          sqrt: Complex.fromReal(1),
-          reciprocal: Complex.fromReal(2),
-          conjugate: Complex.fromReal(3),
-          phase: 1,
-          abs: 2,
-        )),
+        isNot(
+          const AnalyzedComplexNumber(
+            polarComplex: PolarComplex(r: 1, phiRadians: 2, phiDegrees: 1),
+            sqrt: Complex.fromReal(1),
+            reciprocal: Complex.fromReal(2),
+            conjugate: Complex.fromReal(3),
+            phase: 1,
+            abs: 2,
+          ),
+        ),
       );
 
       expect(

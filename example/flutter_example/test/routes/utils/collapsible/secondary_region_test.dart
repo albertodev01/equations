@@ -9,12 +9,14 @@ void main() {
     testWidgets(
       "Making sure SecondaryRegion 'SecondaryRegion' can be rendered",
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: SecondaryRegion(
-            heightBetweenRegions: 10,
-            child: Container(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SecondaryRegion(
+              heightBetweenRegions: 10,
+              child: Container(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(SecondaryRegion), findsOneWidget);
         expect(find.byType(Column), findsOneWidget);

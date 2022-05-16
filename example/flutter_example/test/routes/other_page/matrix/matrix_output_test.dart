@@ -11,12 +11,15 @@ void main() {
     testWidgets(
       'Making sure that the widget renders ',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: MatrixOutput(
-            matrix: RealMatrix.diagonal(rows: 2, columns: 2, diagonalValue: 3),
-            description: 'Demo',
+        await tester.pumpWidget(
+          MockWrapper(
+            child: MatrixOutput(
+              matrix:
+                  RealMatrix.diagonal(rows: 2, columns: 2, diagonalValue: 3),
+              description: 'Demo',
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(MatrixOutput), findsOneWidget);
         expect(find.text('Demo'), findsOneWidget);
@@ -30,33 +33,35 @@ void main() {
       (tester) async {
         var matrixSize = 2;
 
-        await tester.pumpWidget(MockWrapper(
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  MatrixOutput(
-                    matrix: RealMatrix.diagonal(
-                      rows: matrixSize,
-                      columns: matrixSize,
-                      diagonalValue: 3,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MatrixOutput(
+                      matrix: RealMatrix.diagonal(
+                        rows: matrixSize,
+                        columns: matrixSize,
+                        diagonalValue: 3,
+                      ),
+                      description: 'Demo',
                     ),
-                    description: 'Demo',
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        matrixSize = matrixSize == 2 ? 3 : 2;
-                      });
-                    },
-                    child: const Text('Rebuild'),
-                  ),
-                ],
-              );
-            },
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          matrixSize = matrixSize == 2 ? 3 : 2;
+                        });
+                      },
+                      child: const Text('Rebuild'),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
-        ));
+        );
 
         expect(find.byType(TextFormField), findsNWidgets(4));
 

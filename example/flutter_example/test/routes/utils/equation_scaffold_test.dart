@@ -26,11 +26,13 @@ void main() {
     testWidgets(
       'Making sure that the scaffold can be rendered',
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: EquationScaffold(
-            body: SizedBox(),
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: EquationScaffold(
+              body: SizedBox(),
+            ),
           ),
-        ));
+        );
 
         expect(find.byKey(const Key('ScaffoldBackground')), findsOneWidget);
         expect(find.byKey(const Key('ScaffoldExtraBackground')), findsNothing);
@@ -48,11 +50,13 @@ void main() {
     testWidgets(
       'Making sure that the navigation scaffold can be rendered',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: EquationScaffold.navigation(
-            navigationItems: navigationItems,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: EquationScaffold.navigation(
+              navigationItems: navigationItems,
+            ),
           ),
-        ));
+        );
 
         expect(find.byKey(const Key('ScaffoldBackground')), findsOneWidget);
         expect(find.byKey(const Key('ScaffoldExtraBackground')), findsNothing);
@@ -74,11 +78,13 @@ void main() {
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-        await tester.pumpWidget(MockWrapper(
-          child: EquationScaffold.navigation(
-            navigationItems: navigationItems,
+        await tester.pumpWidget(
+          MockWrapper(
+            child: EquationScaffold.navigation(
+              navigationItems: navigationItems,
+            ),
           ),
-        ));
+        );
 
         expect(
           find.byKey(const Key('ScaffoldBackground')),

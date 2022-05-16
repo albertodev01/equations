@@ -28,9 +28,11 @@ void main() {
 
   group("Testing the 'PlotWidget' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: plotWidget,
-      ));
+      await tester.pumpWidget(
+        MockWrapper(
+          child: plotWidget,
+        ),
+      );
 
       expect(find.byType(Slider), findsOneWidget);
       expect(find.byType(ClipRRect), findsOneWidget);

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// route the user to the desired pages.
 class HomeContents extends StatelessWidget {
   /// Creates a [HomeContents] widget.
-  const HomeContents({Key? key}) : super(key: key);
+  const HomeContents({super.key});
 
   @override
   Widget build(BuildContext context) {

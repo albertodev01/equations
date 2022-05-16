@@ -49,10 +49,12 @@ void main() {
       when(() => dropdownCubit.state)
           .thenReturn(SystemDropdownItems.lu.asString());
 
-      await tester.pumpWidget(MockWrapper(
-        dropdownInitial: SystemDropdownItems.lu.asString(),
-        child: widgetWithMocks,
-      ));
+      await tester.pumpWidget(
+        MockWrapper(
+          dropdownInitial: SystemDropdownItems.lu.asString(),
+          child: widgetWithMocks,
+        ),
+      );
 
       expect(find.byType(SystemDataInput), findsOneWidget);
       expect(find.byType(SizePicker), findsOneWidget);
@@ -76,26 +78,28 @@ void main() {
 
         final bloc = SystemBloc(SystemType.factorization);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: Builder(
-                builder: (context) {
-                  focusScope = FocusScope.of(context);
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: Builder(
+                  builder: (context) {
+                    focusScope = FocusScope.of(context);
 
-                  return const SystemDataInput();
-                },
+                    return const SystemDataInput();
+                  },
+                ),
               ),
             ),
           ),
-        ));
+        );
 
         expect(bloc.state, equals(const SystemNone()));
 
@@ -131,20 +135,22 @@ void main() {
 
         final bloc = SystemBloc(SystemType.rowReduction);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Filling the matrix with some data
         final widget = find.byType(SystemDataInput);
@@ -180,20 +186,22 @@ void main() {
 
         final bloc = SystemBloc(SystemType.factorization);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Filling the matrix with some data
         final widget = find.byType(SystemDataInput);
@@ -229,20 +237,22 @@ void main() {
 
         final bloc = SystemBloc(SystemType.factorization);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Filling the matrix with some data
         final widget = find.byType(SystemDataInput);
@@ -278,20 +288,22 @@ void main() {
 
         final bloc = SystemBloc(SystemType.iterative);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Filling the matrix with some data
         final widget = find.byType(SystemDataInput);
@@ -328,20 +340,22 @@ void main() {
 
         final bloc = SystemBloc(SystemType.iterative);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Filling the matrix with some data
         final widget = find.byType(SystemDataInput);
@@ -379,20 +393,22 @@ void main() {
 
         final bloc = SystemBloc(SystemType.rowReduction);
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: bloc),
-                BlocProvider<NumberSwitcherCubit>.value(
-                  value: numberSwitcherCubit,
-                ),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: bloc),
+                  BlocProvider<NumberSwitcherCubit>.value(
+                    value: numberSwitcherCubit,
+                  ),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         // Filling the matrix with some data
         final widget = find.byType(SystemDataInput);
@@ -432,18 +448,20 @@ void main() {
           max: 4,
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: SingleChildScrollView(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: systemBloc),
-                BlocProvider<NumberSwitcherCubit>.value(value: bloc),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDataInput(),
+        await tester.pumpWidget(
+          MockWrapper(
+            child: SingleChildScrollView(
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SystemBloc>.value(value: systemBloc),
+                  BlocProvider<NumberSwitcherCubit>.value(value: bloc),
+                  BlocProvider<DropdownCubit>.value(value: dropdownCubit),
+                ],
+                child: const SystemDataInput(),
+              ),
             ),
           ),
-        ));
+        );
 
         expect(bloc.state, equals(2));
 

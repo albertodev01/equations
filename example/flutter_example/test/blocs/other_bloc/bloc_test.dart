@@ -15,7 +15,7 @@ void main() {
 
     blocTest<OtherBloc, OtherState>(
       'Making sure that the bloc emits states',
-      build: () => OtherBloc(),
+      build: OtherBloc.new,
       act: (bloc) => bloc.add(const OtherClean()),
       expect: () => const [OtherNone()],
       verify: (bloc) => bloc.state == const OtherNone(),
@@ -24,11 +24,13 @@ void main() {
     blocTest<OtherBloc, OtherState>(
       'Making sure that an exception is thrown if one (or more) matrix input '
       'values are malformed strings',
-      build: () => OtherBloc(),
-      act: (bloc) => bloc.add(const MatrixAnalyze(
-        size: 2,
-        matrix: ['1', '2', '3', 'c'],
-      )),
+      build: OtherBloc.new,
+      act: (bloc) => bloc.add(
+        const MatrixAnalyze(
+          size: 2,
+          matrix: ['1', '2', '3', 'c'],
+        ),
+      ),
       expect: () => const [
         OtherLoading(),
         OtherError(),
@@ -39,11 +41,13 @@ void main() {
     blocTest<OtherBloc, OtherState>(
       'Making sure that an exception is thrown if the matrix size does NOT '
       'match the actual list length',
-      build: () => OtherBloc(),
-      act: (bloc) => bloc.add(const MatrixAnalyze(
-        size: 3,
-        matrix: ['1', '2', '3', '4'],
-      )),
+      build: OtherBloc.new,
+      act: (bloc) => bloc.add(
+        const MatrixAnalyze(
+          size: 3,
+          matrix: ['1', '2', '3', '4'],
+        ),
+      ),
       expect: () => const [
         OtherLoading(),
         OtherError(),
@@ -54,11 +58,13 @@ void main() {
     blocTest<OtherBloc, OtherState>(
       'Making sure that an exception is thrown if the complex number has a '
       'malformed real input',
-      build: () => OtherBloc(),
-      act: (bloc) => bloc.add(const ComplexNumberAnalyze(
-        realPart: '',
-        imaginaryPart: '1',
-      )),
+      build: OtherBloc.new,
+      act: (bloc) => bloc.add(
+        const ComplexNumberAnalyze(
+          realPart: '',
+          imaginaryPart: '1',
+        ),
+      ),
       expect: () => const [
         OtherLoading(),
         OtherError(),
@@ -69,11 +75,13 @@ void main() {
     blocTest<OtherBloc, OtherState>(
       'Making sure that an exception is thrown if the complex number has a '
       'malformed complex input',
-      build: () => OtherBloc(),
-      act: (bloc) => bloc.add(const ComplexNumberAnalyze(
-        realPart: '2',
-        imaginaryPart: '...',
-      )),
+      build: OtherBloc.new,
+      act: (bloc) => bloc.add(
+        const ComplexNumberAnalyze(
+          realPart: '2',
+          imaginaryPart: '...',
+        ),
+      ),
       expect: () => const [
         OtherLoading(),
         OtherError(),
@@ -83,11 +91,13 @@ void main() {
 
     blocTest<OtherBloc, OtherState>(
       'Making sure that matrices can be analyzed',
-      build: () => OtherBloc(),
-      act: (bloc) => bloc.add(const MatrixAnalyze(
-        size: 2,
-        matrix: ['1', '2', '3', '5'],
-      )),
+      build: OtherBloc.new,
+      act: (bloc) => bloc.add(
+        const MatrixAnalyze(
+          size: 2,
+          matrix: ['1', '2', '3', '5'],
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<AnalyzedMatrix>());
 
@@ -149,11 +159,13 @@ void main() {
 
     blocTest<OtherBloc, OtherState>(
       'Making sure that complex numbers can be analyzed',
-      build: () => OtherBloc(),
-      act: (bloc) => bloc.add(const ComplexNumberAnalyze(
-        realPart: '3',
-        imaginaryPart: '2',
-      )),
+      build: OtherBloc.new,
+      act: (bloc) => bloc.add(
+        const ComplexNumberAnalyze(
+          realPart: '3',
+          imaginaryPart: '2',
+        ),
+      ),
       verify: (bloc) {
         expect(bloc.state, isA<AnalyzedComplexNumber>());
 

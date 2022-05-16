@@ -13,9 +13,9 @@ class RelaxationFactorInput extends StatefulWidget {
 
   /// Creates a [RelaxationFactorInput] widget.
   const RelaxationFactorInput({
-    Key? key,
+    super.key,
     required this.textEditingController,
-  }) : super(key: key);
+  });
 
   @override
   _RelaxationFactorInputState createState() => _RelaxationFactorInputState();

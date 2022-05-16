@@ -17,10 +17,10 @@ class PolynomialResultCard extends StatelessWidget {
 
   /// Creates a [PolynomialResultCard] widget.
   const PolynomialResultCard({
-    Key? key,
+    super.key,
     required this.algebraic,
     this.withFraction = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +75,9 @@ class _ExponentOnVariable extends StatelessWidget {
 
   /// Creates an [_ExponentOnVariable] widget.
   const _ExponentOnVariable({
-    Key? key,
+    super.key,
     required this.exponent,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

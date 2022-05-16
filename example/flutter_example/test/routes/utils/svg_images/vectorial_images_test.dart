@@ -11,9 +11,11 @@ void main() {
     testWidgets(
       "Making sure that 'ArrowUpSvg' can be rendered",
       (tester) async {
-        await tester.pumpWidget(const MockWrapper(
-          child: ArrowUpSvg(),
-        ));
+        await tester.pumpWidget(
+          const MockWrapper(
+            child: ArrowUpSvg(),
+          ),
+        );
 
         expect(find.byType(ArrowUpSvg), findsOneWidget);
         expect(find.byType(SvgPicture), findsOneWidget);
