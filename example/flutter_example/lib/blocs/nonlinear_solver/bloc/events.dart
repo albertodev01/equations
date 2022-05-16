@@ -41,12 +41,9 @@ class SinglePointMethod extends NonlinearEvent {
     required this.function,
     required this.initialGuess,
     required this.method,
-    int maxIterations = 15,
-    double precision = 1.0e-10,
-  }) : super(
-          maxIterations: maxIterations,
-          precision: precision,
-        );
+    super.maxIterations = 15,
+    super.precision = 1.0e-10,
+  });
 
   @override
   List<Object?> get props => [
@@ -91,12 +88,9 @@ class BracketingMethod extends NonlinearEvent {
     required this.lowerBound,
     required this.upperBound,
     required this.method,
-    int maxIterations = 15,
-    double precision = 1.0e-10,
-  }) : super(
-          maxIterations: maxIterations,
-          precision: precision,
-        );
+    super.maxIterations = 15,
+    super.precision = 1.0e-10,
+  });
 
   @override
   List<Object?> get props => [
