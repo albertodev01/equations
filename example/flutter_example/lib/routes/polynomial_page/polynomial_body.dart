@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
+import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
@@ -12,7 +13,6 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains the solutions of the polynomial equation and a chart
 /// to plot the function.
@@ -64,7 +64,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   /// Getting the title of the page according with the type of polynomial that
   /// is going to be solved.
   String getLocalizedName() {
-    final polynomialType = context.read<PolynomialBloc>().polynomialType;
+    final polynomialType = context.polynomialState.polynomialType;
 
     switch (polynomialType) {
       case PolynomialType.linear:
@@ -147,44 +147,30 @@ class _PolynomialPlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PolynomialBloc, PolynomialState>(
-      builder: (context, state) {
-        PolynomialPlot? plotMode;
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Title
+            const _PlotTitle(),
 
-        if (state is PolynomialRoots) {
-          plotMode = PolynomialPlot(
-            algebraic: state.algebraic,
-          );
-        }
+            // The actual plot
+            LayoutBuilder(
+              builder: (context, dimensions) {
+                final width = min<double>(
+                  dimensions.maxWidth,
+                  maxWidthPlot,
+                );
 
-        return Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Title
-                const _PlotTitle(),
-
-                // The actual plot
-                LayoutBuilder(
-                  builder: (context, dimensions) {
-                    final width = min<double>(
-                      dimensions.maxWidth,
-                      maxWidthPlot,
-                    );
-
-                    return SizedBox(
-                      width: width,
-                      child: PlotWidget(
-                        plotMode: plotMode,
-                      ),
-                    );
-                  },
-                ),
-              ],
+                return SizedBox(
+                  width: width,
+                  child: const PlotWidgetListener(),
+                );
+              },
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }
@@ -199,6 +185,31 @@ class _PlotTitle extends StatelessWidget {
     return PageTitle(
       pageTitle: context.l10n.chart,
       pageLogo: const PlotIcon(),
+    );
+  }
+}
+
+/// TODO
+class PlotWidgetListener extends StatelessWidget {
+  const PlotWidgetListener({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: context.polynomialState,
+      builder: (context, _) {
+        final algebraic = context.polynomialState.state.algebraic;
+
+        if (algebraic != null) {
+          return PlotWidget(
+            plotMode: PolynomialPlot(
+              algebraic: algebraic,
+            ),
+          );
+        }
+
+        return const PlotWidget();
+      },
     );
   }
 }

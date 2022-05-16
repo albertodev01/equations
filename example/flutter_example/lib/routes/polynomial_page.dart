@@ -1,7 +1,8 @@
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
+import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
@@ -28,19 +29,6 @@ class PolynomialPage extends StatefulWidget {
 }
 
 class _PolynomialPageState extends State<PolynomialPage> {
-  /*
-   * Caching blocs here in the state since `EquationScaffold` is creating a
-   * tab view and thus `BlocProvider`s might be destroyed when the body is not
-   * visible anymore.
-   *
-   */
-
-  // Equation solving blocs
-  final linearBloc = PolynomialBloc(PolynomialType.linear);
-  final quadraticBloc = PolynomialBloc(PolynomialType.quadratic);
-  final cubicBloc = PolynomialBloc(PolynomialType.cubic);
-  final quarticBloc = PolynomialBloc(PolynomialType.quartic);
-
   // Function plotting blocs
   final linearPlot = PlotZoomCubit(
     minValue: 2,
@@ -73,70 +61,70 @@ class _PolynomialPageState extends State<PolynomialPage> {
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.firstDegree,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<PolynomialBloc>.value(
-            value: linearBloc,
-          ),
-          BlocProvider<PlotZoomCubit>.value(
-            value: linearPlot,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: linearTextfields,
-          ),
-        ],
-        child: const PolynomialBody(),
+      content: InheritedPolynomial(
+        polynomialState: PolynomialState(PolynomialType.linear),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PlotZoomCubit>.value(
+              value: linearPlot,
+            ),
+            BlocProvider<TextFieldValuesCubit>.value(
+              value: linearTextfields,
+            ),
+          ],
+          child: const PolynomialBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.secondDegree,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<PolynomialBloc>.value(
-            value: quadraticBloc,
-          ),
-          BlocProvider<PlotZoomCubit>.value(
-            value: quadraticPlot,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: quadraticTextfields,
-          ),
-        ],
-        child: const PolynomialBody(),
+      content: InheritedPolynomial(
+        polynomialState: PolynomialState(PolynomialType.quadratic),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PlotZoomCubit>.value(
+              value: quadraticPlot,
+            ),
+            BlocProvider<TextFieldValuesCubit>.value(
+              value: quadraticTextfields,
+            ),
+          ],
+          child: const PolynomialBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.thirdDegree,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<PolynomialBloc>.value(
-            value: cubicBloc,
-          ),
-          BlocProvider<PlotZoomCubit>.value(
-            value: cubicPlot,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: cubicTextfields,
-          ),
-        ],
-        child: const PolynomialBody(),
+      content: InheritedPolynomial(
+        polynomialState: PolynomialState(PolynomialType.cubic),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PlotZoomCubit>.value(
+              value: cubicPlot,
+            ),
+            BlocProvider<TextFieldValuesCubit>.value(
+              value: cubicTextfields,
+            ),
+          ],
+          child: const PolynomialBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.fourthDegree,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<PolynomialBloc>.value(
-            value: quarticBloc,
-          ),
-          BlocProvider<PlotZoomCubit>.value(
-            value: quarticPlot,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: quarticTextfields,
-          ),
-        ],
-        child: const PolynomialBody(),
+      content: InheritedPolynomial(
+        polynomialState: PolynomialState(PolynomialType.quartic),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PlotZoomCubit>.value(
+              value: quarticPlot,
+            ),
+            BlocProvider<TextFieldValuesCubit>.value(
+              value: quarticTextfields,
+            ),
+          ],
+          child: const PolynomialBody(),
+        ),
       ),
     ),
   ];

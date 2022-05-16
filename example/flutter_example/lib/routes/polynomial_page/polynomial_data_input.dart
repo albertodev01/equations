@@ -1,7 +1,8 @@
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
+import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class PolynomialDataInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final polynomialType = context.read<PolynomialBloc>().polynomialType;
+    final polynomialType = context.polynomialState.polynomialType;
 
     switch (polynomialType) {
       case PolynomialType.linear:
@@ -113,14 +114,12 @@ class __InputWidget extends State<_InputWidget> {
   /// Validates the input and, if it's valid, sends the data to the bloc.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
-      final event = PolynomialSolve(
-        coefficients: controllers.map<String>((c) => c.text).toList(),
-      );
-
       // Valid input
-      context.read<PolynomialBloc>().add(event);
+      context.polynomialState.solvePolynomial(
+        controllers.map<String>((c) => c.text).toList(),
+      );
     } else {
-      context.read<PolynomialBloc>().add(const PolynomialClean());
+      context.polynomialState.clear();
 
       // Error message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -139,7 +138,7 @@ class __InputWidget extends State<_InputWidget> {
     }
 
     formKey.currentState?.reset();
-    context.read<PolynomialBloc>().add(const PolynomialClean());
+    context.polynomialState.clear();
     context.read<PlotZoomCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
 
