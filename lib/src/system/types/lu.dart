@@ -26,8 +26,7 @@ class LUSolver extends SystemSolver {
 
     // Solving Ux = y
     final U = lu[1].toListOfList();
-    final x = SystemSolver.backSubstitution(U, y);
 
-    return x;
+    return SystemSolver.backSubstitution(U, y);
   }
 }

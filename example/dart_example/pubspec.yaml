@@ -17,9 +17,6 @@ dev_dependencies:
   # https://pub.dev/packages/dart_code_metrics
   dart_code_metrics: ^4.15.1
 
-  # https://pub.dev/packages/lints
-  lints: ^2.0.0
-
   # https://pub.dev/packages/test
   test: ^1.21.1
   

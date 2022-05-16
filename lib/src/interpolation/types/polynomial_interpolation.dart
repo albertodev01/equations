@@ -58,6 +58,7 @@ class PolynomialInterpolation extends Interpolation {
     );
 
     final coefficients = lu.solve().reversed.toList(growable: false);
+
     return Algebraic.fromReal(coefficients);
   }
 }

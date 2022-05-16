@@ -31,8 +31,7 @@ class CholeskySolver extends SystemSolver {
 
     // Solving Ux = y
     final transposedL = cholesky[1].toListOfList();
-    final x = SystemSolver.backSubstitution(transposedL, y);
 
-    return x;
+    return SystemSolver.backSubstitution(transposedL, y);
   }
 }

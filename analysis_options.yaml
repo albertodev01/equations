@@ -1,5 +1,3 @@
-include: package:lints/recommended.yaml
-
 analyzer:
   exclude:
     - example/**
@@ -20,8 +18,10 @@ dart_code_metrics:
     - test/**
     - example/**
   rules:
+    - avoid-collection-methods-with-unrelated-types
     - avoid-dynamic
     - avoid-global-state
+    - avoid-ignoring-return-values
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
     - avoid-throw-in-catch-block
@@ -34,7 +34,9 @@ dart_code_metrics:
     - newline-before-return
     - no-boolean-literal-compare
     - no-equal-then-else
+    - no-empty-block
     - no-object-declaration
+    - prefer-async-await
     - prefer-correct-type-name
     - prefer-first
     - prefer-immediate-return
@@ -42,6 +44,7 @@ dart_code_metrics:
     - prefer-trailing-comma
   rules-exclude:
     - example/**
+    - test/**
 
 # All lint rules: https://dart-lang.github.io/linter/lints/options/options.html
 linter:
@@ -60,6 +63,7 @@ linter:
     - avoid_double_and_int_checks
     - avoid_dynamic_calls
     - avoid_empty_else
+    # - avoid_equals_and_hash_code_on_mutable_classes (Flutter only)
     - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
     - avoid_final_parameters

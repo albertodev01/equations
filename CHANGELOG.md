@@ -8,7 +8,8 @@
  - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
  - Added `csc` (cosecant) and `sec` (secant) trigonometric functions to the `ExpressionParser` type
  - Migrated Dart code to 2.17 with super parameters
- - Updated the `analysis_options.yaml` file with more rules
+ - Updated the `analysis_options.yaml` file with almost all rules
+ - Added more rules from the `dart_code_metrics` package
  - Updated the Flutter demo in the `example/` folder. Now the project can be run all platforms (mobile, web and desktop)
  - Dependencies versions update
 

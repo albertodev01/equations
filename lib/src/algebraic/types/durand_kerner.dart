@@ -325,8 +325,7 @@ class DurandKerner extends Algebraic with MathUtils {
         realBuffer: realBuffer,
         imaginaryBuffer: imaginaryBuffer,
       );
-      final factor = 0.65 * bound;
-
+      final factor = bound * 0.65;
       final multiplier = math.cos(0.25 * 2 * math.pi);
 
       for (var i = 0; i < coefficientsLength - 1; ++i) {

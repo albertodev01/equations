@@ -24,10 +24,12 @@ class NewtonInterpolation extends Interpolation {
   double compute(double x) {
     if (forwardDifference) {
       final matrix = forwardDifferenceTable();
+
       return _forwardEvaluation(matrix, x);
     }
 
     final matrix = backwardDifferenceTable();
+
     return _backwardEvaluation(matrix, x);
   }
 
