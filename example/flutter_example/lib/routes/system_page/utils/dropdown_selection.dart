@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,7 +48,7 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
       context.read<DropdownCubit>().changeValue(newValue.asString());
 
   /// The currently selected system type.
-  SystemType get systemType => context.read<SystemBloc>().systemType;
+  SystemType get systemType => context.systemState.systemType;
 
   @override
   Widget build(BuildContext context) {

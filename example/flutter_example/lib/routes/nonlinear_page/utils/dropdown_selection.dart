@@ -1,5 +1,6 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,7 @@ class NonlinearDropdownSelectionState
       context.read<DropdownCubit>().changeValue(newValue.asString());
 
   /// The currently selected nonlinear type.
-  NonlinearType get nonlinearType =>
-      context.read<NonlinearBloc>().nonlinearType;
+  NonlinearType get nonlinearType => context.nonlinearState.nonlinearType;
 
   @override
   Widget build(BuildContext context) {

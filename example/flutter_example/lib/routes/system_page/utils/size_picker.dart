@@ -1,8 +1,6 @@
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget has 2 arrows that, respectively, decrease and increase value
 /// held in the state of the [NumberSwitcherCubit] bloc.
@@ -21,7 +19,7 @@ class SizePicker extends StatelessWidget {
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
-          onPressed: context.read<NumberSwitcherCubit>().decrease,
+          onPressed: context.numberSwitcherState.decrease,
           child: const Icon(Icons.arrow_back),
         ),
 
@@ -29,17 +27,12 @@ class SizePicker extends StatelessWidget {
         const SizedBox(width: 15),
 
         // The size
-        BlocConsumer<NumberSwitcherCubit, int>(
-          listenWhen: (prev, curr) => prev != curr,
-          listener: (context, _) {
-            // Making sure to reset the cached text field values when the
-            // matrix size changes
-            context.read<TextFieldValuesCubit>().reset();
-          },
-          builder: (context, state) {
+        AnimatedBuilder(
+          animation: context.numberSwitcherState,
+          builder: (context, _) {
             late final String text;
 
-            switch (state) {
+            switch (context.numberSwitcherState.state) {
               case 1:
                 text = context.l10n.matrix_size1;
                 break;
@@ -75,7 +68,7 @@ class SizePicker extends StatelessWidget {
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
-          onPressed: context.read<NumberSwitcherCubit>().increase,
+          onPressed: context.numberSwitcherState.increase,
           child: const Icon(Icons.arrow_forward),
         ),
       ],

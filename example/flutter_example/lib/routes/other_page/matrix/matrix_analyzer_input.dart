@@ -1,7 +1,7 @@
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +62,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
   void matrixAnalyze() {
     if (formKey.currentState?.validate() ?? false) {
       final bloc = context.read<OtherBloc>();
-      final size = context.read<NumberSwitcherCubit>().state;
+      final size = context.numberSwitcherState.state;
 
       // Getting the inputs
       final matrixInputs = matrixControllers.sublist(0, size * size).map((c) {
@@ -123,11 +123,12 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
             ),
 
             // Matrix input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (_, state) {
+            AnimatedBuilder(
+              animation: context.numberSwitcherState,
+              builder: (context, _) {
                 return MatrixInput(
                   matrixControllers: matrixControllers,
-                  matrixSize: state,
+                  matrixSize: context.numberSwitcherState.state,
                 );
               },
             ),

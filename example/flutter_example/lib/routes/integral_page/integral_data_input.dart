@@ -1,8 +1,9 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
+import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
@@ -71,7 +72,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     upperBoundController.clear();
 
     formKey.currentState?.reset();
-    context.read<IntegralBloc>().add(const IntegralClean());
+    context.integralState.clear();
     context.read<PlotZoomCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
 
@@ -81,9 +82,8 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
   /// Solves a nonlinear equation.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
-      final bloc = context.read<IntegralBloc>();
       final dropdown = context.read<DropdownCubit>().state;
-      late IntegralType type;
+      IntegralType type;
 
       switch (dropdown.toIntegralDropdownItems()) {
         case IntegralDropdownItems.simpson:
@@ -97,14 +97,12 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
           break;
       }
 
-      bloc.add(
-        IntegralSolve(
-          function: functionController.text,
-          lowerBound: lowerBoundController.text,
-          upperBound: upperBoundController.text,
-          intervals: 32,
-          integralType: type,
-        ),
+      context.integralState.solveIntegral(
+        function: functionController.text,
+        lowerBound: lowerBoundController.text,
+        upperBound: upperBoundController.text,
+        intervals: 32,
+        integralType: type,
       );
     } else {
       // Malformed inputs

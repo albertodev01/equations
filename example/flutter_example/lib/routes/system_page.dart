@@ -1,8 +1,10 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
+import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
@@ -28,36 +30,10 @@ class SystemPage extends StatefulWidget {
 }
 
 class _SystemPageState extends State<SystemPage> {
-  /*
-   * Caching blocs here in the state since `EquationScaffold` is creating a
-   * tab view and thus `BlocProvider`s might be destroyed when the body is not
-   * visible anymore.
-   *
-   */
-
-  // System solving blocs
-  final rowReductionBloc = SystemBloc(SystemType.rowReduction);
-  final factorizationBloc = SystemBloc(SystemType.factorization);
-  final iterativeBloc = SystemBloc(SystemType.iterative);
-
   // TextFields values blocs
   final rowReductionTextFields = TextFieldValuesCubit();
   final factorizationTextFields = TextFieldValuesCubit();
   final iterativeTextFields = TextFieldValuesCubit();
-
-  // Bloc for the matrix size
-  final matrixSizeRowReduction = NumberSwitcherCubit(
-    min: 1,
-    max: 4,
-  );
-  final matrixSizeFactorization = NumberSwitcherCubit(
-    min: 1,
-    max: 4,
-  );
-  final matrixSizeIterative = NumberSwitcherCubit(
-    min: 1,
-    max: 4,
-  );
 
   // Bloc for the algorithm selection
   final dropdownFactorization = DropdownCubit(
@@ -71,64 +47,64 @@ class _SystemPageState extends State<SystemPage> {
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.row_reduction,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemBloc>.value(
-            value: rowReductionBloc,
+      content: InheritedSystem(
+        systemState: SystemState(SystemType.rowReduction),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TextFieldValuesCubit>.value(
+                value: rowReductionTextFields,
+              ),
+              BlocProvider<DropdownCubit>(
+                create: (_) => DropdownCubit(
+                  initialValue: '',
+                ),
+              ),
+            ],
+            child: const SystemBody(),
           ),
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSizeRowReduction,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: rowReductionTextFields,
-          ),
-          BlocProvider<DropdownCubit>(
-            create: (_) => DropdownCubit(
-              initialValue: '',
-            ),
-          ),
-        ],
-        child: const SystemBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.factorization,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemBloc>.value(
-            value: factorizationBloc,
+      content: InheritedSystem(
+        systemState: SystemState(SystemType.factorization),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TextFieldValuesCubit>.value(
+                value: factorizationTextFields,
+              ),
+              BlocProvider<DropdownCubit>.value(
+                value: dropdownFactorization,
+              ),
+            ],
+            child: const SystemBody(),
           ),
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSizeFactorization,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: factorizationTextFields,
-          ),
-          BlocProvider<DropdownCubit>.value(
-            value: dropdownFactorization,
-          ),
-        ],
-        child: const SystemBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.iterative,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemBloc>.value(
-            value: iterativeBloc,
+      content: InheritedSystem(
+        systemState: SystemState(SystemType.iterative),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<TextFieldValuesCubit>.value(
+                value: iterativeTextFields,
+              ),
+              BlocProvider<DropdownCubit>.value(
+                value: dropdownIterative,
+              ),
+            ],
+            child: const SystemBody(),
           ),
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSizeIterative,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: iterativeTextFields,
-          ),
-          BlocProvider<DropdownCubit>.value(
-            value: dropdownIterative,
-          ),
-        ],
-        child: const SystemBody(),
+        ),
       ),
     ),
   ];

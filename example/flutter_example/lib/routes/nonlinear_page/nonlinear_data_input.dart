@@ -1,11 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
@@ -40,7 +41,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// Manually caching the inputs.
   late final guessesInput = _GuessesInput(
     controllers: controllers,
-    type: _getType,
+    type: getType,
   );
 
   /// Form validation key.
@@ -48,10 +49,10 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 
   /// This is required to figure out how many inputs are required for the
   /// equation to be solved.
-  NonlinearType get _getType => context.read<NonlinearBloc>().nonlinearType;
+  NonlinearType get getType => context.nonlinearState.nonlinearType;
 
   /// How many input fields the widget requires.
-  int get fieldsCount => _getType == NonlinearType.singlePoint ? 2 : 3;
+  int get fieldsCount => getType == NonlinearType.singlePoint ? 2 : 3;
 
   /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
   /// order to cache the user input.
@@ -79,7 +80,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     }
 
     formKey.currentState?.reset();
-    context.read<NonlinearBloc>().add(const NonlinearClean());
+    context.nonlinearState.clear();
     context.read<PlotZoomCubit>().reset();
     context.read<PrecisionSliderCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
@@ -95,29 +96,24 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// Solves a nonlinear equation.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
-      final bloc = context.read<NonlinearBloc>();
       final precision = context.read<PrecisionSliderCubit>().state;
       final algorithm =
           context.read<DropdownCubit>().state.toNonlinearDropdownItems();
 
-      if (_getType == NonlinearType.singlePoint) {
-        bloc.add(
-          SinglePointMethod(
-            method: SinglePointMethod.resolve(algorithm),
-            initialGuess: controllers[1].text,
-            function: controllers.first.text,
-            precision: 1.0 * math.pow(10, -precision),
-          ),
+      if (getType == NonlinearType.singlePoint) {
+        context.nonlinearState.solveWithSinglePoint(
+          method: NonlinearState.singlePointResolve(algorithm),
+          initialGuess: controllers[1].text,
+          function: controllers.first.text,
+          precision: 1.0 * math.pow(10, -precision),
         );
       } else {
-        bloc.add(
-          BracketingMethod(
-            method: BracketingMethod.resolve(algorithm),
-            lowerBound: controllers[1].text,
-            upperBound: controllers[2].text,
-            function: controllers.first.text,
-            precision: 1.0 * math.pow(10, -precision),
-          ),
+        context.nonlinearState.solveWithBracketing(
+          method: NonlinearState.brackedingResolve(algorithm),
+          lowerBound: controllers[1].text,
+          upperBound: controllers[2].text,
+          function: controllers.first.text,
+          precision: 1.0 * math.pow(10, -precision),
         );
       }
     } else {

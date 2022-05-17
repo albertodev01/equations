@@ -1,12 +1,12 @@
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_data_input.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget allows for both the system input and the results printing.
 ///
@@ -57,7 +57,7 @@ class __SystemBodyContentsState extends State<_SystemBodyContents> {
   /// Getting the title of the page according with the kind of algorithms that
   /// are going to be used.
   String get localizedName {
-    final systemType = context.read<SystemBloc>().systemType;
+    final systemType = context.systemState.systemType;
 
     switch (systemType) {
       case SystemType.rowReduction:

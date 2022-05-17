@@ -1,0 +1,242 @@
+import 'package:equations/equations.dart';
+import 'package:equations_solver/routes/system_page.dart';
+import 'package:equations_solver/routes/system_page/model/system_result.dart';
+import 'package:flutter/widgets.dart';
+
+/// Represents kind of system solvers that a bloc has to to handle.
+enum SystemType {
+  /// Row reduction algorithm.
+  rowReduction,
+
+  /// Factorization algorithms like LU or Cholesky.
+  factorization,
+
+  /// Algorithms that require initial values and a finite number of steps.
+  iterative,
+}
+
+/// Row reduction algorithm to solve systems of equations.
+enum RowReductionMethods {
+  /// Gauss elimination.
+  gauss,
+}
+
+/// Factorization algorithm factor a matrix into multiple matrices.
+enum FactorizationMethods {
+  /// LU decomposition.
+  lu,
+
+  /// Cholesky decomposition.
+  cholesky,
+}
+
+/// Iterative methods use an initial value to generate a sequence of improving
+/// approximate solutions for the system.
+enum IterativeMethods {
+  /// Successive Over Relaxation method.
+  sor,
+
+  /// Gauss-Seidel method.
+  gaussSeidel,
+
+  /// Jacobi method.
+  jacobi,
+}
+
+/// Holds the state of the [SystemPage] page.
+class SystemState extends ChangeNotifier {
+  var state = const SystemResult();
+
+  /// The type of polynomial this bloc has to solve.
+  final SystemType systemType;
+
+  /// Creates a
+  SystemState(this.systemType);
+
+  /// Tries to return a [RowReductionMethods] value from a string value.
+  static RowReductionMethods resolve(String name) {
+    if (name.toLowerCase() == 'gauss') {
+      return RowReductionMethods.gauss;
+    }
+
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'RowReductionMethods value.",
+    );
+  }
+
+  /// Tries to return a [FactorizationMethods] value from a string value.
+  static FactorizationMethods factorizationResolve(String name) {
+    if (name.toLowerCase() == 'lu') {
+      return FactorizationMethods.lu;
+    }
+
+    if (name.toLowerCase() == 'cholesky') {
+      return FactorizationMethods.cholesky;
+    }
+
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'FactorizationMethods value.",
+    );
+  }
+
+  /// Tries to return a [IterativeMethods] value from a string value.
+  static IterativeMethods iterativeResolve(String name) {
+    if (name.toLowerCase() == 'sor') {
+      return IterativeMethods.sor;
+    }
+
+    if (name.toLowerCase() == 'jacobi') {
+      return IterativeMethods.jacobi;
+    }
+
+    throw ArgumentError(
+      "The given string doesn't map to a valid 'IterativeMethod value.",
+    );
+  }
+
+  void rowReductionSolver({
+    required List<String> flatMatrix,
+    required List<String> knownValues,
+    required int size,
+  }) {
+    try {
+      final matrix = _valueParser(flatMatrix);
+      final vector = _valueParser(knownValues);
+
+      final solver = GaussianElimination(
+        matrix: RealMatrix.fromFlattenedData(
+          rows: size,
+          columns: size,
+          data: matrix,
+        ),
+        knownValues: vector,
+      );
+
+      if (solver.hasSolution()) {
+        state = SystemResult(
+          systemSolver: solver,
+        );
+      } else {
+        state = const SystemResult();
+      }
+    } on Exception {
+      state = const SystemResult();
+    }
+
+    notifyListeners();
+  }
+
+  void factorizationSolver({
+    required List<String> flatMatrix,
+    required List<String> knownValues,
+    required int size,
+    required FactorizationMethods method,
+  }) {
+    try {
+      final matrix = _valueParser(flatMatrix);
+      final vector = _valueParser(knownValues);
+
+      final SystemSolver solver;
+      final realMatrix = RealMatrix.fromFlattenedData(
+        rows: size,
+        columns: size,
+        data: matrix,
+      );
+
+      switch (method) {
+        case FactorizationMethods.lu:
+          solver = LUSolver(
+            matrix: realMatrix,
+            knownValues: vector,
+          );
+          break;
+        case FactorizationMethods.cholesky:
+          solver = CholeskySolver(
+            matrix: realMatrix,
+            knownValues: vector,
+          );
+          break;
+      }
+
+      if (solver.hasSolution()) {
+        state = SystemResult(
+          systemSolver: solver,
+        );
+      } else {
+        state = const SystemResult();
+      }
+    } on Exception {
+      state = const SystemResult();
+    }
+
+    notifyListeners();
+  }
+
+  void iterativeSolver({
+    required List<String> flatMatrix,
+    required List<String> knownValues,
+    required int size,
+    required IterativeMethods method,
+    String w = '1.25',
+    List<String> jacobiInitialVector = const [],
+  }) {
+    try {
+      final matrix = _valueParser(flatMatrix);
+      final vector = _valueParser(knownValues);
+
+      final SystemSolver solver;
+      final realMatrix = RealMatrix.fromFlattenedData(
+        rows: size,
+        columns: size,
+        data: matrix,
+      );
+
+      switch (method) {
+        case IterativeMethods.sor:
+          const parser = ExpressionParser();
+          solver = SORSolver(
+            matrix: realMatrix,
+            knownValues: vector,
+            w: parser.evaluate(w),
+          );
+          break;
+        case IterativeMethods.gaussSeidel:
+          solver = GaussSeidelSolver(
+            matrix: realMatrix,
+            knownValues: vector,
+          );
+          break;
+        case IterativeMethods.jacobi:
+          solver = JacobiSolver(
+            matrix: realMatrix,
+            knownValues: vector,
+            x0: _valueParser(jacobiInitialVector),
+          );
+          break;
+      }
+
+      if (solver.hasSolution()) {
+        state = SystemResult(
+          systemSolver: solver,
+        );
+      } else {
+        state = const SystemResult();
+      }
+    } on Exception {
+      state = const SystemResult();
+    }
+
+    notifyListeners();
+  }
+
+  /// Clears the state.
+  void clear() {
+    state = const SystemResult();
+    notifyListeners();
+  }
+
+  List<double> _valueParser(List<String> source) {
+    const parser = ExpressionParser();
+    return source.map(parser.evaluate).toList(growable: false);
+  }
+}

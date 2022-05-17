@@ -1,11 +1,10 @@
-import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// The results of the numerical integration.
 class IntegralResultsWidget extends StatelessWidget {
@@ -40,21 +39,14 @@ class _IntegralSolutions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<IntegralBloc, IntegralState>(
-      listener: (context, state) {
-        if (state is IntegralError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.l10n.nonlinear_error),
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is IntegralResult) {
+    return AnimatedBuilder(
+      animation: context.integralState,
+      builder: (context, _) {
+        final integration = context.integralState.state.numericalIntegration;
+
+        if (integration != null) {
           return RealResultCard(
-            value: state.result,
+            value: integration.integrate().result,
           );
         }
 

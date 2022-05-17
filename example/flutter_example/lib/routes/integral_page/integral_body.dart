@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/integral_page/integral_results.dart';
+import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
@@ -12,7 +12,6 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains the input of the function (along with the integration
 /// bounds), the result and a cartesian plane that highlights the area.
@@ -131,53 +130,31 @@ class _IntegralPlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<IntegralBloc, IntegralState>(
-      builder: (context, state) {
-        IntegralPlot? plotMode;
-        double? lowerLimit;
-        double? upperLimit;
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Title
+            const _PlotTitle(),
 
-        if (state is IntegralResult) {
-          plotMode = IntegralPlot(
-            function: state.numericalIntegration,
-          );
+            // The actual plot
+            // The actual plot
+            LayoutBuilder(
+              builder: (context, dimensions) {
+                final width = min<double>(
+                  dimensions.maxWidth,
+                  maxWidthPlot,
+                );
 
-          lowerLimit = state.numericalIntegration.lowerBound;
-          upperLimit = state.numericalIntegration.upperBound;
-        }
-
-        return Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Title
-                const _PlotTitle(),
-
-                // The actual plot
-                // The actual plot
-                LayoutBuilder(
-                  builder: (context, dimensions) {
-                    final width = min<double>(
-                      dimensions.maxWidth,
-                      maxWidthPlot,
-                    );
-
-                    return SizedBox(
-                      width: width,
-                      child: PlotWidget(
-                        plotMode: plotMode,
-                        areaColor: Colors.amber.withAlpha(60),
-                        lowerAreaLimit: lowerLimit,
-                        upperAreaLimit: upperLimit,
-                      ),
-                    );
-                  },
-                ),
-              ],
+                return SizedBox(
+                  width: width,
+                  child: const PlotWidgetListener(),
+                );
+              },
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }
@@ -192,6 +169,34 @@ class _PlotTitle extends StatelessWidget {
     return PageTitle(
       pageTitle: context.l10n.chart,
       pageLogo: const PlotIcon(),
+    );
+  }
+}
+
+/// TODO
+class PlotWidgetListener extends StatelessWidget {
+  const PlotWidgetListener({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: context.integralState,
+      builder: (context, _) {
+        final integral = context.integralState.state.numericalIntegration;
+
+        if (integral != null) {
+          return PlotWidget(
+            plotMode: IntegralPlot(
+              function: integral,
+            ),
+            areaColor: Colors.amber.withAlpha(60),
+            lowerAreaLimit: integral.lowerBound,
+            upperAreaLimit: integral.upperBound,
+          );
+        }
+
+        return const PlotWidget();
+      },
     );
   }
 }

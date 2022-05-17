@@ -7,8 +7,6 @@ import 'package:equations_solver/blocs/nonlinear_solver/models/nonlinear_types.d
 import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/bloc/bloc.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
-import 'package:equations_solver/blocs/polynomial_solver/bloc/bloc.dart';
-import 'package:equations_solver/blocs/polynomial_solver/models/polynomial_types.dart';
 import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/system_solver/bloc/bloc.dart';
 import 'package:equations_solver/blocs/system_solver/models/system_types.dart';
@@ -87,9 +85,6 @@ class MockWrapper extends StatelessWidget {
               minValue: 1,
               initial: 4,
             ),
-          ),
-          BlocProvider<PolynomialBloc>(
-            create: (_) => PolynomialBloc(PolynomialType.linear),
           ),
           BlocProvider<PrecisionSliderCubit>(
             create: (_) => PrecisionSliderCubit(

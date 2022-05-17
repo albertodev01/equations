@@ -1,7 +1,7 @@
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers_body.dart';
 import 'package:equations_solver/routes/other_page/matrix_body.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
@@ -35,43 +35,40 @@ class _OtherPageState extends State<OtherPage> {
   final matrixTextfields = TextFieldValuesCubit();
   final complexTextfields = TextFieldValuesCubit();
 
-  // Bloc for the matrix size
-  final matrixSize = NumberSwitcherCubit(
-    min: 1,
-    max: 5,
-  );
-
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.matrices,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSize,
-          ),
-          BlocProvider<OtherBloc>.value(
-            value: matrixBloc,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: matrixTextfields,
-          ),
-        ],
-        child: const MatrixOtherBody(),
+      content: InheritedNumberSwitcher(
+        numberSwitcherState: context.numberSwitcherState,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<OtherBloc>.value(
+              value: matrixBloc,
+            ),
+            BlocProvider<TextFieldValuesCubit>.value(
+              value: matrixTextfields,
+            ),
+          ],
+          child: const MatrixOtherBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.complex_numbers,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<OtherBloc>.value(
-            value: complexBloc,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: complexTextfields,
-          ),
-        ],
-        child: const ComplexNumberOtherBody(),
+      content: InheritedNumberSwitcher(
+        numberSwitcherState: context.numberSwitcherState,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<OtherBloc>.value(
+              value: complexBloc,
+            ),
+            BlocProvider<TextFieldValuesCubit>.value(
+              value: complexTextfields,
+            ),
+          ],
+          child: const ComplexNumberOtherBody(),
+        ),
       ),
     ),
   ];

@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
@@ -12,7 +13,6 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains the solutions of the nonlinear equation and a chart
 /// which plots the function.
@@ -62,7 +62,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   );
 
   String getLocalizedName() {
-    final nonlinearType = context.read<NonlinearBloc>().nonlinearType;
+    final nonlinearType = context.nonlinearState.nonlinearType;
 
     return nonlinearType == NonlinearType.singlePoint
         ? context.l10n.single_point
@@ -138,44 +138,30 @@ class _NonlinearPlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NonlinearBloc, NonlinearState>(
-      builder: (context, state) {
-        NonlinearPlot? plotMode;
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Title
+            const _PlotTitle(),
 
-        if (state is NonlinearGuesses) {
-          plotMode = NonlinearPlot(
-            nonLinear: state.nonLinear,
-          );
-        }
+            // The actual plot
+            LayoutBuilder(
+              builder: (context, dimensions) {
+                final width = min<double>(
+                  dimensions.maxWidth,
+                  maxWidthPlot,
+                );
 
-        return Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                // Title
-                const _PlotTitle(),
-
-                // The actual plot
-                LayoutBuilder(
-                  builder: (context, dimensions) {
-                    final width = min<double>(
-                      dimensions.maxWidth,
-                      maxWidthPlot,
-                    );
-
-                    return SizedBox(
-                      width: width,
-                      child: PlotWidget(
-                        plotMode: plotMode,
-                      ),
-                    );
-                  },
-                ),
-              ],
+                return SizedBox(
+                  width: width,
+                  child: const PlotWidgetListener(),
+                );
+              },
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }
@@ -190,6 +176,31 @@ class _PlotTitle extends StatelessWidget {
     return PageTitle(
       pageTitle: context.l10n.chart,
       pageLogo: const PlotIcon(),
+    );
+  }
+}
+
+/// TODO
+class PlotWidgetListener extends StatelessWidget {
+  const PlotWidgetListener({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: context.nonlinearState,
+      builder: (context, _) {
+        final nonlinear = context.nonlinearState.state.nonlinear;
+
+        if (nonlinear != null) {
+          return PlotWidget(
+            plotMode: NonlinearPlot(
+              nonLinear: nonlinear,
+            ),
+          );
+        }
+
+        return const PlotWidget();
+      },
     );
   }
 }

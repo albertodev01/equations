@@ -1,8 +1,9 @@
 import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/system_page/utils/jacobi_initial_vector.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
@@ -91,7 +92,7 @@ class SystemDataInputState extends State<SystemDataInput> {
 
   /// This is required to figure out which system solving algorithm has to be
   /// used.
-  SystemType get _getType => context.read<SystemBloc>().systemType;
+  SystemType get _getType => context.systemState.systemType;
 
   /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
   /// order to cache the user input.
@@ -130,8 +131,8 @@ class SystemDataInputState extends State<SystemDataInput> {
 
     // Making sure to also clear the form completely
     formKey.currentState?.reset();
-    context.read<SystemBloc>().add(const SystemClean());
-    context.read<NumberSwitcherCubit>().reset();
+    context.systemState.clear();
+    context.numberSwitcherState.reset();
     context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();
@@ -141,8 +142,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final algorithm = context.read<DropdownCubit>().state;
-      final bloc = context.read<SystemBloc>();
-      final size = context.read<NumberSwitcherCubit>().state;
+      final size = context.numberSwitcherState.state;
 
       // Getting the inputs
       final systemInputs = matrixControllers.sublist(0, size * size).map((c) {
@@ -156,22 +156,18 @@ class SystemDataInputState extends State<SystemDataInput> {
       // Solving the system
       switch (_getType) {
         case SystemType.rowReduction:
-          bloc.add(
-            RowReductionMethod(
-              matrix: systemInputs,
-              knownValues: vectorInputs,
-              size: size,
-            ),
+          context.systemState.rowReductionSolver(
+            flatMatrix: systemInputs,
+            knownValues: vectorInputs,
+            size: size,
           );
           break;
         case SystemType.factorization:
-          bloc.add(
-            FactorizationMethod(
-              matrix: systemInputs,
-              knownValues: vectorInputs,
-              size: size,
-              method: FactorizationMethod.resolve(algorithm),
-            ),
+          context.systemState.factorizationSolver(
+            flatMatrix: systemInputs,
+            knownValues: vectorInputs,
+            size: size,
+            method: SystemState.factorizationResolve(algorithm),
           );
           break;
         case SystemType.iterative:
@@ -179,15 +175,13 @@ class SystemDataInputState extends State<SystemDataInput> {
             return c.text;
           }).toList();
 
-          bloc.add(
-            IterativeMethod(
-              matrix: systemInputs,
-              knownValues: vectorInputs,
-              size: size,
-              method: IterativeMethod.resolve(algorithm),
-              w: wSorController.text,
-              jacobiInitialVector: initialGuesses,
-            ),
+          context.systemState.iterativeSolver(
+            flatMatrix: systemInputs,
+            knownValues: vectorInputs,
+            size: size,
+            method: SystemState.iterativeResolve(algorithm),
+            jacobiInitialVector: initialGuesses,
+            w: wSorController.text,
           );
           break;
       }
@@ -259,11 +253,12 @@ class SystemDataInputState extends State<SystemDataInput> {
             ),
 
             // Matrix input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (_, state) {
+            AnimatedBuilder(
+              animation: context.numberSwitcherState,
+              builder: (context, _) {
                 return MatrixInput(
                   matrixControllers: matrixControllers,
-                  matrixSize: state,
+                  matrixSize: context.numberSwitcherState.state,
                 );
               },
             ),
@@ -277,11 +272,12 @@ class SystemDataInputState extends State<SystemDataInput> {
             ),
 
             // Vector input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (_, state) {
+            AnimatedBuilder(
+              animation: context.numberSwitcherState,
+              builder: (context, _) {
                 return VectorInput(
                   vectorControllers: vectorControllers,
-                  vectorSize: state,
+                  vectorSize: context.numberSwitcherState.state,
                 );
               },
             ),
@@ -297,11 +293,12 @@ class SystemDataInputState extends State<SystemDataInput> {
 
             // The optional input for the initial guesses vector
             // Vector input
-            BlocBuilder<NumberSwitcherCubit, int>(
-              builder: (_, state) {
+            AnimatedBuilder(
+              animation: context.numberSwitcherState,
+              builder: (context, _) {
                 return JacobiVectorInput(
                   controllers: jacobiControllers,
-                  vectorSize: state,
+                  vectorSize: context.numberSwitcherState.state,
                 );
               },
             ),

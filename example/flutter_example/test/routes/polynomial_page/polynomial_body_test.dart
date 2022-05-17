@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
@@ -16,11 +15,6 @@ import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue(MockPolynomialEvent());
-    registerFallbackValue(MockPolynomialState());
-  });
-
   group("Testing the 'PolynomialBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(

@@ -1,11 +1,10 @@
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// The results of the nonlinear equation.
 class NonlinearResults extends StatelessWidget {
@@ -38,23 +37,18 @@ class _NonlinearSolutions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<NonlinearBloc, NonlinearState>(
-      listener: (context, state) {
-        if (state is NonlinearError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.l10n.nonlinear_error),
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is NonlinearGuesses) {
+    return AnimatedBuilder(
+      animation: context.nonlinearState,
+      builder: (context, _) {
+        final nonlinear = context.nonlinearState.state.nonlinear;
+
+        if (nonlinear != null) {
           // Computation results
-          final guess = state.nonlinearResults.guesses.last;
-          final convergence = state.nonlinearResults.convergence;
-          final efficiency = state.nonlinearResults.efficiency;
+          final results = nonlinear.solve();
+
+          final guess = results.guesses.last;
+          final convergence = results.convergence;
+          final efficiency = results.efficiency;
 
           return Column(
             mainAxisSize: MainAxisSize.min,
