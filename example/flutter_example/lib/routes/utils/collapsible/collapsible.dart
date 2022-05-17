@@ -1,10 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:equations_solver/blocs/expansion_cubit/expansion_cubit.dart';
 import 'package:equations_solver/routes/utils/collapsible/primary_region.dart';
 import 'package:equations_solver/routes/utils/collapsible/secondary_region.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget has a visible area, called **header** and another area, called
 /// **content**, that appears or disappears with a slide down or up animation.
@@ -70,7 +68,13 @@ class _CollapsibleState extends State<Collapsible>
   );
 
   /// Open or closes the secondary region.
-  void toggleExpansion() => context.read<ExpansionCubit>().toggle();
+  void toggleExpansion() {
+    if (controller.value == 0) {
+      controller.forward();
+    } else {
+      controller.reverse();
+    }
+  }
 
   @override
   void dispose() {
@@ -82,41 +86,32 @@ class _CollapsibleState extends State<Collapsible>
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ExpansionCubit, bool>(
-      listener: (context, state) {
-        if (!state) {
-          controller.reverse();
-        } else {
-          controller.forward();
-        }
-      },
-      child: Padding(
-        padding: widget.edgeInsets,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: toggleExpansion,
-              behavior: HitTestBehavior.opaque,
-              child: PrimaryRegion(
-                key: const Key('Collapsible-Primary-region'),
-                animation: rotationAnimation,
-                child: widget.header,
-              ),
+    return Padding(
+      padding: widget.edgeInsets,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: toggleExpansion,
+            behavior: HitTestBehavior.opaque,
+            child: PrimaryRegion(
+              key: const Key('Collapsible-Primary-region'),
+              animation: rotationAnimation,
+              child: widget.header,
             ),
-            SizeTransition(
-              key: const Key('Collapsible-SizeTransition'),
-              sizeFactor: controller,
-              axisAlignment: 1,
-              child: SecondaryRegion(
-                key: const Key('Collapsible-Secondary-region'),
-                heightBetweenRegions: widget.heightBetweenRegions,
-                child: widget.content,
-              ),
+          ),
+          SizeTransition(
+            key: const Key('Collapsible-SizeTransition'),
+            sizeFactor: controller,
+            axisAlignment: 1,
+            child: SecondaryRegion(
+              key: const Key('Collapsible-Secondary-region'),
+              heightBetweenRegions: widget.heightBetweenRegions,
+              child: widget.content,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

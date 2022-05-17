@@ -1,8 +1,9 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
+import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
@@ -29,18 +30,6 @@ class NonlinearPage extends StatefulWidget {
 }
 
 class _NonlinearPageState extends State<NonlinearPage> {
-  // Blocs for keeping the zoom state of the plot widget
-  final singlePlot = PlotZoomCubit(
-    minValue: 2,
-    maxValue: 10,
-    initial: 3,
-  );
-  final bracketingPlot = PlotZoomCubit(
-    minValue: 2,
-    maxValue: 10,
-    initial: 3,
-  );
-
   // Bloc for the algorithm precision
   final singlePrecision = PrecisionSliderCubit(
     minValue: 1,
@@ -65,20 +54,24 @@ class _NonlinearPageState extends State<NonlinearPage> {
           dropdownValue: ValueNotifier<String>(
             NonlinearDropdownItems.newton.asString(),
           ),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<PlotZoomCubit>.value(
-                value: singlePlot,
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 2,
+              maxValue: 10,
+              initial: 3,
+            ),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<PrecisionSliderCubit>.value(
+                  value: singlePrecision,
+                ),
+                BlocProvider<TextFieldValuesCubit>.value(
+                  value: singlePointTextfields,
+                ),
+              ],
+              child: const NonlinearBody(
+                key: Key('NonlinearPage-SinglePoint-Body'),
               ),
-              BlocProvider<PrecisionSliderCubit>.value(
-                value: singlePrecision,
-              ),
-              BlocProvider<TextFieldValuesCubit>.value(
-                value: singlePointTextfields,
-              ),
-            ],
-            child: const NonlinearBody(
-              key: Key('NonlinearPage-SinglePoint-Body'),
             ),
           ),
         ),
@@ -92,20 +85,24 @@ class _NonlinearPageState extends State<NonlinearPage> {
           dropdownValue: ValueNotifier<String>(
             NonlinearDropdownItems.bisection.asString(),
           ),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<PlotZoomCubit>.value(
-                value: bracketingPlot,
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 2,
+              maxValue: 10,
+              initial: 3,
+            ),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<PrecisionSliderCubit>.value(
+                  value: bracketingPrecision,
+                ),
+                BlocProvider<TextFieldValuesCubit>.value(
+                  value: bracketingTextfields,
+                ),
+              ],
+              child: const NonlinearBody(
+                key: Key('NonlinearPage-Bracketing-Body'),
               ),
-              BlocProvider<PrecisionSliderCubit>.value(
-                value: bracketingPrecision,
-              ),
-              BlocProvider<TextFieldValuesCubit>.value(
-                value: bracketingTextfields,
-              ),
-            ],
-            child: const NonlinearBody(
-              key: Key('NonlinearPage-Bracketing-Body'),
             ),
           ),
         ),
