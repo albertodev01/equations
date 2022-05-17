@@ -1,9 +1,10 @@
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
+import 'package:equations_solver/routes/models/precision_slider/inherited_precision_slider.dart';
+import 'package:equations_solver/routes/models/precision_slider/precision_slider_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
@@ -30,16 +31,6 @@ class NonlinearPage extends StatefulWidget {
 }
 
 class _NonlinearPageState extends State<NonlinearPage> {
-  // Bloc for the algorithm precision
-  final singlePrecision = PrecisionSliderCubit(
-    minValue: 1,
-    maxValue: 15,
-  );
-  final bracketingPrecision = PrecisionSliderCubit(
-    minValue: 1,
-    maxValue: 15,
-  );
-
   // TextFields values blocs
   final singlePointTextfields = TextFieldValuesCubit();
   final bracketingTextfields = TextFieldValuesCubit();
@@ -60,17 +51,17 @@ class _NonlinearPageState extends State<NonlinearPage> {
               maxValue: 10,
               initial: 3,
             ),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<PrecisionSliderCubit>.value(
-                  value: singlePrecision,
+            child: InheritedPrecisionSlider(
+              precisionState: PrecisionSliderState(minValue: 1, maxValue: 15),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<TextFieldValuesCubit>.value(
+                    value: singlePointTextfields,
+                  ),
+                ],
+                child: const NonlinearBody(
+                  key: Key('NonlinearPage-SinglePoint-Body'),
                 ),
-                BlocProvider<TextFieldValuesCubit>.value(
-                  value: singlePointTextfields,
-                ),
-              ],
-              child: const NonlinearBody(
-                key: Key('NonlinearPage-SinglePoint-Body'),
               ),
             ),
           ),
@@ -91,17 +82,17 @@ class _NonlinearPageState extends State<NonlinearPage> {
               maxValue: 10,
               initial: 3,
             ),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<PrecisionSliderCubit>.value(
-                  value: bracketingPrecision,
+            child: InheritedPrecisionSlider(
+              precisionState: PrecisionSliderState(minValue: 1, maxValue: 15),
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<TextFieldValuesCubit>.value(
+                    value: bracketingTextfields,
+                  ),
+                ],
+                child: const NonlinearBody(
+                  key: Key('NonlinearPage-Bracketing-Body'),
                 ),
-                BlocProvider<TextFieldValuesCubit>.value(
-                  value: bracketingTextfields,
-                ),
-              ],
-              child: const NonlinearBody(
-                key: Key('NonlinearPage-Bracketing-Body'),
               ),
             ),
           ),

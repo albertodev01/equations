@@ -1,6 +1,6 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
@@ -139,7 +139,7 @@ class __InputWidget extends State<_InputWidget> {
 
     formKey.currentState?.reset();
     context.polynomialState.clear();
-    context.read<PlotZoomCubit>().reset();
+    context.plotZoomState.reset();
     context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();

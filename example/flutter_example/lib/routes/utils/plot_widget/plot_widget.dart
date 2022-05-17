@@ -1,9 +1,8 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget draws a cartesian plane and, if there's a [plotMode], it also
 /// plots a real function `f(x)`.
@@ -106,16 +105,17 @@ class _PlotBody<T> extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: BlocBuilder<PlotZoomCubit, double>(
+            child: AnimatedBuilder(
+              animation: context.plotZoomState,
               builder: (context, state) {
                 return CustomPaint(
                   painter: PlotterPainter<T>(
                     plotMode: plotMode,
-                    range: state.round(),
+                    range: context.plotZoomState.zoom.round(),
                     colorArea: ColorArea(
                       color: areaColor,
-                      startPoint: lowerAreaLimit ?? -state,
-                      endPoint: upperAreaLimit ?? state,
+                      startPoint: lowerAreaLimit ?? -context.plotZoomState.zoom,
+                      endPoint: upperAreaLimit ?? context.plotZoomState.zoom,
                     ),
                   ),
                   size: Size.square(normalized),
@@ -133,18 +133,19 @@ class _PlotSlider extends StatelessWidget {
   const _PlotSlider({super.key});
 
   void update(BuildContext context, double value) =>
-      context.read<PlotZoomCubit>().updateSlider(value);
+      context.plotZoomState.updateSlider(value);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlotZoomCubit, double>(
+    return AnimatedBuilder(
+      animation: context.plotZoomState,
       builder: (context, state) {
         return Slider(
           min: 2,
           max: 10,
-          value: state,
+          value: context.plotZoomState.zoom,
           onChanged: (value) => update(context, value),
-          label: '${state.round()}',
+          label: '${context.plotZoomState.zoom.round()}',
         );
       },
     );

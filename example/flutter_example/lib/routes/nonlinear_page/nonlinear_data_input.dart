@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
+import 'package:equations_solver/routes/models/precision_slider/inherited_precision_slider.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
@@ -82,7 +82,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     formKey.currentState?.reset();
     context.nonlinearState.clear();
     context.plotZoomState.reset();
-    context.read<PrecisionSliderCubit>().reset();
+    context.precisionState.reset();
     context.read<TextFieldValuesCubit>().reset();
     context.dropdownValue.value = fieldsCount == 2
         ? NonlinearDropdownItems.newton.asString()
@@ -94,7 +94,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// Solves a nonlinear equation.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
-      final precision = context.read<PrecisionSliderCubit>().state;
+      final precision = context.precisionState.value;
       final algorithm = context.dropdownValue.value.toNonlinearDropdownItems();
 
       if (getType == NonlinearType.singlePoint) {

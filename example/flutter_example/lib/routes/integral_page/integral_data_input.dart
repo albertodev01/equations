@@ -1,10 +1,10 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
 import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
 
     formKey.currentState?.reset();
     context.integralState.clear();
-    context.read<PlotZoomCubit>().reset();
+    context.plotZoomState.reset();
     context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();
