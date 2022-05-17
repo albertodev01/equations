@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
@@ -31,17 +30,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
   /// order to cache the user input.
   TextEditingController _generateTextController(int index) {
     // Initializing with the cached value, if any
-    final controller = TextEditingController(
-      text: context.read<TextFieldValuesCubit>().getValue(index),
-    );
-
-    // Listener that updates the value
-    controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
-    });
+    final controller = TextEditingController();
 
     return controller;
   }
@@ -51,9 +40,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
     for (final controller in matrixControllers) {
       controller.clear();
     }
-
     context.read<OtherBloc>().add(const OtherClean());
-    context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();
   }
@@ -97,71 +84,62 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (_, state) {
-        if (state.isEmpty) {
-          for (final controller in matrixControllers) {
-            controller.clear();
-          }
-        }
-      },
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            // Some spacing
-            const SizedBox(
-              height: 60,
-            ),
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          // Some spacing
+          const SizedBox(
+            height: 60,
+          ),
 
-            // Size changer
-            const SizePicker(),
+          // Size changer
+          const SizePicker(),
 
-            // Some spacing
-            const SizedBox(
-              height: 35,
-            ),
+          // Some spacing
+          const SizedBox(
+            height: 35,
+          ),
 
-            // Matrix input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
-              builder: (context, _) {
-                return MatrixInput(
-                  matrixControllers: matrixControllers,
-                  matrixSize: context.numberSwitcherState.state,
-                );
-              },
-            ),
+          // Matrix input
+          AnimatedBuilder(
+            animation: context.numberSwitcherState,
+            builder: (context, _) {
+              return MatrixInput(
+                matrixControllers: matrixControllers,
+                matrixSize: context.numberSwitcherState.state,
+              );
+            },
+          ),
 
-            // Some spacing
-            const SizedBox(
-              height: 30,
-            ),
+          // Some spacing
+          const SizedBox(
+            height: 30,
+          ),
 
-            // Two buttons needed to "solve" and "clear" the system
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Solving the equation
-                ElevatedButton(
-                  key: const Key('MatrixAnalyze-button-analyze'),
-                  onPressed: matrixAnalyze,
-                  child: Text(context.l10n.analyze),
-                ),
+          // Two buttons needed to "solve" and "clear" the system
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the equation
+              ElevatedButton(
+                key: const Key('MatrixAnalyze-button-analyze'),
+                onPressed: matrixAnalyze,
+                child: Text(context.l10n.analyze),
+              ),
 
-                // Some spacing
-                const SizedBox(width: 30),
+              // Some spacing
+              const SizedBox(width: 30),
 
-                // Cleaning the inputs
-                ElevatedButton(
-                  key: const Key('MatrixAnalyze-button-clean'),
-                  onPressed: cleanInput,
-                  child: Text(context.l10n.clean),
-                ),
-              ],
-            ),
-          ],
-        ),
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('MatrixAnalyze-button-clean'),
+                onPressed: cleanInput,
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

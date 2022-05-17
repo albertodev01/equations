@@ -1,4 +1,3 @@
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
@@ -10,7 +9,6 @@ import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dar
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This page contains a series of linear systems solvers. There are 3 tabs
 /// to solve various size of systems:
@@ -30,11 +28,6 @@ class SystemPage extends StatefulWidget {
 }
 
 class _SystemPageState extends State<SystemPage> {
-  // TextFields values blocs
-  final rowReductionTextFields = TextFieldValuesCubit();
-  final factorizationTextFields = TextFieldValuesCubit();
-  final iterativeTextFields = TextFieldValuesCubit();
-
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -45,14 +38,7 @@ class _SystemPageState extends State<SystemPage> {
           numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
           child: InheritedDropdownValue(
             dropdownValue: ValueNotifier<String>(''),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<TextFieldValuesCubit>.value(
-                  value: rowReductionTextFields,
-                ),
-              ],
-              child: const SystemBody(),
-            ),
+            child: const SystemBody(),
           ),
         ),
       ),
@@ -67,14 +53,7 @@ class _SystemPageState extends State<SystemPage> {
             dropdownValue: ValueNotifier<String>(
               SystemDropdownItems.lu.asString(),
             ),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<TextFieldValuesCubit>.value(
-                  value: factorizationTextFields,
-                ),
-              ],
-              child: const SystemBody(),
-            ),
+            child: const SystemBody(),
           ),
         ),
       ),
@@ -89,14 +68,7 @@ class _SystemPageState extends State<SystemPage> {
             dropdownValue: ValueNotifier<String>(
               SystemDropdownItems.sor.asString(),
             ),
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<TextFieldValuesCubit>.value(
-                  value: iterativeTextFields,
-                ),
-              ],
-              child: const SystemBody(),
-            ),
+            child: const SystemBody(),
           ),
         ),
       ),

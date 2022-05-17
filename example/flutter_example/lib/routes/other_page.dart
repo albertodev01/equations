@@ -1,5 +1,4 @@
 import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers_body.dart';
@@ -31,10 +30,6 @@ class _OtherPageState extends State<OtherPage> {
   final matrixBloc = OtherBloc();
   final complexBloc = OtherBloc();
 
-  // TextFields values blocs
-  final matrixTextfields = TextFieldValuesCubit();
-  final complexTextfields = TextFieldValuesCubit();
-
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -45,9 +40,6 @@ class _OtherPageState extends State<OtherPage> {
           providers: [
             BlocProvider<OtherBloc>.value(
               value: matrixBloc,
-            ),
-            BlocProvider<TextFieldValuesCubit>.value(
-              value: matrixTextfields,
             ),
           ],
           child: const MatrixOtherBody(),
@@ -62,9 +54,6 @@ class _OtherPageState extends State<OtherPage> {
           providers: [
             BlocProvider<OtherBloc>.value(
               value: complexBloc,
-            ),
-            BlocProvider<TextFieldValuesCubit>.value(
-              value: complexTextfields,
             ),
           ],
           child: const ComplexNumberOtherBody(),

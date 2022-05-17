@@ -1,4 +1,3 @@
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
 import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
@@ -8,7 +7,6 @@ import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dar
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a series of input widgets needed to parse the
 /// equation and the integration bounds.
@@ -50,17 +48,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
   /// order to cache the user input.
   TextEditingController _generateTextController(int index) {
     // Initializing with the cached value, if any
-    final controller = TextEditingController(
-      text: context.read<TextFieldValuesCubit>().getValue(index),
-    );
-
-    // Listener that updates the value
-    controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
-    });
+    final controller = TextEditingController();
 
     return controller;
   }
@@ -74,7 +62,6 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     formKey.currentState?.reset();
     context.integralState.clear();
     context.plotZoomState.reset();
-    context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();
   }
@@ -117,62 +104,53 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (_, state) {
-        if (state.isEmpty) {
-          functionController.clear();
-          lowerBoundController.clear();
-          upperBoundController.clear();
-        }
-      },
-      child: Form(
-        key: formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Some space from the top
-            const SizedBox(height: 40),
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Some space from the top
+          const SizedBox(height: 40),
 
-            // The equation input
-            functionInput,
+          // The equation input
+          functionInput,
 
-            // The guesses required by the app
-            guessesInput,
+          // The guesses required by the app
+          guessesInput,
 
-            // Some spacing
-            const SizedBox(height: 40),
+          // Some spacing
+          const SizedBox(height: 40),
 
-            // Which algorithm has to be used
-            const IntegralDropdownSelection(),
+          // Which algorithm has to be used
+          const IntegralDropdownSelection(),
 
-            // Some spacing
-            const SizedBox(height: 50),
+          // Some spacing
+          const SizedBox(height: 50),
 
-            // Two buttons needed to "solve" and "clear" the equation
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Solving the equation
-                ElevatedButton(
-                  key: const Key('Integral-button-solve'),
-                  onPressed: solve,
-                  child: Text(context.l10n.solve),
-                ),
+          // Two buttons needed to "solve" and "clear" the equation
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the equation
+              ElevatedButton(
+                key: const Key('Integral-button-solve'),
+                onPressed: solve,
+                child: Text(context.l10n.solve),
+              ),
 
-                // Some spacing
-                const SizedBox(width: 30),
+              // Some spacing
+              const SizedBox(width: 30),
 
-                // Cleaning the inputs
-                ElevatedButton(
-                  key: const Key('Integral-button-clean'),
-                  onPressed: cleanInput,
-                  child: Text(context.l10n.clean),
-                ),
-              ],
-            ),
-          ],
-        ),
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('Integral-button-clean'),
+                onPressed: cleanInput,
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

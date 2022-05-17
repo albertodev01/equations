@@ -1,4 +1,3 @@
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
@@ -6,7 +5,6 @@ import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.d
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a series of [PolynomialInputField] widgets needed to
 /// parse the coefficients of the polynomial to be solved.
@@ -96,17 +94,7 @@ class __InputWidget extends State<_InputWidget> {
   /// order to cache the user input.
   TextEditingController _generateTextController(int index) {
     // Initializing with the cached value, if any
-    final controller = TextEditingController(
-      text: context.read<TextFieldValuesCubit>().getValue(index),
-    );
-
-    // Listener that updates the value
-    controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
-    });
+    final controller = TextEditingController();
 
     return controller;
   }
@@ -140,7 +128,6 @@ class __InputWidget extends State<_InputWidget> {
     formKey.currentState?.reset();
     context.polynomialState.clear();
     context.plotZoomState.reset();
-    context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();
   }
@@ -156,60 +143,51 @@ class __InputWidget extends State<_InputWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (_, state) {
-        if (state.isEmpty) {
-          for (final controller in controllers) {
-            controller.clear();
-          }
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Some space from the top
-          const SizedBox(height: 40),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Some space from the top
+        const SizedBox(height: 40),
 
-          // The title
-          cachedEquationTitle,
+        // The title
+        cachedEquationTitle,
 
-          // Responsively placing input fields using 'Wrap'
-          Padding(
-            padding: const EdgeInsets.only(left: 60, right: 60),
-            child: Form(
-              key: formKey,
-              child: cachedWrap,
+        // Responsively placing input fields using 'Wrap'
+        Padding(
+          padding: const EdgeInsets.only(left: 60, right: 60),
+          child: Form(
+            key: formKey,
+            child: cachedWrap,
+          ),
+        ),
+
+        // A "spacer" widget
+        const SizedBox(height: 40),
+
+        // Two buttons needed to "solve" and "clear" the equation
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Solving the polynomial
+            ElevatedButton(
+              key: const Key('Polynomial-button-solve'),
+              onPressed: _processInput,
+              child: Text(context.l10n.solve),
             ),
-          ),
 
-          // A "spacer" widget
-          const SizedBox(height: 40),
+            // Some spacing
+            const SizedBox(width: 30),
 
-          // Two buttons needed to "solve" and "clear" the equation
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the polynomial
-              ElevatedButton(
-                key: const Key('Polynomial-button-solve'),
-                onPressed: _processInput,
-                child: Text(context.l10n.solve),
-              ),
-
-              // Some spacing
-              const SizedBox(width: 30),
-
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('Polynomial-button-clean'),
-                onPressed: _cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
-      ),
+            // Cleaning the inputs
+            ElevatedButton(
+              key: const Key('Polynomial-button-clean'),
+              onPressed: _cleanInput,
+              child: Text(context.l10n.clean),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

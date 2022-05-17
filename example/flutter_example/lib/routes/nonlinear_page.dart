@@ -1,4 +1,3 @@
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
@@ -12,7 +11,6 @@ import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This page contains a series of nonlinear equations solvers. There are 2 tabs
 /// that group a series of well-known root finding algorithms:
@@ -31,10 +29,6 @@ class NonlinearPage extends StatefulWidget {
 }
 
 class _NonlinearPageState extends State<NonlinearPage> {
-  // TextFields values blocs
-  final singlePointTextfields = TextFieldValuesCubit();
-  final bracketingTextfields = TextFieldValuesCubit();
-
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -53,15 +47,8 @@ class _NonlinearPageState extends State<NonlinearPage> {
             ),
             child: InheritedPrecisionSlider(
               precisionState: PrecisionSliderState(minValue: 1, maxValue: 15),
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<TextFieldValuesCubit>.value(
-                    value: singlePointTextfields,
-                  ),
-                ],
-                child: const NonlinearBody(
-                  key: Key('NonlinearPage-SinglePoint-Body'),
-                ),
+              child: const NonlinearBody(
+                key: Key('NonlinearPage-SinglePoint-Body'),
               ),
             ),
           ),
@@ -84,15 +71,8 @@ class _NonlinearPageState extends State<NonlinearPage> {
             ),
             child: InheritedPrecisionSlider(
               precisionState: PrecisionSliderState(minValue: 1, maxValue: 15),
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider<TextFieldValuesCubit>.value(
-                    value: bracketingTextfields,
-                  ),
-                ],
-                child: const NonlinearBody(
-                  key: Key('NonlinearPage-Bracketing-Body'),
-                ),
+              child: const NonlinearBody(
+                key: Key('NonlinearPage-Bracketing-Body'),
               ),
             ),
           ),

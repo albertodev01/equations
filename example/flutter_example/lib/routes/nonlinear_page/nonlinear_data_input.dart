@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
@@ -11,7 +10,6 @@ import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a series of input widgets needed to parse the
 /// coefficients of the nonlinear equation to be solved.
@@ -58,17 +56,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// order to cache the user input.
   TextEditingController _generateTextController(int index) {
     // Initializing with the cached value, if any
-    final controller = TextEditingController(
-      text: context.read<TextFieldValuesCubit>().getValue(index),
-    );
-
-    // Listener that updates the value
-    controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
-    });
+    final controller = TextEditingController();
 
     return controller;
   }
@@ -83,7 +71,6 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     context.nonlinearState.clear();
     context.plotZoomState.reset();
     context.precisionState.reset();
-    context.read<TextFieldValuesCubit>().reset();
     context.dropdownValue.value = fieldsCount == 2
         ? NonlinearDropdownItems.newton.asString()
         : NonlinearDropdownItems.bisection.asString();
@@ -126,68 +113,59 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (_, state) {
-        if (state.isEmpty) {
-          for (final controller in controllers) {
-            controller.clear();
-          }
-        }
-      },
-      child: Form(
-        key: formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Some space from the top
-            const SizedBox(height: 40),
+    return Form(
+      key: formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Some space from the top
+          const SizedBox(height: 40),
 
-            // The equation input
-            functionInput,
+          // The equation input
+          functionInput,
 
-            // The guesses required by the app
-            guessesInput,
+          // The guesses required by the app
+          guessesInput,
 
-            // Some spacing
-            const SizedBox(height: 40),
+          // Some spacing
+          const SizedBox(height: 40),
 
-            // Which algorithm has to be used
-            const NonlinearDropdownSelection(),
+          // Which algorithm has to be used
+          const NonlinearDropdownSelection(),
 
-            // Some spacing
-            const SizedBox(height: 40),
+          // Some spacing
+          const SizedBox(height: 40),
 
-            // The slider
-            const PrecisionSlider(),
+          // The slider
+          const PrecisionSlider(),
 
-            // Some spacing
-            const SizedBox(height: 50),
+          // Some spacing
+          const SizedBox(height: 50),
 
-            // Two buttons needed to "solve" and "clear" the equation
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Solving the equation
-                ElevatedButton(
-                  key: const Key('Nonlinear-button-solve'),
-                  onPressed: solve,
-                  child: Text(context.l10n.solve),
-                ),
+          // Two buttons needed to "solve" and "clear" the equation
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the equation
+              ElevatedButton(
+                key: const Key('Nonlinear-button-solve'),
+                onPressed: solve,
+                child: Text(context.l10n.solve),
+              ),
 
-                // Some spacing
-                const SizedBox(width: 30),
+              // Some spacing
+              const SizedBox(width: 30),
 
-                // Cleaning the inputs
-                ElevatedButton(
-                  key: const Key('Nonlinear-button-clean'),
-                  onPressed: cleanInput,
-                  child: Text(context.l10n.clean),
-                ),
-              ],
-            ),
-          ],
-        ),
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('Nonlinear-button-clean'),
+                onPressed: cleanInput,
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
@@ -11,7 +10,6 @@ import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:equations_solver/routes/system_page/utils/sor_relaxation_factor.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a [MatrixInput] widgets needed to parse the values of
 /// the matrix of the system in the `Ax = b` equation.
@@ -98,17 +96,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   /// order to cache the user input.
   TextEditingController _generateTextController(int index) {
     // Initializing with the cached value, if any
-    final controller = TextEditingController(
-      text: context.read<TextFieldValuesCubit>().getValue(index),
-    );
-
-    // Listener that updates the value
-    controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
-    });
+    final controller = TextEditingController();
 
     return controller;
   }
@@ -133,7 +121,6 @@ class SystemDataInputState extends State<SystemDataInput> {
     formKey.currentState?.reset();
     context.systemState.clear();
     context.numberSwitcherState.reset();
-    context.read<TextFieldValuesCubit>().reset();
 
     FocusScope.of(context).unfocus();
   }
@@ -217,119 +204,100 @@ class SystemDataInputState extends State<SystemDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (_, state) {
-        if (state.isEmpty) {
-          wSorController.clear();
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          // Some spacing
+          const SizedBox(
+            height: 60,
+          ),
 
-          for (final controller in matrixControllers) {
-            controller.clear();
-          }
+          // Size changer
+          const SizePicker(),
 
-          for (final controller in vectorControllers) {
-            controller.clear();
-          }
+          // Some spacing
+          const SizedBox(
+            height: 35,
+          ),
 
-          for (final controller in jacobiControllers) {
-            controller.clear();
-          }
-        }
-      },
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            // Some spacing
-            const SizedBox(
-              height: 60,
-            ),
+          // Matrix input
+          AnimatedBuilder(
+            animation: context.numberSwitcherState,
+            builder: (context, _) {
+              return MatrixInput(
+                matrixControllers: matrixControllers,
+                matrixSize: context.numberSwitcherState.state,
+              );
+            },
+          ),
 
-            // Size changer
-            const SizePicker(),
+          // The description associated to the matrix widget
+          matrixText,
 
-            // Some spacing
-            const SizedBox(
-              height: 35,
-            ),
+          // Some spacing
+          const SizedBox(
+            height: 30,
+          ),
 
-            // Matrix input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
-              builder: (context, _) {
-                return MatrixInput(
-                  matrixControllers: matrixControllers,
-                  matrixSize: context.numberSwitcherState.state,
-                );
-              },
-            ),
+          // Vector input
+          AnimatedBuilder(
+            animation: context.numberSwitcherState,
+            builder: (context, _) {
+              return VectorInput(
+                vectorControllers: vectorControllers,
+                vectorSize: context.numberSwitcherState.state,
+              );
+            },
+          ),
 
-            // The description associated to the matrix widget
-            matrixText,
+          // The description associated to the matrix widget
+          vectorText,
 
-            // Some spacing
-            const SizedBox(
-              height: 30,
-            ),
+          // Algorithm type picker
+          const SystemDropdownSelection(),
 
-            // Vector input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
-              builder: (context, _) {
-                return VectorInput(
-                  vectorControllers: vectorControllers,
-                  vectorSize: context.numberSwitcherState.state,
-                );
-              },
-            ),
+          // The optional input for the relaxation value
+          wInput,
 
-            // The description associated to the matrix widget
-            vectorText,
+          // The optional input for the initial guesses vector
+          // Vector input
+          AnimatedBuilder(
+            animation: context.numberSwitcherState,
+            builder: (context, _) {
+              return JacobiVectorInput(
+                controllers: jacobiControllers,
+                vectorSize: context.numberSwitcherState.state,
+              );
+            },
+          ),
 
-            // Algorithm type picker
-            const SystemDropdownSelection(),
+          // Spacing
+          const SizedBox(height: 45),
 
-            // The optional input for the relaxation value
-            wInput,
+          // Two buttons needed to "solve" and "clear" the system
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Solving the equation
+              ElevatedButton(
+                key: const Key('System-button-solve'),
+                onPressed: solve,
+                child: Text(context.l10n.solve),
+              ),
 
-            // The optional input for the initial guesses vector
-            // Vector input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
-              builder: (context, _) {
-                return JacobiVectorInput(
-                  controllers: jacobiControllers,
-                  vectorSize: context.numberSwitcherState.state,
-                );
-              },
-            ),
+              // Some spacing
+              const SizedBox(width: 30),
 
-            // Spacing
-            const SizedBox(height: 45),
-
-            // Two buttons needed to "solve" and "clear" the system
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Solving the equation
-                ElevatedButton(
-                  key: const Key('System-button-solve'),
-                  onPressed: solve,
-                  child: Text(context.l10n.solve),
-                ),
-
-                // Some spacing
-                const SizedBox(width: 30),
-
-                // Cleaning the inputs
-                ElevatedButton(
-                  key: const Key('System-button-clean'),
-                  onPressed: cleanInput,
-                  child: Text(context.l10n.clean),
-                ),
-              ],
-            ),
-          ],
-        ),
+              // Cleaning the inputs
+              ElevatedButton(
+                key: const Key('System-button-clean'),
+                onPressed: cleanInput,
+                child: Text(context.l10n.clean),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
