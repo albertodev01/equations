@@ -1,10 +1,9 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Dropdown button used to choose which root finding algorithm has to be used
 /// in a [NonlinearDataInput] widget.
@@ -55,7 +54,7 @@ class NonlinearDropdownSelectionState
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(NonlinearDropdownItems newValue) =>
-      context.read<DropdownCubit>().changeValue(newValue.asString());
+      context.dropdownValue.value = newValue.asString();
 
   /// The currently selected nonlinear type.
   NonlinearType get nonlinearType => context.nonlinearState.nonlinearType;
@@ -65,12 +64,13 @@ class NonlinearDropdownSelectionState
     return Center(
       child: SizedBox(
         width: nonlinearDropdownWidth,
-        child: BlocBuilder<DropdownCubit, String>(
-          builder: (context, state) {
+        child: ValueListenableBuilder<String>(
+          valueListenable: context.dropdownValue,
+          builder: (context, value, _) {
             return DropdownButtonFormField<NonlinearDropdownItems>(
-              key: const Key('Dropdown-Button-Selection'),
+              key: const Key('Integral-Dropdown-Button-Selection'),
               isExpanded: true,
-              value: state.toNonlinearDropdownItems(),
+              value: value.toNonlinearDropdownItems(),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),

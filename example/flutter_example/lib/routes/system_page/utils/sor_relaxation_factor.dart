@@ -1,9 +1,8 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This very simple widget allows the input of the relaxation factor `w` of the
 /// SOR system solving algorithm.
@@ -55,9 +54,10 @@ class _RelaxationFactorInputState extends State<RelaxationFactorInput> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: BlocBuilder<DropdownCubit, String>(
-        builder: (context, state) {
-          if (state.toLowerCase() ==
+      child: ValueListenableBuilder<String>(
+        valueListenable: context.dropdownValue,
+        builder: (context, value, _) {
+          if (value.toLowerCase() ==
               SystemDropdownItems.sor.asString().toLowerCase()) {
             return inputWidget;
           }

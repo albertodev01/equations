@@ -1,6 +1,6 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
 import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
@@ -35,14 +35,6 @@ class _SystemPageState extends State<SystemPage> {
   final factorizationTextFields = TextFieldValuesCubit();
   final iterativeTextFields = TextFieldValuesCubit();
 
-  // Bloc for the algorithm selection
-  final dropdownFactorization = DropdownCubit(
-    initialValue: SystemDropdownItems.lu.asString(),
-  );
-  final dropdownIterative = DropdownCubit(
-    initialValue: SystemDropdownItems.sor.asString(),
-  );
-
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -51,18 +43,16 @@ class _SystemPageState extends State<SystemPage> {
         systemState: SystemState(SystemType.rowReduction),
         child: InheritedNumberSwitcher(
           numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<TextFieldValuesCubit>.value(
-                value: rowReductionTextFields,
-              ),
-              BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(
-                  initialValue: '',
+          child: InheritedDropdownValue(
+            dropdownValue: ValueNotifier<String>(''),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<TextFieldValuesCubit>.value(
+                  value: rowReductionTextFields,
                 ),
-              ),
-            ],
-            child: const SystemBody(),
+              ],
+              child: const SystemBody(),
+            ),
           ),
         ),
       ),
@@ -73,16 +63,18 @@ class _SystemPageState extends State<SystemPage> {
         systemState: SystemState(SystemType.factorization),
         child: InheritedNumberSwitcher(
           numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<TextFieldValuesCubit>.value(
-                value: factorizationTextFields,
-              ),
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownFactorization,
-              ),
-            ],
-            child: const SystemBody(),
+          child: InheritedDropdownValue(
+            dropdownValue: ValueNotifier<String>(
+              SystemDropdownItems.lu.asString(),
+            ),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<TextFieldValuesCubit>.value(
+                  value: factorizationTextFields,
+                ),
+              ],
+              child: const SystemBody(),
+            ),
           ),
         ),
       ),
@@ -93,16 +85,18 @@ class _SystemPageState extends State<SystemPage> {
         systemState: SystemState(SystemType.iterative),
         child: InheritedNumberSwitcher(
           numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<TextFieldValuesCubit>.value(
-                value: iterativeTextFields,
-              ),
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownIterative,
-              ),
-            ],
-            child: const SystemBody(),
+          child: InheritedDropdownValue(
+            dropdownValue: ValueNotifier<String>(
+              SystemDropdownItems.sor.asString(),
+            ),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<TextFieldValuesCubit>.value(
+                  value: iterativeTextFields,
+                ),
+              ],
+              child: const SystemBody(),
+            ),
           ),
         ),
       ),

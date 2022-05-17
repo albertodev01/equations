@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
@@ -84,11 +84,9 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     context.read<PlotZoomCubit>().reset();
     context.read<PrecisionSliderCubit>().reset();
     context.read<TextFieldValuesCubit>().reset();
-    context.read<DropdownCubit>().changeValue(
-          fieldsCount == 2
-              ? NonlinearDropdownItems.newton.asString()
-              : NonlinearDropdownItems.bisection.asString(),
-        );
+    context.dropdownValue.value = fieldsCount == 2
+        ? NonlinearDropdownItems.newton.asString()
+        : NonlinearDropdownItems.bisection.asString();
 
     FocusScope.of(context).unfocus();
   }
@@ -97,8 +95,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final precision = context.read<PrecisionSliderCubit>().state;
-      final algorithm =
-          context.read<DropdownCubit>().state.toNonlinearDropdownItems();
+      final algorithm = context.dropdownValue.value.toNonlinearDropdownItems();
 
       if (getType == NonlinearType.singlePoint) {
         context.nonlinearState.solveWithSinglePoint(

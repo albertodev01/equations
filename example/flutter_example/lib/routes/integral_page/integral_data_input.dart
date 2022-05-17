@@ -1,10 +1,10 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
 import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +82,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
   /// Solves a nonlinear equation.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
-      final dropdown = context.read<DropdownCubit>().state;
+      final dropdown = context.dropdownValue.value;
       IntegralType type;
 
       switch (dropdown.toIntegralDropdownItems()) {

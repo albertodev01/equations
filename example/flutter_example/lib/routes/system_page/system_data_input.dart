@@ -1,6 +1,6 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
@@ -141,7 +141,7 @@ class SystemDataInputState extends State<SystemDataInput> {
   /// Solves a system of equations.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
-      final algorithm = context.read<DropdownCubit>().state;
+      final algorithm = context.dropdownValue.value;
       final size = context.numberSwitcherState.state;
 
       // Getting the inputs

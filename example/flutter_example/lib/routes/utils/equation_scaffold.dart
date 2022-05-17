@@ -1,12 +1,12 @@
 import 'dart:math' as math;
-import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
+
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/bottom_navigation_bar.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/rail_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 const _assertionError = 'There must be at least 1 navigation item.';
@@ -96,8 +96,8 @@ class _EquationScaffoldState extends State<EquationScaffold>
 
     // At this point, there's at least 1 navigation item and thus the widget
     // requires some responsiveness!
-    return BlocProvider<NavigationCubit>(
-      create: (_) => NavigationCubit(),
+    return InheritedNavigation(
+      navigationIndex: ValueNotifier<int>(0),
       child: LayoutBuilder(
         builder: (context, dimensions) {
           final hasExtra = dimensions.maxWidth >= extraBackgroundBreakpoint;

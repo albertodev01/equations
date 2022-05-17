@@ -1,7 +1,6 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Dropdown button needed to choose which numerical integration algorithm has
 /// to be used.
@@ -38,19 +37,20 @@ class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(IntegralDropdownItems newValue) =>
-      context.read<DropdownCubit>().changeValue(newValue.asString());
+      context.dropdownValue.value = newValue.asString();
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
         width: integralDropdownWidth,
-        child: BlocBuilder<DropdownCubit, String>(
-          builder: (context, state) {
+        child: ValueListenableBuilder<String>(
+          valueListenable: context.dropdownValue,
+          builder: (context, value, _) {
             return DropdownButtonFormField<IntegralDropdownItems>(
               key: const Key('Integral-Dropdown-Button-Selection'),
               isExpanded: true,
-              value: state.toIntegralDropdownItems(),
+              value: value.toIntegralDropdownItems(),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),

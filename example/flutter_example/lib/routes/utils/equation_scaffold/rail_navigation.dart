@@ -1,9 +1,8 @@
-import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// A rail navigation bar to be displayed within an [EquationScaffold] widget.
 class RailNavigation extends StatefulWidget {
@@ -53,14 +52,16 @@ class _RailNavigationState extends State<RailNavigation> {
         ),
 
         // The rail
-        BlocBuilder<NavigationCubit, int>(
-          builder: (_, state) {
+        ValueListenableBuilder<int>(
+          valueListenable: context.navigationIndex,
+          builder: (context, value, _) {
             return NavigationRail(
               groupAlignment: 0,
               destinations: rails,
-              selectedIndex: state,
+              selectedIndex: value,
               labelType: NavigationRailLabelType.all,
-              onDestinationSelected: context.read<NavigationCubit>().pageIndex,
+              onDestinationSelected: (int newIndex) =>
+                  context.navigationIndex.value = newIndex,
             );
           },
         ),

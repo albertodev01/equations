@@ -1,8 +1,7 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Dropdown button used to choose which system solving algorithm has to be used.
 class SystemDropdownSelection extends StatefulWidget {
@@ -45,7 +44,7 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(SystemDropdownItems newValue) =>
-      context.read<DropdownCubit>().changeValue(newValue.asString());
+      context.dropdownValue.value = newValue.asString();
 
   /// The currently selected system type.
   SystemType get systemType => context.systemState.systemType;
@@ -68,12 +67,13 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
           // Dropdown picker
           SizedBox(
             width: 250,
-            child: BlocBuilder<DropdownCubit, String>(
-              builder: (context, state) {
+            child: ValueListenableBuilder<String>(
+              valueListenable: context.dropdownValue,
+              builder: (context, value, _) {
                 return DropdownButtonFormField<SystemDropdownItems>(
                   key: const Key('System-Dropdown-Button-Selection'),
                   isExpanded: true,
-                  value: state.toSystemDropdownItems(),
+                  value: value.toSystemDropdownItems(),
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15)),

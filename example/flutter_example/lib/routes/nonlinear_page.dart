@@ -1,8 +1,8 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
@@ -51,14 +51,6 @@ class _NonlinearPageState extends State<NonlinearPage> {
     maxValue: 15,
   );
 
-  // Bloc for the algorithm selection
-  final dropdownSingle = DropdownCubit(
-    initialValue: NonlinearDropdownItems.newton.asString(),
-  );
-  final dropdownBracketing = DropdownCubit(
-    initialValue: NonlinearDropdownItems.bisection.asString(),
-  );
-
   // TextFields values blocs
   final singlePointTextfields = TextFieldValuesCubit();
   final bracketingTextfields = TextFieldValuesCubit();
@@ -69,23 +61,25 @@ class _NonlinearPageState extends State<NonlinearPage> {
       title: context.l10n.single_point,
       content: InheritedNonlinear(
         nonlinearState: NonlinearState(NonlinearType.singlePoint),
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<PlotZoomCubit>.value(
-              value: singlePlot,
+        child: InheritedDropdownValue(
+          dropdownValue: ValueNotifier<String>(
+            NonlinearDropdownItems.newton.asString(),
+          ),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<PlotZoomCubit>.value(
+                value: singlePlot,
+              ),
+              BlocProvider<PrecisionSliderCubit>.value(
+                value: singlePrecision,
+              ),
+              BlocProvider<TextFieldValuesCubit>.value(
+                value: singlePointTextfields,
+              ),
+            ],
+            child: const NonlinearBody(
+              key: Key('NonlinearPage-SinglePoint-Body'),
             ),
-            BlocProvider<PrecisionSliderCubit>.value(
-              value: singlePrecision,
-            ),
-            BlocProvider<DropdownCubit>.value(
-              value: dropdownSingle,
-            ),
-            BlocProvider<TextFieldValuesCubit>.value(
-              value: singlePointTextfields,
-            ),
-          ],
-          child: const NonlinearBody(
-            key: Key('NonlinearPage-SinglePoint-Body'),
           ),
         ),
       ),
@@ -94,23 +88,25 @@ class _NonlinearPageState extends State<NonlinearPage> {
       title: context.l10n.bracketing,
       content: InheritedNonlinear(
         nonlinearState: NonlinearState(NonlinearType.singlePoint),
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<PlotZoomCubit>.value(
-              value: bracketingPlot,
+        child: InheritedDropdownValue(
+          dropdownValue: ValueNotifier<String>(
+            NonlinearDropdownItems.bisection.asString(),
+          ),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider<PlotZoomCubit>.value(
+                value: bracketingPlot,
+              ),
+              BlocProvider<PrecisionSliderCubit>.value(
+                value: bracketingPrecision,
+              ),
+              BlocProvider<TextFieldValuesCubit>.value(
+                value: bracketingTextfields,
+              ),
+            ],
+            child: const NonlinearBody(
+              key: Key('NonlinearPage-Bracketing-Body'),
             ),
-            BlocProvider<PrecisionSliderCubit>.value(
-              value: bracketingPrecision,
-            ),
-            BlocProvider<DropdownCubit>.value(
-              value: dropdownBracketing,
-            ),
-            BlocProvider<TextFieldValuesCubit>.value(
-              value: bracketingTextfields,
-            ),
-          ],
-          child: const NonlinearBody(
-            key: Key('NonlinearPage-Bracketing-Body'),
           ),
         ),
       ),

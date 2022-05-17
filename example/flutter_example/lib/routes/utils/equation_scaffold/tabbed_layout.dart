@@ -1,7 +1,6 @@
-import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget is wrapper of a [TabBarView] where the user cannot swipe to
 /// change tabs.
@@ -38,8 +37,12 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NavigationCubit, int>(
-      listener: (context, state) => changePage(state),
+    return ValueListenableBuilder<int>(
+      valueListenable: context.navigationIndex,
+      builder: (_, value, child) {
+        changePage(value);
+        return child!;
+      },
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: widget.tabController,
