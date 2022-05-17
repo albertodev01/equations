@@ -3,7 +3,7 @@ import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_result.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents the types of polynomials that can be solved.
+/// Represents the analyzers of polynomials that can be solved.
 enum PolynomialType {
   /// A polynomial whose degree is 1.
   linear,

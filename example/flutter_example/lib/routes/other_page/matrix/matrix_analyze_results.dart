@@ -1,7 +1,8 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
+import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/matrix_result_wrapper.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
@@ -11,7 +12,6 @@ import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget shows the matrix analysis results produced by an [OtherBloc].
 class MatrixAnalyzerResults extends StatelessWidget {
@@ -46,26 +46,25 @@ class _SystemSolutions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OtherBloc, OtherState>(
-      builder: (context, state) {
-        if (state is AnalyzedMatrix) {
-          return _Results(
-            transpose: state.transpose,
-            cofactorMatrix: state.cofactorMatrix,
-            inverse: state.inverse,
-            trace: state.trace,
-            rank: state.rank,
-            characteristicPolynomial: state.characteristicPolynomial,
-            eigenvalues: state.eigenvalues,
-            determinant: state.determinant,
-            isSymmetric: state.isSymmetric,
-            isDiagonal: state.isDiagonal,
-            isIdentity: state.isIdentity,
-          );
-        }
+    return AnimatedBuilder(
+      animation: context.otherState,
+      builder: (context, _) {
+        final result = context.otherState.state.results;
 
-        if (state is OtherLoading) {
-          return const _LoadingWidget();
+        if (result != null && result is MatrixResultWrapper) {
+          return _Results(
+            transpose: result.transpose,
+            cofactorMatrix: result.cofactorMatrix,
+            inverse: result.inverse,
+            trace: result.trace,
+            rank: result.rank,
+            characteristicPolynomial: result.characteristicPolynomial,
+            eigenvalues: result.eigenvalues,
+            determinant: result.determinant,
+            isSymmetric: result.isSymmetric,
+            isDiagonal: result.isDiagonal,
+            isIdentity: result.isIdentity,
+          );
         }
 
         return const SizedBox.shrink();

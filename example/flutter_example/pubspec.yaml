@@ -9,17 +9,11 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  # https://pub.dev/packages/equatable
-  equatable: ^2.0.3
-
   equations:
     path: ../../
 
   flutter:
     sdk: flutter
-
-  # https://pub.dev/packages/flutter_bloc
-  flutter_bloc: ^8.0.1
 
   flutter_localizations:
     sdk: flutter
@@ -34,9 +28,6 @@ dependencies:
   intl: ^0.17.0
 
 dev_dependencies:
-  # https://pub.dev/packages/bloc_test
-  bloc_test: ^9.0.2
-
   # https://pub.dev/packages/dart_code_metrics
   dart_code_metrics: ^4.15.2
 
@@ -48,9 +39,6 @@ dev_dependencies:
 
   integration_test:
     sdk: flutter
-
-  # https://pub.dev/packages/mocktail
-  mocktail: ^0.2.0
 
 flutter:
   uses-material-design: true

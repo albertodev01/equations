@@ -4,8 +4,8 @@ import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_result.da
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents the types of polynomials
-/// Represents the types of nonlinear equations that can be solved.
+/// Represents the analyzers of polynomials
+/// Represents the analyzers of nonlinear equations that can be solved.
 enum NonlinearType {
   /// Algorithms that require a single starting point.
   singlePoint,

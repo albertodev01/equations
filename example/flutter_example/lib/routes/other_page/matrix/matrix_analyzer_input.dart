@@ -1,10 +1,9 @@
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a [MatrixInput] needed to parse the values of the matrix
 /// to be analyzed.
@@ -40,15 +39,14 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
     for (final controller in matrixControllers) {
       controller.clear();
     }
-    context.read<OtherBloc>().add(const OtherClean());
 
+    context.otherState.clear();
     FocusScope.of(context).unfocus();
   }
 
   /// Analyzes the matrix.
   void matrixAnalyze() {
     if (formKey.currentState?.validate() ?? false) {
-      final bloc = context.read<OtherBloc>();
       final size = context.numberSwitcherState.state;
 
       // Getting the inputs
@@ -57,11 +55,9 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
       }).toList();
 
       // Analyze the input
-      bloc.add(
-        MatrixAnalyze(
-          matrix: matrixInputs,
-          size: size,
-        ),
+      context.otherState.matrixAnalyze(
+        matrix: matrixInputs,
+        size: size,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

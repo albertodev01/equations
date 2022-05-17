@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/integral_page/model/integral_result.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents the types of numerical integration algorithms available to compute
+/// Represents the analyzers of numerical integration algorithms available to compute
 /// the solution of a definite integral.
 enum IntegralType {
   /// The midpoint rule.

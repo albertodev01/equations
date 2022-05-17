@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
+import 'package:equations_solver/routes/other_page/model/analyzer/analyzer.dart';
+import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/complex_result_wrapper.dart';
 
 /// Analyzes a complex number and computes various results:
 ///
@@ -9,7 +10,7 @@ import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 ///  - the reciprocal
 ///  - the square root
 ///  - the polar coordinates conversion
-class ComplexNumberAnalyzer extends Analyzer<AnalyzedComplexNumber> {
+class ComplexNumberAnalyzer extends Analyzer<ComplexResultWrapper> {
   /// The real part of the complex number be analyzed.
   final String realPart;
 
@@ -23,12 +24,12 @@ class ComplexNumberAnalyzer extends Analyzer<AnalyzedComplexNumber> {
   });
 
   @override
-  AnalyzedComplexNumber process() {
+  ComplexResultWrapper process() {
     final real = valueParser(realPart);
     final imaginary = valueParser(imaginaryPart);
     final complex = Complex(real, imaginary);
 
-    return AnalyzedComplexNumber(
+    return ComplexResultWrapper(
       abs: complex.abs(),
       conjugate: complex.conjugate(),
       phase: complex.phase(),
@@ -37,10 +38,4 @@ class ComplexNumberAnalyzer extends Analyzer<AnalyzedComplexNumber> {
       polarComplex: complex.toPolarCoordinates(),
     );
   }
-
-  @override
-  List<Object?> get props => [
-        realPart,
-        imaginaryPart,
-      ];
 }

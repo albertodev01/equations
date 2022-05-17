@@ -1,13 +1,13 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/complex_result_wrapper.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget shows the complex number analysis results produced by an
 /// [OtherBloc].
@@ -43,21 +43,20 @@ class _ComplexAnalysis extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OtherBloc, OtherState>(
-      builder: (context, state) {
-        if (state is AnalyzedComplexNumber) {
-          return _Results(
-            abs: state.abs,
-            conjugate: state.conjugate,
-            phase: state.phase,
-            polarComplex: state.polarComplex,
-            reciprocal: state.reciprocal,
-            sqrt: state.sqrt,
-          );
-        }
+    return AnimatedBuilder(
+      animation: context.otherState,
+      builder: (context, _) {
+        final result = context.otherState.state.results;
 
-        if (state is OtherLoading) {
-          return const _LoadingWidget();
+        if (result != null && result is ComplexResultWrapper) {
+          return _Results(
+            abs: result.abs,
+            conjugate: result.conjugate,
+            phase: result.phase,
+            polarComplex: result.polarComplex,
+            reciprocal: result.reciprocal,
+            sqrt: result.sqrt,
+          );
         }
 
         return const SizedBox.shrink();

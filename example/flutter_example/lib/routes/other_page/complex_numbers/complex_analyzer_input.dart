@@ -1,8 +1,7 @@
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a [ComplexNumberInput] needed to parse the values of
 /// the complex number to be analyzed.
@@ -38,19 +37,17 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
     realController.clear();
     imaginaryController.clear();
 
-    context.read<OtherBloc>().add(const OtherClean());
+    context.otherState.clear();
     FocusScope.of(context).unfocus();
   }
 
   /// Analyzes the complex number.
   void complexAnalyze() {
     if (formKey.currentState?.validate() ?? false) {
-      context.read<OtherBloc>().add(
-            ComplexNumberAnalyze(
-              realPart: realController.text,
-              imaginaryPart: imaginaryController.text,
-            ),
-          );
+      context.otherState.complexAnalyze(
+        realPart: realController.text,
+        imaginaryPart: imaginaryController.text,
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/home_page.dart';
 import 'package:equations_solver/routes/integral_page.dart';
 import 'package:equations_solver/routes/nonlinear_page.dart';
@@ -103,13 +102,10 @@ abstract class RouteGenerator {
 }
 
 /// Exception to be thrown when the route being pushed doesn't exist.
-class RouteException extends Equatable implements Exception {
+class RouteException implements Exception {
   /// The error message.
   final String message;
 
   /// Requires the error [message] to be shown when a route is not found.
   const RouteException(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }

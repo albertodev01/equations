@@ -1,9 +1,8 @@
-import 'package:equatable/equatable.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
 /// An interactive item within a [EquationScaffold] navigation bar widget.
-class NavigationItem extends Equatable {
+class NavigationItem {
   /// The title of the item.
   final String title;
 
@@ -26,10 +25,22 @@ class NavigationItem extends Equatable {
   });
 
   @override
-  List<Object?> get props => [
-        title,
-        icon,
-        activeIcon,
-        content,
-      ];
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    if (other is NavigationItem) {
+      return runtimeType == other.runtimeType &&
+          title == other.title &&
+          icon == other.icon &&
+          activeIcon == other.activeIcon &&
+          content == other.content;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode => Object.hash(title, icon, activeIcon, content);
 }

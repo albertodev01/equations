@@ -16,7 +16,7 @@ dart_code_metrics:
   metrics-exclude:
     - test/**
   rules:
-    - avoid-collection-methods-with-unrelated-types
+    - avoid-collection-methods-with-unrelated-analyzers
     - avoid-dynamic
     - avoid-global-state
     - avoid-ignoring-return-values

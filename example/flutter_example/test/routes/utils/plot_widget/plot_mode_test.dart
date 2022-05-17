@@ -3,7 +3,7 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing the 'PlotMode' types", () {
+  group("Testing the 'PlotMode' analyzers", () {
     test('Making sure that objects comparison works properly', () {
       expect(
         PolynomialPlot(

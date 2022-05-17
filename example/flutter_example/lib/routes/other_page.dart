@@ -1,12 +1,13 @@
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers_body.dart';
 import 'package:equations_solver/routes/other_page/matrix_body.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
+import 'package:equations_solver/routes/other_page/model/other_state.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This page contains a series of utilities to analyze matrices (determinant,
 /// eigenvalues, trace, decompositions...) and complex numbers.
@@ -19,43 +20,30 @@ class OtherPage extends StatefulWidget {
 }
 
 class _OtherPageState extends State<OtherPage> {
-  /*
-   * Caching blocs here in the state since `EquationScaffold` is creating a
-   * tab view and thus `BlocProvider`s might be destroyed when the body is not
-   * visible anymore.
-   *
-   */
-
-  // Bloc for working on matrices and complex numbers.
-  final matrixBloc = OtherBloc();
-  final complexBloc = OtherBloc();
-
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.matrices,
-      content: InheritedNumberSwitcher(
-        numberSwitcherState: context.numberSwitcherState,
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<OtherBloc>.value(
-              value: matrixBloc,
-            ),
-          ],
+      content: InheritedOther(
+        otherState: OtherState(),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 5,
+          ),
           child: const MatrixOtherBody(),
         ),
       ),
     ),
     NavigationItem(
       title: context.l10n.complex_numbers,
-      content: InheritedNumberSwitcher(
-        numberSwitcherState: context.numberSwitcherState,
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<OtherBloc>.value(
-              value: complexBloc,
-            ),
-          ],
+      content: InheritedOther(
+        otherState: OtherState(),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 5,
+          ),
           child: const ComplexNumberOtherBody(),
         ),
       ),
