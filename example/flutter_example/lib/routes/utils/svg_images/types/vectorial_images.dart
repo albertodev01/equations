@@ -107,3 +107,15 @@ class Atoms extends SvgImage {
   @override
   String get assetName => 'atoms';
 }
+
+/// A red cloud with a white cross at the bottom-middle of its body.
+class UrlError extends SvgImage {
+  /// Creates an [UrlError] widget.
+  const UrlError({
+    super.key,
+    super.size,
+  });
+
+  @override
+  String get assetName => 'url_error';
+}

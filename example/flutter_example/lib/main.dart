@@ -30,9 +30,12 @@ class EquationsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final appRouter = generateRouter();
+
+    return MaterialApp.router(
       // Route management
-      onGenerateRoute: RouteGenerator.generateRoute,
+      routerDelegate: appRouter.routerDelegate,
+      routeInformationParser: appRouter.routeInformationParser,
 
       // Localized app title
       onGenerateTitle: (context) => context.l10n.appTitle,

@@ -1,7 +1,6 @@
 import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
@@ -14,22 +13,19 @@ void main() {
       expect(find.byType(Center), findsOneWidget);
       expect(find.text('No discriminant.'), findsOneWidget);
     });
+  });
 
-    testGoldens('NoDiscriminant', (tester) async {
-      const widget = SizedBox(
-        width: 300,
-        height: 150,
-        child: Scaffold(body: NoDiscriminant()),
+  group('Golden tests - NoDiscriminant', () {
+    testWidgets('NoDiscriminant', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: NoDiscriminant(),
+        ),
       );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 300),
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/no_discriminant.png'),
       );
-      await screenMatchesGolden(tester, 'no_discriminant');
     });
   });
 }

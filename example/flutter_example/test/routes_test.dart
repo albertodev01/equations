@@ -1,135 +1,48 @@
 import 'package:equations_solver/routes.dart';
-import 'package:equations_solver/routes/home_page.dart';
-import 'package:equations_solver/routes/integral_page.dart';
-import 'package:equations_solver/routes/nonlinear_page.dart';
-import 'package:equations_solver/routes/other_page.dart';
-import 'package:equations_solver/routes/polynomial_page.dart';
-import 'package:equations_solver/routes/system_page.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Making sure that route names are consistent', () {
     test('Verifying route names', () {
-      expect(RouteGenerator.homePage, equals('/'));
-      expect(RouteGenerator.polynomialPage, equals('/polynomials'));
-      expect(RouteGenerator.nonlinearPage, equals('/nonlinear'));
-      expect(RouteGenerator.systemPage, equals('/system'));
-      expect(RouteGenerator.integralPage, equals('/integral'));
-      expect(RouteGenerator.otherPage, equals('/other'));
+      expect(homePagePath, equals('/'));
+      expect(polynomialPagePath, equals('/polynomials'));
+      expect(nonlinearPagePath, equals('/nonlinears'));
+      expect(systemPagePath, equals('/systems'));
+      expect(integralPagePath, equals('/integrals'));
+      expect(otherPagePath, equals('/other'));
     });
 
-    test('Checking routes health', () {
-      // Determines the status of the test
-      var success = true;
+    test('Making sure that the generator produces correct routes', () {
+      final appRoutes = generateRouter();
+      expect(appRoutes.routerDelegate.routes.length, equals(6));
+      expect(appRoutes.routerDelegate.errorBuilder, isNotNull);
 
-      // The list of routes to be tested
-      const routes = <String>[
-        RouteGenerator.homePage,
-        RouteGenerator.polynomialPage,
-        RouteGenerator.nonlinearPage,
-        RouteGenerator.systemPage,
-        RouteGenerator.integralPage,
-        RouteGenerator.otherPage,
-      ];
-
-      try {
-        // Making sure no exceptions are thrown inside routes
-        for (final route in routes) {
-          final setting = RouteSettings(name: route);
-          final pageRouteBuilder = RouteGenerator.generateRoute(setting);
-
-          expect(pageRouteBuilder, isA<PageRouteBuilder>());
-        }
-      } on Exception {
-        success = false;
-      }
-
-      expect(success, true);
-    });
-
-    test('Making sure that routes map to a PageRoute instance', () {
+      // Exact routes
       expect(
-        RouteGenerator.generateRoute(
-          const RouteSettings(
-            name: RouteGenerator.homePage,
-          ),
-        ),
-        isA<PageRouteBuilder<HomePage>>(),
+        appRoutes.routerDelegate.routes.any((r) => r.path == homePagePath),
+        isTrue,
       );
-
       expect(
-        RouteGenerator.generateRoute(
-          const RouteSettings(
-            name: RouteGenerator.polynomialPage,
-          ),
-        ),
-        isA<PageRouteBuilder<PolynomialPage>>(),
+        appRoutes.routerDelegate.routes
+            .any((r) => r.path == polynomialPagePath),
+        isTrue,
       );
-
       expect(
-        RouteGenerator.generateRoute(
-          const RouteSettings(
-            name: RouteGenerator.nonlinearPage,
-          ),
-        ),
-        isA<PageRouteBuilder<NonlinearPage>>(),
+        appRoutes.routerDelegate.routes.any((r) => r.path == nonlinearPagePath),
+        isTrue,
       );
-
       expect(
-        RouteGenerator.generateRoute(
-          const RouteSettings(
-            name: RouteGenerator.systemPage,
-          ),
-        ),
-        isA<PageRouteBuilder<SystemPage>>(),
+        appRoutes.routerDelegate.routes.any((r) => r.path == systemPagePath),
+        isTrue,
       );
-
       expect(
-        RouteGenerator.generateRoute(
-          const RouteSettings(
-            name: RouteGenerator.integralPage,
-          ),
-        ),
-        isA<PageRouteBuilder<IntegralPage>>(),
+        appRoutes.routerDelegate.routes.any((r) => r.path == integralPagePath),
+        isTrue,
       );
-
       expect(
-        RouteGenerator.generateRoute(
-          const RouteSettings(
-            name: RouteGenerator.otherPage,
-          ),
-        ),
-        isA<PageRouteBuilder<OtherPage>>(),
+        appRoutes.routerDelegate.routes.any((r) => r.path == otherPagePath),
+        isTrue,
       );
     });
-
-    test('Checking the type of the exception thrown', () {
-      expect(
-        () {
-          RouteGenerator.generateRoute(const RouteSettings(name: ''));
-        },
-        throwsA(isA<RouteException>()),
-      );
-    });
-
-    test(
-      "Making sure that 'RouteException' objects properly define equality"
-      ' overrides',
-      () {
-        const exception = RouteException('Message');
-
-        expect(exception.message, equals('Message'));
-        expect(
-          exception,
-          equals(const RouteException('Message')),
-        );
-        expect(
-          exception.hashCode,
-          equals(const RouteException('Message').hashCode),
-        );
-      },
-    );
   });
 }

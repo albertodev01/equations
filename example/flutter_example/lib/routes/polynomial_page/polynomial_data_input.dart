@@ -1,5 +1,6 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
@@ -19,22 +20,18 @@ class PolynomialDataInput extends StatelessWidget {
     switch (polynomialType) {
       case PolynomialType.linear:
         return const _InputWidget(
-          inputLength: 2,
           equationTemplate: 'ax + b',
         );
       case PolynomialType.quadratic:
         return const _InputWidget(
-          inputLength: 3,
           equationTemplate: 'ax^2 + bx + c',
         );
       case PolynomialType.cubic:
         return const _InputWidget(
-          inputLength: 4,
           equationTemplate: 'ax^3 + bx^2 + cx + d',
         );
       case PolynomialType.quartic:
         return const _InputWidget(
-          inputLength: 5,
           equationTemplate: 'ax^4 + bx^3 + cx^2 + dx + e',
         );
     }
@@ -43,16 +40,12 @@ class PolynomialDataInput extends StatelessWidget {
 
 /// The actual input container.
 class _InputWidget extends StatefulWidget {
-  /// How many input fields the screen has to display.
-  final int inputLength;
-
   /// The 'form' of the equation. This can be, for example, `ax^2 + bx + c` in
   /// the case of a quadratic polynomial.
   final String equationTemplate;
 
   /// Creates a [_InputWidget] widget.
   const _InputWidget({
-    required this.inputLength,
     required this.equationTemplate,
   });
 
@@ -61,14 +54,6 @@ class _InputWidget extends StatefulWidget {
 }
 
 class __InputWidget extends State<_InputWidget> {
-  /// Controllers of the various input fields are "cached" because they'll never
-  /// change during the lifetime of the widget.
-  late final controllers = List<TextEditingController>.generate(
-    widget.inputLength,
-    _generateTextController,
-    growable: false,
-  );
-
   /// This is displayed at the top of the input box.
   late final cachedEquationTitle = Padding(
     padding: const EdgeInsets.only(bottom: 20),
@@ -86,8 +71,8 @@ class __InputWidget extends State<_InputWidget> {
   ///
   /// This is cached because the number of input fields won't change.
   late final Widget cachedWrap = _InputFieldsWrapWidget(
-    controllers: controllers,
-    inputLength: widget.inputLength,
+    controllers: context.textControllers,
+    inputLength: context.textControllers.length,
   );
 
   /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
@@ -104,7 +89,9 @@ class __InputWidget extends State<_InputWidget> {
     if (formKey.currentState?.validate() ?? false) {
       // Valid input
       context.polynomialState.solvePolynomial(
-        controllers.map<String>((c) => c.text).toList(),
+        context.textControllers
+            .map<String>((c) => c.text)
+            .toList(growable: false),
       );
     } else {
       context.polynomialState.clear();
@@ -121,7 +108,7 @@ class __InputWidget extends State<_InputWidget> {
 
   /// Form cleanup.
   void _cleanInput() {
-    for (final controller in controllers) {
+    for (final controller in context.textControllers) {
       controller.clear();
     }
 
@@ -130,15 +117,6 @@ class __InputWidget extends State<_InputWidget> {
     context.plotZoomState.reset();
 
     FocusScope.of(context).unfocus();
-  }
-
-  @override
-  void dispose() {
-    for (final controller in controllers) {
-      controller.dispose();
-    }
-
-    super.dispose();
   }
 
   @override

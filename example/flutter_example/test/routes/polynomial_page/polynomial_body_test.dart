@@ -1,30 +1,26 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
+import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
+import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
+import 'polynomial_mock.dart';
 
 void main() {
   group("Testing the 'PolynomialBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        MockWrapper(
-          child: BlocProvider<PolynomialBloc>(
-            create: (_) => PolynomialBloc(PolynomialType.quartic),
-            child: const Scaffold(
-              body: PolynomialBody(),
-            ),
-          ),
+        mockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
       );
 
@@ -38,13 +34,11 @@ void main() {
       'test',
       (tester) async {
         await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<PolynomialBloc>(
-              create: (_) => PolynomialBloc(PolynomialType.quadratic),
-              child: const Scaffold(
-                body: PolynomialBody(),
-              ),
-            ),
+          mockPolynomialWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -66,13 +60,11 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<PolynomialBloc>(
-              create: (_) => PolynomialBloc(PolynomialType.cubic),
-              child: const Scaffold(
-                body: PolynomialBody(),
-              ),
-            ),
+          mockPolynomialWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -88,30 +80,12 @@ void main() {
     );
 
     testWidgets('Making sure that solving linear eq. works', (tester) async {
-      final bloc = PolynomialBloc(PolynomialType.linear);
-
       await tester.pumpWidget(
-        MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<PolynomialBloc>.value(
-                value: bloc,
-              ),
-              BlocProvider<PlotZoomCubit>(
-                create: (_) => PlotZoomCubit(
-                  minValue: 1,
-                  maxValue: 10,
-                  initial: 5,
-                ),
-              ),
-            ],
-            child: Scaffold(
-              body: BlocProvider<PolynomialBloc>.value(
-                value: bloc,
-                child: const PolynomialBody(),
-              ),
-            ),
-          ),
+        mockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
       );
 
@@ -126,22 +100,24 @@ void main() {
       await tester.enterText(coeffB, '1/2');
 
       // Making sure that there are no results
-      expect(bloc.state, isA<PolynomialNone>());
+      final inheritedWidget = tester.widget<InheritedPolynomial>(
+        find.byType(InheritedPolynomial),
+      );
+      expect(inheritedWidget.polynomialState.state.algebraic, isNull);
       expect(find.byType(NoResults), findsOneWidget);
 
       // Solving the equation
       await tester.tap(solveButton);
       await tester.pumpAndSettle();
 
-      // Solutions on the UI!
-      expect(bloc.state, isA<PolynomialRoots>());
+      // Solutions in the UI!
+      expect(inheritedWidget.polynomialState.state.algebraic, isNotNull);
       expect(find.byType(NoResults), findsNothing);
       expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
       expect(find.byType(ComplexResultCard), findsNWidgets(2));
     });
 
-    testWidgets('Making sure that solving linear eq. works', (tester) async {
-      final bloc = PolynomialBloc(PolynomialType.quadratic);
+    testWidgets('Making sure that solving quadratic eq. works', (tester) async {
       var quadraticTabName = '';
 
       await tester.pumpWidget(
@@ -150,25 +126,13 @@ void main() {
             builder: (context) {
               quadraticTabName = context.l10n.secondDegree;
 
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<PolynomialBloc>.value(
-                    value: bloc,
-                  ),
-                  BlocProvider<PlotZoomCubit>(
-                    create: (_) => PlotZoomCubit(
-                      minValue: 1,
-                      maxValue: 10,
-                      initial: 5,
-                    ),
-                  ),
+              return mockPolynomialWidget(
+                polynomialType: PolynomialType.quadratic,
+                textControllers: [
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
                 ],
-                child: Scaffold(
-                  body: BlocProvider<PolynomialBloc>.value(
-                    value: bloc,
-                    child: const PolynomialBody(),
-                  ),
-                ),
               );
             },
           ),
@@ -194,7 +158,10 @@ void main() {
       await tester.enterText(coeffC, '3');
 
       // Making sure that there are no results
-      expect(bloc.state, isA<PolynomialNone>());
+      final inheritedWidget = tester.widget<InheritedPolynomial>(
+        find.byType(InheritedPolynomial),
+      );
+      expect(inheritedWidget.polynomialState.state.algebraic, isNull);
       expect(find.byType(NoResults), findsOneWidget);
 
       // Solving the equation
@@ -202,14 +169,13 @@ void main() {
       await tester.pumpAndSettle();
 
       // Solutions on the UI!
-      expect(bloc.state, isA<PolynomialRoots>());
+      expect(inheritedWidget.polynomialState.state.algebraic, isNotNull);
       expect(find.byType(NoResults), findsNothing);
       expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
       expect(find.byType(ComplexResultCard), findsNWidgets(3));
     });
 
     testWidgets('Making sure that solving cubic eq. works', (tester) async {
-      final bloc = PolynomialBloc(PolynomialType.cubic);
       var cubicTabName = '';
 
       await tester.pumpWidget(
@@ -218,25 +184,14 @@ void main() {
             builder: (context) {
               cubicTabName = context.l10n.thirdDegree;
 
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<PolynomialBloc>.value(
-                    value: bloc,
-                  ),
-                  BlocProvider<PlotZoomCubit>(
-                    create: (_) => PlotZoomCubit(
-                      minValue: 1,
-                      maxValue: 10,
-                      initial: 5,
-                    ),
-                  ),
+              return mockPolynomialWidget(
+                polynomialType: PolynomialType.cubic,
+                textControllers: [
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
                 ],
-                child: Scaffold(
-                  body: BlocProvider<PolynomialBloc>.value(
-                    value: bloc,
-                    child: const PolynomialBody(),
-                  ),
-                ),
               );
             },
           ),
@@ -265,7 +220,10 @@ void main() {
       await tester.enterText(coeffD, '1');
 
       // Making sure that there are no results
-      expect(bloc.state, isA<PolynomialNone>());
+      final inheritedWidget = tester.widget<InheritedPolynomial>(
+        find.byType(InheritedPolynomial),
+      );
+      expect(inheritedWidget.polynomialState.state.algebraic, isNull);
       expect(find.byType(NoResults), findsOneWidget);
 
       // Solving the equation
@@ -273,14 +231,13 @@ void main() {
       await tester.pumpAndSettle();
 
       // Solutions on the UI!
-      expect(bloc.state, isA<PolynomialRoots>());
+      expect(inheritedWidget.polynomialState.state.algebraic, isNotNull);
       expect(find.byType(NoResults), findsNothing);
       expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
       expect(find.byType(ComplexResultCard), findsNWidgets(4));
     });
 
-    testWidgets('Making sure that solving cubic eq. works', (tester) async {
-      final bloc = PolynomialBloc(PolynomialType.quartic);
+    testWidgets('Making sure that solving quartic eq. works', (tester) async {
       var quarticTabName = '';
 
       await tester.pumpWidget(
@@ -289,25 +246,15 @@ void main() {
             builder: (context) {
               quarticTabName = context.l10n.fourthDegree;
 
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<PolynomialBloc>.value(
-                    value: bloc,
-                  ),
-                  BlocProvider<PlotZoomCubit>(
-                    create: (_) => PlotZoomCubit(
-                      minValue: 1,
-                      maxValue: 10,
-                      initial: 5,
-                    ),
-                  ),
+              return mockPolynomialWidget(
+                polynomialType: PolynomialType.quartic,
+                textControllers: [
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
                 ],
-                child: Scaffold(
-                  body: BlocProvider<PolynomialBloc>.value(
-                    value: bloc,
-                    child: const PolynomialBody(),
-                  ),
-                ),
               );
             },
           ),
@@ -339,7 +286,10 @@ void main() {
       await tester.enterText(coeffE, 'e');
 
       // Making sure that there are no results
-      expect(bloc.state, isA<PolynomialNone>());
+      final inheritedWidget = tester.widget<InheritedPolynomial>(
+        find.byType(InheritedPolynomial),
+      );
+      expect(inheritedWidget.polynomialState.state.algebraic, isNull);
       expect(find.byType(NoResults), findsOneWidget);
 
       // Solving the equation
@@ -347,7 +297,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Solutions on the UI!
-      expect(bloc.state, isA<PolynomialRoots>());
+      expect(inheritedWidget.polynomialState.state.algebraic, isNotNull);
       expect(find.byType(NoResults), findsNothing);
       expect(find.byKey(const Key('PolynomialDiscriminant')), findsOneWidget);
       expect(find.byType(ComplexResultCard), findsNWidgets(5));

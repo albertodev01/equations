@@ -12,15 +12,15 @@ import 'package:flutter_test/flutter_test.dart';
 import '../mock_wrapper.dart';
 
 void main() {
-  const widgetToTest = MockWrapper(
-    child: SingleChildScrollView(
-      child: HomeContents(),
-    ),
-  );
-
   group("Testing the 'HomeContents' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(widgetToTest);
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: SingleChildScrollView(
+            child: HomeContents(),
+          ),
+        ),
+      );
 
       expect(find.byType(CardContainer), findsNWidgets(5));
       expect(find.byType(PolynomialLogo), findsOneWidget);
@@ -31,7 +31,9 @@ void main() {
       'Making sure that tapping on the CardContainer widget for '
       'polynomial equations opens a new route',
       (tester) async {
-        await tester.pumpWidget(widgetToTest);
+        await tester.pumpWidget(
+          const MockWrapperWithNavigator(),
+        );
         final finder = find.byKey(const Key('PolynomialLogo-Container'));
 
         // Tapping an waiting for the animations to complete
@@ -45,9 +47,11 @@ void main() {
 
     testWidgets(
       'Making sure that tapping on the CardContainer widget for '
-      'polynomial equations opens a new route',
+      'nonlinear equations opens a new route',
       (tester) async {
-        await tester.pumpWidget(widgetToTest);
+        await tester.pumpWidget(
+          const MockWrapperWithNavigator(),
+        );
         final finder = find.byKey(const Key('NonlinearLogo-Container'));
 
         // Tapping an waiting for the animations to complete
@@ -63,7 +67,9 @@ void main() {
       'Making sure that tapping on the CardContainer widget for '
       'systems of equations opens a new route',
       (tester) async {
-        await tester.pumpWidget(widgetToTest);
+        await tester.pumpWidget(
+          const MockWrapperWithNavigator(),
+        );
         final finder = find.byKey(const Key('SystemsLogo-Container'));
 
         // Tapping an waiting for the animations to complete
@@ -79,7 +85,9 @@ void main() {
       'Making sure that tapping on the CardContainer widget for '
       'integrals opens a new route',
       (tester) async {
-        await tester.pumpWidget(widgetToTest);
+        await tester.pumpWidget(
+          const MockWrapperWithNavigator(),
+        );
         final finder = find.byKey(const Key('IntegralsLogo-Container'));
 
         // Tapping an waiting for the animations to complete
@@ -95,7 +103,9 @@ void main() {
       'Making sure that tapping on the CardContainer widget for '
       'the analyzers ("Other" page) opens a new route',
       (tester) async {
-        await tester.pumpWidget(widgetToTest);
+        await tester.pumpWidget(
+          const MockWrapperWithNavigator(),
+        );
         final finder = find.byKey(const Key('OtherLogo-Container'));
 
         // Tapping an waiting for the animations to complete
@@ -106,9 +116,17 @@ void main() {
         expect(find.byType(OtherPage), findsOneWidget);
       },
     );
+  });
 
+  group('Golden tests - HomeContents', () {
     testWidgets('Golden test - HomeContents', (tester) async {
-      await tester.pumpWidget(widgetToTest);
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: SingleChildScrollView(
+            child: HomeContents(),
+          ),
+        ),
+      );
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/home_contents.png'),

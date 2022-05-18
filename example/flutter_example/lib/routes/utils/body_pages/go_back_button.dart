@@ -1,4 +1,6 @@
+import 'package:equations_solver/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// This button simply goes back to the previous page.
 class GoBackButton extends StatelessWidget {
@@ -9,7 +11,7 @@ class GoBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
-      onPressed: Navigator.of(context).pop,
+      onPressed: () => context.go(homePagePath),
     );
   }
 }

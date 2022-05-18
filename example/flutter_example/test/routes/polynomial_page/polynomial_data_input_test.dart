@@ -1,55 +1,25 @@
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
+import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
+import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
+import 'polynomial_mock.dart';
 
 void main() {
-  late final List<BlocProvider> providers;
-  late final PolynomialBloc polynomialBloc;
-
-  setUpAll(() {
-    registerFallbackValue(MockPolynomialEvent());
-    registerFallbackValue(MockPolynomialState());
-
-    polynomialBloc = MockPolynomialBloc();
-
-    providers = [
-      BlocProvider<PolynomialBloc>.value(
-        value: polynomialBloc,
-      ),
-      BlocProvider<PrecisionSliderCubit>(
-        create: (_) => PrecisionSliderCubit(
-          minValue: 1,
-          maxValue: 10,
-        ),
-      ),
-    ];
-  });
-
   group("Testing the 'PolynomialDataInput' widget", () {
     testWidgets(
       "Making sure that with a 'linear' configuration type only "
       '2 input fields appear on the screen',
       (tester) async {
-        when(() => polynomialBloc.polynomialType)
-            .thenReturn(PolynomialType.linear);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const Scaffold(
-                body: PolynomialDataInput(),
-              ),
-            ),
+          mockPolynomialWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -65,17 +35,14 @@ void main() {
       "Making sure that with a 'quadratic' configuration type only "
       '3 input fields appear on the screen',
       (tester) async {
-        when(() => polynomialBloc.polynomialType)
-            .thenReturn(PolynomialType.quadratic);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const Scaffold(
-                body: PolynomialDataInput(),
-              ),
-            ),
+          mockPolynomialWidget(
+            polynomialType: PolynomialType.quadratic,
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -91,17 +58,15 @@ void main() {
       "Making sure that with a 'cubic' configuration type only "
       '4 input fields appear on the screen',
       (tester) async {
-        when(() => polynomialBloc.polynomialType)
-            .thenReturn(PolynomialType.cubic);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const Scaffold(
-                body: PolynomialDataInput(),
-              ),
-            ),
+          mockPolynomialWidget(
+            polynomialType: PolynomialType.cubic,
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -114,20 +79,19 @@ void main() {
     );
 
     testWidgets(
-      "Making sure that with a 'cubic' configuration type only "
+      "Making sure that with a 'quartic' configuration type only "
       '5 input fields appear on the screen',
       (tester) async {
-        when(() => polynomialBloc.polynomialType)
-            .thenReturn(PolynomialType.quartic);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const Scaffold(
-                body: PolynomialDataInput(),
-              ),
-            ),
+          mockPolynomialWidget(
+            polynomialType: PolynomialType.quartic,
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -143,17 +107,12 @@ void main() {
       'Making sure that when trying to solve an equation, if at '
       'least one of the inputs is wrong, a snackbar appears',
       (tester) async {
-        when(() => polynomialBloc.polynomialType)
-            .thenReturn(PolynomialType.linear);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const Scaffold(
-                body: PolynomialDataInput(),
-              ),
-            ),
+          mockPolynomialWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -167,29 +126,32 @@ void main() {
         // The snackbar appeared
         await tester.pumpAndSettle();
         expect(find.byType(SnackBar), findsOneWidget);
+
+        final inheritedWidget = tester.widget<InheritedPolynomial>(
+          find.byType(InheritedPolynomial),
+        );
+        expect(inheritedWidget.polynomialState.state.algebraic, isNull);
       },
     );
 
     testWidgets('Making sure that equations can be solved', (tester) async {
       late FocusScopeNode focusScope;
-      final bloc = PolynomialBloc(PolynomialType.quadratic);
 
       await tester.pumpWidget(
-        MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: Scaffold(
-              body: BlocProvider<PolynomialBloc>.value(
-                value: bloc,
-                child: Builder(
-                  builder: (context) {
-                    focusScope = FocusScope.of(context);
+        MaterialApp(
+          home: Builder(
+            builder: (context) {
+              focusScope = FocusScope.of(context);
 
-                    return const PolynomialDataInput();
-                  },
-                ),
-              ),
-            ),
+              return mockPolynomialWidget(
+                polynomialType: PolynomialType.quadratic,
+                textControllers: [
+                  TextEditingController(),
+                  TextEditingController(),
+                  TextEditingController(),
+                ],
+              );
+            },
           ),
         ),
       );
@@ -215,137 +177,94 @@ void main() {
       await tester.enterText(coeffB, '1/2');
       await tester.enterText(coeffC, '3');
 
-      expect(bloc.state, isA<PolynomialNone>());
+      final inheritedWidget = tester.widget<InheritedPolynomial>(
+        find.byType(InheritedPolynomial),
+      );
+      expect(inheritedWidget.polynomialState.state.algebraic, isNull);
       expect(focusScope.hasFocus, isTrue);
 
       // Solving the equation
       await tester.tap(solveButton);
       await tester.pumpAndSettle();
 
-      // Sending it to the bloc
-      expect(bloc.state, isA<PolynomialRoots>());
-
       // Cleaning the UI
       await tester.tap(cleanButton);
       await tester.pumpAndSettle();
 
-      expect(bloc.state, isA<PolynomialNone>());
-      expect(focusScope.hasFocus, isFalse);
       tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach((t) {
         expect(t.controller!.text.length, isZero);
       });
     });
+  });
 
-    testGoldens('PolynomialDataInput - Linear equation', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.linear);
-
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Linear equations',
-          SizedBox(
-            width: 500,
-            height: 400,
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const PolynomialDataInput(),
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+  group('Golden tests - PolynomialDataInput', () {
+    testWidgets('PolynomialDataInput - linear', (tester) async {
+      await tester.pumpWidget(
+        mockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
-        surfaceSize: const Size(500, 500),
       );
-
-      await screenMatchesGolden(tester, 'polynomial_input_linear');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/polynomial_data_input_linear.png'),
+      );
     });
 
-    testGoldens('PolynomialDataInput - Quadratic equation', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.quadratic);
-
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Quadratic equations',
-          SizedBox(
-            width: 500,
-            height: 400,
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const PolynomialDataInput(),
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+    testWidgets('PolynomialDataInput - quadratic', (tester) async {
+      await tester.pumpWidget(
+        mockPolynomialWidget(
+          polynomialType: PolynomialType.quadratic,
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
-        surfaceSize: const Size(500, 500),
       );
-
-      await screenMatchesGolden(tester, 'polynomial_input_quadratic');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/polynomial_data_input_quadratic.png'),
+      );
     });
 
-    testGoldens('PolynomialDataInput - Cubic equation', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.cubic);
-
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Cubic equations',
-          SizedBox(
-            width: 500,
-            height: 400,
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const PolynomialDataInput(),
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+    testWidgets('PolynomialDataInput - cubic', (tester) async {
+      await tester.pumpWidget(
+        mockPolynomialWidget(
+          polynomialType: PolynomialType.cubic,
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
-        surfaceSize: const Size(500, 500),
       );
-
-      await screenMatchesGolden(tester, 'polynomial_input_cubic');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/polynomial_data_input_cubic.png'),
+      );
     });
 
-    testGoldens('PolynomialDataInput - Quartic equation', (tester) async {
-      when(() => polynomialBloc.polynomialType)
-          .thenReturn(PolynomialType.quartic);
-
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Quartic equations',
-          SizedBox(
-            width: 500,
-            height: 400,
-            child: MultiBlocProvider(
-              providers: providers,
-              child: const PolynomialDataInput(),
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+    testWidgets('PolynomialDataInput - quartic', (tester) async {
+      await tester.pumpWidget(
+        mockPolynomialWidget(
+          polynomialType: PolynomialType.quartic,
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
-        surfaceSize: const Size(500, 500),
       );
-
-      await screenMatchesGolden(tester, 'polynomial_input_quartic');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/polynomial_data_input_quartic.png'),
+      );
     });
   });
 }

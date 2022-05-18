@@ -127,5 +127,16 @@ void main() {
       );
       await screenMatchesGolden(tester, 'atoms');
     });
+
+    testGoldens('UrlError', (tester) async {
+      final builder = GoldenBuilder.column()..addScenario('', const UrlError());
+
+      await tester.pumpWidgetBuilder(
+        builder.build(),
+        wrapper: (child) => MockWrapper(child: child),
+        surfaceSize: const Size(100, 100),
+      );
+      await screenMatchesGolden(tester, 'url_error');
+    });
   });
 }

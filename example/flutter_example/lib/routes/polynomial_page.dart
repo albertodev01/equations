@@ -1,6 +1,7 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
@@ -28,6 +29,41 @@ class PolynomialPage extends StatefulWidget {
 }
 
 class _PolynomialPageState extends State<PolynomialPage> {
+  /*
+   * These controllers are exposed to the subtree with [InheritedTextController]
+   * because the scaffold uses tabs and when swiping, the controllers get
+   * disposed.
+   *
+   * In order to keep the controllers alive (and thus persist the text), we need
+   * to save theme here, which is ABOVE the tabs.
+   */
+
+  final linearControllers = [
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  final quadraticControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  final cubicControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  final quarticControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -42,7 +78,10 @@ class _PolynomialPageState extends State<PolynomialPage> {
             maxValue: 10,
             initial: 3,
           ),
-          child: const PolynomialBody(),
+          child: InheritedTextControllers(
+            textControllers: linearControllers,
+            child: const PolynomialBody(),
+          ),
         ),
       ),
     ),
@@ -58,7 +97,10 @@ class _PolynomialPageState extends State<PolynomialPage> {
             maxValue: 10,
             initial: 3,
           ),
-          child: const PolynomialBody(),
+          child: InheritedTextControllers(
+            textControllers: quadraticControllers,
+            child: const PolynomialBody(),
+          ),
         ),
       ),
     ),
@@ -74,7 +116,10 @@ class _PolynomialPageState extends State<PolynomialPage> {
             maxValue: 10,
             initial: 3,
           ),
-          child: const PolynomialBody(),
+          child: InheritedTextControllers(
+            textControllers: cubicControllers,
+            child: const PolynomialBody(),
+          ),
         ),
       ),
     ),
@@ -90,11 +135,35 @@ class _PolynomialPageState extends State<PolynomialPage> {
             maxValue: 10,
             initial: 3,
           ),
-          child: const PolynomialBody(),
+          child: InheritedTextControllers(
+            textControllers: quarticControllers,
+            child: const PolynomialBody(),
+          ),
         ),
       ),
     ),
   ];
+
+  @override
+  void dispose() {
+    for (final controller in linearControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in quadraticControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in cubicControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in quarticControllers) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

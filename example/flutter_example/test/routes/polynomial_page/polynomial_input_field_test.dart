@@ -1,7 +1,6 @@
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../mock_wrapper.dart';
 
@@ -53,25 +52,22 @@ void main() {
         expect(validatorFunction(''), isNotNull);
       },
     );
+  });
 
-    testGoldens('PolynomialInputField', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          '',
-          PolynomialInputField(
+  group('Golden test - PolynomialInputField', () {
+    testWidgets('PolynomialInputField', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: PolynomialInputField(
             controller: TextEditingController(text: '-1/2'),
             placeholder: 'Demo',
           ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
         ),
-        surfaceSize: const Size(110, 110),
       );
-      await screenMatchesGolden(tester, 'polynomial_input_field');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/polynomial_input_field.png'),
+      );
     });
   });
 }

@@ -31,7 +31,6 @@ class MockWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      onGenerateRoute: RouteGenerator.generateRoute,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: navigatorObservers,
@@ -49,6 +48,34 @@ class MockWrapper extends StatelessWidget {
           body: child,
         ),
       ),
+    );
+  }
+}
+
+/// A wrapper of a [MaterialApp] with localization and navigator support to be
+/// used in widget tests.
+class MockWrapperWithNavigator extends StatelessWidget {
+  /// The initial route.
+  final String initialRoute;
+
+  /// Creates a [MockWrapperWithNavigator] widget.
+  const MockWrapperWithNavigator({
+    super.key,
+    this.initialRoute = homePagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appRouter = generateRouter(initialRoute: initialRoute);
+    return MaterialApp.router(
+      routerDelegate: appRouter.routerDelegate,
+      routeInformationParser: appRouter.routeInformationParser,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData.light().copyWith(
+        textTheme: GoogleFonts.latoTextTheme(),
+      ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
