@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 /// A [Matcher] used to compare two [double]s value within some tolerated error.
 ///

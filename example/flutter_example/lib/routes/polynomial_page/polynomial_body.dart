@@ -14,8 +14,8 @@ import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.da
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains the solutions of the polynomial equation and a chart
-/// to plot the function.
+/// This widget is used to solve polynomial equations and plot the function in
+/// a cartesian plane.
 ///
 /// This widget is responsive: contents may be laid out on a single column or
 /// on two columns according with the available space.
@@ -140,7 +140,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
   }
 }
 
-/// Puts on the screen a widget that draws mathematical functions.
+/// Draws on the screen a widget that draws mathematical functions.
 class _PolynomialPlot extends StatelessWidget {
   /// Creates a [_PolynomialPlot] widget.
   const _PolynomialPlot();
@@ -189,8 +189,10 @@ class _PlotTitle extends StatelessWidget {
   }
 }
 
-/// TODO
+/// A wrapper of [PlotWidget] that listens to [PolynomialState] to either draw
+/// the polynomial or clear the chart.
 class PlotWidgetListener extends StatelessWidget {
+  /// Creates a [PlotWidgetListener] widget.
   const PlotWidgetListener({super.key});
 
   @override

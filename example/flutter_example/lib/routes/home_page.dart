@@ -17,6 +17,7 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: const [
               // The logo at the top
               AppLogo(),

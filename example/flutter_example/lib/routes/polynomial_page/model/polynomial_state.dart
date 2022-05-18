@@ -3,29 +3,35 @@ import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_result.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents the analyzers of polynomials that can be solved.
+/// The types of polynomials that can be solved.
 enum PolynomialType {
   /// A polynomial whose degree is 1.
-  linear,
+  linear(2),
 
   /// A polynomial whose degree is 2.
-  quadratic,
+  quadratic(3),
 
   /// A polynomial whose degree is 3.
-  cubic,
+  cubic(4),
 
   /// A polynomial whose degree is 4.
-  quartic,
+  quartic(5);
+
+  /// How many coefficients the associated polynomial type has.
+  final int coefficients;
+
+  /// Creates a [PolynomialType] enumeration type.
+  const PolynomialType(this.coefficients);
 }
 
 /// Holds the state of the [PolynomialPage] page.
 class PolynomialState extends ChangeNotifier {
   var state = const PolynomialResult();
 
-  /// The type of polynomial this bloc has to solve.
+  /// The type of polynomial represented by this class.
   final PolynomialType polynomialType;
 
-  /// Creates a
+  /// Creates a [PolynomialState] object.
   PolynomialState(this.polynomialType);
 
   /// Tries to solve a polynomial equation with the given coefficients.
@@ -52,7 +58,7 @@ class PolynomialState extends ChangeNotifier {
 
   /// Converts a list of strings into a list of numbers, if possible.
   List<Complex> _parseCoefficients(List<String> rawInput) {
-    if (rawInput.length != _coefficientsListLength) {
+    if (rawInput.length != polynomialType.coefficients) {
       throw const FormatException(
         "The coefficients list length doesn't match the coefficients number "
         'expected from the given degree.',
@@ -70,18 +76,5 @@ class PolynomialState extends ChangeNotifier {
 
       return Complex.fromReal(parser.evaluate(value));
     }).toList(growable: false);
-  }
-
-  int get _coefficientsListLength {
-    switch (polynomialType) {
-      case PolynomialType.linear:
-        return 2;
-      case PolynomialType.quadratic:
-        return 3;
-      case PolynomialType.cubic:
-        return 4;
-      case PolynomialType.quartic:
-        return 5;
-    }
   }
 }

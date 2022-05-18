@@ -1,7 +1,7 @@
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:flutter/widgets.dart';
 
-/// TODO
+/// An [InheritedWidget] that exposes a [PolynomialState] object.
 class InheritedPolynomial extends InheritedWidget {
   /// The state of the polynomial page.
   final PolynomialState polynomialState;
@@ -13,6 +13,7 @@ class InheritedPolynomial extends InheritedWidget {
     required super.child,
   });
 
+  /// Retrieves the closest [InheritedPolynomial] instance up in the tree.
   static InheritedPolynomial of(BuildContext context) {
     final ref =
         context.dependOnInheritedWidgetOfExactType<InheritedPolynomial>();
@@ -26,7 +27,10 @@ class InheritedPolynomial extends InheritedWidget {
   }
 }
 
+/// Extension method on [BuildContext] that allows getting a reference to the
+///[PolynomialState] up in the tree using [InheritedPolynomial].
 extension InheritedPolynomialExt on BuildContext {
+  /// Uses [InheritedPolynomial] to retrieve a [PolynomialState] object.
   PolynomialState get polynomialState =>
       InheritedPolynomial.of(this).polynomialState;
 }

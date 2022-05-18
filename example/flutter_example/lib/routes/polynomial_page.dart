@@ -17,8 +17,8 @@ import 'package:flutter/material.dart';
 ///  - Cubic
 ///  - Quartic
 ///
-/// Each tab also features a [PlotWidget] which plots the function on a cartesian
-/// plane.
+/// Each tab also features a [PlotWidget] which plots the function on a
+/// cartesian plane.
 class PolynomialPage extends StatefulWidget {
   /// Creates a [PolynomialPage] widget.
   const PolynomialPage({super.key});
@@ -33,7 +33,9 @@ class _PolynomialPageState extends State<PolynomialPage> {
     NavigationItem(
       title: context.l10n.firstDegree,
       content: InheritedPolynomial(
-        polynomialState: PolynomialState(PolynomialType.linear),
+        polynomialState: PolynomialState(
+          PolynomialType.linear,
+        ),
         child: InheritedPlotZoom(
           plotZoomState: PlotZoomState(
             minValue: 2,
@@ -47,7 +49,9 @@ class _PolynomialPageState extends State<PolynomialPage> {
     NavigationItem(
       title: context.l10n.secondDegree,
       content: InheritedPolynomial(
-        polynomialState: PolynomialState(PolynomialType.quadratic),
+        polynomialState: PolynomialState(
+          PolynomialType.quadratic,
+        ),
         child: InheritedPlotZoom(
           plotZoomState: PlotZoomState(
             minValue: 2,
@@ -61,7 +65,9 @@ class _PolynomialPageState extends State<PolynomialPage> {
     NavigationItem(
       title: context.l10n.thirdDegree,
       content: InheritedPolynomial(
-        polynomialState: PolynomialState(PolynomialType.cubic),
+        polynomialState: PolynomialState(
+          PolynomialType.cubic,
+        ),
         child: InheritedPlotZoom(
           plotZoomState: PlotZoomState(
             minValue: 2,
@@ -75,7 +81,9 @@ class _PolynomialPageState extends State<PolynomialPage> {
     NavigationItem(
       title: context.l10n.fourthDegree,
       content: InheritedPolynomial(
-        polynomialState: PolynomialState(PolynomialType.quartic),
+        polynomialState: PolynomialState(
+          PolynomialType.quartic,
+        ),
         child: InheritedPlotZoom(
           plotZoomState: PlotZoomState(
             minValue: 2,

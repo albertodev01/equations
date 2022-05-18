@@ -73,31 +73,6 @@ class _SystemSolutions extends StatelessWidget {
   }
 }
 
-/// Displayed while the bloc is processing the matrix.
-class _LoadingWidget extends StatelessWidget {
-  /// Creates a [_LoadingWidget] widget.
-  const _LoadingWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Loading indicator
-        const Padding(
-          padding: EdgeInsets.only(
-            bottom: 20,
-          ),
-          child: CircularProgressIndicator(),
-        ),
-
-        // Waiting text
-        Text(context.l10n.wait_a_moment),
-      ],
-    );
-  }
-}
-
 /// The matrix analysis results.
 class _Results extends StatelessWidget {
   /// The transposed matrix.

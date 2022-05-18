@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// The app's main entrypoint.
 ///
-/// The [LicenseRegistry.addLicense] call cab be ignored by the code coverage
+/// The [LicenseRegistry.addLicense] call can be ignored by the code coverage
 /// tool since it will be tested by integration tests.
 void main() {
   // coverage:ignore-start

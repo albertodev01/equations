@@ -99,7 +99,7 @@ class __InputWidget extends State<_InputWidget> {
     return controller;
   }
 
-  /// Validates the input and, if it's valid, sends the data to the bloc.
+  /// Validates the input and, if it's valid, sends the data to the state class.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
       // Valid input
@@ -109,7 +109,7 @@ class __InputWidget extends State<_InputWidget> {
     } else {
       context.polynomialState.clear();
 
-      // Error message
+      // Error message.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.polynomial_error),
@@ -147,10 +147,8 @@ class __InputWidget extends State<_InputWidget> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Some space from the top
         const SizedBox(height: 40),
 
-        // The title
         cachedEquationTitle,
 
         // Responsively placing input fields using 'Wrap'
