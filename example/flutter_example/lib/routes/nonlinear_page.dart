@@ -58,7 +58,7 @@ class _NonlinearPageState extends State<NonlinearPage> {
     NavigationItem(
       title: context.l10n.bracketing,
       content: InheritedNonlinear(
-        nonlinearState: NonlinearState(NonlinearType.singlePoint),
+        nonlinearState: NonlinearState(NonlinearType.bracketing),
         child: InheritedDropdownValue(
           dropdownValue: ValueNotifier<String>(
             NonlinearDropdownItems.bisection.asString(),

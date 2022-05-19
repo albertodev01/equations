@@ -1,17 +1,13 @@
-import 'dart:math';
-
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
-import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
 /// This widget is used to solve polynomial equations and plot the function in
@@ -61,6 +57,41 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
     ),
   );
 
+  /// Caching the single column layout subtree (small screens configuration).
+  late final singleColumnLayout = SingleChildScrollView(
+    key: const Key('SingleChildScrollView-mobile-responsive'),
+    child: Column(
+      children: [
+        pageTitleWidget,
+        const PolynomialDataInput(),
+        const PolynomialResults(),
+        const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 50,
+          ),
+          child: PolynomialPlotWidget(),
+        ),
+      ],
+    ),
+  );
+
+  /// Caching the double column layout subtree (large screens configuration)
+  late final doubleColumnLayout = Center(
+    child: SingleChildScrollView(
+      key: const Key('SingleChildScrollView-desktop-responsive'),
+      child: Column(
+        children: [
+          pageTitleWidget,
+          const PolynomialDataInput(),
+          const PolynomialResults(),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
+      ),
+    ),
+  );
+
   /// Getting the title of the page according with the type of polynomial that
   /// is going to be solved.
   String getLocalizedName() {
@@ -84,22 +115,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
       builder: (context, size) {
         if (size.maxWidth <= doubleColumnPageBreakpoint) {
           // For mobile devices - all in a column
-          return SingleChildScrollView(
-            key: const Key('SingleChildScrollView-mobile-responsive'),
-            child: Column(
-              children: [
-                pageTitleWidget,
-                const PolynomialDataInput(),
-                const PolynomialResults(),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 50,
-                  ),
-                  child: _PolynomialPlot(),
-                ),
-              ],
-            ),
-          );
+          return singleColumnLayout;
         }
 
         // For wider screens - plot on the right and results on the left
@@ -110,107 +126,17 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
             SizedBox(
               width: size.maxWidth / 3,
               height: double.infinity,
-              child: Center(
-                child: SingleChildScrollView(
-                  key: const Key('SingleChildScrollView-desktop-responsive'),
-                  child: Column(
-                    children: [
-                      pageTitleWidget,
-                      const PolynomialDataInput(),
-                      const PolynomialResults(),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              child: doubleColumnLayout,
             ),
 
             // Plot
             SizedBox(
               width: size.maxWidth / 2.3,
               height: double.infinity,
-              child: const _PolynomialPlot(),
+              child: const PolynomialPlotWidget(),
             ),
           ],
         );
-      },
-    );
-  }
-}
-
-/// Draws on the screen a widget that draws mathematical functions.
-class _PolynomialPlot extends StatelessWidget {
-  /// Creates a [_PolynomialPlot] widget.
-  const _PolynomialPlot();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Title
-            const _PlotTitle(),
-
-            // The actual plot
-            LayoutBuilder(
-              builder: (context, dimensions) {
-                final width = min<double>(
-                  dimensions.maxWidth,
-                  maxWidthPlot,
-                );
-
-                return SizedBox(
-                  width: width,
-                  child: const PlotWidgetListener(),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// A wrapper of [PageTitle] placed above a [PlotWidget].
-class _PlotTitle extends StatelessWidget {
-  /// Creates a [_PlotTitle] widget.
-  const _PlotTitle({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return PageTitle(
-      pageTitle: context.l10n.chart,
-      pageLogo: const PlotIcon(),
-    );
-  }
-}
-
-/// A wrapper of [PlotWidget] that listens to [PolynomialState] to either draw
-/// the polynomial or clear the chart.
-class PlotWidgetListener extends StatelessWidget {
-  /// Creates a [PlotWidgetListener] widget.
-  const PlotWidgetListener({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.polynomialState,
-      builder: (context, _) {
-        final algebraic = context.polynomialState.state.algebraic;
-
-        if (algebraic != null) {
-          return PlotWidget(
-            plotMode: PolynomialPlot(
-              algebraic: algebraic,
-            ),
-          );
-        }
-
-        return const PlotWidget();
       },
     );
   }

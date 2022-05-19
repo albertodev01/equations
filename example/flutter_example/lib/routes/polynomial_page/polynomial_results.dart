@@ -1,6 +1,6 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/no_discriminant.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_discriminant.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
@@ -75,34 +75,6 @@ class _PolynomialSolutions extends StatelessWidget {
 
         return const NoResults();
       },
-    );
-  }
-}
-
-/// Shows the discriminant of the polynomial equation to be solved.
-@visibleForTesting
-class PolynomialDiscriminant extends StatelessWidget {
-  /// Creates a [PolynomialDiscriminant] widget.
-  const PolynomialDiscriminant({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: AnimatedBuilder(
-        animation: context.polynomialState,
-        builder: (context, _) {
-          final algebraic = context.polynomialState.state.algebraic;
-
-          if (algebraic != null) {
-            return ComplexResultCard(
-              value: algebraic.discriminant(),
-            );
-          }
-
-          return const NoDiscriminant();
-        },
-      ),
     );
   }
 }

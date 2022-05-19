@@ -205,6 +205,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
+          child: const PolynomialDataInput(),
         ),
       );
       await expectLater(
@@ -222,6 +223,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
+          child: const PolynomialDataInput(),
         ),
       );
       await expectLater(
@@ -240,6 +242,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
+          child: const PolynomialDataInput(),
         ),
       );
       await expectLater(
@@ -259,6 +262,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
+          child: const PolynomialDataInput(),
         ),
       );
       await expectLater(

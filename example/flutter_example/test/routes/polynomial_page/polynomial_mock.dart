@@ -11,6 +11,7 @@ import '../mock_wrapper.dart';
 Widget mockPolynomialWidget({
   required List<TextEditingController> textControllers,
   PolynomialType polynomialType = PolynomialType.linear,
+  Widget child = const PolynomialBody(),
 }) {
   return MockWrapper(
     child: InheritedPolynomial(
@@ -23,7 +24,7 @@ Widget mockPolynomialWidget({
             maxValue: 10,
             initial: 3,
           ),
-          child: const PolynomialBody(),
+          child: child,
         ),
       ),
     ),

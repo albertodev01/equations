@@ -82,6 +82,7 @@ void main() {
       appLocalizations.diagonal,
       appLocalizations.symmetric,
       appLocalizations.identity,
+      appLocalizations.url_error,
     ];
 
     for (final element in values) {

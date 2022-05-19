@@ -1,6 +1,7 @@
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_discriminant.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,7 @@ void main() {
 
       await expectLater(
         find.byType(MockWrapper),
-        matchesGoldenFile('goldens/no_discriminant.png'),
+        matchesGoldenFile('goldens/polynomial_results.png'),
       );
     });
   });

@@ -1,5 +1,4 @@
 import 'package:equations_solver/routes/home_page/card_containers.dart';
-import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -67,7 +66,7 @@ void main() {
         MockWrapper(
           child: CardContainer(
             title: 'Title',
-            image: const Atoms(),
+            image: const Icon(Icons.ac_unit),
             onTap: () {},
           ),
         ),

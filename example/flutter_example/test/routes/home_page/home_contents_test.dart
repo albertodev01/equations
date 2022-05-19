@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
+import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -42,6 +43,11 @@ void main() {
 
         // Expecting to be on the new page
         expect(find.byType(PolynomialPage), findsOneWidget);
+
+        await tester.tap(find.byType(GoBackButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomeContents), findsOneWidget);
       },
     );
 
@@ -60,6 +66,11 @@ void main() {
 
         // Expecting to be on the new page
         expect(find.byType(NonlinearPage), findsOneWidget);
+
+        await tester.tap(find.byType(GoBackButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomeContents), findsOneWidget);
       },
     );
 
@@ -78,6 +89,11 @@ void main() {
 
         // Expecting to be on the new page
         expect(find.byType(SystemPage), findsOneWidget);
+
+        await tester.tap(find.byType(GoBackButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomeContents), findsOneWidget);
       },
     );
 
@@ -96,6 +112,11 @@ void main() {
 
         // Expecting to be on the new page
         expect(find.byType(IntegralPage), findsOneWidget);
+
+        await tester.tap(find.byType(GoBackButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomeContents), findsOneWidget);
       },
     );
 
@@ -109,11 +130,19 @@ void main() {
         final finder = find.byKey(const Key('OtherLogo-Container'));
 
         // Tapping an waiting for the animations to complete
+        await tester.ensureVisible(finder);
+        await tester.pumpAndSettle();
+
         await tester.tap(finder);
         await tester.pumpAndSettle();
 
         // Expecting to be on the new page
         expect(find.byType(OtherPage), findsOneWidget);
+
+        await tester.tap(find.byType(GoBackButton));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomeContents), findsOneWidget);
       },
     );
   });

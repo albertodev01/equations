@@ -23,6 +23,8 @@ void main() {
 
 /// The root widget of the app.
 class EquationsApp extends StatelessWidget {
+  static final _appRouter = generateRouter();
+
   /// Creates an [EquationsApp] instance.
   const EquationsApp({
     super.key,
@@ -30,12 +32,10 @@ class EquationsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appRouter = generateRouter();
-
     return MaterialApp.router(
       // Route management
-      routerDelegate: appRouter.routerDelegate,
-      routeInformationParser: appRouter.routeInformationParser,
+      routerDelegate: _appRouter.routerDelegate,
+      routeInformationParser: _appRouter.routeInformationParser,
 
       // Localized app title
       onGenerateTitle: (context) => context.l10n.appTitle,

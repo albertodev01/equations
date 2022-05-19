@@ -75,15 +75,6 @@ class __InputWidget extends State<_InputWidget> {
     inputLength: context.textControllers.length,
   );
 
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController();
-
-    return controller;
-  }
-
   /// Validates the input and, if it's valid, sends the data to the state class.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
