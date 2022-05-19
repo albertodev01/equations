@@ -4,12 +4,14 @@ import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dar
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
 import 'package:equations_solver/routes/models/precision_slider/inherited_precision_slider.dart';
 import 'package:equations_solver/routes/models/precision_slider/precision_slider_state.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
+import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:flutter/material.dart';
 
 /// This page contains a series of nonlinear equations solvers. There are 2 tabs
@@ -18,8 +20,8 @@ import 'package:flutter/material.dart';
 ///  - Single point methods (like Newton's method)
 ///  - Bracketing methods (like secant method or bisection)
 ///
-/// Each tab also features a [PlotWidget] which plots the function on a cartesian
-/// plane.
+/// Each tab also features a [PlotWidget] which plots the function on a
+/// cartesian plane.
 class NonlinearPage extends StatefulWidget {
   /// Creates a [NonlinearPage] widget.
   const NonlinearPage({super.key});
@@ -29,6 +31,26 @@ class NonlinearPage extends StatefulWidget {
 }
 
 class _NonlinearPageState extends State<NonlinearPage> {
+  /*
+   * These controllers are exposed to the subtree with [InheritedTextController]
+   * because the scaffold uses tabs and when swiping, the controllers get
+   * disposed.
+   *
+   * In order to keep the controllers alive (and thus persist the text), we need
+   * to save theme here, which is ABOVE the tabs.
+   */
+
+  final singlePointControllers = [
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  final bracketingControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -47,8 +69,11 @@ class _NonlinearPageState extends State<NonlinearPage> {
             ),
             child: InheritedPrecisionSlider(
               precisionState: PrecisionSliderState(minValue: 1, maxValue: 15),
-              child: const NonlinearBody(
-                key: Key('NonlinearPage-SinglePoint-Body'),
+              child: InheritedTextControllers(
+                textControllers: singlePointControllers,
+                child: const NonlinearBody(
+                  key: Key('NonlinearPage-SinglePoint-Body'),
+                ),
               ),
             ),
           ),
@@ -71,8 +96,11 @@ class _NonlinearPageState extends State<NonlinearPage> {
             ),
             child: InheritedPrecisionSlider(
               precisionState: PrecisionSliderState(minValue: 1, maxValue: 15),
-              child: const NonlinearBody(
-                key: Key('NonlinearPage-Bracketing-Body'),
+              child: InheritedTextControllers(
+                textControllers: bracketingControllers,
+                child: const NonlinearBody(
+                  key: Key('NonlinearPage-Bracketing-Body'),
+                ),
               ),
             ),
           ),
@@ -80,6 +108,19 @@ class _NonlinearPageState extends State<NonlinearPage> {
       ),
     ),
   ];
+
+  @override
+  void dispose() {
+    for (final controller in singlePointControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in bracketingControllers) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

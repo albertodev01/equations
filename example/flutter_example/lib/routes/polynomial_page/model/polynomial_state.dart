@@ -26,7 +26,7 @@ enum PolynomialType {
 
 /// Holds the state of the [PolynomialPage] page.
 class PolynomialState extends ChangeNotifier {
-  var state = const PolynomialResult();
+  var _state = const PolynomialResult();
 
   /// The type of polynomial represented by this class.
   final PolynomialType polynomialType;
@@ -34,17 +34,20 @@ class PolynomialState extends ChangeNotifier {
   /// Creates a [PolynomialState] object.
   PolynomialState(this.polynomialType);
 
+  /// The current state.
+  PolynomialResult get state => _state;
+
   /// Tries to solve a polynomial equation with the given coefficients.
   void solvePolynomial(List<String> coefficients) {
     try {
       // Parsing coefficients
       final params = _parseCoefficients(coefficients);
 
-      state = PolynomialResult(
+      _state = PolynomialResult(
         algebraic: Algebraic.from(params),
       );
     } on Exception {
-      state = const PolynomialResult();
+      _state = const PolynomialResult();
     }
 
     notifyListeners();
@@ -52,7 +55,7 @@ class PolynomialState extends ChangeNotifier {
 
   /// Clears the state.
   void clear() {
-    state = const PolynomialResult();
+    _state = const PolynomialResult();
     notifyListeners();
   }
 

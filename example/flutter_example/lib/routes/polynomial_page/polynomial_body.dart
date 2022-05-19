@@ -3,7 +3,7 @@ import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomi
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot_widget.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
@@ -65,11 +65,18 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
         pageTitleWidget,
         const PolynomialDataInput(),
         const PolynomialResults(),
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 50,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 30,
           ),
-          child: PolynomialPlotWidget(),
+          child: LayoutBuilder(
+            builder: (_, dimensions) {
+              return Visibility(
+                visible: dimensions.maxWidth >= minimumChartWidth,
+                child: const PolynomialPlotWidget(),
+              );
+            },
+          ),
         ),
       ],
     ),

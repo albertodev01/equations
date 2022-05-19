@@ -4,8 +4,7 @@ import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_result.da
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents the analyzers of polynomials
-/// Represents the analyzers of nonlinear equations that can be solved.
+/// The types of nonlinear equations that can be solved.
 enum NonlinearType {
   /// Algorithms that require a single starting point.
   singlePoint,
@@ -23,7 +22,8 @@ enum SinglePointMethods {
   steffensen,
 }
 
-/// Root finding algorithm that need to bracket the root to start the iterations.
+/// Root finding algorithm that need to bracket the root to start the
+/// iterations.
 enum BracketingMethods {
   /// Bisection method.
   bisection,
@@ -37,13 +37,16 @@ enum BracketingMethods {
 
 /// Holds the state of the [NonlinearPage] page.
 class NonlinearState extends ChangeNotifier {
-  var state = const NonlineaerResult();
+  var _state = const NonlinearResult();
 
   /// The type of polynomial this bloc has to solve.
   final NonlinearType nonlinearType;
 
   /// Creates a [NonlinearState] object.
   NonlinearState(this.nonlinearType);
+
+  /// The current state.
+  NonlinearResult get state => _state;
 
   /// Tries to return a [SinglePointMethods] value from a [NonlinearDropdownItems]
   /// value.
@@ -69,6 +72,7 @@ class NonlinearState extends ChangeNotifier {
     return BracketingMethods.bisection;
   }
 
+  /// Solves an equation using a bracketing algorithm.
   void solveWithBracketing({
     required String upperBound,
     required String lowerBound,
@@ -113,16 +117,17 @@ class NonlinearState extends ChangeNotifier {
           break;
       }
 
-      state = NonlineaerResult(
+      _state = NonlinearResult(
         nonlinear: solver,
       );
     } on Exception {
-      state = const NonlineaerResult();
+      _state = const NonlinearResult();
     }
 
     notifyListeners();
   }
 
+  /// Solves an equation using a single point algorithm.
   void solveWithSinglePoint({
     required String initialGuess,
     required String function,
@@ -154,11 +159,11 @@ class NonlinearState extends ChangeNotifier {
           break;
       }
 
-      state = NonlineaerResult(
+      _state = NonlinearResult(
         nonlinear: solver,
       );
     } on Exception {
-      state = const NonlineaerResult();
+      _state = const NonlinearResult();
     }
 
     notifyListeners();
@@ -166,7 +171,7 @@ class NonlinearState extends ChangeNotifier {
 
   /// Clears the state.
   void clear() {
-    state = const NonlineaerResult();
+    _state = const NonlinearResult();
     notifyListeners();
   }
 }

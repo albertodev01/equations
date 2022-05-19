@@ -3,6 +3,7 @@ import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomi
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot_widget.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
@@ -50,6 +51,10 @@ void main() {
           find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
           findsNothing,
         );
+        expect(
+          find.byType(PolynomialPlotWidget),
+          findsOneWidget,
+        );
       },
     );
 
@@ -75,6 +80,35 @@ void main() {
         expect(
           find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
           findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'Making sure that the chars does NOT appear on smaller screens',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(200, 2000));
+
+        await tester.pumpWidget(
+          mockPolynomialWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+          ),
+        );
+
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsNothing,
+        );
+        expect(
+          find.byType(PolynomialPlotWidget),
+          findsNothing,
         );
       },
     );

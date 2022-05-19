@@ -4,6 +4,7 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/precision_slider/inherited_precision_slider.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
@@ -22,25 +23,15 @@ class NonlinearDataInput extends StatefulWidget {
 }
 
 class _NonlinearDataInputState extends State<NonlinearDataInput> {
-  /// The controllers needed by the [TextFormField]s of the widget.
-  late final controllers = List<TextEditingController>.generate(
-    fieldsCount,
-    _generateTextController,
-    growable: false,
-  );
-
   /// Manually caching the equation input field.
   late final functionInput = EquationInput(
     key: const Key('EquationInput-function'),
-    controller: controllers.first,
+    controller: context.textControllers.first,
     placeholderText: 'f(x)',
   );
 
   /// Manually caching the inputs.
-  late final guessesInput = _GuessesInput(
-    controllers: controllers,
-    type: getType,
-  );
+  final guessesInput = const _GuessesInput();
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
@@ -49,21 +40,9 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   /// equation to be solved.
   NonlinearType get getType => context.nonlinearState.nonlinearType;
 
-  /// How many input fields the widget requires.
-  int get fieldsCount => getType == NonlinearType.singlePoint ? 2 : 3;
-
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController();
-
-    return controller;
-  }
-
   /// Form and chart cleanup.
   void cleanInput() {
-    for (final controller in controllers) {
+    for (final controller in context.textControllers) {
       controller.clear();
     }
 
@@ -71,7 +50,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     context.nonlinearState.clear();
     context.plotZoomState.reset();
     context.precisionState.reset();
-    context.dropdownValue.value = fieldsCount == 2
+    context.dropdownValue.value = context.textControllers.length == 2
         ? NonlinearDropdownItems.newton.asString()
         : NonlinearDropdownItems.bisection.asString();
 
@@ -87,16 +66,16 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
       if (getType == NonlinearType.singlePoint) {
         context.nonlinearState.solveWithSinglePoint(
           method: NonlinearState.singlePointResolve(algorithm),
-          initialGuess: controllers[1].text,
-          function: controllers.first.text,
+          function: context.textControllers.first.text,
+          initialGuess: context.textControllers[1].text,
           precision: 1.0 * math.pow(10, -precision),
         );
       } else {
         context.nonlinearState.solveWithBracketing(
           method: NonlinearState.brackedingResolve(algorithm),
-          lowerBound: controllers[1].text,
-          upperBound: controllers[2].text,
-          function: controllers.first.text,
+          function: context.textControllers.first.text,
+          lowerBound: context.textControllers[1].text,
+          upperBound: context.textControllers[2].text,
           precision: 1.0 * math.pow(10, -precision),
         );
       }
@@ -123,7 +102,9 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
           const SizedBox(height: 40),
 
           // The equation input
-          functionInput,
+          Flexible(
+            child: functionInput,
+          ),
 
           // The guesses required by the app
           guessesInput,
@@ -171,22 +152,11 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
   }
 }
 
-/// Either 1 or 2 [TextFormField] widgets asking for the initial values of the
+/// Either 1 or 2 [EquationInput] widgets asking for the initial values of the
 /// root finding algorithm.
 class _GuessesInput extends StatelessWidget {
-  /// The controllers of the [TextFormField] widgets.
-  final List<TextEditingController> controllers;
-
-  /// The root finding algorithm to be used.
-  ///
-  /// This determines how many starting points for the algorithm are needed.
-  final NonlinearType type;
-
   /// Creates a [_GuessesInput] instance.
-  const _GuessesInput({
-    required this.controllers,
-    required this.type,
-  });
+  const _GuessesInput({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -196,16 +166,16 @@ class _GuessesInput extends StatelessWidget {
       children: [
         EquationInput(
           key: const Key('EquationInput-first-param'),
-          controller: controllers[1],
+          controller: context.textControllers[1],
           placeholderText: 'x0',
           baseWidth: 80,
           maxLength: 8,
           onlyRealValues: true,
         ),
-        if (type == NonlinearType.bracketing)
+        if (context.nonlinearState.nonlinearType == NonlinearType.bracketing)
           EquationInput(
             key: const Key('EquationInput-second-param'),
-            controller: controllers[2],
+            controller: context.textControllers[2],
             placeholderText: 'x1',
             baseWidth: 80,
             maxLength: 8,

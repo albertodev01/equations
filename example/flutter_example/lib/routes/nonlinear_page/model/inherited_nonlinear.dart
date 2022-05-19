@@ -1,9 +1,9 @@
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:flutter/widgets.dart';
 
-/// TODO
+/// An [InheritedWidget] that exposes a [NonlinearState] object.
 class InheritedNonlinear extends InheritedWidget {
-  /// The state of the polynomial page.
+  /// The state of the nonlinear solvers page.
   final NonlinearState nonlinearState;
 
   /// Creates an [InheritedWidget] that exposes a [NonlinearState] object.
@@ -13,10 +13,11 @@ class InheritedNonlinear extends InheritedWidget {
     required super.child,
   });
 
+  /// Retrieves the closest [InheritedNonlinear] instance up in the tree.
   static InheritedNonlinear of(BuildContext context) {
     final ref =
         context.dependOnInheritedWidgetOfExactType<InheritedNonlinear>();
-    assert(ref != null, "No 'InheritedPolynomial' found above in the tree.");
+    assert(ref != null, "No 'InheritedNonlinear' found above in the tree.");
     return ref!;
   }
 
@@ -26,7 +27,10 @@ class InheritedNonlinear extends InheritedWidget {
   }
 }
 
+/// Extension method on [BuildContext] that allows getting a reference to the
+///[NonlinearState] up in the tree using [InheritedNonlinear].
 extension InheritedNonlinearExt on BuildContext {
+  /// Uses [InheritedNonlinear] to retrieve a [NonlinearState] object.
   NonlinearState get nonlinearState =>
       InheritedNonlinear.of(this).nonlinearState;
 }

@@ -13,40 +13,33 @@ class PrecisionSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        var defaultWidth = precisonSliderWidth;
+    return Center(
+      child: SizedBox(
+        width: precisonSliderWidth,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Slider
+            AnimatedBuilder(
+              animation: context.precisionState,
+              builder: (context, state) {
+                return Slider(
+                  min: 2,
+                  max: 15,
+                  divisions: 13,
+                  value: context.precisionState.value,
+                  onChanged: (value) => _update(context, value),
+                );
+              },
+            ),
 
-        if (dimensions.maxWidth <= precisonSliderWidth + 50) {
-          defaultWidth = defaultWidth * 1.5;
-        }
+            const SizedBox(height: 15),
 
-        return SizedBox(
-          width: defaultWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Slider
-              AnimatedBuilder(
-                animation: context.precisionState,
-                builder: (context, state) {
-                  return Slider(
-                    min: 2,
-                    max: 15,
-                    value: context.precisionState.value,
-                    onChanged: (value) => _update(context, value),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 15),
-
-              // Labels
-              const _SliderLabels(),
-            ],
-          ),
-        );
-      },
+            // Labels
+            const _SliderLabels(),
+          ],
+        ),
+      ),
     );
   }
 }

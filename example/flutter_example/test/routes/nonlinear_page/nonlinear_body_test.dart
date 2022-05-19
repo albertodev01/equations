@@ -1,40 +1,24 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
-import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
-import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_plot_widget.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../utils/bloc_mocks.dart';
-import '../mock_wrapper.dart';
+import 'nonlinear_mock.dart';
 
 void main() {
-  late final DropdownCubit dropdownCubit;
-
-  setUpAll(() {
-    registerFallbackValue(MockNonlinearEvent());
-    registerFallbackValue(MockNonlinearState());
-
-    dropdownCubit = MockDropdownCubit();
-  });
-
   group("Testing the 'NonlinearBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        MockWrapper(
-          dropdownInitial: NonlinearDropdownItems.newton.asString(),
-          child: BlocProvider<NonlinearBloc>(
-            create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-            child: const Scaffold(body: NonlinearBody()),
-          ),
+        mockNonlinearWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
       );
 
@@ -48,17 +32,11 @@ void main() {
       'test',
       (tester) async {
         await tester.pumpWidget(
-          MockWrapper(
-            dropdownInitial: NonlinearDropdownItems.secant.asString(),
-            child: BlocProvider<NonlinearBloc>(
-              create: (_) => NonlinearBloc(NonlinearType.bracketing),
-              child: const Scaffold(
-                body: SizedBox(
-                  width: 800,
-                  child: NonlinearBody(),
-                ),
-              ),
-            ),
+          mockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -80,14 +58,11 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(
-          MockWrapper(
-            dropdownInitial: NonlinearDropdownItems.newton.asString(),
-            child: BlocProvider<NonlinearBloc>(
-              create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-              child: const Scaffold(
-                body: NonlinearBody(),
-              ),
-            ),
+          mockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -103,37 +78,43 @@ void main() {
     );
 
     testWidgets(
-      'Making sure that single point equations works',
+      'Making sure that the chars does NOT appear on smaller screens',
       (tester) async {
-        when(() => dropdownCubit.state)
-            .thenReturn(NonlinearDropdownItems.newton.asString());
-
-        final bloc = NonlinearBloc(NonlinearType.singlePoint);
+        await tester.binding.setSurfaceSize(const Size(250, 2000));
 
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<NonlinearBloc>.value(
-                  value: bloc,
-                ),
-                BlocProvider<DropdownCubit>.value(
-                  value: dropdownCubit,
-                ),
-                BlocProvider<PrecisionSliderCubit>(
-                  create: (_) => PrecisionSliderCubit(
-                    minValue: 1,
-                    maxValue: 10,
-                  ),
-                ),
-              ],
-              child: Scaffold(
-                body: BlocProvider<NonlinearBloc>.value(
-                  value: bloc,
-                  child: const NonlinearBody(),
-                ),
-              ),
-            ),
+          mockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+          ),
+        );
+
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsNothing,
+        );
+        expect(
+          find.byType(NonlinearPlotWidget),
+          findsNothing,
+        );
+      },
+    );
+
+    testWidgets(
+      'Making sure that single point equations works',
+      (tester) async {
+        await tester.pumpWidget(
+          mockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -146,7 +127,6 @@ void main() {
         await tester.enterText(paramInput, '3');
 
         // Making sure that there are no results
-        expect(bloc.state, isA<NonlinearNone>());
         expect(find.byType(NoResults), findsOneWidget);
 
         // Solving the equation
@@ -154,42 +134,21 @@ void main() {
         await tester.pumpAndSettle();
 
         // Solutions on the UI!
-        expect(bloc.state, isA<NonlinearGuesses>());
         expect(find.byType(NoResults), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(3));
       },
     );
 
     testWidgets('Making sure that bracketing equations works', (tester) async {
-      when(() => dropdownCubit.state)
-          .thenReturn(NonlinearDropdownItems.bisection.asString());
-
-      final bloc = NonlinearBloc(NonlinearType.bracketing);
-
       await tester.pumpWidget(
-        MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-              ),
-              BlocProvider<DropdownCubit>.value(
-                value: dropdownCubit,
-              ),
-              BlocProvider<PrecisionSliderCubit>(
-                create: (_) => PrecisionSliderCubit(
-                  minValue: 1,
-                  maxValue: 10,
-                ),
-              ),
-            ],
-            child: Scaffold(
-              body: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearBody(),
-              ),
-            ),
-          ),
+        mockNonlinearWidget(
+          nonlinearType: NonlinearType.bracketing,
+          dropdownValue: 'Bisection',
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
       );
 
@@ -204,7 +163,6 @@ void main() {
       await tester.enterText(paramInput2, '4.3');
 
       // Making sure that there are no results
-      expect(bloc.state, isA<NonlinearNone>());
       expect(find.byType(NoResults), findsOneWidget);
 
       // Solving the equation
@@ -212,7 +170,6 @@ void main() {
       await tester.pumpAndSettle();
 
       // Solutions on the UI!
-      expect(bloc.state, isA<NonlinearGuesses>());
       expect(find.byType(NoResults), findsNothing);
       expect(find.byType(RealResultCard), findsNWidgets(3));
     });

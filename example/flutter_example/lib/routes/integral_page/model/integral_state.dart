@@ -1,9 +1,9 @@
 import 'package:equations/equations.dart';
+import 'package:equations_solver/routes/integral_page.dart';
 import 'package:equations_solver/routes/integral_page/model/integral_result.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents the analyzers of numerical integration algorithms available to compute
-/// the solution of a definite integral.
+/// The type of numerical integration algorithms.
 enum IntegralType {
   /// The midpoint rule.
   midPoint,
@@ -15,14 +15,14 @@ enum IntegralType {
   trapezoid,
 }
 
-/// TODO
+/// Holds the state of the [IntegralPage] page.
 class IntegralState extends ChangeNotifier {
-  var state = const IntegralResult();
+  var _state = const IntegralResult();
 
-  /// Creates a [IntegralState] object.
-  IntegralState();
+  /// The current state.
+  IntegralResult get state => _state;
 
-  /// Tries to solve a polynomial equation with the given coefficients.
+  /// Tries to integrate the given function within the intervals.
   void solveIntegral({
     required String upperBound,
     required String lowerBound,
@@ -67,11 +67,11 @@ class IntegralState extends ChangeNotifier {
       // Integrating and returning the result
       final integrationResult = integration.integrate();
 
-      state = IntegralResult(
+      _state = IntegralResult(
         numericalIntegration: integration,
       );
     } on Exception {
-      state = const IntegralResult();
+      _state = const IntegralResult();
     }
 
     notifyListeners();
@@ -79,7 +79,7 @@ class IntegralState extends ChangeNotifier {
 
   /// Clears the state.
   void clear() {
-    state = const IntegralResult();
+    _state = const IntegralResult();
     notifyListeners();
   }
 }

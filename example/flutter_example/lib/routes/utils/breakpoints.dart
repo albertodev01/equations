@@ -23,6 +23,9 @@ const doubleColumnPageBreakpoint = 1100.0;
 /// The maximum size (width and height) of a [PlotWidget].
 const maxWidthPlot = 600.0;
 
+/// The minimum available space required to show the chart.
+const minimumChartWidth = 350;
+
 /// Determines whether the [MatrixAnalyzerResults] widget should show data in
 /// one or two columns.
 const matricesPageDoubleColumn = 1200.0;

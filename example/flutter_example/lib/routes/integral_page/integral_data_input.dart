@@ -20,13 +20,13 @@ class IntegralDataInput extends StatefulWidget {
 
 class _IntegralDataInputState extends State<IntegralDataInput> {
   /// The [TextEditingController] of the function to integrate.
-  late final functionController = _generateTextController(0);
+  final functionController = TextEditingController();
 
   /// The [TextEditingController] of the lower integration bound.
-  late final lowerBoundController = _generateTextController(1);
+  final lowerBoundController = TextEditingController();
 
   /// The [TextEditingController] of the upper integration bound.
-  late final upperBoundController = _generateTextController(2);
+  final upperBoundController = TextEditingController();
 
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
@@ -43,15 +43,6 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     lowerBound: lowerBoundController,
     upperBound: upperBoundController,
   );
-
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController();
-
-    return controller;
-  }
 
   /// Form and chart cleanup.
   void cleanInput() {
@@ -92,7 +83,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
         integralType: type,
       );
     } else {
-      // Malformed inputs
+      // Error message in case of malformed inputs
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.invalid_values),

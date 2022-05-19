@@ -2,7 +2,7 @@ import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dar
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
 import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
-import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

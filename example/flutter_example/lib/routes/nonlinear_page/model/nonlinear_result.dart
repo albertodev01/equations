@@ -1,16 +1,16 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 
 /// Wrapper class that holds the [NonLinear] type computed by [NonlinearState].
-class NonlineaerResult {
+class NonlinearResult {
   /// The [NonLinear] object holding the nonlinear equation data.
   ///
   /// When `null`, it means that there has been an error while computing the
   /// roots.
   final NonLinear? nonlinear;
 
-  /// Creates a [NonlineaerResult] object.
-  const NonlineaerResult({
+  /// Creates a [NonlinearResult] object.
+  const NonlinearResult({
     this.nonlinear,
   });
 
@@ -20,7 +20,7 @@ class NonlineaerResult {
       return true;
     }
 
-    if (other is NonlineaerResult) {
+    if (other is NonlinearResult) {
       return runtimeType == other.runtimeType && nonlinear == other.nonlinear;
     } else {
       return false;

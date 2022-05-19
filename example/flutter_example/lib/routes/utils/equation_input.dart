@@ -50,29 +50,22 @@ class EquationInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        var inputWidth = baseWidth;
-
-        // The '+100' adds some extra spacing to not be too much close to the
-        // sides of the bounds
-        if (dimensions.maxWidth <= baseWidth + 100) {
-          inputWidth = dimensions.maxWidth / 1.5;
-        }
-
-        return SizedBox(
-          width: inputWidth,
-          child: TextFormField(
-            controller: controller,
-            maxLength: maxLength,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              hintText: placeholderText,
-            ),
-            validator: _validator,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
+      child: SizedBox(
+        width: baseWidth,
+        child: TextFormField(
+          controller: controller,
+          maxLength: maxLength,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            hintText: placeholderText,
           ),
-        );
-      },
+          validator: _validator,
+        ),
+      ),
     );
   }
 }
