@@ -1,33 +1,25 @@
-import 'package:equations_solver/blocs/integral_solver/integral_solver.dart';
-import 'package:equations_solver/routes/integral_page/integral_body.dart';
 import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/integral_page/integral_results.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
+import 'package:equations_solver/routes/integral_page/utils/integral_plot_widget.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../utils/bloc_mocks.dart';
-import '../mock_wrapper.dart';
+import 'integral_mock.dart';
 
 void main() {
-  setUpAll(() {
-    registerFallbackValue(MockIntegralEvent());
-    registerFallbackValue(MockIntegralState());
-  });
-
   group("Testing the 'IntegralBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        MockWrapper(
-          dropdownInitial: IntegralDropdownItems.simpson.asString(),
-          child: const Scaffold(
-            body: IntegralBody(),
-          ),
+        mockIntegralWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
       );
 
@@ -40,11 +32,12 @@ void main() {
       'Making sure that the widget is responsive - small screens test',
       (tester) async {
         await tester.pumpWidget(
-          MockWrapper(
-            dropdownInitial: IntegralDropdownItems.simpson.asString(),
-            child: const Scaffold(
-              body: IntegralBody(),
-            ),
+          mockIntegralWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -65,11 +58,12 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(
-          MockWrapper(
-            dropdownInitial: IntegralDropdownItems.simpson.asString(),
-            child: const Scaffold(
-              body: IntegralBody(),
-            ),
+          mockIntegralWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
         );
 
@@ -84,18 +78,44 @@ void main() {
       },
     );
 
-    testWidgets('Making sure that simpson solver works', (tester) async {
-      final bloc = IntegralBloc();
+    testWidgets(
+      'Making sure the chart does NOT appear on smaller screens',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(250, 2000));
 
-      await tester.pumpWidget(
-        MockWrapper(
-          dropdownInitial: IntegralDropdownItems.simpson.asString(),
-          child: BlocProvider<IntegralBloc>.value(
-            value: bloc,
-            child: const Scaffold(
-              body: IntegralBody(),
-            ),
+        await tester.pumpWidget(
+          mockIntegralWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
+        );
+
+        expect(
+          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
+          findsNothing,
+        );
+        expect(
+          find.byType(IntegralPlotWidget),
+          findsNothing,
+        );
+      },
+    );
+
+    testWidgets('Making sure that simpson solver works', (tester) async {
+      await tester.pumpWidget(
+        mockIntegralWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
       );
 
@@ -110,7 +130,6 @@ void main() {
 
       // Initial state
       expect(find.byType(NoResults), findsOneWidget);
-      expect(bloc.state, equals(const IntegralNone()));
 
       // Evaluating the integral
       await tester.tap(find.byKey(const Key('Integral-button-solve')));
@@ -119,21 +138,17 @@ void main() {
       // Results
       expect(find.byType(NoResults), findsNothing);
       expect(find.byType(RealResultCard), findsOneWidget);
-      expect(bloc.state, isA<IntegralResult>());
     });
 
     testWidgets('Making sure that midpoint solver works', (tester) async {
-      final bloc = IntegralBloc();
-
       await tester.pumpWidget(
-        MockWrapper(
-          dropdownInitial: IntegralDropdownItems.midpoint.asString(),
-          child: BlocProvider<IntegralBloc>.value(
-            value: bloc,
-            child: const Scaffold(
-              body: IntegralBody(),
-            ),
-          ),
+        mockIntegralWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
+          dropdownValue: IntegralDropdownItems.midpoint.asString(),
         ),
       );
 
@@ -148,7 +163,6 @@ void main() {
 
       // Initial state
       expect(find.byType(NoResults), findsOneWidget);
-      expect(bloc.state, equals(const IntegralNone()));
 
       // Evaluating the integral
       await tester.tap(find.byKey(const Key('Integral-button-solve')));
@@ -157,21 +171,17 @@ void main() {
       // Results
       expect(find.byType(NoResults), findsNothing);
       expect(find.byType(RealResultCard), findsOneWidget);
-      expect(bloc.state, isA<IntegralResult>());
     });
 
     testWidgets('Making sure that trapezoid solver works', (tester) async {
-      final bloc = IntegralBloc();
-
       await tester.pumpWidget(
-        MockWrapper(
-          dropdownInitial: IntegralDropdownItems.trapezoid.asString(),
-          child: BlocProvider<IntegralBloc>.value(
-            value: bloc,
-            child: const Scaffold(
-              body: IntegralBody(),
-            ),
-          ),
+        mockIntegralWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
+          dropdownValue: IntegralDropdownItems.midpoint.asString(),
         ),
       );
 
@@ -186,7 +196,6 @@ void main() {
 
       // Initial state
       expect(find.byType(NoResults), findsOneWidget);
-      expect(bloc.state, equals(const IntegralNone()));
 
       // Evaluating the integral
       await tester.tap(find.byKey(const Key('Integral-button-solve')));
@@ -195,7 +204,6 @@ void main() {
       // Results
       expect(find.byType(NoResults), findsNothing);
       expect(find.byType(RealResultCard), findsOneWidget);
-      expect(bloc.state, isA<IntegralResult>());
     });
   });
 }

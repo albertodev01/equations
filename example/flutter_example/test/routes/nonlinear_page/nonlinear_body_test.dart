@@ -78,7 +78,7 @@ void main() {
     );
 
     testWidgets(
-      'Making sure that the chars does NOT appear on smaller screens',
+      'Making sure the chart does NOT appear on smaller screens',
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(250, 2000));
 

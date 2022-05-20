@@ -63,11 +63,18 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
         pageTitleWidget,
         const IntegralDataInput(),
         const IntegralResultsWidget(),
-        const Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 50,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 30,
           ),
-          child: IntegralPlotWidget(),
+          child: LayoutBuilder(
+            builder: (_, dimensions) {
+              return Visibility(
+                visible: dimensions.maxWidth >= minimumChartWidth,
+                child: const IntegralPlotWidget(),
+              );
+            },
+          ),
         ),
       ],
     ),

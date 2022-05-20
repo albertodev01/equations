@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
+import '../integral_mock.dart';
 
 void main() {
   group("Testing the 'IntegralDropdownSelection' widget", () {
@@ -43,24 +44,17 @@ void main() {
     testWidgets(
       'Making sure that the dropdown items can be changed',
       (tester) async {
-        final cubit = DropdownCubit(
-          initialValue: IntegralDropdownItems.simpson.asString(),
-        );
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<DropdownCubit>.value(
-              value: cubit,
-              child: const Scaffold(
-                body: IntegralDropdownSelection(),
-              ),
-            ),
+          mockIntegralWidget(
+            child: const IntegralDropdownSelection(),
           ),
         );
 
         // Initial value
-        expect(cubit.state, equals('Simpson'));
-        expect(find.text('Simpson'), findsOneWidget);
+        expect(
+          find.text(IntegralDropdownItems.simpson.asString()),
+          findsOneWidget,
+        );
 
         // Changing the value
         await tester.tap(
@@ -75,7 +69,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verifying the new dropdown state
-        expect(cubit.state, equals('Midpoint'));
+        expect(
+          find.text(IntegralDropdownItems.midpoint.asString()),
+          findsOneWidget,
+        );
         expect(find.text('Midpoint'), findsOneWidget);
 
         // Changing the value again
@@ -91,9 +88,53 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verifying the new dropdown state
-        expect(cubit.state, equals('Trapezoid'));
+        expect(
+          find.text(IntegralDropdownItems.trapezoid.asString()),
+          findsOneWidget,
+        );
         expect(find.text('Trapezoid'), findsOneWidget);
       },
     );
+  });
+
+  group('Golden tests - IntegralDropdownSelection', () {
+    testWidgets('IntegralDropdownSelection - simpson', (tester) async {
+      await tester.pumpWidget(
+        mockIntegralWidget(
+          dropdownValue: IntegralDropdownItems.simpson.asString(),
+          child: const IntegralDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_simpson.png'),
+      );
+    });
+
+    testWidgets('IntegralDropdownSelection - midpoint', (tester) async {
+      await tester.pumpWidget(
+        mockIntegralWidget(
+          dropdownValue: IntegralDropdownItems.midpoint.asString(),
+          child: const IntegralDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_midpoint.png'),
+      );
+    });
+
+    testWidgets('IntegralDropdownSelection - trapezoid', (tester) async {
+      await tester.pumpWidget(
+        mockIntegralWidget(
+          dropdownValue: IntegralDropdownItems.trapezoid.asString(),
+          child: const IntegralDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_trapezoid.png'),
+      );
+    });
   });
 }

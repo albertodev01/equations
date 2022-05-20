@@ -32,7 +32,7 @@ void main() {
     });
   });
 
-  group('Golden test - PolynomialPlotWidget', () {
+  group('Golden test - NonlinearPlotWidget', () {
     Widget mockedTree({
       required NonlinearState state,
     }) {
@@ -51,7 +51,7 @@ void main() {
       );
     }
 
-    testWidgets('PolynomialPlotWidget - single point', (tester) async {
+    testWidgets('NonlinearPlotWidget - single point', (tester) async {
       await tester.pumpWidget(
         mockedTree(
           state: NonlinearState(NonlinearType.singlePoint)
@@ -69,7 +69,7 @@ void main() {
       );
     });
 
-    testWidgets('PolynomialPlotWidget - bracketing', (tester) async {
+    testWidgets('NonlinearPlotWidget - bracketing', (tester) async {
       await tester.pumpWidget(
         mockedTree(
           state: NonlinearState(NonlinearType.bracketing)
