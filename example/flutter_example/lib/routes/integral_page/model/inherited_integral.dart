@@ -28,7 +28,7 @@ class InheritedIntegral extends InheritedWidget {
 
 /// Extension method on [BuildContext] that allows getting a reference to the
 ///[IntegralState] up in the tree using [InheritedIntegral].
-extension InheritedNonlinearExt on BuildContext {
+extension InheritedIntegralExt on BuildContext {
   /// Uses [InheritedIntegral] to retrieve a [IntegralState] object.
   IntegralState get integralState => InheritedIntegral.of(this).integralState;
 }

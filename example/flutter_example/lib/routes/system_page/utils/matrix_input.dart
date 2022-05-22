@@ -9,12 +9,10 @@ class MatrixInput extends StatefulWidget {
   /// The text controllers of the matrix entries.
   final List<TextEditingController> matrixControllers;
 
-  /// The size of the matrix.
+  /// The matrix size.
   final int matrixSize;
 
   /// Creates a [MatrixInput] widget.
-  ///
-  /// The size of the matrix (`N`) is determined by [matrixSize].
   const MatrixInput({
     super.key,
     required this.matrixControllers,

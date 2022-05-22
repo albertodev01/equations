@@ -1,9 +1,10 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
 import 'package:flutter/material.dart';
 
-/// This widget has 2 arrows that, respectively, decrease and increase value
-/// held in the state of the [NumberSwitcherCubit] bloc.
+/// This widget has 2 arrows that, respectively, decrease and increase the value
+/// store in [NumberSwitcherState].
 class SizePicker extends StatelessWidget {
   /// Creates a [SizePicker] widget.
   const SizePicker({super.key});

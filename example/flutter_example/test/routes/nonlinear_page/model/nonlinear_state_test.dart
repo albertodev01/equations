@@ -72,7 +72,7 @@ void main() {
       expect(count, equals(2));
     });
 
-    test('Making sure that expections are handled', () {
+    test('Making sure that exceptions are handled', () {
       var count = 0;
       final nonlinearState = NonlinearState(NonlinearType.singlePoint)
         ..addListener(() => ++count);

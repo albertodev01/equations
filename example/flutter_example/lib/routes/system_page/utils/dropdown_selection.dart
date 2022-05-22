@@ -3,7 +3,8 @@ import 'package:equations_solver/routes/system_page/model/inherited_system.dart'
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:flutter/material.dart';
 
-/// Dropdown button used to choose which system solving algorithm has to be used.
+/// Dropdown button used to choose which system solving algorithm has to be
+/// used.
 class SystemDropdownSelection extends StatefulWidget {
   /// Creates a [SystemDropdownSelection] widget.
   const SystemDropdownSelection({super.key});
@@ -52,7 +53,7 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
   @override
   Widget build(BuildContext context) {
     // Gauss is the only supported row reduction system and it doesn't require
-    // an algorithm to be picked so we can go this way.
+    // an algorithm so we can remove the dropdown.
     if (systemType == SystemType.rowReduction) {
       return const SizedBox.shrink();
     }

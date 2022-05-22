@@ -1,27 +1,14 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
+import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../../utils/bloc_mocks.dart';
 import '../../mock_wrapper.dart';
+import '../system_mock.dart';
 
 void main() {
-  late final SystemBloc systemBloc;
-  late final DropdownCubit dropdownCubit;
-
-  setUpAll(() {
-    registerFallbackValue(MockSystemEvent());
-    registerFallbackValue(MockSystemState());
-
-    systemBloc = MockSystemBloc();
-    dropdownCubit = MockDropdownCubit();
-  });
-
   group("Testing the 'SystemDropdownSelection' widget", () {
     test("Testing the 'SystemDropdownItemsExt' extension method", () {
       expect(SystemDropdownItems.lu.asString(), equals('LU'));
@@ -54,18 +41,9 @@ void main() {
       'Making sure that the widget shows no dropdown when row '
       'reduction type is selected',
       (tester) async {
-        when(() => systemBloc.systemType).thenReturn(SystemType.rowReduction);
-        when(() => dropdownCubit.state).thenReturn('');
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: systemBloc),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDropdownSelection(),
-            ),
+          mockSystemWidget(
+            child: const SystemDropdownSelection(),
           ),
         );
 
@@ -81,19 +59,11 @@ void main() {
       'Making sure that the widget shows the dropdown when the '
       'factorization type is selected',
       (tester) async {
-        when(() => systemBloc.systemType).thenReturn(SystemType.factorization);
-        when(() => dropdownCubit.state)
-            .thenReturn(SystemDropdownItems.lu.asString());
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: systemBloc),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDropdownSelection(),
-            ),
+          mockSystemWidget(
+            systemType: SystemType.factorization,
+            dropdownValue: SystemDropdownItems.lu.asString(),
+            child: const SystemDropdownSelection(),
           ),
         );
 
@@ -110,19 +80,11 @@ void main() {
       'Making sure that the widget shows the dropdown when the '
       'iterative type is selected',
       (tester) async {
-        when(() => systemBloc.systemType).thenReturn(SystemType.iterative);
-        when(() => dropdownCubit.state)
-            .thenReturn(SystemDropdownItems.sor.asString());
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>.value(value: systemBloc),
-                BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-              ],
-              child: const SystemDropdownSelection(),
-            ),
+          mockSystemWidget(
+            systemType: SystemType.iterative,
+            dropdownValue: SystemDropdownItems.sor.asString(),
+            child: const SystemDropdownSelection(),
           ),
         );
 
@@ -138,145 +100,120 @@ void main() {
     testWidgets(
       'Making sure that dropdown values can be changed',
       (tester) async {
-        final cubit = DropdownCubit(
-          initialValue: SystemDropdownItems.lu.asString(),
-        );
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<SystemBloc>(
-                  create: (_) => SystemBloc(SystemType.factorization),
-                ),
-                BlocProvider<DropdownCubit>.value(
-                  value: cubit,
-                ),
-              ],
-              child: const Scaffold(
-                body: SystemDropdownSelection(),
-              ),
-            ),
+          mockSystemWidget(
+            systemType: SystemType.factorization,
+            dropdownValue: SystemDropdownItems.lu.asString(),
+            child: const SystemDropdownSelection(),
           ),
         );
 
-        expect(cubit.state, equals('LU'));
         await tester.tap(find.text('LU'));
         await tester.pumpAndSettle();
 
         await tester.tap(find.text('Cholesky').last);
         await tester.pumpAndSettle();
-        expect(cubit.state, equals('Cholesky'));
       },
     );
+  });
 
-    testGoldens('SystemDropdownSelection', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'SOR',
-          SizedBox(
-            width: 200,
-            height: 150,
-            child: Builder(
-              builder: (context) {
-                when(() => systemBloc.systemType)
-                    .thenReturn(SystemType.iterative);
-                when(() => dropdownCubit.state).thenReturn(
-                  SystemDropdownItems.sor.asString(),
-                );
-
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<SystemBloc>.value(value: systemBloc),
-                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-                  ],
-                  child: const SystemDropdownSelection(),
-                );
-              },
+  group('Golden tests - SystemDropdownSelection', () {
+    testWidgets('SystemDropdownSelection - gauss', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedSystem(
+            systemState: SystemState(SystemType.rowReduction),
+            child: InheritedDropdownValue(
+              dropdownValue: ValueNotifier<String>(''),
+              child: const SystemDropdownSelection(),
             ),
           ),
-        )
-        ..addScenario(
-          'Jacobi',
-          SizedBox(
-            width: 200,
-            height: 150,
-            child: Builder(
-              builder: (context) {
-                when(() => systemBloc.systemType)
-                    .thenReturn(SystemType.iterative);
-                when(() => dropdownCubit.state).thenReturn(
-                  SystemDropdownItems.jacobi.asString(),
-                );
-
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<SystemBloc>.value(value: systemBloc),
-                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-                  ],
-                  child: const SystemDropdownSelection(),
-                );
-              },
-            ),
-          ),
-        )
-        ..addScenario(
-          'LU',
-          SizedBox(
-            width: 200,
-            height: 150,
-            child: Builder(
-              builder: (context) {
-                when(() => systemBloc.systemType)
-                    .thenReturn(SystemType.factorization);
-                when(() => dropdownCubit.state).thenReturn(
-                  SystemDropdownItems.lu.asString(),
-                );
-
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<SystemBloc>.value(value: systemBloc),
-                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-                  ],
-                  child: const SystemDropdownSelection(),
-                );
-              },
-            ),
-          ),
-        )
-        ..addScenario(
-          'Cholesky',
-          SizedBox(
-            width: 200,
-            height: 150,
-            child: Builder(
-              builder: (context) {
-                when(() => systemBloc.systemType)
-                    .thenReturn(SystemType.factorization);
-                when(() => dropdownCubit.state).thenReturn(
-                  SystemDropdownItems.cholesky.asString(),
-                );
-
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<SystemBloc>.value(value: systemBloc),
-                    BlocProvider<DropdownCubit>.value(value: dropdownCubit),
-                  ],
-                  child: const SystemDropdownSelection(),
-                );
-              },
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
         ),
-        surfaceSize: const Size(230, 810),
       );
-      await screenMatchesGolden(tester, 'system_dropdown_selection');
+      await expectLater(
+        find.byType(SystemDropdownSelection),
+        matchesGoldenFile('goldens/dropdown_input_gauss.png'),
+      );
+    });
+
+    testWidgets('SystemDropdownSelection - lu', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedSystem(
+            systemState: SystemState(SystemType.factorization),
+            child: InheritedDropdownValue(
+              dropdownValue: ValueNotifier<String>(
+                SystemDropdownItems.lu.asString(),
+              ),
+              child: const SystemDropdownSelection(),
+            ),
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(SystemDropdownSelection),
+        matchesGoldenFile('goldens/dropdown_input_lu.png'),
+      );
+    });
+
+    testWidgets('SystemDropdownSelection - cholesky', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedSystem(
+            systemState: SystemState(SystemType.factorization),
+            child: InheritedDropdownValue(
+              dropdownValue: ValueNotifier<String>(
+                SystemDropdownItems.cholesky.asString(),
+              ),
+              child: const SystemDropdownSelection(),
+            ),
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(SystemDropdownSelection),
+        matchesGoldenFile('goldens/dropdown_input_cholesky.png'),
+      );
+    });
+
+    testWidgets('SystemDropdownSelection - jacobi', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedSystem(
+            systemState: SystemState(SystemType.iterative),
+            child: InheritedDropdownValue(
+              dropdownValue: ValueNotifier<String>(
+                SystemDropdownItems.jacobi.asString(),
+              ),
+              child: const SystemDropdownSelection(),
+            ),
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(SystemDropdownSelection),
+        matchesGoldenFile('goldens/dropdown_input_jacobi.png'),
+      );
+    });
+
+    testWidgets('SystemDropdownSelection - sor', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedSystem(
+            systemState: SystemState(SystemType.iterative),
+            child: InheritedDropdownValue(
+              dropdownValue: ValueNotifier<String>(
+                SystemDropdownItems.sor.asString(),
+              ),
+              child: const SystemDropdownSelection(),
+            ),
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(SystemDropdownSelection),
+        matchesGoldenFile('goldens/dropdown_input_sor.png'),
+      );
     });
   });
 }

@@ -119,11 +119,11 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
           // Some spacing
           const SizedBox(height: 50),
 
-          // Two buttons needed to "solve" and "clear" the equation
+          // Two buttons needed to "evaluate" and "clear" the integral
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Solving the equation
+              // Evaluating the integral
               ElevatedButton(
                 key: const Key('Integral-button-solve'),
                 onPressed: solve,

@@ -7,7 +7,7 @@ class IntegralResult {
   /// The [NumericalIntegration] object holding the polynomial data.
   ///
   /// When `null`, it means that there has been an error while computing the
-  /// roots.
+  /// solution.
   final NumericalIntegration? numericalIntegration;
 
   /// Creates a [IntegralResult] object.

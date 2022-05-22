@@ -1,6 +1,7 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/system_text_controllers/inherited_system_controllers.dart';
 import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
@@ -11,8 +12,8 @@ import 'package:equations_solver/routes/system_page/utils/sor_relaxation_factor.
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains a [MatrixInput] widgets needed to parse the values of
-/// the matrix of the system in the `Ax = b` equation.
+/// A wrapper of [MatrixInput] which also handles other specific inputs to
+/// solve systems in the `Ax = b` form using different algorithms.
 class SystemDataInput extends StatefulWidget {
   /// Creates a [SystemDataInput] widget.
   const SystemDataInput({super.key});
@@ -24,38 +25,6 @@ class SystemDataInput extends StatefulWidget {
 /// State of the [SystemDataInput] widget.
 @visibleForTesting
 class SystemDataInputState extends State<SystemDataInput> {
-  /// The text input controllers for the matrix.
-  ///
-  /// This is asking for `A` in the `Ax = b` equation where:
-  ///
-  ///  - `A` is the matrix
-  ///  - `b` is the known values vector
-  late final matrixControllers = List<TextEditingController>.generate(
-    16,
-    _generateTextController,
-  );
-
-  /// The text input controllers for the vector.
-  ///
-  /// This is asking for `b` in the `Ax = b` equation where:
-  ///
-  ///  - `A` is the matrix
-  ///  - `b` is the known values vector
-  late final vectorControllers = List<TextEditingController>.generate(
-    4,
-    (index) => _generateTextController(index + 16),
-  );
-
-  /// The text input controllers for the initial guess vector of the Jacobi
-  /// algorithm.
-  late final jacobiControllers = List<TextEditingController>.generate(
-    4,
-    (index) => _generateTextController(index + 16 + 4),
-  );
-
-  /// A controller for the relaxation factor `w` of the SOR algorithm.
-  late final wSorController = _generateTextController(16 + 4 + 4);
-
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
@@ -83,39 +52,25 @@ class SystemDataInputState extends State<SystemDataInput> {
     ),
   );
 
-  /// The widget asking for the relaxation factor `w` of the SOR algorithm.
-  late final wInput = RelaxationFactorInput(
-    textEditingController: wSorController,
-  );
-
   /// This is required to figure out which system solving algorithm has to be
   /// used.
   SystemType get _getType => context.systemState.systemType;
 
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController();
-
-    return controller;
-  }
-
   /// Form cleanup.
   void cleanInput() {
-    for (final controller in matrixControllers) {
+    for (final controller in context.systemTextControllers.matrixControllers) {
       controller.clear();
     }
 
-    for (final controller in vectorControllers) {
+    for (final controller in context.systemTextControllers.vectorControllers) {
       controller.clear();
     }
 
-    for (final controller in jacobiControllers) {
+    for (final controller in context.systemTextControllers.jacobiControllers) {
       controller.clear();
     }
 
-    wSorController.clear();
+    context.systemTextControllers.wSorController.clear();
 
     // Making sure to also clear the form completely
     formKey.currentState?.reset();
@@ -132,13 +87,15 @@ class SystemDataInputState extends State<SystemDataInput> {
       final size = context.numberSwitcherState.state;
 
       // Getting the inputs
-      final systemInputs = matrixControllers.sublist(0, size * size).map((c) {
-        return c.text;
-      }).toList();
+      final systemInputs = context.systemTextControllers.matrixControllers
+          .sublist(0, size * size)
+          .map((c) => c.text)
+          .toList(growable: false);
 
-      final vectorInputs = vectorControllers.sublist(0, size).map((c) {
-        return c.text;
-      }).toList();
+      final vectorInputs = context.systemTextControllers.vectorControllers
+          .sublist(0, size)
+          .map((c) => c.text)
+          .toList(growable: false);
 
       // Solving the system
       switch (_getType) {
@@ -158,9 +115,10 @@ class SystemDataInputState extends State<SystemDataInput> {
           );
           break;
         case SystemType.iterative:
-          final initialGuesses = jacobiControllers.sublist(0, size).map((c) {
-            return c.text;
-          }).toList();
+          final initialGuesses = context.systemTextControllers.jacobiControllers
+              .sublist(0, size)
+              .map((c) => c.text)
+              .toList(growable: false);
 
           context.systemState.iterativeSolver(
             flatMatrix: systemInputs,
@@ -168,12 +126,12 @@ class SystemDataInputState extends State<SystemDataInput> {
             size: size,
             method: SystemState.iterativeResolve(algorithm),
             jacobiInitialVector: initialGuesses,
-            w: wSorController.text,
+            w: context.systemTextControllers.wSorController.text,
           );
           break;
       }
     } else {
-      // The user entered invalid values
+      // The user entered invalid values,
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.invalid_values),
@@ -181,25 +139,6 @@ class SystemDataInputState extends State<SystemDataInput> {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    wSorController.dispose();
-
-    for (final controller in matrixControllers) {
-      controller.dispose();
-    }
-
-    for (final controller in vectorControllers) {
-      controller.dispose();
-    }
-
-    for (final controller in jacobiControllers) {
-      controller.dispose();
-    }
-
-    super.dispose();
   }
 
   @override
@@ -226,7 +165,8 @@ class SystemDataInputState extends State<SystemDataInput> {
             animation: context.numberSwitcherState,
             builder: (context, _) {
               return MatrixInput(
-                matrixControllers: matrixControllers,
+                matrixControllers:
+                    context.systemTextControllers.matrixControllers,
                 matrixSize: context.numberSwitcherState.state,
               );
             },
@@ -245,7 +185,8 @@ class SystemDataInputState extends State<SystemDataInput> {
             animation: context.numberSwitcherState,
             builder: (context, _) {
               return VectorInput(
-                vectorControllers: vectorControllers,
+                vectorControllers:
+                    context.systemTextControllers.vectorControllers,
                 vectorSize: context.numberSwitcherState.state,
               );
             },
@@ -258,7 +199,7 @@ class SystemDataInputState extends State<SystemDataInput> {
           const SystemDropdownSelection(),
 
           // The optional input for the relaxation value
-          wInput,
+          const _RelaxationFactor(),
 
           // The optional input for the initial guesses vector
           // Vector input
@@ -266,7 +207,7 @@ class SystemDataInputState extends State<SystemDataInput> {
             animation: context.numberSwitcherState,
             builder: (context, _) {
               return JacobiVectorInput(
-                controllers: jacobiControllers,
+                controllers: context.systemTextControllers.jacobiControllers,
                 vectorSize: context.numberSwitcherState.state,
               );
             },
@@ -279,7 +220,7 @@ class SystemDataInputState extends State<SystemDataInput> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Solving the equation
+              // Solving the system
               ElevatedButton(
                 key: const Key('System-button-solve'),
                 onPressed: solve,
@@ -298,6 +239,32 @@ class SystemDataInputState extends State<SystemDataInput> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// The widget asking for the relaxation factor `w` of the SOR algorithm.
+class _RelaxationFactor extends StatelessWidget {
+  /// Creates a [_RelaxationFactor] widget.
+  const _RelaxationFactor({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<String>(
+      valueListenable: context.dropdownValue,
+      builder: (context, value, child) {
+        final sorValue = SystemDropdownItems.sor.asString().toLowerCase();
+
+        if (value.toLowerCase() == sorValue) {
+          return child!;
+        }
+
+        // Nothing is displayed if SOR isn't the currently selected option.
+        return const SizedBox.shrink();
+      },
+      child: RelaxationFactorInput(
+        textEditingController: context.systemTextControllers.wSorController,
       ),
     );
   }

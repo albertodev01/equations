@@ -8,10 +8,8 @@ import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 
-/// This widget allows for both the system input and the results printing.
-///
-/// This widget is responsive: contents may be laid out on a single column or
-/// on two columns according with the available width.
+/// This widget contains the input for a matrix and the known values vector to
+/// solve systems of linear equations.
 class SystemBody extends StatelessWidget {
   /// Creates a [SystemBody] widget.
   const SystemBody({super.key});

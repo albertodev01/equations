@@ -1,7 +1,12 @@
 import 'package:equations/equations.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 
-/// TODO
+/// Wrapper class that holds the [SystemSolver] type computed by [SystemState].
 class SystemResult {
+  /// The [SystemSolver] object holding the system data.
+  ///
+  /// When `null`, it means that there has been an error while computing the
+  /// solutions.
   final SystemSolver? systemSolver;
 
   /// Creates a [SystemResult] object.

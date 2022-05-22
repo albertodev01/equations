@@ -2,6 +2,8 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
+import 'package:equations_solver/routes/models/system_text_controllers/inherited_system_controllers.dart';
+import 'package:equations_solver/routes/models/system_text_controllers/system_text_controllers.dart';
 import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
@@ -28,6 +30,35 @@ class SystemPage extends StatefulWidget {
 }
 
 class _SystemPageState extends State<SystemPage> {
+  /*
+   * These controllers are exposed to the subtree with [InheritedTextController]
+   * because the scaffold uses tabs and when swiping, the controllers get
+   * disposed.
+   *
+   * In order to keep the controllers alive (and thus persist the text), we need
+   * to save theme here, which is ABOVE the tabs.
+   */
+
+  final matrixControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final vectorControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final jacobiControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final wSorController = TextEditingController();
+
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
@@ -35,10 +66,21 @@ class _SystemPageState extends State<SystemPage> {
       content: InheritedSystem(
         systemState: SystemState(SystemType.rowReduction),
         child: InheritedNumberSwitcher(
-          numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 4,
+          ),
           child: InheritedDropdownValue(
             dropdownValue: ValueNotifier<String>(''),
-            child: const SystemBody(),
+            child: InheritedSystemControllers(
+              systemTextControllers: SystemTextControllers(
+                matrixControllers: matrixControllers,
+                vectorControllers: vectorControllers,
+                jacobiControllers: jacobiControllers,
+                wSorController: wSorController,
+              ),
+              child: const SystemBody(),
+            ),
           ),
         ),
       ),
@@ -48,12 +90,23 @@ class _SystemPageState extends State<SystemPage> {
       content: InheritedSystem(
         systemState: SystemState(SystemType.factorization),
         child: InheritedNumberSwitcher(
-          numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 4,
+          ),
           child: InheritedDropdownValue(
             dropdownValue: ValueNotifier<String>(
               SystemDropdownItems.lu.asString(),
             ),
-            child: const SystemBody(),
+            child: InheritedSystemControllers(
+              systemTextControllers: SystemTextControllers(
+                matrixControllers: matrixControllers,
+                vectorControllers: vectorControllers,
+                jacobiControllers: jacobiControllers,
+                wSorController: wSorController,
+              ),
+              child: const SystemBody(),
+            ),
           ),
         ),
       ),
@@ -63,17 +116,46 @@ class _SystemPageState extends State<SystemPage> {
       content: InheritedSystem(
         systemState: SystemState(SystemType.iterative),
         child: InheritedNumberSwitcher(
-          numberSwitcherState: NumberSwitcherState(min: 1, max: 4),
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 4,
+          ),
           child: InheritedDropdownValue(
             dropdownValue: ValueNotifier<String>(
               SystemDropdownItems.sor.asString(),
             ),
-            child: const SystemBody(),
+            child: InheritedSystemControllers(
+              systemTextControllers: SystemTextControllers(
+                matrixControllers: matrixControllers,
+                vectorControllers: vectorControllers,
+                jacobiControllers: jacobiControllers,
+                wSorController: wSorController,
+              ),
+              child: const SystemBody(),
+            ),
           ),
         ),
       ),
     ),
   ];
+
+  @override
+  void dispose() {
+    for (final controller in matrixControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in jacobiControllers) {
+      controller.dispose();
+    }
+
+    wSorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

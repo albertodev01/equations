@@ -44,25 +44,26 @@ class _SystemSolutions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: context.systemState,
-        builder: (context, _) {
-          final system = context.systemState.state.systemSolver;
+      animation: context.systemState,
+      builder: (context, _) {
+        final system = context.systemState.state.systemSolver;
 
-          if (system != null) {
-            final solutions = system.solve();
+        if (system != null) {
+          final solutions = system.solve();
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final solution in solutions)
-                  RealResultCard(
-                    value: solution,
-                  ),
-              ],
-            );
-          }
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final solution in solutions)
+                RealResultCard(
+                  value: solution,
+                ),
+            ],
+          );
+        }
 
-          return const NoResults();
-        });
+        return const NoResults();
+      },
+    );
   }
 }

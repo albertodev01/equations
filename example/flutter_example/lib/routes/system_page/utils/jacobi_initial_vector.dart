@@ -41,6 +41,7 @@ class JacobiVectorInput extends StatelessWidget {
             bottom: 10,
           ),
           child: Column(
+            key: const Key('Jacobi-Vector-Input-Column'),
             children: [
               // Input.
               VectorInput(

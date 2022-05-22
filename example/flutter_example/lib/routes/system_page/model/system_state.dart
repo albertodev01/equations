@@ -3,7 +3,7 @@ import 'package:equations_solver/routes/system_page.dart';
 import 'package:equations_solver/routes/system_page/model/system_result.dart';
 import 'package:flutter/widgets.dart';
 
-/// Represents kind of system solvers that a bloc has to to handle.
+/// The types of system solving algorithms.
 enum SystemType {
   /// Row reduction algorithm.
   rowReduction,
@@ -15,13 +15,13 @@ enum SystemType {
   iterative,
 }
 
-/// Row reduction algorithm to solve systems of equations.
+/// Row reduction algorithms to solve systems of equations.
 enum RowReductionMethods {
   /// Gauss elimination.
   gauss,
 }
 
-/// Factorization algorithm factor a matrix into multiple matrices.
+/// Factorization algorithms that factor a matrix into multiple matrices.
 enum FactorizationMethods {
   /// LU decomposition.
   lu,
@@ -45,13 +45,16 @@ enum IterativeMethods {
 
 /// Holds the state of the [SystemPage] page.
 class SystemState extends ChangeNotifier {
-  var state = const SystemResult();
+  var _state = const SystemResult();
 
-  /// The type of polynomial this bloc has to solve.
+  /// The kind of system solver algorithm to be used.
   final SystemType systemType;
 
-  /// Creates a
+  /// Creates a [SystemState] object.
   SystemState(this.systemType);
+
+  /// The current state.
+  SystemResult get state => _state;
 
   /// Tries to return a [RowReductionMethods] value from a string value.
   static RowReductionMethods resolve(String name) {
@@ -94,6 +97,7 @@ class SystemState extends ChangeNotifier {
     );
   }
 
+  /// Tries to solve a system of equations using a row reduction algorithm.
   void rowReductionSolver({
     required List<String> flatMatrix,
     required List<String> knownValues,
@@ -113,19 +117,20 @@ class SystemState extends ChangeNotifier {
       );
 
       if (solver.hasSolution()) {
-        state = SystemResult(
+        _state = SystemResult(
           systemSolver: solver,
         );
       } else {
-        state = const SystemResult();
+        _state = const SystemResult();
       }
     } on Exception {
-      state = const SystemResult();
+      _state = const SystemResult();
     }
 
     notifyListeners();
   }
 
+  /// Tries to solve a system of equations using a factorization algorithm.
   void factorizationSolver({
     required List<String> flatMatrix,
     required List<String> knownValues,
@@ -159,19 +164,20 @@ class SystemState extends ChangeNotifier {
       }
 
       if (solver.hasSolution()) {
-        state = SystemResult(
+        _state = SystemResult(
           systemSolver: solver,
         );
       } else {
-        state = const SystemResult();
+        _state = const SystemResult();
       }
     } on Exception {
-      state = const SystemResult();
+      _state = const SystemResult();
     }
 
     notifyListeners();
   }
 
+  /// Tries to solve a system of equations using an iterative algorithm.
   void iterativeSolver({
     required List<String> flatMatrix,
     required List<String> knownValues,
@@ -216,14 +222,14 @@ class SystemState extends ChangeNotifier {
       }
 
       if (solver.hasSolution()) {
-        state = SystemResult(
+        _state = SystemResult(
           systemSolver: solver,
         );
       } else {
-        state = const SystemResult();
+        _state = const SystemResult();
       }
     } on Exception {
-      state = const SystemResult();
+      _state = const SystemResult();
     }
 
     notifyListeners();
@@ -231,7 +237,7 @@ class SystemState extends ChangeNotifier {
 
   /// Clears the state.
   void clear() {
-    state = const SystemResult();
+    _state = const SystemResult();
     notifyListeners();
   }
 
