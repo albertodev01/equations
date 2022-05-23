@@ -67,6 +67,7 @@ class MockWrapperWithNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appRouter = generateRouter(initialRoute: initialRoute);
+
     return MaterialApp.router(
       routerDelegate: appRouter.routerDelegate,
       routeInformationParser: appRouter.routeInformationParser,

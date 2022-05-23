@@ -23,7 +23,7 @@ void main() {
   });
 
   group("Testing the 'EquationScaffold' widget", () {
-    testWidgets(
+    testWidgets(s
       'Making sure that the scaffold can be rendered',
       (tester) async {
         await tester.pumpWidget(

@@ -2,7 +2,6 @@ import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
 
 /// Used in [PlotterPainter] to color a portion of area below the function.
-@immutable
 class ColorArea {
   /// The [Color] of the area below the function.
   ///
@@ -40,15 +39,7 @@ class ColorArea {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + color.hashCode;
-    result = result * 37 + startPoint.hashCode;
-    result = result * 37 + endPoint.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(color, startPoint, endPoint);
 
   @override
   String toString() {

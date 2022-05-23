@@ -1,7 +1,7 @@
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
-/// An interactive item within a [EquationScaffold] navigation bar widget.
+/// An interactive item within an [EquationScaffold] navigation bar widget.
 class NavigationItem {
   /// The title of the item.
   final String title;

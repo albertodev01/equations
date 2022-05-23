@@ -3,7 +3,6 @@ import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
@@ -24,11 +23,7 @@ void main() {
 
     testWidgets('Making sure that the button can be tapped', (tester) async {
       await tester.pumpWidget(
-        const MockWrapper(
-          child: Scaffold(
-            body: HomePage(),
-          ),
-        ),
+        const MockWrapperWithNavigator(),
       );
 
       // Opening a page
@@ -41,26 +36,23 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(HomePage), findsOneWidget);
     });
+  });
 
-    testGoldens('GoBackButton', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          '',
-          const SizedBox(
+  group('Golden tests - EquationTextFormatter', () {
+    testWidgets('EquationTextFormatter', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: SizedBox(
             width: 90,
             height: 90,
-            child: Scaffold(
-              body: GoBackButton(),
-            ),
+            child: GoBackButton(),
           ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(150, 150),
+        ),
       );
-      await screenMatchesGolden(tester, 'go_back_button');
+      await expectLater(
+        find.byType(GoBackButton),
+        matchesGoldenFile('goldens/go_back_button.png'),
+      );
     });
   });
 }

@@ -4,26 +4,26 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
 void main() {
-  group("Testing the 'PlotPainter' class", () {
-    Widget _buildPolynomialPainter({
-      int range = 5,
-      ColorArea colorArea = const ColorArea(
-        startPoint: 5,
-        endPoint: 5,
-      ),
-      List<double> coefficients = const [1, 2, -3, -2],
-    }) {
-      return ClipRRect(
+  Widget _buildPolynomialPainter({
+    int range = 5,
+    ColorArea colorArea = const ColorArea(
+      startPoint: 5,
+      endPoint: 5,
+    ),
+    List<double> coefficients = const [1, 2, -3, -2],
+  }) {
+    return MockWrapper(
+      child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         child: Card(
           color: Colors.white,
           clipBehavior: Clip.antiAlias,
           child: CustomPaint(
+            key: const Key('PlotWidget-Golden'),
             painter: PlotterPainter(
               plotMode: PolynomialPlot(
                 algebraic: Algebraic.fromReal(coefficients),
@@ -34,143 +34,176 @@ void main() {
             size: const Size.square(200),
           ),
         ),
-      );
-    }
-
-    Widget _buildNonlinearPainter({
-      int range = 5,
-      ColorArea colorArea = const ColorArea(
-        startPoint: 5,
-        endPoint: 5,
       ),
-    }) {
-      return ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        child: CustomPaint(
-          painter: PlotterPainter(
-            plotMode: const NonlinearPlot(
-              nonLinear: Newton(function: 'e^x+x^3', x0: -1),
-            ),
-            range: range,
-            colorArea: colorArea,
+    );
+  }
+
+  Widget _buildNonlinearPainter({
+    int range = 5,
+    ColorArea colorArea = const ColorArea(
+      startPoint: 5,
+      endPoint: 5,
+    ),
+  }) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      child: CustomPaint(
+        key: const Key('PlotWidget-Golden'),
+        painter: PlotterPainter(
+          plotMode: const NonlinearPlot(
+            nonLinear: Newton(function: 'e^x+x^3', x0: -1),
           ),
-          size: const Size.square(200),
+          range: range,
+          colorArea: colorArea,
+        ),
+        size: const Size.square(200),
+      ),
+    );
+  }
+
+  group('Golden tests - PlotPainter (no area)', () {
+    testWidgets('Polynomial - low range', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          range: 2,
         ),
       );
-    }
-
-    testGoldens('PlotPainter - Polynomial', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Polynomial - low range',
-          _buildPolynomialPainter(
-            range: 2,
-          ),
-        )
-        ..addScenario(
-          'Polynomial - default',
-          _buildPolynomialPainter(),
-        )
-        ..addScenario(
-          'Polynomial - high range',
-          _buildPolynomialPainter(
-            range: 9,
-          ),
-        )
-        ..addScenario(
-          'Polynomial - plot edges',
-          _buildPolynomialPainter(
-            coefficients: [1, 0],
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(250, 1100),
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_polynomial_low.png'),
       );
-
-      await screenMatchesGolden(tester, 'polynomial_plot_painter');
     });
 
-    testGoldens('PlotPainter - Nonlinear', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Nonlinear - low range',
-          _buildNonlinearPainter(
-            range: 2,
-          ),
-        )
-        ..addScenario(
-          'Nonlinear - default',
-          _buildNonlinearPainter(),
-        )
-        ..addScenario(
-          'Nonlinear - high range',
-          _buildNonlinearPainter(
-            range: 9,
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(230, 750),
+    testWidgets('Polynomial - default', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(),
       );
-
-      await screenMatchesGolden(tester, 'nonlinear_plot_painter');
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_polynomial.png'),
+      );
     });
 
-    testGoldens('PlotPainter - Polynomial with area', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Polynomial - only color',
-          _buildPolynomialPainter(
-            colorArea: ColorArea(
-              color: Colors.lightGreen.withAlpha(80),
-              startPoint: -5,
-              endPoint: 5,
-            ),
-          ),
-        )
-        ..addScenario(
-          'Polynomial - color and ranges',
-          _buildPolynomialPainter(
-            colorArea: ColorArea(
-              color: Colors.lightGreen.withAlpha(80),
-              startPoint: -1,
-              endPoint: 2,
-            ),
-          ),
-        )
-        ..addScenario(
-          'Polynomial - color left range',
-          _buildPolynomialPainter(
-            colorArea: ColorArea(
-              color: Colors.lightGreen.withAlpha(80),
-              startPoint: -1,
-              endPoint: 5,
-            ),
-          ),
-        )
-        ..addScenario(
-          'Polynomial - color right range',
-          _buildPolynomialPainter(
-            colorArea: ColorArea(
-              color: Colors.lime.withAlpha(80),
-              startPoint: -5,
-              endPoint: 3.5,
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(280, 1070),
+    testWidgets('Polynomial - high range', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          range: 9,
+        ),
       );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_polynomial_high.png'),
+      );
+    });
 
-      await screenMatchesGolden(tester, 'polynomial_plot_painter_with_area');
+    testWidgets('Polynomial - with edges', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(coefficients: [1, 0]),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_polynomial_edges.png'),
+      );
+    });
+
+    testWidgets('Nonlinear - low range', (tester) async {
+      await tester.pumpWidget(
+        _buildNonlinearPainter(
+          range: 2,
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_nonlinear_low.png'),
+      );
+    });
+
+    testWidgets('Nonlinear - default', (tester) async {
+      await tester.pumpWidget(
+        _buildNonlinearPainter(),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_nonlinear.png'),
+      );
+    });
+
+    testWidgets('Nonlinear - high range', (tester) async {
+      await tester.pumpWidget(
+        _buildNonlinearPainter(
+          range: 9,
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_nonlinear_high.png'),
+      );
+    });
+  });
+
+  group('Golden tests - PlotPainter (with area)', () {
+    testWidgets('Color only', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          colorArea: ColorArea(
+            color: Colors.lightGreen.withAlpha(80),
+            startPoint: -5,
+            endPoint: 5,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_area_color.png'),
+      );
+    });
+
+    testWidgets('Color and ranges', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          colorArea: ColorArea(
+            color: Colors.lightGreen.withAlpha(80),
+            startPoint: -1,
+            endPoint: 2,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_area_color_and_ranges.png'),
+      );
+    });
+
+    testWidgets('Color and left range only', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          colorArea: ColorArea(
+            color: Colors.lightGreen.withAlpha(80),
+            startPoint: -1,
+            endPoint: 5,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_area_color_left_range.png'),
+      );
+    });
+
+    testWidgets('Color and right range only', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          colorArea: ColorArea(
+            color: Colors.lime.withAlpha(80),
+            startPoint: -5,
+            endPoint: 3.5,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_painter_area_color_right_range.png'),
+      );
     });
   });
 }

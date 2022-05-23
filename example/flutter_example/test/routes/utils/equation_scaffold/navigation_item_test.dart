@@ -14,7 +14,6 @@ void main() {
       expect(navigationItem.content, isA<SizedBox>());
       expect(navigationItem.icon, isA<Icon>());
       expect(navigationItem.activeIcon, isA<Icon>());
-      expect(navigationItem.props.length, equals(4));
     });
   });
 }

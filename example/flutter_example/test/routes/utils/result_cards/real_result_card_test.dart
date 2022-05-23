@@ -1,7 +1,6 @@
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
@@ -50,28 +49,51 @@ void main() {
         expect(find.text('Not computed'), findsOneWidget);
       },
     );
+  });
 
-    testGoldens('RealResultCard', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          '',
-          const RealResultCard(
-            value: 12,
+  group('Golden tests - RealResultCard', () {
+    testWidgets('RealResultCard', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: RealResultCard(
+            value: 13,
+            leading: 'f(x): ',
           ),
-        )
-        ..addScenario(
-          '',
-          const RealResultCard(
-            value: 0.5,
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(350, 350),
+        ),
       );
-      await screenMatchesGolden(tester, 'real_result_card');
+      await expectLater(
+        find.byType(RealResultCard),
+        matchesGoldenFile('goldens/real_result_card.png'),
+      );
+    });
+
+    testWidgets('RealResultCard - no fraction', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: RealResultCard(
+            value: 13,
+            withFraction: false,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(RealResultCard),
+        matchesGoldenFile('goldens/real_result_card_nofraction.png'),
+      );
+    });
+
+    testWidgets('RealResultCard - decimals', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: RealResultCard(
+            value: -2.43,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(RealResultCard),
+        matchesGoldenFile('goldens/real_result_card_decimals.png'),
+      );
     });
   });
 }

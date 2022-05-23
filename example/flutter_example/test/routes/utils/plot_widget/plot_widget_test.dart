@@ -1,11 +1,10 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
+import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
 
@@ -37,64 +36,68 @@ void main() {
       expect(find.byType(Slider), findsOneWidget);
       expect(find.byType(ClipRRect), findsOneWidget);
     });
+  });
 
-    testGoldens('PlotWidget', (tester) async {
-      final widget = SizedBox(
-        width: 500,
-        height: 580,
-        child: BlocProvider<PlotZoomCubit>(
-          create: (_) => PlotZoomCubit(
-            minValue: 1,
-            maxValue: 10,
-            initial: 4,
-          ),
-          child: PlotWidget(
-            plotMode: PolynomialPlot(
-              algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+  group('Golden tests - PlotWidget', () {
+    testWidgets('PlotWidget', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 1,
+              maxValue: 10,
+              initial: 4,
+            ),
+            child: SizedBox(
+              width: 500,
+              height: 580,
+              child: PlotWidget(
+                key: const Key('PlotWidget-Golden'),
+                plotMode: PolynomialPlot(
+                  algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+                ),
+              ),
             ),
           ),
         ),
       );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        surfaceSize: const Size(500, 650),
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_widget.png'),
       );
-      await screenMatchesGolden(tester, 'plotwidget');
     });
 
-    testGoldens('PlotWidget - zoom', (tester) async {
-      final widget = SizedBox(
-        width: 500,
-        height: 580,
-        child: BlocProvider<PlotZoomCubit>(
-          create: (_) => PlotZoomCubit(
-            minValue: 1,
-            maxValue: 10,
-            initial: 4,
-          ),
-          child: PlotWidget(
-            plotMode: PolynomialPlot(
-              algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+    testWidgets('PlotWidget - zoom', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 1,
+              maxValue: 10,
+              initial: 4,
+            ),
+            child: SizedBox(
+              width: 500,
+              height: 580,
+              child: PlotWidget(
+                key: const Key('PlotWidget-Golden'),
+                plotMode: PolynomialPlot(
+                  algebraic: Algebraic.fromReal([1, 2, -3, -2]),
+                ),
+              ),
             ),
           ),
         ),
-      );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        surfaceSize: const Size(500, 650),
       );
 
       final slider = find.byType(Slider);
       await tester.drag(slider, const Offset(80, 0));
       await tester.pumpAndSettle();
 
-      await screenMatchesGolden(tester, 'plotwidget_zoom');
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile('goldens/plot_widget_zoom.png'),
+      );
     });
   });
 }

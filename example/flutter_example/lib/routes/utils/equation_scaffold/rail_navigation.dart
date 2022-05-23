@@ -25,13 +25,18 @@ class RailNavigation extends StatefulWidget {
 
 class _RailNavigationState extends State<RailNavigation> {
   /// Converts a [NavigationItem] into a [BottomNavigationBarItem].
+  ///
+  /// There is no need to update this into 'didUpdateWidget' because navigation
+  /// items won't change during the app's lifetime.
   late final rails = widget.navigationItems.map<NavigationRailDestination>((i) {
     return NavigationRailDestination(
       icon: i.icon,
       selectedIcon: i.activeIcon,
       label: Text(i.title),
     );
-  }).toList(growable: false);
+  }).toList(
+    growable: false,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +65,7 @@ class _RailNavigationState extends State<RailNavigation> {
               destinations: rails,
               selectedIndex: value,
               labelType: NavigationRailLabelType.all,
-              onDestinationSelected: (int newIndex) =>
+              onDestinationSelected: (newIndex) =>
                   context.navigationIndex.value = newIndex,
             );
           },

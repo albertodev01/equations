@@ -1,8 +1,6 @@
 import 'package:equations_solver/routes/utils/app_logo.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../mock_wrapper.dart';
 
@@ -14,21 +12,19 @@ void main() {
       expect(find.byType(AppLogo), findsOneWidget);
       expect(find.byType(SvgPicture), findsOneWidget);
     });
+  });
 
-    testGoldens('AppLogo', (tester) async {
-      const widget = SizedBox(
-        width: 300,
-        height: 150,
-        child: Scaffold(body: AppLogo()),
+  group('Golden tests - NoResults', () {
+    testWidgets('NoResults', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: AppLogo(),
+        ),
       );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
+      await expectLater(
+        find.byType(AppLogo),
+        matchesGoldenFile('goldens/app_logo.png'),
       );
-      await screenMatchesGolden(tester, 'app_logo');
     });
   });
 }

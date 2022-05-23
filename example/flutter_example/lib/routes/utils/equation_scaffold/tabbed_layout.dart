@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 /// This widget is wrapper of a [TabBarView] where the user cannot swipe to
 /// change tabs.
 ///
-/// Tabs can be changed only according with the state of a [NavigationBloc] bloc.
+/// Tabs can be changed only according with the state of the notifier exposed
+/// by [InheritedNavigation].
 class TabbedNavigationLayout extends StatefulWidget {
   /// A list of items for a responsive navigation bar.
   final List<NavigationItem> navigationItems;
@@ -28,6 +29,9 @@ class TabbedNavigationLayout extends StatefulWidget {
 @visibleForTesting
 class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
   /// The various pages of the [TabBarView].
+  ///
+  /// There is no need to update this into 'didUpdateWidget' because tabs won't
+  /// change during the app's lifetime.
   late final tabPages = widget.navigationItems
       .map((item) => item.content)
       .toList(growable: false);
@@ -41,6 +45,7 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
       valueListenable: context.navigationIndex,
       builder: (_, value, child) {
         changePage(value);
+
         return child!;
       },
       child: TabBarView(

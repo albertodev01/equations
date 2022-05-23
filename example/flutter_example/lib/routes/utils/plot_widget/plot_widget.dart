@@ -85,7 +85,7 @@ class _PlotBody<T> extends StatelessWidget {
   /// below the function has to be colored.
   final double? upperAreaLimit;
 
-  /// Creates a [_PLotBody] widget.
+  /// Creates a [_PlotBody] widget.
   const _PlotBody({
     super.key,
     required this.plotMode,
@@ -96,18 +96,18 @@ class _PlotBody<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, sizes) {
-        final normalized = sizes.normalize().maxWidth;
+    return Material(
+      elevation: 8,
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: AnimatedBuilder(
+          animation: context.plotZoomState,
+          builder: (context, state) {
+            return LayoutBuilder(
+              builder: (context, sizes) {
+                final normalized = sizes.normalize().maxWidth;
 
-        return Material(
-          elevation: 8,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: AnimatedBuilder(
-              animation: context.plotZoomState,
-              builder: (context, state) {
                 return CustomPaint(
                   painter: PlotterPainter<T>(
                     plotMode: plotMode,
@@ -121,16 +121,17 @@ class _PlotBody<T> extends StatelessWidget {
                   size: Size.square(normalized),
                 );
               },
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
+    ;
   }
 }
 
 class _PlotSlider extends StatelessWidget {
-  const _PlotSlider({super.key});
+  const _PlotSlider();
 
   void update(BuildContext context, double value) =>
       context.plotZoomState.updateSlider(value);

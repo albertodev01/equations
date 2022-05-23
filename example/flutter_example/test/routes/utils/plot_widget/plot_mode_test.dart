@@ -1,6 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group("Testing the 'PlotMode' analyzers", () {
@@ -31,23 +31,6 @@ void main() {
             ),
           ),
         ),
-      );
-
-      expect(
-        const NonlinearPlot(
-          nonLinear: Newton(
-            function: 'x-3',
-            x0: 1,
-          ),
-        ).props.length,
-        equals(1),
-      );
-
-      expect(
-        PolynomialPlot(
-          algebraic: Algebraic.fromReal([1, 4]),
-        ).props.length,
-        equals(1),
       );
     });
 
