@@ -46,7 +46,14 @@ class Brent extends NonLinear {
   }
 
   @override
-  int get hashCode => Object.hash(a, b, function, tolerance, maxSteps);
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = result * 37 + a.hashCode;
+    result = result * 37 + b.hashCode;
+
+    return result;
+  }
 
   bool _condition1(double s, double a, double b) {
     final lower = (a * 3 + b) / 4;

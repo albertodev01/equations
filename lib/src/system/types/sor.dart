@@ -45,13 +45,14 @@ class SORSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        precision,
-        matrix,
-        w,
-        maxSteps,
-        ...knownValues,
-      ]);
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = result * 37 + w.hashCode;
+    result = result * 37 + maxSteps.hashCode;
+
+    return result;
+  }
 
   @override
   List<double> solve() {

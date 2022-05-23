@@ -97,7 +97,14 @@ class Complex implements Comparable<Complex> {
   }
 
   @override
-  int get hashCode => Object.hash(real, imaginary);
+  int get hashCode {
+    var result = 83;
+
+    result = result * 37 + real.hashCode;
+    result = result * 37 + imaginary.hashCode;
+
+    return result;
+  }
 
   @override
   int compareTo(Complex other) {

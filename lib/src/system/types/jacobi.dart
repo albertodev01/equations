@@ -92,13 +92,17 @@ class JacobiSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        precision,
-        matrix,
-        x0,
-        maxSteps,
-        ...knownValues,
-      ]);
+  int get hashCode {
+    var result = super.hashCode;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < x0.length; ++i) {
+      result = result * 37 + x0[i].hashCode;
+    }
+
+    return result * 37 + maxSteps.hashCode;
+  }
 
   @override
   List<double> solve() {

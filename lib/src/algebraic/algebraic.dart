@@ -206,7 +206,17 @@ abstract class Algebraic {
   }
 
   @override
-  int get hashCode => Object.hashAll(coefficients);
+  int get hashCode {
+    var result = 17;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < coefficients.length; ++i) {
+      result = result * 37 + coefficients[i].hashCode;
+    }
+
+    return result;
+  }
 
   @override
   String toString() => _convertToString();

@@ -50,7 +50,17 @@ class IntegralResults {
   }
 
   @override
-  int get hashCode => Object.hashAll([result, ...guesses]);
+  int get hashCode {
+    var result = 2011;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < guesses.length; ++i) {
+      result = result * 37 + guesses[i].hashCode;
+    }
+
+    return result * 37 + result.hashCode;
+  }
 
   @override
   String toString() {

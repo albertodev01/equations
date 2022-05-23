@@ -148,7 +148,20 @@ abstract class Matrix<T> {
   }
 
   @override
-  int get hashCode => Object.hashAll([rowCount, columnCount, ..._data]);
+  int get hashCode {
+    var result = 83;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < _data.length; ++i) {
+      result = result * 37 + _data[i].hashCode;
+    }
+
+    result = result * 37 + rowCount.hashCode;
+    result = result * 37 + columnCount.hashCode;
+
+    return result;
+  }
 
   @override
   String toString() {

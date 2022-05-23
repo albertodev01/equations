@@ -35,7 +35,13 @@ abstract class EquationException implements Exception {
   }
 
   @override
-  int get hashCode => Object.hash(message, messagePrefix);
+  int get hashCode {
+    var result = 83;
+    result = result * 37 + message.hashCode;
+    result = result * 37 + messagePrefix.hashCode;
+
+    return result;
+  }
 
   @override
   String toString() => '$messagePrefix: $message';

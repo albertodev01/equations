@@ -40,12 +40,7 @@ class GaussSeidelSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        precision,
-        matrix,
-        maxSteps,
-        ...knownValues,
-      ]);
+  int get hashCode => 37 * super.hashCode + maxSteps.hashCode;
 
   @override
   List<double> solve() {

@@ -156,6 +156,7 @@ void main() {
       expect(jacobi == jacobi2, isTrue);
       expect(jacobi2, equals(jacobi));
       expect(jacobi2 == jacobi, isTrue);
+      expect(jacobi2.hashCode, jacobi.hashCode);
     });
 
     test('Batch tests', () {

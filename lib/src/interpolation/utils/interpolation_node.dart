@@ -30,7 +30,13 @@ class InterpolationNode {
   }
 
   @override
-  int get hashCode => Object.hash(x, x);
+  int get hashCode {
+    var result = 2011;
+
+    result = result * 37 + x.hashCode;
+
+    return result * 37 + y.hashCode;
+  }
 
   @override
   String toString() => '($x; $y)';

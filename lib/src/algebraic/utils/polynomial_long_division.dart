@@ -142,7 +142,13 @@ class PolynomialLongDivision {
   }
 
   @override
-  int get hashCode => Object.hash(polyNumerator, polyDenominator);
+  int get hashCode {
+    var result = 2011;
+
+    result = result * 37 + polyNumerator.hashCode;
+
+    return result * 37 + polyDenominator.hashCode;
+  }
 
   @override
   String toString() {

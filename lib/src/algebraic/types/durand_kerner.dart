@@ -167,12 +167,20 @@ class DurandKerner extends Algebraic with MathUtils {
   }
 
   @override
-  int get hashCode => Object.hashAll([
-        initialGuess,
-        precision,
-        maxSteps,
-        ...coefficients,
-      ]);
+  int get hashCode {
+    var result = super.hashCode;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < initialGuess.length; ++i) {
+      result = result * 37 + initialGuess[i].hashCode;
+    }
+
+    result = result * 37 + precision.hashCode;
+    result = result * 37 + maxSteps.hashCode;
+
+    return result;
+  }
 
   @override
   int get degree => coefficients.length - 1;

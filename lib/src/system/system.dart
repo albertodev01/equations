@@ -80,7 +80,20 @@ abstract class SystemSolver {
   }
 
   @override
-  int get hashCode => Object.hashAll([precision, matrix, ...knownValues]);
+  int get hashCode {
+    var result = 17;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < knownValues.length; ++i) {
+      result = result * 37 + knownValues[i].hashCode;
+    }
+
+    result = result * 37 + matrix.hashCode;
+    result = result * 37 + precision.hashCode;
+
+    return result;
+  }
 
   @override
   String toString() => matrix.toString();

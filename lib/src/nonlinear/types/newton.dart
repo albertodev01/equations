@@ -42,7 +42,7 @@ class Newton extends NonLinear {
   }
 
   @override
-  int get hashCode => Object.hash(x0, function, tolerance, maxSteps);
+  int get hashCode => 37 * super.hashCode + x0.hashCode;
 
   @override
   NonlinearResults solve() {

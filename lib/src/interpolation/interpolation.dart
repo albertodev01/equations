@@ -50,7 +50,17 @@ abstract class Interpolation {
   }
 
   @override
-  int get hashCode => Object.hashAll(nodes);
+  int get hashCode {
+    var result = 17;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < nodes.length; ++i) {
+      result = result * 37 + nodes[i].hashCode;
+    }
+
+    return result;
+  }
 
   /// Returns the `y` value of the `y = f(x)` equation where the function `f` is
   /// built by interpolating the given [nodes] nodes and [x] is the given point

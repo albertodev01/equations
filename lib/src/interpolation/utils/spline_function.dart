@@ -76,7 +76,17 @@ abstract class SplineFunction {
   }
 
   @override
-  int get hashCode => Object.hashAll(nodes);
+  int get hashCode {
+    var result = 17;
+
+    // Like we did in operator== iterating over all elements ensures that the
+    // hashCode is properly calculated.
+    for (var i = 0; i < nodes.length; ++i) {
+      result = result * 37 + nodes[i].hashCode;
+    }
+
+    return result;
+  }
 
   @override
   String toString() => nodes.join(', ');

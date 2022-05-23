@@ -27,7 +27,7 @@ class SylvesterMatrix {
   }
 
   @override
-  int get hashCode => Object.hashAll([polynomial]);
+  int get hashCode => polynomial.hashCode;
 
   /// Builds the Sylvester matrix associated to the given polynomial.
   ComplexMatrix buildMatrix() {

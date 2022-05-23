@@ -59,7 +59,15 @@ abstract class NonLinear {
   }
 
   @override
-  int get hashCode => Object.hash(function, tolerance, maxSteps);
+  int get hashCode {
+    var result = 17;
+
+    result = result * 37 + function.hashCode;
+    result = result * 37 + tolerance.hashCode;
+    result = result * 37 + maxSteps.hashCode;
+
+    return result;
+  }
 
   @override
   String toString() => 'f(x) = $function';

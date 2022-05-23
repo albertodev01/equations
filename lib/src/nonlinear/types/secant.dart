@@ -45,7 +45,14 @@ class Secant extends NonLinear {
   }
 
   @override
-  int get hashCode => Object.hash(a, b, function, tolerance, maxSteps);
+  int get hashCode {
+    var result = super.hashCode;
+
+    result = result * 37 + a.hashCode;
+    result = result * 37 + b.hashCode;
+
+    return result;
+  }
 
   @override
   NonlinearResults solve() {

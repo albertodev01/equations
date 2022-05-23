@@ -34,7 +34,7 @@ abstract class Decomposition<K, T extends Matrix<K>> {
   }
 
   @override
-  int get hashCode => Object.hashAll([matrix]);
+  int get hashCode => matrix.hashCode;
 
   @override
   String toString() => '$matrix';
