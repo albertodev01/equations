@@ -19,13 +19,10 @@ dependencies:
     sdk: flutter
 
   # https://pub.dev/packages/flutter_svg
-  flutter_svg: ^1.0.3
+  flutter_svg: ^1.1.0
 
   # https://pub.dev/packages/go_router
   go_router: ^3.1.0
-
-  # https://pub.dev/packages/google_fonts
-  google_fonts: ^2.3.2
 
   # https://pub.dev/packages/intl
   intl: ^0.17.0
@@ -41,9 +38,19 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-  uses-material-design: true
-  generate: true
-
   assets:
     - assets/
-    - google_fonts/
+
+  generate: true
+
+  fonts:
+    - family: Lato
+        fonts:
+          - asset: fonts/Lato-Black.ttf
+          - asset: fonts/Lato-Bold.ttf
+          - asset: fonts/Lato-Italic.ttf
+          - asset: fonts/Lato-Light.ttf
+          - asset: fonts/Lato-Regular.ttf
+          - asset: fonts/Lato-Thin.ttf
+
+  uses-material-design: true

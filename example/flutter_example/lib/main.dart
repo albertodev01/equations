@@ -3,7 +3,6 @@ import 'package:equations_solver/routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// The app's main entrypoint.
 ///
@@ -12,8 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 void main() {
   // coverage:ignore-start
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('google_fonts/OFL.txt');
-    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+    final license = await rootBundle.loadString('fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['fonts'], license);
   });
   // coverage:ignore-end
 
@@ -47,8 +46,9 @@ class EquationsApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
       // Theme
-      theme: ThemeData.light().copyWith(
-        textTheme: GoogleFonts.latoTextTheme(),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        fontFamily: 'Lato',
       ),
 
       // Hiding the debug banner
