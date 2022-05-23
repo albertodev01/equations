@@ -23,7 +23,7 @@ void main() {
   });
 
   group("Testing the 'EquationScaffold' widget", () {
-    testWidgets(s
+    testWidgets(
       'Making sure that the scaffold can be rendered',
       (tester) async {
         await tester.pumpWidget(
@@ -62,6 +62,10 @@ void main() {
         expect(find.byKey(const Key('ScaffoldExtraBackground')), findsNothing);
 
         expect(find.byType(RailNavigation), findsNothing);
+        expect(
+          find.byKey(const Key('TabbedNavigationLayout-Scaffold')),
+          findsOneWidget,
+        );
 
         final finder = find.byType(EquationScaffold);
         expect(finder, findsOneWidget);
@@ -95,6 +99,10 @@ void main() {
           findsOneWidget,
         );
         expect(find.byType(RailNavigation), findsOneWidget);
+        expect(
+          find.byKey(const Key('TabbedNavigationLayout-Scaffold')),
+          findsNothing,
+        );
       },
     );
 

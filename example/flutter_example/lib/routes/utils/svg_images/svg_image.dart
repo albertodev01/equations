@@ -8,7 +8,7 @@ abstract class SvgImage extends StatelessWidget {
   /// By default, this is set to `40`.
   final double size;
 
-  /// Creates a [LogoSvg] widget,
+  /// Creates a [SvgImage] widget,
   const SvgImage({
     super.key,
     this.size = 40,
