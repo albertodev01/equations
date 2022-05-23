@@ -1,22 +1,27 @@
-import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
 import 'package:equations_solver/routes/models/precision_slider/precision_slider_state.dart';
 import 'package:flutter/widgets.dart';
 
-/// TODO
+/// An [InheritedWidget] that exposes a [PrecisionSliderState] object.
 class InheritedPrecisionSlider extends InheritedWidget {
+  /// The slider state.
   final PrecisionSliderState precisionState;
 
-  /// Creates an [InheritedWidget] that exposes a [NumberSwitcherState] object.
+  /// Creates an [InheritedWidget] that exposes a [PrecisionSliderState] object.
   const InheritedPrecisionSlider({
     super.key,
     required this.precisionState,
     required super.child,
   });
 
+  /// Retrieves the closest [InheritedPrecisionSlider] instance up in the tree.
   static InheritedPrecisionSlider of(BuildContext context) {
     final ref =
         context.dependOnInheritedWidgetOfExactType<InheritedPrecisionSlider>();
-    assert(ref != null, "No 'InheritedPlotZoom' found above in the tree.");
+    assert(
+      ref != null,
+      "No 'InheritedPrecisionSlider' found above in the tree.",
+    );
+
     return ref!;
   }
 
@@ -26,7 +31,11 @@ class InheritedPrecisionSlider extends InheritedWidget {
   }
 }
 
+/// Extension method on [BuildContext] that allows getting a reference to the
+/// [PrecisionSliderState] up in the tree using [InheritedPrecisionSlider].
 extension InheritedPrecisionStateExt on BuildContext {
+  /// Uses [InheritedPrecisionSlider] to retrieve a [PrecisionSliderState]
+  /// object.
   PrecisionSliderState get precisionState =>
       InheritedPrecisionSlider.of(this).precisionState;
 }

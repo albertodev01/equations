@@ -10,8 +10,8 @@ dart_code_metrics:
   anti-patterns:
     - long-parameter-list
   metrics:
-    number-of-parameters: 5
-    maximum-nesting: 4
+    number-of-parameters: 6
+    maximum-nesting: 3
     number-of-methods: 8
   metrics-exclude:
     - test/**

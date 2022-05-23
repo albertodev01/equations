@@ -45,12 +45,12 @@ flutter:
 
   fonts:
     - family: Lato
-        fonts:
-          - asset: fonts/Lato-Black.ttf
-          - asset: fonts/Lato-Bold.ttf
-          - asset: fonts/Lato-Italic.ttf
-          - asset: fonts/Lato-Light.ttf
-          - asset: fonts/Lato-Regular.ttf
-          - asset: fonts/Lato-Thin.ttf
+      fonts:
+      - asset: fonts/Lato-Black.ttf
+      - asset: fonts/Lato-Bold.ttf
+      - asset: fonts/Lato-Italic.ttf
+      - asset: fonts/Lato-Light.ttf
+      - asset: fonts/Lato-Regular.ttf
+      - asset: fonts/Lato-Thin.ttf
 
   uses-material-design: true

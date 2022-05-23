@@ -1,3 +1,4 @@
+import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:flutter/material.dart';
 
 /// Holds the state of a [Slider] in the [NonlinearDataInput] widget. This is
@@ -19,6 +20,7 @@ class PrecisionSliderState extends ChangeNotifier {
     required this.maxValue,
   }) : _value = (minValue + maxValue) / 2;
 
+  /// The current state.
   double get value => _value;
 
   /// Updates the current slider value.

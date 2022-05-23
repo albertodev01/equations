@@ -34,4 +34,29 @@ class SystemTextControllers {
     required this.jacobiControllers,
     required this.wSorController,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    if (other is SystemTextControllers) {
+      return runtimeType == other.runtimeType &&
+          matrixControllers == other.matrixControllers &&
+          vectorControllers == other.vectorControllers &&
+          jacobiControllers == other.jacobiControllers &&
+          wSorController == other.wSorController;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        matrixControllers,
+        vectorControllers,
+        jacobiControllers,
+        wSorController,
+      );
 }

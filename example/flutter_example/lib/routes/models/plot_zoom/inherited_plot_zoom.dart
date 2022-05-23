@@ -1,21 +1,24 @@
-import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
+import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:flutter/widgets.dart';
 
-/// TODO
+/// An [InheritedWidget] that exposes a [PlotZoomState] object.
 class InheritedPlotZoom extends InheritedWidget {
+  /// The zoom state of a [PlotWidget].
   final PlotZoomState plotZoomState;
 
-  /// Creates an [InheritedWidget] that exposes a [NumberSwitcherState] object.
+  /// Creates an [InheritedWidget] that exposes a [PlotZoomState] object.
   const InheritedPlotZoom({
     super.key,
     required this.plotZoomState,
     required super.child,
   });
 
+  /// Retrieves the closest [InheritedPlotZoom] instance up in the tree.
   static InheritedPlotZoom of(BuildContext context) {
     final ref = context.dependOnInheritedWidgetOfExactType<InheritedPlotZoom>();
     assert(ref != null, "No 'InheritedPlotZoom' found above in the tree.");
+
     return ref!;
   }
 
@@ -25,6 +28,9 @@ class InheritedPlotZoom extends InheritedWidget {
   }
 }
 
+/// Extension method on [BuildContext] that allows getting a reference to the
+/// [PlotZoomState] up in the tree using [InheritedPlotZoomExt].
 extension InheritedPlotZoomExt on BuildContext {
+  /// Uses [InheritedPlotZoomExt] to retrieve a [PlotZoomState] object.
   PlotZoomState get plotZoomState => InheritedPlotZoom.of(this).plotZoomState;
 }
