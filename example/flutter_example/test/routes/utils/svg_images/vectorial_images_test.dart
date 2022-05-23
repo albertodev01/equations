@@ -1,4 +1,3 @@
-import 'package:equations_solver/routes/utils/svg_images/svg_image.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,7 +14,7 @@ void main() {
         ),
       );
       await expectLater(
-        find.byType(SvgImage),
+        find.byType(ArrowUpSvg),
         matchesGoldenFile('goldens/vectorial_arrow_up.png'),
       );
     });

@@ -78,9 +78,7 @@ class _VectorChildren extends StatelessWidget {
       children: [
         for (var i = 0; i < vectorSize; ++i)
           Padding(
-            padding: i == 0
-                ? const EdgeInsets.only()
-                : const EdgeInsets.only(top: 10),
+            padding: i == 0 ? EdgeInsets.zero : const EdgeInsets.only(top: 10),
             child: SystemInputField(
               key: Key('VectorEntry-$i'),
               controller: vectorControllers[i],
