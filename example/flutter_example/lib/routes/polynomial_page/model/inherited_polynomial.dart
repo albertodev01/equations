@@ -18,6 +18,7 @@ class InheritedPolynomial extends InheritedWidget {
     final ref =
         context.dependOnInheritedWidgetOfExactType<InheritedPolynomial>();
     assert(ref != null, "No 'InheritedPolynomial' found above in the tree.");
+
     return ref!;
   }
 

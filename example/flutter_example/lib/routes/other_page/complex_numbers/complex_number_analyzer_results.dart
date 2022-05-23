@@ -2,6 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/complex_result_wrapper.dart';
 import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
+import 'package:equations_solver/routes/other_page/model/other_state.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
@@ -10,7 +11,7 @@ import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.
 import 'package:flutter/material.dart';
 
 /// This widget shows the complex number analysis results produced by an
-/// [OtherBloc].
+/// [OtherState] class.
 class ComplexNumberAnalyzerResult extends StatelessWidget {
   /// Creates a [ComplexNumberAnalyzerResult] widget.
   const ComplexNumberAnalyzerResult({super.key});
@@ -36,7 +37,7 @@ class ComplexNumberAnalyzerResult extends StatelessWidget {
   }
 }
 
-/// Either prints nothing, a loading widget or the analysis results.
+/// Either prints nothing or the analysis results.
 class _ComplexAnalysis extends StatelessWidget {
   /// Creates a [_ComplexAnalysis] widget.
   const _ComplexAnalysis();
@@ -61,31 +62,6 @@ class _ComplexAnalysis extends StatelessWidget {
 
         return const SizedBox.shrink();
       },
-    );
-  }
-}
-
-/// Displayed while the bloc is processing data.
-class _LoadingWidget extends StatelessWidget {
-  /// Creates a [_LoadingWidget] widget.
-  const _LoadingWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Loading indicator
-        const Padding(
-          padding: EdgeInsets.only(
-            bottom: 20,
-          ),
-          child: CircularProgressIndicator(),
-        ),
-
-        // Waiting text
-        Text(context.l10n.wait_a_moment),
-      ],
     );
   }
 }
@@ -123,62 +99,62 @@ class _Results extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Properties
+    final propertiesWidget = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SectionTitle(
+          pageTitle: context.l10n.properties,
+          icon: const SquareRoot(),
+        ),
+        RealResultCard(
+          value: abs,
+          leading: '${context.l10n.abs}: ',
+        ),
+        RealResultCard(
+          value: phase,
+          leading: '${context.l10n.phase}: ',
+        ),
+        ComplexResultCard(
+          value: sqrt,
+          leading: '${context.l10n.sqrt}: ',
+        ),
+        ComplexResultCard(
+          value: conjugate,
+          leading: '${context.l10n.conjugate}: ',
+        ),
+        ComplexResultCard(
+          value: reciprocal,
+          leading: '${context.l10n.reciprocal}: ',
+        ),
+      ],
+    );
+
+    // Polar coordinates
+    final coordinatesWidget = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SectionTitle(
+          pageTitle: context.l10n.polar_coordinates,
+          icon: const HalfRightAngle(),
+        ),
+        RealResultCard(
+          value: polarComplex.r,
+          leading: '${context.l10n.length}: ',
+        ),
+        RealResultCard(
+          value: polarComplex.phiDegrees,
+          leading: '${context.l10n.angle_deg}: ',
+        ),
+        RealResultCard(
+          value: polarComplex.phiRadians,
+          leading: '${context.l10n.angle_rad}: ',
+        ),
+      ],
+    );
+
     return LayoutBuilder(
       builder: (context, dimensions) {
-        // Properties
-        final propertiesWidget = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SectionTitle(
-              pageTitle: context.l10n.properties,
-              icon: const SquareRoot(),
-            ),
-            RealResultCard(
-              value: abs,
-              leading: '${context.l10n.abs}: ',
-            ),
-            RealResultCard(
-              value: phase,
-              leading: '${context.l10n.phase}: ',
-            ),
-            ComplexResultCard(
-              value: sqrt,
-              leading: '${context.l10n.sqrt}: ',
-            ),
-            ComplexResultCard(
-              value: conjugate,
-              leading: '${context.l10n.conjugate}: ',
-            ),
-            ComplexResultCard(
-              value: reciprocal,
-              leading: '${context.l10n.reciprocal}: ',
-            ),
-          ],
-        );
-
-        // Polar coordinates
-        final coordinatesWidget = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SectionTitle(
-              pageTitle: context.l10n.polar_coordinates,
-              icon: const HalfRightAngle(),
-            ),
-            RealResultCard(
-              value: polarComplex.r,
-              leading: '${context.l10n.length}: ',
-            ),
-            RealResultCard(
-              value: polarComplex.phiDegrees,
-              leading: '${context.l10n.angle_deg}: ',
-            ),
-            RealResultCard(
-              value: polarComplex.phiRadians,
-              leading: '${context.l10n.angle_rad}: ',
-            ),
-          ],
-        );
-
         // For mobile devices - all in a column
         if (dimensions.maxWidth <= matricesPageDoubleColumn) {
           return Column(

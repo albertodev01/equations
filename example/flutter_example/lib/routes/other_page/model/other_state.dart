@@ -6,9 +6,12 @@ import 'package:flutter/widgets.dart';
 
 /// Holds the state of the [OtherPage] page.
 class OtherState extends ChangeNotifier {
-  var state = const OtherResult();
+  var _state = const OtherResult();
 
-  /// Tries to solve a polynomial equation with the given coefficients.
+  /// The current state.
+  OtherResult get state => _state;
+
+  /// Analyzes a matrix from a series of String coefficients.
   void matrixAnalyze({
     required List<String> matrix,
     required int size,
@@ -20,16 +23,17 @@ class OtherState extends ChangeNotifier {
         size: size,
       ).process();
 
-      state = OtherResult(
+      _state = OtherResult(
         results: resultWrapper,
       );
     } on Exception {
-      state = const OtherResult();
+      _state = const OtherResult();
     }
 
     notifyListeners();
   }
 
+  /// Analyzes a complex number parsing the real and the imaginary parts.
   void complexAnalyze({
     required String realPart,
     required String imaginaryPart,
@@ -40,11 +44,11 @@ class OtherState extends ChangeNotifier {
         imaginaryPart: imaginaryPart,
       ).process();
 
-      state = OtherResult(
+      _state = OtherResult(
         results: resultWrapper,
       );
     } on Exception {
-      state = const OtherResult();
+      _state = const OtherResult();
     }
 
     notifyListeners();
@@ -52,7 +56,7 @@ class OtherState extends ChangeNotifier {
 
   /// Clears the state.
   void clear() {
-    state = const OtherResult();
+    _state = const OtherResult();
     notifyListeners();
   }
 }

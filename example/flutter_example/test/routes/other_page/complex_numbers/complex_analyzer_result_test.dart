@@ -1,45 +1,18 @@
-import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_analyzer_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../../utils/bloc_mocks.dart';
 import '../../mock_wrapper.dart';
+import '../complex_numbers_mock.dart';
 
 void main() {
-  late final OtherBloc bloc;
-  late final AnalyzedComplexNumber mockResult;
-
-  setUpAll(() {
-    registerFallbackValue(MockOtherEvent());
-    registerFallbackValue(MockOtherState());
-
-    bloc = MockOtherBloc();
-
-    mockResult = const AnalyzedComplexNumber(
-      abs: 1,
-      phase: 1,
-      conjugate: Complex.zero(),
-      reciprocal: Complex.zero(),
-      sqrt: Complex.zero(),
-      polarComplex: PolarComplex(r: 1, phiRadians: 1, phiDegrees: 1),
-    );
-  });
-
   group("Testing the 'ComplexNumberAnalyzerResult' widget", () {
     testWidgets('Making sure that the widget renders', (tester) async {
       await tester.pumpWidget(
-        MockWrapper(
-          child: BlocProvider<OtherBloc>(
-            create: (_) => OtherBloc(),
-            child: const ComplexNumberAnalyzerResult(),
-          ),
+        const MockComplexNumbers(
+          child: ComplexNumberAnalyzerResult(),
         ),
       );
 
@@ -48,37 +21,11 @@ void main() {
     });
 
     testWidgets(
-      'Making sure that a progress indicator appears while loading data',
-      (tester) async {
-        when(() => bloc.state).thenReturn(const OtherLoading());
-
-        await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const ComplexNumberAnalyzerResult(),
-            ),
-          ),
-        );
-
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        expect(find.byType(RealResultCard), findsNothing);
-      },
-    );
-
-    testWidgets(
       'Making sure that the widget is responsive - small screens test',
       (tester) async {
-        when(() => bloc.state).thenReturn(mockResult);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const SingleChildScrollView(
-                child: ComplexNumberAnalyzerResult(),
-              ),
-            ),
+          const MockComplexNumbers(
+            complexMockData: true,
           ),
         );
 
@@ -94,16 +41,9 @@ void main() {
       (tester) async {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-        when(() => bloc.state).thenReturn(mockResult);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const SingleChildScrollView(
-                child: ComplexNumberAnalyzerResult(),
-              ),
-            ),
+          const MockComplexNumbers(
+            complexMockData: true,
           ),
         );
 
@@ -117,16 +57,10 @@ void main() {
     testWidgets(
       'Making sure that analysis results can correctly be displayed',
       (tester) async {
-        when(() => bloc.state).thenReturn(mockResult);
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: BlocProvider<OtherBloc>.value(
-              value: bloc,
-              child: const SingleChildScrollView(
-                child: ComplexNumberAnalyzerResult(),
-              ),
-            ),
+          const MockComplexNumbers(
+            complexMockData: true,
+            child: ComplexNumberAnalyzerResult(),
           ),
         );
 
@@ -135,44 +69,20 @@ void main() {
         expect(find.byType(ComplexResultCard), findsNWidgets(3));
       },
     );
+  });
 
-    testGoldens('ComplexNumberAnalyzerResult', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'No results',
-          Builder(
-            builder: (context) {
-              when(() => bloc.state).thenReturn(const OtherNone());
-
-              return BlocProvider<OtherBloc>.value(
-                value: bloc,
-                child: const ComplexNumberAnalyzerResult(),
-              );
-            },
-          ),
-        )
-        ..addScenario(
-          'Results',
-          Builder(
-            builder: (context) {
-              when(() => bloc.state).thenReturn(mockResult);
-
-              return BlocProvider<OtherBloc>.value(
-                value: bloc,
-                child: const ComplexNumberAnalyzerResult(),
-              );
-            },
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+  group('Golden tests - MockComplexNumbers', () {
+    testWidgets('MockComplexNumbers', (tester) async {
+      await tester.pumpWidget(
+        const MockComplexNumbers(
+          complexMockData: true,
+          child: ComplexNumberAnalyzerResult(),
         ),
-        surfaceSize: const Size(500, 1500),
       );
-      await screenMatchesGolden(tester, 'complex_analyze_results');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/complex_output_results.png'),
+      );
     });
   });
 }

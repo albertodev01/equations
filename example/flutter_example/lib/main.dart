@@ -18,7 +18,9 @@ void main() {
   // coverage:ignore-end
 
   // Running the app
-  runApp(const EquationsApp());
+  runApp(
+    const EquationsApp(),
+  );
 }
 
 /// The root widget of the app.

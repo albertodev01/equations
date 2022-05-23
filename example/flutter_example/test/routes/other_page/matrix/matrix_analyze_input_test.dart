@@ -1,93 +1,32 @@
-import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyzer_input.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../../utils/bloc_mocks.dart';
 import '../../mock_wrapper.dart';
+import '../matrix_mock.dart';
 
 void main() {
-  late final OtherBloc bloc;
-  late final AnalyzedMatrix analyzedMatrix;
-
-  setUpAll(() {
-    registerFallbackValue(MockOtherEvent());
-    registerFallbackValue(MockOtherState());
-
-    bloc = MockOtherBloc();
-
-    analyzedMatrix = AnalyzedMatrix(
-      eigenvalues: const [
-        Complex.fromReal(5.37288),
-        Complex.fromReal(-0.372281),
-      ],
-      rank: 2,
-      determinant: -2,
-      trace: 5,
-      inverse: RealMatrix.fromFlattenedData(
-        rows: 2,
-        columns: 2,
-        data: [
-          -2,
-          1,
-          1.5,
-          -0.5,
-        ],
-      ),
-      cofactorMatrix: RealMatrix.fromFlattenedData(
-        rows: 2,
-        columns: 2,
-        data: [
-          4,
-          -3,
-          -2,
-          1,
-        ],
-      ),
-      transpose: RealMatrix.fromFlattenedData(
-        rows: 2,
-        columns: 2,
-        data: [
-          1,
-          3,
-          2,
-          4,
-        ],
-      ),
-      characteristicPolynomial: Algebraic.fromReal([1, -5, -2]),
-      isIdentity: true,
-      isDiagonal: true,
-      isSymmetric: false,
+  List<TextEditingController> generateControllers() {
+    return List<TextEditingController>.generate(
+      25,
+      (index) => TextEditingController(text: '$index'),
+      growable: false,
     );
-  });
+  }
 
   group("Testing the 'MatrixAnalyzerInput' widget", () {
     testWidgets(
       'Making sure that when trying to evaluate a matrix, if at least one of '
       'the inputs is wrong, a snackbar appears',
       (tester) async {
-        when(() => bloc.state).thenReturn(const OtherNone());
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<NumberSwitcherCubit>(
-                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-                ),
-                BlocProvider<OtherBloc>.value(
-                  value: bloc,
-                ),
-              ],
-              child: const MatrixAnalyzerInput(),
-            ),
+          MockMatrixOther(
+            controllers: [
+              TextEditingController(),
+            ],
+            child: const MatrixAnalyzerInput(),
           ),
         );
 
@@ -95,8 +34,7 @@ void main() {
         expect(find.byType(MatrixInput), findsOneWidget);
         expect(find.byType(Form), findsOneWidget);
 
-        // Entering some text
-        await tester.enterText(find.byType(TextFormField), 'abc');
+        // Wrong input check
         await tester.tap(find.byKey(const Key('MatrixAnalyze-button-analyze')));
         await tester.pumpAndSettle();
 
@@ -107,139 +45,109 @@ void main() {
     testWidgets(
       'Making sure that the form can be cleared correctly',
       (tester) async {
-        late FocusScopeNode focusScope;
-        when(() => bloc.state).thenReturn(const OtherNone());
-
         await tester.pumpWidget(
-          MockWrapper(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<NumberSwitcherCubit>(
-                  create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-                ),
-                BlocProvider<OtherBloc>.value(
-                  value: bloc,
-                ),
-              ],
-              child: Builder(
-                builder: (context) {
-                  focusScope = FocusScope.of(context);
-
-                  return const MatrixAnalyzerInput();
-                },
-              ),
-            ),
+          MockMatrixOther(
+            min: 2,
+            controllers: generateControllers(),
+            child: const MatrixAnalyzerInput(),
           ),
         );
 
         expect(find.byType(SizePicker), findsOneWidget);
         expect(find.byType(MatrixInput), findsOneWidget);
 
-        when(() => bloc.state).thenReturn(analyzedMatrix);
-
-        // Entering some text
-        await tester.enterText(find.byType(TextFormField), '435');
-        await tester.tap(find.byKey(const Key('MatrixAnalyze-button-analyze')));
-        expect(focusScope.hasFocus, isTrue);
+        // Expecting to find some mock data
+        expect(find.text('0'), findsOneWidget);
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
 
         // Now clearing
-        expect(find.text('435'), findsOneWidget);
-
         await tester.tap(find.byKey(const Key('MatrixAnalyze-button-clean')));
         await tester.pumpAndSettle();
 
-        expect(find.text('435'), findsNothing);
-        expect(focusScope.hasFocus, isFalse);
+        expect(find.text('0'), findsNothing);
+        expect(find.text('1'), findsNothing);
+        expect(find.text('2'), findsNothing);
+        expect(find.text('3'), findsNothing);
 
-        tester
-            .widgetList<TextFormField>(find.byType(TextFormField))
-            .forEach((t) {
-          expect(t.controller!.text.length, isZero);
-        });
+        tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach(
+          (textFormField) {
+            expect(textFormField.controller!.text.length, isZero);
+          },
+        );
       },
     );
+  });
 
-    testGoldens('MatrixAnalyzerInput', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          '1x1',
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 1, max: 5),
-              ),
-              BlocProvider<OtherBloc>(
-                create: (_) => OtherBloc(),
-              ),
-            ],
-            child: const MatrixAnalyzerInput(),
-          ),
-        )
-        ..addScenario(
-          '2x2',
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 2, max: 5),
-              ),
-              BlocProvider<OtherBloc>(
-                create: (_) => OtherBloc(),
-              ),
-            ],
-            child: const MatrixAnalyzerInput(),
-          ),
-        )
-        ..addScenario(
-          '3x3',
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 3, max: 5),
-              ),
-              BlocProvider<OtherBloc>(
-                create: (_) => OtherBloc(),
-              ),
-            ],
-            child: const MatrixAnalyzerInput(),
-          ),
-        )
-        ..addScenario(
-          '4x4',
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 4, max: 5),
-              ),
-              BlocProvider<OtherBloc>(
-                create: (_) => OtherBloc(),
-              ),
-            ],
-            child: const MatrixAnalyzerInput(),
-          ),
-        )
-        ..addScenario(
-          '5x5',
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<NumberSwitcherCubit>(
-                create: (_) => NumberSwitcherCubit(min: 5, max: 6),
-              ),
-              BlocProvider<OtherBloc>(
-                create: (_) => OtherBloc(),
-              ),
-            ],
-            child: const MatrixAnalyzerInput(),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+  group('Golden tests - MatrixAnalyzerInput', () {
+    testWidgets('MatrixAnalyzerInput - 1x1', (tester) async {
+      await tester.pumpWidget(
+        MockMatrixOther(
+          controllers: generateControllers(),
+          child: const MatrixAnalyzerInput(),
         ),
-        surfaceSize: const Size(700, 2300),
       );
-      await screenMatchesGolden(tester, 'matrix_analyze_input');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/matrix_analyze_input_1x1.png'),
+      );
+    });
+
+    testWidgets('MatrixAnalyzerInput - 2x2', (tester) async {
+      await tester.pumpWidget(
+        MockMatrixOther(
+          min: 2,
+          controllers: generateControllers(),
+          child: const MatrixAnalyzerInput(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/matrix_analyze_input_2x2.png'),
+      );
+    });
+
+    testWidgets('MatrixAnalyzerInput - 3x3', (tester) async {
+      await tester.pumpWidget(
+        MockMatrixOther(
+          min: 3,
+          controllers: generateControllers(),
+          child: const MatrixAnalyzerInput(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/matrix_analyze_input_3x3.png'),
+      );
+    });
+
+    testWidgets('MatrixAnalyzerInput - 4x4', (tester) async {
+      await tester.pumpWidget(
+        MockMatrixOther(
+          min: 4,
+          controllers: generateControllers(),
+          child: const MatrixAnalyzerInput(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/matrix_analyze_input_4x4.png'),
+      );
+    });
+
+    testWidgets('MatrixAnalyzerInput - 5x5', (tester) async {
+      await tester.pumpWidget(
+        MockMatrixOther(
+          min: 5,
+          controllers: generateControllers(),
+          child: const MatrixAnalyzerInput(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/matrix_analyze_input_5x5.png'),
+      );
     });
   });
 }

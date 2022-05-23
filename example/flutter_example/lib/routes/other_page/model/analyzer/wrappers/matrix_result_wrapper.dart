@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/result_wrapper.dart';
 
-/// State emitted when the matrix has been analyzed and results are available.
+/// Wrapper that holds a series of data about a [RealMatrix].
 class MatrixResultWrapper extends ResultWrapper {
   /// The transposed matrix.
   final RealMatrix transpose;

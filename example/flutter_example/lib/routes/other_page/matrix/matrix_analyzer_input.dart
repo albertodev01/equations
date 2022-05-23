@@ -1,11 +1,12 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains a [MatrixInput] needed to parse the values of the matrix
+/// Contains the [MatrixInput] widget needed to parse the values of the matrix
 /// to be analyzed.
 class MatrixAnalyzerInput extends StatefulWidget {
   /// Creates a [MatrixAnalyzerInput] widget.
@@ -16,27 +17,12 @@ class MatrixAnalyzerInput extends StatefulWidget {
 }
 
 class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
-  /// The text input controllers for the matrix.
-  late final matrixControllers = List<TextEditingController>.generate(
-    25,
-    _generateTextController,
-  );
-
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController();
-
-    return controller;
-  }
-
   /// Form and results cleanup.
   void cleanInput() {
-    for (final controller in matrixControllers) {
+    for (final controller in context.textControllers) {
       controller.clear();
     }
 
@@ -50,9 +36,10 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
       final size = context.numberSwitcherState.state;
 
       // Getting the inputs
-      final matrixInputs = matrixControllers.sublist(0, size * size).map((c) {
-        return c.text;
-      }).toList();
+      final matrixInputs = context.textControllers
+          .sublist(0, size * size)
+          .map((c) => c.text)
+          .toList(growable: false);
 
       // Analyze the input
       context.otherState.matrixAnalyze(
@@ -67,15 +54,6 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    for (final controller in matrixControllers) {
-      controller.dispose();
-    }
-
-    super.dispose();
   }
 
   @override
@@ -102,7 +80,7 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
             animation: context.numberSwitcherState,
             builder: (context, _) {
               return MatrixInput(
-                matrixControllers: matrixControllers,
+                matrixControllers: context.textControllers,
                 matrixSize: context.numberSwitcherState.state,
               );
             },

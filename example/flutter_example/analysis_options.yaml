@@ -19,7 +19,6 @@ dart_code_metrics:
     - avoid-collection-methods-with-unrelated-analyzers
     - avoid-dynamic
     - avoid-global-state
-    - avoid-ignoring-return-values
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
     - always-remove-listener

@@ -3,7 +3,9 @@ import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_analyzer_results.dart';
+import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
+import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
@@ -67,3 +69,9 @@ const systemInputFieldSize = Size(60, 50);
 /// The length of an [EquationInput] widget used inside a [IntegralDataInput] to
 /// parse the values of the lower and upper integration limits.
 const integrationBoundsWidth = 80.0;
+
+/// The width of the [ComplexNumberInput] input widgets.
+const complexInputWidth = 65.0;
+
+/// The width of a [TableRow] in the [MatrixOutput] widget.
+const matrixOutputWidth = 70.0;

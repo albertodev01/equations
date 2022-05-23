@@ -16,7 +16,7 @@ import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/matri
 ///  - whether it's symmetric or not
 ///  - whether it's identity or not
 class MatrixDataAnalyzer extends Analyzer<MatrixResultWrapper> {
-  /// The size of the matrix.
+  /// The matrix size.
   final int size;
 
   /// The flattened representation of the matrix.
@@ -50,10 +50,4 @@ class MatrixDataAnalyzer extends Analyzer<MatrixResultWrapper> {
       isIdentity: matrix.isIdentity(),
     );
   }
-
-  @override
-  List<Object?> get props => [
-        size,
-        flatMatrix,
-      ];
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// This widget is used as "separator" in lists or columns to define different
-/// UI portions. This is made up of an icon, on the left, and some text on the
+/// UI portions. It's made up of an icon, on the left, and some text on the
 /// right.
 class SectionTitle extends StatelessWidget {
   /// The title of the page.

@@ -1,10 +1,13 @@
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains a [ComplexNumberInput] needed to parse the values of
-/// the complex number to be analyzed.
+/// A wrapper of [ComplexNumberInput] with two buttons:
+///
+///  - One for analyzing the complex number
+///  - One for clearing the state and the page
 class ComplexAnalyzerInput extends StatefulWidget {
   /// Creates a [ComplexAnalyzerInput] widget.
   const ComplexAnalyzerInput({super.key});
@@ -14,23 +17,14 @@ class ComplexAnalyzerInput extends StatefulWidget {
 }
 
 class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
-  /// The [TextEditingController] for the real part of the complex number.
-  late final realController = _generateTextController(0);
-
-  /// The [TextEditingController] for the real part of the complex number.
-  late final imaginaryController = _generateTextController(1);
-
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController();
+  /// The [TextEditingController] that controls the real part.
+  TextEditingController get realController => context.textControllers.first;
 
-    return controller;
-  }
+  /// The [TextEditingController] that controls the imaginary part.
+  TextEditingController get imaginaryController => context.textControllers[1];
 
   /// Form and results cleanup.
   void cleanInput() {
@@ -56,14 +50,6 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    realController.dispose();
-    imaginaryController.dispose();
-
-    super.dispose();
   }
 
   @override
