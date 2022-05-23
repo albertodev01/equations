@@ -44,8 +44,8 @@ void main() {
 
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
-          child: const NonlinearDropdownSelection(),
+        const MockNonlinearWidget(
+          child: NonlinearDropdownSelection(),
         ),
       );
 
@@ -57,8 +57,8 @@ void main() {
       'only contains single point algorithms',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
-            child: const NonlinearDropdownSelection(),
+          const MockNonlinearWidget(
+            child: NonlinearDropdownSelection(),
           ),
         );
 
@@ -86,7 +86,7 @@ void main() {
       'only contains bracketing algorithms',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             nonlinearType: NonlinearType.bracketing,
             dropdownValue: NonlinearDropdownItems.bisection.asString(),
             child: const NonlinearDropdownSelection(),
@@ -120,8 +120,8 @@ void main() {
       'Making sure that dropdown values can be changed',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
-            child: const NonlinearDropdownSelection(),
+          const MockNonlinearWidget(
+            child: NonlinearDropdownSelection(),
           ),
         );
 
@@ -137,8 +137,8 @@ void main() {
   group('Golden tests - NonlinearDropdownSelection', () {
     testWidgets('NonlinearDropdownSelection - single point', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
-          child: const NonlinearDropdownSelection(),
+        const MockNonlinearWidget(
+          child: NonlinearDropdownSelection(),
         ),
       );
       await expectLater(
@@ -149,7 +149,7 @@ void main() {
 
     testWidgets('NonlinearDropdownSelection - bracketing', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,
           dropdownValue: NonlinearDropdownItems.bisection.asString(),
           child: const NonlinearDropdownSelection(),

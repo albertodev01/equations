@@ -15,7 +15,7 @@ class MockWrapper extends StatelessWidget {
   /// or popped.
   final List<NavigatorObserver> navigatorObservers;
 
-  /// The initial value of the [DropdownCubit].
+  /// The initial value of the dropdown.
   ///
   /// By default, this is an empty string.
   final String dropdownInitial;

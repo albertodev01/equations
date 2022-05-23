@@ -35,7 +35,7 @@ class ErrorPage extends StatelessWidget {
 }
 
 class _ErrorText extends StatelessWidget {
-  const _ErrorText({super.key});
+  const _ErrorText();
 
   @override
   Widget build(BuildContext context) {

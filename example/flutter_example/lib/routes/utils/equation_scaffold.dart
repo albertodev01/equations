@@ -20,7 +20,8 @@ const _assertionError = 'There must be at least 1 navigation item.';
 ///  - an optional [FloatingActionButton].
 ///
 /// This widget also contains a responsive navigation bar which can be either a
-/// [BottomNavigationBar] or a [NavigationRail] according with the screen's size.
+/// [BottomNavigationBar] or a [NavigationRail] according with the screen's
+/// size.
 class EquationScaffold extends StatefulWidget {
   /// The body of the [Scaffold]. When there's a [navigationItems] list defined,
   /// this widget is ignored because the actual body of the scaffold will be
@@ -102,8 +103,8 @@ class _EquationScaffoldState extends State<EquationScaffold>
         builder: (context, dimensions) {
           final hasExtra = dimensions.maxWidth >= extraBackgroundBreakpoint;
 
-          // If the dimension of the screen is "small" enough, a bottom navigation
-          // bar fits better
+          // If the dimension of the screen is "small" enough, a bottom
+          // navigation bar fits better
           if (dimensions.maxWidth <= bottomNavigationBreakpoint) {
             return Scaffold(
               key: const Key('TabbedNavigationLayout-Scaffold'),
@@ -192,7 +193,7 @@ class _ScaffoldContents extends StatelessWidget {
 /// The contents of the scaffold in the background.
 class _ScaffoldBackground extends StatelessWidget {
   /// Creates a [_ScaffoldBackground] widget.
-  const _ScaffoldBackground({super.key});
+  const _ScaffoldBackground();
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +214,7 @@ class _ScaffoldBackground extends StatelessWidget {
 /// The contents of the scaffold in the background.
 class _ScaffoldExtraBackground extends StatelessWidget {
   /// Creates a [_ScaffoldExtraBackground] widget.
-  const _ScaffoldExtraBackground({super.key});
+  const _ScaffoldExtraBackground();
 
   @override
   Widget build(BuildContext context) {

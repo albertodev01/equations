@@ -18,6 +18,7 @@ class InheritedNonlinear extends InheritedWidget {
     final ref =
         context.dependOnInheritedWidgetOfExactType<InheritedNonlinear>();
     assert(ref != null, "No 'InheritedNonlinear' found above in the tree.");
+
     return ref!;
   }
 

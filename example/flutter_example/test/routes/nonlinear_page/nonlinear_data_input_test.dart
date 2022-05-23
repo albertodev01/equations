@@ -17,7 +17,7 @@ void main() {
       'has 2 input fields appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -42,7 +42,7 @@ void main() {
       'has 3 input fields appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             nonlinearType: NonlinearType.bracketing,
             textControllers: [
               TextEditingController(),
@@ -69,7 +69,7 @@ void main() {
       'least one of the inputs is wrong, a snackbar appears',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             nonlinearType: NonlinearType.bracketing,
             textControllers: [
               TextEditingController(),
@@ -98,7 +98,7 @@ void main() {
       'Making sure that single point equations can be solved',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -130,7 +130,7 @@ void main() {
       'Making sure that bracketing equations can be solved',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             nonlinearType: NonlinearType.bracketing,
             textControllers: [
               TextEditingController(),
@@ -172,7 +172,7 @@ void main() {
             builder: (context) {
               focusScope = FocusScope.of(context);
 
-              return mockNonlinearWidget(
+              return MockNonlinearWidget(
                 textControllers: [
                   TextEditingController(),
                   TextEditingController(),
@@ -215,7 +215,7 @@ void main() {
   group('Golden tests - NonlinearDataInput', () {
     testWidgets('NonlinearDataInput - single point', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -231,7 +231,7 @@ void main() {
 
     testWidgets('NonlinearDataInput - bracketing', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,
           dropdownValue: NonlinearDropdownItems.bisection.asString(),
           textControllers: [

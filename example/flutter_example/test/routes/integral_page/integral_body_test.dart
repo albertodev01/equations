@@ -14,7 +14,7 @@ void main() {
   group("Testing the 'IntegralBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -32,7 +32,7 @@ void main() {
       'Making sure that the widget is responsive - small screens test',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -58,7 +58,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -84,7 +84,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(250, 2000));
 
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -110,7 +110,7 @@ void main() {
 
     testWidgets('Making sure that simpson solver works', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -142,7 +142,7 @@ void main() {
 
     testWidgets('Making sure that midpoint solver works', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -175,7 +175,7 @@ void main() {
 
     testWidgets('Making sure that trapezoid solver works', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),

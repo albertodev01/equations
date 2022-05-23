@@ -46,7 +46,7 @@ class PolynomialPlotWidget extends StatelessWidget {
 /// A wrapper of [PageTitle] placed above a [PlotWidget].
 class _PlotTitle extends StatelessWidget {
   /// Creates a [_PlotTitle] widget.
-  const _PlotTitle({super.key});
+  const _PlotTitle();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _PlotTitle extends StatelessWidget {
 /// the polynomial or clear the chart.
 class _PlotWidgetListener extends StatelessWidget {
   /// Creates a [_PlotWidgetListener] widget.
-  const _PlotWidgetListener({super.key});
+  const _PlotWidgetListener();
 
   @override
   Widget build(BuildContext context) {

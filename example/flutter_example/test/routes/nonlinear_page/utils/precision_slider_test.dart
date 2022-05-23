@@ -9,8 +9,8 @@ void main() {
   group("Testing the 'PrecisionSlider' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
-          child: const PrecisionSlider(),
+        const MockNonlinearWidget(
+          child: PrecisionSlider(),
         ),
       );
 
@@ -22,8 +22,8 @@ void main() {
       'middle of the range values).',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
-            child: const PrecisionSlider(),
+          const MockNonlinearWidget(
+            child: PrecisionSlider(),
           ),
         );
 
@@ -41,8 +41,8 @@ void main() {
       'Making sure that the slider can actually slide',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
-            child: const PrecisionSlider(),
+          const MockNonlinearWidget(
+            child: PrecisionSlider(),
           ),
         );
 
@@ -64,8 +64,8 @@ void main() {
   group('Golden tests - PrecisionSlider', () {
     testWidgets('PrecisionSlider', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
-          child: const PrecisionSlider(),
+        const MockNonlinearWidget(
+          child: PrecisionSlider(),
         ),
       );
       await expectLater(

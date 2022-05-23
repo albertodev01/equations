@@ -65,8 +65,6 @@ class IntegralState extends ChangeNotifier {
       }
 
       // Integrating and returning the result
-      final integrationResult = integration.integrate();
-
       _state = IntegralResult(
         numericalIntegration: integration,
       );

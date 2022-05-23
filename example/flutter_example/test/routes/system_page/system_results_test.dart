@@ -13,8 +13,8 @@ void main() {
   group("Testing the 'PolynomialResults' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
-          child: const SystemResults(),
+        const MockSystemWidget(
+          child: SystemResults(),
         ),
       );
 
@@ -27,8 +27,8 @@ void main() {
       'Making sure that, when there are no solutions, no result cards appear',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
-            child: const SystemResults(),
+          const MockSystemWidget(
+            child: SystemResults(),
           ),
         );
 
@@ -41,7 +41,7 @@ void main() {
       'Making sure that, when there are solutions, result cards appear',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             child: InheritedSystem(
               systemState: SystemState(SystemType.rowReduction)
                 ..rowReductionSolver(
@@ -63,8 +63,8 @@ void main() {
   group('Golden tests - SystemResults', () {
     testWidgets('SystemResults - no results', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
-          child: const SystemResults(),
+        const MockSystemWidget(
+          child: SystemResults(),
         ),
       );
       await expectLater(
@@ -75,7 +75,7 @@ void main() {
 
     testWidgets('SystemResults - no results', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           child: InheritedSystem(
             systemState: SystemState(SystemType.rowReduction)
               ..rowReductionSolver(

@@ -10,7 +10,7 @@ void main() {
   group("Testing the 'NonlinearResults' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -28,7 +28,7 @@ void main() {
       'a Snackbar appears.',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -49,8 +49,8 @@ void main() {
       "appears saying that there's nothing to display",
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
-            child: const NonlinearResults(),
+          const MockNonlinearWidget(
+            child: NonlinearResults(),
           ),
         );
 
@@ -64,7 +64,7 @@ void main() {
       'appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -93,7 +93,7 @@ void main() {
   group('Golden tests - NonlinearResults', () {
     testWidgets('NonlinearResults', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),

@@ -12,7 +12,7 @@ void main() {
             rows: 2,
             data: const [
               [3, -1],
-              [1, 0]
+              [1, 0],
             ],
           ),
           knownValues: const [1, 2],
@@ -30,7 +30,7 @@ void main() {
             rows: 2,
             data: const [
               [3, -1],
-              [1, 0]
+              [1, 0],
             ],
           ),
           knownValues: const [1, 2],
@@ -39,19 +39,21 @@ void main() {
 
       expect(
         systemResult,
-        equals(SystemResult(
-          systemSolver: LUSolver(
-            matrix: RealMatrix.fromData(
-              columns: 2,
-              rows: 2,
-              data: const [
-                [3, -1],
-                [1, 0]
-              ],
+        equals(
+          SystemResult(
+            systemSolver: LUSolver(
+              matrix: RealMatrix.fromData(
+                columns: 2,
+                rows: 2,
+                data: const [
+                  [3, -1],
+                  [1, 0],
+                ],
+              ),
+              knownValues: const [1, 2],
             ),
-            knownValues: const [1, 2],
           ),
-        )),
+        ),
       );
 
       expect(
@@ -62,7 +64,7 @@ void main() {
               rows: 2,
               data: const [
                 [3, -1],
-                [1, 0]
+                [1, 0],
               ],
             ),
             knownValues: const [1, 2],
@@ -80,7 +82,7 @@ void main() {
                   rows: 2,
                   data: const [
                     [3, -1],
-                    [1, 0]
+                    [1, 0],
                   ],
                 ),
                 knownValues: const [1, 2],
@@ -97,7 +99,7 @@ void main() {
                   rows: 2,
                   data: const [
                     [3, -1],
-                    [1, 0]
+                    [1, 0],
                   ],
                 ),
                 knownValues: const [1, 2],
@@ -115,7 +117,7 @@ void main() {
                   rows: 2,
                   data: const [
                     [3, 1],
-                    [1, 0]
+                    [1, 0],
                   ],
                 ),
                 knownValues: const [1, 2],
@@ -135,7 +137,7 @@ void main() {
                 rows: 2,
                 data: const [
                   [3, -1],
-                  [1, 0]
+                  [1, 0],
                 ],
               ),
               knownValues: const [1, 2],

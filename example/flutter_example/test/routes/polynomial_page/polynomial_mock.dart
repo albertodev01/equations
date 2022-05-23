@@ -8,25 +8,34 @@ import 'package:flutter/material.dart';
 
 import '../mock_wrapper.dart';
 
-Widget mockPolynomialWidget({
-  required List<TextEditingController> textControllers,
-  PolynomialType polynomialType = PolynomialType.linear,
-  Widget child = const PolynomialBody(),
-}) {
-  return MockWrapper(
-    child: InheritedPolynomial(
-      polynomialState: PolynomialState(polynomialType),
-      child: InheritedTextControllers(
-        textControllers: textControllers,
-        child: InheritedPlotZoom(
-          plotZoomState: PlotZoomState(
-            minValue: 2,
-            maxValue: 10,
-            initial: 3,
+class MockPolynomialWidget extends StatelessWidget {
+  final List<TextEditingController> textControllers;
+  final PolynomialType polynomialType;
+  final Widget child;
+  const MockPolynomialWidget({
+    super.key,
+    required this.textControllers,
+    this.polynomialType = PolynomialType.linear,
+    this.child = const PolynomialBody(),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MockWrapper(
+      child: InheritedPolynomial(
+        polynomialState: PolynomialState(polynomialType),
+        child: InheritedTextControllers(
+          textControllers: textControllers,
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 2,
+              maxValue: 10,
+              initial: 3,
+            ),
+            child: child,
           ),
-          child: child,
         ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -42,8 +42,8 @@ void main() {
       'reduction type is selected',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
-            child: const SystemDropdownSelection(),
+          const MockSystemWidget(
+            child: SystemDropdownSelection(),
           ),
         );
 
@@ -60,7 +60,7 @@ void main() {
       'factorization type is selected',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.lu.asString(),
             child: const SystemDropdownSelection(),
@@ -81,7 +81,7 @@ void main() {
       'iterative type is selected',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.iterative,
             dropdownValue: SystemDropdownItems.sor.asString(),
             child: const SystemDropdownSelection(),
@@ -101,7 +101,7 @@ void main() {
       'Making sure that dropdown values can be changed',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.lu.asString(),
             child: const SystemDropdownSelection(),

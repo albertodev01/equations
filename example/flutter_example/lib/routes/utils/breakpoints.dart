@@ -6,9 +6,15 @@ import 'package:equations_solver/routes/other_page/complex_numbers/complex_numbe
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_analyze_results.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
+import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
+import 'package:equations_solver/routes/utils/equation_scaffold.dart';
+import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 
 /// When the viewport is horizontally smaller than [bottomNavigationBreakpoint],

@@ -67,7 +67,6 @@ class _VectorChildren extends StatelessWidget {
 
   /// Creates a [_VectorChildren] widget.
   const _VectorChildren({
-    super.key,
     required this.vectorControllers,
     required this.vectorSize,
   });

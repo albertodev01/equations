@@ -12,7 +12,7 @@ void main() {
   group("Testing the 'JacobiVectorInput' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.iterative,
           dropdownValue: SystemDropdownItems.jacobi.asString(),
           child: JacobiVectorInput(
@@ -37,7 +37,7 @@ void main() {
       'method is NOT Jacobi',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.lu.asString(),
             child: JacobiVectorInput(

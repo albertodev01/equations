@@ -168,7 +168,6 @@ class _InputFieldsWrapWidget extends StatelessWidget {
   final int inputLength;
 
   const _InputFieldsWrapWidget({
-    super.key,
     required this.controllers,
     required this.inputLength,
   });

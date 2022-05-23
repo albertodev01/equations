@@ -14,7 +14,7 @@ void main() {
   group("Testing the 'NonlinearBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -32,7 +32,7 @@ void main() {
       'test',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -58,7 +58,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -83,7 +83,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(250, 2000));
 
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -110,7 +110,7 @@ void main() {
       'Making sure that single point equations works',
       (tester) async {
         await tester.pumpWidget(
-          mockNonlinearWidget(
+          MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -141,7 +141,7 @@ void main() {
 
     testWidgets('Making sure that bracketing equations works', (tester) async {
       await tester.pumpWidget(
-        mockNonlinearWidget(
+        MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,
           dropdownValue: 'Bisection',
           textControllers: [

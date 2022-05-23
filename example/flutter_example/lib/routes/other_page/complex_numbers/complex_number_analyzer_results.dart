@@ -88,7 +88,6 @@ class _Results extends StatelessWidget {
 
   /// Creates an [_Results] object..
   const _Results({
-    super.key,
     required this.polarComplex,
     required this.conjugate,
     required this.reciprocal,

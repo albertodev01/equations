@@ -7,18 +7,19 @@ import 'package:flutter/material.dart';
 /// This widget draws a cartesian plane and, if there's a [plotMode], it also
 /// plots a real function `f(x)`.
 ///
-/// If [plotMode] is not `null`, then a plot_zoom is also added below the widget to
-/// scale the image.
+/// If [plotMode] is not `null`, then a plot_zoom is also added below the widget
+/// to scale the image.
 ///
-/// If [plotMode] is `null`, the plot_zoom doesn't appear and the widget only draws
-/// a cartesian plane (with no function within).
+/// If [plotMode] is `null`, the plot_zoom doesn't appear and the widget only
+/// draws a cartesian plane (with no function within).
 class PlotWidget<T> extends StatelessWidget {
   /// Provides the ability to evaluate a real function on a point.
   final PlotMode<T>? plotMode;
 
   /// The color that highlights the area below a function.
   ///
-  /// By default, this is set to [Colors.transparent] so nothing will be colored.
+  /// By default, this is set to [Colors.transparent] so nothing will be
+  /// colored.
   final Color areaColor;
 
   /// The lower limit that indicates from which point in the x axis the area
@@ -126,7 +127,6 @@ class _PlotBody<T> extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
 

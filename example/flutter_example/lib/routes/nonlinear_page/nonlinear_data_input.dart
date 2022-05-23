@@ -156,7 +156,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 /// root finding algorithm.
 class _GuessesInput extends StatelessWidget {
   /// Creates a [_GuessesInput] instance.
-  const _GuessesInput({super.key});
+  const _GuessesInput();
 
   @override
   Widget build(BuildContext context) {

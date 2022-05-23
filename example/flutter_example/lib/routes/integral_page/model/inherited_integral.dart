@@ -17,6 +17,7 @@ class InheritedIntegral extends InheritedWidget {
   static InheritedIntegral of(BuildContext context) {
     final ref = context.dependOnInheritedWidgetOfExactType<InheritedIntegral>();
     assert(ref != null, "No 'InheritedIntegral' found above in the tree.");
+
     return ref!;
   }
 

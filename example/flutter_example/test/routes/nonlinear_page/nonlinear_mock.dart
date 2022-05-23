@@ -12,37 +12,47 @@ import 'package:flutter/material.dart';
 
 import '../mock_wrapper.dart';
 
-Widget mockNonlinearWidget({
-  List<TextEditingController> textControllers = const [],
-  NonlinearType nonlinearType = NonlinearType.singlePoint,
-  Widget child = const NonlinearBody(),
-  String? dropdownValue,
-}) {
-  return MockWrapper(
-    child: InheritedNonlinear(
-      nonlinearState: NonlinearState(nonlinearType),
-      child: InheritedTextControllers(
-        textControllers: textControllers,
-        child: InheritedPlotZoom(
-          plotZoomState: PlotZoomState(
-            minValue: 2,
-            maxValue: 10,
-            initial: 3,
-          ),
-          child: InheritedDropdownValue(
-            dropdownValue: ValueNotifier(
-              dropdownValue ?? NonlinearDropdownItems.newton.asString(),
+class MockNonlinearWidget extends StatelessWidget {
+  final List<TextEditingController> textControllers;
+  final NonlinearType nonlinearType;
+  final Widget child;
+  final String? dropdownValue;
+  const MockNonlinearWidget({
+    super.key,
+    this.textControllers = const [],
+    this.nonlinearType = NonlinearType.singlePoint,
+    this.dropdownValue,
+    this.child = const NonlinearBody(),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MockWrapper(
+      child: InheritedNonlinear(
+        nonlinearState: NonlinearState(nonlinearType),
+        child: InheritedTextControllers(
+          textControllers: textControllers,
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 2,
+              maxValue: 10,
+              initial: 3,
             ),
-            child: InheritedPrecisionSlider(
-              precisionState: PrecisionSliderState(
-                minValue: 2,
-                maxValue: 10,
+            child: InheritedDropdownValue(
+              dropdownValue: ValueNotifier(
+                dropdownValue ?? NonlinearDropdownItems.newton.asString(),
               ),
-              child: child,
+              child: InheritedPrecisionSlider(
+                precisionState: PrecisionSliderState(
+                  minValue: 2,
+                  maxValue: 10,
+                ),
+                child: child,
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

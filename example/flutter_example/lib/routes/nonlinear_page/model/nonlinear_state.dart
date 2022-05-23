@@ -48,8 +48,8 @@ class NonlinearState extends ChangeNotifier {
   /// The current state.
   NonlinearResult get state => _state;
 
-  /// Tries to return a [SinglePointMethods] value from a [NonlinearDropdownItems]
-  /// value.
+  /// Tries to return a [SinglePointMethods] value from a
+  /// [NonlinearDropdownItems] value.
   static SinglePointMethods singlePointResolve(NonlinearDropdownItems item) {
     if (item == NonlinearDropdownItems.newton) {
       return SinglePointMethods.newton;
@@ -58,8 +58,8 @@ class NonlinearState extends ChangeNotifier {
     return SinglePointMethods.steffensen;
   }
 
-  /// Tries to return a [BracketingMethods] value from a [NonlinearDropdownItems]
-  /// value.
+  /// Tries to return a [BracketingMethods] value from a
+  /// [NonlinearDropdownItems] value.
   static BracketingMethods brackedingResolve(NonlinearDropdownItems item) {
     if (item == NonlinearDropdownItems.secant) {
       return BracketingMethods.secant;

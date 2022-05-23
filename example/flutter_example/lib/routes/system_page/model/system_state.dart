@@ -243,6 +243,7 @@ class SystemState extends ChangeNotifier {
 
   List<double> _valueParser(List<String> source) {
     const parser = ExpressionParser();
+
     return source.map(parser.evaluate).toList(growable: false);
   }
 }

@@ -13,8 +13,8 @@ void main() {
   group("Testing the 'SystemDataInput' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
-          child: const SystemDataInput(),
+        const MockSystemWidget(
+          child: SystemDataInput(),
         ),
       );
 
@@ -32,8 +32,8 @@ void main() {
       'Making sure that row reduction methods do not show SOR or jacobi inputs',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
-            child: const SystemDataInput(),
+          const MockSystemWidget(
+            child: SystemDataInput(),
           ),
         );
 
@@ -55,7 +55,7 @@ void main() {
       'Making sure that LU does not show SOR or jacobi inputs',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             dropdownValue: SystemDropdownItems.lu.asString(),
             systemType: SystemType.factorization,
             child: const SystemDataInput(),
@@ -80,7 +80,7 @@ void main() {
       'Making sure that Cholesky does not show SOR or jacobi inputs',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             dropdownValue: SystemDropdownItems.cholesky.asString(),
             systemType: SystemType.factorization,
             child: const SystemDataInput(),
@@ -105,7 +105,7 @@ void main() {
       'Making sure that SOR only shows the relaxation factor input',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             dropdownValue: SystemDropdownItems.sor.asString(),
             systemType: SystemType.iterative,
             child: const SingleChildScrollView(
@@ -132,7 +132,7 @@ void main() {
       'Making sure that Jacobi only shows the initial vector input',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             dropdownValue: SystemDropdownItems.jacobi.asString(),
             systemType: SystemType.iterative,
             child: const SingleChildScrollView(
@@ -159,8 +159,8 @@ void main() {
   group('Golden tests - SystemDataInput', () {
     testWidgets('SystemDataInput - Row reduction', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
-          child: const SystemDataInput(),
+        const MockSystemWidget(
+          child: SystemDataInput(),
         ),
       );
       await expectLater(
@@ -171,7 +171,7 @@ void main() {
 
     testWidgets('SystemDataInput - LU', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.factorization,
           dropdownValue: SystemDropdownItems.lu.asString(),
           child: const SystemDataInput(),
@@ -185,7 +185,7 @@ void main() {
 
     testWidgets('SystemDataInput - Cholesky', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.factorization,
           dropdownValue: SystemDropdownItems.cholesky.asString(),
           child: const SystemDataInput(),
@@ -199,7 +199,7 @@ void main() {
 
     testWidgets('SystemDataInput - SOR', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.iterative,
           dropdownValue: SystemDropdownItems.sor.asString(),
           child: const SingleChildScrollView(
@@ -215,7 +215,7 @@ void main() {
 
     testWidgets('SystemDataInput - Jacobi', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.iterative,
           dropdownValue: SystemDropdownItems.jacobi.asString(),
           child: const SingleChildScrollView(

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
+import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
@@ -35,7 +36,7 @@ class IntegralPlotWidget extends StatelessWidget {
 
                 return SizedBox(
                   width: width,
-                  child: const PlotWidgetListener(),
+                  child: const _PlotWidgetListener(),
                 );
               },
             ),
@@ -49,7 +50,7 @@ class IntegralPlotWidget extends StatelessWidget {
 /// A wrapper of [PageTitle] placed above a [PlotWidget].
 class _PlotTitle extends StatelessWidget {
   /// Creates a [_PlotTitle] widget.
-  const _PlotTitle({super.key});
+  const _PlotTitle();
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +61,11 @@ class _PlotTitle extends StatelessWidget {
   }
 }
 
-/// TODO
-class PlotWidgetListener extends StatelessWidget {
-  const PlotWidgetListener({super.key});
+/// A wrapper of [PlotWidget] that listens to [IntegralState] to either draw
+/// the function or clear the chart.
+class _PlotWidgetListener extends StatelessWidget {
+  /// Creates a [_PlotWidgetListener] widget.
+  const _PlotWidgetListener();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +85,7 @@ class PlotWidgetListener extends StatelessWidget {
           );
         }
 
-        return const PlotWidget();
+        return const PlotWidget<IntegralPlot>();
       },
     );
   }

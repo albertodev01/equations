@@ -247,7 +247,7 @@ class SystemDataInputState extends State<SystemDataInput> {
 /// The widget asking for the relaxation factor `w` of the SOR algorithm.
 class _RelaxationFactor extends StatelessWidget {
   /// Creates a [_RelaxationFactor] widget.
-  const _RelaxationFactor({super.key});
+  const _RelaxationFactor();
 
   @override
   Widget build(BuildContext context) {

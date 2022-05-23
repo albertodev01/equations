@@ -35,7 +35,7 @@ class ComplexNumberOtherBody extends StatelessWidget {
 /// The actual contents of the [ComplexNumberOtherBody] widget.
 class _PageBody extends StatefulWidget {
   /// Creates a [_PageBody] widget.
-  const _PageBody({super.key});
+  const _PageBody();
 
   @override
   State<_PageBody> createState() => _PageBodyState();

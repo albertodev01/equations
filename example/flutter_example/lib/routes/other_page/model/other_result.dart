@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/other_page/model/analyzer/result_wrapper.dart';
+import 'package:equations_solver/routes/other_page/model/other_state.dart';
 
 /// Wrapper class that holds the [ResultWrapper] type computed by [OtherState].
 class OtherResult<T extends ResultWrapper> {

@@ -17,6 +17,7 @@ class InheritedSystem extends InheritedWidget {
   static InheritedSystem of(BuildContext context) {
     final ref = context.dependOnInheritedWidgetOfExactType<InheritedSystem>();
     assert(ref != null, "No 'InheritedSystem' found above in the tree.");
+
     return ref!;
   }
 
@@ -29,5 +30,6 @@ class InheritedSystem extends InheritedWidget {
 /// Extension method on [BuildContext] that allows getting a reference to the
 ///[SystemState] up in the tree using [InheritedSystem].
 extension InheritedSystemExt on BuildContext {
+  /// Uses [InheritedSystem] to retrieve a [SystemState] object.
   SystemState get systemState => InheritedSystem.of(this).systemState;
 }

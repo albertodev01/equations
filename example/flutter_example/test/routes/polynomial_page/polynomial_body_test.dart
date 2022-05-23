@@ -17,7 +17,7 @@ void main() {
   group("Testing the 'PolynomialBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockPolynomialWidget(
+        MockPolynomialWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -35,7 +35,7 @@ void main() {
       'test',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -65,7 +65,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -90,7 +90,7 @@ void main() {
         await tester.binding.setSurfaceSize(const Size(200, 2000));
 
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -115,7 +115,7 @@ void main() {
 
     testWidgets('Making sure that solving linear eq. works', (tester) async {
       await tester.pumpWidget(
-        mockPolynomialWidget(
+        MockPolynomialWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -160,7 +160,7 @@ void main() {
             builder: (context) {
               quadraticTabName = context.l10n.secondDegree;
 
-              return mockPolynomialWidget(
+              return MockPolynomialWidget(
                 polynomialType: PolynomialType.quadratic,
                 textControllers: [
                   TextEditingController(),
@@ -218,7 +218,7 @@ void main() {
             builder: (context) {
               cubicTabName = context.l10n.thirdDegree;
 
-              return mockPolynomialWidget(
+              return MockPolynomialWidget(
                 polynomialType: PolynomialType.cubic,
                 textControllers: [
                   TextEditingController(),
@@ -280,7 +280,7 @@ void main() {
             builder: (context) {
               quarticTabName = context.l10n.fourthDegree;
 
-              return mockPolynomialWidget(
+              return MockPolynomialWidget(
                 polynomialType: PolynomialType.quartic,
                 textControllers: [
                   TextEditingController(),

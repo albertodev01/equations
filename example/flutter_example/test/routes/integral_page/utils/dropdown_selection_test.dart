@@ -45,8 +45,8 @@ void main() {
       'Making sure that the dropdown items can be changed',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
-            child: const IntegralDropdownSelection(),
+          const MockIntegralWidget(
+            child: IntegralDropdownSelection(),
           ),
         );
 
@@ -100,7 +100,7 @@ void main() {
   group('Golden tests - IntegralDropdownSelection', () {
     testWidgets('IntegralDropdownSelection - simpson', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           dropdownValue: IntegralDropdownItems.simpson.asString(),
           child: const IntegralDropdownSelection(),
         ),
@@ -113,7 +113,7 @@ void main() {
 
     testWidgets('IntegralDropdownSelection - midpoint', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           dropdownValue: IntegralDropdownItems.midpoint.asString(),
           child: const IntegralDropdownSelection(),
         ),
@@ -126,7 +126,7 @@ void main() {
 
     testWidgets('IntegralDropdownSelection - trapezoid', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           dropdownValue: IntegralDropdownItems.trapezoid.asString(),
           child: const IntegralDropdownSelection(),
         ),

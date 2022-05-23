@@ -15,7 +15,7 @@ void main() {
       '2 input fields appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -36,7 +36,7 @@ void main() {
       '3 input fields appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             polynomialType: PolynomialType.quadratic,
             textControllers: [
               TextEditingController(),
@@ -59,7 +59,7 @@ void main() {
       '4 input fields appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             polynomialType: PolynomialType.cubic,
             textControllers: [
               TextEditingController(),
@@ -83,7 +83,7 @@ void main() {
       '5 input fields appear on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             polynomialType: PolynomialType.quartic,
             textControllers: [
               TextEditingController(),
@@ -108,7 +108,7 @@ void main() {
       'least one of the inputs is wrong, a snackbar appears',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -143,7 +143,7 @@ void main() {
             builder: (context) {
               focusScope = FocusScope.of(context);
 
-              return mockPolynomialWidget(
+              return MockPolynomialWidget(
                 polynomialType: PolynomialType.quadratic,
                 textControllers: [
                   TextEditingController(),
@@ -200,7 +200,7 @@ void main() {
   group('Golden tests - PolynomialDataInput', () {
     testWidgets('PolynomialDataInput - linear', (tester) async {
       await tester.pumpWidget(
-        mockPolynomialWidget(
+        MockPolynomialWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -216,7 +216,7 @@ void main() {
 
     testWidgets('PolynomialDataInput - quadratic', (tester) async {
       await tester.pumpWidget(
-        mockPolynomialWidget(
+        MockPolynomialWidget(
           polynomialType: PolynomialType.quadratic,
           textControllers: [
             TextEditingController(),
@@ -234,7 +234,7 @@ void main() {
 
     testWidgets('PolynomialDataInput - cubic', (tester) async {
       await tester.pumpWidget(
-        mockPolynomialWidget(
+        MockPolynomialWidget(
           polynomialType: PolynomialType.cubic,
           textControllers: [
             TextEditingController(),
@@ -253,7 +253,7 @@ void main() {
 
     testWidgets('PolynomialDataInput - quartic', (tester) async {
       await tester.pumpWidget(
-        mockPolynomialWidget(
+        MockPolynomialWidget(
           polynomialType: PolynomialType.quartic,
           textControllers: [
             TextEditingController(),

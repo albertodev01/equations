@@ -22,6 +22,7 @@ class MoreOrLessEquals extends Matcher {
   }) : assert(precision >= 0, 'The precision must be >= 0');
 
   @override
+  // ignore: avoid-dynamic
   bool matches(dynamic object, Map<dynamic, dynamic> matchState) {
     if (object is double) {
       return (object - value).abs() <= precision;
@@ -37,6 +38,7 @@ class MoreOrLessEquals extends Matcher {
 
   @override
   Description describeMismatch(
+    // ignore: avoid-dynamic
     dynamic item,
     Description mismatchDescription,
     Map<dynamic, dynamic> matchState,

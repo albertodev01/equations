@@ -9,27 +9,36 @@ import 'package:flutter/material.dart';
 
 import '../mock_wrapper.dart';
 
-Widget mockIntegralWidget({
-  List<TextEditingController> textControllers = const [],
-  Widget child = const IntegralBody(),
-  String? dropdownValue,
-}) {
-  return MockWrapper(
-    child: InheritedIntegral(
-      integralState: IntegralState(),
-      child: InheritedDropdownValue(
-        dropdownValue: ValueNotifier<String>(
-          dropdownValue ?? IntegralDropdownItems.simpson.asString(),
-        ),
-        child: InheritedPlotZoom(
-          plotZoomState: PlotZoomState(
-            minValue: 2,
-            maxValue: 10,
-            initial: 3,
+class MockIntegralWidget extends StatelessWidget {
+  final List<TextEditingController> textControllers;
+  final Widget child;
+  final String? dropdownValue;
+  const MockIntegralWidget({
+    super.key,
+    this.textControllers = const [],
+    this.child = const IntegralBody(),
+    this.dropdownValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MockWrapper(
+      child: InheritedIntegral(
+        integralState: IntegralState(),
+        child: InheritedDropdownValue(
+          dropdownValue: ValueNotifier<String>(
+            dropdownValue ?? IntegralDropdownItems.simpson.asString(),
           ),
-          child: child,
+          child: InheritedPlotZoom(
+            plotZoomState: PlotZoomState(
+              minValue: 2,
+              maxValue: 10,
+              initial: 3,
+            ),
+            child: child,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

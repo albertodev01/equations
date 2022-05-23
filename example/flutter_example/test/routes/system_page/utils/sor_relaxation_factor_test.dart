@@ -11,7 +11,7 @@ void main() {
   group("Testing the 'RelaxationFactorInput' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.iterative,
           dropdownValue: SystemDropdownItems.sor.asString(),
           child: const SingleChildScrollView(
@@ -32,7 +32,7 @@ void main() {
       "when the system solving algorithm isn't SOR",
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.lu.asString(),
             child: const SingleChildScrollView(
@@ -49,7 +49,7 @@ void main() {
   group('Golden tests - RelaxationFactorInput', () {
     testWidgets('RelaxationFactorInput', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(
+        MockSystemWidget(
           systemType: SystemType.iterative,
           dropdownValue: SystemDropdownItems.sor.asString(),
           child: RelaxationFactorInput(

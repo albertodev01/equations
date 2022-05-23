@@ -12,6 +12,7 @@ void main() {
           child: CardContainer(
             title: 'Title',
             image: const SizedBox(),
+            // ignore: no-empty-block
             onTap: () {},
           ),
         ),
@@ -51,6 +52,7 @@ void main() {
           child: CardContainer(
             title: 'Title',
             image: const SizedBox(),
+            // ignore: no-empty-block
             onTap: () {},
           ),
         ),
@@ -67,6 +69,7 @@ void main() {
           child: CardContainer(
             title: 'Title',
             image: const Icon(Icons.ac_unit),
+            // ignore: no-empty-block
             onTap: () {},
           ),
         ),

@@ -14,7 +14,7 @@ void main() {
       'of the inputs is wrong, a snackbar appears',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -41,7 +41,7 @@ void main() {
       'Making sure that fields can be cleared',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -88,7 +88,7 @@ void main() {
       'Making sure that integrals can be evaluated using the Simpson method',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -122,7 +122,7 @@ void main() {
       'Making sure that integrals can be evaluated using the Midpoint rule',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -157,7 +157,7 @@ void main() {
       'Making sure that integrals can be evaluated using the Trapezoid rule',
       (tester) async {
         await tester.pumpWidget(
-          mockIntegralWidget(
+          MockIntegralWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
@@ -192,7 +192,7 @@ void main() {
   group('Golden tests - IntegralDataInput', () {
     testWidgets('IntegralDataInput - simpson', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -210,7 +210,7 @@ void main() {
 
     testWidgets('IntegralDataInput - midpoint', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),
@@ -228,7 +228,7 @@ void main() {
 
     testWidgets('IntegralDataInput - trapezoid', (tester) async {
       await tester.pumpWidget(
-        mockIntegralWidget(
+        MockIntegralWidget(
           textControllers: [
             TextEditingController(),
             TextEditingController(),

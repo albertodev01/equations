@@ -72,7 +72,7 @@ void main() {
       'equation, a Snackbar appears.',
       (tester) async {
         await tester.pumpWidget(
-          mockPolynomialWidget(
+          MockPolynomialWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),

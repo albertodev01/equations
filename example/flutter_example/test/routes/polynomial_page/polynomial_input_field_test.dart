@@ -41,7 +41,8 @@ void main() {
             find.byKey(const Key('PolynomialInputField-TextFormField'));
         expect(finder, findsOneWidget);
 
-        // Testing the validator. Making sure that is accepts numbers and fractions
+        // Testing the validator. Making sure that is accepts numbers and
+        // fractions
         final textField = tester.firstWidget(finder) as TextFormField;
         final validatorFunction = textField.validator!;
 

@@ -20,8 +20,8 @@ class EquationInput extends StatelessWidget {
   /// Determines whether the validator function of the input should allow for
   /// real values or not.
   ///
-  /// In other words, when `onlyRealValues = true` then equations aren't accepted
-  /// but numbers are.
+  /// In other words, when `onlyRealValues = true` then equations aren't
+  /// accepted but numbers are.
   ///
   /// This is `false` by default.
   final bool onlyRealValues;

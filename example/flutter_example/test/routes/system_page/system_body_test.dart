@@ -16,7 +16,7 @@ void main() {
   group("Testing the 'SystemBody' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        mockSystemWidget(),
+        const MockSystemWidget(),
       );
 
       expect(find.byType(GoBackButton), findsOneWidget);
@@ -30,7 +30,7 @@ void main() {
       'Making sure that the "Clear" button actually clears the state',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.lu.asString(),
           ),
@@ -76,7 +76,7 @@ void main() {
       'system of equations with a factorization method (LU)',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.lu.asString(),
           ),
@@ -111,7 +111,7 @@ void main() {
       'system of equations with a factorization method (Cholesky)',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.factorization,
             dropdownValue: SystemDropdownItems.cholesky.asString(),
           ),
@@ -146,7 +146,7 @@ void main() {
       'system of equations with an iterative method (SOR)',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.iterative,
             dropdownValue: SystemDropdownItems.sor.asString(),
           ),
@@ -182,7 +182,7 @@ void main() {
       'system of equations with an iterative method (Jacobi)',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(
+          MockSystemWidget(
             systemType: SystemType.iterative,
             dropdownValue: SystemDropdownItems.jacobi.asString(),
           ),
@@ -219,7 +219,7 @@ void main() {
       'system in case of malformed input',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(),
+          const MockSystemWidget(),
         );
 
         // Solving the system
@@ -238,7 +238,7 @@ void main() {
       'number of input tiles on the screen',
       (tester) async {
         await tester.pumpWidget(
-          mockSystemWidget(),
+          const MockSystemWidget(),
         );
 
         expect(find.byKey(const Key('SystemEntry-0-0')), findsOneWidget);
