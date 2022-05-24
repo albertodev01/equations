@@ -12,6 +12,49 @@ void main() {
     });
   });
 
+  group("Testing static methods on 'SystemState'", () {
+    test("Testing the 'rowReductionResolve' method", () {
+      expect(
+        SystemState.rowReductionResolve('gauss'),
+        equals(RowReductionMethods.gauss),
+      );
+      expect(
+        () => SystemState.rowReductionResolve(''),
+        throwsArgumentError,
+      );
+    });
+
+    test("Testing the 'factorizationResolve' method", () {
+      expect(
+        SystemState.factorizationResolve('lu'),
+        equals(FactorizationMethods.lu),
+      );
+      expect(
+        SystemState.factorizationResolve('cholesky'),
+        equals(FactorizationMethods.cholesky),
+      );
+      expect(
+        () => SystemState.factorizationResolve(''),
+        throwsArgumentError,
+      );
+    });
+
+    test("Testing the 'iterativeResolve' method", () {
+      expect(
+        SystemState.iterativeResolve('sor'),
+        equals(IterativeMethods.sor),
+      );
+      expect(
+        SystemState.iterativeResolve('jacobi'),
+        equals(IterativeMethods.jacobi),
+      );
+      expect(
+        () => SystemState.iterativeResolve(''),
+        throwsArgumentError,
+      );
+    });
+  });
+
   group("Testing the 'SystemState' class", () {
     test('Initial values', () {
       final systemState = SystemState(SystemType.iterative);
@@ -136,6 +179,29 @@ void main() {
       expect(systemState.state, equals(const SystemResult()));
       expect(systemState.state.systemSolver, isNull);
       expect(count, equals(2));
+
+      systemState.iterativeSolver(
+        flatMatrix: ['', '', '', ''],
+        knownValues: ['', ''],
+        size: 2,
+        method: IterativeMethods.sor,
+        w: '1.25',
+      );
+
+      expect(systemState.state, equals(const SystemResult()));
+      expect(systemState.state.systemSolver, isNull);
+      expect(count, equals(3));
+
+      systemState.factorizationSolver(
+        flatMatrix: ['', '', '', ''],
+        knownValues: ['', ''],
+        size: 2,
+        method: FactorizationMethods.lu,
+      );
+
+      expect(systemState.state, equals(const SystemResult()));
+      expect(systemState.state.systemSolver, isNull);
+      expect(count, equals(4));
     });
   });
 }

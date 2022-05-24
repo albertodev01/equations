@@ -18,6 +18,45 @@ void main() {
 
   group("Testing the 'MatrixAnalyzerInput' widget", () {
     testWidgets(
+      'Making sure that matrices can be analyzed',
+      (tester) async {
+        await tester.pumpWidget(
+          MockMatrixOther(
+            controllers: [
+              TextEditingController(),
+            ],
+            child: const MatrixAnalyzerInput(),
+          ),
+        );
+
+        expect(find.byType(SizePicker), findsOneWidget);
+        expect(find.byType(MatrixInput), findsOneWidget);
+        expect(find.byType(Form), findsOneWidget);
+
+        // Matrix input
+        await tester.enterText(find.byType(TextFormField), '1');
+        await tester.tap(find.byKey(const Key('MatrixAnalyze-button-analyze')));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SnackBar), findsNothing);
+        expect(find.text('1'), findsOneWidget);
+
+        // Cleaning
+        final finder = find.byKey(const Key('MatrixAnalyze-button-clean'));
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+
+        expect(find.text('1'), findsNothing);
+
+        tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach(
+          (textController) {
+            expect(textController.controller!.text.length, isZero);
+          },
+        );
+      },
+    );
+
+    testWidgets(
       'Making sure that when trying to evaluate a matrix, if at least one of '
       'the inputs is wrong, a snackbar appears',
       (tester) async {

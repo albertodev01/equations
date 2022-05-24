@@ -41,6 +41,7 @@ class _PolynomialResultCardState extends State<PolynomialResultCard> {
         ? Text(
             '${context.l10n.fraction}: '
             '${coefficient.toStringAsFraction()}',
+            key: Key('PolynomialResultCard-Item-$index'),
           )
         : null;
 

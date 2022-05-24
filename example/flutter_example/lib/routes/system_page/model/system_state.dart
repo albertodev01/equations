@@ -57,7 +57,7 @@ class SystemState extends ChangeNotifier {
   SystemResult get state => _state;
 
   /// Tries to return a [RowReductionMethods] value from a string value.
-  static RowReductionMethods resolve(String name) {
+  static RowReductionMethods rowReductionResolve(String name) {
     if (name.toLowerCase() == 'gauss') {
       return RowReductionMethods.gauss;
     }

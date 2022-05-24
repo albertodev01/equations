@@ -23,6 +23,79 @@ void main() {
     });
   });
 
+  testWidgets(
+    "Making sure that 'didUpdateWidget' is executed",
+    (tester) async {
+      var algebraic = Algebraic.fromReal(
+        const [1, 2],
+      );
+
+      await tester.pumpWidget(
+        MockWrapper(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PolynomialResultCard(
+                    algebraic: algebraic,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        algebraic = Algebraic.fromReal(
+                          const [1, 2, 3, 4],
+                        );
+                      });
+                    },
+                    child: const Text('Rebuild'),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-0')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-1')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-2')),
+        findsNothing,
+      );
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-3')),
+        findsNothing,
+      );
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-0')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-1')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-2')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const Key('PolynomialResultCard-Item-3')),
+        findsOneWidget,
+      );
+    },
+  );
+
   group('Golden tests - PolynomialResultCard', () {
     testWidgets(
       'PolynomialResultCard - no fraction - constant',

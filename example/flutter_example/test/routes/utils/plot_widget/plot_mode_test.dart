@@ -17,6 +17,17 @@ void main() {
       );
 
       expect(
+        PolynomialPlot(
+          algebraic: Algebraic.fromReal([1, 4]),
+        ).hashCode,
+        equals(
+          PolynomialPlot(
+            algebraic: Algebraic.fromReal([1, 4]),
+          ).hashCode,
+        ),
+      );
+
+      expect(
         const NonlinearPlot(
           nonLinear: Newton(
             function: 'x-3',
@@ -30,6 +41,42 @@ void main() {
               x0: 1,
             ),
           ),
+        ),
+      );
+
+      expect(
+        const NonlinearPlot(
+          nonLinear: Newton(
+            function: 'x-3',
+            x0: 1,
+          ),
+        ).hashCode,
+        equals(
+          const NonlinearPlot(
+            nonLinear: Newton(
+              function: 'x-3',
+              x0: 1,
+            ),
+          ).hashCode,
+        ),
+      );
+
+      expect(
+        const IntegralPlot(
+          function: SimpsonRule(
+            function: 'x-2',
+            lowerBound: 1,
+            upperBound: 2,
+          ),
+        ).hashCode,
+        equals(
+          const IntegralPlot(
+            function: SimpsonRule(
+              function: 'x-2',
+              lowerBound: 1,
+              upperBound: 2,
+            ),
+          ).hashCode,
         ),
       );
     });
@@ -58,6 +105,22 @@ void main() {
         );
 
         expect(plot.evaluateOn(-3), equals(-8));
+      },
+    );
+
+    test(
+      'Making sure that function evaluation works as expected with '
+      'integrals.',
+      () {
+        const plot = IntegralPlot(
+          function: SimpsonRule(
+            function: 'x',
+            lowerBound: 1,
+            upperBound: 2,
+          ),
+        );
+
+        expect(plot.evaluateOn(5), equals(5));
       },
     );
   });

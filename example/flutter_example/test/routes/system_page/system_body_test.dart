@@ -1,4 +1,3 @@
-import 'package:equations_solver/routes/models/system_text_controllers/inherited_system_controllers.dart';
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_data_input.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
@@ -37,16 +36,8 @@ void main() {
         );
 
         // Filling the matrix with some data
-        final widget = find.byType(SystemDataInput);
-        final state = tester.state<SystemDataInputState>(widget);
-
-        state.context.systemTextControllers.matrixControllers.first.text = '1';
-        state.context.systemTextControllers.matrixControllers[1].text = '2';
-        state.context.systemTextControllers.matrixControllers[2].text = '3';
-        state.context.systemTextControllers.matrixControllers[3].text = '4';
-        state.context.systemTextControllers.vectorControllers.first.text = '7';
-        state.context.systemTextControllers.vectorControllers[1].text = '8';
-
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
         expect(find.byType(RealResultCard), findsNothing);
 
         // Solving the system
@@ -73,6 +64,29 @@ void main() {
 
     testWidgets(
       'Making sure that the "Solve" button actually solves the '
+      'system of equations using the row reduction algorithm',
+      (tester) async {
+        await tester.pumpWidget(
+          const MockSystemWidget(),
+        );
+
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+        expect(find.byType(RealResultCard), findsNothing);
+
+        // Solving the system
+        final solveButton = find.byKey(const Key('System-button-solve'));
+
+        await tester.ensureVisible(solveButton);
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(RealResultCard), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Making sure that the "Solve" button actually solves the '
       'system of equations with a factorization method (LU)',
       (tester) async {
         await tester.pumpWidget(
@@ -83,15 +97,8 @@ void main() {
         );
 
         // Filling the matrix with some data
-        final widget = find.byType(SystemDataInput);
-        final state = tester.state<SystemDataInputState>(widget);
-
-        state.context.systemTextControllers.matrixControllers.first.text = '1';
-        state.context.systemTextControllers.matrixControllers[1].text = '2';
-        state.context.systemTextControllers.matrixControllers[2].text = '3';
-        state.context.systemTextControllers.matrixControllers[3].text = '4';
-        state.context.systemTextControllers.vectorControllers.first.text = '7';
-        state.context.systemTextControllers.vectorControllers[1].text = '8';
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
 
         expect(find.byType(RealResultCard), findsNothing);
 
@@ -118,15 +125,8 @@ void main() {
         );
 
         // Filling the matrix with some data
-        final widget = find.byType(SystemDataInput);
-        final state = tester.state<SystemDataInputState>(widget);
-
-        state.context.systemTextControllers.matrixControllers.first.text = '4';
-        state.context.systemTextControllers.matrixControllers[1].text = '12';
-        state.context.systemTextControllers.matrixControllers[2].text = '12';
-        state.context.systemTextControllers.matrixControllers[3].text = '26';
-        state.context.systemTextControllers.vectorControllers.first.text = '4';
-        state.context.systemTextControllers.vectorControllers[1].text = '6';
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
 
         expect(find.byType(RealResultCard), findsNothing);
 
@@ -153,16 +153,12 @@ void main() {
         );
 
         // Filling the matrix with some data
-        final widget = find.byType(SystemDataInput);
-        final state = tester.state<SystemDataInputState>(widget);
-
-        state.context.systemTextControllers.matrixControllers.first.text = '4';
-        state.context.systemTextControllers.matrixControllers[1].text = '12';
-        state.context.systemTextControllers.matrixControllers[2].text = '12';
-        state.context.systemTextControllers.matrixControllers[3].text = '26';
-        state.context.systemTextControllers.vectorControllers.first.text = '4';
-        state.context.systemTextControllers.vectorControllers[1].text = '6';
-        state.context.systemTextControllers.wSorController.text = '1';
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+        await tester.enterText(
+          find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor')),
+          '1',
+        );
 
         expect(find.byType(RealResultCard), findsNothing);
 
@@ -189,17 +185,15 @@ void main() {
         );
 
         // Filling the matrix with some data
-        final widget = find.byType(SystemDataInput);
-        final state = tester.state<SystemDataInputState>(widget);
-
-        state.context.systemTextControllers.matrixControllers.first.text = '1';
-        state.context.systemTextControllers.matrixControllers[1].text = '2';
-        state.context.systemTextControllers.matrixControllers[2].text = '3';
-        state.context.systemTextControllers.matrixControllers[3].text = '4';
-        state.context.systemTextControllers.vectorControllers.first.text = '7';
-        state.context.systemTextControllers.vectorControllers[1].text = '8';
-        state.context.systemTextControllers.jacobiControllers.first.text = '-5';
-        state.context.systemTextControllers.jacobiControllers[1].text = '7';
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(
+          find.byKey(const Key('VectorEntry-0')).first,
+          '1',
+        );
+        await tester.enterText(
+          find.byKey(const Key('VectorEntry-0')).last,
+          '1',
+        );
 
         expect(find.byType(RealResultCard), findsNothing);
 

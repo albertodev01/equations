@@ -19,12 +19,10 @@ class SystemDataInput extends StatefulWidget {
   const SystemDataInput({super.key});
 
   @override
-  SystemDataInputState createState() => SystemDataInputState();
+  _SystemDataInputState createState() => _SystemDataInputState();
 }
 
-/// State of the [SystemDataInput] widget.
-@visibleForTesting
-class SystemDataInputState extends State<SystemDataInput> {
+class _SystemDataInputState extends State<SystemDataInput> {
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
