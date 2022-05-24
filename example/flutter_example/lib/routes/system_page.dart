@@ -39,13 +39,37 @@ class _SystemPageState extends State<SystemPage> {
    * to save theme here, which is ABOVE the tabs.
    */
 
-  final matrixControllers = List<TextEditingController>.generate(
+  final matrixRowReductionControllers = List<TextEditingController>.generate(
     16,
     (_) => TextEditingController(),
     growable: false,
   );
 
-  final vectorControllers = List<TextEditingController>.generate(
+  final vectorRowReductionControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final matrixFactorizationControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final vectorFactorizationControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final matrixIterativeControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final vectorIterativeControllers = List<TextEditingController>.generate(
     4,
     (_) => TextEditingController(),
     growable: false,
@@ -74,8 +98,8 @@ class _SystemPageState extends State<SystemPage> {
             dropdownValue: ValueNotifier<String>(''),
             child: InheritedSystemControllers(
               systemTextControllers: SystemTextControllers(
-                matrixControllers: matrixControllers,
-                vectorControllers: vectorControllers,
+                matrixControllers: matrixRowReductionControllers,
+                vectorControllers: vectorRowReductionControllers,
                 jacobiControllers: jacobiControllers,
                 wSorController: wSorController,
               ),
@@ -100,8 +124,8 @@ class _SystemPageState extends State<SystemPage> {
             ),
             child: InheritedSystemControllers(
               systemTextControllers: SystemTextControllers(
-                matrixControllers: matrixControllers,
-                vectorControllers: vectorControllers,
+                matrixControllers: matrixFactorizationControllers,
+                vectorControllers: vectorFactorizationControllers,
                 jacobiControllers: jacobiControllers,
                 wSorController: wSorController,
               ),
@@ -126,8 +150,8 @@ class _SystemPageState extends State<SystemPage> {
             ),
             child: InheritedSystemControllers(
               systemTextControllers: SystemTextControllers(
-                matrixControllers: matrixControllers,
-                vectorControllers: vectorControllers,
+                matrixControllers: matrixIterativeControllers,
+                vectorControllers: vectorIterativeControllers,
                 jacobiControllers: jacobiControllers,
                 wSorController: wSorController,
               ),
@@ -141,11 +165,27 @@ class _SystemPageState extends State<SystemPage> {
 
   @override
   void dispose() {
-    for (final controller in matrixControllers) {
+    for (final controller in matrixRowReductionControllers) {
       controller.dispose();
     }
 
-    for (final controller in vectorControllers) {
+    for (final controller in matrixFactorizationControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in matrixIterativeControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorRowReductionControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorFactorizationControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorIterativeControllers) {
       controller.dispose();
     }
 

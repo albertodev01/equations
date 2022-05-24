@@ -45,7 +45,7 @@ class _VectorInputState extends State<VectorInput> {
   Widget build(BuildContext context) {
     // We're adding '5' to the overall width to make sure that tiles aren't too
     // close each other.
-    final boxWidth = systemInputFieldSize + 5;
+    const boxWidth = systemInputFieldSize + 5;
 
     return Center(
       child: SizedBox(

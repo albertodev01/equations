@@ -26,11 +26,13 @@ void main() {
       'Making sure that a result card appears when there is a solution to show',
       (tester) async {
         await tester.pumpWidget(
-          MockIntegralWidget(textControllers: [
-            TextEditingController(),
-            TextEditingController(),
-            TextEditingController(),
-          ],),
+          MockIntegralWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
+          ),
         );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
@@ -56,11 +58,13 @@ void main() {
       'Making sure that a snackbar appears in case of computation errors',
       (tester) async {
         await tester.pumpWidget(
-          MockIntegralWidget(textControllers: [
-            TextEditingController(),
-            TextEditingController(),
-            TextEditingController(),
-          ],),
+          MockIntegralWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
+          ),
         );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
@@ -85,11 +89,13 @@ void main() {
   group('Golden tests - IntegralResultsWidget', () {
     testWidgets('IntegralResultsWidget', (tester) async {
       await tester.pumpWidget(
-        MockIntegralWidget(textControllers: [
-          TextEditingController(),
-          TextEditingController(),
-          TextEditingController(),
-        ],),
+        MockIntegralWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
+        ),
       );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));

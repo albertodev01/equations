@@ -80,7 +80,7 @@ void main() {
       'Making sure that the rail navigation appears when the '
       'screen is wide (web & desktop platforms)',
       (tester) async {
-        await tester.binding.setSurfaceSize(const Size(2000, 2000));
+        await tester.binding.setSurfaceSize(const Size(4000, 4000));
 
         await tester.pumpWidget(
           MockWrapper(
