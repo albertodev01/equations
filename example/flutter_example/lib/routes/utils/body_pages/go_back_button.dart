@@ -1,4 +1,3 @@
-import 'package:equations_solver/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,7 +10,7 @@ class GoBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
-      onPressed: () => context.go(homePagePath),
+      onPressed: () => context.pop(),
     );
   }
 }

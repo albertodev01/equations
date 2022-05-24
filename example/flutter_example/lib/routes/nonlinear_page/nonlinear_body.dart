@@ -67,7 +67,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
         const NonlinearResults(),
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 50,
+            horizontal: 30,
           ),
           child: LayoutBuilder(
             builder: (_, dimensions) {
