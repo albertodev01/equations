@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// The app's main entrypoint.
 ///
-/// The [LicenseRegistry.addLicense] call cab be ignored by the code coverage
+/// The [LicenseRegistry.addLicense] call can be ignored by the code coverage
 /// tool since it will be tested by integration tests.
 void main() {
   // coverage:ignore-start
@@ -18,21 +18,26 @@ void main() {
   // coverage:ignore-end
 
   // Running the app
-  runApp(const EquationsApp());
+  runApp(
+    const EquationsApp(),
+  );
 }
 
 /// The root widget of the app.
 class EquationsApp extends StatelessWidget {
+  static final _appRouter = generateRouter();
+
   /// Creates an [EquationsApp] instance.
   const EquationsApp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       // Route management
-      onGenerateRoute: RouteGenerator.generateRoute,
+      routerDelegate: _appRouter.routerDelegate,
+      routeInformationParser: _appRouter.routeInformationParser,
 
       // Localized app title
       onGenerateTitle: (context) => context.l10n.appTitle,

@@ -1,15 +1,15 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Dropdown button used to choose which root finding algorithm has to be used
 /// in a [NonlinearDataInput] widget.
 class NonlinearDropdownSelection extends StatefulWidget {
   /// Creates a [NonlinearDropdownSelection] widget.
-  const NonlinearDropdownSelection({Key? key}) : super(key: key);
+  const NonlinearDropdownSelection({super.key});
 
   @override
   NonlinearDropdownSelectionState createState() =>
@@ -54,23 +54,23 @@ class NonlinearDropdownSelectionState
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(NonlinearDropdownItems newValue) =>
-      context.read<DropdownCubit>().changeValue(newValue.asString());
+      context.dropdownValue.value = newValue.name;
 
   /// The currently selected nonlinear type.
-  NonlinearType get nonlinearType =>
-      context.read<NonlinearBloc>().nonlinearType;
+  NonlinearType get nonlinearType => context.nonlinearState.nonlinearType;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
         width: nonlinearDropdownWidth,
-        child: BlocBuilder<DropdownCubit, String>(
-          builder: (context, state) {
+        child: ValueListenableBuilder<String>(
+          valueListenable: context.dropdownValue,
+          builder: (context, value, _) {
             return DropdownButtonFormField<NonlinearDropdownItems>(
-              key: const Key('Dropdown-Button-Selection'),
+              key: const Key('Integral-Dropdown-Button-Selection'),
               isExpanded: true,
-              value: state.toNonlinearDropdownItems(),
+              value: value.toNonlinearDropdownItems(),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -89,38 +89,25 @@ class NonlinearDropdownSelectionState
 /// The possible values of the [NonlinearDropdownSelection] dropdown.
 enum NonlinearDropdownItems {
   /// Newton's method.
-  newton,
+  newton('Newton'),
 
   /// Steffensen's method.
-  steffensen,
+  steffensen('Steffensen'),
 
   /// Bisection method.
-  bisection,
+  bisection('Bisection'),
 
   /// Secant method.
-  secant,
+  secant('Secant'),
 
   /// Brent's method.
-  brent,
-}
+  brent('Brent');
 
-/// Extension method on [NonlinearDropdownItems] to convert a value to a string.
-extension NonlinearDropdownItemsExt on NonlinearDropdownItems {
-  /// Converts the enum into a [String].
-  String asString() {
-    switch (this) {
-      case NonlinearDropdownItems.newton:
-        return 'Newton';
-      case NonlinearDropdownItems.steffensen:
-        return 'Steffensen';
-      case NonlinearDropdownItems.bisection:
-        return 'Bisection';
-      case NonlinearDropdownItems.secant:
-        return 'Secant';
-      case NonlinearDropdownItems.brent:
-        return 'Brent';
-    }
-  }
+  /// The string representation.
+  final String name;
+
+  /// [NonlinearDropdownItems] constructor.
+  const NonlinearDropdownItems(this.name);
 }
 
 /// Extension method on [String] to convert into a [NonlinearDropdownItems] the

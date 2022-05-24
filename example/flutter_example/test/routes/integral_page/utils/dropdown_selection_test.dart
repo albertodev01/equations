@@ -1,10 +1,9 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
+import '../integral_mock.dart';
 
 void main() {
   group("Testing the 'IntegralDropdownSelection' widget", () {
@@ -12,9 +11,9 @@ void main() {
       "Making sure that an 'IntegralDropdownItemsExt' is correctly converted "
       'into a string',
       () {
-        expect(IntegralDropdownItems.simpson.asString(), equals('Simpson'));
-        expect(IntegralDropdownItems.trapezoid.asString(), equals('Trapezoid'));
-        expect(IntegralDropdownItems.midpoint.asString(), equals('Midpoint'));
+        expect(IntegralDropdownItems.simpson.name, equals('Simpson'));
+        expect(IntegralDropdownItems.trapezoid.name, equals('Trapezoid'));
+        expect(IntegralDropdownItems.midpoint.name, equals('Midpoint'));
       },
     );
 
@@ -45,22 +44,17 @@ void main() {
     testWidgets(
       'Making sure that the dropdown items can be changed',
       (tester) async {
-        final cubit = DropdownCubit(
-          initialValue: IntegralDropdownItems.simpson.asString(),
+        await tester.pumpWidget(
+          const MockIntegralWidget(
+            child: IntegralDropdownSelection(),
+          ),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<DropdownCubit>.value(
-            value: cubit,
-            child: const Scaffold(
-              body: IntegralDropdownSelection(),
-            ),
-          ),
-        ));
-
         // Initial value
-        expect(cubit.state, equals('Simpson'));
-        expect(find.text('Simpson'), findsOneWidget);
+        expect(
+          find.text(IntegralDropdownItems.simpson.name),
+          findsOneWidget,
+        );
 
         // Changing the value
         await tester.tap(
@@ -75,7 +69,10 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verifying the new dropdown state
-        expect(cubit.state, equals('Midpoint'));
+        expect(
+          find.text(IntegralDropdownItems.midpoint.name),
+          findsOneWidget,
+        );
         expect(find.text('Midpoint'), findsOneWidget);
 
         // Changing the value again
@@ -91,9 +88,53 @@ void main() {
         await tester.pumpAndSettle();
 
         // Verifying the new dropdown state
-        expect(cubit.state, equals('Trapezoid'));
+        expect(
+          find.text(IntegralDropdownItems.trapezoid.name),
+          findsOneWidget,
+        );
         expect(find.text('Trapezoid'), findsOneWidget);
       },
     );
+  });
+
+  group('Golden tests - IntegralDropdownSelection', () {
+    testWidgets('IntegralDropdownSelection - simpson', (tester) async {
+      await tester.pumpWidget(
+        MockIntegralWidget(
+          dropdownValue: IntegralDropdownItems.simpson.name,
+          child: const IntegralDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_simpson.png'),
+      );
+    });
+
+    testWidgets('IntegralDropdownSelection - midpoint', (tester) async {
+      await tester.pumpWidget(
+        MockIntegralWidget(
+          dropdownValue: IntegralDropdownItems.midpoint.name,
+          child: const IntegralDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_midpoint.png'),
+      );
+    });
+
+    testWidgets('IntegralDropdownSelection - trapezoid', (tester) async {
+      await tester.pumpWidget(
+        MockIntegralWidget(
+          dropdownValue: IntegralDropdownItems.trapezoid.name,
+          child: const IntegralDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_trapezoid.png'),
+      );
+    });
   });
 }

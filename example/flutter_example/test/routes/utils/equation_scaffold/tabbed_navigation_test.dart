@@ -1,8 +1,7 @@
-import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
@@ -19,24 +18,26 @@ void main() {
 
   group("Testing the 'TabbedNavigationLayout' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NavigationCubit>(
-          create: (_) => NavigationCubit(),
-          child: TabbedNavigationLayout(
-            tabController: controller,
-            navigationItems: const [
-              NavigationItem(
-                title: 'Test',
-                content: SizedBox(),
-              ),
-              NavigationItem(
-                title: 'Test',
-                content: SizedBox(),
-              ),
-            ],
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedNavigation(
+            navigationIndex: ValueNotifier<int>(0),
+            child: TabbedNavigationLayout(
+              tabController: controller,
+              navigationItems: const [
+                NavigationItem(
+                  title: 'Test',
+                  content: SizedBox(),
+                ),
+                NavigationItem(
+                  title: 'Test',
+                  content: SizedBox(),
+                ),
+              ],
+            ),
           ),
         ),
-      ));
+      );
 
       final finder = find.byType(TabbedNavigationLayout);
       expect(finder, findsOneWidget);
@@ -48,24 +49,26 @@ void main() {
     testWidgets(
       'Making sure that tabs can be changed with a controller',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NavigationCubit>(
-            create: (_) => NavigationCubit(),
-            child: TabbedNavigationLayout(
-              tabController: controller,
-              navigationItems: const [
-                NavigationItem(
-                  title: 'Test',
-                  content: Text('A'),
-                ),
-                NavigationItem(
-                  title: 'Test',
-                  content: Text('B'),
-                ),
-              ],
+        await tester.pumpWidget(
+          MockWrapper(
+            child: InheritedNavigation(
+              navigationIndex: ValueNotifier<int>(0),
+              child: TabbedNavigationLayout(
+                tabController: controller,
+                navigationItems: const [
+                  NavigationItem(
+                    title: 'Test',
+                    content: Text('A'),
+                  ),
+                  NavigationItem(
+                    title: 'Test',
+                    content: Text('B'),
+                  ),
+                ],
+              ),
             ),
           ),
-        ));
+        );
 
         final finder = find.byType(TabbedNavigationLayout);
         final state = tester.state(finder) as TabbedNavigationLayoutState;

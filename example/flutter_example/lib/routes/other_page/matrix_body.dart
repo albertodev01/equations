@@ -6,11 +6,11 @@ import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// This widget analyzes a matrix and outputs various results about its rank,
-/// determinant, eigenvalues and much more.
+/// This widget analyzes a matrix and computes various properties such as rank,
+/// eigenvalues, inverse and much more.
 class MatrixOtherBody extends StatelessWidget {
-  /// Creates a [MatrixBody] widget.
-  const MatrixOtherBody({Key? key}) : super(key: key);
+  /// Creates a [MatrixOtherBody] widget.
+  const MatrixOtherBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class MatrixOtherBody extends StatelessWidget {
 /// The actual contents of the [MatrixOtherBody] widget.
 class _PageBody extends StatefulWidget {
   /// Creates a [_PageBody] widget.
-  const _PageBody({Key? key}) : super(key: key);
+  const _PageBody();
 
   @override
   State<_PageBody> createState() => _PageBodyState();

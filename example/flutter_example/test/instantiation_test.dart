@@ -1,17 +1,9 @@
-import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
 import 'package:equations_solver/main.dart';
 import 'package:equations_solver/routes/home_page.dart';
-import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
-import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
-import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
-import 'package:equations_solver/routes/system_page/system_body.dart';
-import 'package:equations_solver/routes/utils/collapsible/collapsible.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 // ignore_for_file: prefer_const_constructors
 
@@ -25,75 +17,6 @@ import 'package:test/test.dart';
 /// calls.
 void main() {
   group('Testing constructors of the classes', () {
-    test('Bloc events and states', () {
-      expect(
-        RowReductionMethod(
-          matrix: const [],
-          knownValues: const [],
-          size: 1,
-        ),
-        isA<RowReductionMethod>(),
-      );
-      expect(
-        FactorizationMethod(
-          matrix: const [],
-          knownValues: const [],
-          size: 1,
-        ),
-        isA<FactorizationMethod>(),
-      );
-      expect(
-        IterativeMethod(
-          matrix: const [],
-          knownValues: const [],
-          size: 1,
-        ),
-        isA<IterativeMethod>(),
-      );
-      expect(
-        SystemGuesses(
-          systemSolver: LUSolver(
-            matrix: RealMatrix(rows: 1, columns: 1),
-            knownValues: const [],
-          ),
-          solution: const [],
-        ),
-        isA<SystemGuesses>(),
-      );
-      expect(
-        SystemError(),
-        isA<SystemError>(),
-      );
-      expect(
-        SystemNone(),
-        isA<SystemNone>(),
-      );
-      expect(
-        SystemClean(),
-        isA<SystemClean>(),
-      );
-      expect(
-        SingularSystemError(),
-        isA<SingularSystemError>(),
-      );
-      expect(
-        NonlinearBody(),
-        isA<NonlinearBody>(),
-      );
-      expect(
-        PolynomialBody(),
-        isA<PolynomialBody>(),
-      );
-      expect(
-        SystemBody(),
-        isA<SystemBody>(),
-      );
-      expect(
-        PolynomialDiscriminant(),
-        isA<PolynomialDiscriminant>(),
-      );
-    });
-
     test('Widgets constructors', () {
       expect(
         EquationsApp(),
@@ -162,13 +85,6 @@ void main() {
       expect(
         EquationSolution(),
         isA<EquationSolution>(),
-      );
-      expect(
-        Collapsible(
-          content: const SizedBox.shrink(),
-          header: const Text(''),
-        ),
-        isA<Collapsible>(),
       );
     });
   });

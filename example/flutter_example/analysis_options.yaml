@@ -10,16 +10,15 @@ dart_code_metrics:
   anti-patterns:
     - long-parameter-list
   metrics:
-    number-of-parameters: 4
-    maximum-nesting: 4
+    number-of-parameters: 6
+    maximum-nesting: 3
     number-of-methods: 8
   metrics-exclude:
     - test/**
   rules:
-    - avoid-collection-methods-with-unrelated-types
+    - avoid-collection-methods-with-unrelated-analyzers
     - avoid-dynamic
     - avoid-global-state
-    - avoid-ignoring-return-values
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
     - always-remove-listener
@@ -53,11 +52,9 @@ linter:
   rules:
     - always_declare_return_types
     - always_put_control_body_on_new_line
-    - always_put_required_named_parameters_first
     - always_require_non_null_named_parameters
     - always_use_package_imports
     - annotate_overrides
-    - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
     - avoid_catches_without_on_clauses
     - avoid_catching_errors
@@ -65,7 +62,6 @@ linter:
     - avoid_double_and_int_checks
     - avoid_dynamic_calls
     - avoid_empty_else
-    - avoid_equals_and_hash_code_on_mutable_classes
     - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
     - avoid_final_parameters
@@ -111,7 +107,6 @@ linter:
     - curly_braces_in_flow_control_structures
     - depend_on_referenced_packages
     - deprecated_consistency
-    - diagnostic_describe_all_properties
     - directives_ordering
     - do_not_use_environment
     - empty_catches
@@ -129,7 +124,6 @@ linter:
     - leading_newlines_in_multiline_strings
     - library_names
     - library_prefixes
-    - library_private_types_in_public_api
     - lines_longer_than_80_chars
     - list_remove_unrelated_type
     - literal_only_boolean_expressions
@@ -165,7 +159,6 @@ linter:
     - prefer_constructors_over_static_methods
     - prefer_contains
     - prefer_equal_for_default_values
-    - prefer_expression_function_bodies
     - prefer_final_fields
     - prefer_final_in_for_each
     - prefer_final_locals

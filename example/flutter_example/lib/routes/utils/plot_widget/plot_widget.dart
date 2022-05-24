@@ -1,25 +1,25 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget draws a cartesian plane and, if there's a [plotMode], it also
 /// plots a real function `f(x)`.
 ///
-/// If [plotMode] is not `null`, then a plot_zoom is also added below the widget to
-/// scale the image.
+/// If [plotMode] is not `null`, then a plot_zoom is also added below the widget
+/// to scale the image.
 ///
-/// If [plotMode] is `null`, the plot_zoom doesn't appear and the widget only draws
-/// a cartesian plane (with no function within).
+/// If [plotMode] is `null`, the plot_zoom doesn't appear and the widget only
+/// draws a cartesian plane (with no function within).
 class PlotWidget<T> extends StatelessWidget {
   /// Provides the ability to evaluate a real function on a point.
   final PlotMode<T>? plotMode;
 
   /// The color that highlights the area below a function.
   ///
-  /// By default, this is set to [Colors.transparent] so nothing will be colored.
+  /// By default, this is set to [Colors.transparent] so nothing will be
+  /// colored.
   final Color areaColor;
 
   /// The lower limit that indicates from which point in the x axis the area
@@ -38,12 +38,12 @@ class PlotWidget<T> extends StatelessWidget {
 
   /// Creates a [PlotWidget] instance.
   const PlotWidget({
-    Key? key,
+    super.key,
     this.areaColor = Colors.transparent,
     this.plotMode,
     this.lowerAreaLimit,
     this.upperAreaLimit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,65 +86,67 @@ class _PlotBody<T> extends StatelessWidget {
   /// below the function has to be colored.
   final double? upperAreaLimit;
 
-  /// Creates a [_PLotBody] widget.
+  /// Creates a [_PlotBody] widget.
   const _PlotBody({
-    Key? key,
+    super.key,
     required this.plotMode,
     required this.areaColor,
     required this.lowerAreaLimit,
     required this.upperAreaLimit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, sizes) {
-        final normalized = sizes.normalize().maxWidth;
+    return Material(
+      elevation: 8,
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        child: AnimatedBuilder(
+          animation: context.plotZoomState,
+          builder: (context, state) {
+            return LayoutBuilder(
+              builder: (context, sizes) {
+                final normalized = sizes.normalize().maxWidth;
 
-        return Material(
-          elevation: 8,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: BlocBuilder<PlotZoomCubit, double>(
-              builder: (context, state) {
                 return CustomPaint(
                   painter: PlotterPainter<T>(
                     plotMode: plotMode,
-                    range: state.round(),
+                    range: context.plotZoomState.zoom.round(),
                     colorArea: ColorArea(
                       color: areaColor,
-                      startPoint: lowerAreaLimit ?? -state,
-                      endPoint: upperAreaLimit ?? state,
+                      startPoint: lowerAreaLimit ?? -context.plotZoomState.zoom,
+                      endPoint: upperAreaLimit ?? context.plotZoomState.zoom,
                     ),
                   ),
                   size: Size.square(normalized),
                 );
               },
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }
 
 class _PlotSlider extends StatelessWidget {
-  const _PlotSlider({Key? key}) : super(key: key);
+  const _PlotSlider();
 
   void update(BuildContext context, double value) =>
-      context.read<PlotZoomCubit>().updateSlider(value);
+      context.plotZoomState.updateSlider(value);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PlotZoomCubit, double>(
+    return AnimatedBuilder(
+      animation: context.plotZoomState,
       builder: (context, state) {
         return Slider(
           min: 2,
           max: 10,
-          value: state,
+          value: context.plotZoomState.zoom,
           onChanged: (value) => update(context, value),
-          label: '${state.round()}',
+          label: '${context.plotZoomState.zoom.round()}',
         );
       },
     );

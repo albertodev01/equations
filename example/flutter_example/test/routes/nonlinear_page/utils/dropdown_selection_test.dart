@@ -1,23 +1,21 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
+
 import '../../mock_wrapper.dart';
+import '../nonlinear_mock.dart';
 
 void main() {
   group("Testing the 'DropdownSelection' widget", () {
     test("Testing the 'NonlinearDropdownItemsExt' extension method", () {
-      expect(NonlinearDropdownItems.newton.asString(), equals('Newton'));
+      expect(NonlinearDropdownItems.newton.name, equals('Newton'));
       expect(
-        NonlinearDropdownItems.steffensen.asString(),
+        NonlinearDropdownItems.steffensen.name,
         equals('Steffensen'),
       );
-      expect(NonlinearDropdownItems.bisection.asString(), equals('Bisection'));
-      expect(NonlinearDropdownItems.secant.asString(), equals('Secant'));
-      expect(NonlinearDropdownItems.brent.asString(), equals('Brent'));
+      expect(NonlinearDropdownItems.bisection.name, equals('Bisection'));
+      expect(NonlinearDropdownItems.secant.name, equals('Secant'));
+      expect(NonlinearDropdownItems.brent.name, equals('Brent'));
     });
 
     test("Testing the 'StringExt' extension method", () {
@@ -45,50 +43,27 @@ void main() {
     });
 
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider<NonlinearBloc>(
-              create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-            ),
-            BlocProvider<DropdownCubit>(
-              create: (_) => DropdownCubit(initialValue: 'Newton'),
-            ),
-          ],
-          child: const Scaffold(
-            body: NonlinearDropdownSelection(),
-          ),
+      await tester.pumpWidget(
+        const MockNonlinearWidget(
+          child: NonlinearDropdownSelection(),
         ),
-      ));
+      );
 
       expect(find.byType(NonlinearDropdownSelection), findsOneWidget);
     });
 
     testWidgets(
-      "Making sure that when the bloc is of type 'singlePoint' the "
-      'dropdown only contains single point algorithms',
+      "Making sure that when the state is of type 'singlePoint' the dropdown "
+      'only contains single point algorithms',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-              ),
-              BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(
-                  initialValue: NonlinearDropdownItems.newton.asString(),
-                ),
-              ),
-            ],
-            child: const Scaffold(
-              body: NonlinearDropdownSelection(),
-            ),
+        await tester.pumpWidget(
+          const MockNonlinearWidget(
+            child: NonlinearDropdownSelection(),
           ),
-        ));
+        );
 
-        final dropdownFinder =
-            find.byKey(const Key('Dropdown-Button-Selection'));
-        expect(dropdownFinder, findsOneWidget);
+        await tester.tap(find.text('Newton'));
+        await tester.pumpAndSettle();
 
         final widgetFinder = find.byType(NonlinearDropdownSelection);
         final state =
@@ -107,30 +82,19 @@ void main() {
     );
 
     testWidgets(
-      "Making sure that when the bloc is of type 'bracketing' the "
-      'dropdown only contains single point algorithms',
+      "Making sure that when the state is of type 'bracketing' the dropdown "
+      'only contains bracketing algorithms',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.bracketing),
-              ),
-              BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(
-                  initialValue: NonlinearDropdownItems.bisection.asString(),
-                ),
-              ),
-            ],
-            child: const Scaffold(
-              body: NonlinearDropdownSelection(),
-            ),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            nonlinearType: NonlinearType.bracketing,
+            dropdownValue: NonlinearDropdownItems.bisection.name,
+            child: const NonlinearDropdownSelection(),
           ),
-        ));
+        );
 
-        final dropdownFinder =
-            find.byKey(const Key('Dropdown-Button-Selection'));
-        expect(dropdownFinder, findsOneWidget);
+        await tester.tap(find.text('Bisection'));
+        await tester.pumpAndSettle();
 
         final widgetFinder = find.byType(NonlinearDropdownSelection);
         final state =
@@ -155,64 +119,46 @@ void main() {
     testWidgets(
       'Making sure that dropdown values can be changed',
       (tester) async {
-        final cubit = DropdownCubit(
-          initialValue: NonlinearDropdownItems.newton.asString(),
-        );
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.singlePoint),
-              ),
-              BlocProvider<DropdownCubit>.value(
-                value: cubit,
-              ),
-            ],
-            child: const Scaffold(
-              body: NonlinearDropdownSelection(),
-            ),
+        await tester.pumpWidget(
+          const MockNonlinearWidget(
+            child: NonlinearDropdownSelection(),
           ),
-        ));
+        );
 
-        expect(cubit.state, equals('Newton'));
         await tester.tap(find.text('Newton'));
         await tester.pumpAndSettle();
 
         await tester.tap(find.text('Steffensen').last);
         await tester.pumpAndSettle();
-        expect(cubit.state, equals('Steffensen'));
       },
     );
+  });
 
-    testGoldens('DropdownSelection', (tester) async {
-      final widget = SizedBox(
-        width: 200,
-        height: 200,
-        child: Scaffold(
-          body: MultiBlocProvider(
-            providers: [
-              BlocProvider<NonlinearBloc>(
-                create: (_) => NonlinearBloc(NonlinearType.bracketing),
-              ),
-              BlocProvider<DropdownCubit>(
-                create: (_) => DropdownCubit(
-                  initialValue: NonlinearDropdownItems.bisection.asString(),
-                ),
-              ),
-            ],
-            child: const NonlinearDropdownSelection(),
-          ),
+  group('Golden tests - NonlinearDropdownSelection', () {
+    testWidgets('NonlinearDropdownSelection - single point', (tester) async {
+      await tester.pumpWidget(
+        const MockNonlinearWidget(
+          child: NonlinearDropdownSelection(),
         ),
       );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 300),
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_single_point.png'),
       );
-      await screenMatchesGolden(tester, 'dropdown_selection');
+    });
+
+    testWidgets('NonlinearDropdownSelection - bracketing', (tester) async {
+      await tester.pumpWidget(
+        MockNonlinearWidget(
+          nonlinearType: NonlinearType.bracketing,
+          dropdownValue: NonlinearDropdownItems.bisection.name,
+          child: const NonlinearDropdownSelection(),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/dropdown_selection_bracketing.png'),
+      );
     });
   });
 }

@@ -1,21 +1,22 @@
 import 'package:equations_solver/routes/home_page/card_containers.dart';
-import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../mock_wrapper.dart';
 
 void main() {
   group("Testing the 'HomePage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: CardContainer(
-          title: 'Title',
-          image: const SizedBox(),
-          onTap: () {},
+      await tester.pumpWidget(
+        MockWrapper(
+          child: CardContainer(
+            title: 'Title',
+            image: const SizedBox(),
+            // ignore: no-empty-block
+            onTap: () {},
+          ),
         ),
-      ));
+      );
 
       expect(find.byType(CardContainer), findsOneWidget);
       expect(find.byType(GestureDetector), findsOneWidget);
@@ -25,13 +26,15 @@ void main() {
     testWidgets('Making sure that the widget is tappable', (tester) async {
       var counter = 0;
 
-      await tester.pumpWidget(MockWrapper(
-        child: CardContainer(
-          title: 'Title',
-          image: const SizedBox(),
-          onTap: () => counter++,
+      await tester.pumpWidget(
+        MockWrapper(
+          child: CardContainer(
+            title: 'Title',
+            image: const SizedBox(),
+            onTap: () => counter++,
+          ),
         ),
-      ));
+      );
 
       final card = find.byType(CardContainer);
 
@@ -40,32 +43,41 @@ void main() {
 
       expect(counter, equals(2));
     });
+  });
 
-    testGoldens('CardContainer', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'No image',
-          CardContainer(
+  group('Golden tests', () {
+    testWidgets('Golden test - CardContainer', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: CardContainer(
             title: 'Title',
             image: const SizedBox(),
+            // ignore: no-empty-block
             onTap: () {},
           ),
-        )
-        ..addScenario(
-          'With image',
-          CardContainer(
-            title: 'Title',
-            image: const Atoms(),
-            onTap: () {},
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(child: child),
-        surfaceSize: const Size(300, 290),
+        ),
       );
-      await screenMatchesGolden(tester, 'card_container');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/cardcontainer_no_image.png'),
+      );
+    });
+
+    testWidgets('Golden test - CardContainer', (tester) async {
+      await tester.pumpWidget(
+        MockWrapper(
+          child: CardContainer(
+            title: 'Title',
+            image: const Icon(Icons.ac_unit),
+            // ignore: no-empty-block
+            onTap: () {},
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/cardcontainer_with_image.png'),
+      );
     });
   });
 }

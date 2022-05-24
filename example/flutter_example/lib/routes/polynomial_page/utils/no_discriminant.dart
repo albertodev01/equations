@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// A very simple widget stating that there is no discriminant value to display.
 class NoDiscriminant extends StatelessWidget {
   /// Creates a [NoDiscriminant] widget.
-  const NoDiscriminant({Key? key}) : super(key: key);
+  const NoDiscriminant({super.key});
 
   @override
   Widget build(BuildContext context) {

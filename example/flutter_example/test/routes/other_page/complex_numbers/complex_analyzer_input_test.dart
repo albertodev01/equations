@@ -1,22 +1,19 @@
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_analyzer_input.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../../mock_wrapper.dart';
+import '../complex_numbers_mock.dart';
 
 void main() {
   group("Testing the 'ComplexAnalyzerInput' widget", () {
     testWidgets('Making sure that the widget renders', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<OtherBloc>(
-          create: (_) => OtherBloc(),
-          child: const ComplexAnalyzerInput(),
+      await tester.pumpWidget(
+        const MockComplexNumbers(
+          child: ComplexAnalyzerInput(),
         ),
-      ));
+      );
 
       expect(find.byType(ComplexAnalyzerInput), findsOneWidget);
       expect(find.byType(ComplexNumberInput), findsOneWidget);
@@ -27,19 +24,18 @@ void main() {
       'Making sure that when trying to evaluate a complex number, if at least '
       'one of the inputs is wrong, a snackbar appears',
       (tester) async {
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>(
-            create: (_) => OtherBloc(),
-            child: const ComplexAnalyzerInput(),
+        await tester.pumpWidget(
+          const MockComplexNumbers(
+            child: ComplexAnalyzerInput(),
           ),
-        ));
+        );
 
         // Entering some text
         const realKey = Key('ComplexNumberInput-TextFormField-RealPart');
         const imagKey = Key('ComplexNumberInput-TextFormField-ImaginaryPart');
 
         await tester.enterText(find.byKey(realKey), '-1/2');
-        await tester.enterText(find.byKey(imagKey), '...');
+        await tester.enterText(find.byKey(imagKey), '..');
         await tester.tap(
           find.byKey(const Key('ComplexAnalyze-button-analyze')),
         );
@@ -60,23 +56,11 @@ void main() {
     testWidgets(
       'Making sure that complex numbers can be analyzed',
       (tester) async {
-        late FocusScopeNode focusScope;
-        final bloc = OtherBloc();
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<OtherBloc>.value(
-            value: bloc,
-            child: Builder(
-              builder: (context) {
-                focusScope = FocusScope.of(context);
-
-                return const ComplexAnalyzerInput();
-              },
-            ),
+        await tester.pumpWidget(
+          const MockComplexNumbers(
+            child: ComplexAnalyzerInput(),
           ),
-        ));
-
-        expect(bloc.state, equals(const OtherNone()));
+        );
 
         // Entering some text
         const realKey = Key('ComplexNumberInput-TextFormField-RealPart');
@@ -84,48 +68,47 @@ void main() {
 
         await tester.enterText(find.byKey(realKey), '-1/2');
         await tester.enterText(find.byKey(imagKey), '5');
-        expect(focusScope.hasFocus, isTrue);
 
         await tester.tap(
           find.byKey(const Key('ComplexAnalyze-button-analyze')),
         );
         await tester.pumpAndSettle();
 
-        expect(bloc.state, isA<AnalyzedComplexNumber>());
+        expect(find.text('-1/2'), findsOneWidget);
+        expect(find.text('5'), findsOneWidget);
 
         // Cleaning
         final finder = find.byKey(const Key('ComplexAnalyze-button-clean'));
         await tester.tap(finder);
         await tester.pumpAndSettle();
 
-        expect(focusScope.hasFocus, isFalse);
+        expect(find.text('-1/2'), findsNothing);
+        expect(find.text('5'), findsNothing);
 
-        tester
-            .widgetList<TextFormField>(find.byType(TextFormField))
-            .forEach((t) {
-          expect(t.controller!.text.length, isZero);
-        });
+        tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach(
+          (textController) {
+            expect(textController.controller!.text.length, isZero);
+          },
+        );
       },
     );
+  });
 
-    testGoldens('ComplexAnalyzerInput', (tester) async {
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'ComplexAnalyzerInput',
-          BlocProvider<OtherBloc>(
-            create: (_) => OtherBloc(),
-            child: const ComplexAnalyzerInput(),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+  group('Golden tests - ComplexAnalyzerInput', () {
+    testWidgets('ComplexAnalyzerInput', (tester) async {
+      await tester.pumpWidget(
+        MockComplexNumbers(
+          controllers: [
+            TextEditingController(text: '2'),
+            TextEditingController(text: '-1'),
+          ],
+          child: const ComplexAnalyzerInput(),
         ),
-        surfaceSize: const Size(400, 250),
       );
-      await screenMatchesGolden(tester, 'complex_analyzer_input');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/complex_analyze_input.png'),
+      );
     });
   });
 }

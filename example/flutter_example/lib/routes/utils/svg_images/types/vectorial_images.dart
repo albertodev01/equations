@@ -1,13 +1,12 @@
 import 'package:equations_solver/routes/utils/svg_images/svg_image.dart';
-import 'package:flutter/material.dart';
 
 /// A light blue circle with a white arrow pointing upwards.
 class ArrowUpSvg extends SvgImage {
   /// Creates an [ArrowUpSvg] widget.
   const ArrowUpSvg({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'arrow_up';
@@ -17,9 +16,9 @@ class ArrowUpSvg extends SvgImage {
 class OtherComplexNumbers extends SvgImage {
   /// Creates a [OtherComplexNumbers] widget.
   const OtherComplexNumbers({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'tools_imaginary';
@@ -29,9 +28,9 @@ class OtherComplexNumbers extends SvgImage {
 class OtherMatrix extends SvgImage {
   /// Creates a [OtherMatrix] widget.
   const OtherMatrix({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'tools_matrix';
@@ -41,9 +40,9 @@ class OtherMatrix extends SvgImage {
 class SquareMatrix extends SvgImage {
   /// Creates a [SquareMatrix] widget.
   const SquareMatrix({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'square_matrix';
@@ -53,9 +52,9 @@ class SquareMatrix extends SvgImage {
 class SquareRoot extends SvgImage {
   /// Creates a [SquareRoot] widget.
   const SquareRoot({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'square-root-simple';
@@ -65,9 +64,9 @@ class SquareRoot extends SvgImage {
 class HalfRightAngle extends SvgImage {
   /// Creates a [HalfRightAngle] widget.
   const HalfRightAngle({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'angle';
@@ -77,9 +76,9 @@ class HalfRightAngle extends SvgImage {
 class PlotIcon extends SvgImage {
   /// Creates an [PlotIcon] widget.
   const PlotIcon({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'plot';
@@ -89,9 +88,9 @@ class PlotIcon extends SvgImage {
 class EquationSolution extends SvgImage {
   /// Creates an [EquationSolution] widget.
   const EquationSolution({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'solutions';
@@ -101,10 +100,22 @@ class EquationSolution extends SvgImage {
 class Atoms extends SvgImage {
   /// Creates an [Atoms] widget.
   const Atoms({
-    Key? key,
-    double size = 40,
-  }) : super(key: key, size: size);
+    super.key,
+    super.size,
+  });
 
   @override
   String get assetName => 'atoms';
+}
+
+/// A red cloud with a white cross at the bottom-middle of its body.
+class UrlError extends SvgImage {
+  /// Creates an [UrlError] widget.
+  const UrlError({
+    super.key,
+    super.size,
+  });
+
+  @override
+  String get assetName => 'url_error';
 }

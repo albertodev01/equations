@@ -75,5 +75,6 @@
   "no": "No",
   "diagonal": "Diagonal",
   "symmetric": "Symmetric",
-  "identity": "Identity"
+  "identity": "Identity",
+  "url_error": "This page doesn't exists!"
 }

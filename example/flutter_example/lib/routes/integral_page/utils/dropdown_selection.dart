@@ -1,13 +1,12 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Dropdown button needed to choose which numerical integration algorithm has
 /// to be used.
 class IntegralDropdownSelection extends StatefulWidget {
   /// Creates a [IntegralDropdownSelection] widget.
-  const IntegralDropdownSelection({Key? key}) : super(key: key);
+  const IntegralDropdownSelection({super.key});
 
   @override
   IntegralDropdownSelectionState createState() =>
@@ -38,19 +37,20 @@ class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(IntegralDropdownItems newValue) =>
-      context.read<DropdownCubit>().changeValue(newValue.asString());
+      context.dropdownValue.value = newValue.name;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
         width: integralDropdownWidth,
-        child: BlocBuilder<DropdownCubit, String>(
-          builder: (context, state) {
+        child: ValueListenableBuilder<String>(
+          valueListenable: context.dropdownValue,
+          builder: (context, value, _) {
             return DropdownButtonFormField<IntegralDropdownItems>(
               key: const Key('Integral-Dropdown-Button-Selection'),
               isExpanded: true,
-              value: state.toIntegralDropdownItems(),
+              value: value.toIntegralDropdownItems(),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -69,28 +69,19 @@ class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
 /// The possible values of the [IntegralDropdownSelection] dropdown.
 enum IntegralDropdownItems {
   /// Simpson rule.
-  simpson,
+  simpson('Simpson'),
 
   /// Midpoint rule.
-  midpoint,
+  midpoint('Midpoint'),
 
   /// Trapezoid rule.
-  trapezoid,
-}
+  trapezoid('Trapezoid');
 
-/// Extension method on [IntegralDropdownItems] to convert a value to a string.
-extension IntegralDropdownItemsExt on IntegralDropdownItems {
-  /// Converts the enum into a [String].
-  String asString() {
-    switch (this) {
-      case IntegralDropdownItems.simpson:
-        return 'Simpson';
-      case IntegralDropdownItems.midpoint:
-        return 'Midpoint';
-      case IntegralDropdownItems.trapezoid:
-        return 'Trapezoid';
-    }
-  }
+  /// The string representation.
+  final String name;
+
+  /// [IntegralDropdownItems] constructor.
+  const IntegralDropdownItems(this.name);
 }
 
 /// Extension method on [String] to convert into a [IntegralDropdownItems] the

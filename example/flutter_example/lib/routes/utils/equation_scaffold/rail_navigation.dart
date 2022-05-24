@@ -1,9 +1,8 @@
-import 'package:equations_solver/blocs/navigation_bar/navigation_bar.dart';
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// A rail navigation bar to be displayed within an [EquationScaffold] widget.
 class RailNavigation extends StatefulWidget {
@@ -15,10 +14,10 @@ class RailNavigation extends StatefulWidget {
 
   /// Creates a [RailNavigation] widget.
   const RailNavigation({
-    Key? key,
+    super.key,
     required this.navigationItems,
     required this.tabController,
-  }) : super(key: key);
+  });
 
   @override
   _RailNavigationState createState() => _RailNavigationState();
@@ -26,13 +25,18 @@ class RailNavigation extends StatefulWidget {
 
 class _RailNavigationState extends State<RailNavigation> {
   /// Converts a [NavigationItem] into a [BottomNavigationBarItem].
+  ///
+  /// There is no need to update this into 'didUpdateWidget' because navigation
+  /// items won't change during the app's lifetime.
   late final rails = widget.navigationItems.map<NavigationRailDestination>((i) {
     return NavigationRailDestination(
       icon: i.icon,
       selectedIcon: i.activeIcon,
       label: Text(i.title),
     );
-  }).toList(growable: false);
+  }).toList(
+    growable: false,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +57,16 @@ class _RailNavigationState extends State<RailNavigation> {
         ),
 
         // The rail
-        BlocBuilder<NavigationCubit, int>(
-          builder: (_, state) {
+        ValueListenableBuilder<int>(
+          valueListenable: context.navigationIndex,
+          builder: (context, value, _) {
             return NavigationRail(
               groupAlignment: 0,
               destinations: rails,
-              selectedIndex: state,
+              selectedIndex: value,
               labelType: NavigationRailLabelType.all,
-              onDestinationSelected: context.read<NavigationCubit>().pageIndex,
+              onDestinationSelected: (newIndex) =>
+                  context.navigationIndex.value = newIndex,
             );
           },
         ),

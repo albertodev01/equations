@@ -1,41 +1,37 @@
-import 'package:equations_solver/blocs/plot_zoom/plot_zoom.dart';
-import 'package:equations_solver/blocs/polynomial_solver/polynomial_solver.dart';
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
+import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
+import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This widget contains a series of [PolynomialInputField] widgets needed to
 /// parse the coefficients of the polynomial to be solved.
 class PolynomialDataInput extends StatelessWidget {
   /// Creates a [PolynomialDataInput] widget.
-  const PolynomialDataInput({Key? key}) : super(key: key);
+  const PolynomialDataInput({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final polynomialType = context.read<PolynomialBloc>().polynomialType;
+    final polynomialType = context.polynomialState.polynomialType;
 
     switch (polynomialType) {
       case PolynomialType.linear:
         return const _InputWidget(
-          inputLength: 2,
           equationTemplate: 'ax + b',
         );
       case PolynomialType.quadratic:
         return const _InputWidget(
-          inputLength: 3,
           equationTemplate: 'ax^2 + bx + c',
         );
       case PolynomialType.cubic:
         return const _InputWidget(
-          inputLength: 4,
           equationTemplate: 'ax^3 + bx^2 + cx + d',
         );
       case PolynomialType.quartic:
         return const _InputWidget(
-          inputLength: 5,
           equationTemplate: 'ax^4 + bx^3 + cx^2 + dx + e',
         );
     }
@@ -44,16 +40,12 @@ class PolynomialDataInput extends StatelessWidget {
 
 /// The actual input container.
 class _InputWidget extends StatefulWidget {
-  /// How many input fields the screen has to display.
-  final int inputLength;
-
   /// The 'form' of the equation. This can be, for example, `ax^2 + bx + c` in
   /// the case of a quadratic polynomial.
   final String equationTemplate;
 
   /// Creates a [_InputWidget] widget.
   const _InputWidget({
-    required this.inputLength,
     required this.equationTemplate,
   });
 
@@ -62,14 +54,6 @@ class _InputWidget extends StatefulWidget {
 }
 
 class __InputWidget extends State<_InputWidget> {
-  /// Controllers of the various input fields are "cached" because they'll never
-  /// change during the lifetime of the widget.
-  late final controllers = List<TextEditingController>.generate(
-    widget.inputLength,
-    _generateTextController,
-    growable: false,
-  );
-
   /// This is displayed at the top of the input box.
   late final cachedEquationTitle = Padding(
     padding: const EdgeInsets.only(bottom: 20),
@@ -87,42 +71,23 @@ class __InputWidget extends State<_InputWidget> {
   ///
   /// This is cached because the number of input fields won't change.
   late final Widget cachedWrap = _InputFieldsWrapWidget(
-    controllers: controllers,
-    inputLength: widget.inputLength,
+    controllers: context.textControllers,
+    inputLength: context.textControllers.length,
   );
 
-  /// Generates the controllers and hooks them to the [TextFieldValuesCubit] in
-  /// order to cache the user input.
-  TextEditingController _generateTextController(int index) {
-    // Initializing with the cached value, if any
-    final controller = TextEditingController(
-      text: context.read<TextFieldValuesCubit>().getValue(index),
-    );
-
-    // Listener that updates the value
-    controller.addListener(() {
-      context.read<TextFieldValuesCubit>().setValue(
-            index: index,
-            value: controller.text,
-          );
-    });
-
-    return controller;
-  }
-
-  /// Validates the input and, if it's valid, sends the data to the bloc.
+  /// Validates the input and, if it's valid, sends the data to the state class.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
-      final event = PolynomialSolve(
-        coefficients: controllers.map<String>((c) => c.text).toList(),
-      );
-
       // Valid input
-      context.read<PolynomialBloc>().add(event);
+      context.polynomialState.solvePolynomial(
+        context.textControllers
+            .map<String>((c) => c.text)
+            .toList(growable: false),
+      );
     } else {
-      context.read<PolynomialBloc>().add(const PolynomialClean());
+      context.polynomialState.clear();
 
-      // Error message
+      // Error message.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.l10n.polynomial_error),
@@ -134,83 +99,62 @@ class __InputWidget extends State<_InputWidget> {
 
   /// Form cleanup.
   void _cleanInput() {
-    for (final controller in controllers) {
+    for (final controller in context.textControllers) {
       controller.clear();
     }
 
     formKey.currentState?.reset();
-    context.read<PolynomialBloc>().add(const PolynomialClean());
-    context.read<PlotZoomCubit>().reset();
-    context.read<TextFieldValuesCubit>().reset();
+    context.polynomialState.clear();
+    context.plotZoomState.reset();
 
     FocusScope.of(context).unfocus();
   }
 
   @override
-  void dispose() {
-    for (final controller in controllers) {
-      controller.dispose();
-    }
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocListener<TextFieldValuesCubit, Map<int, String>>(
-      listener: (_, state) {
-        if (state.isEmpty) {
-          for (final controller in controllers) {
-            controller.clear();
-          }
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Some space from the top
-          const SizedBox(height: 40),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 40),
 
-          // The title
-          cachedEquationTitle,
+        cachedEquationTitle,
 
-          // Responsively placing input fields using 'Wrap'
-          Padding(
-            padding: const EdgeInsets.only(left: 60, right: 60),
-            child: Form(
-              key: formKey,
-              child: cachedWrap,
+        // Responsively placing input fields using 'Wrap'
+        Padding(
+          padding: const EdgeInsets.only(left: 60, right: 60),
+          child: Form(
+            key: formKey,
+            child: cachedWrap,
+          ),
+        ),
+
+        // A "spacer" widget
+        const SizedBox(height: 40),
+
+        // Two buttons needed to "solve" and "clear" the equation
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Solving the polynomial
+            ElevatedButton(
+              key: const Key('Polynomial-button-solve'),
+              onPressed: _processInput,
+              child: Text(context.l10n.solve),
             ),
-          ),
 
-          // A "spacer" widget
-          const SizedBox(height: 40),
+            // Some spacing
+            const SizedBox(width: 30),
 
-          // Two buttons needed to "solve" and "clear" the equation
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the polynomial
-              ElevatedButton(
-                key: const Key('Polynomial-button-solve'),
-                onPressed: _processInput,
-                child: Text(context.l10n.solve),
-              ),
-
-              // Some spacing
-              const SizedBox(width: 30),
-
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('Polynomial-button-clean'),
-                onPressed: _cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
-      ),
+            // Cleaning the inputs
+            ElevatedButton(
+              key: const Key('Polynomial-button-clean'),
+              onPressed: _cleanInput,
+              child: Text(context.l10n.clean),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -224,10 +168,9 @@ class _InputFieldsWrapWidget extends StatelessWidget {
   final int inputLength;
 
   const _InputFieldsWrapWidget({
-    Key? key,
     required this.controllers,
     required this.inputLength,
-  }) : super(key: key);
+  });
 
   /// Increments by [index] the char code unit to get a specific letter. For
   /// example:

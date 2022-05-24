@@ -9,17 +9,15 @@ class MatrixInput extends StatefulWidget {
   /// The text controllers of the matrix entries.
   final List<TextEditingController> matrixControllers;
 
-  /// The size of the matrix.
+  /// The matrix size.
   final int matrixSize;
 
   /// Creates a [MatrixInput] widget.
-  ///
-  /// The size of the matrix (`N`) is determined by [matrixSize].
   const MatrixInput({
-    Key? key,
+    super.key,
     required this.matrixControllers,
     required this.matrixSize,
-  }) : super(key: key);
+  });
 
   @override
   _MatrixInputState createState() => _MatrixInputState();
@@ -37,18 +35,22 @@ class _MatrixInputState extends State<MatrixInput> {
       final children = <Widget>[];
 
       for (var j = 0; j < widget.matrixSize; ++j) {
-        children.add(Padding(
-          padding: const EdgeInsets.all(5),
-          child: SystemInputField(
-            key: Key('SystemEntry-$i-$j'),
-            controller: widget.matrixControllers[j + i * widget.matrixSize],
+        children.add(
+          Padding(
+            padding: const EdgeInsets.all(5),
+            child: SystemInputField(
+              key: Key('SystemEntry-$i-$j'),
+              controller: widget.matrixControllers[j + i * widget.matrixSize],
+            ),
           ),
-        ));
+        );
       }
 
-      rows.add(TableRow(
-        children: children,
-      ));
+      rows.add(
+        TableRow(
+          children: children,
+        ),
+      );
     }
 
     return rows;
@@ -67,7 +69,7 @@ class _MatrixInputState extends State<MatrixInput> {
   Widget build(BuildContext context) {
     // We're adding '5' to the overall width to make sure that tiles aren't too
     // close each other.
-    final boxWidth = widget.matrixSize * (systemInputFieldSize.width + 5);
+    final boxWidth = widget.matrixSize * (systemInputFieldSize + 5);
 
     return Center(
       child: SizedBox(
