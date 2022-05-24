@@ -27,11 +27,6 @@ class SystemResults extends StatelessWidget {
 
         // Showing the solutions of the nonlinear equation
         const _SystemSolutions(),
-
-        // Additional spacing
-        const SizedBox(
-          height: 50,
-        ),
       ],
     );
   }
@@ -58,6 +53,9 @@ class _SystemSolutions extends StatelessWidget {
                 RealResultCard(
                   value: solution,
                 ),
+              const SizedBox(
+                height: 30,
+              ),
             ],
           );
         }
