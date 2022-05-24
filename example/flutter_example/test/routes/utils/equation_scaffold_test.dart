@@ -94,10 +94,6 @@ void main() {
           find.byKey(const Key('ScaffoldBackground')),
           findsOneWidget,
         );
-        expect(
-          find.byKey(const Key('ScaffoldExtraBackground')),
-          findsOneWidget,
-        );
         expect(find.byType(RailNavigation), findsOneWidget);
         expect(
           find.byKey(const Key('TabbedNavigationLayout-Scaffold')),

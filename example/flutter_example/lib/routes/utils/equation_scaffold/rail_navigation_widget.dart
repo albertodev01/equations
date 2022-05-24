@@ -28,8 +28,6 @@ class RailNavigationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('rail navigation rebuild');
-
     return Scaffold(
       key: const Key('RailNavigationLayout-Scaffold'),
       body: ScaffoldContents(
