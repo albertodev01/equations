@@ -8,14 +8,14 @@ import '../nonlinear_mock.dart';
 void main() {
   group("Testing the 'DropdownSelection' widget", () {
     test("Testing the 'NonlinearDropdownItemsExt' extension method", () {
-      expect(NonlinearDropdownItems.newton.asString(), equals('Newton'));
+      expect(NonlinearDropdownItems.newton.name, equals('Newton'));
       expect(
-        NonlinearDropdownItems.steffensen.asString(),
+        NonlinearDropdownItems.steffensen.name,
         equals('Steffensen'),
       );
-      expect(NonlinearDropdownItems.bisection.asString(), equals('Bisection'));
-      expect(NonlinearDropdownItems.secant.asString(), equals('Secant'));
-      expect(NonlinearDropdownItems.brent.asString(), equals('Brent'));
+      expect(NonlinearDropdownItems.bisection.name, equals('Bisection'));
+      expect(NonlinearDropdownItems.secant.name, equals('Secant'));
+      expect(NonlinearDropdownItems.brent.name, equals('Brent'));
     });
 
     test("Testing the 'StringExt' extension method", () {
@@ -88,7 +88,7 @@ void main() {
         await tester.pumpWidget(
           MockNonlinearWidget(
             nonlinearType: NonlinearType.bracketing,
-            dropdownValue: NonlinearDropdownItems.bisection.asString(),
+            dropdownValue: NonlinearDropdownItems.bisection.name,
             child: const NonlinearDropdownSelection(),
           ),
         );
@@ -151,7 +151,7 @@ void main() {
       await tester.pumpWidget(
         MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,
-          dropdownValue: NonlinearDropdownItems.bisection.asString(),
+          dropdownValue: NonlinearDropdownItems.bisection.name,
           child: const NonlinearDropdownSelection(),
         ),
       );

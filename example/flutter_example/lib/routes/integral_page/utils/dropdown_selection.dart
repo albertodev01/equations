@@ -37,7 +37,7 @@ class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(IntegralDropdownItems newValue) =>
-      context.dropdownValue.value = newValue.asString();
+      context.dropdownValue.value = newValue.name;
 
   @override
   Widget build(BuildContext context) {
@@ -69,28 +69,19 @@ class IntegralDropdownSelectionState extends State<IntegralDropdownSelection> {
 /// The possible values of the [IntegralDropdownSelection] dropdown.
 enum IntegralDropdownItems {
   /// Simpson rule.
-  simpson,
+  simpson('Simpson'),
 
   /// Midpoint rule.
-  midpoint,
+  midpoint('Midpoint'),
 
   /// Trapezoid rule.
-  trapezoid,
-}
+  trapezoid('Trapezoid');
 
-/// Extension method on [IntegralDropdownItems] to convert a value to a string.
-extension IntegralDropdownItemsExt on IntegralDropdownItems {
-  /// Converts the enum into a [String].
-  String asString() {
-    switch (this) {
-      case IntegralDropdownItems.simpson:
-        return 'Simpson';
-      case IntegralDropdownItems.midpoint:
-        return 'Midpoint';
-      case IntegralDropdownItems.trapezoid:
-        return 'Trapezoid';
-    }
-  }
+  /// The string representation.
+  final String name;
+
+  /// [IntegralDropdownItems] constructor.
+  const IntegralDropdownItems(this.name);
 }
 
 /// Extension method on [String] to convert into a [IntegralDropdownItems] the

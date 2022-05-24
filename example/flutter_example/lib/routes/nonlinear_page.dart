@@ -59,7 +59,7 @@ class _NonlinearPageState extends State<NonlinearPage> {
         nonlinearState: NonlinearState(NonlinearType.singlePoint),
         child: InheritedDropdownValue(
           dropdownValue: ValueNotifier<String>(
-            NonlinearDropdownItems.newton.asString(),
+            NonlinearDropdownItems.newton.name,
           ),
           child: InheritedPlotZoom(
             plotZoomState: PlotZoomState(
@@ -86,7 +86,7 @@ class _NonlinearPageState extends State<NonlinearPage> {
         nonlinearState: NonlinearState(NonlinearType.bracketing),
         child: InheritedDropdownValue(
           dropdownValue: ValueNotifier<String>(
-            NonlinearDropdownItems.bisection.asString(),
+            NonlinearDropdownItems.bisection.name,
           ),
           child: InheritedPlotZoom(
             plotZoomState: PlotZoomState(

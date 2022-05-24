@@ -23,7 +23,7 @@ class IntegralPage extends StatelessWidget {
       integralState: IntegralState(),
       child: InheritedDropdownValue(
         dropdownValue: ValueNotifier<String>(
-          IntegralDropdownItems.simpson.asString(),
+          IntegralDropdownItems.simpson.name,
         ),
         child: InheritedPlotZoom(
           plotZoomState: PlotZoomState(

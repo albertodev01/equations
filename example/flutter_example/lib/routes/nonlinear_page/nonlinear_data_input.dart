@@ -51,8 +51,8 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     context.plotZoomState.reset();
     context.precisionState.reset();
     context.dropdownValue.value = context.textControllers.length == 2
-        ? NonlinearDropdownItems.newton.asString()
-        : NonlinearDropdownItems.bisection.asString();
+        ? NonlinearDropdownItems.newton.name
+        : NonlinearDropdownItems.bisection.name;
 
     FocusScope.of(context).unfocus();
   }

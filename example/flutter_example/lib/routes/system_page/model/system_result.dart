@@ -29,5 +29,5 @@ class SystemResult {
   }
 
   @override
-  int get hashCode => Object.hashAll([systemSolver]);
+  int get hashCode => systemSolver.hashCode;
 }

@@ -128,7 +128,7 @@ void main() {
               TextEditingController(),
               TextEditingController(),
             ],
-            dropdownValue: IntegralDropdownItems.midpoint.asString(),
+            dropdownValue: IntegralDropdownItems.midpoint.name,
           ),
         );
 
@@ -163,7 +163,7 @@ void main() {
               TextEditingController(),
               TextEditingController(),
             ],
-            dropdownValue: IntegralDropdownItems.trapezoid.asString(),
+            dropdownValue: IntegralDropdownItems.trapezoid.name,
           ),
         );
 
@@ -198,7 +198,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
-          dropdownValue: IntegralDropdownItems.simpson.asString(),
+          dropdownValue: IntegralDropdownItems.simpson.name,
           child: const IntegralDataInput(),
         ),
       );
@@ -216,7 +216,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
-          dropdownValue: IntegralDropdownItems.midpoint.asString(),
+          dropdownValue: IntegralDropdownItems.midpoint.name,
           child: const IntegralDataInput(),
         ),
       );
@@ -234,7 +234,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
-          dropdownValue: IntegralDropdownItems.trapezoid.asString(),
+          dropdownValue: IntegralDropdownItems.trapezoid.name,
           child: const IntegralDataInput(),
         ),
       );

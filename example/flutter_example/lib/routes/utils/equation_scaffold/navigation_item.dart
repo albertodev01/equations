@@ -42,5 +42,14 @@ class NavigationItem {
   }
 
   @override
-  int get hashCode => Object.hash(title, icon, activeIcon, content);
+  int get hashCode {
+    var result = 17;
+
+    result = result * 37 + title.hashCode;
+    result = result * 37 + icon.hashCode;
+    result = result * 37 + activeIcon.hashCode;
+    result = result * 37 + content.hashCode;
+
+    return result;
+  }
 }

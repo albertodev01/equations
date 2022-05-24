@@ -54,7 +54,7 @@ class NonlinearDropdownSelectionState
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(NonlinearDropdownItems newValue) =>
-      context.dropdownValue.value = newValue.asString();
+      context.dropdownValue.value = newValue.name;
 
   /// The currently selected nonlinear type.
   NonlinearType get nonlinearType => context.nonlinearState.nonlinearType;
@@ -89,38 +89,25 @@ class NonlinearDropdownSelectionState
 /// The possible values of the [NonlinearDropdownSelection] dropdown.
 enum NonlinearDropdownItems {
   /// Newton's method.
-  newton,
+  newton('Newton'),
 
   /// Steffensen's method.
-  steffensen,
+  steffensen('Steffensen'),
 
   /// Bisection method.
-  bisection,
+  bisection('Bisection'),
 
   /// Secant method.
-  secant,
+  secant('Secant'),
 
   /// Brent's method.
-  brent,
-}
+  brent('Brent');
 
-/// Extension method on [NonlinearDropdownItems] to convert a value to a string.
-extension NonlinearDropdownItemsExt on NonlinearDropdownItems {
-  /// Converts the enum into a [String].
-  String asString() {
-    switch (this) {
-      case NonlinearDropdownItems.newton:
-        return 'Newton';
-      case NonlinearDropdownItems.steffensen:
-        return 'Steffensen';
-      case NonlinearDropdownItems.bisection:
-        return 'Bisection';
-      case NonlinearDropdownItems.secant:
-        return 'Secant';
-      case NonlinearDropdownItems.brent:
-        return 'Brent';
-    }
-  }
+  /// The string representation.
+  final String name;
+
+  /// [NonlinearDropdownItems] constructor.
+  const NonlinearDropdownItems(this.name);
 }
 
 /// Extension method on [String] to convert into a [NonlinearDropdownItems] the

@@ -39,7 +39,15 @@ class ColorArea {
   }
 
   @override
-  int get hashCode => Object.hash(color, startPoint, endPoint);
+  int get hashCode {
+    var result = 17;
+
+    result = result * 37 + color.hashCode;
+    result = result * 37 + startPoint.hashCode;
+    result = result * 37 + endPoint.hashCode;
+
+    return result;
+  }
 
   @override
   String toString() {

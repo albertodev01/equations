@@ -1,4 +1,8 @@
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes.dart';
+import 'package:equations_solver/routes/error_page.dart';
+import 'package:equations_solver/routes/home_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -44,5 +48,31 @@ void main() {
         isTrue,
       );
     });
+
+    testWidgets(
+      'Making sure that invalid paths redirect to the error page',
+      (tester) async {
+        final router = generateRouter();
+
+        await tester.pumpWidget(
+          MaterialApp.router(
+            routeInformationParser: router.routeInformationParser,
+            routerDelegate: router.routerDelegate,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        );
+
+        // Home page
+        router.go(homePagePath);
+        await tester.pumpAndSettle();
+        expect(find.byType(HomePage), findsOneWidget);
+
+        // Wrong address
+        router.go('/does-not-exist');
+        await tester.pumpAndSettle();
+        expect(find.byType(ErrorPage), findsOneWidget);
+      },
+    );
   });
 }

@@ -70,6 +70,18 @@ void main() {
       expect(nonlinearState.nonlinearType, equals(NonlinearType.bracketing));
       expect(nonlinearState.state, equals(const NonlinearResult()));
       expect(count, equals(2));
+
+      nonlinearState.solveWithBracketing(
+        function: 'x-2',
+        precision: 1.0e-10,
+        upperBound: '1',
+        lowerBound: '1',
+        method: BracketingMethods.brent,
+      );
+
+      expect(nonlinearState.nonlinearType, equals(NonlinearType.bracketing));
+      expect(nonlinearState.state.nonlinear, isNotNull);
+      expect(count, equals(3));
     });
 
     test('Making sure that exceptions are handled', () {

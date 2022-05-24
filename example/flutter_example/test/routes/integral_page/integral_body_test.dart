@@ -148,7 +148,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
-          dropdownValue: IntegralDropdownItems.midpoint.asString(),
+          dropdownValue: IntegralDropdownItems.midpoint.name,
         ),
       );
 
@@ -181,7 +181,7 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
-          dropdownValue: IntegralDropdownItems.midpoint.asString(),
+          dropdownValue: IntegralDropdownItems.midpoint.name,
         ),
       );
 

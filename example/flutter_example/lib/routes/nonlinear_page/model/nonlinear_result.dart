@@ -28,5 +28,5 @@ class NonlinearResult {
   }
 
   @override
-  int get hashCode => Object.hashAll([nonlinear]);
+  int get hashCode => nonlinear.hashCode;
 }

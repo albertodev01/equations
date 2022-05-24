@@ -22,7 +22,7 @@ void main() {
               TextEditingController(),
               TextEditingController(),
             ],
-            dropdownValue: NonlinearDropdownItems.newton.asString(),
+            dropdownValue: NonlinearDropdownItems.newton.name,
             child: const NonlinearDataInput(),
           ),
         );
@@ -49,7 +49,7 @@ void main() {
               TextEditingController(),
               TextEditingController(),
             ],
-            dropdownValue: NonlinearDropdownItems.secant.asString(),
+            dropdownValue: NonlinearDropdownItems.secant.name,
             child: const NonlinearDataInput(),
           ),
         );
@@ -76,7 +76,7 @@ void main() {
               TextEditingController(),
               TextEditingController(),
             ],
-            dropdownValue: NonlinearDropdownItems.secant.asString(),
+            dropdownValue: NonlinearDropdownItems.secant.name,
             child: const NonlinearDataInput(),
           ),
         );
@@ -137,7 +137,7 @@ void main() {
               TextEditingController(),
               TextEditingController(),
             ],
-            dropdownValue: NonlinearDropdownItems.secant.asString(),
+            dropdownValue: NonlinearDropdownItems.secant.name,
             child: const NonlinearDataInput(),
           ),
         );
@@ -233,7 +233,7 @@ void main() {
       await tester.pumpWidget(
         MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,
-          dropdownValue: NonlinearDropdownItems.bisection.asString(),
+          dropdownValue: NonlinearDropdownItems.bisection.name,
           textControllers: [
             TextEditingController(),
             TextEditingController(),

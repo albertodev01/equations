@@ -27,7 +27,7 @@ class MockIntegralWidget extends StatelessWidget {
         integralState: IntegralState(),
         child: InheritedDropdownValue(
           dropdownValue: ValueNotifier<String>(
-            dropdownValue ?? IntegralDropdownItems.simpson.asString(),
+            dropdownValue ?? IntegralDropdownItems.simpson.name,
           ),
           child: InheritedPlotZoom(
             plotZoomState: PlotZoomState(

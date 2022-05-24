@@ -30,5 +30,5 @@ class IntegralResult {
   }
 
   @override
-  int get hashCode => Object.hashAll([numericalIntegration]);
+  int get hashCode => numericalIntegration.hashCode;
 }

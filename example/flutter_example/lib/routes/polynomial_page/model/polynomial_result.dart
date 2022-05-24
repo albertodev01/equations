@@ -28,5 +28,5 @@ class PolynomialResult {
   }
 
   @override
-  int get hashCode => Object.hashAll([algebraic]);
+  int get hashCode => algebraic.hashCode;
 }

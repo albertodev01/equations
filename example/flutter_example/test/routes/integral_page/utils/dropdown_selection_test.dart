@@ -11,9 +11,9 @@ void main() {
       "Making sure that an 'IntegralDropdownItemsExt' is correctly converted "
       'into a string',
       () {
-        expect(IntegralDropdownItems.simpson.asString(), equals('Simpson'));
-        expect(IntegralDropdownItems.trapezoid.asString(), equals('Trapezoid'));
-        expect(IntegralDropdownItems.midpoint.asString(), equals('Midpoint'));
+        expect(IntegralDropdownItems.simpson.name, equals('Simpson'));
+        expect(IntegralDropdownItems.trapezoid.name, equals('Trapezoid'));
+        expect(IntegralDropdownItems.midpoint.name, equals('Midpoint'));
       },
     );
 
@@ -52,7 +52,7 @@ void main() {
 
         // Initial value
         expect(
-          find.text(IntegralDropdownItems.simpson.asString()),
+          find.text(IntegralDropdownItems.simpson.name),
           findsOneWidget,
         );
 
@@ -70,7 +70,7 @@ void main() {
 
         // Verifying the new dropdown state
         expect(
-          find.text(IntegralDropdownItems.midpoint.asString()),
+          find.text(IntegralDropdownItems.midpoint.name),
           findsOneWidget,
         );
         expect(find.text('Midpoint'), findsOneWidget);
@@ -89,7 +89,7 @@ void main() {
 
         // Verifying the new dropdown state
         expect(
-          find.text(IntegralDropdownItems.trapezoid.asString()),
+          find.text(IntegralDropdownItems.trapezoid.name),
           findsOneWidget,
         );
         expect(find.text('Trapezoid'), findsOneWidget);
@@ -101,7 +101,7 @@ void main() {
     testWidgets('IntegralDropdownSelection - simpson', (tester) async {
       await tester.pumpWidget(
         MockIntegralWidget(
-          dropdownValue: IntegralDropdownItems.simpson.asString(),
+          dropdownValue: IntegralDropdownItems.simpson.name,
           child: const IntegralDropdownSelection(),
         ),
       );
@@ -114,7 +114,7 @@ void main() {
     testWidgets('IntegralDropdownSelection - midpoint', (tester) async {
       await tester.pumpWidget(
         MockIntegralWidget(
-          dropdownValue: IntegralDropdownItems.midpoint.asString(),
+          dropdownValue: IntegralDropdownItems.midpoint.name,
           child: const IntegralDropdownSelection(),
         ),
       );
@@ -127,7 +127,7 @@ void main() {
     testWidgets('IntegralDropdownSelection - trapezoid', (tester) async {
       await tester.pumpWidget(
         MockIntegralWidget(
-          dropdownValue: IntegralDropdownItems.trapezoid.asString(),
+          dropdownValue: IntegralDropdownItems.trapezoid.name,
           child: const IntegralDropdownSelection(),
         ),
       );

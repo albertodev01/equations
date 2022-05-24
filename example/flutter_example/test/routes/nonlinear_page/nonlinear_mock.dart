@@ -40,7 +40,7 @@ class MockNonlinearWidget extends StatelessWidget {
             ),
             child: InheritedDropdownValue(
               dropdownValue: ValueNotifier(
-                dropdownValue ?? NonlinearDropdownItems.newton.asString(),
+                dropdownValue ?? NonlinearDropdownItems.newton.name,
               ),
               child: InheritedPrecisionSlider(
                 precisionState: PrecisionSliderState(

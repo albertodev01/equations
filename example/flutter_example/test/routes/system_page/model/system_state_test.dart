@@ -108,5 +108,34 @@ void main() {
         expect(count, equals(2));
       },
     );
+
+    test('Making sure that exceptions are handled', () {
+      var count = 0;
+      final systemState = SystemState(SystemType.factorization)
+        ..addListener(() => ++count);
+
+      expect(systemState.systemType, equals(SystemType.factorization));
+      expect(systemState.state, equals(const SystemResult()));
+
+      systemState.rowReductionSolver(
+        flatMatrix: ['1', '2', '1', '2'],
+        knownValues: ['1', '2'],
+        size: 2,
+      );
+
+      expect(systemState.state, equals(const SystemResult()));
+      expect(systemState.state.systemSolver, isNull);
+      expect(count, equals(1));
+
+      systemState.rowReductionSolver(
+        flatMatrix: ['', '', '', ''],
+        knownValues: ['', ''],
+        size: 2,
+      );
+
+      expect(systemState.state, equals(const SystemResult()));
+      expect(systemState.state.systemSolver, isNull);
+      expect(count, equals(2));
+    });
   });
 }
