@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/nonlinear_page.dart';
 import 'package:equations_solver/routes/other_page.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/system_page.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 /// Route name for the home page of the app.
@@ -27,32 +28,49 @@ const otherPagePath = '/other';
 
 /// Generates the [GoRouter] instance that manages the app navigation.
 GoRouter generateRouter({String initialRoute = homePagePath}) {
+  CustomTransitionPage<void> _builder(
+    BuildContext _,
+    GoRouterState state,
+    Widget childPage,
+  ) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      transitionsBuilder: (context, animation, _, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      child: childPage,
+    );
+  }
+
   return GoRouter(
     initialLocation: initialRoute,
     routes: [
       GoRoute(
         path: homePagePath,
-        builder: (_, __) => const HomePage(),
+        pageBuilder: (_, state) => _builder(_, state, const HomePage()),
       ),
       GoRoute(
         path: integralPagePath,
-        builder: (_, __) => const IntegralPage(),
+        pageBuilder: (_, state) => _builder(_, state, const IntegralPage()),
       ),
       GoRoute(
         path: nonlinearPagePath,
-        builder: (_, __) => const NonlinearPage(),
+        pageBuilder: (_, state) => _builder(_, state, const NonlinearPage()),
       ),
       GoRoute(
         path: polynomialPagePath,
-        builder: (_, __) => const PolynomialPage(),
+        pageBuilder: (_, state) => _builder(_, state, const PolynomialPage()),
       ),
       GoRoute(
         path: systemPagePath,
-        builder: (_, __) => const SystemPage(),
+        pageBuilder: (_, state) => _builder(_, state, const SystemPage()),
       ),
       GoRoute(
         path: otherPagePath,
-        builder: (_, __) => const OtherPage(),
+        pageBuilder: (_, state) => _builder(_, state, const OtherPage()),
       ),
     ],
     urlPathStrategy: UrlPathStrategy.path,

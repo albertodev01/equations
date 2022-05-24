@@ -174,6 +174,23 @@ void main() {
       );
     });
 
+    testWidgets('Color and ranges swapped', (tester) async {
+      await tester.pumpWidget(
+        _buildPolynomialPainter(
+          colorArea: ColorArea(
+            color: Colors.lightGreen.withAlpha(80),
+            startPoint: 2,
+            endPoint: -1,
+          ),
+        ),
+      );
+      await expectLater(
+        find.byKey(const Key('PlotWidget-Golden')),
+        matchesGoldenFile(
+            'goldens/plot_painter_area_color_and_ranges_swapped.png'),
+      );
+    });
+
     testWidgets('Color and left range only', (tester) async {
       await tester.pumpWidget(
         _buildPolynomialPainter(

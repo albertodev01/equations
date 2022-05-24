@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.d
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,37 @@ import 'package:flutter/material.dart';
 /// algorithm evaluates the integral.
 ///
 /// The function is also plotted and the area is highlighted on the chart.
-class IntegralPage extends StatelessWidget {
+class IntegralPage extends StatefulWidget {
   /// Creates a [IntegralPage] widget.
   const IntegralPage({super.key});
+
+  @override
+  State<IntegralPage> createState() => _IntegralPageState();
+}
+
+class _IntegralPageState extends State<IntegralPage> {
+  /*
+   * These controllers are exposed to the subtree with [InheritedTextController]
+   * because the scaffold uses tabs and when swiping, the controllers get
+   * disposed.
+   *
+   * In order to keep the controllers alive (and thus persist the text), we need
+   * to save theme here, which is ABOVE the tabs.
+   */
+  final integralControllers = [
+    TextEditingController(),
+    TextEditingController(),
+    TextEditingController(),
+  ];
+
+  @override
+  void dispose() {
+    for (final controller in integralControllers) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +60,11 @@ class IntegralPage extends StatelessWidget {
             maxValue: 10,
             initial: 3,
           ),
-          child: const EquationScaffold(
-            body: IntegralBody(),
+          child: InheritedTextControllers(
+            textControllers: integralControllers,
+            child: const EquationScaffold(
+              body: IntegralBody(),
+            ),
           ),
         ),
       ),

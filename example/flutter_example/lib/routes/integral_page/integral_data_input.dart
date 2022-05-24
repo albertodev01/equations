@@ -4,6 +4,7 @@ import 'package:equations_solver/routes/integral_page/model/integral_state.dart'
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +20,6 @@ class IntegralDataInput extends StatefulWidget {
 }
 
 class _IntegralDataInputState extends State<IntegralDataInput> {
-  /// The [TextEditingController] of the function to integrate.
-  final functionController = TextEditingController();
-
-  /// The [TextEditingController] of the lower integration bound.
-  final lowerBoundController = TextEditingController();
-
-  /// The [TextEditingController] of the upper integration bound.
-  final upperBoundController = TextEditingController();
-
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
@@ -43,6 +35,15 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     lowerBound: lowerBoundController,
     upperBound: upperBoundController,
   );
+
+  /// The [TextEditingController] for the function.
+  TextEditingController get functionController => context.textControllers.first;
+
+  /// The [TextEditingController] for the lower integration bound.
+  TextEditingController get lowerBoundController => context.textControllers[1];
+
+  /// The [TextEditingController] for the upper integration bound.
+  TextEditingController get upperBoundController => context.textControllers[2];
 
   /// Form and chart cleanup.
   void cleanInput() {

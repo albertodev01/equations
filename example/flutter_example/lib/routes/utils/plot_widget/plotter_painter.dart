@@ -113,6 +113,18 @@ class PlotterPainter<T> extends CustomPainter {
     var currPoint = Offset.zero;
     var prevPoint = Offset.zero;
 
+    // In case the user entered the startPoint greater than the endPoint, we
+    // swap the values
+    var actualColorArea = colorArea;
+
+    if (colorArea.startPoint > colorArea.endPoint) {
+      actualColorArea = ColorArea(
+        startPoint: colorArea.endPoint,
+        endPoint: colorArea.startPoint,
+        color: colorArea.color,
+      );
+    }
+
     for (var i = 0; i < size.width; ++i) {
       logx = _screenToLog(Offset(i * 1.0, 0), width, height).dx;
 
@@ -128,10 +140,11 @@ class PlotterPainter<T> extends CustomPainter {
       }
 
       // Highlighting the area below the function ONLY if a color is defined
-      if (colorArea.color != Colors.transparent) {
+      if (actualColorArea.color != Colors.transparent) {
         final xAxis = Offset(currPoint.dx, size.height / 2);
 
-        if (logx >= colorArea.startPoint && logx <= colorArea.endPoint) {
+        if (logx >= actualColorArea.startPoint &&
+            logx <= actualColorArea.endPoint) {
           canvas.drawLine(xAxis, currPoint, area);
         }
       }
