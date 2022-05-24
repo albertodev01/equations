@@ -69,8 +69,8 @@ const integralDropdownWidth = 200.0;
 /// The width of a [PrecisionSlider] widget.
 const precisonSliderWidth = 300.0;
 
-/// The size of a [SystemInputField] widget.
-const systemInputFieldSize = Size(60, 50);
+/// The width of a [SystemInputField] widget.
+const systemInputFieldSize = 60.0;
 
 /// The length of an [EquationInput] widget used inside a [IntegralDataInput] to
 /// parse the values of the lower and upper integration limits.

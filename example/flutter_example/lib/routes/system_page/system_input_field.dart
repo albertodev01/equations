@@ -1,5 +1,4 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
@@ -24,10 +23,10 @@ class SystemInputField extends StatefulWidget {
 }
 
 class _SystemInputFieldState extends State<SystemInputField> {
-  String? _validationLogic(String? value, BuildContext context) {
+  String? _validationLogic(String? value) {
     if (value != null) {
       if (!value.isNumericalExpression) {
-        return context.l10n.wrong_input;
+        return 'Uh! :(';
       }
     }
 
@@ -36,8 +35,8 @@ class _SystemInputFieldState extends State<SystemInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.fromSize(
-      size: systemInputFieldSize,
+    return SizedBox(
+      width: systemInputFieldSize,
       child: TextFormField(
         key: const Key('SystemInputField-TextFormField'),
         controller: widget.controller,
@@ -53,7 +52,7 @@ class _SystemInputFieldState extends State<SystemInputField> {
           ),
           hintText: widget.placeholder,
         ),
-        validator: (value) => _validationLogic(value, context),
+        validator: _validationLogic,
       ),
     );
   }

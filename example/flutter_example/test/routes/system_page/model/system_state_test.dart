@@ -185,7 +185,6 @@ void main() {
         knownValues: ['', ''],
         size: 2,
         method: IterativeMethods.sor,
-        w: '1.25',
       );
 
       expect(systemState.state, equals(const SystemResult()));

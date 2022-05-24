@@ -187,7 +187,8 @@ void main() {
       await expectLater(
         find.byKey(const Key('PlotWidget-Golden')),
         matchesGoldenFile(
-            'goldens/plot_painter_area_color_and_ranges_swapped.png'),
+          'goldens/plot_painter_area_color_and_ranges_swapped.png',
+        ),
       );
     });
 
