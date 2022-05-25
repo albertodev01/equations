@@ -1,10 +1,12 @@
 import 'package:equations_solver/main.dart' as app;
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  var needsOpenPage = true;
+
   const matrixCoefficients = [
     16,
     -12,
@@ -29,6 +31,14 @@ void main() {
     WidgetTester tester, [
     int size = 1,
   ]) async {
+    if (needsOpenPage) {
+      // Opening the system page
+      await tester.tap(find.byKey(const Key('SystemsLogo-Container')));
+      await tester.pumpAndSettle();
+
+      needsOpenPage = false;
+    }
+
     final finder = find.byType(TextFormField);
     final matrixInputs = size * size;
 
@@ -88,6 +98,14 @@ void main() {
     int size = 1,
     bool cholesky = false,
   ]) async {
+    // Moving to the 'Bracketing' page
+    tester
+        .widget<InheritedNavigation>(find.byType(InheritedNavigation))
+        .navigationIndex
+        .value = 1;
+
+    await tester.pumpAndSettle();
+
     final finder = find.byType(TextFormField);
     final matrixInputs = size * size;
 
@@ -159,6 +177,14 @@ void main() {
     int size = 1,
     bool jacobi = false,
   ]) async {
+    // Moving to the 'Bracketing' page
+    tester
+        .widget<InheritedNavigation>(find.byType(InheritedNavigation))
+        .navigationIndex
+        .value = 2;
+
+    await tester.pumpAndSettle();
+
     final finder = find.byType(TextFormField);
     final matrixInputs = size * size;
 
@@ -199,6 +225,14 @@ void main() {
 
       await tester.tap(find.text('Jacobi').last);
       await tester.pumpAndSettle();
+
+      // Initial guess vector
+      final totalInputs = matrixInputs + size;
+
+      var value = 0;
+      for (var i = totalInputs; i < totalInputs + size; ++i) {
+        await tester.enterText(finder.at(i), '${value++}');
+      }
     } else {
       final w = find.byKey(
         const Key('SystemSolver-Iterative-RelaxationFactor'),
@@ -244,10 +278,6 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        // Opening the system page
-        await tester.tap(find.byKey(const Key('SystemsLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testRowReduction(tester);
         await _testRowReduction(tester, 2);
         await _testRowReduction(tester, 3);
@@ -259,14 +289,6 @@ void main() {
       'Testing factorization - LU',
       (tester) async {
         app.main();
-        await tester.pumpAndSettle();
-
-        // Opening the system page
-        await tester.tap(find.byKey(const Key('SystemsLogo-Container')));
-        await tester.pumpAndSettle();
-
-        // Moving to the 'Factorization' page
-        await tester.tap(find.text('Factorization'));
         await tester.pumpAndSettle();
 
         await _testFactorization(tester);
@@ -282,14 +304,6 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        // Opening the system page
-        await tester.tap(find.byKey(const Key('SystemsLogo-Container')));
-        await tester.pumpAndSettle();
-
-        // Moving to the 'Factorization' page
-        await tester.tap(find.text('Factorization'));
-        await tester.pumpAndSettle();
-
         await _testFactorization(tester, 1, true);
         await _testFactorization(tester, 2, true);
         await _testFactorization(tester, 3, true);
@@ -303,18 +317,23 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        // Opening the system page
-        await tester.tap(find.byKey(const Key('SystemsLogo-Container')));
-        await tester.pumpAndSettle();
-
-        // Moving to the 'Factorization' page
-        await tester.tap(find.text('Iterative'));
-        await tester.pumpAndSettle();
-
         await _testIterative(tester);
         await _testIterative(tester, 2);
         await _testIterative(tester, 3);
         await _testIterative(tester, 4);
+      },
+    );
+
+    testWidgets(
+      'Testing iterative - Jacobi',
+      (tester) async {
+        app.main();
+        await tester.pumpAndSettle();
+
+        await _testIterative(tester, 1, true);
+        await _testIterative(tester, 2, true);
+        await _testIterative(tester, 3, true);
+        await _testIterative(tester, 4, true);
       },
     );
   });

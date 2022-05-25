@@ -1,14 +1,24 @@
 import 'package:equations_solver/main.dart' as app;
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  var needsOpenPage = true;
+
   Future<void> _testSinglePoint(
     WidgetTester tester, [
     String dropdownValue = '',
   ]) async {
+    if (needsOpenPage) {
+      // Opening the nonlinear page
+      await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
+      await tester.pumpAndSettle();
+
+      needsOpenPage = false;
+    }
+
     // Inserting data
     final finder = find.byType(TextFormField);
     await tester.enterText(finder.first, 'x-2.25');
@@ -55,7 +65,11 @@ void main() {
     String dropdownValue = '',
   ]) async {
     // Moving to the 'Bracketing' page
-    await tester.tap(find.text('Bracketing'));
+    tester
+        .widget<InheritedNavigation>(find.byType(InheritedNavigation))
+        .navigationIndex
+        .value = 1;
+
     await tester.pumpAndSettle();
 
     // Inserting data
@@ -106,11 +120,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the nonlinear page
-        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testSinglePoint(tester);
       },
     );
@@ -120,11 +129,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the nonlinear page
-        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testSinglePoint(tester, 'Steffensen');
       },
     );
@@ -134,11 +138,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the nonlinear page
-        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testBracketing(tester);
       },
     );
@@ -148,11 +147,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the nonlinear page
-        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testBracketing(tester, 'Secant');
       },
     );
@@ -162,11 +156,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the nonlinear page
-        await tester.tap(find.byKey(const Key('NonlinearLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testBracketing(tester, 'Brent');
       },
     );
