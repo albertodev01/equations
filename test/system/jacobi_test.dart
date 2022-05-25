@@ -10,16 +10,21 @@ void main() {
       'well formed matrix.',
       () {
         final jacobi = JacobiSolver(
-          equations: const [
-            [2, 1],
-            [5, 7],
-          ],
-          constants: [11, 13],
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [2, 1],
+              [5, 7],
+            ],
+          ),
+          knownValues: [11, 13],
           x0: [1, 1],
         );
 
-        // This is needed because we want to make sure that the "original" matrix
-        // doesn't get side effects from the calculations (i.e. row swapping).
+        // This is needed because we want to make sure that the "original"
+        // matrix doesn't get side effects from the calculations (i.e. row
+        // swapping).
         final matrix = RealMatrix.fromData(
           rows: 2,
           columns: 2,
@@ -30,7 +35,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(jacobi.equations, equals(matrix));
+        expect(jacobi.matrix, equals(matrix));
         expect(jacobi.knownValues, orderedEquals(<double>[11, 13]));
         expect(jacobi.x0, orderedEquals(<double>[1, 1]));
         expect(jacobi.maxSteps, equals(30));
@@ -53,37 +58,17 @@ void main() {
       },
     );
 
-    test(
-      'Making sure that flat constructor produces the same object that '
-      'a non-flattened constructor does',
-      () {
-        final matrix = JacobiSolver(
-          equations: const [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-          ],
-          constants: const [1, 2, 3],
-          x0: [1, 2, 3],
-        );
-
-        final flatMatrix = JacobiSolver.flatMatrix(
-          equations: const [1, 2, 3, 4, 5, 6, 7, 8, 9],
-          constants: const [1, 2, 3],
-          x0: [1, 2, 3],
-        );
-
-        expect(matrix, equals(flatMatrix));
-      },
-    );
-
     test('Making sure that the string conversion works properly.', () {
       final solver = JacobiSolver(
-        equations: const [
-          [2, 1],
-          [5, 7],
-        ],
-        constants: [11, 13],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [2, 1],
+            [5, 7],
+          ],
+        ),
+        knownValues: [11, 13],
         x0: [1, 1],
       );
 
@@ -102,11 +87,15 @@ void main() {
       () {
         expect(
           () => JacobiSolver(
-            equations: const [
-              [1, 2],
-              [4, 5],
-            ],
-            constants: [7, 8, 9],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: const [
+                [1, 2],
+                [4, 5],
+              ],
+            ),
+            knownValues: [7, 8, 9],
             x0: [1, 2],
           ),
           throwsA(isA<SystemSolverException>()),
@@ -120,36 +109,16 @@ void main() {
       () {
         expect(
           () => JacobiSolver(
-            equations: const [
-              [1, 2],
-              [4, 5],
-            ],
-            constants: [7, 8],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: const [
+                [1, 2],
+                [4, 5],
+              ],
+            ),
+            knownValues: [7, 8],
             x0: [],
-          ),
-          throwsA(isA<SystemSolverException>()),
-        );
-      },
-    );
-
-    test(
-      'Making sure that when the input is a flat matrix, the matrix must '
-      'be squared.',
-      () {
-        expect(
-          () => JacobiSolver.flatMatrix(
-            equations: const [1, 2, 3, 4, 5],
-            constants: [7, 8],
-            x0: [1, 2],
-          ),
-          throwsA(isA<MatrixException>()),
-        );
-
-        expect(
-          () => JacobiSolver.flatMatrix(
-            equations: const [1, 2, 3, 4],
-            constants: [7, 8],
-            x0: [1],
           ),
           throwsA(isA<SystemSolverException>()),
         );
@@ -158,20 +127,28 @@ void main() {
 
     test('Making sure that objects comparison works properly.', () {
       final jacobi = JacobiSolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
         x0: [1, 2],
       );
 
       final jacobi2 = JacobiSolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2],
+            [3, 4],
+          ],
+        ),
+        knownValues: [0, -6],
         x0: [1, 2],
       );
 
@@ -179,36 +156,48 @@ void main() {
       expect(jacobi == jacobi2, isTrue);
       expect(jacobi2, equals(jacobi));
       expect(jacobi2 == jacobi, isTrue);
-      expect(jacobi.hashCode, equals(jacobi2.hashCode));
+      expect(jacobi2.hashCode, jacobi.hashCode);
     });
 
     test('Batch tests', () {
       final systems = [
         JacobiSolver(
-          equations: const [
-            [25, 15, -5],
-            [15, 18, 0],
-            [-5, 0, 11],
-          ],
-          constants: [35, 33, 6],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [25, 15, -5],
+              [15, 18, 0],
+              [-5, 0, 11],
+            ],
+          ),
+          knownValues: [35, 33, 6],
           x0: [3, 1, -1],
         ).solve(),
         JacobiSolver(
-          equations: const [
-            [1, 0, 1],
-            [0, 2, 0],
-            [1, 0, 3],
-          ],
-          constants: [6, 5, -2],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 1],
+              [0, 2, 0],
+              [1, 0, 3],
+            ],
+          ),
+          knownValues: [6, 5, -2],
           x0: [0, 0, 0],
         ).solve(),
         JacobiSolver(
-          equations: const [
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-          ],
-          constants: [5, -2, 3],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1],
+            ],
+          ),
+          knownValues: [5, -2, 3],
           x0: [3, 3, 3],
         ).solve(),
       ];

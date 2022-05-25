@@ -73,7 +73,8 @@ abstract class NonLinear {
   String toString() => 'f(x) = $function';
 
   /// In order to get a meaningful result, it makes sense to compute the rate of
-  /// convergence only if the algorithm made **at least** 3 [steps] (iterations).
+  /// convergence only if the algorithm made **at least** 3 [steps]
+  /// (iterations).
   ///
   /// If [steps] is 2 or lower, `nan` is returned.
   double convergence(List<double> guesses, int steps) {

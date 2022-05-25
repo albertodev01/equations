@@ -12,6 +12,10 @@ void main() {
 
       expect(parser.evaluate('5*3-4'), equals(11));
       expect(parser.evaluate('3/8 + 2^3'), equals(8.375));
+      expect(
+        parser.evaluate('-11+3/4-5*1-3/7'),
+        const MoreOrLessEquals(-15.678571428, precision: 1.0e-9),
+      );
 
       expect(
         parser.evaluate('pi'),
@@ -66,6 +70,18 @@ void main() {
       expect(
         parser.evaluate('cos(pi)'),
         const MoreOrLessEquals(-1, precision: 1.0e-1),
+      );
+      expect(
+        parser.evaluate('tan(pi/4)'),
+        const MoreOrLessEquals(1, precision: 1.0e-1),
+      );
+      expect(
+        parser.evaluate('sec(pi)'),
+        const MoreOrLessEquals(-1, precision: 1.0e-1),
+      );
+      expect(
+        parser.evaluate('csc(pi/2)'),
+        const MoreOrLessEquals(1, precision: 1.0e-1),
       );
       expect(
         parser.evaluate('tan(pi/4)'),

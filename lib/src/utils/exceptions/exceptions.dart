@@ -1,6 +1,6 @@
-/// Base class for exception objects to be thrown.
+/// Base class for exception objects in this package.
 abstract class EquationException implements Exception {
-  /// The error message
+  /// The error message.
   final String message;
 
   /// The prefix to display at the beginning of the error message. When reading

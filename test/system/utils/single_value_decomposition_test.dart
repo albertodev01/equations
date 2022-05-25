@@ -9,7 +9,7 @@ void main() {
   group('SingleValueDecomposition class', () {
     test('Equality tests', () {
       final real = SVDReal(
-        realMatrix: RealMatrix.fromData(
+        matrix: RealMatrix.fromData(
           rows: 1,
           columns: 1,
           data: [
@@ -19,7 +19,7 @@ void main() {
       );
 
       final complex = SVDComplex(
-        complexMatrix: ComplexMatrix.fromData(
+        matrix: ComplexMatrix.fromData(
           rows: 1,
           columns: 1,
           data: const [
@@ -30,7 +30,7 @@ void main() {
 
       expect(
         SVDReal(
-          realMatrix: RealMatrix.fromData(
+          matrix: RealMatrix.fromData(
             rows: 1,
             columns: 1,
             data: [
@@ -45,7 +45,7 @@ void main() {
         real,
         equals(
           SVDReal(
-            realMatrix: RealMatrix.fromData(
+            matrix: RealMatrix.fromData(
               rows: 1,
               columns: 1,
               data: [
@@ -58,7 +58,7 @@ void main() {
 
       expect(
         SVDReal(
-          realMatrix: RealMatrix.fromData(
+          matrix: RealMatrix.fromData(
             rows: 1,
             columns: 1,
             data: [
@@ -71,7 +71,7 @@ void main() {
 
       expect(
         SVDComplex(
-          complexMatrix: ComplexMatrix.fromData(
+          matrix: ComplexMatrix.fromData(
             rows: 1,
             columns: 1,
             data: const [
@@ -86,7 +86,7 @@ void main() {
         complex,
         equals(
           SVDComplex(
-            complexMatrix: ComplexMatrix.fromData(
+            matrix: ComplexMatrix.fromData(
               rows: 1,
               columns: 1,
               data: const [
@@ -99,7 +99,7 @@ void main() {
 
       expect(
         SVDComplex(
-          complexMatrix: ComplexMatrix.fromData(
+          matrix: ComplexMatrix.fromData(
             rows: 1,
             columns: 1,
             data: const [
@@ -315,8 +315,8 @@ void main() {
             const MoreOrLessEquals(0.22473, precision: 1.0e-5),
           );
 
-          // Making sure that U x E x Vt (where Vt is V transposed) equals to the
-          // starting matrix
+          // Making sure that U x E x Vt (where Vt is V transposed) equals to
+          // the starting matrix
           final original = U * E * V.transpose();
 
           expect(
@@ -690,8 +690,8 @@ void main() {
             const MoreOrLessEquals(0.22473, precision: 1.0e-5),
           );
 
-          // Making sure that U x E x Vt (where Vt is V transposed) equals to the
-          // starting matrix
+          // Making sure that U x E x Vt (where Vt is V transposed) equals to
+          // the starting matrix
           final original = U * E * V.transpose();
 
           expect(

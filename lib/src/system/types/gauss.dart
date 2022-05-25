@@ -6,36 +6,21 @@ class GaussianElimination extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [equations] is the matrix containing the equations
-  ///   - [constants] is the vector with the known values
-  GaussianElimination({
-    required List<List<double>> equations,
-    required List<double> constants,
-  }) : super(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
-
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values
   ///
-  ///   - [equations] is the flattened matrix containing the equations
-  ///   - [constants] is the vector with the known values
-  GaussianElimination.flatMatrix({
-    required List<double> equations,
-    required List<double> constants,
-  }) : super.flatMatrix(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
+  /// Swaps rows/columns and uses back substitution to solve the system.
+  GaussianElimination({
+    required super.matrix,
+    required super.knownValues,
+    super.precision,
+  });
 
   @override
   List<double> solve() {
     final n = knownValues.length;
-    final A = equations.toListOfList();
-    final b = knownValues.map((e) => e).toList();
+    final A = matrix.toListOfList();
+    final b = knownValues.toList();
 
     // Swapping rows and pivoting
     for (var p = 0; p < n; ++p) {

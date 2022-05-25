@@ -1,56 +1,31 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
+import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../utils/bloc_mocks.dart';
 import '../mock_wrapper.dart';
+import 'nonlinear_mock.dart';
 
 void main() {
-  late final List<BlocProvider> providers;
-  late final NonlinearBloc nonlinearBloc;
-  late final DropdownCubit dropdownCubit;
-
-  setUpAll(() {
-    registerFallbackValue(MockNonlinearEvent());
-    registerFallbackValue(MockNonlinearState());
-
-    nonlinearBloc = MockNonlinearBloc();
-    dropdownCubit = MockDropdownCubit();
-
-    providers = [
-      BlocProvider<NonlinearBloc>.value(
-        value: nonlinearBloc,
-      ),
-      BlocProvider<DropdownCubit>.value(
-        value: dropdownCubit,
-      ),
-    ];
-  });
-
   group("Testing the 'NonlinearDataInput' widget", () {
     testWidgets(
       "Making sure that with a 'singlePoint' configuration type only "
       'has 2 input fields appear on the screen',
       (tester) async {
-        when(() => dropdownCubit.state)
-            .thenReturn(NonlinearDropdownItems.newton.asString());
-        when(() => nonlinearBloc.nonlinearType)
-            .thenReturn(NonlinearType.singlePoint);
-
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(body: NonlinearDataInput()),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            dropdownValue: NonlinearDropdownItems.newton.name,
+            child: const NonlinearDataInput(),
           ),
-        ));
+        );
 
         expect(find.byType(NonlinearDataInput), findsOneWidget);
         expect(find.byType(EquationInput), findsNWidgets(2));
@@ -66,17 +41,18 @@ void main() {
       "Making sure that with a 'bracketing' configuration type only "
       'has 3 input fields appear on the screen',
       (tester) async {
-        when(() => dropdownCubit.state)
-            .thenReturn(NonlinearDropdownItems.secant.asString());
-        when(() => nonlinearBloc.nonlinearType)
-            .thenReturn(NonlinearType.bracketing);
-
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(body: NonlinearDataInput()),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            nonlinearType: NonlinearType.bracketing,
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            dropdownValue: NonlinearDropdownItems.secant.name,
+            child: const NonlinearDataInput(),
           ),
-        ));
+        );
 
         expect(find.byType(NonlinearDataInput), findsOneWidget);
         expect(find.byType(EquationInput), findsNWidgets(3));
@@ -92,17 +68,18 @@ void main() {
       'Making sure that when trying to solve an equation, if at '
       'least one of the inputs is wrong, a snackbar appears',
       (tester) async {
-        when(() => dropdownCubit.state)
-            .thenReturn(NonlinearDropdownItems.secant.asString());
-        when(() => nonlinearBloc.nonlinearType)
-            .thenReturn(NonlinearType.bracketing);
-
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: const Scaffold(body: NonlinearDataInput()),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            nonlinearType: NonlinearType.bracketing,
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            dropdownValue: NonlinearDropdownItems.secant.name,
+            child: const NonlinearDataInput(),
           ),
-        ));
+        );
 
         // No snackbar by default
         expect(find.byType(SnackBar), findsNothing);
@@ -120,21 +97,15 @@ void main() {
     testWidgets(
       'Making sure that single point equations can be solved',
       (tester) async {
-        when(() => dropdownCubit.state)
-            .thenReturn(NonlinearDropdownItems.newton.asString());
-        final bloc = NonlinearBloc(NonlinearType.singlePoint);
-
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: Scaffold(
-              body: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearDataInput(),
-              ),
-            ),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            child: const NonlinearDataInput(),
           ),
-        ));
+        );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
         final paramInput = find.byKey(const Key('EquationInput-first-param'));
@@ -144,36 +115,32 @@ void main() {
         await tester.enterText(equationInput, 'x-3');
         await tester.enterText(paramInput, '3');
 
-        // Making sure that there are no results
-        expect(bloc.state, isA<NonlinearNone>());
-
         // Solving the equation
         await tester.tap(solveButton);
         await tester.pumpAndSettle();
 
-        // Sending it to the bloc
-        expect(bloc.state, isA<NonlinearGuesses>());
+        final inheritedWidget = tester.widget<InheritedNonlinear>(
+          find.byType(InheritedNonlinear),
+        );
+        expect(inheritedWidget.nonlinearState.state.nonlinear, isNotNull);
       },
     );
 
     testWidgets(
       'Making sure that bracketing equations can be solved',
       (tester) async {
-        when(() => dropdownCubit.state)
-            .thenReturn(NonlinearDropdownItems.bisection.asString());
-        final bloc = NonlinearBloc(NonlinearType.bracketing);
-
-        await tester.pumpWidget(MockWrapper(
-          child: MultiBlocProvider(
-            providers: providers,
-            child: Scaffold(
-              body: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearDataInput(),
-              ),
-            ),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            nonlinearType: NonlinearType.bracketing,
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+              TextEditingController(),
+            ],
+            dropdownValue: NonlinearDropdownItems.secant.name,
+            child: const NonlinearDataInput(),
           ),
-        ));
+        );
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
         final paramInput1 = find.byKey(const Key('EquationInput-first-param'));
@@ -185,41 +152,37 @@ void main() {
         await tester.enterText(paramInput1, '1');
         await tester.enterText(paramInput2, '4');
 
-        // Making sure that there are no results
-        expect(bloc.state, isA<NonlinearNone>());
-
         // Solving the equation
         await tester.tap(solveButton);
         await tester.pumpAndSettle();
 
-        // Sending it to the bloc
-        expect(bloc.state, isA<NonlinearGuesses>());
+        final inheritedWidget = tester.widget<InheritedNonlinear>(
+          find.byType(InheritedNonlinear),
+        );
+        expect(inheritedWidget.nonlinearState.state.nonlinear, isNotNull);
       },
     );
 
     testWidgets('Making sure that textfields can be cleared', (tester) async {
-      when(() => dropdownCubit.state)
-          .thenReturn(NonlinearDropdownItems.newton.asString());
       late FocusScopeNode focusScope;
-      final bloc = NonlinearBloc(NonlinearType.singlePoint);
 
-      await tester.pumpWidget(MockWrapper(
-        child: MultiBlocProvider(
-          providers: providers,
-          child: Scaffold(
-            body: BlocProvider<NonlinearBloc>.value(
-              value: bloc,
-              child: Builder(
-                builder: (context) {
-                  focusScope = FocusScope.of(context);
+      await tester.pumpWidget(
+        MockWrapper(
+          child: Builder(
+            builder: (context) {
+              focusScope = FocusScope.of(context);
 
-                  return const NonlinearDataInput();
-                },
-              ),
-            ),
+              return MockNonlinearWidget(
+                textControllers: [
+                  TextEditingController(),
+                  TextEditingController(),
+                ],
+                child: const NonlinearDataInput(),
+              );
+            },
           ),
         ),
-      ));
+      );
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final paramInput = find.byKey(const Key('EquationInput-first-param'));
@@ -238,75 +201,51 @@ void main() {
       await tester.tap(cleanButton);
       await tester.pumpAndSettle();
 
-      // Making sure that fields have been cleared
-      expect(focusScope.hasFocus, isFalse);
-      expect(bloc.state, equals(const NonlinearNone()));
+      final inheritedWidget = tester.widget<InheritedNonlinear>(
+        find.byType(InheritedNonlinear),
+      );
+      expect(inheritedWidget.nonlinearState.state.nonlinear, isNull);
 
       tester.widgetList<TextFormField>(find.byType(TextFormField)).forEach((t) {
         expect(t.controller!.text.length, isZero);
       });
     });
+  });
 
-    testGoldens('NonlinearDataInput - Single point', (tester) async {
-      when(() => dropdownCubit.state)
-          .thenReturn(NonlinearDropdownItems.newton.asString());
-      final bloc = NonlinearBloc(NonlinearType.singlePoint);
-
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Single point',
-          SizedBox(
-            width: 600,
-            height: 650,
-            child: MultiBlocProvider(
-              providers: providers,
-              child: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearDataInput(),
-              ),
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+  group('Golden tests - NonlinearDataInput', () {
+    testWidgets('NonlinearDataInput - single point', (tester) async {
+      await tester.pumpWidget(
+        MockNonlinearWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
+          child: const NonlinearDataInput(),
         ),
-        surfaceSize: const Size(600, 750),
       );
-      await screenMatchesGolden(tester, 'nonlinear_input_data_single_point');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/nonlinear_data_input_single_point.png'),
+      );
     });
 
-    testGoldens('NonlinearDataInput - Bracketing', (tester) async {
-      when(() => dropdownCubit.state)
-          .thenReturn(NonlinearDropdownItems.bisection.asString());
-      final bloc = NonlinearBloc(NonlinearType.bracketing);
-
-      final builder = GoldenBuilder.column()
-        ..addScenario(
-          'Bracketing',
-          SizedBox(
-            width: 600,
-            height: 650,
-            child: MultiBlocProvider(
-              providers: providers,
-              child: BlocProvider<NonlinearBloc>.value(
-                value: bloc,
-                child: const NonlinearDataInput(),
-              ),
-            ),
-          ),
-        );
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+    testWidgets('NonlinearDataInput - bracketing', (tester) async {
+      await tester.pumpWidget(
+        MockNonlinearWidget(
+          nonlinearType: NonlinearType.bracketing,
+          dropdownValue: NonlinearDropdownItems.bisection.name,
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+            TextEditingController(),
+          ],
+          child: const NonlinearDataInput(),
         ),
-        surfaceSize: const Size(600, 750),
       );
-      await screenMatchesGolden(tester, 'nonlinear_input_data_bracketing');
+      await expectLater(
+        find.byType(MockWrapper),
+        matchesGoldenFile('goldens/nonlinear_data_input_bracketing.png'),
+      );
     });
   });
 }

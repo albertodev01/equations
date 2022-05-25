@@ -54,8 +54,8 @@ class PolarComplex implements Comparable<PolarComplex> {
 
   @override
   int compareTo(PolarComplex other) {
-    final thisValue = Complex.fromPolar(r, phiRadians);
-    final otherValue = Complex.fromPolar(other.r, other.phiRadians);
+    final thisValue = Complex.fromPolar(r: r, theta: phiRadians);
+    final otherValue = Complex.fromPolar(r: other.r, theta: other.phiRadians);
 
     if (thisValue > otherValue) {
       return 1;

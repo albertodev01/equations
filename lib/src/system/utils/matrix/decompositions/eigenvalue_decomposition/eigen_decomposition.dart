@@ -10,13 +10,11 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 ///   - V^-1 is the inverse of V.
 abstract class EigenDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates an instance of [EigenvalueDecomposition] to eigendecompose the
+  /// Creates an instance of [EigenDecomposition] to eigendecompose the
   /// given [matrix].
   const EigenDecomposition({
-    required T matrix,
-  }) : super(
-          matrix: matrix,
-        );
+    required super.matrix,
+  });
 
   /// Computes the `V`, `D` and `V^-1` matrices of the eigendecomposition
   /// algorithm. In particular, this method returns the `V`, `D and `V^-1`

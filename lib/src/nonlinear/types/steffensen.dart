@@ -1,37 +1,33 @@
 import 'package:equations/equations.dart';
 
-/// Implements the Steffensen method to find the roots of a given equation.
+/// Implements Seffensen's method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
-///   - Similar to [Newton] as they use the same approach and both have a quadratic
-///   convergence.
+///   - Similar to [Newton] as they use the same approach and both have a
+///   quadratic convergence.
 ///
 ///   - This method does **not** use the derivative _f'(x)_ of the function
 ///
-///   - If _x0_ is too far from the root, the method might fail so the convergence
-///   is not guaranteed.
+///   - If _x0_ is too far from the root, the method might fail so the
+///   convergence is not guaranteed.
 class Steffensen extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// Steffensen method.
+  /// Instantiates a new object to find the root of an equation by using
+  /// Steffensen's method.
   ///
   ///   - [function]: the function f(x)
   ///   - [x0]: the initial guess x<sub>0</sub>
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Steffensen({
-    required String function,
+    required super.function,
     required this.x0,
-    double tolerance = 1.0e-10,
-    int maxSteps = 15,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 15,
+  });
 
   @override
   bool operator ==(Object other) {

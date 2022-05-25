@@ -46,7 +46,7 @@ class InterpolationNode {
   /// same that would result in calling `toStringAsFixed` on a [double]:
   ///
   /// ```dart
-  /// final example = InterpolationNode(
+  /// const example = InterpolationNode(
   ///   x: 5.123,
   ///   y: 8.123,
   /// );

@@ -62,11 +62,13 @@ void main() {
 
       expect(
         results.hashCode,
-        equals(const NonlinearResults(
-          guesses: [1.0, 2.0, 3.0],
-          convergence: 10,
-          efficiency: -7,
-        ).hashCode),
+        equals(
+          const NonlinearResults(
+            guesses: [1.0, 2.0, 3.0],
+            convergence: 10,
+            efficiency: -7,
+          ).hashCode,
+        ),
       );
 
       expect(

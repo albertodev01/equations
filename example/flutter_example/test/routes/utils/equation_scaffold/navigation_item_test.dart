@@ -14,7 +14,81 @@ void main() {
       expect(navigationItem.content, isA<SizedBox>());
       expect(navigationItem.icon, isA<Icon>());
       expect(navigationItem.activeIcon, isA<Icon>());
-      expect(navigationItem.props.length, equals(4));
     });
+
+    testWidgets(
+      'Making sure that objects can correctly be compared',
+      (tester) async {
+        const child = SizedBox();
+        const navigationItem = NavigationItem(
+          title: 'Item title',
+          content: child,
+        );
+
+        expect(
+          const NavigationItem(
+            title: 'Item title',
+            content: child,
+          ),
+          equals(navigationItem),
+        );
+
+        expect(
+          navigationItem,
+          equals(
+            const NavigationItem(
+              title: 'Item title',
+              content: child,
+            ),
+          ),
+        );
+
+        expect(
+          const NavigationItem(
+                title: 'Item title',
+                content: child,
+              ) ==
+              navigationItem,
+          isTrue,
+        );
+
+        expect(
+          navigationItem ==
+              const NavigationItem(
+                title: 'Item title',
+                content: child,
+              ),
+          isTrue,
+        );
+
+        expect(
+          navigationItem ==
+              const NavigationItem(
+                title: 'Item title',
+                content: SizedBox(),
+              ),
+          isFalse,
+        );
+
+        expect(
+          navigationItem ==
+              const NavigationItem(
+                title: 'Item',
+                content: SizedBox(),
+              ),
+          isFalse,
+        );
+
+        expect(
+          navigationItem.hashCode,
+          equals(
+            const NavigationItem(
+              title: 'Item title',
+              content: child,
+            ).hashCode,
+          ),
+        );
+      },
+    );
   });
 }

@@ -11,8 +11,8 @@ class PolynomialInterpolation extends Interpolation {
   /// Creates a [PolynomialInterpolation] instance from the given interpolation
   /// nodes.
   const PolynomialInterpolation({
-    required List<InterpolationNode> nodes,
-  }) : super(nodes);
+    required super.nodes,
+  });
 
   @override
   double compute(double x) {
@@ -31,7 +31,8 @@ class PolynomialInterpolation extends Interpolation {
     return result;
   }
 
-  /// Creates the interpolation polynomial of degree [maxDegree].
+  /// Computes the interpolation polynomial and returns it as an [Algebraic]
+  /// object.
   Algebraic buildPolynomial() {
     final length = nodes.length * nodes.length;
     final matrixSource = List<double>.generate(length, (_) => 0);
@@ -47,14 +48,17 @@ class PolynomialInterpolation extends Interpolation {
     final knownValues = nodes.map((node) => node.y).toList(growable: false);
 
     // Finding the coefficients by solving the system
-    final lu = LUSolver.flatMatrix(
-      equations: matrixSource,
-      constants: knownValues,
+    final lu = LUSolver(
+      matrix: RealMatrix.fromFlattenedData(
+        rows: nodes.length,
+        columns: nodes.length,
+        data: matrixSource,
+      ),
+      knownValues: knownValues,
     );
 
-    final coefficients = lu.solve().reversed.toList();
+    final coefficients = lu.solve().reversed.toList(growable: false);
 
-    // Buildng the polynomial
     return Algebraic.fromReal(coefficients);
   }
 }

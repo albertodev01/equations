@@ -18,8 +18,8 @@ class Riddler extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using
-  /// Riddler's method.
+  /// Instantiates a new object to find the root of an equation using Riddler's
+  /// method.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate `f(a)`
@@ -27,16 +27,12 @@ class Riddler extends NonLinear {
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Riddler({
-    required String function,
+    required super.function,
     required this.a,
     required this.b,
-    double tolerance = 1.0e-10,
-    int maxSteps = 15,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 15,
+  });
 
   @override
   bool operator ==(Object other) {

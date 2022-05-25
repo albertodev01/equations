@@ -8,30 +8,16 @@ class LUSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [equations] is the matrix containing the equations
-  ///   - [constants] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values
   LUSolver({
-    required List<List<double>> equations,
-    required List<double> constants,
-  }) : super(A: equations, b: constants, size: constants.length);
-
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
-  ///
-  ///   - [equations] is the flattened matrix containing the equations
-  ///   - [constants] is the vector with the known values
-  LUSolver.flatMatrix({
-    required List<double> equations,
-    required List<double> constants,
-  }) : super.flatMatrix(
-          A: equations,
-          b: constants,
-          size: constants.length,
-        );
+    required super.matrix,
+    required super.knownValues,
+  });
 
   @override
   List<double> solve() {
-    final lu = equations.luDecomposition();
+    final lu = matrix.luDecomposition();
 
     // Solving Ly = b
     final L = lu.first.toListOfList();
@@ -40,8 +26,7 @@ class LUSolver extends SystemSolver {
 
     // Solving Ux = y
     final U = lu[1].toListOfList();
-    final x = SystemSolver.backSubstitution(U, y);
 
-    return x;
+    return SystemSolver.backSubstitution(U, y);
   }
 }

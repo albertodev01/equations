@@ -7,17 +7,13 @@ import '../../double_approximation_matcher.dart';
 
 void main() {
   group('Testing the behaviors of the SylvesterMatrix class.', () {
-    final matrix = SylvesterMatrix.fromReal(
-      coefficients: [
-        1,
-        -7,
-        8,
-      ],
+    final matrix = SylvesterMatrix(
+      polynomial: Algebraic.fromReal([1, -7, 8]),
     );
 
     test('Making sure that values are properly constructed.', () {
       expect(
-        matrix.coefficients,
+        matrix.polynomial.coefficients,
         orderedEquals(
           const <Complex>[
             Complex.fromReal(1),
@@ -25,13 +21,6 @@ void main() {
             Complex.fromReal(8),
           ],
         ),
-      );
-    });
-
-    test('Making sure that the list of coefficients is unmodifiable.', () {
-      expect(
-        () => matrix.coefficients.first = const Complex.zero(),
-        throwsA(isA<UnsupportedError>()),
       );
     });
 
@@ -78,11 +67,11 @@ void main() {
 
     test('Making sure that SylvesterMatrix instances can be compared.', () {
       final matrix2 = SylvesterMatrix(
-        coefficients: const [
+        polynomial: Algebraic.from(const [
           Complex.fromReal(1),
           Complex.fromReal(-7),
           Complex.fromReal(8),
-        ],
+        ]),
       );
 
       expect(matrix == matrix2, isTrue);
@@ -93,21 +82,21 @@ void main() {
       expect(
         matrix ==
             SylvesterMatrix(
-              coefficients: const [
+              polynomial: Algebraic.from(const [
                 Complex.fromReal(1),
                 Complex.fromReal(-7),
                 Complex.fromReal(8),
-              ],
+              ]),
             ),
         isTrue,
       );
       expect(
         SylvesterMatrix(
-              coefficients: const [
+              polynomial: Algebraic.from(const [
                 Complex.fromReal(1),
                 Complex.fromReal(-7),
                 Complex.fromReal(8),
-              ],
+              ]),
             ) ==
             matrix,
         isTrue,
@@ -261,7 +250,7 @@ void main() {
 
       for (var i = 0; i < determinants.length; ++i) {
         final matrix = SylvesterMatrix(
-          coefficients: poly[i].coefficients,
+          polynomial: poly[i],
         );
 
         expect(

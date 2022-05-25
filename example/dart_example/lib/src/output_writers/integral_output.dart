@@ -13,17 +13,17 @@ class IntegralOutput implements Output {
     const equation = 'x^5-tan(1-x)';
 
     // Integral evaluation algorithms
-    final simpson = SimpsonRule(
+    final simpson = const SimpsonRule(
       function: equation,
       lowerBound: 0.5,
       upperBound: 2,
     ).integrate();
-    final midpoint = MidpointRule(
+    final midpoint = const MidpointRule(
       function: equation,
       lowerBound: 0.5,
       upperBound: 2,
     ).integrate();
-    final trapezoidal = TrapezoidalRule(
+    final trapezoidal = const TrapezoidalRule(
       function: equation,
       lowerBound: 0.5,
       upperBound: 2,

@@ -117,10 +117,12 @@ void main() {
 
       expect(
         fx,
-        equals(Linear(
-          a: const Complex(2, 3),
-          b: const Complex.i(),
-        )),
+        equals(
+          Linear(
+            a: const Complex(2, 3),
+            b: const Complex.i(),
+          ),
+        ),
       );
       expect(
         Linear(
@@ -147,10 +149,12 @@ void main() {
       );
       expect(
         fx.hashCode,
-        equals(Linear(
-          a: const Complex(2, 3),
-          b: const Complex.i(),
-        ).hashCode),
+        equals(
+          Linear(
+            a: const Complex(2, 3),
+            b: const Complex.i(),
+          ).hashCode,
+        ),
       );
     });
 

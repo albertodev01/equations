@@ -5,23 +5,25 @@ import 'package:equations/src/interpolation/utils/spline_functions/montone_cubic
 export 'spline_functions/linear_spline.dart';
 export 'spline_functions/montone_cubic_spline.dart';
 
-/// A **spline** is a special function defined piecewise by polynomials. In
-/// interpolating problems, spline interpolation is often preferred to polynomial
-/// interpolation because it yields similar results, even when using low-degree
-/// polynomials, while avoiding Runge's phenomenon for higher degrees.
+/// A **spline** is a special function defined piecewise by polynomials.
+///
+/// In interpolating problems, spline interpolation is often preferred to
+/// polynomial interpolation because it yields similar results, even when using
+/// low-degree polynomials, while avoiding Runge's phenomenon for higher
+/// degrees.
 abstract class SplineFunction {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
-  /// Creates an instance of [Interpolation] with the given nodes.
+  /// Creates an instance of [SplineFunction] with the given nodes.
   const SplineFunction({
     required this.nodes,
   });
 
   /// Creates an appropriate spline based on the properties of the given nodes.
   ///
-  /// If the control points are monotonic then the resulting spline will preserve
-  /// that. This method can either return:
+  /// If the control points are monotonic then the resulting spline will
+  /// preserve that. This method can either return:
   ///
   ///  - [MonotoneCubicSpline] if nodes are monotonic
   ///  - [LinearSpline] otherwise.
@@ -55,9 +57,9 @@ abstract class SplineFunction {
         return false;
       }
 
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
+      // Each successful comparison increases a counter by 1. If all elements
+      // are equal, then the counter will match the actual length of the
+      // coefficients list.
       var equalsCount = 0;
 
       for (var i = 0; i < nodes.length; ++i) {

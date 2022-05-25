@@ -1,11 +1,30 @@
 import 'package:equations_solver/main.dart' as app;
+import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  var needsOpenPage = true;
+
   Future<void> _testPolynomial(WidgetTester tester, int degree) async {
+    if (needsOpenPage) {
+      // Opening the nonlinear page
+      await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
+      await tester.pumpAndSettle();
+
+      needsOpenPage = false;
+    }
+
+    if (degree != 1) {
+      tester
+          .widget<InheritedNavigation>(find.byType(InheritedNavigation))
+          .navigationIndex
+          .value = degree - 1;
+
+      await tester.pumpAndSettle();
+    }
+
     final finder = find.byType(TextFormField);
     for (var i = 0; i <= degree; ++i) {
       await tester.enterText(finder.at(i), '${i + 1}');
@@ -41,11 +60,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the polynomial page
-        await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testPolynomial(tester, 1);
       },
     );
@@ -55,13 +69,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the polynomial page
-        await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Quadratic'));
-        await tester.pumpAndSettle();
-
         await _testPolynomial(tester, 2);
       },
     );
@@ -71,13 +78,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the polynomial page
-        await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Cubic'));
-        await tester.pumpAndSettle();
-
         await _testPolynomial(tester, 3);
       },
     );
@@ -87,13 +87,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the polynomial page
-        await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Quartic'));
-        await tester.pumpAndSettle();
-
         await _testPolynomial(tester, 4);
       },
     );

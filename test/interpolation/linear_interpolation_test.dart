@@ -13,7 +13,7 @@ void main() {
         ],
       );
 
-      expect(() => interpolation.nodes.clear(), throwsUnsupportedError);
+      expect(interpolation.nodes.clear, throwsUnsupportedError);
       expect(interpolation.nodes.length, equals(2));
       expect(
         interpolation.nodes,
@@ -34,17 +34,21 @@ void main() {
 
     test("Making sure that an exception is thrown when nodes aren't 2", () {
       expect(
-        () => LinearInterpolation(nodes: const [
-          InterpolationNode(x: 1, y: 3),
-        ]),
+        () => LinearInterpolation(
+          nodes: const [
+            InterpolationNode(x: 1, y: 3),
+          ],
+        ),
         throwsA(isA<AssertionError>()),
       );
       expect(
-        () => LinearInterpolation(nodes: const [
-          InterpolationNode(x: 1, y: 3),
-          InterpolationNode(x: 2, y: 4),
-          InterpolationNode(x: 5, y: 6),
-        ]),
+        () => LinearInterpolation(
+          nodes: const [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: 2, y: 4),
+            InterpolationNode(x: 5, y: 6),
+          ],
+        ),
         throwsA(isA<AssertionError>()),
       );
     });
@@ -119,12 +123,14 @@ void main() {
 
       expect(
         interpolation.hashCode,
-        equals(LinearInterpolation(
-          nodes: const [
-            InterpolationNode(x: 1, y: 3),
-            InterpolationNode(x: -2, y: 5),
-          ],
-        ).hashCode),
+        equals(
+          LinearInterpolation(
+            nodes: const [
+              InterpolationNode(x: 1, y: 3),
+              InterpolationNode(x: -2, y: 5),
+            ],
+          ).hashCode,
+        ),
       );
     });
   });

@@ -3,12 +3,13 @@ import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Contains a series of tiles, represented by a [CardContainer] widget, that
 /// route the user to the desired pages.
 class HomeContents extends StatelessWidget {
   /// Creates a [HomeContents] widget.
-  const HomeContents({Key? key}) : super(key: key);
+  const HomeContents({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,41 +22,31 @@ class HomeContents extends StatelessWidget {
             key: const Key('PolynomialLogo-Container'),
             title: context.l10n.polynomials,
             image: const PolynomialLogo(),
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteGenerator.polynomialPage,
-            ),
+            onTap: () => context.push(polynomialPagePath),
           ),
           CardContainer(
             key: const Key('NonlinearLogo-Container'),
             title: context.l10n.functions,
             image: const NonlinearLogo(),
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteGenerator.nonlinearPage,
-            ),
+            onTap: () => context.push(nonlinearPagePath),
           ),
           CardContainer(
             key: const Key('SystemsLogo-Container'),
             title: context.l10n.systems,
             image: const SystemsLogo(),
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteGenerator.systemPage,
-            ),
+            onTap: () => context.push(systemPagePath),
           ),
           CardContainer(
             key: const Key('IntegralsLogo-Container'),
             title: context.l10n.integrals,
             image: const IntegralLogo(),
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteGenerator.integralPage,
-            ),
+            onTap: () => context.push(integralPagePath),
           ),
           CardContainer(
             key: const Key('OtherLogo-Container'),
             title: context.l10n.other,
             image: const OtherLogo(),
-            onTap: () => Navigator.of(context).pushNamed(
-              RouteGenerator.otherPage,
-            ),
+            onTap: () => context.push(otherPagePath),
           ),
         ],
       ),

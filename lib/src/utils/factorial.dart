@@ -36,7 +36,8 @@ class Factorial {
 
   /// Efficiently computes the factorial of a number.
   ///
-  /// When [n] is greater than 20, values start to be approximated.
+  /// When [n] is greater than `20`, values start to be approximated.
+  /// When [n] is less than or equal to `20`, this method executes in O(1) time.
   int compute(int n) {
     // If it's in the cache, return it immediately.
     if (_factorialsCache.containsKey(n)) {

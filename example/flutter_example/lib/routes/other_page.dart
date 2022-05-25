@@ -1,19 +1,20 @@
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers_body.dart';
 import 'package:equations_solver/routes/other_page/matrix_body.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
+import 'package:equations_solver/routes/other_page/model/other_state.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This page contains a series of utilities to analyze matrices (determinant,
 /// eigenvalues, trace, decompositions...) and complex numbers.
 class OtherPage extends StatefulWidget {
   /// Creates a [OtherPage] widget.
-  const OtherPage({Key? key}) : super(key: key);
+  const OtherPage({super.key});
 
   @override
   State<OtherPage> createState() => _OtherPageState();
@@ -21,60 +22,66 @@ class OtherPage extends StatefulWidget {
 
 class _OtherPageState extends State<OtherPage> {
   /*
-   * Caching blocs here in the state since `EquationScaffold` is creating a
-   * tab view and thus `BlocProvider`s might be destroyed when the body is not
-   * visible anymore.
+   * These controllers are exposed to the subtree with [InheritedTextController]
+   * because the scaffold uses tabs and when swiping, the controllers get
+   * disposed.
    *
+   * In order to keep the controllers alive (and thus persist the text), we need
+   * to save theme here, which is ABOVE the tabs.
    */
+  final realController = TextEditingController();
+  final imaginaryController = TextEditingController();
 
-  // Bloc for working on matrices and complex numbers.
-  final matrixBloc = OtherBloc();
-  final complexBloc = OtherBloc();
-
-  // TextFields values blocs
-  final matrixTextfields = TextFieldValuesCubit();
-  final complexTextfields = TextFieldValuesCubit();
-
-  // Bloc for the matrix size
-  final matrixSize = NumberSwitcherCubit(
-    min: 1,
-    max: 5,
+  final matrixControllers = List<TextEditingController>.generate(
+    25,
+    (_) => TextEditingController(),
+    growable: false,
   );
 
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.matrices,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSize,
+      content: InheritedOther(
+        otherState: OtherState(),
+        child: InheritedTextControllers(
+          textControllers: matrixControllers,
+          child: InheritedNumberSwitcher(
+            numberSwitcherState: NumberSwitcherState(
+              min: 1,
+              max: 5,
+            ),
+            child: const MatrixOtherBody(),
           ),
-          BlocProvider<OtherBloc>.value(
-            value: matrixBloc,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: matrixTextfields,
-          ),
-        ],
-        child: const MatrixOtherBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.complex_numbers,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<OtherBloc>.value(
-            value: complexBloc,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: complexTextfields,
-          ),
-        ],
-        child: const ComplexNumberOtherBody(),
+      content: InheritedOther(
+        otherState: OtherState(),
+        child: InheritedTextControllers(
+          textControllers: [
+            realController,
+            imaginaryController,
+          ],
+          child: const ComplexNumberOtherBody(),
+        ),
       ),
     ),
   ];
+
+  @override
+  void dispose() {
+    for (final controller in matrixControllers) {
+      controller.dispose();
+    }
+
+    realController.dispose();
+    imaginaryController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 
-/// Concrete implementation of [Algebraic] which represents a constant value `a`.
-/// It can be real or complex.
+/// Concrete implementation of [Algebraic] which represents a constant value
+/// `a`. It can be real or complex.
 ///
 /// **Examples**:
 ///
@@ -19,7 +19,9 @@ class Constant extends Algebraic {
 
   /// The only coefficient of the polynomial is represented by a [double]
   /// (real) number [a].
-  Constant.realEquation({double a = 1}) : super.realEquation([a]);
+  Constant.realEquation({
+    double a = 1,
+  }) : super.realEquation([a]);
 
   @override
   num get degree => a.isZero ? double.negativeInfinity : 0;
@@ -38,5 +40,7 @@ class Constant extends Algebraic {
 
   /// Creates a **deep** copy of this object with the given fields replaced
   /// with the new values.
-  Constant copyWith({Complex? a}) => Constant(a: a ?? this.a);
+  Constant copyWith({Complex? a}) => Constant(
+        a: a ?? this.a,
+      );
 }

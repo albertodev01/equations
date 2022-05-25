@@ -1,14 +1,16 @@
-import 'package:equations_solver/blocs/dropdown/dropdown.dart';
-import 'package:equations_solver/blocs/number_switcher/number_switcher.dart';
-import 'package:equations_solver/blocs/system_solver/system_solver.dart';
-import 'package:equations_solver/blocs/textfield_values/textfield_values.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown_value.dart';
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
+import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
+import 'package:equations_solver/routes/models/system_text_controllers/inherited_system_controllers.dart';
+import 'package:equations_solver/routes/models/system_text_controllers/system_text_controllers.dart';
+import 'package:equations_solver/routes/system_page/model/inherited_system.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// This page contains a series of linear systems solvers. There are 3 tabs
 /// to solve various size of systems:
@@ -21,7 +23,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 /// No complex numbers are allowed.
 class SystemPage extends StatefulWidget {
   /// Creates a [SystemPage] widget.
-  const SystemPage({Key? key}) : super(key: key);
+  const SystemPage({super.key});
 
   @override
   _SystemPageState createState() => _SystemPageState();
@@ -29,109 +31,171 @@ class SystemPage extends StatefulWidget {
 
 class _SystemPageState extends State<SystemPage> {
   /*
-   * Caching blocs here in the state since `EquationScaffold` is creating a
-   * tab view and thus `BlocProvider`s might be destroyed when the body is not
-   * visible anymore.
+   * These controllers are exposed to the subtree with [InheritedTextController]
+   * because the scaffold uses tabs and when swiping, the controllers get
+   * disposed.
    *
+   * In order to keep the controllers alive (and thus persist the text), we need
+   * to save theme here, which is ABOVE the tabs.
    */
 
-  // System solving blocs
-  final rowReductionBloc = SystemBloc(SystemType.rowReduction);
-  final factorizationBloc = SystemBloc(SystemType.factorization);
-  final iterativeBloc = SystemBloc(SystemType.iterative);
-
-  // TextFields values blocs
-  final rowReductionTextFields = TextFieldValuesCubit();
-  final factorizationTextFields = TextFieldValuesCubit();
-  final iterativeTextFields = TextFieldValuesCubit();
-
-  // Bloc for the matrix size
-  final matrixSizeRowReduction = NumberSwitcherCubit(
-    min: 1,
-    max: 4,
-  );
-  final matrixSizeFactorization = NumberSwitcherCubit(
-    min: 1,
-    max: 4,
-  );
-  final matrixSizeIterative = NumberSwitcherCubit(
-    min: 1,
-    max: 4,
+  final matrixRowReductionControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+    growable: false,
   );
 
-  // Bloc for the algorithm selection
-  final dropdownFactorization = DropdownCubit(
-    initialValue: SystemDropdownItems.lu.asString(),
+  final vectorRowReductionControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
   );
-  final dropdownIterative = DropdownCubit(
-    initialValue: SystemDropdownItems.sor.asString(),
+
+  final matrixFactorizationControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+    growable: false,
   );
+
+  final vectorFactorizationControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final matrixIterativeControllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final vectorIterativeControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final jacobiControllers = List<TextEditingController>.generate(
+    4,
+    (_) => TextEditingController(),
+    growable: false,
+  );
+
+  final wSorController = TextEditingController();
 
   /// Caching navigation items since they'll never change.
   late final cachedItems = [
     NavigationItem(
       title: context.l10n.row_reduction,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemBloc>.value(
-            value: rowReductionBloc,
+      content: InheritedSystem(
+        systemState: SystemState(SystemType.rowReduction),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 4,
           ),
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSizeRowReduction,
-          ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: rowReductionTextFields,
-          ),
-          BlocProvider<DropdownCubit>(
-            create: (_) => DropdownCubit(
-              initialValue: '',
+          child: InheritedDropdownValue(
+            dropdownValue: ValueNotifier<String>(''),
+            child: InheritedSystemControllers(
+              systemTextControllers: SystemTextControllers(
+                matrixControllers: matrixRowReductionControllers,
+                vectorControllers: vectorRowReductionControllers,
+                jacobiControllers: jacobiControllers,
+                wSorController: wSorController,
+              ),
+              child: const SystemBody(),
             ),
           ),
-        ],
-        child: const SystemBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.factorization,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemBloc>.value(
-            value: factorizationBloc,
+      content: InheritedSystem(
+        systemState: SystemState(SystemType.factorization),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 4,
           ),
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSizeFactorization,
+          child: InheritedDropdownValue(
+            dropdownValue: ValueNotifier<String>(
+              SystemDropdownItems.lu.asString(),
+            ),
+            child: InheritedSystemControllers(
+              systemTextControllers: SystemTextControllers(
+                matrixControllers: matrixFactorizationControllers,
+                vectorControllers: vectorFactorizationControllers,
+                jacobiControllers: jacobiControllers,
+                wSorController: wSorController,
+              ),
+              child: const SystemBody(),
+            ),
           ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: factorizationTextFields,
-          ),
-          BlocProvider<DropdownCubit>.value(
-            value: dropdownFactorization,
-          ),
-        ],
-        child: const SystemBody(),
+        ),
       ),
     ),
     NavigationItem(
       title: context.l10n.iterative,
-      content: MultiBlocProvider(
-        providers: [
-          BlocProvider<SystemBloc>.value(
-            value: iterativeBloc,
+      content: InheritedSystem(
+        systemState: SystemState(SystemType.iterative),
+        child: InheritedNumberSwitcher(
+          numberSwitcherState: NumberSwitcherState(
+            min: 1,
+            max: 4,
           ),
-          BlocProvider<NumberSwitcherCubit>.value(
-            value: matrixSizeIterative,
+          child: InheritedDropdownValue(
+            dropdownValue: ValueNotifier<String>(
+              SystemDropdownItems.sor.asString(),
+            ),
+            child: InheritedSystemControllers(
+              systemTextControllers: SystemTextControllers(
+                matrixControllers: matrixIterativeControllers,
+                vectorControllers: vectorIterativeControllers,
+                jacobiControllers: jacobiControllers,
+                wSorController: wSorController,
+              ),
+              child: const SystemBody(),
+            ),
           ),
-          BlocProvider<TextFieldValuesCubit>.value(
-            value: iterativeTextFields,
-          ),
-          BlocProvider<DropdownCubit>.value(
-            value: dropdownIterative,
-          ),
-        ],
-        child: const SystemBody(),
+        ),
       ),
     ),
   ];
+
+  @override
+  void dispose() {
+    for (final controller in matrixRowReductionControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in matrixFactorizationControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in matrixIterativeControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorRowReductionControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorFactorizationControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in vectorIterativeControllers) {
+      controller.dispose();
+    }
+
+    for (final controller in jacobiControllers) {
+      controller.dispose();
+    }
+
+    wSorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

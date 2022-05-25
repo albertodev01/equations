@@ -1,7 +1,9 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/blocs/other_solvers/other_solvers.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
+import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/matrix_result_wrapper.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
+import 'package:equations_solver/routes/other_page/model/other_state.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
@@ -11,12 +13,12 @@ import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-/// This widget shows the matrix analysis results produced by an [OtherBloc].
+/// This widget shows the matrix analysis results produced by an [OtherState]
+/// class.
 class MatrixAnalyzerResults extends StatelessWidget {
   /// Creates a [MatrixAnalyzerResults] widget.
-  const MatrixAnalyzerResults({Key? key}) : super(key: key);
+  const MatrixAnalyzerResults({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class MatrixAnalyzerResults extends StatelessWidget {
         ),
 
         // Showing the analysis results
-        _SystemSolutions(),
+        _MatrixResults(),
 
         // Additional spacing
         SizedBox(
@@ -39,62 +41,36 @@ class MatrixAnalyzerResults extends StatelessWidget {
   }
 }
 
-/// Either prints nothing, a loading widget or the analysis results.
-class _SystemSolutions extends StatelessWidget {
-  /// Creates a [_SystemSolutions] widget.
-  const _SystemSolutions();
+/// Either prints nothing or the analysis results.
+class _MatrixResults extends StatelessWidget {
+  /// Creates a [_MatrixResults] widget.
+  const _MatrixResults();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OtherBloc, OtherState>(
-      builder: (context, state) {
-        if (state is AnalyzedMatrix) {
-          return _Results(
-            transpose: state.transpose,
-            cofactorMatrix: state.cofactorMatrix,
-            inverse: state.inverse,
-            trace: state.trace,
-            rank: state.rank,
-            characteristicPolynomial: state.characteristicPolynomial,
-            eigenvalues: state.eigenvalues,
-            determinant: state.determinant,
-            isSymmetric: state.isSymmetric,
-            isDiagonal: state.isDiagonal,
-            isIdentity: state.isIdentity,
-          );
-        }
+    return AnimatedBuilder(
+      animation: context.otherState,
+      builder: (context, _) {
+        final result = context.otherState.state.results;
 
-        if (state is OtherLoading) {
-          return const _LoadingWidget();
+        if (result != null && result is MatrixResultWrapper) {
+          return _Results(
+            transpose: result.transpose,
+            cofactorMatrix: result.cofactorMatrix,
+            inverse: result.inverse,
+            trace: result.trace,
+            rank: result.rank,
+            characteristicPolynomial: result.characteristicPolynomial,
+            eigenvalues: result.eigenvalues,
+            determinant: result.determinant,
+            isSymmetric: result.isSymmetric,
+            isDiagonal: result.isDiagonal,
+            isIdentity: result.isIdentity,
+          );
         }
 
         return const SizedBox.shrink();
       },
-    );
-  }
-}
-
-/// Displayed while the bloc is processing the matrix.
-class _LoadingWidget extends StatelessWidget {
-  /// Creates a [_LoadingWidget] widget.
-  const _LoadingWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Loading indicator
-        const Padding(
-          padding: EdgeInsets.only(
-            bottom: 20,
-          ),
-          child: CircularProgressIndicator(),
-        ),
-
-        // Waiting text
-        Text(context.l10n.wait_a_moment),
-      ],
     );
   }
 }
@@ -151,123 +127,123 @@ class _Results extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Numerical properties
+    final propertiesWidget = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Properties
+        SectionTitle(
+          pageTitle: context.l10n.properties,
+          icon: const Atoms(),
+        ),
+
+        RealResultCard(
+          value: rank * 1.0,
+          leading: '${context.l10n.rank}: ',
+        ),
+
+        RealResultCard(
+          value: trace,
+          leading: '${context.l10n.trace}: ',
+        ),
+
+        RealResultCard(
+          value: determinant,
+          leading: '${context.l10n.determinant}: ',
+        ),
+
+        BoolResultCard(
+          value: isDiagonal,
+          leading: '${context.l10n.diagonal}: ',
+        ),
+
+        BoolResultCard(
+          value: isSymmetric,
+          leading: '${context.l10n.symmetric}: ',
+        ),
+
+        BoolResultCard(
+          value: isIdentity,
+          leading: '${context.l10n.identity}: ',
+        ),
+      ],
+    );
+
+    // Eigenvalues and characteristic polynomial
+    final eigenvaluesWidget = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SectionTitle(
+          pageTitle: context.l10n.characteristicPolynomial,
+          icon: const PolynomialLogo(),
+        ),
+        PolynomialResultCard(
+          algebraic: characteristicPolynomial,
+        ),
+
+        // Spacing
+        const SizedBox(
+          height: 20,
+        ),
+
+        SectionTitle(
+          pageTitle: context.l10n.eigenvalues,
+          icon: const EquationSolution(),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: eigenvalues.length,
+          itemBuilder: (context, index) => ComplexResultCard(
+            value: eigenvalues[index],
+          ),
+        ),
+      ],
+    );
+
+    // Operations on the matrix
+    final matricesWidget = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SectionTitle(
+          pageTitle: context.l10n.matrices,
+          icon: const SquareMatrix(),
+        ),
+
+        // Spacing
+        const SizedBox(
+          height: 20,
+        ),
+
+        MatrixOutput(
+          matrix: transpose,
+          description: context.l10n.transpose,
+        ),
+
+        // Spacing
+        const SizedBox(
+          height: 20,
+        ),
+
+        MatrixOutput(
+          matrix: inverse,
+          description: context.l10n.inverse,
+        ),
+
+        // Spacing
+        const SizedBox(
+          height: 20,
+        ),
+
+        MatrixOutput(
+          matrix: cofactorMatrix,
+          description: context.l10n.cofactor,
+        ),
+      ],
+    );
+
     return LayoutBuilder(
       builder: (context, dimensions) {
-        // Numerical properties
-        final propertiesWidget = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Properties
-            SectionTitle(
-              pageTitle: context.l10n.properties,
-              icon: const Atoms(),
-            ),
-
-            RealResultCard(
-              value: rank * 1.0,
-              leading: '${context.l10n.rank}: ',
-            ),
-
-            RealResultCard(
-              value: trace,
-              leading: '${context.l10n.trace}: ',
-            ),
-
-            RealResultCard(
-              value: determinant,
-              leading: '${context.l10n.determinant}: ',
-            ),
-
-            BoolResultCard(
-              value: isDiagonal,
-              leading: '${context.l10n.diagonal}: ',
-            ),
-
-            BoolResultCard(
-              value: isSymmetric,
-              leading: '${context.l10n.symmetric}: ',
-            ),
-
-            BoolResultCard(
-              value: isIdentity,
-              leading: '${context.l10n.identity}: ',
-            ),
-          ],
-        );
-
-        // Eigenvalues and characteristic polynomial
-        final eigenvaluesWidget = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SectionTitle(
-              pageTitle: context.l10n.characteristicPolynomial,
-              icon: const PolynomialLogo(),
-            ),
-            PolynomialResultCard(
-              algebraic: characteristicPolynomial,
-            ),
-
-            // Spacing
-            const SizedBox(
-              height: 20,
-            ),
-
-            SectionTitle(
-              pageTitle: context.l10n.eigenvalues,
-              icon: const EquationSolution(),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: eigenvalues.length,
-              itemBuilder: (context, index) => ComplexResultCard(
-                value: eigenvalues[index],
-              ),
-            ),
-          ],
-        );
-
-        // Operations on the matrix
-        final matricesWidget = Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SectionTitle(
-              pageTitle: context.l10n.matrices,
-              icon: const SquareMatrix(),
-            ),
-
-            // Spacing
-            const SizedBox(
-              height: 20,
-            ),
-
-            MatrixOutput(
-              matrix: transpose,
-              description: context.l10n.transpose,
-            ),
-
-            // Spacing
-            const SizedBox(
-              height: 20,
-            ),
-
-            MatrixOutput(
-              matrix: inverse,
-              description: context.l10n.inverse,
-            ),
-
-            // Spacing
-            const SizedBox(
-              height: 20,
-            ),
-
-            MatrixOutput(
-              matrix: cofactorMatrix,
-              description: context.l10n.cofactor,
-            ),
-          ],
-        );
-
         // For mobile devices - all in a column
         if (dimensions.maxWidth <= matricesPageDoubleColumn) {
           return Column(
@@ -295,7 +271,7 @@ class _Results extends StatelessWidget {
           );
         }
 
-        // For wider screens - splitting numerical results in two columns
+        // For wider screens - splitting numerical results in multiple columns
         return Wrap(
           spacing: 80,
           runSpacing: 40,

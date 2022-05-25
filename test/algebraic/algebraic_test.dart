@@ -14,9 +14,7 @@ void main() {
           'the length of the coefficients list is 1',
           () {
             final equation = Algebraic.from(
-              [
-                const Complex(1, 0),
-              ],
+              [const Complex(1, 0)],
             );
             expect(equation, isA<Constant>());
           },
@@ -117,9 +115,7 @@ void main() {
           "Making sure that a 'Constant' object is properly constructed when "
           'the length of the coefficients list is 1',
           () {
-            final equation = Algebraic.fromReal(
-              [1],
-            );
+            final equation = Algebraic.fromReal([1]);
             expect(equation, isA<Constant>());
           },
         );
@@ -449,15 +445,19 @@ void main() {
 
           expect(
             div.quotient,
-            equals(Algebraic.fromReal(
-              const [1, -3],
-            )),
+            equals(
+              Algebraic.fromReal(
+                const [1, -3],
+              ),
+            ),
           );
           expect(
             div.remainder,
-            equals(Algebraic.from(
-              const [Complex(4, -3)],
-            )),
+            equals(
+              Algebraic.from(
+                const [Complex(4, -3)],
+              ),
+            ),
           );
           expect(div.quotient, isA<Linear>());
           expect(div.remainder, isA<Constant>());
@@ -535,15 +535,19 @@ void main() {
           expect(result, isA<AlgebraicDivision>());
           expect(
             result.quotient,
-            equals(Algebraic.fromReal(
-              [1, -5],
-            )),
+            equals(
+              Algebraic.fromReal(
+                [1, -5],
+              ),
+            ),
           );
           expect(
             result.remainder,
-            equals(Algebraic.fromReal(
-              [12],
-            )),
+            equals(
+              Algebraic.fromReal(
+                [12],
+              ),
+            ),
           );
           expect(result.quotient, isA<Linear>());
           expect(result.remainder, isA<Constant>());

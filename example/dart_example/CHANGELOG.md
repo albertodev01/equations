@@ -1,3 +1,8 @@
-## 1.0.0
+## [1.0.1]
 
-- Initial release of the Dart CLI example app!
+ - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
+ - Dependencies versions update
+
+## [1.0.0]
+
+ - Initial release of the Dart CLI example app!

@@ -12,7 +12,8 @@ import 'package:equations/equations.dart';
 ///  - [SimpsonRule]
 ///  - [TrapezoidalRule]
 ///
-/// The function must be continuous in the [`lowerBound`, `upperBound`] interval.
+/// The function must be continuous in the [`lowerBound`, `upperBound`]
+/// interval.
 abstract class NumericalIntegration {
   /// Internal functions evaluator.
   static const _evaluator = ExpressionParser();
@@ -76,9 +77,7 @@ abstract class NumericalIntegration {
   }
 
   /// Evaluates the given [function] on the [x] point.
-  double evaluateFunction(double x) {
-    return _evaluator.evaluateOn(function, x);
-  }
+  double evaluateFunction(double x) => _evaluator.evaluateOn(function, x);
 
   /// Calculates the numerical value of the [function] **definite** integral
   /// between [lowerBound] and [upperBound].

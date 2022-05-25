@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/single_value_decomposition.dart';
 
@@ -9,6 +10,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///
 ///  - [QRDecomposition]
 ///  - [SingleValueDecomposition]
+///  - [EigenDecomposition]
 abstract class Decomposition<K, T extends Matrix<K>> {
   /// The matrix to be decomposed.
   final T matrix;

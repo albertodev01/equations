@@ -20,21 +20,21 @@ class EquationInput extends StatelessWidget {
   /// Determines whether the validator function of the input should allow for
   /// real values or not.
   ///
-  /// In other words, when `onlyRealValues = true` then equations aren't accepted
-  /// but numbers are.
+  /// In other words, when `onlyRealValues = true` then equations aren't
+  /// accepted but numbers are.
   ///
   /// This is `false` by default.
   final bool onlyRealValues;
 
   /// Creates a [EquationInput] instance.
   const EquationInput({
-    Key? key,
+    super.key,
     required this.controller,
     required this.placeholderText,
     this.baseWidth = 300,
     this.maxLength = 100,
     this.onlyRealValues = false,
-  }) : super(key: key);
+  });
 
   String? _validator(String? value) {
     if (value != null) {
@@ -50,29 +50,22 @@ class EquationInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        var inputWidth = baseWidth;
-
-        // The '+100' adds some extra spacing to not be too much close to the
-        // sides of the bounds
-        if (dimensions.maxWidth <= baseWidth + 100) {
-          inputWidth = dimensions.maxWidth / 1.5;
-        }
-
-        return SizedBox(
-          width: inputWidth,
-          child: TextFormField(
-            controller: controller,
-            maxLength: maxLength,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              hintText: placeholderText,
-            ),
-            validator: _validator,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
+      child: SizedBox(
+        width: baseWidth,
+        child: TextFormField(
+          controller: controller,
+          maxLength: maxLength,
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            hintText: placeholderText,
           ),
-        );
-      },
+          validator: _validator,
+        ),
+      ),
     );
   }
 }

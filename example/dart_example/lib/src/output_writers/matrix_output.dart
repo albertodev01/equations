@@ -29,24 +29,23 @@ class MatrixOutput implements Output {
     final svd = matrix.singleValueDecomposition();
 
     // Solvers
-    final arrayMatrix = matrix.toListOfList();
     final gaussianElimination = GaussianElimination(
-      equations: arrayMatrix,
-      constants: knownValues,
+      matrix: matrix,
+      knownValues: knownValues,
     );
 
     final gaussSolver = gaussianElimination.solve();
     final luSolver = LUSolver(
-      equations: arrayMatrix,
-      constants: knownValues,
+      matrix: matrix,
+      knownValues: knownValues,
     ).solve();
     final choleskySolver = CholeskySolver(
-      equations: arrayMatrix,
-      constants: knownValues,
+      matrix: matrix,
+      knownValues: knownValues,
     ).solve();
     final sorSolver = SORSolver(
-      equations: arrayMatrix,
-      constants: knownValues,
+      matrix: matrix,
+      knownValues: knownValues,
       w: 1.25,
     ).solve();
 

@@ -172,7 +172,6 @@ final List<double> guesses = solutions.guesses;
 
 Note that certain algorithms don't always guarantee to converge to the correct root so read the documentation carefully before choosing the method.
 
-
 # Systems of equations
 
 Use one of the following classes to solve systems of linear equations. Note that only real coefficients are allowed (so `double` is ok but `Complex` isn't) and you must define `N` equations in `N` variables (so a **square** matrix is needed). This package supports the following algorithms:
@@ -369,3 +368,20 @@ print('\n${polynomial.buildPolynomial()}');
 ```
 
 This is another example with a different interpolation strategy. The `buildPolynomial()` method returns the interpolation polynomial (as an `Algebraic` type) internally used to interpolate `x`.
+
+# Expressions parsing
+
+You can use the `ExpressionParser` type to either parse numerical expressions or evaluate mathematical functions with the `x` variable:
+
+```dart
+const parser = ExpressionParser();
+
+print(parser.evaluate('5*3-4')); // 11
+print(parser.evaluate('sqrt(49)+10')); // 17
+print(parser.evaluate('pi')); // 3.1415926535
+
+print(parser.evaluateOn('6*x + 4', 3)); // 22
+print(parser.evaluateOn('sqrt(x) - 3', 81)); // 6
+```
+
+This type is internally used by the library to evaluate nonlinear functions.

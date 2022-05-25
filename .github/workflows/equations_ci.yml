@@ -14,7 +14,6 @@ jobs:
   verify_equation_package:
     name: Equations package - CI action
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false && github.event.pull_request.merged == false
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,7 +28,7 @@ jobs:
         run: flutter format --set-exit-if-changed lib test
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings && dart run dart_code_metrics:metrics analyze lib test
+        run: flutter analyze --fatal-infos --fatal-warnings lib test && dart run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
         run: flutter test --coverage
@@ -65,16 +64,10 @@ jobs:
         run: flutter format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings && flutter pub run dart_code_metrics:metrics analyze lib test
+        run: flutter analyze --fatal-infos --fatal-warnings lib test && flutter pub run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
-        run: flutter test --coverage
-
-      - name: Making sure that code coverage is at least 98
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
-        with:
-          path: example/flutter_example/coverage/lcov.info
-          min_coverage: 98
+        run: flutter test
 
   verify_equation_dart_example:
     name: Dart example
@@ -97,7 +90,7 @@ jobs:
         run: flutter format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings && flutter pub run dart_code_metrics:metrics analyze lib test
+        run: flutter analyze --fatal-infos --fatal-warnings lib test && flutter pub run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit and widget tests
         run: flutter test

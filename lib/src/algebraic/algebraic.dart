@@ -1,7 +1,15 @@
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:equations/equations.dart';
+
+/// The message thrown by the constructor to indicate that the polynomial cannot
+/// correctly be created.
+const _exceptionError = '''
+To solve a polynomial equation (unless it's a constant), the coefficient with the highest degree cannot be zero. As such, make sure to pass a list that either:
+
+ 1. Contains a single value (like [5] or [0]) to represent a polynomial whose degree is zero.
+ 2. Contains one or more values AND the first parameter is not zero (like [1, 0] or [1, -3, 2, 8]).
+ ''';
 
 /// Abstract class representing an _algebraic equation_, also know as
 /// _polynomial equation_, which has a single variable with a maximum degree.
@@ -15,14 +23,14 @@ import 'package:equations/equations.dart';
 /// This class stores the list of coefficients starting from the one with the
 /// **highest** degree.
 abstract class Algebraic {
-  /// An unmodifiable list with the coefficients of the polynomial.
-  final UnmodifiableListView<Complex> coefficients;
+  /// An list with the coefficients of the polynomial.
+  final List<Complex> coefficients;
 
   /// Creates a new algebraic equation by taking the coefficients of the
   /// polynomial starting from the one with the highest degree.
   ///
-  /// For example, the equation `x^3 + 5x^2 + 3x - 2 = 0` would require a subclass
-  /// of `Algebraic` to call the following...
+  /// For example, the equation `x^3 + 5x^2 + 3x - 2 = 0` would require a
+  /// subclass of `Algebraic` to call the following...
   ///
   /// ```dart
   /// super([
@@ -36,22 +44,20 @@ abstract class Algebraic {
   /// ... because the coefficient with the highest degree goes first.
   ///
   /// If the coefficients of the polynomial are all real numbers, consider using
-  /// the [Algebraic.realEquation(coefficients)] constructor which is more
-  /// convenient.
-  Algebraic(List<Complex> coefficients)
-      : coefficients = UnmodifiableListView(List<Complex>.from(coefficients)) {
+  /// the [Algebraic.realEquation] constructor which is more convenient.
+  Algebraic(this.coefficients) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
-    if (!isValid) {
-      throw const AlgebraicException('The given equation is not valid.');
+    if (!_isValid) {
+      throw const AlgebraicException(_exceptionError);
     }
   }
 
   /// Creates a new algebraic equation by taking the coefficients of the
   /// polynomial starting from the one with the highest degree.
   ///
-  /// For example, the equation `x^3 + 5x^2 + 3x - 2 = 0` would require a subclass
-  /// of `Algebraic` to call the following...
+  /// For example, the equation `x^3 + 5x^2 + 3x - 2 = 0` would require a
+  /// subclass of `Algebraic` to call the following...
   ///
   /// ```dart
   /// super.realEquation(1, 5, 3, 2);
@@ -60,20 +66,20 @@ abstract class Algebraic {
   /// ... because the coefficient with the highest degree goes first.
   ///
   /// Use this constructor when the coefficients are all real numbers. If there
-  /// were complex numbers as well, use the [Algebraic(coefficients)] constructor.
+  /// were complex numbers as well, use the [Algebraic] default constructor
+  /// instead.
   Algebraic.realEquation(List<double> coefficients)
-      : coefficients = UnmodifiableListView(
-          coefficients.map((c) => Complex.fromReal(c)),
-        ) {
+      : coefficients =
+            coefficients.map(Complex.fromReal).toList(growable: false) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
-    if (!isValid) {
-      throw const AlgebraicException('The given equation is not valid.');
+    if (!_isValid) {
+      throw const AlgebraicException(_exceptionError);
     }
   }
 
-  /// Returns an [Algebraic] instance according with the number of [coefficients]
-  /// passed. In particular:
+  /// Returns an [Algebraic] instance according with the number of
+  /// [coefficients] passed. In particular:
   ///
   ///  - if length is 1, a [Constant] object is returned;
   ///  - if length is 2, a [Linear] object is returned;
@@ -140,8 +146,8 @@ abstract class Algebraic {
     }
   }
 
-  /// Returns an [Algebraic] instance according with the number of [coefficients]
-  /// passed. In particular:
+  /// Returns an [Algebraic] instance according with the number of
+  /// [coefficients] passed. In particular:
   ///
   ///  - if length is 1, a [Constant] object is returned;
   ///  - if length is 2, a [Linear] object is returned;
@@ -164,8 +170,9 @@ abstract class Algebraic {
   /// Use this method when the coefficients are all real numbers. If there
   /// were complex numbers as well, use the [Algebraic.from(coefficients)]
   /// instead.
-  factory Algebraic.fromReal(List<double> coefficients) =>
-      Algebraic.from(coefficients.map((c) => Complex.fromReal(c)).toList());
+  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
+        coefficients.map(Complex.fromReal).toList(growable: false),
+      );
 
   @override
   bool operator ==(Object other) {
@@ -179,9 +186,9 @@ abstract class Algebraic {
         return false;
       }
 
-      // Each successful comparison increases a counter by 1. If all elements are
-      // equal, then the counter will match the actual length of the coefficients
-      // list.
+      // Each successful comparison increases a counter by 1. If all elements
+      // are equal, then the counter will match the actual length of the
+      // coefficients list.
       var equalsCount = 0;
 
       for (var i = 0; i < coefficients.length; ++i) {
@@ -282,6 +289,14 @@ abstract class Algebraic {
     }
   }
 
+  /// A polynomial equation is **valid** if the coefficient associated to the
+  /// variable of highest degree is different from zero. In other words, the
+  /// polynomial is valid if `a` is different from zero.
+  ///
+  /// A [Constant] is an exception because a constant value has no variables
+  /// with a degree.
+  bool get _isValid => this is Constant || !coefficients.first.isZero;
+
   /// Evaluates the polynomial on the given complex number [x].
   Complex evaluateOn(Complex x) {
     var value = const Complex.zero();
@@ -326,14 +341,6 @@ abstract class Algebraic {
   /// If at least one coefficient is complex, then the polynomial is complex.
   bool get isRealEquation => coefficients.every((c) => c.imaginary == 0);
 
-  /// A polynomial equation is **valid** if the coefficient associated to the
-  /// variable of highest degree is different from zero. In other words, the
-  /// polynomial is valid if `a` is different from zero.
-  ///
-  /// A [Constant] is an exception because a constant value has no variables with
-  /// a degree.
-  bool get isValid => this is Constant || !coefficients.first.isZero;
-
   /// Returns the coefficient of the polynomial at the given [index] position.
   /// For example:
   ///
@@ -368,7 +375,8 @@ abstract class Algebraic {
   /// final degreeTwo = quadratic.coefficient(2) // Complex(2, 0)
   /// ```
   ///
-  /// This method returns `null` if no coefficient of the given [degree] is found.
+  /// This method returns `null` if no coefficient of the given [degree] is
+  /// found.
   Complex? coefficient(int degree) {
     // The coefficient of the given degree doesn't exist
     if ((degree < 0) || (degree > coefficients.length - 1)) {
@@ -380,8 +388,10 @@ abstract class Algebraic {
   }
 
   /// The addition of two polynomials is performed by adding the corresponding
-  /// coefficients. The degrees of the two polynomials don't need to be the same
-  /// so you can sum a [Cubic] with a [Linear] for example.
+  /// coefficients.
+  ///
+  /// The degrees of the two polynomials don't need to be the same. For example,
+  /// you could sum a [Cubic] with a [Linear].
   Algebraic operator +(Algebraic other) {
     final maxDegree = max<int>(coefficients.length, other.coefficients.length);
     final newCoefficients = <Complex>[];
@@ -404,8 +414,10 @@ abstract class Algebraic {
   }
 
   /// The difference of two polynomials is performed by subtracting the
-  /// corresponding coefficients. The degrees of the two polynomials don't need
-  /// to be the same so you can subtract a [Quadratic] and a [Quartic] for example.
+  /// corresponding coefficients.
+  ///
+  /// The degrees of the two polynomials don't need to be the same. For example,
+  /// you could subtract a [Quadratic] and a [Quartic].
   Algebraic operator -(Algebraic other) {
     final maxDegree = max<int>(coefficients.length, other.coefficients.length);
     final newCoefficients = <Complex>[];
@@ -427,10 +439,11 @@ abstract class Algebraic {
     return Algebraic.from(newCoefficients);
   }
 
-  /// The product of two polynomials is performed by multiplying the corresponding
-  /// coefficients of the polynomials. The degrees of the two polynomials don't
-  /// need to be the same so you can multiply a [Constant] with a [DurandKerner] for
-  /// example.
+  /// The product of two polynomials is performed by multiplying the
+  /// corresponding coefficients of the polynomials.
+  ///
+  /// The degrees of the two polynomials don't need to be the same. For example,
+  /// you could multiply a [Constant] with a [DurandKerner].
   Algebraic operator *(Algebraic other) {
     // Generating the new list of coefficients
     final newLength = coefficients.length + other.coefficients.length - 1;

@@ -16,29 +16,27 @@ class NewtonInterpolation extends Interpolation {
   /// Creates a [NewtonInterpolation] instance from the given interpolation
   /// nodes.
   const NewtonInterpolation({
-    required List<InterpolationNode> nodes,
+    required super.nodes,
     this.forwardDifference = true,
-  }) : super(nodes);
+  });
 
   @override
   double compute(double x) {
-    late final RealMatrix matrix;
-
     if (forwardDifference) {
-      matrix = forwardDifferenceTable();
+      final matrix = forwardDifferenceTable();
 
       return _forwardEvaluation(matrix, x);
-    } else {
-      matrix = backwardDifferenceTable();
-
-      return _backwardEvaluation(matrix, x);
     }
+
+    final matrix = backwardDifferenceTable();
+
+    return _backwardEvaluation(matrix, x);
   }
 
   /// Computes the u of the formula, where `u = (x – a)/h`.
   double _computeU(double u, int n) {
     var temp = u;
-    for (int i = 1; i < n; i++) {
+    for (var i = 1; i < n; i++) {
       temp = temp * (u - i);
     }
 
@@ -91,7 +89,7 @@ class NewtonInterpolation extends Interpolation {
 
     // Forward difference table
     for (var i = 1; i < size; i++) {
-      for (int j = 0; j < size - i; j++) {
+      for (var j = 0; j < size - i; j++) {
         table[j][i] = table[j + 1][i - 1] - table[j][i - 1];
       }
     }
@@ -116,7 +114,7 @@ class NewtonInterpolation extends Interpolation {
 
     // Forward difference table
     for (var i = 1; i < size; i++) {
-      for (int j = size - 1; j >= i; j--) {
+      for (var j = size - 1; j >= i; j--) {
         table[j][i] = table[j][i - 1] - table[j - 1][i - 1];
       }
     }

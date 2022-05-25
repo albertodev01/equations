@@ -12,10 +12,10 @@ class BoolResultCard extends StatelessWidget {
 
   /// Creates a [BoolResultCard] widget.
   const BoolResultCard({
-    Key? key,
+    super.key,
     required this.value,
     required this.leading,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

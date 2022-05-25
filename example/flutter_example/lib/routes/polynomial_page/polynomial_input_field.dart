@@ -14,10 +14,10 @@ class PolynomialInputField extends StatelessWidget {
 
   /// Creates a [PolynomialInputField] widget.
   const PolynomialInputField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.placeholder,
-  }) : super(key: key);
+  });
 
   String? _validationLogic(String? value, BuildContext context) {
     if (value != null) {

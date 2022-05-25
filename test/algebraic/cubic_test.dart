@@ -125,12 +125,14 @@ void main() {
 
       expect(
         fx,
-        equals(Cubic(
-          a: const Complex(2, -3),
-          b: Complex.fromImaginaryFraction(Fraction(6, 5)),
-          c: const Complex(5, -1),
-          d: const Complex(-9, -6),
-        )),
+        equals(
+          Cubic(
+            a: const Complex(2, -3),
+            b: Complex.fromImaginaryFraction(Fraction(6, 5)),
+            c: const Complex(5, -1),
+            d: const Complex(-9, -6),
+          ),
+        ),
       );
       expect(
         Cubic(

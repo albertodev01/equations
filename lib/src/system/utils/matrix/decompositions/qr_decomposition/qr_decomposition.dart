@@ -8,12 +8,11 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 ///   - an upper triangular matrix R
 abstract class QRDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates an instance of [QRDecomposition] to QR decompose the given [matrix].
+  /// Creates an instance of [QRDecomposition] to QR decompose the given
+  /// [matrix].
   const QRDecomposition({
-    required T matrix,
-  }) : super(
-          matrix: matrix,
-        );
+    required super.matrix,
+  });
 
   /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
   /// particular, this method returns the `Q` and `R` matrices of the

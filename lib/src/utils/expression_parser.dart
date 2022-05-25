@@ -3,7 +3,8 @@ import 'dart:math' as math;
 import 'package:equations/equations.dart';
 import 'package:petitparser/petitparser.dart';
 
-/// This function alias is used to create a "callable" parser in [ExpressionParser].
+/// This function alias is used to create a "callable" parser in
+/// [ExpressionParser].
 typedef _Evaluator = num Function(num value);
 
 /// Parses mathematical expressions with real numbers and the `x` variable (if
@@ -50,118 +51,129 @@ class ExpressionParser {
 
   /// A "cached" instance of a parser to be used to evaluate expressions on a
   /// given point.
-  static late final Parser _parser = () {
-    final builder = ExpressionBuilder();
+  static final Parser<_Evaluator> _parser = () {
+    final builder = ExpressionBuilder<_Evaluator>();
 
-    // This primitive is fundamental as it recognizes real numbers from the input
-    // and parses them using 'parse'.
+    // This primitive is fundamental as it recognizes real numbers from the
+    // input and parses them using 'parse'.
     builder.group()
-      ..primitive(digit()
-          .plus()
-          .seq(char('.').seq(digit().plus()).optional())
-          .flatten()
-          .trim()
-          .map((a) {
-        final number = num.parse(a);
+      ..primitive(
+        digit()
+            .plus()
+            .seq(char('.').seq(digit().plus()).optional())
+            .flatten()
+            .trim()
+            .map((a) {
+          final number = num.parse(a);
 
-        return (num value) => number;
-      }))
+          return (value) => number;
+        }),
+      )
 
       // Recognze the 'x' variable
-      ..primitive(char('x').trim().map((_) => (num value) => value))
+      ..primitive(char('x').trim().map((_) => (value) => value))
 
       // Constants
-      ..primitive(char('e').trim().map((_) => (num value) => math.e))
-      ..primitive(string('pi').trim().map((_) => (num value) => math.pi))
-      ..primitive(string('sqrt2').trim().map((_) => (num value) => math.sqrt2))
-      ..primitive(string('sqrt3').trim().map((_) => (num value) => _sqrt3))
-      ..primitive(string('G').trim().map((_) => (num value) => _g))
+      ..primitive(char('e').trim().map((_) => (value) => math.e))
+      ..primitive(string('pi').trim().map((_) => (value) => math.pi))
+      ..primitive(string('sqrt2').trim().map((_) => (value) => math.sqrt2))
+      ..primitive(string('sqrt3').trim().map((_) => (value) => _sqrt3))
+      ..primitive(string('G').trim().map((_) => (value) => _g))
 
       // Enable the parentheses
-      ..wrapper(char('(').trim(), char(')').trim(), (_, _Evaluator a, __) => a)
+      ..wrapper(char('(').trim(), char(')').trim(), (_, a, __) => a)
 
       // Adding various mathematical operators
       ..wrapper(
         string('sqrt(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.sqrt(a(value)),
+        (_, a, __) => (value) => math.sqrt(a(value)),
       )
       ..wrapper(
         string('abs(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => a(value).abs(),
+        (_, a, __) => (value) => a(value).abs(),
       )
       ..wrapper(
         string('sin(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.sin(a(value)),
+        (_, a, __) => (value) => math.sin(a(value)),
       )
       ..wrapper(
         string('cos(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.cos(a(value)),
+        (_, a, __) => (value) => math.cos(a(value)),
       )
       ..wrapper(
         string('tan(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.tan(a(value)),
+        (_, a, __) => (value) => math.tan(a(value)),
       )
       ..wrapper(
         string('log(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.log(a(value)),
+        (_, a, __) => (value) => math.log(a(value)),
       )
       ..wrapper(
         string('acos(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.acos(a(value)),
+        (_, a, __) => (value) => math.acos(a(value)),
       )
       ..wrapper(
         string('asin(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.asin(a(value)),
+        (_, a, __) => (value) => math.asin(a(value)),
       )
       ..wrapper(
         string('atan(').trim(),
         char(')').trim(),
-        (_, _Evaluator a, __) => (num value) => math.atan(a(value)),
+        (_, a, __) => (value) => math.atan(a(value)),
+      )
+      ..wrapper(
+        string('csc(').trim(),
+        char(')').trim(),
+        (_, a, __) => (value) => 1 / math.sin(a(value)),
+      )
+      ..wrapper(
+        string('sec(').trim(),
+        char(')').trim(),
+        (_, a, __) => (value) => 1 / math.cos(a(value)),
       );
 
     // Defining operations among operators.
     builder.group().prefix(
           char('-').trim(),
-          (_, _Evaluator a) => (num value) => -a(value),
+          (_, a) => (value) => -a(value),
         );
     builder.group().right(
           char('^').trim(),
-          (_Evaluator a, _, _Evaluator b) =>
-              (num value) => math.pow(a(value), b(value)),
+          (a, _, b) => (value) => math.pow(a(value), b(value)),
         );
     builder.group()
       ..left(
         char('*').trim(),
-        (_Evaluator a, _, _Evaluator b) => (num value) => a(value) * b(value),
+        (a, _, b) => (value) => a(value) * b(value),
       )
       ..left(
         char('/').trim(),
-        (_Evaluator a, _, _Evaluator b) => (num value) => a(value) / b(value),
+        (a, _, b) => (value) => a(value) / b(value),
       );
     builder.group()
       ..left(
         char('+').trim(),
-        (_Evaluator a, _, _Evaluator b) => (num value) => a(value) + b(value),
+        (a, _, b) => (value) => a(value) + b(value),
       )
       ..left(
         char('-').trim(),
-        (_Evaluator a, _, _Evaluator b) => (num value) => a(value) - b(value),
+        (a, _, b) => (value) => a(value) - b(value),
       );
 
     // Build the parser
     return builder.build().end();
   }();
 
-  /// Builds a new expression parser accepting strings with a single `x` variable.
-  /// For example, valid expressions are:
+  /// Builds a new expression parser accepting strings with a single `x`
+  /// variable. For example, valid expressions are:
   ///
   ///   - `2 + x`
   ///   - `3 * x - 6`
@@ -170,21 +182,23 @@ class ExpressionParser {
   /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**.
   const ExpressionParser();
 
-  /// Evaluates the mathematical [expression] and returns the result. This method
-  /// should be used to evaluate those expression that don't contain the `x`
-  /// variable. For example:
+  /// Evaluates the mathematical [expression] and returns the result. This
+  /// method has to be used to evaluate those expression that don't contain the
+  /// `x` variable. For example:
   ///
   ///   - `"6 + 10 * 3 / 7"` // Good
   ///   - `"6 + 10 * x / 7"` // Bad
   ///
-  /// If you want to evaluate a function with the `x` variable, use [evaluateOn].
+  /// If you want to evaluate a function with the `x` variable, use
+  /// [evaluateOn].
   double evaluate(String expression) {
     if (expression.contains('x') || (!_parser.accept(expression))) {
-      throw const ExpressionParserException('The given expression cannot be '
-          'parsed! Make sure that all operators are supported. Make also sure '
-          "that the product of two values explicitly has the '*' symbol.\n\n "
-          "There cannot be the 'x' variable in the expression because this "
-          'method only evaluates numbers.');
+      throw const ExpressionParserException(
+        'The given expression cannot be parsed! Make sure that all operators '
+        'are supported. Make also sure that the product of two values '
+        "explicitly has the '*' symbol.\n\nThere cannot be the 'x' variable in "
+        'the expression because this method only evaluates numbers.',
+      );
     }
 
     return evaluateOn(expression, 0);
@@ -197,24 +211,16 @@ class ExpressionParser {
   /// consider using [evaluate].
   double evaluateOn(String expression, double evaluationPoint) {
     if (!_parser.accept(expression)) {
-      throw const ExpressionParserException('The given expression cannot be '
-          'parsed! Make sure that all operators are supported. Make also sure '
-          "that the product of two values explicitly has the '*' symbol.");
+      throw const ExpressionParserException(
+        'The given expression cannot be parsed! Make sure that all operators '
+        'are supported. Make also sure that the product of two values '
+        "explicitly has the '*' symbol.",
+      );
     }
 
-    // The evaluator returns 'num' so this cast is safe
-    final value = _parser.parse(expression).value(evaluationPoint) as num;
-
-    // NOTE: The following code is safe because 'num' has only 2 subtypes ('int'
-    // and 'double'). Since it is a compile-time error for any type other than
-    // 'int' or 'double' to attempt to extend or implement 'num', we can safely
-    // assume that a 'num' can always be an integer OR a double.
-    if (value is int) {
-      // Converting 'int' into 'double'
-      return value * 1.0;
-    }
-
-    return value as double;
+    // The evaluator returns 'num' so we multiply by 1.0 to convert the result
+    // into a double.
+    return _parser.parse(expression).value(evaluationPoint) * 1.0;
   }
 }
 

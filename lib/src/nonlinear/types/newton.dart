@@ -1,11 +1,11 @@
 import 'package:equations/equations.dart';
 
-/// Implements the Newton method to find the roots of a given equation.
+/// Implements Newton's method to find the roots of a given equation.
 ///
 /// **Characteristics**:
 ///
-///   - The method is extremely powerful but it's not guaranteed to converge to a
-/// root of `f(x)`.
+///   - The method is extremely powerful but it's not guaranteed to converge to
+///   a root of `f(x)`.
 ///
 ///   - It may fail for example due to a division by zero, if the derivative
 ///   evaluated at a certain value is 0, or because the initial guess is too far
@@ -14,23 +14,19 @@ class Newton extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// Newton method.
+  /// Instantiates a new object to find the root of an equation using Newton's
+  /// method.
   ///
   ///   - [function]: the function f(x)
   ///   - [x0]: the initial guess x<sub>0</sub>
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Newton({
-    required String function,
+    required super.function,
     required this.x0,
-    double tolerance = 1.0e-10,
-    int maxSteps = 10,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 10,
+  });
 
   @override
   bool operator ==(Object other) {

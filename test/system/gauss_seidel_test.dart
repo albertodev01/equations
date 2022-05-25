@@ -10,16 +10,21 @@ void main() {
       'well formed matrix.',
       () {
         final gaussSeidel = GaussSeidelSolver(
-          equations: const [
-            [3, -1, 1],
-            [-1, 3, -1],
-            [1, -1, 3],
-          ],
-          constants: [-1, 7, -7],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: [
+              [3, -1, 1],
+              [-1, 3, -1],
+              [1, -1, 3],
+            ],
+          ),
+          knownValues: [-1, 7, -7],
         );
 
-        // This is needed because we want to make sure that the "original" matrix
-        // doesn't get side effects from the calculations (i.e. row swapping).
+        // This is needed because we want to make sure that the "original"
+        // matrix doesn't get side effects from the calculations (i.e. row
+        // swapping).
         final matrix = RealMatrix.fromData(
           rows: 3,
           columns: 3,
@@ -31,7 +36,7 @@ void main() {
         );
 
         // Checking the "state" of the object
-        expect(gaussSeidel.equations, equals(matrix));
+        expect(gaussSeidel.matrix, equals(matrix));
         expect(gaussSeidel.knownValues, orderedEquals(<double>[-1, 7, -7]));
         expect(gaussSeidel.maxSteps, equals(30));
         expect(gaussSeidel.precision, equals(1.0e-10));
@@ -48,36 +53,18 @@ void main() {
       },
     );
 
-    test(
-      'Making sure that flat constructor produces the same object that '
-      'a non-flattened constructor does',
-      () {
-        final matrix = GaussSeidelSolver(
-          equations: const [
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9],
-          ],
-          constants: const [1, 2, 3],
-        );
-
-        final flatMatrix = GaussSeidelSolver.flatMatrix(
-          equations: const [1, 2, 3, 4, 5, 6, 7, 8, 9],
-          constants: const [1, 2, 3],
-        );
-
-        expect(matrix, equals(flatMatrix));
-      },
-    );
-
     test('Making sure that the string conversion works properly.', () {
       final solver = GaussSeidelSolver(
-        equations: const [
-          [3, -1, 1],
-          [-1, 3, -1],
-          [1, -1, 3],
-        ],
-        constants: const [-1, 7, -7],
+        matrix: RealMatrix.fromData(
+          rows: 3,
+          columns: 3,
+          data: [
+            [3, -1, 1],
+            [-1, 3, -1],
+            [1, -1, 3],
+          ],
+        ),
+        knownValues: const [-1, 7, -7],
       );
 
       const toString = '[3.0, -1.0, 1.0]\n'
@@ -97,46 +84,44 @@ void main() {
       () {
         expect(
           () => GaussSeidelSolver(
-            equations: const [
-              [1, 2],
-              [4, 5],
-            ],
-            constants: [7, 8, 9],
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: [
+                [1, 2],
+                [4, 5],
+              ],
+            ),
+            knownValues: [7, 8, 9],
           ),
-          throwsA(isA<MatrixException>()),
-        );
-      },
-    );
-
-    test(
-      'Making sure that when the input is a flat matrix, the matrix must '
-      'be squared.',
-      () {
-        expect(
-          () => GaussSeidelSolver.flatMatrix(
-            equations: const [1, 2, 3, 4, 5],
-            constants: [7, 8],
-          ),
-          throwsA(isA<MatrixException>()),
+          throwsA(isA<SystemSolverException>()),
         );
       },
     );
 
     test('Making sure that objects comparison works properly.', () {
       final gaussSeidel = GaussSeidelSolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [1, 2],
+            [4, 5],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       final gaussSeidel2 = GaussSeidelSolver(
-        equations: const [
-          [1, 2],
-          [3, 4],
-        ],
-        constants: [0, -6],
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: [
+            [1, 2],
+            [4, 5],
+          ],
+        ),
+        knownValues: [0, -6],
       );
 
       expect(gaussSeidel, equals(gaussSeidel2));
@@ -149,28 +134,40 @@ void main() {
     test('Batch tests', () {
       final systems = [
         GaussSeidelSolver(
-          equations: const [
-            [25, 15, -5],
-            [15, 18, 0],
-            [-5, 0, 11],
-          ],
-          constants: [35, 33, 6],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: [
+              [25, 15, -5],
+              [15, 18, 0],
+              [-5, 0, 11],
+            ],
+          ),
+          knownValues: [35, 33, 6],
         ).solve(),
         GaussSeidelSolver(
-          equations: const [
-            [1, 0, 1],
-            [0, 2, 0],
-            [1, 0, 3],
-          ],
-          constants: [6, 5, -2],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: [
+              [1, 0, 1],
+              [0, 2, 0],
+              [1, 0, 3],
+            ],
+          ),
+          knownValues: [6, 5, -2],
         ).solve(),
         GaussSeidelSolver(
-          equations: const [
-            [1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1],
-          ],
-          constants: [5, -2, 3],
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1],
+            ],
+          ),
+          knownValues: [5, -2, 3],
         ).solve(),
       ];
 

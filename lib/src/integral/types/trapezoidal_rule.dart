@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 /// definite integral.
 ///
 /// This algorithm requires a parameter `m` which indicates how many partitions
-/// have to be computed by the algorithm. The bigger the value of `m`, the better
-/// the result approximation.
+/// have to be computed by the algorithm. The bigger the value of `m`, the
+/// better the result approximation.
 class TrapezoidalRule extends NumericalIntegration {
   /// Expects the [function] to be integrated ad the integration bounds
   /// ([lowerBound] and [upperBound]).
@@ -13,16 +13,11 @@ class TrapezoidalRule extends NumericalIntegration {
   /// The [intervals] variable represents the number of parts in which the
   /// [lowerBound, upperBound] interval has to be split by the algorithm.
   const TrapezoidalRule({
-    required String function,
-    required double lowerBound,
-    required double upperBound,
-    int intervals = 20,
-  }) : super(
-          function: function,
-          lowerBound: lowerBound,
-          upperBound: upperBound,
-          intervals: intervals,
-        );
+    required super.function,
+    required super.lowerBound,
+    required super.upperBound,
+    super.intervals = 20,
+  });
 
   @override
   IntegralResults integrate() {

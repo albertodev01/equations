@@ -105,14 +105,16 @@ void main() {
         expect(matrix.rowCount * matrix.columnCount, equals(4));
         expect(
           matrix,
-          equals(RealMatrix.fromData(
-            rows: 2,
-            columns: 2,
-            data: [
-              [1, 2],
-              [3, 4],
-            ],
-          )),
+          equals(
+            RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: [
+                [1, 2],
+                [3, 4],
+              ],
+            ),
+          ),
         );
       },
     );
@@ -234,11 +236,15 @@ void main() {
     );
 
     test("Making sure that 'toString()' works as expected.", () {
-      final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-      ]);
+      final matrix = RealMatrix.fromData(
+        columns: 3,
+        rows: 3,
+        data: const [
+          [1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9],
+        ],
+      );
 
       const expected = '[1.0, 2.0, 3.0]\n'
           '[4.0, 5.0, 6.0]\n'
@@ -250,11 +256,15 @@ void main() {
       'Making sure that a matrix is properly built from a list of lists '
       'entries.',
       () {
-        final matrix = RealMatrix.fromData(columns: 3, rows: 3, data: const [
-          [1, 2, 3],
-          [4, 5, 6],
-          [7, 8, 9],
-        ]);
+        final matrix = RealMatrix.fromData(
+          columns: 3,
+          rows: 3,
+          data: const [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
+        );
 
         // Checking the sizes
         expect(matrix.rowCount, equals(3));
@@ -305,25 +315,37 @@ void main() {
     * A = |  2  6  |
     *     | -5  0  |
     * */
-    final matrixA = RealMatrix.fromData(columns: 2, rows: 2, data: const [
-      [2, 6],
-      [-5, 0],
-    ]);
+    final matrixA = RealMatrix.fromData(
+      columns: 2,
+      rows: 2,
+      data: const [
+        [2, 6],
+        [-5, 0],
+      ],
+    );
 
     /*
     * B = | -4  1  |
     *     |  7 -3  |
     * */
-    final matrixB = RealMatrix.fromData(columns: 2, rows: 2, data: const [
-      [-4, 1],
-      [7, -3],
-    ]);
+    final matrixB = RealMatrix.fromData(
+      columns: 2,
+      rows: 2,
+      data: const [
+        [-4, 1],
+        [7, -3],
+      ],
+    );
 
     test('Making sure that operator+ works properly.', () {
-      final matrixSum = RealMatrix.fromData(columns: 2, rows: 2, data: [
-        [-2, 7],
-        [2, -3],
-      ]);
+      final matrixSum = RealMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: [
+          [-2, 7],
+          [2, -3],
+        ],
+      );
       expect(matrixA + matrixB, equals(matrixSum));
     });
 
@@ -365,10 +387,14 @@ void main() {
     });
 
     test('Making sure that operator- works properly.', () {
-      final matrixSub = RealMatrix.fromData(columns: 2, rows: 2, data: [
-        [6, 5],
-        [-12, 3],
-      ]);
+      final matrixSub = RealMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: [
+          [6, 5],
+          [-12, 3],
+        ],
+      );
       expect(matrixA - matrixB, equals(matrixSub));
     });
 
@@ -410,10 +436,14 @@ void main() {
     });
 
     test('Making sure that operator* works properly.', () {
-      final matrixMul = RealMatrix.fromData(columns: 2, rows: 2, data: [
-        [34, -16],
-        [20, -5],
-      ]);
+      final matrixMul = RealMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: [
+          [34, -16],
+          [20, -5],
+        ],
+      );
       expect(matrixA * matrixB, equals(matrixMul));
     });
 
@@ -449,10 +479,14 @@ void main() {
     });
 
     test('Making sure that operator/ works properly.', () {
-      final matrixDiv = RealMatrix.fromData(columns: 2, rows: 2, data: [
-        [-1 / 2, 6],
-        [-5 / 7, 0],
-      ]);
+      final matrixDiv = RealMatrix.fromData(
+        columns: 2,
+        rows: 2,
+        data: [
+          [-1 / 2, 6],
+          [-5 / 7, 0],
+        ],
+      );
       expect(matrixA / matrixB, equals(matrixDiv));
     });
 

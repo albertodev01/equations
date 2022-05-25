@@ -10,9 +10,11 @@ import 'mock_wrapper.dart';
 void main() {
   group("Testing the 'HomePage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: HomePage(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: HomePage(),
+        ),
+      );
 
       expect(find.byType(SingleChildScrollView), findsOneWidget);
       expect(find.byType(AppLogo), findsOneWidget);

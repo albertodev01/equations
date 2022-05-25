@@ -1,52 +1,45 @@
-import 'package:equations_solver/blocs/precision_slider/precision_slider.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/precision_slider/inherited_precision_slider.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Sets the precision of the currently selected algorithm.
 class PrecisionSlider extends StatelessWidget {
   /// Creates a [PrecisionSlider] widget.
-  const PrecisionSlider({Key? key}) : super(key: key);
+  const PrecisionSlider({super.key});
 
   void _update(BuildContext context, double value) =>
-      context.read<PrecisionSliderCubit>().updateSlider(value);
+      context.precisionState.updateSlider(value);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        var defaultWidth = precisonSliderWidth;
+    return Center(
+      child: SizedBox(
+        width: precisonSliderWidth,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Slider
+            AnimatedBuilder(
+              animation: context.precisionState,
+              builder: (context, state) {
+                return Slider(
+                  min: 2,
+                  max: 15,
+                  divisions: 13,
+                  value: context.precisionState.value,
+                  onChanged: (value) => _update(context, value),
+                );
+              },
+            ),
 
-        if (dimensions.maxWidth <= precisonSliderWidth + 50) {
-          defaultWidth = defaultWidth * 1.5;
-        }
+            const SizedBox(height: 15),
 
-        return SizedBox(
-          width: defaultWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Slider
-              BlocBuilder<PrecisionSliderCubit, double>(
-                builder: (context, state) {
-                  return Slider(
-                    min: 2,
-                    max: 15,
-                    value: state,
-                    onChanged: (value) => _update(context, value),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 15),
-
-              // Labels
-              const _SliderLabels(),
-            ],
-          ),
-        );
-      },
+            // Labels
+            const _SliderLabels(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -66,9 +59,10 @@ class _SliderLabels extends StatelessWidget {
           Text(context.l10n.precision),
 
           // The label representing the precision
-          BlocBuilder<PrecisionSliderCubit, double>(
-            builder: (_, state) {
-              return Text('1.0e-${state.round()}');
+          AnimatedBuilder(
+            animation: context.precisionState,
+            builder: (context, state) {
+              return Text('1.0e-${context.precisionState.value.round()}');
             },
           ),
         ],

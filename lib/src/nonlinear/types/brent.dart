@@ -16,8 +16,8 @@ class Brent extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// Chords method.
+  /// Instantiates a new object to find the root of an equation using Brent's
+  /// method.
   ///
   ///   - [function]: the function f(x)
   ///   - [a]: the first interval in which evaluate `f(a)`
@@ -25,16 +25,12 @@ class Brent extends NonLinear {
   ///   - [tolerance]: how accurate the algorithm has to be
   ///   - [maxSteps]: how many iterations at most the algorithm has to do
   const Brent({
-    required String function,
+    required super.function,
     required this.a,
     required this.b,
-    double tolerance = 1.0e-10,
-    int maxSteps = 15,
-  }) : super(
-          function: function,
-          tolerance: tolerance,
-          maxSteps: maxSteps,
-        );
+    super.tolerance = 1.0e-10,
+    super.maxSteps = 15,
+  });
 
   @override
   bool operator ==(Object other) {
@@ -65,21 +61,17 @@ class Brent extends NonLinear {
     return !((s >= lower) && (s <= b));
   }
 
-  bool _condition2(double s, bool flag, double b, double c) {
-    return flag && ((s - b).abs() >= ((b - c).abs() / 2));
-  }
+  bool _condition2(double s, bool flag, double b, double c) =>
+      flag && ((s - b).abs() >= ((b - c).abs() / 2));
 
-  bool _condition3(double s, bool flag, double b, double c, double d) {
-    return !flag && ((s - b).abs() >= ((c - d).abs() / 2));
-  }
+  bool _condition3(double s, bool flag, double b, double c, double d) =>
+      !flag && ((s - b).abs() >= ((c - d).abs() / 2));
 
-  bool _condition4(bool flag, double b, double c) {
-    return flag && ((b - c).abs() <= tolerance.abs());
-  }
+  bool _condition4(bool flag, double b, double c) =>
+      flag && ((b - c).abs() <= tolerance.abs());
 
-  bool _condition5(bool flag, double c, double d) {
-    return !flag && ((c - d).abs() <= tolerance.abs());
-  }
+  bool _condition5(bool flag, double c, double d) =>
+      !flag && ((c - d).abs() <= tolerance.abs());
 
   @override
   NonlinearResults solve() {

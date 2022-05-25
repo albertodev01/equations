@@ -1,14 +1,23 @@
 import 'package:equations_solver/main.dart' as app;
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  var needsOpenPage = true;
+
   Future<void> _testIntegral(
     WidgetTester tester, [
     String type = '',
   ]) async {
+    if (needsOpenPage) {
+      // Opening the integral page
+      await tester.tap(find.byKey(const Key('IntegralsLogo-Container')));
+      await tester.pumpAndSettle();
+
+      needsOpenPage = false;
+    }
+
     // Entering values
     await tester.enterText(
       find.byKey(const Key('EquationInput-function')),
@@ -37,7 +46,6 @@ void main() {
 
     // Solving
     final solveBtn = find.byKey(const Key('Integral-button-solve'));
-
     await tester.ensureVisible(solveBtn);
     await tester.pumpAndSettle();
 
@@ -65,11 +73,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the integral page
-        await tester.tap(find.byKey(const Key('IntegralsLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testIntegral(tester);
       },
     );
@@ -79,11 +82,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the integral page
-        await tester.tap(find.byKey(const Key('IntegralsLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testIntegral(tester, 'Trapezoid');
       },
     );
@@ -93,11 +91,6 @@ void main() {
       (tester) async {
         app.main();
         await tester.pumpAndSettle();
-
-        // Opening the integral page
-        await tester.tap(find.byKey(const Key('IntegralsLogo-Container')));
-        await tester.pumpAndSettle();
-
         await _testIntegral(tester, 'Midpoint');
       },
     );

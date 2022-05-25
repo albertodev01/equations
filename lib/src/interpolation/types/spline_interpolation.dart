@@ -8,8 +8,8 @@ class SplineInterpolation extends Interpolation {
   /// Creates a [SplineInterpolation] instance from the given interpolation
   /// nodes.
   const SplineInterpolation({
-    required List<InterpolationNode> nodes,
-  }) : super(nodes);
+    required super.nodes,
+  });
 
   @override
   double compute(double x) {

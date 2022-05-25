@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// Creates a column of [SystemInputField] to input the known values vector
 /// of the system.
 class VectorInput extends StatefulWidget {
-  /// Determines the size of the vector.
+  /// The text controllers of the known values vector.
   final List<TextEditingController> vectorControllers;
 
   /// The actual size of the vector.
@@ -13,10 +13,10 @@ class VectorInput extends StatefulWidget {
 
   /// Creates a [VectorInput] widget.
   const VectorInput({
-    Key? key,
+    super.key,
     required this.vectorControllers,
     required this.vectorSize,
-  }) : super(key: key);
+  });
 
   @override
   _VectorInputState createState() => _VectorInputState();
@@ -45,7 +45,7 @@ class _VectorInputState extends State<VectorInput> {
   Widget build(BuildContext context) {
     // We're adding '5' to the overall width to make sure that tiles aren't too
     // close each other.
-    final boxWidth = systemInputFieldSize.width + 5;
+    const boxWidth = systemInputFieldSize + 5;
 
     return Center(
       child: SizedBox(
@@ -56,10 +56,10 @@ class _VectorInputState extends State<VectorInput> {
   }
 }
 
-/// Returns the [Column]'s and the children that will contain the input fields
-/// for the known values vector.
+/// Returns the the children that will contain the input fields for the known
+/// values vector.
 class _VectorChildren extends StatelessWidget {
-  /// Determines the size of the vector.
+  /// The text controllers of the known values vector.
   final List<TextEditingController> vectorControllers;
 
   /// The actual size of the vector.
@@ -67,10 +67,9 @@ class _VectorChildren extends StatelessWidget {
 
   /// Creates a [_VectorChildren] widget.
   const _VectorChildren({
-    Key? key,
     required this.vectorControllers,
     required this.vectorSize,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +78,9 @@ class _VectorChildren extends StatelessWidget {
       children: [
         for (var i = 0; i < vectorSize; ++i)
           Padding(
-            padding: i == 0
-                ? const EdgeInsets.all(0)
-                : const EdgeInsets.only(top: 10),
+            padding: i == 0 ? EdgeInsets.zero : const EdgeInsets.only(top: 10),
             child: SystemInputField(
+              key: Key('VectorEntry-$i'),
               controller: vectorControllers[i],
             ),
           ),

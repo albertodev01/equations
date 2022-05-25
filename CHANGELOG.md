@@ -1,4 +1,20 @@
+## [4.0.0]
+
+ - **BREAKING**: The `Complex.fromPolar` constructor now asks for required **named** parameters
+ - **BREAKING**: The `Interpolation` constructor now asks for required **named** parameters
+ - **BREAKING**: The `SylvesterMatrix` type now accepts an `Algebraic` type rather than a `List<Complex>`. As such, the `SylvesterMatrix.fromReal` constructor has been removed because a real polynomial can be built using `Algebraic.fromReal` instead
+ - **BREAKING**: The `SystemSolver` type now accepts a `RealMatrix` type rather than a `List<List<double>>`. As such, the `size` parameter has also been removed because the size can be retrieved from the `RealMatrix` object itself
+ - **BREAKING**: New names for `SytemSolver` parameters: changes `equations` to `matrix` and `constants` to `knownValues`
+ - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
+ - Added `csc` (cosecant) and `sec` (secant) trigonometric functions to the `ExpressionParser` type
+ - Migrated Dart code to 2.17 with super parameters
+ - Updated the `analysis_options.yaml` file with almost all rules
+ - Added more rules from the `dart_code_metrics` package
+ - Updated the Flutter demo in the `example/` folder. Now the project can be run all platforms (mobile, web and desktop)
+ - Dependencies versions update
+
 ## [3.2.0]
+
  - Dependencies versions update
  - Updated the `analysis_options.yaml` file with some more rules
  - Updated the Flutter demo in the `example/` folder
@@ -6,16 +22,19 @@
  - Minor documentation improvements
 
 ## [3.1.3]
+
  - Dependencies versions update
  - Updated the `analysis_options.yaml` file with some more rules
 
 ## [3.1.2]
+
  - Dependencies versions update
  - Updated the README file with some fixes
  - Added a new root-finding algorithm (`Riddler` which implements the Riddler's method)
  - Updated the Flutter demo in the `example/` folder
 
 ## [3.1.1]
+
  - Dependencies versions update
  - Added more tests cases
  - Updated the Flutter demo in the `example/` folder

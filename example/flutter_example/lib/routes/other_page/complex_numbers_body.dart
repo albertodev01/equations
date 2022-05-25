@@ -6,11 +6,11 @@ import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// This widget analyzes a complex number and outputs various results about the
-/// modulus, the polar coordinate conversions and much more.
+/// This widget analyzes a complex number and computes various properties, such
+/// as modulus. polar coordinates and more.
 class ComplexNumberOtherBody extends StatelessWidget {
   /// Creates a [ComplexNumberOtherBody] widget.
-  const ComplexNumberOtherBody({Key? key}) : super(key: key);
+  const ComplexNumberOtherBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ComplexNumberOtherBody extends StatelessWidget {
 /// The actual contents of the [ComplexNumberOtherBody] widget.
 class _PageBody extends StatefulWidget {
   /// Creates a [_PageBody] widget.
-  const _PageBody({Key? key}) : super(key: key);
+  const _PageBody();
 
   @override
   State<_PageBody> createState() => _PageBodyState();

@@ -1,11 +1,13 @@
 import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
-/// A simple Dart implementation of an `m x n` matrix whose data type is [double].
+/// A simple Dart implementation of an `m x n` matrix whose data type is
+/// [double].
 ///
 /// ```dart
 /// final matrix = RealMatrix(
@@ -31,61 +33,47 @@ import 'package:equations/src/utils/math_utils.dart';
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
 class RealMatrix extends Matrix<double> with MathUtils {
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
   /// matrix is filled with zeroes.
   ///
-  /// If [identity] is set to `true` (by default it's `false`) then the matrix
+  /// If `identity` is set to `true` (by default it's `false`) then the matrix
   /// is initialized with all zeroes **and** the diagonal is filled with ones.
   RealMatrix({
-    required int rows,
-    required int columns,
-    bool identity = false,
+    required super.rows,
+    required super.columns,
+    super.identity,
   }) : super(
-          rows: rows,
-          columns: columns,
-          identity: identity,
           defaultValue: 0,
           identityOneValue: 1,
         );
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with values from [data].
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with values from `data`.
   RealMatrix.fromData({
-    required int rows,
-    required int columns,
-    required List<List<double>> data,
-  }) : super.fromData(
-          rows: rows,
-          columns: columns,
-          data: data,
-        );
+    required super.rows,
+    required super.columns,
+    required super.data,
+  }) : super.fromData();
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with values from [data].
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with values from `data`.
   ///
   /// The source matrix is expressed as an array whose size must **exactly** be
   /// `N` * `M`.
   RealMatrix.fromFlattenedData({
-    required int rows,
-    required int columns,
-    required List<double> data,
-  }) : super.fromFlattenedData(
-          rows: rows,
-          columns: columns,
-          data: data,
-        );
+    required super.rows,
+    required super.columns,
+    required super.data,
+  }) : super.fromFlattenedData();
 
-  /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
-  /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
+  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
+  /// matrix is filled with `diagonalValue` in the main diagonal and zeroes
   /// otherwise.
   RealMatrix.diagonal({
-    required int rows,
-    required int columns,
-    required double diagonalValue,
+    required super.rows,
+    required super.columns,
+    required super.diagonalValue,
   }) : super.diagonal(
-          rows: rows,
-          columns: columns,
-          diagonalValue: diagonalValue,
           defaultValue: 0,
         );
 
@@ -98,8 +86,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator +(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.');
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the sum
@@ -126,8 +116,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator -(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.');
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the difference
@@ -154,8 +146,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.');
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the product
@@ -187,8 +181,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   @override
   Matrix<double> operator /(Matrix<double> other) {
     if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException('Matrices shapes mismatch! The column count '
-          'of the source matrix must match the row count of the other.');
+      throw const MatrixException(
+        'Matrices shapes mismatch! The column count '
+        'of the source matrix must match the row count of the other.',
+      );
     }
 
     // Performing the division
@@ -246,9 +242,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    final source = List<List<double>>.generate(rowCount - 1, (_) {
-      return List<double>.generate(columnCount - 1, (_) => 0.0);
-    });
+    final source = List<List<double>>.generate(
+      rowCount - 1,
+      (_) => List<double>.generate(columnCount - 1, (_) => 0.0),
+    );
 
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; i != row && j < columnCount; ++j) {
@@ -283,9 +280,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    final source = List<List<double>>.generate(rowCount, (_) {
-      return List<double>.generate(columnCount, (_) => 0.0);
-    });
+    final source = List<List<double>>.generate(
+      rowCount,
+      (_) => List<double>.generate(columnCount, (_) => 0.0),
+    );
 
     // Computing cofactors
     for (var i = 0; i < rowCount; ++i) {
@@ -316,7 +314,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
       );
     }
 
-    // In case of a 2x2 matrix, we can directly compute it and save computational
+    // In case of 2x2 matrix, we can directly compute it and save computational
     // time. Note that, from here, we're sure that this matrix is square so no
     // need to check both the row count and the col count.
     if (rowCount == 2) {
@@ -346,9 +344,9 @@ class RealMatrix extends Matrix<double> with MathUtils {
 
     // Multiplying each number by 1/det(A)
     final multiplier = 1 / determinant();
-    final inverse = transpose.flattenData.map((value) {
-      return multiplier * value;
-    }).toList(growable: false);
+    final inverse = transpose.flattenData
+        .map((value) => multiplier * value)
+        .toList(growable: false);
 
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
@@ -710,31 +708,21 @@ class RealMatrix extends Matrix<double> with MathUtils {
   }
 
   @override
-  List<RealMatrix> qrDecomposition() {
-    return QRDecompositionReal(
-      realMatrix: this,
-    ).decompose();
-  }
+  List<RealMatrix> qrDecomposition() =>
+      QRDecompositionReal(matrix: this).decompose();
 
   @override
-  List<RealMatrix> singleValueDecomposition() {
-    return SVDReal(
-      realMatrix: this,
-    ).decompose();
-  }
+  List<RealMatrix> singleValueDecomposition() =>
+      SVDReal(matrix: this).decompose();
 
   @override
-  List<RealMatrix> eigenDecomposition() {
-    return EigendecompositionReal(
-      matrix: this,
-    ).decompose();
-  }
+  List<RealMatrix> eigenDecomposition() =>
+      EigendecompositionReal(matrix: this).decompose();
 
   /// Computes the determinant of a 2x2 matrix.
-  double _compute2x2Determinant(RealMatrix source) {
-    return source.flattenData.first * source.flattenData[3] -
-        source.flattenData[1] * source.flattenData[2];
-  }
+  double _compute2x2Determinant(RealMatrix source) =>
+      source.flattenData.first * source.flattenData[3] -
+      source.flattenData[1] * source.flattenData[2];
 
   /// Computes the determinant of a 3x3 matrix.
   double _compute3x3Determinant(RealMatrix source) {
@@ -790,8 +778,10 @@ class RealMatrix extends Matrix<double> with MathUtils {
   double _computeDeterminant(RealMatrix source) {
     // Computing the determinant only if the matrix is square
     if (!isSquareMatrix) {
-      throw const MatrixException("Can't compute the determinant of this "
-          "matrix because it's not square.");
+      throw const MatrixException(
+        "Can't compute the determinant of this "
+        "matrix because it's not square.",
+      );
     }
 
     // In case there were an 1x1 matrix, just return the value
@@ -820,11 +810,12 @@ class RealMatrix extends Matrix<double> with MathUtils {
     //
     //  det(A) = det(L x U) = det(L) x det(U)
     //
-    // In particular, the determinant of a lower triangular and an upper triangular
-    // matrix is the product of the items in the diagonal.
+    // In particular, the determinant of a lower triangular and an upper
+    // triangular matrix is the product of the items in the diagonal.
     //
-    // For this reason, the computation of the determinant is O(n^3) which is way
-    // better than O(n!) from the Leibniz formula or the Laplace transformation!
+    // For this reason, the computation of the determinant is O(n^3) which is
+    // way better than O(n!) from the Leibniz formula or the Laplace
+    // transformation!
     final lu = luDecomposition();
 
     var prodL = 1.0;

@@ -8,10 +8,12 @@ import 'common_process.dart';
 void main() {
   group("Testing the 'Console' class", () {
     test('Making sure that it can be built correctly', () {
-      const console = Console(args: [
-        'a',
-        'b',
-      ]);
+      const console = Console(
+        args: [
+          'a',
+          'b',
+        ],
+      );
 
       expect(console.args, orderedEquals(<String>['a', 'b']));
     });
@@ -23,16 +25,21 @@ void main() {
         final process = await createProcess();
 
         // Converting into a stream
-        final stream =
-            process.stdout.transform(Utf8Decoder()).transform(LineSplitter());
+        final stream = process.stdout
+            .transform(
+              const Utf8Decoder(),
+            )
+            .transform(
+              const LineSplitter(),
+            );
 
         // Expected output
-        final expectedOutput = ' > Error: exactly one argument is required '
+        const expectedOutput = ' > Error: exactly one argument is required '
             'but 0 have been provided).';
 
         process.stdin.writeln('.');
 
-        expectLater(
+        await expectLater(
           stream,
           emitsAnyOf(
             ['', expectedOutput, ''],

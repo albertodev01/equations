@@ -9,9 +9,11 @@ import 'mock_wrapper.dart';
 void main() {
   group("Testing the 'OtherPage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: OtherPage(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: OtherPage(),
+        ),
+      );
 
       expect(find.byType(EquationScaffold), findsOneWidget);
       expect(find.byType(MatrixOtherBody), findsOneWidget);

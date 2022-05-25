@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// This widget allows for the insertion of the real and the imaginary part of
@@ -18,11 +19,11 @@ class ComplexNumberInput extends StatefulWidget {
 
   /// Creates a [ComplexNumberInput] widget.
   const ComplexNumberInput({
-    Key? key,
+    super.key,
     required this.realController,
     required this.imaginaryController,
     this.isReadOnly = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ComplexNumberInput> createState() => _ComplexNumberInputState();
@@ -61,7 +62,7 @@ class _ComplexNumberInputState extends State<ComplexNumberInput> {
       children: [
         // Real part
         SizedBox(
-          width: 65,
+          width: complexInputWidth,
           child: TextFormField(
             key: const Key('ComplexNumberInput-TextFormField-RealPart'),
             controller: widget.realController,
@@ -87,7 +88,7 @@ class _ComplexNumberInputState extends State<ComplexNumberInput> {
 
         // Imaginary part
         SizedBox(
-          width: 65,
+          width: complexInputWidth,
           child: TextFormField(
             key: const Key('ComplexNumberInput-TextFormField-ImaginaryPart'),
             controller: widget.imaginaryController,

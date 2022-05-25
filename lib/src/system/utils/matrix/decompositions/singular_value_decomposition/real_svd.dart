@@ -14,10 +14,10 @@ import 'package:equations/src/utils/math_utils.dart';
 /// This class performs the SVD procedure on [RealMatrix] types.
 class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     with MathUtils {
-  /// Requires the [realMatrix] matrix to be decomposed.
+  /// Requires the [matrix] matrix to be decomposed.
   const SVDReal({
-    required RealMatrix realMatrix,
-  }) : super(matrix: realMatrix);
+    required super.matrix,
+  });
 
   /// Reduces the source matrix a to bidiagonal form.
   ///
@@ -49,7 +49,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
           }
 
           // Dividing each by the k-th element of the values array.
-          for (int i = k; i < matrix.rowCount; i++) {
+          for (var i = k; i < matrix.rowCount; i++) {
             sourceMatrix[i][k] /= arrayS[k];
           }
           sourceMatrix[k][k] += 1.0;
@@ -228,15 +228,17 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     final maxRowCol = max(matrix.rowCount, matrix.columnCount);
 
     // Arrays for internal storage of U and V.
-    final matrixU = List<List<double>>.generate(matrix.rowCount, (_) {
-      return List<double>.generate(
+    final matrixU = List<List<double>>.generate(
+      matrix.rowCount,
+      (_) => List<double>.generate(
         maxRowCol,
         (_) => 0,
-      );
-    });
-    final matrixV = List<List<double>>.generate(matrix.columnCount, (_) {
-      return List<double>.generate(matrix.columnCount, (_) => 0);
-    });
+      ),
+    );
+    final matrixV = List<List<double>>.generate(
+      matrix.columnCount,
+      (_) => List<double>.generate(matrix.columnCount, (_) => 0),
+    );
 
     // Array for internal storage of the singular values.
     final arrayS = List<double>.generate(
@@ -288,7 +290,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
       // The 'convergenceStatus' variable works along with 'index' to determine
       // when the iterations should stop. In particular:
       //
-      //  - 'convergenceStatus' = 1: if s(p) && e[k-1] are small enough and k < p
+      //  - 'convergenceStatus' = 1: if s(p) && e[k-1] are small enough && k < p
       //  - 'convergenceStatus' = 2: if s(k) is small enough and k < p
       //  - 'convergenceStatus' = 3: if e[k-1] is small enough && k < p && a QR
       //                             step is required since values in s(*) are
@@ -364,10 +366,10 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
         case 2:
           var f = arrayE[index - 1];
           arrayE[index - 1] = 0.0;
-          for (int j = index; j < p; j++) {
+          for (var j = index; j < p; j++) {
             var t = hypot(arrayS[j], f);
-            final double cs = arrayS[j] / t;
-            final double sn = f / t;
+            final cs = arrayS[j] / t;
+            final sn = f / t;
             arrayS[j] = t;
             f = -sn * arrayE[j];
             arrayE[j] = cs * arrayE[j];
@@ -416,7 +418,7 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
           var g = sk * ek;
 
           // Looking for 0s.
-          for (int j = index; j < p - 1; j++) {
+          for (var j = index; j < p - 1; j++) {
             var t = hypot(f, g);
             var cs = f / t;
             var sn = g / t;
@@ -492,11 +494,12 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     }
 
     // Building the 'E' rectangular matrix, whose size is rowCount * columnCount
-    final sAsMatrix = List<List<double>>.generate(matrix.rowCount, (_) {
-      return List<double>.generate(matrix.columnCount, (_) => 0);
-    });
-    for (int i = 0; i < matrix.rowCount; i++) {
-      for (int j = 0; j < matrix.columnCount; j++) {
+    final sAsMatrix = List<List<double>>.generate(
+      matrix.rowCount,
+      (_) => List<double>.generate(matrix.columnCount, (_) => 0),
+    );
+    for (var i = 0; i < matrix.rowCount; i++) {
+      for (var j = 0; j < matrix.columnCount; j++) {
         if (i == j) {
           sAsMatrix[i][j] = arrayS[i];
         } else {

@@ -8,9 +8,11 @@ import 'mock_wrapper.dart';
 void main() {
   group("Testing the 'IntegralPage' widget", () {
     testWidgets('Making sure that the widget is rendered', (tester) async {
-      await tester.pumpWidget(const MockWrapper(
-        child: IntegralPage(),
-      ));
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: IntegralPage(),
+        ),
+      );
 
       expect(find.byType(IntegralPage), findsOneWidget);
       expect(find.byType(EquationScaffold), findsOneWidget);

@@ -10,8 +10,8 @@ import 'package:equations/src/utils/math_utils.dart';
 class MonotoneCubicSpline extends SplineFunction with MathUtils {
   /// Creates a [MonotoneCubicSpline] instance from the given nodes.
   const MonotoneCubicSpline({
-    required List<InterpolationNode> nodes,
-  }) : super(nodes: nodes);
+    required super.nodes,
+  });
 
   @override
   double interpolate(double x) {

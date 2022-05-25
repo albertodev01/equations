@@ -1,36 +1,23 @@
-import 'package:bloc_test/bloc_test.dart';
-import 'package:equations/equations.dart' as equations;
-import 'package:equations_solver/blocs/nonlinear_solver/nonlinear_solver.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../utils/bloc_mocks.dart';
-import '../mock_wrapper.dart';
+import 'nonlinear_mock.dart';
 
 void main() {
-  late final MockNonlinearBloc nonlinearBloc;
-
-  setUpAll(() {
-    registerFallbackValue(MockNonlinearEvent());
-    registerFallbackValue(MockNonlinearState());
-
-    nonlinearBloc = MockNonlinearBloc();
-  });
-
   group("Testing the 'NonlinearResults' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
-      await tester.pumpWidget(MockWrapper(
-        child: BlocProvider<NonlinearBloc>(
-          create: (_) => NonlinearBloc(NonlinearType.singlePoint),
+      await tester.pumpWidget(
+        MockNonlinearWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
           child: const NonlinearResults(),
         ),
-      ));
+      );
 
       expect(find.byType(NonlinearResults), findsOneWidget);
       expect(find.byType(SectionTitle), findsOneWidget);
@@ -40,25 +27,17 @@ void main() {
       'Making sure that when an error occurred while solving the equation, '
       'a Snackbar appears.',
       (tester) async {
-        when(() => nonlinearBloc.state).thenReturn(const NonlinearError());
-
-        // Triggering the consumer to listen for the error state
-        whenListen<NonlinearState>(
-          nonlinearBloc,
-          Stream<NonlinearState>.fromIterable(const [
-            NonlinearNone(),
-            NonlinearError(),
-          ]),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+          ),
         );
 
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NonlinearBloc>.value(
-            value: nonlinearBloc,
-            child: const NonlinearResults(),
-          ),
-        ));
-
         // Refreshing to make the snackbar appear
+        await tester.tap(find.byKey(const Key('Nonlinear-button-solve')));
         await tester.pumpAndSettle();
 
         expect(find.byType(SnackBar), findsOneWidget);
@@ -69,16 +48,13 @@ void main() {
       'Making sure that, when there are no solutions, a text widget '
       "appears saying that there's nothing to display",
       (tester) async {
-        when(() => nonlinearBloc.state).thenReturn(const NonlinearNone());
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NonlinearBloc>.value(
-            value: nonlinearBloc,
-            child: const NonlinearResults(),
+        await tester.pumpWidget(
+          const MockNonlinearWidget(
+            child: NonlinearResults(),
           ),
-        ));
+        );
 
-        expect(find.byType(ListView), findsNothing);
+        expect(find.byType(RealResultCard), findsNothing);
         expect(find.text('No solutions to display.'), findsOneWidget);
       },
     );
@@ -87,48 +63,63 @@ void main() {
       'Making sure that, when there are solutions, solution widgets '
       'appear on the screen',
       (tester) async {
-        const newton = equations.Newton(function: 'x-2', x0: 2);
-
-        when(() => nonlinearBloc.state).thenReturn(NonlinearGuesses(
-          nonLinear: newton,
-          nonlinearResults: newton.solve(),
-        ));
-
-        await tester.pumpWidget(MockWrapper(
-          child: BlocProvider<NonlinearBloc>.value(
-            value: nonlinearBloc,
-            child: const NonlinearResults(),
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
           ),
-        ));
+        );
+
+        final equationInput = find.byKey(const Key('EquationInput-function'));
+        final paramInput = find.byKey(const Key('EquationInput-first-param'));
+        final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
+
+        // Filling the forms
+        await tester.enterText(equationInput, 'x-3');
+        await tester.enterText(paramInput, '3');
+
+        // Solving the equation
+        await tester.tap(solveButton);
+        await tester.pumpAndSettle();
 
         expect(find.text('No solutions to display.'), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(3));
       },
     );
+  });
 
-    testGoldens('PolynomialResults', (tester) async {
-      const newton = equations.Newton(function: 'x-2', x0: 2);
-
-      when(() => nonlinearBloc.state).thenReturn(NonlinearGuesses(
-        nonLinear: newton,
-        nonlinearResults: newton.solve(),
-      ));
-
-      final widget = BlocProvider<NonlinearBloc>.value(
-        value: nonlinearBloc,
-        child: const NonlinearResults(),
-      );
-
-      final builder = GoldenBuilder.column()..addScenario('', widget);
-
-      await tester.pumpWidgetBuilder(
-        builder.build(),
-        wrapper: (child) => MockWrapper(
-          child: child,
+  group('Golden tests - NonlinearResults', () {
+    testWidgets('NonlinearResults', (tester) async {
+      await tester.pumpWidget(
+        MockNonlinearWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
         ),
-        surfaceSize: const Size(400, 700),
       );
-      await screenMatchesGolden(tester, 'nonlinear_results');
+
+      final equationInput = find.byKey(const Key('EquationInput-function'));
+      final paramInput = find.byKey(const Key('EquationInput-first-param'));
+      final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
+
+      // Filling the forms
+      await tester.enterText(equationInput, 'x-3');
+      await tester.enterText(paramInput, '3');
+
+      // Solving the equation
+      await tester.tap(solveButton);
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.byType(NonlinearResults).last);
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(NonlinearResults),
+        matchesGoldenFile('goldens/nonlinear_result.png'),
+      );
     });
   });
 }
