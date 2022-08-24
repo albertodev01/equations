@@ -12,7 +12,7 @@ import 'package:equations/equations.dart';
 ///  - [SimpsonRule]
 ///  - [TrapezoidalRule]
 ///
-/// The function must be continuous in the [`lowerBound`, `upperBound`]
+/// The function must be continuous in the `[lowerBound, upperBound]`
 /// interval.
 abstract class NumericalIntegration {
   /// Internal functions evaluator.
@@ -27,8 +27,8 @@ abstract class NumericalIntegration {
   /// The upper bound of the integral.
   final double upperBound;
 
-  /// The number of parts in which the interval [lowerBound, upperBound] has to
-  /// be split by the algorithm.
+  /// The number of parts in which the interval `[lowerBound, upperBound]` has
+  /// to be split by the algorithm.
   final int intervals;
 
   /// Expects the [lowerBound] and [upperBound] of the integral.

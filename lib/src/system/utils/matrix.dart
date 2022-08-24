@@ -356,7 +356,7 @@ abstract class Matrix<T> {
   ///
   /// If you want to find the eigenvalues of a matrix, you can compute the
   /// characteristic polynomial and solve the polynomial equation. However, for
-  /// 5x5 or bigger matrices, consider using the [eigenValues()] method which is
+  /// 5x5 or bigger matrices, consider using the [eigenvalues] method which is
   /// faster and more accurate.
   Algebraic characteristicPolynomial();
 

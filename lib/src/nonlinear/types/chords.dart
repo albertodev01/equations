@@ -5,10 +5,10 @@ import 'package:equations/equations.dart';
 /// **Characteristics**:
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
-///   continuous function on the interval [a, b].
+///   continuous function on the interval `[a, b]`.
 ///
 ///   - The values of `f(a)` and `f(b)` must have opposite signs AND there must
-///   be at least one root in [a, b]. These are 2 required conditions.
+///   be at least one root in `[a, b]`. These are 2 required conditions.
 class Chords extends NonLinear {
   /// The starting point of the interval.
   final double a;

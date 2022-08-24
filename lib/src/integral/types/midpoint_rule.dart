@@ -11,7 +11,7 @@ class MidpointRule extends NumericalIntegration {
   /// ([lowerBound] and [upperBound]).
   ///
   /// The [intervals] variable represents the number of parts in which the
-  /// [lowerBound, upperBound] interval has to be split by the algorithm.
+  /// `[lowerBound, upperBound]` interval has to be split by the algorithm.
   const MidpointRule({
     required super.function,
     required super.lowerBound,

@@ -101,16 +101,20 @@ abstract class SystemSolver {
   /// Prints the augmented matrix of this instance, which is the equations
   /// matrix plus the known values vector to the right. For example, if...
   ///
+  /// ```txt
   /// A = [1, 2]
   ///     [4, 5]
   /// b = [3]
   ///     [6]
+  /// ```
   ///
   /// ... then the `Ax = b` system represented by this instance is printed in
   /// the following way:
   ///
+  /// ```txt
   /// [1, 2 | 3]
   /// [4, 5 | 6]
+  /// ```
   String toStringAugmented() {
     final buffer = StringBuffer();
 
