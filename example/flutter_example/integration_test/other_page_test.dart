@@ -5,6 +5,8 @@ import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
   var needsOpenPage = true;
 
@@ -72,7 +74,14 @@ void main() {
     await tester.pumpAndSettle();
 
     // Result cards
+    await tester.ensureVisible(find.byType(RealResultCard).last);
+    await tester.pumpAndSettle();
+
     expect(find.byType(RealResultCard), findsWidgets);
+
+    await tester.ensureVisible(find.byType(ComplexResultCard).last);
+    await tester.pumpAndSettle();
+
     expect(find.byType(ComplexResultCard), findsWidgets);
 
     // Cleaning
@@ -92,6 +101,8 @@ void main() {
     testWidgets(
       'Testing matrix analysis',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testMatrix(tester);
@@ -101,6 +112,8 @@ void main() {
     testWidgets(
       'Testing complex numbers analysis',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testComplex(tester);

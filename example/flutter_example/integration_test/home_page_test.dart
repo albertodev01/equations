@@ -8,11 +8,15 @@ import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
   group('Integration tests on the Home page', () {
     testWidgets(
       'Testing route transition animations',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
 

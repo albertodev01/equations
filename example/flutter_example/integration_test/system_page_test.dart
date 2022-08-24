@@ -4,6 +4,8 @@ import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
   var needsOpenPage = true;
 
@@ -79,6 +81,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Result cards
+    await tester.ensureVisible(find.byType(RealResultCard).last);
+    await tester.pumpAndSettle();
+
     expect(find.byType(RealResultCard), findsNWidgets(size));
 
     // Cleaning
@@ -144,6 +149,9 @@ void main() {
       await tester.tap(find.text('LU'));
       await tester.pumpAndSettle();
 
+      await tester.ensureVisible(find.text('Cholesky').last);
+      await tester.pumpAndSettle();
+
       await tester.tap(find.text('Cholesky').last);
       await tester.pumpAndSettle();
     }
@@ -158,6 +166,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Result cards
+    await tester.ensureVisible(find.byType(RealResultCard).last);
+    await tester.pumpAndSettle();
+
     expect(find.byType(RealResultCard), findsNWidgets(size));
 
     // Cleaning
@@ -223,6 +234,9 @@ void main() {
       await tester.tap(find.text('SOR'));
       await tester.pumpAndSettle();
 
+      await tester.ensureVisible(find.text('SOR').last);
+      await tester.pumpAndSettle();
+
       await tester.tap(find.text('Jacobi').last);
       await tester.pumpAndSettle();
 
@@ -275,6 +289,8 @@ void main() {
     testWidgets(
       'Testing row reduction',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
 
@@ -288,6 +304,8 @@ void main() {
     testWidgets(
       'Testing factorization - LU',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
 
@@ -301,6 +319,8 @@ void main() {
     testWidgets(
       'Testing factorization - Cholesky',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
 
@@ -314,6 +334,8 @@ void main() {
     testWidgets(
       'Testing iterative - SOR',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
 
@@ -327,6 +349,8 @@ void main() {
     testWidgets(
       'Testing iterative - Jacobi',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
 
