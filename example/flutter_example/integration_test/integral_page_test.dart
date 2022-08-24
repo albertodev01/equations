@@ -3,6 +3,8 @@ import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
   var needsOpenPage = true;
 
@@ -53,6 +55,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Expecting one card with the integral evaluation
+    await tester.ensureVisible(find.byType(RealResultCard));
+    await tester.pumpAndSettle();
+
     expect(find.byType(RealResultCard), findsOneWidget);
 
     // Cleaning
@@ -71,6 +76,8 @@ void main() {
     testWidgets(
       'Testing the simpson method',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testIntegral(tester);
@@ -80,6 +87,8 @@ void main() {
     testWidgets(
       'Testing the trapezoid method',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testIntegral(tester, 'Trapezoid');
@@ -89,6 +98,8 @@ void main() {
     testWidgets(
       'Testing the midpoint method',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testIntegral(tester, 'Midpoint');

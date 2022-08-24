@@ -4,6 +4,8 @@ import 'package:equations_solver/routes/utils/result_cards/complex_result_card.d
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
   var needsOpenPage = true;
 
@@ -40,6 +42,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Widgets: `degree` cards for the root and 1 for the discriminant
+    await tester.ensureVisible(find.byType(ComplexResultCard).last);
+    await tester.pumpAndSettle();
+
     expect(find.byType(ComplexResultCard), findsNWidgets(degree + 1));
 
     // Cleaning
@@ -58,6 +63,8 @@ void main() {
     testWidgets(
       'Testing linear equations',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testPolynomial(tester, 1);
@@ -67,6 +74,8 @@ void main() {
     testWidgets(
       'Testing quadratic equations',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testPolynomial(tester, 2);
@@ -76,6 +85,8 @@ void main() {
     testWidgets(
       'Testing cubic equations',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testPolynomial(tester, 3);
@@ -85,6 +96,8 @@ void main() {
     testWidgets(
       'Testing quartic equations',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testPolynomial(tester, 4);

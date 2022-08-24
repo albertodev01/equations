@@ -4,6 +4,8 @@ import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'utils.dart';
+
 void main() {
   var needsOpenPage = true;
 
@@ -46,6 +48,9 @@ void main() {
     await tester.pump();
 
     // Expecting solutions
+    await tester.ensureVisible(find.byType(RealResultCard).first);
+    await tester.pumpAndSettle();
+
     expect(find.byType(RealResultCard), findsNWidgets(3));
 
     // Cleaning
@@ -100,6 +105,9 @@ void main() {
     await tester.pump();
 
     // Expecting solutions
+    await tester.ensureVisible(find.byType(RealResultCard).first);
+    await tester.pumpAndSettle();
+
     expect(find.byType(RealResultCard), findsNWidgets(3));
 
     // Cleaning
@@ -118,6 +126,8 @@ void main() {
     testWidgets(
       'Testing nonlinear equations - Newton',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testSinglePoint(tester);
@@ -127,6 +137,8 @@ void main() {
     testWidgets(
       'Testing nonlinear equations - Steffensen',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testSinglePoint(tester, 'Steffensen');
@@ -136,6 +148,8 @@ void main() {
     testWidgets(
       'Testing nonlinear equations - Bisection',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testBracketing(tester);
@@ -145,6 +159,8 @@ void main() {
     testWidgets(
       'Testing nonlinear equations - Secant',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testBracketing(tester, 'Secant');
@@ -154,6 +170,8 @@ void main() {
     testWidgets(
       'Testing nonlinear equations - Brent',
       (tester) async {
+        await configureIfDesktop(tester);
+
         app.main();
         await tester.pumpAndSettle();
         await _testBracketing(tester, 'Brent');

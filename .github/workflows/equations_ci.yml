@@ -14,11 +14,8 @@ jobs:
     name: Equations package - CI action
     runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
+      - uses: actions/checkout@v3.0.2
+      - uses: dart-lang/setup-dart@v1.3
 
       - name: Installing dependencies
         run: dart pub get
@@ -27,10 +24,14 @@ jobs:
         run: dart format --set-exit-if-changed lib test
 
       - name: Making sure that there are no analysis warnings or errors
-        run: dart analyze --fatal-infos --fatal-warnings lib test && dart run dart_code_metrics:metrics analyze lib test
+        run: |
+          dart analyze --fatal-infos --fatal-warnings lib test
+          dart run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit tests
-        run: dart pub global activate coverage && dart pub global run coverage:test_with_coverage
+        run: |
+          dart pub global activate coverage
+          dart pub global run coverage:test_with_coverage
 
       - name: Making sure that code coverage is 100
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
@@ -51,8 +52,8 @@ jobs:
         working-directory: example/flutter_example
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
+        uses: actions/checkout@v3.0.2
+      - uses: subosito/flutter-action@v2.6.1
         with:
           channel: 'stable'
 
@@ -63,9 +64,11 @@ jobs:
         run: flutter format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings lib test && flutter pub run dart_code_metrics:metrics analyze lib test
+        run: |
+          flutter analyze --fatal-infos --fatal-warnings lib test
+          flutter pub run dart_code_metrics:metrics analyze lib test
 
-      - name: Runing unit and widget tests
+      - name: Runing unit, widget and golden tests
         run: flutter test
 
   verify_equation_dart_example:
@@ -76,11 +79,8 @@ jobs:
       run:
         working-directory: example/dart_example
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
+      - uses: actions/checkout@v3.0.2
+      - uses: dart-lang/setup-dart@v1.3
 
       - name: Installing dependencies
         run: dart pub get
@@ -89,7 +89,9 @@ jobs:
         run: dart format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: dart analyze --fatal-infos --fatal-warnings lib test && flutter pub run dart_code_metrics:metrics analyze lib test
+        run: |
+          dart analyze --fatal-infos --fatal-warnings lib test
+          dart pub run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit tests
         run: dart test
