@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] which represents a constant value
-/// `a`. It can be real or complex.
+/// `a`. It can be either real or complex.
 ///
 /// **Examples**:
 ///
@@ -33,7 +33,7 @@ class Constant extends Algebraic {
   Complex discriminant() => const Complex(double.nan, double.nan);
 
   @override
-  List<Complex> solutions() => [];
+  List<Complex> solutions() => const [];
 
   /// The constant coefficient.
   Complex get a => coefficients.first;

@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// A Sylvester matrix is used to compute the discriminant of a polynomial
 /// starting from its coefficients.
 class SylvesterMatrix {
-  /// The polynomial object.
+  /// The polynomial used to build the Sylvester matrix.
   final Algebraic polynomial;
 
   /// Creates a [SylvesterMatrix] object.

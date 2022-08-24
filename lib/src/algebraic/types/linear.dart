@@ -23,15 +23,26 @@ class Linear extends Algebraic {
   /// ```
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
-  /// values are required, then consider using [Linear.realEquation()] for a
+  /// values are required, then consider using [Linear.realEquation] for a
   /// less verbose syntax.
   Linear({
     Complex a = const Complex.fromReal(1),
     Complex b = const Complex.zero(),
   }) : super([a, b]);
 
-  /// The only coefficient of the polynomial is represented by a [double]
-  /// (real) number [a].
+  /// These are examples of linear equations, where the coefficient with the
+  /// highest degree goes first:
+  ///
+  /// ```dart
+  /// // f(x) = 2x + 5
+  /// final eq = Linear.realEquation(
+  ///   a: 2,
+  ///   b: 5,
+  /// );
+  /// ```
+  ///
+  /// If the coefficients of your polynomial contain complex numbers, consider
+  /// using the [Linear.new] constructor instead.
   Linear.realEquation({
     double a = 1,
     double b = 0,
