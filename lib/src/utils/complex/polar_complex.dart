@@ -1,15 +1,15 @@
 import 'package:equations/equations.dart';
 
-/// The wrapper returned by a [Complex] that represents the number in polar
-/// coordinates.
+/// A wrapper class, returned by a [Complex] object, that represents a complex
+/// number in polar coordinates.
 class PolarComplex implements Comparable<PolarComplex> {
   /// The absolute value/modulus of the complex number.
   final double r;
 
-  /// The angle phi expressed in radians.
+  /// The 'phi' angle expressed in radians.
   final double phiRadians;
 
-  /// The angle phi expressed in degrees.
+  /// The 'phi' angle expressed in degrees.
   final double phiDegrees;
 
   /// The angle [r] is required both in radians ([phiRadians]) and degrees.

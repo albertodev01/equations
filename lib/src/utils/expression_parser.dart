@@ -33,9 +33,8 @@ typedef _Evaluator = num Function(num value);
 ///   - asin() (arc sine of `x`)
 ///   - atan() (arc tangent of `x`)
 ///
-/// An exception of type [ExpressionParserException] is thrown in case the
-/// string being parsed is malformed. This parser is also able to recognize some
-/// constants:
+/// An exception of type [ExpressionParserException] is thrown if the parsed is
+/// malformed. This parser is also able to recognize some constants:
 ///
 ///  - pi (pi, the ratio of the circumference on the diameter)
 ///  - e (Euler's number)
@@ -43,10 +42,10 @@ typedef _Evaluator = num Function(num value);
 ///  - sqrt3 (the square root of 3)
 ///  - G (Gauss constant)
 class ExpressionParser {
-  /// Gauss constant
+  /// Gauss constant.
   static const _g = 0.834626841674;
 
-  /// Square root of 3
+  /// Square root of 3.
   static const _sqrt3 = 1.7320508075688;
 
   /// A "cached" instance of a parser to be used to evaluate expressions on a
@@ -108,6 +107,11 @@ class ExpressionParser {
         string('tan(').trim(),
         char(')').trim(),
         (_, a, __) => (value) => math.tan(a(value)),
+      )
+      ..wrapper(
+        string('exp(').trim(),
+        char(')').trim(),
+        (_, a, __) => (value) => math.exp(a(value)),
       )
       ..wrapper(
         string('log(').trim(),
@@ -183,14 +187,14 @@ class ExpressionParser {
   const ExpressionParser();
 
   /// Evaluates the mathematical [expression] and returns the result. This
-  /// method has to be used to evaluate those expression that don't contain the
-  /// `x` variable. For example:
+  /// method has to be used to evaluate those expression that do **not** contain
+  /// the `x` variable. For example:
   ///
   ///   - `"6 + 10 * 3 / 7"` // Good
   ///   - `"6 + 10 * x / 7"` // Bad
   ///
-  /// If you want to evaluate a function with the `x` variable, use
-  /// [evaluateOn].
+  /// If you want to evaluate a function with the `x` variable, use [evaluateOn]
+  /// instead.
   double evaluate(String expression) {
     if (expression.contains('x') || (!_parser.accept(expression))) {
       throw const ExpressionParserException(
@@ -208,7 +212,7 @@ class ExpressionParser {
   /// the value of the given [evaluationPoint].
   ///
   /// If you want to evaluate a simple expression without the `x` variable,
-  /// consider using [evaluate].
+  /// using [evaluate] instead.
   double evaluateOn(String expression, double evaluationPoint) {
     if (!_parser.accept(expression)) {
       throw const ExpressionParserException(
@@ -248,8 +252,8 @@ extension ExpressionParserX on String {
   ///   - `"3.8 / 2"`
   ///   - `"cos(pi) - 18 * 6"`
   ///
-  /// The `x` variable is **not** considered as valid because this getter only
-  /// considers numerical values.
+  /// The `x` variable is **not** valid because this getter only considers
+  /// numerical values.
   bool get isNumericalExpression =>
       !contains('x') && ExpressionParser._parser.accept(this);
 }

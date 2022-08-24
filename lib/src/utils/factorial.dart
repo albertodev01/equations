@@ -1,12 +1,11 @@
-/// This class simply computes the factorial of a number and performs some speed
-/// optimizations by using a cache.
+/// This class efficiently computes the factorial of a number using a cache.
 ///
 /// The factorial of a non-negative integer `n`, denoted by `n!`, is the product
 /// of all positive integers less than or equal to `n`. For example:
 ///
 ///  - 5! = 5 * 4 * 3 * 2 * 1 = 120
 class Factorial {
-  /// The cache of the most common factorial numbers.
+  /// A cache with the most common factorial values.
   static const _factorialsCache = <int, int>{
     0: 1,
     1: 1,
@@ -38,13 +37,5 @@ class Factorial {
   ///
   /// When [n] is greater than `20`, values start to be approximated.
   /// When [n] is less than or equal to `20`, this method executes in O(1) time.
-  int compute(int n) {
-    // If it's in the cache, return it immediately.
-    if (_factorialsCache.containsKey(n)) {
-      return _factorialsCache[n]!;
-    }
-
-    // Classic recursive factorial calculation.
-    return n * compute(n - 1);
-  }
+  int compute(int n) => _factorialsCache[n] ?? n * compute(n - 1);
 }
