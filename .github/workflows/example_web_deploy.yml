@@ -23,7 +23,7 @@ jobs:
         run: flutter pub get
 
       - name: Building for the web
-        run: flutter build web --csp
+        run: flutter build web --csp --release
 
       - name: Setting the git username
         run: git config user.name github-actions
