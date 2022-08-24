@@ -8,12 +8,11 @@ on:
   pull_request:
     types:
       - opened
-      - ready_for_review
 
 jobs:
   verify_equation_package:
     name: Equations package - CI action
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,17 +20,17 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Installing the dependencies
-        run: flutter pub get
+      - name: Installing dependencies
+        run: dart pub get
 
       - name: Making sure the package is formatted
-        run: flutter format --set-exit-if-changed lib test
+        run: dart format --set-exit-if-changed lib test
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings lib test && dart run dart_code_metrics:metrics analyze lib test
+        run: dart analyze --fatal-infos --fatal-warnings lib test && dart run dart_code_metrics:metrics analyze lib test
 
-      - name: Runing unit and widget tests
-        run: flutter test --coverage
+      - name: Runing unit tests
+        run: dart pub global activate coverage && dart pub global run coverage:test_with_coverage
 
       - name: Making sure that code coverage is 100
         uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
@@ -57,7 +56,7 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Installing the dependencies
+      - name: Installing dependencies
         run: flutter pub get
 
       - name: Making sure the package is formatted
@@ -83,14 +82,14 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Installing the dependencies
-        run: flutter pub get
+      - name: Installing dependencies
+        run: dart pub get
 
       - name: Making sure the package is formatted
-        run: flutter format --set-exit-if-changed .
+        run: dart format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings lib test && flutter pub run dart_code_metrics:metrics analyze lib test
+        run: dart analyze --fatal-infos --fatal-warnings lib test && flutter pub run dart_code_metrics:metrics analyze lib test
 
-      - name: Runing unit and widget tests
-        run: flutter test
+      - name: Runing unit tests
+        run: dart test

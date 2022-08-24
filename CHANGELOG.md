@@ -1,4 +1,13 @@
-## [4.0.0]
+## 4.1.0
+ - Added the missing `exp` function from the expression parsing grammar
+ - Improved docstring comments
+ - Updated the `analysis_options.yaml` file with more rules
+ - Added more rules from the `dart_code_metrics` package
+ - Updated the Flutter demo in the `example/` folder
+ - README updates
+ - Dependencies versions update
+
+## 4.0.0
 
  - **BREAKING**: The `Complex.fromPolar` constructor now asks for required **named** parameters
  - **BREAKING**: The `Interpolation` constructor now asks for required **named** parameters
@@ -13,7 +22,7 @@
  - Updated the Flutter demo in the `example/` folder. Now the project can be run all platforms (mobile, web and desktop)
  - Dependencies versions update
 
-## [3.2.0]
+## 3.2.0
 
  - Dependencies versions update
  - Updated the `analysis_options.yaml` file with some more rules
@@ -21,25 +30,25 @@
  - Updated the Dart demo in the `example/` folder
  - Minor documentation improvements
 
-## [3.1.3]
+## 3.1.3
 
  - Dependencies versions update
  - Updated the `analysis_options.yaml` file with some more rules
 
-## [3.1.2]
+## 3.1.2
 
  - Dependencies versions update
  - Updated the README file with some fixes
  - Added a new root-finding algorithm (`Riddler` which implements the Riddler's method)
  - Updated the Flutter demo in the `example/` folder
 
-## [3.1.1]
+## 3.1.1
 
  - Dependencies versions update
  - Added more tests cases
  - Updated the Flutter demo in the `example/` folder
 
-## [3.1.0]
+## 3.1.0
 
  - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (earlier it was passed to the `integrate()` function)
  - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
@@ -50,7 +59,7 @@
  - Added more lints and stricter rules in `analysis_options.yaml`
  - Dependencies versions update
 
-## [3.0.0]
+## 3.0.0
 
  - **BREAKING**: Replaced the `Laguerre` type with `DurandKerner` (the latter is a more reliable root-finding algorithm for polynomials)
  - **BREAKING**: Removed the `integrateOn` method on `Nonlinear`. Now numerical integration algorithms live on their own in the `src/integral` folder
@@ -72,36 +81,36 @@
  - Bug fixes in `Algebraic`
  - Dependencies versions update
 
-## [2.1.3]
+## 2.1.3
 
  - Dependencies versions update
  - Minor enhancement in the `PolynomialLongDivision` class
  - Added trace computation on matrices
  - Added french localization to the Flutter example app
  
-## [2.1.2]
+## 2.1.2
 
  - Dependencies versions update
  - Updated example to Flutter 2.2.0 and improved coverage
  - Added `bool hasSolution()` on the `SystemSolver` type to determine whether a system can be solved or not
 
-## [2.1.1]
+## 2.1.1
 
  - Added QR decomposition to the `RealMatrix` and `ComplexMatrix` type
  - Dependencies versions update
 
-## [2.1.0]
+## 2.1.0
 
  - Changes on deep copy logic for lists (now the library uses `List.from()` on immutable objects)
  - Added the `PolynomialLongDivision` class to divide a polynomial by another
  - Now the `Algebraic` type supports `opeartor/` too so you can divide polynomials to get quotient and remainder
  - Dependencies versions update
 
-## [2.0.3]
+## 2.0.3
 
  - Dependencies versions update
 
-## [2.0.2]
+## 2.0.2
 
  - New extension method on `String` called `isRealFunction` that determines whether a string represents a real function or not
  - New extension method on `String` called `isNumericalExpression` that determines whether a string represents numerical expression or not
@@ -109,13 +118,13 @@
  - Written more tests for the `flutter_example` demo project
  - Dependencies versions update
 
-## [2.0.1]
+## 2.0.1
 
  - New `toStringAsFixed()` method for the `Complex` type
  - Improved static analysis with a more elaborated `analysis_options.yaml` file
  - Dependencies versions update
 
-## [2.0.0]
+## 2.0.0
 
  - Migration to stable null safety
  - Dependencies versions update

@@ -19,11 +19,13 @@ dart_code_metrics:
     - example/**
   rules:
     - avoid-collection-methods-with-unrelated-types
+    - avoid-duplicate-exports
     - avoid-dynamic
     - avoid-global-state
     - avoid-ignoring-return-values
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
+    - avoid-shrink-wrap-in-lists.
     - avoid-throw-in-catch-block
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts
@@ -37,7 +39,9 @@ dart_code_metrics:
     - no-empty-block
     - no-object-declaration
     - prefer-async-await
+    - prefer-correct-edge-insets-constructor-rule
     - prefer-correct-type-name
+    - prefer-enums-by-name
     - prefer-first
     - prefer-immediate-return
     - prefer-last
