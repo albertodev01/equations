@@ -5,9 +5,9 @@ import 'package:equations/equations.dart';
 /// **Characteristics**:
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
-///   continuous function on the interval [a, b].
+///   continuous function on the interval `[a, b]`.
 ///
-///   - The root must be inside the [a, b] interval. For this reason, the method
+///   - The root must be inside the `[a, b]` interval. For this reason, the method
 ///   will fail if `f(a) * f(b) >= 0`.
 class Brent extends NonLinear {
   /// The starting point of the interval.
