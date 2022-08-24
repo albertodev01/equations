@@ -5,11 +5,6 @@ import 'package:equations/equations.dart';
 /// A Dart representation of a complex number in the form `a + bi` where `a` is
 /// the real part and `bi` is the imaginary (or complex) part.
 ///
-/// New instances of [Complex] can be created either by:
-///
-///  - using one of the constructors
-///  - the extension method on [num]
-///
 /// A [Complex] object is **immutable**.
 class Complex implements Comparable<Complex> {
   /// The real part of the complex number.
@@ -21,12 +16,14 @@ class Complex implements Comparable<Complex> {
   /// Creates a complex number with the given real and imaginary parts.
   const Complex(this.real, this.imaginary);
 
-  /// Creates a complex number having only the real part, meaning that the
-  /// imaginary part is set to 0.
+  /// Creates a complex with only the real part.
+  ///
+  /// The imaginary part is set to 0i.
   const Complex.fromReal(this.real) : imaginary = 0;
 
-  /// Creates a complex number having only the imaginary part, meaning that the
-  /// real part is set to 0.
+  /// Creates a complex with only the imaginary part.
+  ///
+  /// The real part is set to 0.
   const Complex.fromImaginary(this.imaginary) : real = 0;
 
   /// This is the same as calling `Complex(0, 0)`.
@@ -35,40 +32,46 @@ class Complex implements Comparable<Complex> {
   /// This is the same as calling `Complex(0, 1)`.
   const Complex.i() : this(0, 1);
 
-  /// Creates a complex number from [Fraction] objects as parameter for the real
-  /// and imaginary part.
+  /// Creates a complex number from [Fraction] objects.
   factory Complex.fromFraction(Fraction real, Fraction imaginary) =>
       Complex(real.toDouble(), imaginary.toDouble());
 
-  /// Creates a complex number from [MixedFraction] objects as parameter for the
-  /// real and imaginary part.
+  /// Creates a complex number from [MixedFraction] objects.
   factory Complex.fromMixedFraction(MixedFraction real, MixedFraction imag) =>
       Complex(real.toDouble(), imag.toDouble());
 
-  /// Creates a complex number having only the real part, which is expressed as
-  /// a [Fraction]. The imaginary part is set to 0.
+  /// Creates a complex number having only the real part expressed as a
+  /// [Fraction] object.
+  ///
+  /// The imaginary part is set to 0i.
   factory Complex.fromRealFraction(Fraction real) =>
       Complex(real.toDouble(), 0);
 
-  /// Creates a complex number having only the imaginary part, which is
-  /// expressed as a [Fraction]. The real part is set to 0.
+  /// Creates a complex number having only the imaginary part expressed as a
+  /// [Fraction] object.
+  ///
+  /// The real part is set to 0.
   factory Complex.fromImaginaryFraction(Fraction imaginary) =>
       Complex(0, imaginary.toDouble());
 
-  /// Creates a complex number having only the real part, which is expressed as
-  /// a [MixedFraction]. The imaginary part is set to 0.
+  /// Creates a complex number having only the real part expressed as a
+  /// [MixedFraction] object.
+  ///
+  /// The imaginary part is set to 0i.
   factory Complex.fromRealMixedFraction(MixedFraction real) =>
       Complex(real.toDouble(), 0);
 
-  /// Creates a complex number having only the imaginary part, which is
-  /// expressed as a [MixedFraction]. The real part is set to 0.
+  /// Creates a complex number having only the imaginary part expressed as a
+  /// [MixedFraction] object.
+  ///
+  /// The real part is set to 0.
   factory Complex.fromImaginaryMixedFraction(MixedFraction imaginary) =>
       Complex(0, imaginary.toDouble());
 
   /// Creates a complex number from the given polar coordinates where [r] is the
   /// radius and [theta] is the angle.
   ///
-  /// By default the angle theta must be expressed in *radians* but setting
+  /// By default, the angle [theta] must be expressed in *radians* but setting
   /// `angleInRadians = false` allows the value to be in degrees.
   factory Complex.fromPolar({
     required double r,
@@ -137,7 +140,7 @@ class Complex implements Comparable<Complex> {
   @override
   String toString() => _convertToString();
 
-  /// Prints the real and the imaginary parts of this [Complex] instance with
+  /// Prints the real and the imaginary parts of this [Complex] object with
   /// [fractionDigits] decimal digits. The output produced by this method is the
   /// same that would result in calling `toStringAsFixed` on a [double]:
   ///
@@ -157,7 +160,7 @@ class Complex implements Comparable<Complex> {
   String toStringAsFixed(int fractionDigits) =>
       _convertToString(fractionDigits: fractionDigits);
 
-  /// Prints the real and the imaginary parts or the complex number as fractions
+  /// Prints the real and the imaginary parts of the complex number as fractions
   /// with the best possible approximation.
   String toStringAsFraction() => _convertToString(asFraction: true);
 
@@ -175,8 +178,8 @@ class Complex implements Comparable<Complex> {
     return '($this)';
   }
 
-  /// Returns an instance of [PolarComplex] which contains the radius `r` and
-  /// the angle `phi` of the complex number.
+  /// Converts this object into polar coordinates and wraps them in a new
+  /// [PolarComplex] object.
   PolarComplex toPolarCoordinates() => PolarComplex(
         r: abs(),
         phiRadians: phase(),
@@ -184,11 +187,10 @@ class Complex implements Comparable<Complex> {
       );
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
-  /// the real and the imaginary part are converted into fractions rather than
-  /// being "normal" double values.
+  /// the real and the imaginary part are converted into fractions.
   ///
-  /// You cannot define `asFraction = true` and assign `fractionDigits` a value
-  /// as well.
+  /// If you define `asFraction = true` and assign `fractionDigits` together,
+  /// then `fractionDigit` takes precedence and ignores the `asFraction` value.
   String _convertToString({
     bool asFraction = false,
     int? fractionDigits,
@@ -240,19 +242,19 @@ class Complex implements Comparable<Complex> {
   /// Converts an angle from degrees to radians.
   static double _degToRad(num value) => value * math.pi / 180;
 
-  /// Calculates the sum between two complex numbers.
+  /// Sums two complex numbers.
   Complex operator +(Complex other) => Complex(
         real + other.real,
         imaginary + other.imaginary,
       );
 
-  /// Calculates the difference between two complex numbers.
+  /// Subtracts two complex numbers.
   Complex operator -(Complex other) => Complex(
         real - other.real,
         imaginary - other.imaginary,
       );
 
-  /// Calculates the product of two complex numbers.
+  /// The products of two complex numbers.
   Complex operator *(Complex other) {
     final realPart = real * other.real - imaginary * other.imaginary;
     final imaginaryPart = real * other.imaginary + imaginary * other.real;
@@ -260,12 +262,13 @@ class Complex implements Comparable<Complex> {
     return Complex(realPart, imaginaryPart);
   }
 
-  /// Calculates the division of two complex numbers.
+  /// Divides two complex numbers.
   Complex operator /(Complex other) => this * other.reciprocal();
 
   /// Returns the negation of this complex number.
   Complex operator -() => negate;
 
+  /// {@template natural_ordering_complex_numbers}
   /// There is no natural linear ordering for complex numbers. In fact, any
   /// square in an ordered field is >= 0 but in the complex field we have that
   /// _i<sup>2</sup> = -1_.
@@ -275,39 +278,16 @@ class Complex implements Comparable<Complex> {
   ///
   /// In this implementation, we compare two [Complex] instances by looking at
   /// their modulus/magnitude.
+  /// {@endtemplate}
   bool operator >(Complex other) => abs() > other.abs();
 
-  /// There is no natural linear ordering for complex numbers. In fact, any
-  /// square in an ordered field is >= 0 but in the complex field we have that
-  /// _i<sup>2</sup> = -1_.
-  ///
-  /// A possible comparison strategy involves comparing the modulus/magnitude
-  /// [abs] of the two complex number.
-  ///
-  /// In this implementation, we compare two [Complex] instances by looking at
-  /// their modulus/magnitude.
+  /// {@macro natural_ordering_complex_numbers}
   bool operator >=(Complex other) => abs() >= other.abs();
 
-  /// There is no natural linear ordering for complex numbers. In fact, any
-  /// square in an ordered field is >= 0 but in the complex field we have that
-  /// _i<sup>2</sup> = -1_.
-  ///
-  /// A possible comparison strategy involves comparing the modulus/magnitude
-  /// [abs] of the two complex number.
-  ///
-  /// In this implementation, we compare two [Complex] instances by looking at
-  /// their modulus/magnitude.
+  /// {@macro natural_ordering_complex_numbers}
   bool operator <(Complex other) => abs() < other.abs();
 
-  /// There is no natural linear ordering for complex numbers. In fact, any
-  /// square in an ordered field is >= 0 but in the complex field we have that
-  /// _i<sup>2</sup> = -1_.
-  ///
-  /// A possible comparison strategy involves comparing the modulus/magnitude
-  /// [abs] of the two complex number.
-  ///
-  /// In this implementation, we compare two [Complex] instances by looking at
-  /// their modulus/magnitude.
+  /// {@macro natural_ordering_complex_numbers}
   bool operator <=(Complex other) => abs() <= other.abs();
 
   /// The sign of the imaginary part of current object is changed and the result
@@ -350,7 +330,7 @@ class Complex implements Comparable<Complex> {
   double phase() => math.atan2(imaginary, real);
 
   /// Calculates the _base-e_ exponential of a complex number z where _e_ is the
-  /// famous Euler constant.
+  /// Euler constant.
   Complex exp() => Complex(
         math.exp(real) * math.cos(imaginary),
         math.exp(real) * math.sin(imaginary),
@@ -380,7 +360,7 @@ class Complex implements Comparable<Complex> {
   /// Calculates the hyperbolic sine.
   double _sinh(num x) => (math.exp(x) - math.exp(-x)) / 2;
 
-  /// Calculates the square root of a complex number.
+  /// Calculates the square root of this complex number.
   Complex sqrt() {
     // In case this instance were a real, positive number, then we can simplify
     // the calculation.
@@ -412,8 +392,8 @@ class Complex implements Comparable<Complex> {
   /// Checks whether the complex number is zero.
   bool get isZero => real == 0 && imaginary == 0;
 
-  /// Computes the complex n-th root of the complex number. The returned root is
-  /// the one with the smallest positive argument.
+  /// Computes the complex n-th root of this object. The returned root is the
+  /// one with the smallest positive argument.
   Complex nthRoot(int nth) {
     var a = 0.0;
     var b = 0.0;
