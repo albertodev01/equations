@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 
-/// The "Polynomial long division" is an algorithm that divides a polynomial by
-/// another polynomial of the same or lower degree.
+/// The "Polynomial long division" algorithm divides a polynomial by another
+/// polynomial of the same or lower degree.
 ///
 /// The only constraint of this procedure is that the degree of the denominator
 /// cannot exceed the degree of the numerator. If this condition is not
@@ -10,7 +10,7 @@ class PolynomialLongDivision {
   /// The numerator.
   final Algebraic polyNumerator;
 
-  /// The denominator
+  /// The denominator.
   final Algebraic polyDenominator;
 
   /// Creates a [PolynomialLongDivision] instance.

@@ -32,7 +32,7 @@ class Quartic extends Algebraic {
   /// ```
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
-  /// values are required, then consider using [Quartic.realEquation()] for a
+  /// values are required, then consider using [Quartic.realEquation] for a
   /// less verbose syntax.
   Quartic({
     Complex a = const Complex.fromReal(1),
@@ -42,8 +42,20 @@ class Quartic extends Algebraic {
     Complex e = const Complex.zero(),
   }) : super([a, b, c, d, e]);
 
-  /// The only coefficient of the polynomial is represented by a [double]
-  /// (real) number [a].
+  /// These are examples of quartic equations, where the coefficient with the
+  /// highest degree goes first:
+  ///
+  /// ```dart
+  /// // f(x) = -x^4 - 8x^3 - 1
+  /// final eq = Quartic.realEquation(
+  ///   a: Complex.fromReal(-1),
+  ///   b: Complex.fromReal(-8),
+  ///   e: Complex.fromReal(-1),
+  /// );
+  /// ```
+  ///
+  /// If the coefficients of your polynomial contain complex numbers, consider
+  /// using the [Quartic.new] constructor instead.
   Quartic.realEquation({
     double a = 1,
     double b = 0,

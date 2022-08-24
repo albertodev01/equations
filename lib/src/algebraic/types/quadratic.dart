@@ -25,7 +25,7 @@ class Quadratic extends Algebraic {
   /// ```
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
-  /// values are required, then consider using [Quadratic.realEquation()] for a
+  /// values are required, then consider using [Quadratic.realEquation] for a
   /// less verbose syntax.
   Quadratic({
     Complex a = const Complex.fromReal(1),
@@ -33,8 +33,20 @@ class Quadratic extends Algebraic {
     Complex c = const Complex.zero(),
   }) : super([a, b, c]);
 
-  /// The only coefficient of the polynomial is represented by a [double]
-  /// (real) number [a].
+  /// These are examples of quadratic equations, where the coefficient with the
+  /// highest degree goes first:
+  ///
+  /// ```dart
+  /// // f(x) = x^2 - 6x + 5
+  /// final eq = Quadratic.realEquation(
+  ///   a: 2,
+  ///   b: -6,
+  ///   c: 5,
+  /// );
+  /// ```
+  ///
+  /// If the coefficients of your polynomial contain complex numbers, consider
+  /// using the [Quadratic.new] constructor instead.
   Quadratic.realEquation({
     double a = 1,
     double b = 0,
@@ -51,11 +63,7 @@ class Quadratic extends Algebraic {
       );
 
   @override
-  Complex discriminant() {
-    final root = const Complex.fromReal(4) * a * c;
-
-    return (b * b) - root;
-  }
+  Complex discriminant() => (b * b) - const Complex.fromReal(4) * a * c;
 
   @override
   List<Complex> solutions() {

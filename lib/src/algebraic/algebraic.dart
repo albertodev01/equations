@@ -7,8 +7,8 @@ import 'package:equations/equations.dart';
 const _exceptionError = '''
 To solve a polynomial equation (unless it's a constant), the coefficient with the highest degree cannot be zero. As such, make sure to pass a list that either:
 
- 1. Contains a single value (like [5] or [0]) to represent a polynomial whose degree is zero.
- 2. Contains one or more values AND the first parameter is not zero (like [1, 0] or [1, -3, 2, 8]).
+ 1. Contains a single value (like `[5]` or `[-2]`) to represent a polynomial whose degree is zero.
+ 2. Contains one or more values AND the first parameter is not zero (like `[1, 0]` or `[-6, -3, 2, 8]`).
  ''';
 
 /// Abstract class representing an _algebraic equation_, also know as
@@ -20,10 +20,10 @@ To solve a polynomial equation (unless it's a constant), the coefficient with th
 ///   - x<sup>3</sup> + 5x + 2 = 0
 ///   - 2x<sup>3</sup> + (6+i)x + 8i = 0
 ///
-/// This class stores the list of coefficients starting from the one with the
+/// This class stores the coefficients list starting from the one with the
 /// **highest** degree.
 abstract class Algebraic {
-  /// An list with the coefficients of the polynomial.
+  /// The list with the polynomial coefficients.
   final List<Complex> coefficients;
 
   /// Creates a new algebraic equation by taking the coefficients of the
@@ -45,6 +45,9 @@ abstract class Algebraic {
   ///
   /// If the coefficients of the polynomial are all real numbers, consider using
   /// the [Algebraic.realEquation] constructor which is more convenient.
+  ///
+  /// This constructor throws an [AlgebraicException] if the first element of
+  /// [coefficients] is zero.
   Algebraic(this.coefficients) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
@@ -66,31 +69,27 @@ abstract class Algebraic {
   /// ... because the coefficient with the highest degree goes first.
   ///
   /// Use this constructor when the coefficients are all real numbers. If there
-  /// were complex numbers as well, use the [Algebraic] default constructor
+  /// were complex numbers as well, use the [Algebraic.new] default constructor
   /// instead.
+  ///
+  /// This constructor throws an [AlgebraicException] if the first element of
+  /// [coefficients] is zero.
   Algebraic.realEquation(List<double> coefficients)
-      : coefficients =
-            coefficients.map(Complex.fromReal).toList(growable: false) {
-    // Unless this is a constant value, the coefficient with the highest degree
-    // cannot be zero.
-    if (!_isValid) {
-      throw const AlgebraicException(_exceptionError);
-    }
-  }
+      : this(coefficients.map(Complex.fromReal).toList(growable: false));
 
-  /// Returns an [Algebraic] instance according with the number of
-  /// [coefficients] passed. In particular:
+  /// Creates an [Algebraic] subtype according with the length of the
+  /// [coefficients] list. In particular:
   ///
-  ///  - if length is 1, a [Constant] object is returned;
-  ///  - if length is 2, a [Linear] object is returned;
-  ///  - if length is 3, a [Quadratic] object is returned;
-  ///  - if length is 4, a [Cubic] object is returned;
-  ///  - if length is 5, a [Quartic] object is returned;
-  ///  - if length is 6 or higher, a [DurandKerner] object is returned.
+  ///  - if the length is 1, a [Constant] object is returned;
+  ///  - if the length is 2, a [Linear] object is returned;
+  ///  - if the length is 3, a [Quadratic] object is returned;
+  ///  - if the length is 4, a [Cubic] object is returned;
+  ///  - if the length is 5, a [Quartic] object is returned;
+  ///  - if the length is 6 or higher, a [DurandKerner] object is returned.
   ///
-  /// For example, if the length of [coefficients] were 3 it would mean that
+  /// If the length of [coefficients] was 3 for example, it would mean that
   /// you're trying to solve a quadratic equation (because a quadratic has
-  /// exactly 3 coefficients).
+  /// exactly 3 coefficients). Another example:
   ///
   /// ```dart
   /// final linear = Algebraic.from(const [
@@ -99,12 +98,12 @@ abstract class Algebraic {
   /// ]);
   /// ```
   ///
-  /// In the above example, `linear` is of type [Linear] because the given
-  /// coefficients represent the `(1 + 3i)x + i = 0` equation.
+  /// In this case, `linear` is of type [Linear] because the given coefficients
+  /// list represent the `(1 + 3i)x + i = 0` equation.
   ///
   /// Use this method when the coefficients can be complex numbers. If there
-  /// were only real numbers, use the [Algebraic.fromReal(coefficients)] method
-  /// which is more convenient.
+  /// were only real numbers, use the [Algebraic.fromReal] method which is more
+  /// convenient.
   factory Algebraic.from(List<Complex> coefficients) {
     // Reminder: 'Complex' is immutable so there's no risk of getting undesired
     // side effects if 'coefficients' is altered
@@ -146,30 +145,29 @@ abstract class Algebraic {
     }
   }
 
-  /// Returns an [Algebraic] instance according with the number of
-  /// [coefficients] passed. In particular:
+  /// Creates an [Algebraic] subtype according with the length of the
+  /// [coefficients] list. In particular:
   ///
-  ///  - if length is 1, a [Constant] object is returned;
-  ///  - if length is 2, a [Linear] object is returned;
-  ///  - if length is 3, a [Quadratic] object is returned;
-  ///  - if length is 4, a [Cubic] object is returned;
-  ///  - if length is 5, a [Quartic] object is returned;
-  ///  - if length is 6 or higher, a [DurandKerner] object is returned.
+  ///  - if the length is 1, a [Constant] object is returned;
+  ///  - if the length is 2, a [Linear] object is returned;
+  ///  - if the length is 3, a [Quadratic] object is returned;
+  ///  - if the length is 4, a [Cubic] object is returned;
+  ///  - if the length is 5, a [Quartic] object is returned;
+  ///  - if the length is 6 or higher, a [DurandKerner] object is returned.
   ///
-  /// For example, if the length of [coefficients] were 3 it would mean that
+  /// If the length of [coefficients] was 3 for example, it would mean that
   /// you're trying to solve a quadratic equation (because a quadratic has
-  /// exactly 3 coefficients).
+  /// exactly 3 coefficients). Another example:
   ///
   /// ```dart
   /// final linear = Algebraic.fromReal(const [0.5, 6]);
   /// ```
   ///
-  /// In the above example, `linear` is of type [Linear] because the given
-  /// coefficients represent the `0.5x + 6 = 0` equation.
+  /// In this case, `linear` is of type [Linear] because the given coefficients
+  /// represent the `0.5x + 6 = 0` equation.
   ///
   /// Use this method when the coefficients are all real numbers. If there
-  /// were complex numbers as well, use the [Algebraic.from(coefficients)]
-  /// instead.
+  /// were complex numbers as well, use the [Algebraic.new] instead.
   factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
         coefficients.map(Complex.fromReal).toList(growable: false),
       );
@@ -181,7 +179,7 @@ abstract class Algebraic {
     }
 
     if (other is Algebraic) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (coefficients.length != other.coefficients.length) {
         return false;
       }
@@ -297,7 +295,7 @@ abstract class Algebraic {
   /// with a degree.
   bool get _isValid => this is Constant || !coefficients.first.isZero;
 
-  /// Evaluates the polynomial on the given complex number [x].
+  /// Evaluates the polynomial on the given [x] value.
   Complex evaluateOn(Complex x) {
     var value = const Complex.zero();
     var power = coefficients.length - 1;
@@ -315,11 +313,10 @@ abstract class Algebraic {
     return value;
   }
 
-  /// Evaluates the polynomial on the given real number [x].
+  /// Evaluates the polynomial on the given decimal [x] value.
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
-  /// Integrates the polynomial between [lower] and [upper] and computes the
-  /// result.
+  /// Evaluates the integral of the the polynomial between [lower] and [upper].
   Complex evaluateIntegralOn(double lower, double upper) {
     var upperSum = const Complex.zero();
     var lowerSum = const Complex.zero();
@@ -387,7 +384,7 @@ abstract class Algebraic {
     return coefficients[coefficients.length - degree - 1];
   }
 
-  /// The addition of two polynomials is performed by adding the corresponding
+  /// The sum of two polynomials is performed by adding the corresponding
   /// coefficients.
   ///
   /// The degrees of the two polynomials don't need to be the same. For example,
@@ -486,16 +483,13 @@ abstract class Algebraic {
   /// ```
   ///
   /// As you can see, in `poly2` all the coefficients have the opposite sign.
-  Algebraic operator -() {
-    final newList = coefficients.map((c) => -c).toList();
+  Algebraic operator -() =>
+      Algebraic.from(coefficients.map((c) => -c).toList(growable: false));
 
-    return Algebraic.from(newList);
-  }
-
-  /// The discriminant of the algebraic equation if it exists.
+  /// The polynomial discriminant, if it exists.
   Complex discriminant();
 
-  /// Calculates the roots (the solutions) of the equation.
+  /// Finds the roots (the solutions) of the associated _P(x) = 0_ equation.
   List<Complex> solutions();
 
   /// The derivative of the polynomial.

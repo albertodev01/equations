@@ -1,4 +1,4 @@
-name: equations_ci
+name: equations_flutter_example_integration_tests
 
 on:
   push:
@@ -10,8 +10,28 @@ on:
       - opened
 
 jobs:
+  integration_test_macos_flutter_example:
+    name: Flutter example - Integration test on macOS
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: example/flutter_example
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          channel: 'stable'
+
+      - name: Installing dependencies
+        run: flutter pub get
+
+      - name: Running integration tests on windows
+        run: flutter test integration_test -d macos
+
   integration_test_windows_flutter_example:
     name: Flutter example - Integration test on Windows
+    needs: [integration_test_macos_flutter_example]
     runs-on: windows-latest
     defaults:
       run:
@@ -26,5 +46,5 @@ jobs:
       - name: Installing dependencies
         run: flutter pub get
 
-      - name: Runing unit, widget and golden tests
-        run: flutter test -d windows .\integration_test\
+      - name: Running integration tests on windows
+        run: flutter test .\integration_test\ -d windows

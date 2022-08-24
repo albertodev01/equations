@@ -11,7 +11,7 @@ import 'package:equations/equations.dart';
 /// final res = numerator / denominator; // 'res' is of type 'AlgebraicDivision'
 /// ```
 ///
-/// When dividing two polynomials, there always is a quotient and a remainder.
+/// When dividing two polynomials, there always are a quotient and a remainder.
 class AlgebraicDivision {
   /// The quotient of the division.
   final Algebraic quotient;

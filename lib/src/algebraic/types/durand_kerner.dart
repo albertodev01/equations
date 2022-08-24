@@ -95,7 +95,7 @@ class DurandKerner extends Algebraic with MathUtils {
   ///
   /// Since `-5` is the coefficient with the highest degree (2), it goes first.
   /// If the coefficients of your polynomial are only real numbers, consider
-  /// using the [DurandKerner.realEquation()] constructor instead.
+  /// using the [DurandKerner.realEquation] constructor instead.
   DurandKerner({
     required List<Complex> coefficients,
     this.initialGuess = const [],
@@ -118,14 +118,14 @@ class DurandKerner extends Algebraic with MathUtils {
   /// following way:
   ///
   /// ```dart
-  /// final durandKerner = DurandKerner(
+  /// final durandKerner = DurandKerner.realEquation(
   ///   coefficients [-5, 3, 1],
   /// );
   /// ```
   ///
   /// Since `-5` is the coefficient with the highest degree (2), it goes first.
   /// If the coefficients of your polynomial contain complex numbers, consider
-  /// using the [Laguerre()] constructor instead.
+  /// using the [DurandKerner.new] constructor instead.
   DurandKerner.realEquation({
     required List<double> coefficients,
     this.initialGuess = const [],
@@ -554,16 +554,10 @@ class DurandKerner extends Algebraic with MathUtils {
     }
 
     // Merging the two real and complex helper arrays into a single list.
-    final roots = List<Complex>.generate(
+    return List<Complex>.generate(
       coefficientsLength - 1,
-      (_) => const Complex.zero(),
+      (index) => Complex(realValues[index], imaginaryValues[index]),
+      growable: false,
     );
-
-    for (var i = 0; i < coefficientsLength - 1; ++i) {
-      roots[i] = Complex(realValues[i], imaginaryValues[i]);
-    }
-
-    // The polynomial roots.
-    return roots;
   }
 }

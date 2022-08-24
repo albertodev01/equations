@@ -1,10 +1,11 @@
 import 'dart:math' as math;
+
 import 'package:equations/equations.dart';
 
 /// Concrete implementation of [Algebraic] that represents a third degree
 /// polynomial equation in the form `ax^3 + bx^2 + cx + d = 0`.
 ///
-/// This equation has exactly 3 solutions:
+/// This equation exactly has 3 solutions:
 ///
 ///  - 3 distinct real roots and 0 complex roots
 ///  - 3 real roots (some of them are equal) and 0 complex roots
@@ -31,7 +32,7 @@ class Cubic extends Algebraic {
   /// ```
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
-  /// values are required, then consider using [Cubic.realEquation()] for a
+  /// values are required, then consider using [Cubic.realEquation] for a
   /// less verbose syntax.
   Cubic({
     Complex a = const Complex.fromReal(1),
@@ -40,8 +41,20 @@ class Cubic extends Algebraic {
     Complex d = const Complex.zero(),
   }) : super([a, b, c, d]);
 
-  /// The only coefficient of the polynomial is represented by a [double]
-  /// (real) number [a].
+  /// These are examples of cubic equations, where the coefficient with the
+  /// highest degree goes first:
+  ///
+  /// ```dart
+  /// // f(x) = 2x^3 + x^2 + 5
+  /// final eq = Cubic.fromReal(
+  ///   a: 2,
+  ///   b: 1,
+  ///   d: 5,
+  /// );
+  /// ```
+  ///
+  /// If the coefficients of your polynomial contain complex numbers, consider
+  /// using the [Cubic.new] constructor instead.
   Cubic.realEquation({
     double a = 1,
     double b = 0,
