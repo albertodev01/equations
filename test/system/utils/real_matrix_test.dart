@@ -526,6 +526,48 @@ void main() {
         ),
       );
     });
+
+    test(
+      'operator+, operator- and operator/ on matrices of different sizes fails',
+      () {
+        final otherMatrix = RealMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 1,
+          data: [1],
+        );
+
+        expect(
+          () => matrixA + otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+
+        expect(
+          () => matrixA - otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+
+        expect(
+          () => matrixA / otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
+
+    test(
+      'operator* fails if rows and columns have no matching sizes',
+      () {
+        final otherMatrix = RealMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 2,
+          data: [1, 3],
+        );
+
+        expect(
+          () => matrixA * otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
   });
 
   group('Testing the computation of the determinant.', () {

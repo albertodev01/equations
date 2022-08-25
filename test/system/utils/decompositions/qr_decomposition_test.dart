@@ -3,7 +3,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
 import 'package:test/test.dart';
 
-import '../../double_approximation_matcher.dart';
+import '../../../double_approximation_matcher.dart';
 
 void main() {
   group('QRDecomposition class', () {

@@ -293,25 +293,28 @@ abstract class Matrix<T> {
 
   /// Returns the sum of two matrices.
   ///
-  /// {@template matrix_operation_size_mismatch_warning_error}
-  /// An exception is thrown if the column count of the source matrix does
-  /// **not** match the row count of the other matrix.
+  /// {@template matrix_operation_size_mismatch_error}
+  /// An exception is thrown if the size of the source matrix does **not** match
+  /// the size of the other matrix.
   /// {@endtemplate}
   Matrix<T> operator +(Matrix<T> other);
 
   /// Returns the difference of two matrices.
   ///
-  /// {@macro matrix_operation_size_mismatch_warning_error}
+  /// {@macro matrix_operation_size_mismatch_error}
   Matrix<T> operator -(Matrix<T> other);
 
   /// Returns the product of two matrices.
   ///
-  /// {@macro matrix_operation_size_mismatch_warning_error}
+  /// {@template matrix_operation_inverted_size_mismatch_error}
+  /// An exception is thrown if the column count of the source matrix does
+  /// **not** match the row count of the other matrix.
+  /// {@endtemplate}
   Matrix<T> operator *(Matrix<T> other);
 
   /// Returns the division of two matrices.
   ///
-  /// {@macro matrix_operation_size_mismatch_warning_error}
+  /// {@macro matrix_operation_inverted_size_mismatch_error}
   Matrix<T> operator /(Matrix<T> other);
 
   /// Returns the transpose of this matrix.

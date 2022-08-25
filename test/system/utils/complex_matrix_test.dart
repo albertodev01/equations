@@ -560,6 +560,48 @@ void main() {
         ),
       );
     });
+
+    test(
+      'operator+, operator- and operator/ on matrices of different sizes fails',
+      () {
+        final otherMatrix = ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 1,
+          data: const [Complex.i()],
+        );
+
+        expect(
+          () => matrixA + otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+
+        expect(
+          () => matrixA - otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+
+        expect(
+          () => matrixA / otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
+
+    test(
+      'operator* fails if rows and columns have no matching sizes',
+      () {
+        final otherMatrix = ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 2,
+          data: const [Complex.i(), Complex(2, 1)],
+        );
+
+        expect(
+          () => matrixA * otherMatrix,
+          throwsA(isA<MatrixException>()),
+        );
+      },
+    );
   });
 
   group('Testing the computation of the determinant.', () {

@@ -4,6 +4,7 @@
 ///  - finding roots of nonlinear equations;
 ///  - solving linear systems of equations;
 ///  - evaluating definite integrals;
+///  - manipulating and decomposing matrices;
 ///  - interpolate data points using interpolation algorithms.
 ///
 /// Additionally, the package also has utilities to work with complex numbers,
