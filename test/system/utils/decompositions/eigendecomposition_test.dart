@@ -3,7 +3,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_deco
 import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_real_decomposition.dart';
 import 'package:test/test.dart';
 
-import '../../double_approximation_matcher.dart';
+import '../../../double_approximation_matcher.dart';
 
 void main() {
   group('EigenDecomposition class', () {

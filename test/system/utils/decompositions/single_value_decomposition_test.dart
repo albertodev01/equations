@@ -3,7 +3,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
 import 'package:test/test.dart';
 
-import '../../double_approximation_matcher.dart';
+import '../../../double_approximation_matcher.dart';
 
 void main() {
   group('SingleValueDecomposition class', () {
