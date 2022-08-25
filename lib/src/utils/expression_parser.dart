@@ -109,11 +109,6 @@ class ExpressionParser {
         (_, a, __) => (value) => math.tan(a(value)),
       )
       ..wrapper(
-        string('exp(').trim(),
-        char(')').trim(),
-        (_, a, __) => (value) => math.exp(a(value)),
-      )
-      ..wrapper(
         string('log(').trim(),
         char(')').trim(),
         (_, a, __) => (value) => math.log(a(value)),
