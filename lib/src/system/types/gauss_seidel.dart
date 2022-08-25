@@ -13,10 +13,10 @@ class GaussSeidelSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [matrix] is the matrix containing the equations
-  ///   - [knownValues] is the vector with the known values
-  ///   - [precision] determines how accurate the algorithm has to be
-  ///   - [maxSteps] the maximum number of iterations the algorithm
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values;
+  ///   - [precision] determines how accurate the algorithm has to be;
+  ///   - [maxSteps] the maximum number of iterations the algorithm.
   ///
   /// By default, [maxSteps] is set to `30`.
   GaussSeidelSolver({

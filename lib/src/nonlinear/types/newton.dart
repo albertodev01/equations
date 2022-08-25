@@ -14,13 +14,13 @@ class Newton extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Instantiates a new object to find the root of an equation using Newton's
-  /// method.
+  /// Creates a [Newton] object object to find the root of an equation using
+  /// Newton's method.
   ///
-  ///   - [function]: the function f(x)
-  ///   - [x0]: the initial guess x<sub>0</sub>
-  ///   - [tolerance]: how accurate the algorithm has to be
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do
+  ///   - [function]: the function f(x);
+  ///   - [x0]: the initial guess x<sub>0</sub>;
+  ///   - [tolerance]: how accurate the algorithm has to be;
+  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
   const Newton({
     required super.function,
     required this.x0,

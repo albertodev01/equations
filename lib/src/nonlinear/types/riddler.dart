@@ -8,7 +8,6 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method requires the root to be bracketed between two points `a` and
 ///   `b` otherwise it won't work.
-///
 ///   - The rate of convergence is `sqrt(2)` and the convergence is guaranteed
 ///   for not we--behaved functions.
 class Riddler extends NonLinear {
@@ -18,14 +17,14 @@ class Riddler extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation using Riddler's
+  /// Creates a [Riddler] object to find the root of an equation using Riddler's
   /// method.
   ///
-  ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate `f(a)`
-  ///   - [b]: the second interval in which evaluate `f(b)`
-  ///   - [tolerance]: how accurate the algorithm has to be
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do
+  ///   - [function]: the function f(x);
+  ///   - [a]: the first interval in which evaluate `f(a)`;
+  ///   - [b]: the second interval in which evaluate `f(b)`;
+  ///   - [tolerance]: how accurate the algorithm has to be;
+  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
   const Riddler({
     required super.function,
     required this.a,

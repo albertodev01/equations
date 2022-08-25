@@ -7,7 +7,6 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method requires the root to be bracketed between two points `a` and
 ///   `b` otherwise it won't work.
-///
 ///   - If you cannot assume that a function may be interpolated by a linear
 ///   function, then applying this method method could result in worse results
 ///   than the bisection method.
@@ -18,14 +17,14 @@ class RegulaFalsi extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using the
-  /// regula falsi method.
+  /// Creates a [RegulaFalsi] object to find the root of an equation by using
+  /// the regula falsi method.
   ///
-  ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate `f(a)`
-  ///   - [b]: the second interval in which evaluate `f(b)`
-  ///   - [tolerance]: how accurate the algorithm has to be
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do
+  ///   - [function]: the function f(x);
+  ///   - [a]: the first interval in which evaluate `f(a)`;
+  ///   - [b]: the second interval in which evaluate `f(b)`;
+  ///   - [tolerance]: how accurate the algorithm has to be;
+  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
   const RegulaFalsi({
     required super.function,
     required this.a,

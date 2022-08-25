@@ -3,7 +3,7 @@ import 'package:equations/src/interpolation/utils/spline_function.dart';
 /// Represents a linear spline from a given set of control points. The
 /// interpolated curve will be monotonic if the control points.
 class LinearSpline extends SplineFunction {
-  /// Creates a [LinearSpline] instance from the given nodes.
+  /// Creates a [LinearSpline] object from the given nodes.
   const LinearSpline({
     required super.nodes,
   });
@@ -11,11 +11,11 @@ class LinearSpline extends SplineFunction {
   @override
   double interpolate(double x) {
     // Linear spline creation
-    final nodesM = List<double>.generate(nodes.length - 1, (_) => 0);
-
-    for (var i = 0; i < nodes.length - 1; ++i) {
-      nodesM[i] = (nodes[i + 1].y - nodes[i].y) / (nodes[i + 1].x - nodes[i].x);
-    }
+    final nodesM = List<double>.generate(
+      nodes.length - 1,
+      (i) => (nodes[i + 1].y - nodes[i].y) / (nodes[i + 1].x - nodes[i].x),
+      growable: false,
+    );
 
     // Interpolating
     if (x.isNaN) {

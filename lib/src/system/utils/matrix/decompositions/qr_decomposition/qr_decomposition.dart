@@ -1,15 +1,16 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/decomposition.dart';
 
+/// {@template qr_decomposition_class_header}
 /// QR decomposition, also known as a QR factorization or QU factorization, is
 /// a decomposition of a matrix A into a product `A = QR` of:
 ///
-///   - an orthogonal matrix Q
-///   - an upper triangular matrix R
+///   - an orthogonal matrix Q;
+///   - an upper triangular matrix R.
+/// {@endtemplate}
 abstract class QRDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates an instance of [QRDecomposition] to QR decompose the given
-  /// [matrix].
+  /// Creates a [QRDecomposition] object.
   const QRDecomposition({
     required super.matrix,
   });

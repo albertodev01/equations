@@ -5,7 +5,6 @@ import 'package:equations/equations.dart';
 /// **Characteristics**:
 ///
 ///   - The method is not guaranteed to converge to a root of _f(x)_.
-///
 ///   - The secant method does not require the root to remain bracketed, like
 ///   the bisection method does for example, so it doesn't always converge.
 class Secant extends NonLinear {
@@ -15,14 +14,14 @@ class Secant extends NonLinear {
   /// The second guess.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using the
+  /// Creates a [Secant] object to find the root of an equation by using the
   /// secant method. Ideally, the two guesses should be close to the root.
   ///
-  ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate _f(a)_
-  ///   - [b]: the second interval in which evaluate _f(b)_
-  ///   - [tolerance]: how accurate the algorithm has to be
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do
+  ///   - [function]: the function f(x);
+  ///   - [a]: the first interval in which evaluate _f(a)_;
+  ///   - [b]: the second interval in which evaluate _f(b)_;
+  ///   - [tolerance]: how accurate the algorithm has to be;
+  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
   const Secant({
     required super.function,
     required this.a,

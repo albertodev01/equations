@@ -18,13 +18,13 @@ class JacobiSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [matrix] is the matrix containing the equations
-  ///   - [knownValues] is the vector with the known values
-  ///   - [x0] is the initial guess (which is a vector)
-  ///   - [precision] tells how accurate the algorithm has to be
-  ///   - [maxSteps] the maximum number of iterations the algorithm
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values;
+  ///   - [x0] is the initial guess (which is a vector);
+  ///   - [precision] tells how accurate the algorithm has to be;
+  ///   - [maxSteps] the maximum number of iterations the algorithm.
   ///
-  /// `A` must be strictly diagonally dominant.
+  /// The [matrix] `A` must be strictly diagonally dominant.
   factory JacobiSolver({
     required RealMatrix matrix,
     required List<double> knownValues,
@@ -50,7 +50,7 @@ class JacobiSolver extends SystemSolver {
     );
   }
 
-  /// Creates a [JacobiSolver] instance with
+  /// Creates a [JacobiSolver] object.
   JacobiSolver._({
     required super.matrix,
     required super.knownValues,
@@ -66,7 +66,7 @@ class JacobiSolver extends SystemSolver {
     }
 
     if (other is JacobiSolver) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (x0.length != other.x0.length) {
         return false;
       }
@@ -95,7 +95,7 @@ class JacobiSolver extends SystemSolver {
   int get hashCode {
     var result = super.hashCode;
 
-    // Like we did in operator== iterating over all elements ensures that the
+    // Like we did in operator==, iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < x0.length; ++i) {
       result = result * 37 + x0[i].hashCode;
@@ -106,11 +106,11 @@ class JacobiSolver extends SystemSolver {
 
   @override
   List<double> solve() {
-    // Exit conditions for the method
+    // Exit conditions for the method.
     var k = 0;
     var diff = precision + 1;
 
-    // Support lists
+    // Support lists.
     final size = knownValues.length;
     final solutions = List<double>.from(x0);
 
@@ -152,7 +152,7 @@ class JacobiSolver extends SystemSolver {
       difference[i] = vectorA[i] - vectorB[i];
     }
 
-    // Computing the euclidean norm
+    // Computing the euclidean norm.
     final sum = difference.map((xi) => xi * xi).reduce((a, b) => a + b);
 
     return math.sqrt(sum);

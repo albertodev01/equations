@@ -4,12 +4,7 @@ import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/single_value_decomposition.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
-/// Single Value Decomposition decomposition, also known as a SVD, is a
-/// decomposition of a matrix A into a product `A = U x E x Vt` of:
-///
-///   - a square unitary matrix U
-///   - a rectangular diagonal matrix E with positive values on the diagonal
-///   - a square unitary matrix V
+/// {@macro svd_class_header}
 ///
 /// This class performs the SVD procedure on [RealMatrix] types.
 class SVDReal extends SingleValueDecomposition<double, RealMatrix>

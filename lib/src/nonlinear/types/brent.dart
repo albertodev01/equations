@@ -6,9 +6,8 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
-///
-///   - The root must be inside the `[a, b]` interval. For this reason, the method
-///   will fail if `f(a) * f(b) >= 0`.
+///   - The root must be inside the `[a, b]` interval. For this reason, the
+///   method will fail if `f(a) * f(b) >= 0`.
 class Brent extends NonLinear {
   /// The starting point of the interval.
   final double a;
@@ -16,14 +15,14 @@ class Brent extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation using Brent's
+  /// Creates a [Brent] object to find the root of an equation using Brent's
   /// method.
   ///
-  ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate `f(a)`
-  ///   - [b]: the second interval in which evaluate `f(b)`
-  ///   - [tolerance]: how accurate the algorithm has to be
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do
+  ///   - [function]: the function f(x);
+  ///   - [a]: the first interval in which evaluate `f(a)`;
+  ///   - [b]: the second interval in which evaluate `f(b)`;
+  ///   - [tolerance]: how accurate the algorithm has to be;
+  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
   const Brent({
     required super.function,
     required this.a,

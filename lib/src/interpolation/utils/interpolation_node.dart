@@ -10,7 +10,7 @@ class InterpolationNode {
   /// The y coordinate.
   final double y;
 
-  /// Creates an [InterpolationNode] instance.
+  /// Creates an [InterpolationNode] object.
   const InterpolationNode({
     required this.x,
     required this.y,
@@ -51,11 +51,10 @@ class InterpolationNode {
   ///   y: 8.123,
   /// );
   ///
-  /// // Calling 'toStringAsFixed' on the `Complex` instance
+  /// // Calling 'toStringAsFixed' on the `InterpolationNode` object
   /// print(example.toStringAsFixed(1)); // (5.1, 8.1)
   ///
-  /// // The same result but with 'toStringAsFixed' calls on the single [double]
-  /// // values of the complex value:
+  /// // The same result but with 'toStringAsFixed' calls on 'x' and 'y' values
   /// final x = example.x.toStringAsFixed(1);
   /// final y = example.y.toStringAsFixed(1);
   ///

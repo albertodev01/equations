@@ -1,8 +1,8 @@
 /// Holds a series of results returned by [NonLinear.solve]:
 ///
-///  - the list of guesses computed by the algorithm,
-///  - the rate of convergence (if possible),
-///  - the efficiency of the algorithm (if possible).
+///  - the list of guesses computed by the algorithm;
+///  - the rate of convergence (if any);
+///  - the efficiency of the algorithm (if any).
 class NonlinearResults {
   /// List of values guessed by the algorithm.
   final List<double> guesses;
@@ -29,7 +29,7 @@ class NonlinearResults {
     }
 
     if (other is NonlinearResults) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (guesses.length != other.guesses.length) {
         return false;
       }
@@ -59,7 +59,7 @@ class NonlinearResults {
   int get hashCode {
     var result = 2011;
 
-    // Like we did in operator== iterating over all elements ensures that the
+    // Like we did in operator==, iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < guesses.length; ++i) {
       result = result * 37 + guesses[i].hashCode;

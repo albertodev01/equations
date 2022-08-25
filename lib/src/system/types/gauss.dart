@@ -6,8 +6,8 @@ class GaussianElimination extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [matrix] is the matrix containing the equations
-  ///   - [knownValues] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values.
   ///
   /// Swaps rows/columns and uses back substitution to solve the system.
   GaussianElimination({
@@ -22,9 +22,9 @@ class GaussianElimination extends SystemSolver {
     final A = matrix.toListOfList();
     final b = knownValues.toList();
 
-    // Swapping rows and pivoting
+    // Swapping rows and pivoting.
     for (var p = 0; p < n; ++p) {
-      // Finding a pivot
+      // Finding a pivot.
       var max = p;
       for (var i = p + 1; i < n; i++) {
         if (A[i][p].abs() > A[max][p].abs()) {
@@ -32,7 +32,7 @@ class GaussianElimination extends SystemSolver {
         }
       }
 
-      // Swapping rows
+      // Swapping rows.
       final temp = A[p];
       A[p] = A[max];
       A[max] = temp;
@@ -40,14 +40,14 @@ class GaussianElimination extends SystemSolver {
       b[p] = b[max];
       b[max] = t;
 
-      // Making sure the matrix is not singular
+      // Making sure the matrix is not singular.
       if (A[p][p].abs() <= precision) {
         throw const SystemSolverException(
           'The matrix is singular or nearly singular.',
         );
       }
 
-      // pivot within A and b
+      // pivot within A and b.
       for (var i = p + 1; i < n; i++) {
         final alpha = A[i][p] / A[p][p];
         b[i] -= alpha * b[p];
@@ -57,7 +57,7 @@ class GaussianElimination extends SystemSolver {
       }
     }
 
-    // Back substitution
+    // Back substitution.
     return SystemSolver.backSubstitution(A, b);
   }
 }

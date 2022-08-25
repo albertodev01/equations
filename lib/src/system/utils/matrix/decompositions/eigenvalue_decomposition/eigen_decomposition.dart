@@ -1,17 +1,18 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/decomposition.dart';
 
+/// {@template eigendecomposition_class_header}
 /// Eigendecomposition, also known as spectral decomposition, is a decomposition
 /// of a matrix A into a product `A = V x D x V^-1` where:
 ///
 ///   - V is a square matrix whose i<sup>th</sup> column is the eigenvector of A;
 ///   - D is the diagonal matrix whose diagonal elements are the corresponding
-///     eigenvalues of A;
+///   eigenvalues of A;
 ///   - V^-1 is the inverse of V.
+/// {@endtemplate}
 abstract class EigenDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates an instance of [EigenDecomposition] to eigendecompose the
-  /// given [matrix].
+  /// Creates a [EigenDecomposition] object.
   const EigenDecomposition({
     required super.matrix,
   });
