@@ -23,14 +23,10 @@ class NewtonInterpolation extends Interpolation {
   @override
   double compute(double x) {
     if (forwardDifference) {
-      final matrix = forwardDifferenceTable();
-
-      return _forwardEvaluation(matrix, x);
+      return _forwardEvaluation(forwardDifferenceTable(), x);
     }
 
-    final matrix = backwardDifferenceTable();
-
-    return _backwardEvaluation(matrix, x);
+    return _backwardEvaluation(backwardDifferenceTable(), x);
   }
 
   /// Computes the u of the formula, where `u = (x – a)/h`.
@@ -78,7 +74,8 @@ class NewtonInterpolation extends Interpolation {
     final size = nodes.length;
     final table = List<List<double>>.generate(
       size,
-      (_) => List<double>.generate(size, (_) => 0),
+      (_) => List<double>.generate(size, (_) => 0, growable: false),
+      growable: false,
     );
 
     // Initializing the column
@@ -94,7 +91,11 @@ class NewtonInterpolation extends Interpolation {
       }
     }
 
-    return RealMatrix.fromData(columns: size, rows: size, data: table);
+    return RealMatrix.fromData(
+      columns: size,
+      rows: size,
+      data: table,
+    );
   }
 
   /// Computes the backward differences table and stores the results in a
@@ -103,7 +104,8 @@ class NewtonInterpolation extends Interpolation {
     final size = nodes.length;
     final table = List<List<double>>.generate(
       size,
-      (_) => List<double>.generate(size, (_) => 0),
+      (_) => List<double>.generate(size, (_) => 0, growable: false),
+      growable: false,
     );
 
     // Initializing the column
@@ -112,13 +114,17 @@ class NewtonInterpolation extends Interpolation {
       table[index++].first = node.y;
     }
 
-    // Forward difference table
+    // Backward difference table
     for (var i = 1; i < size; i++) {
       for (var j = size - 1; j >= i; j--) {
         table[j][i] = table[j][i - 1] - table[j - 1][i - 1];
       }
     }
 
-    return RealMatrix.fromData(columns: size, rows: size, data: table);
+    return RealMatrix.fromData(
+      columns: size,
+      rows: size,
+      data: table,
+    );
   }
 }

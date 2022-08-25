@@ -16,7 +16,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// );
 /// ```
 ///
-/// By default, the cells of a matrix are initialized with all zeroes. You can
+/// By default, the cells of a matrix are initialized with zeroes. You can
 /// access elements of the matrix very conveniently with the following syntax:
 ///
 /// ```dart
@@ -33,11 +33,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
 class RealMatrix extends Matrix<double> with MathUtils {
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with zeroes.
-  ///
-  /// If `identity` is set to `true` (by default it's `false`) then the matrix
-  /// is initialized with all zeroes **and** the diagonal is filled with ones.
+  /// {@macro matrix_constructor_intro}
   RealMatrix({
     required super.rows,
     required super.columns,
@@ -47,28 +43,21 @@ class RealMatrix extends Matrix<double> with MathUtils {
           identityOneValue: 1,
         );
 
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with values from `data`.
+  /// {@macro matrix_fromData_constructor}
   RealMatrix.fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with values from `data`.
-  ///
-  /// The source matrix is expressed as an array whose size must **exactly** be
-  /// `N` * `M`.
+  /// {@macro matrix_fromFlattenedData_constructor}
   RealMatrix.fromFlattenedData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromFlattenedData();
 
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with `diagonalValue` in the main diagonal and zeroes
-  /// otherwise.
+  /// {@macro matrix_diagonal_constructor}
   RealMatrix.diagonal({
     required super.rows,
     required super.columns,
@@ -271,7 +260,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
       throw const MatrixException('The matrix must be square!');
     }
 
-    // The cofactor matrix of an 1x1 matrix is always 1
+    // The cofactor matrix of an 1x1 matrix is always 1.
     if (rowCount == 1) {
       return RealMatrix.fromFlattenedData(
         rows: 1,
@@ -285,7 +274,7 @@ class RealMatrix extends Matrix<double> with MathUtils {
       (_) => List<double>.generate(columnCount, (_) => 0.0),
     );
 
-    // Computing cofactors
+    // Computing cofactors.
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
         source[i][j] = pow(-1, i + j) * minor(i, j).determinant();

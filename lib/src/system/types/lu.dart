@@ -8,8 +8,8 @@ class LUSolver extends SystemSolver {
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [matrix] is the matrix containing the equations
-  ///   - [knownValues] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values.
   LUSolver({
     required super.matrix,
     required super.knownValues,

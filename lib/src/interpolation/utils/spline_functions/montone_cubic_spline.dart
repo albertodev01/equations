@@ -8,7 +8,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// addition, assuming the control points are monotonic, then the interpolated
 /// values will also be monotonic.
 class MonotoneCubicSpline extends SplineFunction with MathUtils {
-  /// Creates a [MonotoneCubicSpline] instance from the given nodes.
+  /// Creates a [MonotoneCubicSpline] object from the given nodes.
   const MonotoneCubicSpline({
     required super.nodes,
   });

@@ -4,7 +4,7 @@ import 'package:equations/equations.dart';
 
 /// Polynomial interpolation is the interpolation of a given data set by the
 /// polynomial of lowest possible degree that passes through the points of the
-/// dataset.
+/// data set.
 ///
 /// This can also be seen as a generalization of linear interpolation.
 class PolynomialInterpolation extends Interpolation {

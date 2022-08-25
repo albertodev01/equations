@@ -4,9 +4,12 @@ import 'package:equations/equations.dart';
 
 /// A simple Dart implementation of a matrix whose size is `m x n`. Thanks to
 /// its generic nature, you can decide to work with [int], [double], [Complex]
-/// or any other kind of numerical type.
+/// or any other kind of numerical type. This library implements:
 ///
-/// By default, the cells of a matrix are initialized with all zeroes. You can
+///  - [RealMatrix], that works with real numbers;
+///  - [ComplexMatrix], that works with complex numbers.
+///
+/// By default, the cells of a matrix are initialized with zeroes. You can
 /// access elements of the matrix either by calling [itemAt] or by using the
 /// [call] method (which makes the instance 'callable').
 abstract class Matrix<T> {
@@ -19,11 +22,15 @@ abstract class Matrix<T> {
   /// The internal representation of the matrix.
   final List<T> _data;
 
+  /// {@template matrix_constructor_intro}
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with zeroes.
   ///
   /// If [identity] is set to `true` (by default it's `false`) then the matrix
-  /// is initialized with all zeroes **and** the diagonal is filled with ones.
+  /// is initialized with zeroes **and** the diagonal is filled with ones.
+  ///
+  /// A [MatrixException] object is thrown if [rows] or [columns] is set to 0.
+  /// {@endtemplate}
   Matrix({
     required int rows,
     required int columns,
@@ -50,15 +57,20 @@ abstract class Matrix<T> {
     }
   }
 
+  /// {@template matrix_fromData_constructor}
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with values from [data].
+  ///
+  /// A [MatrixException] object is thrown if [rows]*[columns] is **not** equal
+  /// to [data] length.
+  /// {@endtemplate}
   Matrix.fromData({
     required int rows,
     required int columns,
     required List<List<T>> data,
   })  : rowCount = rows,
         columnCount = columns,
-        _data = data.expand((e) => e).toList() {
+        _data = data.expand((e) => e).toList(growable: false) {
     // Making sure the size is correct
     if (_data.length != (rows * columns)) {
       throw const MatrixException(
@@ -67,11 +79,13 @@ abstract class Matrix<T> {
     }
   }
 
+  /// {@template matrix_fromFlattenedData_constructor}
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with values from [data].
   ///
   /// The source matrix is expressed as an array whose size must **exactly** be
-  /// `N` * `M`.
+  /// `N` * `M`, otherwise a [MatrixException] object is thrown.
+  /// {@endtemplate}
   Matrix.fromFlattenedData({
     required int rows,
     required int columns,
@@ -88,9 +102,13 @@ abstract class Matrix<T> {
     }
   }
 
+  /// {@template matrix_diagonal_constructor}
   /// Creates a new `N x M` matrix where [rows] is `N` and [columns] is `M`. The
   /// matrix is filled with [diagonalValue] in the main diagonal and zeroes
   /// otherwise.
+  ///
+  /// A [MatrixException] object is thrown if [rows] or [columns] is set to 0.
+  /// {@endtemplate}
   Matrix.diagonal({
     required int rows,
     required int columns,
@@ -99,12 +117,12 @@ abstract class Matrix<T> {
   })  : rowCount = rows,
         columnCount = columns,
         _data = List<T>.filled(rows * columns, defaultValue) {
-    // Making sure the user entered valid dimensions for the matrix
+    // Making sure the user entered valid dimensions for the matrix.
     if ((rows == 0) || (columns == 0)) {
       throw const MatrixException('The rows or column count cannot be zero.');
     }
 
-    // Putting the given value in the diagonal
+    // Putting the given value in the diagonal.
     for (var i = 0; i < rowCount; ++i) {
       final pos = columnCount * i + i;
 
@@ -201,29 +219,27 @@ abstract class Matrix<T> {
         growable: false,
       );
 
-  /// A flattened representation of the matrix data.
+  /// An unmodifiable, flattened representation of the matrix data.
   List<T> get flattenData => UnmodifiableListView<T>(_data);
 
   /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.
   List<T> toList() => List<T>.from(_data);
 
-  /// Determines whether the matrix is square
+  /// Determines whether the matrix is square nor not.
   bool get isSquareMatrix => rowCount == columnCount;
 
   /// Use this method to retrieve the element at a given position in the matrix.
   /// For example:
   ///
   /// ```dart
-  /// final matrix = Matrix(
-  ///   rowCount: 3,
-  ///   columnCount: 3,
-  /// );
-  ///
-  /// final value = matrix(2, 1);
+  /// final value = myMatrix(2, 1);
   /// ```
   ///
-  /// In the above example, you're accessing the [double] at position `(3, 2)`.
+  /// In the above example, you're accessing the value at position `(3, 2)`.
   /// This method is an alias of [itemAt].
+  ///
+  /// A [MatrixException] is thrown if [row] and/or [col] is not within the
+  /// size range of the matrix.
   T call(int row, int col) {
     if ((row >= rowCount) || (col >= columnCount)) {
       throw const MatrixException('The given indices are out of the bounds.');
@@ -247,15 +263,19 @@ abstract class Matrix<T> {
   /// Returns the value at ([row], [col]) position as if this matrix were
   /// transposed. For example, let's say we have this matrix object:
   ///
+  /// ```txt
   /// A = | 1 2 |
   ///     | 3 4 |
+  /// ```
   ///
   /// calling `itemAt(0, 1)` returns `2` because that's the value stored at row
   /// 0 and column 1. Calling `transposedValue(0, 1)` returns `3` because in the
   /// transposed matrix of A...
   ///
+  /// ```txt
   /// At = | 1 3 |
   ///      | 2 4 |
+  /// ```
   ///
   /// ... the number `3` is at row 0 an column 1. In other words, this method
   /// returns the value of the transposed matrix of this matrix.
@@ -265,27 +285,33 @@ abstract class Matrix<T> {
   /// For example:
   ///
   /// ```dart
-  /// final matrix = Matrix(
-  ///   rowCount: 3,
-  ///   columnCount: 3,
-  /// );
-  ///
-  /// final value = matrix.itemAt(2, 1);
+  /// final value = myMatrix.itemAt(2, 1);
   /// ```
   ///
-  /// In the above example, you're accessing the [double] at position `(3, 2)`.
+  /// In the above example, you're accessing the value at position `(3, 2)`.
   T itemAt(int row, int col) => this(row, col);
 
   /// Returns the sum of two matrices.
+  ///
+  /// {@template matrix_operation_size_mismatch_warning_error}
+  /// An exception is thrown if the column count of the source matrix does
+  /// **not** match the row count of the other matrix.
+  /// {@endtemplate}
   Matrix<T> operator +(Matrix<T> other);
 
   /// Returns the difference of two matrices.
+  ///
+  /// {@macro matrix_operation_size_mismatch_warning_error}
   Matrix<T> operator -(Matrix<T> other);
 
-  /// Returns the sum of two matrices.
+  /// Returns the product of two matrices.
+  ///
+  /// {@macro matrix_operation_size_mismatch_warning_error}
   Matrix<T> operator *(Matrix<T> other);
 
   /// Returns the division of two matrices.
+  ///
+  /// {@macro matrix_operation_size_mismatch_warning_error}
   Matrix<T> operator /(Matrix<T> other);
 
   /// Returns the transpose of this matrix.
@@ -300,13 +326,24 @@ abstract class Matrix<T> {
   /// This function only computes the **first minor**, which is the minor
   /// obtained by only removing 1 row and 1 column from the source matrix. This
   /// is often useful to calculate cofactors.
+  ///
+  /// A [MatrixException] object is thrown in a few cases:
+  ///
+  ///  - [row] or [col] is smaller than zero;
+  ///  - [row] or [col] are higher than, respectively, the total row or column
+  ///    count;
+  ///  - [row] or [col] is 1.
   Matrix<T> minor(int row, int col);
 
   /// The matrix formed by all of the cofactors of a square matrix is called the
   /// "cofactor matrix" (also called "the matrix of cofactors").
   ///
-  /// In practice, this matrix is obtained by calling [minor(i, j)] for all the
+  /// In practice, this matrix is obtained by calling `minor(i, j)` for all the
   /// rows and columns combinations of the matrix.
+  ///
+  /// {@template matrix_not_square_error}
+  /// A [MatrixException] object is thrown if the matrix isn't square.
+  /// {@endtemplate}
   Matrix<T> cofactorMatrix();
 
   /// Returns the inverse of this matrix.
@@ -316,11 +353,15 @@ abstract class Matrix<T> {
   /// the identity matrix.
   ///
   /// A square matrix has an inverse if and only if the determinant **isn't** 0.
+  ///
+  /// {@macro matrix_not_square_error}
   Matrix<T> inverse();
 
   /// The trace of a square matrix `A`, denoted `tr(A)`, is defined to be the
   /// sum of elements on the main diagonal (from the upper left to the lower
   /// right).
+  ///
+  /// {@macro matrix_not_square_error}
   T trace();
 
   /// A diagonal matrix is a matrix in which the entries outside the main
@@ -328,9 +369,9 @@ abstract class Matrix<T> {
   bool isDiagonal();
 
   /// The identity matrix is a square matrix with ones on the main diagonal
-  /// and zeros elsewhere. It is denoted by In, or simply by I i
+  /// and zeros elsewhere. It is denoted by I<sub>n</sub>, or simply by I.
   ///
-  /// This method throws if the matrix is **not** square.
+  /// {@macro matrix_not_square_error}
   bool isIdentity();
 
   /// The **rank** of a matrix `A` is the dimension of the vector space
@@ -358,18 +399,24 @@ abstract class Matrix<T> {
   /// characteristic polynomial and solve the polynomial equation. However, for
   /// 5x5 or bigger matrices, consider using the [eigenvalues] method which is
   /// faster and more accurate.
+  ///
+  /// {@macro matrix_not_square_error}
   Algebraic characteristicPolynomial();
 
   /// Returns the eigenvalues associated to this matrix.
   ///
   /// Eigenvalues can only be computed if the matrix is **square**, meaning
   /// that it must have the same number of columns and rows.
+  ///
+  /// {@macro matrix_not_square_error}
   List<Complex> eigenvalues();
 
   /// Factors the matrix as the product of a lower triangular matrix `L` and
   /// an upper triangular matrix `U`. The matrix **must** be square.
   ///
   /// The returned list contains `L` at index 0 and `U` at index 1.
+  ///
+  /// {@macro matrix_not_square_error}
   List<Matrix<T>> luDecomposition();
 
   /// Uses the the Cholesky decomposition algorithm to factor the matrix into
@@ -382,6 +429,8 @@ abstract class Matrix<T> {
   /// number were encountered.
   ///
   /// The returned list contains `L` at index 0 and `L`<sup>T</sup> at index 1.
+  ///
+  /// {@macro matrix_not_square_error}
   List<Matrix<T>> choleskyDecomposition();
 
   /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In

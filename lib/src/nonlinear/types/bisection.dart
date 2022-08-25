@@ -6,7 +6,6 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
-///
 ///   - The values of `f(a)` and `f(b)` must have opposite signs.
 class Bisection extends NonLinear {
   /// The starting point of the interval.
@@ -15,14 +14,14 @@ class Bisection extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Instantiates a new object to find the root of an equation by using the
+  /// Creates a [Bisection] object to find the root of an equation by using the
   /// bisection method.
   ///
-  ///   - [function]: the function f(x)
-  ///   - [a]: the first interval in which evaluate `f(a)`
-  ///   - [b]: the second interval in which evaluate `f(b)`
-  ///   - [tolerance]: how accurate the algorithm has to be
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do
+  ///   - [function]: the function f(x);
+  ///   - [a]: the first interval in which evaluate `f(a)`;
+  ///   - [b]: the second interval in which evaluate `f(b)`;
+  ///   - [tolerance]: how accurate the algorithm has to be;
+  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
   const Bisection({
     required super.function,
     required this.a,

@@ -32,11 +32,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 /// verbose and you should prefer it. In the example, we're retrieving the value
 /// of the element at position `(1, 3)` in the matrix.
 class ComplexMatrix extends Matrix<Complex> {
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with zeroes.
-  ///
-  /// If `identity` is set to `true` (by default it's `false`) then the matrix
-  /// is initialized with all zeroes **and** the diagonal is filled with ones.
+  /// {@macro matrix_constructor_intro}
   ComplexMatrix({
     required super.rows,
     required super.columns,
@@ -45,28 +41,21 @@ class ComplexMatrix extends Matrix<Complex> {
     super.identityOneValue = const Complex.fromReal(1),
   });
 
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with values from `data`.
+  /// {@macro matrix_fromData_constructor}
   ComplexMatrix.fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with values from `data`.
-  ///
-  /// The source matrix is expressed as an array whose size must **exactly** be
-  /// `N` * `M`.
+  /// {@macro matrix_fromFlattenedData_constructor}
   ComplexMatrix.fromFlattenedData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromFlattenedData();
 
-  /// Creates a new `N x M` matrix where `rows` is `N` and `columns` is `M`. The
-  /// matrix is filled with `diagonalValue` in the main diagonal and zeroes
-  /// otherwise.
+  /// {@macro matrix_diagonal_constructor}
   ComplexMatrix.diagonal({
     required super.rows,
     required super.columns,
@@ -494,7 +483,7 @@ class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    // For 2x2 matries, use a direct formula which is faster
+    // For 2x2 matrices, use a direct formula which is faster
     if (rowCount == 2) {
       return Quadratic(
         b: -trace(),

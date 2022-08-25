@@ -39,6 +39,7 @@ abstract class Decomposition<K, T extends Matrix<K>> {
   @override
   String toString() => '$matrix';
 
-  /// Factorizes [matrix] and returns, in order, the matrices to be multiplied.
+  /// Factorizes [matrix] and returns, in order, the matrices to be multiplied
+  /// to obtain the original one.
   List<T> decompose();
 }

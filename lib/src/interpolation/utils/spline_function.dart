@@ -15,7 +15,7 @@ abstract class SplineFunction {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
-  /// Creates an instance of [SplineFunction] with the given nodes.
+  /// Creates a [SplineFunction] object with the given nodes.
   const SplineFunction({
     required this.nodes,
   });
@@ -29,6 +29,9 @@ abstract class SplineFunction {
   ///  - [LinearSpline] otherwise.
   ///
   /// The control points must all have increasing `x` values.
+  ///
+  /// If the [nodes] doesn't contain values sorted in increasing order, then an
+  /// [InterpolationException] object is thrown.
   factory SplineFunction.generate({
     required List<InterpolationNode> nodes,
   }) {
@@ -52,7 +55,7 @@ abstract class SplineFunction {
     }
 
     if (other is SplineFunction) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (nodes.length != other.nodes.length) {
         return false;
       }
@@ -103,7 +106,7 @@ abstract class SplineFunction {
     // The "comparison" node.
     var prev = nodes.first.x;
 
-    // Making sure that all of the 'X' coordinates of the nodes are increasing
+    // Making sure that all of the 'X' coordinates of the nodes are increasing.
     for (var i = 1; i < nodes.length; ++i) {
       final curr = nodes[i].x;
 

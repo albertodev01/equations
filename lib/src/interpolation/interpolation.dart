@@ -14,7 +14,7 @@ abstract class Interpolation {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
-  /// Creates an instance of [Interpolation] with the given nodes.
+  /// Creates an [Interpolation] object with the given nodes.
   const Interpolation({
     required this.nodes,
   });
@@ -26,7 +26,7 @@ abstract class Interpolation {
     }
 
     if (other is Interpolation) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (nodes.length != other.nodes.length) {
         return false;
       }
@@ -62,8 +62,9 @@ abstract class Interpolation {
     return result;
   }
 
-  /// Returns the `y` value of the `y = f(x)` equation where the function `f` is
-  /// built by interpolating the given [nodes] nodes and [x] is the given point
-  /// at which the function has to be evaluated.
+  /// Returns the `y` value of the `y = f(x)` equation.
+  ///
+  /// The function `f` is built by interpolating the given [nodes] nodes. The
+  /// [x] value is the point at which the function has to be evaluated.
   double compute(double x);
 }

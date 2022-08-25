@@ -3,15 +3,14 @@
 ///  - the list of guesses computed by the algorithm,
 ///  - the actual result (the value of the integral on an `[a, b]` interval).
 class IntegralResults {
-  /// List of values guessed by the algorithm.
+  /// The list of values guessed by the algorithm.
   final List<double> guesses;
 
-  /// The result of the integral on an `[a, b]` interval.
+  /// The evaluation of the integral in the `[a, b]` interval.
   final double result;
 
-  /// The list of [guesses] is iteratively built by the algorithm while the
-  /// final [result] is the actual value of the integral in the `[a, b]`
-  /// interval.
+  /// The [guesses] list is iteratively built by the algorithm. The final
+  /// [result] is the actual value of the integral in the `[a, b]` interval.
   const IntegralResults({
     required this.guesses,
     required this.result,
@@ -24,7 +23,7 @@ class IntegralResults {
     }
 
     if (other is IntegralResults) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (guesses.length != other.guesses.length) {
         return false;
       }

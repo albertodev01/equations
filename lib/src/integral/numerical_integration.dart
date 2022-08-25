@@ -31,7 +31,7 @@ abstract class NumericalIntegration {
   /// to be split by the algorithm.
   final int intervals;
 
-  /// Expects the [lowerBound] and [upperBound] of the integral.
+  /// Creates a [NumericalIntegration] object.
   const NumericalIntegration({
     required this.function,
     required this.lowerBound,

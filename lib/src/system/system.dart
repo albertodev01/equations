@@ -8,22 +8,22 @@ import 'package:equations/equations.dart';
 /// vector, usually known as `b`. From this, we get an equation in the form
 /// `Ax = b`.
 ///
-/// The method [solve] returns the vector `x` of the `Ax = b` equation.
+/// The method [solve] returns the `x` vector of the `Ax = b` equation.
 abstract class SystemSolver {
-  /// The equations of the system to be solved.
+  /// The equations to be solved.
   final RealMatrix matrix;
 
-  /// The vector containing the known values of the equation.
+  /// The vector containing the known values of the equations.
   final List<double> knownValues;
 
-  /// The accuracy of the algorithm.
+  /// The algorithm accuracy.
   final double precision;
 
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
   ///
-  ///   - [matrix] is the matrix containing the equations
-  ///   - [knownValues] is the vector with the known values
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values.
   ///
   /// An exception of type [SystemSolverException] is thrown if the matrix is
   /// not square.
@@ -32,12 +32,12 @@ abstract class SystemSolver {
     required this.knownValues,
     this.precision = 1.0e-10,
   }) {
-    // Only square matrices are allowed
+    // Only square matrices are allowed.
     if (!matrix.isSquareMatrix) {
       throw const SystemSolverException('The matrix must be square');
     }
 
-    // The vector of known values must match the size of the matrix
+    // The vector of known values must match the size of the matrix.
     if (matrix.rowCount != knownValues.length) {
       throw const SystemSolverException(
         'The known values vector must have the '
@@ -53,7 +53,7 @@ abstract class SystemSolver {
     }
 
     if (other is SystemSolver) {
-      // The lengths of the coefficients must match
+      // The lengths of the coefficients must match.
       if (knownValues.length != other.knownValues.length) {
         return false;
       }
@@ -83,7 +83,7 @@ abstract class SystemSolver {
   int get hashCode {
     var result = 17;
 
-    // Like we did in operator== iterating over all elements ensures that the
+    // Like we did in operator==, iterating over all elements ensures that the
     // hashCode is properly calculated.
     for (var i = 0; i < knownValues.length; ++i) {
       result = result * 37 + knownValues[i].hashCode;
@@ -134,7 +134,7 @@ abstract class SystemSolver {
         }
       }
 
-      // Adding the known value associated to the current equation
+      // Adding the known value associated to the current equation.
       buffer
         ..write(' | ')
         ..write(knownValues[i]);
