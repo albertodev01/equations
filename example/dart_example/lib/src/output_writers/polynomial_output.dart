@@ -6,7 +6,7 @@ import 'package:equations/equations.dart';
 
 /// Solves a polynomial equation whose degree and coefficients are randomly
 /// generated each time.
-class PolynomialOutput implements Output {
+class PolynomialOutput extends Output {
   /// Creates an [PolynomialOutput] object.
   const PolynomialOutput();
 

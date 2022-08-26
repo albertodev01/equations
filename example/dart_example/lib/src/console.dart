@@ -47,12 +47,5 @@ class Console {
         'been provided)\n',
       );
     }
-
-    // To keep the console 'awake'. This is very useful on Windows!
-    stdout.write('Press any key to exit...');
-
-    // This last line is to ensure that the console won't shut down immediately
-    // ignore: avoid-ignoring-return-values
-    stdin.readLineSync();
   }
 }

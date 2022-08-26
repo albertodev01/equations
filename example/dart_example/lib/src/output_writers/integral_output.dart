@@ -4,7 +4,7 @@ import 'package:equation_solver_cli/src/output_writers/output.dart';
 import 'package:equations/equations.dart';
 
 /// Evaluates an integral using various algorithms.
-class IntegralOutput implements Output {
+class IntegralOutput extends Output {
   /// Creates an [IntegralOutput] object.
   const IntegralOutput();
 

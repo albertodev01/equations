@@ -1,6 +1,4 @@
 analyzer:
-  exclude:
-    - example/**
   language:
     strict-casts: true
     strict-inference: true
@@ -16,7 +14,8 @@ dart_code_metrics:
     maximum-nesting: 5
   metrics-exclude:
     - test/**
-    - example/**
+    - example/dart_example/test**
+    - example/flutter_example/test**
   rules:
     - avoid-collection-methods-with-unrelated-types
     - avoid-duplicate-exports
@@ -47,8 +46,10 @@ dart_code_metrics:
     - prefer-last
     - prefer-trailing-comma
   rules-exclude:
-    - example/**
     - test/**
+    - example/dart_example/test**
+    - example/flutter_example/test**
+    - example/flutter_example/integration_test**
 
 # All lint rules: https://dart-lang.github.io/linter/lints/options/options.html
 linter:
@@ -113,7 +114,6 @@ linter:
     - curly_braces_in_flow_control_structures
     - depend_on_referenced_packages
     - deprecated_consistency
-    - diagnostic_describe_all_properties
     - directives_ordering
     - do_not_use_environment
     - empty_catches
