@@ -28,12 +28,12 @@ class EquationInput extends StatelessWidget {
 
   /// Creates a [EquationInput] instance.
   const EquationInput({
-    super.key,
     required this.controller,
     required this.placeholderText,
     this.baseWidth = 300,
     this.maxLength = 100,
     this.onlyRealValues = false,
+    super.key,
   });
 
   String? _validator(String? value) {

@@ -15,7 +15,7 @@ class BottomNavigation extends StatefulWidget {
   });
 
   @override
-  _BottomNavigationState createState() => _BottomNavigationState();
+  State<BottomNavigation> createState() => _BottomNavigationState();
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {

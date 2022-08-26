@@ -20,7 +20,7 @@ class RailNavigation extends StatefulWidget {
   });
 
   @override
-  _RailNavigationState createState() => _RailNavigationState();
+  State<RailNavigation> createState() => _RailNavigationState();
 }
 
 class _RailNavigationState extends State<RailNavigation> {

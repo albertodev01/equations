@@ -38,6 +38,7 @@ class EquationsApp extends StatelessWidget {
       // Route management
       routerDelegate: _appRouter.routerDelegate,
       routeInformationParser: _appRouter.routeInformationParser,
+      routeInformationProvider: _appRouter.routeInformationProvider,
 
       // Localized app title
       onGenerateTitle: (context) => context.l10n.appTitle,

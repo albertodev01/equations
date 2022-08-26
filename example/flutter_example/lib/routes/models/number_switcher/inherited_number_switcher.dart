@@ -8,9 +8,9 @@ class InheritedNumberSwitcher extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [NumberSwitcherState] object.
   const InheritedNumberSwitcher({
-    super.key,
     required this.numberSwitcherState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedNumberSwitcher] instance up in the tree.

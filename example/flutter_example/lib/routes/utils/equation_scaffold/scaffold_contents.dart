@@ -19,8 +19,8 @@ class ScaffoldContents extends StatelessWidget {
 
   /// Creates a [ScaffoldContents] widget.
   const ScaffoldContents({
-    super.key,
     required this.body,
+    super.key,
   });
 
   @override

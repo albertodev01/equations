@@ -17,9 +17,9 @@ class PolynomialResultCard extends StatefulWidget {
 
   /// Creates a [PolynomialResultCard] widget.
   const PolynomialResultCard({
-    super.key,
     required this.algebraic,
     this.withFraction = true,
+    super.key,
   });
 
   @override

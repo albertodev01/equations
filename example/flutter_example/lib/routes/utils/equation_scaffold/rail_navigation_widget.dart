@@ -20,9 +20,9 @@ class RailNavigationWidget extends StatelessWidget {
 
   /// Creates a [RailNavigationWidget] widget.
   const RailNavigationWidget({
-    super.key,
     required this.tabController,
     required this.navigationItems,
+    super.key,
     this.fab,
   });
 

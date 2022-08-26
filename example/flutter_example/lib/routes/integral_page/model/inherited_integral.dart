@@ -8,9 +8,9 @@ class InheritedIntegral extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [IntegralState] object.
   const InheritedIntegral({
-    super.key,
     required this.integralState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedIntegral] instance up in the tree.

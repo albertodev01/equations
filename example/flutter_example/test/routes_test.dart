@@ -18,33 +18,43 @@ void main() {
 
     test('Making sure that the generator produces correct routes', () {
       final appRoutes = generateRouter();
-      expect(appRoutes.routerDelegate.routes.length, equals(6));
-      expect(appRoutes.routerDelegate.errorBuilder, isNotNull);
+      expect(appRoutes.routeConfiguration.routes.length, equals(6));
 
       // Exact routes
       expect(
-        appRoutes.routerDelegate.routes.any((r) => r.path == homePagePath),
+        appRoutes.routeConfiguration.routes.any(
+          (r) => r.path == homePagePath,
+        ),
         isTrue,
       );
       expect(
-        appRoutes.routerDelegate.routes
-            .any((r) => r.path == polynomialPagePath),
+        appRoutes.routeConfiguration.routes.any(
+          (r) => r.path == polynomialPagePath,
+        ),
         isTrue,
       );
       expect(
-        appRoutes.routerDelegate.routes.any((r) => r.path == nonlinearPagePath),
+        appRoutes.routeConfiguration.routes.any(
+          (r) => r.path == nonlinearPagePath,
+        ),
         isTrue,
       );
       expect(
-        appRoutes.routerDelegate.routes.any((r) => r.path == systemPagePath),
+        appRoutes.routeConfiguration.routes.any(
+          (r) => r.path == systemPagePath,
+        ),
         isTrue,
       );
       expect(
-        appRoutes.routerDelegate.routes.any((r) => r.path == integralPagePath),
+        appRoutes.routeConfiguration.routes.any(
+          (r) => r.path == integralPagePath,
+        ),
         isTrue,
       );
       expect(
-        appRoutes.routerDelegate.routes.any((r) => r.path == otherPagePath),
+        appRoutes.routeConfiguration.routes.any(
+          (r) => r.path == otherPagePath,
+        ),
         isTrue,
       );
     });

@@ -26,25 +26,30 @@
     // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
+
   <script src="flutter.js" defer></script>
+  <script src="messages.js" defer></script>
 </head>
 <body>
-  <!-- Showing a loader while the app is loading -->
-  <div class="loading_box">
-    <img src="images/circle_logo.svg" alt="Logo" />
-    <div class="loading_spinner"></div>
-  </div>
+  <img src="images/circle_logo.svg" alt="Logo" />
+  <div id="loading" class="status"> </div>
+  <div class="loading_spinner"></div>
 
   <script>
     window.addEventListener('load', function(ev) {
-      // Download main.dart.js
+      // Updates the 'message' text
+      var loading = document.querySelector('#loading');
+      loading.textContent = localizedMessage(0);
+
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         }
       }).then(function(engineInitializer) {
+        loading.textContent = localizedMessage(1);
         return engineInitializer.initializeEngine();
       }).then(function(appRunner) {
+        loading.textContent = localizedMessage(2);
         return appRunner.runApp();
       });
     });
