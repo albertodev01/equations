@@ -35,8 +35,8 @@ class EquationScaffold extends StatefulWidget {
 
   /// Creates a custom [Scaffold] widget with no built-in navigation.
   const EquationScaffold({
-    super.key,
     required this.body,
+    super.key,
     this.fab,
   }) : navigationItems = const [];
 

@@ -88,11 +88,11 @@ class _PlotBody<T> extends StatelessWidget {
 
   /// Creates a [_PlotBody] widget.
   const _PlotBody({
-    super.key,
     required this.plotMode,
     required this.areaColor,
     required this.lowerAreaLimit,
     required this.upperAreaLimit,
+    super.key,
   });
 
   @override

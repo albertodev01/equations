@@ -15,10 +15,10 @@ class CardContainer extends StatelessWidget {
 
   /// Creates a [CardContainer] widget.
   const CardContainer({
-    super.key,
     required this.title,
     required this.image,
     required this.onTap,
+    super.key,
   });
 
   @override

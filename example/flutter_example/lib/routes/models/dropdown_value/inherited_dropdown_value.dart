@@ -7,9 +7,9 @@ class InheritedDropdownValue extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [ValueNotifier] object.
   const InheritedDropdownValue({
-    super.key,
     required this.dropdownValue,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedDropdownValue] instance up in the tree.

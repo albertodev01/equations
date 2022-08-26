@@ -7,9 +7,9 @@ class InheritedNavigation extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [ValueNotifier] object.
   const InheritedNavigation({
-    super.key,
     required this.navigationIndex,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedNavigation] instance up in the tree.

@@ -16,7 +16,7 @@ class IntegralDataInput extends StatefulWidget {
   const IntegralDataInput({super.key});
 
   @override
-  _IntegralDataInputState createState() => _IntegralDataInputState();
+  State<IntegralDataInput> createState() => _IntegralDataInputState();
 }
 
 class _IntegralDataInputState extends State<IntegralDataInput> {
