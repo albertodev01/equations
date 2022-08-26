@@ -4,7 +4,7 @@ import 'package:equation_solver_cli/src/output_writers/output.dart';
 import 'package:equations/equations.dart';
 
 /// Solves a nonlinear equation using various root-finding algorithms.
-class NonlinearOutput implements Output {
+class NonlinearOutput extends Output {
   /// Creates an [NonlinearOutput] object.
   const NonlinearOutput();
 

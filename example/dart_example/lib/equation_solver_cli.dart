@@ -1,3 +1,4 @@
+/// A demo CLI application to showcase the 'equations' package API.
 library equation_solver_cli;
 
 export 'src/console.dart';

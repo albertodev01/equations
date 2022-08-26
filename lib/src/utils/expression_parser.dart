@@ -27,7 +27,6 @@ typedef _Evaluator = num Function(num value);
 ///   - sin(x) (sine of `x`)
 ///   - cos(x) (cosine of `x`)
 ///   - tan(x) (tangent of `x`)
-///   - exp(x) (exponential, which is `e^x`)
 ///   - log() (natural logarithm of `x`)
 ///   - acos() (arc cosine of `x`)
 ///   - asin() (arc sine of `x`)
