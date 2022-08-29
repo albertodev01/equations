@@ -8,8 +8,9 @@ import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains the input of the function (along with the integration
-/// bounds), the result and a cartesian plane that highlights the area.
+/// This widget contains the input for the function (along with the integration
+/// bounds). There also is a cartesian plane to draw the function and highlight
+/// the enclosed area.
 ///
 /// This widget is responsive: contents may be laid out on a single column or
 /// on two columns according with the available width.
@@ -29,7 +30,7 @@ class IntegralBody extends StatelessWidget {
         // "Go back" button
         Positioned(
           top: 20,
-          left: 20,
+          left: 10,
           child: GoBackButton(),
         ),
       ],
@@ -38,64 +39,9 @@ class IntegralBody extends StatelessWidget {
 }
 
 /// Determines whether the contents should appear in 1 or 2 columns.
-class _ResponsiveBody extends StatefulWidget {
+class _ResponsiveBody extends StatelessWidget {
   /// Creates a [_ResponsiveBody] widget.
   const _ResponsiveBody();
-
-  @override
-  __ResponsiveBodyState createState() => __ResponsiveBodyState();
-}
-
-class __ResponsiveBodyState extends State<_ResponsiveBody> {
-  /// Manually caching the page title.
-  late final Widget pageTitleWidget = PageTitle(
-    pageTitle: context.l10n.integrals,
-    pageLogo: const IntegralLogo(
-      size: 50,
-    ),
-  );
-
-  /// Caching the single column layout subtree (small screens configuration).
-  late final singleColumnLayout = SingleChildScrollView(
-    key: const Key('SingleChildScrollView-mobile-responsive'),
-    child: Column(
-      children: [
-        pageTitleWidget,
-        const IntegralDataInput(),
-        const IntegralResultsWidget(),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          child: LayoutBuilder(
-            builder: (_, dimensions) {
-              return Visibility(
-                visible: dimensions.maxWidth >= minimumChartWidth,
-                child: const IntegralPlotWidget(),
-              );
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-
-  /// Caching the double column layout subtree (large screens configuration)
-  late final doubleColumnLayout = Center(
-    child: SingleChildScrollView(
-      key: const Key('SingleChildScrollView-desktop-responsive'),
-      child: Column(
-        children: [
-          pageTitleWidget,
-          const IntegralDataInput(),
-          const IntegralResultsWidget(),
-          const SizedBox(
-            height: 40,
-          ),
-        ],
-      ),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +49,7 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
       builder: (context, size) {
         if (size.maxWidth <= doubleColumnPageBreakpoint) {
           // For mobile devices - all in a column
-          return singleColumnLayout;
+          return const _SingleColumnLayout();
         }
 
         // For wider screens - plot on the right and results on the right
@@ -113,19 +59,86 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
             // Input and results
             SizedBox(
               width: size.maxWidth / 3,
-              height: double.infinity,
-              child: doubleColumnLayout,
+              child: const _DoubleColumnLayout(),
             ),
 
             // Plot
             SizedBox(
               width: size.maxWidth / 2.3,
-              height: double.infinity,
               child: const IntegralPlotWidget(),
             ),
           ],
         );
+        ;
       },
+    );
+  }
+}
+
+/// Lays the page contents on a single column.
+class _SingleColumnLayout extends StatelessWidget {
+  /// Creates a [_SingleColumnLayout] widget.
+  const _SingleColumnLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      key: const Key('SingleChildScrollView-mobile-responsive'),
+      child: Column(
+        children: [
+          PageTitle(
+            pageTitle: context.l10n.integrals,
+            pageLogo: const IntegralLogo(
+              size: 50,
+            ),
+          ),
+          const IntegralDataInput(),
+          const IntegralResultsWidget(),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 35,
+            ),
+            child: LayoutBuilder(
+              builder: (_, dimensions) {
+                return Visibility(
+                  visible: dimensions.maxWidth >= minimumChartWidth,
+                  child: const IntegralPlotWidget(),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Lays the page contents on two columns.
+class _DoubleColumnLayout extends StatelessWidget {
+  /// Creates a [_DoubleColumnLayout] widget.
+  const _DoubleColumnLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        key: const Key('SingleChildScrollView-desktop-responsive'),
+        child: Column(
+          children: [
+            PageTitle(
+              pageTitle: context.l10n.integrals,
+              pageLogo: const IntegralLogo(
+                size: 50,
+              ),
+            ),
+            const IntegralDataInput(),
+            const IntegralResultsWidget(),
+            const SizedBox(
+              height: 40,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

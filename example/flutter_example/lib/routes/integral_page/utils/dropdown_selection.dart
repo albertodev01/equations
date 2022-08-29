@@ -2,8 +2,7 @@ import 'package:equations_solver/routes/models/dropdown_value/inherited_dropdown
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
-/// Dropdown button needed to choose which numerical integration algorithm has
-/// to be used.
+/// Dropdown button needed to choose the numerical integration algorithm.
 class IntegralDropdownSelection extends StatefulWidget {
   /// Creates a [IntegralDropdownSelection] widget.
   const IntegralDropdownSelection({super.key});

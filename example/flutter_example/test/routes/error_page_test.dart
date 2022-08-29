@@ -15,10 +15,25 @@ void main() {
         ),
       );
 
-      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(SliverFillRemaining), findsOneWidget);
       expect(find.byType(UrlError), findsOneWidget);
       expect(find.byType(ErrorPage), findsOneWidget);
       expect(find.byType(EquationScaffold), findsOneWidget);
+    });
+  });
+
+  group('Golden tests - ErrorPage', () {
+    testWidgets('ErrorPage', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: ErrorPage(),
+        ),
+      );
+
+      await expectLater(
+        find.byType(ErrorPage),
+        matchesGoldenFile('goldens/error_page.png'),
+      );
     });
   });
 }

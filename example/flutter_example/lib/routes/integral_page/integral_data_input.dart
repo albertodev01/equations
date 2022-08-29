@@ -1,4 +1,5 @@
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/integral_page/integral_body.dart';
 import 'package:equations_solver/routes/integral_page/model/inherited_integral.dart';
 import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
 import 'package:equations_solver/routes/integral_page/utils/dropdown_selection.dart';
@@ -9,8 +10,8 @@ import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains a series of input widgets needed to parse the
-/// equation and the integration bounds.
+/// This widget contains a series of input widgets for [IntegralBody] to parse
+/// the equation and the integration bounds.
 class IntegralDataInput extends StatefulWidget {
   /// Creates an [IntegralDataInput] widget.
   const IntegralDataInput({super.key});
@@ -58,7 +59,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
     FocusScope.of(context).unfocus();
   }
 
-  /// Solves a nonlinear equation.
+  /// Integrates over the given interval.
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final dropdown = context.dropdownValue.value;
