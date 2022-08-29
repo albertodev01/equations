@@ -42,7 +42,7 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<int>(
-      valueListenable: context.navigationIndex,
+      valueListenable: context.inheritedNavigation.navigationIndex,
       builder: (_, value, child) {
         changePage(value);
 
