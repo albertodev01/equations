@@ -8,9 +8,9 @@ class InheritedPrecisionSlider extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [PrecisionSliderState] object.
   const InheritedPrecisionSlider({
-    super.key,
     required this.precisionState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedPrecisionSlider] instance up in the tree.

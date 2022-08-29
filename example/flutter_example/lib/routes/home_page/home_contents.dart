@@ -1,4 +1,5 @@
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/main.dart';
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
@@ -14,7 +15,7 @@ class HomeContents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 50, 25, 10),
+      padding: const EdgeInsets.fromLTRB(25, 50, 25, 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -47,6 +48,12 @@ class HomeContents extends StatelessWidget {
             title: context.l10n.other,
             image: const OtherLogo(),
             onTap: () => context.push(otherPagePath),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text('${context.l10n.version}: ${EquationsApp.version}'),
+            ),
           ),
         ],
       ),

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-/// A series of [Card] widgets representing the various kind of solvers exposed
-/// by the app. A [CardContainer] widget has an icon on the left and some text
-/// on the right.
+/// A series of [Card] widgets representing the various kind of solvers
+/// supported by the app. A [CardContainer] widget has an icon on the left and
+/// some text on the right.
 class CardContainer extends StatelessWidget {
-  /// The description of the container.
+  /// The container description.
   final String title;
 
   /// The image on the left.
   final Widget image;
 
-  /// The route to be opened when the container is tapped.
-  final void Function() onTap;
+  /// This callback is triggered whenever the widget is tapped or clicked.
+  final VoidCallback onTap;
 
   /// Creates a [CardContainer] widget.
   const CardContainer({

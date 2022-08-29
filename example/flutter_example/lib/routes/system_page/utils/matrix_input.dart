@@ -14,13 +14,13 @@ class MatrixInput extends StatefulWidget {
 
   /// Creates a [MatrixInput] widget.
   const MatrixInput({
-    super.key,
     required this.matrixControllers,
     required this.matrixSize,
+    super.key,
   });
 
   @override
-  _MatrixInputState createState() => _MatrixInputState();
+  State<MatrixInput> createState() => _MatrixInputState();
 }
 
 class _MatrixInputState extends State<MatrixInput> {

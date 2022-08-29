@@ -9,9 +9,9 @@ class InheritedPlotZoom extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [PlotZoomState] object.
   const InheritedPlotZoom({
-    super.key,
     required this.plotZoomState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedPlotZoom] instance up in the tree.

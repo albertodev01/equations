@@ -43,9 +43,9 @@ class EquationScaffold extends StatefulWidget {
   /// Creates a custom [Scaffold] widget with built-in tabbed navigation. There
   /// must be at least 1 navigation item.
   const EquationScaffold.navigation({
-    super.key,
     required this.navigationItems,
     this.fab,
+    super.key,
   })  : body = const SizedBox.shrink(),
         assert(
           navigationItems.length > 0,
@@ -53,7 +53,7 @@ class EquationScaffold extends StatefulWidget {
         );
 
   @override
-  _EquationScaffoldState createState() => _EquationScaffoldState();
+  State<EquationScaffold> createState() => _EquationScaffoldState();
 }
 
 class _EquationScaffoldState extends State<EquationScaffold>

@@ -26,7 +26,7 @@ class SystemPage extends StatefulWidget {
   const SystemPage({super.key});
 
   @override
-  _SystemPageState createState() => _SystemPageState();
+  State<SystemPage> createState() => _SystemPageState();
 }
 
 class _SystemPageState extends State<SystemPage> {

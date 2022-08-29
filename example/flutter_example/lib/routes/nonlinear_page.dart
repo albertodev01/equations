@@ -27,7 +27,7 @@ class NonlinearPage extends StatefulWidget {
   const NonlinearPage({super.key});
 
   @override
-  _NonlinearPageState createState() => _NonlinearPageState();
+  State<NonlinearPage> createState() => _NonlinearPageState();
 }
 
 class _NonlinearPageState extends State<NonlinearPage> {

@@ -5,17 +5,6 @@ import '../../mock_wrapper.dart';
 
 void main() {
   group('Testing vectorial images', () {
-    testWidgets('ArrowUpSvg', (tester) async {
-      await tester.pumpWidget(
-        const MockWrapper(
-          child: ArrowUpSvg(),
-        ),
-      );
-
-      expect(find.byType(ArrowUpSvg), findsOneWidget);
-      expect(const ArrowUpSvg().assetName, equals('arrow_up'));
-    });
-
     testWidgets('OtherComplexNumbers', (tester) async {
       await tester.pumpWidget(
         const MockWrapper(

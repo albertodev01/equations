@@ -9,9 +9,9 @@ class InheritedTextControllers extends InheritedWidget {
   /// Creates an [InheritedWidget] that exposes a list of
   /// [TextEditingController] objects.
   const InheritedTextControllers({
-    super.key,
     required this.textControllers,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedTextControllers] instance up in the tree.

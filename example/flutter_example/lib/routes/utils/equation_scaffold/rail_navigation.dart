@@ -14,9 +14,9 @@ class RailNavigation extends StatefulWidget {
 
   /// Creates a [RailNavigation] widget.
   const RailNavigation({
-    super.key,
     required this.navigationItems,
     required this.tabController,
+    super.key,
   });
 
   @override

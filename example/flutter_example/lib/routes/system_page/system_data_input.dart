@@ -19,7 +19,7 @@ class SystemDataInput extends StatefulWidget {
   const SystemDataInput({super.key});
 
   @override
-  _SystemDataInputState createState() => _SystemDataInputState();
+  State<SystemDataInput> createState() => _SystemDataInputState();
 }
 
 class _SystemDataInputState extends State<SystemDataInput> {

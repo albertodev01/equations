@@ -19,14 +19,14 @@ class MatrixOutput extends StatefulWidget {
 
   /// Creates a [MatrixOutput] widget.
   const MatrixOutput({
-    super.key,
     required this.matrix,
     required this.description,
     this.decimalDigits = 2,
+    super.key,
   });
 
   @override
-  _MatrixOutputState createState() => _MatrixOutputState();
+  State<MatrixOutput> createState() => _MatrixOutputState();
 }
 
 class _MatrixOutputState extends State<MatrixOutput> {

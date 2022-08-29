@@ -21,10 +21,10 @@ class BottomNavigationWidget extends StatelessWidget {
 
   /// Creates a [BottomNavigationWidget] widget.
   const BottomNavigationWidget({
-    super.key,
     required this.tabController,
     required this.navigationItems,
     this.fab,
+    super.key,
   });
 
   @override

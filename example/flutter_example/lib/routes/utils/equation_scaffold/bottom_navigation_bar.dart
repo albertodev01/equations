@@ -10,8 +10,8 @@ class BottomNavigation extends StatefulWidget {
 
   /// Creates a [BottomNavigation] widget.
   const BottomNavigation({
-    super.key,
     required this.navigationItems,
+    super.key,
   });
 
   @override

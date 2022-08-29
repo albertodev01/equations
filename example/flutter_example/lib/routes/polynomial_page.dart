@@ -25,7 +25,7 @@ class PolynomialPage extends StatefulWidget {
   const PolynomialPage({super.key});
 
   @override
-  _PolynomialPageState createState() => _PolynomialPageState();
+  State<PolynomialPage> createState() => _PolynomialPageState();
 }
 
 class _PolynomialPageState extends State<PolynomialPage> {
