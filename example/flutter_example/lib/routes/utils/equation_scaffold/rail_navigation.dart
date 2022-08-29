@@ -6,16 +6,8 @@ import 'package:flutter/material.dart';
 
 /// A rail navigation bar to be displayed within an [EquationScaffold] widget.
 class RailNavigation extends StatefulWidget {
-  /// A list of items for a responsive navigation bar.
-  final List<NavigationItem> navigationItems;
-
-  /// Controls the position of the currently visible page on the screen.
-  final TabController tabController;
-
   /// Creates a [RailNavigation] widget.
   const RailNavigation({
-    required this.navigationItems,
-    required this.tabController,
     super.key,
   });
 
@@ -28,26 +20,22 @@ class _RailNavigationState extends State<RailNavigation> {
   ///
   /// There is no need to update this into 'didUpdateWidget' because navigation
   /// items won't change during the app's lifetime.
-  late final rails = widget.navigationItems.map<NavigationRailDestination>((i) {
+  late final rails = context.inheritedNavigation.navigationItems
+      .map<NavigationRailDestination>((i) {
     return NavigationRailDestination(
       icon: i.icon,
       selectedIcon: i.activeIcon,
       label: Text(i.title),
     );
-  }).toList(
-    growable: false,
-  );
+  }).toList(growable: false);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         // The actual contents of the page
-        Expanded(
-          child: TabbedNavigationLayout(
-            navigationItems: widget.navigationItems,
-            tabController: widget.tabController,
-          ),
+        const Expanded(
+          child: TabbedNavigationLayout(),
         ),
 
         // The separator between the rail and the contents

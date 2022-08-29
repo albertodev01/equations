@@ -1,6 +1,6 @@
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
+import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
@@ -9,14 +9,10 @@ void main() {
   group("Testing the 'PageTitle' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
-        MockWrapper(
+        const MockWrapper(
           child: Scaffold(
             body: PageTitle(
-              pageLogo: SvgPicture.asset(
-                'assets/function.svg',
-                width: 50,
-                height: 50,
-              ),
+              pageLogo: PolynomialLogo(),
               pageTitle: 'Demo title',
             ),
           ),
@@ -31,16 +27,12 @@ void main() {
   group('Golden tests - PageTitle', () {
     testWidgets('PageTitle', (tester) async {
       await tester.pumpWidget(
-        MockWrapper(
+        const MockWrapper(
           child: SizedBox(
             width: 300,
             height: 300,
             child: PageTitle(
-              pageLogo: SvgPicture.asset(
-                'assets/function.svg',
-                width: 50,
-                height: 60,
-              ),
+              pageLogo: PolynomialLogo(),
               pageTitle: 'Demo title',
             ),
           ),

@@ -28,7 +28,7 @@ void main() {
             navigationIndex: valueNotifier,
             fab: null,
             tabController: TabController(
-              length: 1,
+              length: 2,
               vsync: const TestVSync(),
             ),
             navigationItems: const [],

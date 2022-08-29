@@ -36,7 +36,10 @@ class InheritedNavigation extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedNavigation oldWidget) {
-    return navigationIndex != oldWidget.navigationIndex;
+    return navigationIndex != oldWidget.navigationIndex ||
+        navigationIndex != oldWidget.navigationIndex ||
+        fab != oldWidget.fab ||
+        tabController != oldWidget.tabController;
   }
 }
 

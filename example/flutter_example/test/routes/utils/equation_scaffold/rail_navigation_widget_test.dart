@@ -14,26 +14,23 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
-            navigationIndex: ValueNotifier<int>(0),
-            child: RailNavigationWidget(
-              tabController: TabController(
-                length: 2,
-                vsync: const TestVSync(),
-              ),
-              navigationItems: const [
-                NavigationItem(title: 'Test 1', content: SizedBox()),
-                NavigationItem(title: 'Test 2', content: SizedBox()),
-              ],
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
             ),
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: SizedBox()),
+              NavigationItem(title: 'Test 2', content: SizedBox()),
+            ],
+            navigationIndex: ValueNotifier<int>(0),
+            child: const RailNavigationWidget(),
           ),
         ),
       );
 
       final finder = find.byType(RailNavigation);
       expect(finder, findsOneWidget);
-
-      final bottomNavigation = tester.widget(finder) as RailNavigation;
-      expect(bottomNavigation.navigationItems.length, equals(2));
 
       expect(find.byType(TabbedNavigationLayout), findsOneWidget);
       expect(find.byType(RailNavigation), findsOneWidget);
@@ -46,17 +43,17 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
-            navigationIndex: ValueNotifier<int>(0),
-            child: RailNavigationWidget(
-              tabController: TabController(
-                length: 2,
-                vsync: const TestVSync(),
-              ),
-              navigationItems: const [
-                NavigationItem(title: 'Test 1', content: SizedBox()),
-                NavigationItem(title: 'Test 2', content: SizedBox()),
-              ],
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
             ),
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: SizedBox()),
+              NavigationItem(title: 'Test 2', content: SizedBox()),
+            ],
+            navigationIndex: ValueNotifier<int>(0),
+            child: const RailNavigationWidget(),
           ),
         ),
       );

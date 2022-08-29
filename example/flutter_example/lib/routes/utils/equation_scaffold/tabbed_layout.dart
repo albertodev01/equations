@@ -1,5 +1,4 @@
 import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
-import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 
 /// This widget is wrapper of a [TabBarView] where the user cannot swipe to
@@ -8,16 +7,8 @@ import 'package:flutter/material.dart';
 /// Tabs can be changed only according with the state of the notifier exposed
 /// by [InheritedNavigation].
 class TabbedNavigationLayout extends StatefulWidget {
-  /// A list of items for a responsive navigation bar.
-  final List<NavigationItem> navigationItems;
-
-  /// Controls the position of the currently visible page on the screen.
-  final TabController tabController;
-
   /// Creates a [TabbedNavigationLayout] widget.
   const TabbedNavigationLayout({
-    required this.navigationItems,
-    required this.tabController,
     super.key,
   });
 
@@ -32,12 +23,14 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
   ///
   /// There is no need to update this into 'didUpdateWidget' because tabs won't
   /// change during the app's lifetime.
-  late final tabPages = widget.navigationItems
+  late final tabPages = context.inheritedNavigation.navigationItems
       .map((item) => item.content)
       .toList(growable: false);
 
   /// Changes the currently visible page of the tab.
-  void changePage(int pageIndex) => widget.tabController.animateTo(pageIndex);
+  void changePage(int pageIndex) {
+    context.inheritedNavigation.tabController.animateTo(pageIndex);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +43,7 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
       },
       child: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
-        controller: widget.tabController,
+        controller: context.inheritedNavigation.tabController,
         children: tabPages,
       ),
     );

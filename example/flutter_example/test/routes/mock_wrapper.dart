@@ -71,6 +71,7 @@ class MockWrapperWithNavigator extends StatelessWidget {
     return MaterialApp.router(
       routerDelegate: appRouter.routerDelegate,
       routeInformationParser: appRouter.routeInformationParser,
+      routeInformationProvider: appRouter.routeInformationProvider,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData.light().copyWith(

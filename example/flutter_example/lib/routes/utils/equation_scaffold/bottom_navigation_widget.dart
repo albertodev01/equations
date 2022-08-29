@@ -17,11 +17,8 @@ class BottomNavigationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: const Key('TabbedNavigationLayout-Scaffold'),
-      body: ScaffoldContents(
-        body: TabbedNavigationLayout(
-          tabController: context.inheritedNavigation.tabController,
-          navigationItems: context.inheritedNavigation.navigationItems,
-        ),
+      body: const ScaffoldContents(
+        body: TabbedNavigationLayout(),
       ),
       bottomNavigationBar: BottomNavigation(
         navigationItems: context.inheritedNavigation.navigationItems,

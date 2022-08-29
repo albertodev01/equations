@@ -68,6 +68,7 @@ void main() {
           MaterialApp.router(
             routeInformationParser: router.routeInformationParser,
             routerDelegate: router.routerDelegate,
+            routeInformationProvider: router.routeInformationProvider,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
           ),

@@ -16,11 +16,8 @@ class RailNavigationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: const Key('RailNavigationLayout-Scaffold'),
-      body: ScaffoldContents(
-        body: RailNavigation(
-          tabController: context.inheritedNavigation.tabController,
-          navigationItems: context.inheritedNavigation.navigationItems,
-        ),
+      body: const ScaffoldContents(
+        body: RailNavigation(),
       ),
       floatingActionButton: context.inheritedNavigation.fab,
     );

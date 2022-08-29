@@ -12,6 +12,12 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
+            ),
+            fab: null,
+            navigationItems: const [],
             navigationIndex: ValueNotifier<int>(0),
             child: const BottomNavigation(
               navigationItems: [
@@ -36,6 +42,12 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
+            ),
+            fab: null,
+            navigationItems: const [],
             navigationIndex: ValueNotifier<int>(0),
             child: const BottomNavigation(
               navigationItems: [
