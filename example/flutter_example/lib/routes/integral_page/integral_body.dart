@@ -69,7 +69,6 @@ class _ResponsiveBody extends StatelessWidget {
             ),
           ],
         );
-        ;
       },
     );
   }

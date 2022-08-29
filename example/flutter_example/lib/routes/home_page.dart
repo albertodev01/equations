@@ -29,8 +29,8 @@ class HomePage extends StatelessWidget {
                   // The logo at the top
                   AppLogo(),
 
-                  // The body of the home, which is a series of cards redirecting
-                  // the users to the various solvers
+                  // The body of the home, which is a series of cards
+                  // redirecting the users to the various solvers
                   HomeContents(),
                 ],
               ),

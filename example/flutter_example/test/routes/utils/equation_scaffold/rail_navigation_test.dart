@@ -8,15 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../mock_wrapper.dart';
 
 void main() {
-  late final TabController controller;
-
-  setUpAll(() {
-    controller = TabController(
-      length: 2,
-      vsync: const TestVSync(),
-    );
-  });
-
   group("Testing the 'RailNavigation' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
@@ -69,6 +60,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(RailNavigation),
         matchesGoldenFile('goldens/rail_navigation.png'),
