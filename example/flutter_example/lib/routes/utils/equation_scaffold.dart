@@ -64,40 +64,6 @@ class _EquationScaffoldState extends State<EquationScaffold>
     vsync: this,
   );
 
-  /// Caching the bottom navigation view.
-  late BottomNavigationWidget bottomNavigationWidget = BottomNavigationWidget(
-    navigationItems: widget.navigationItems,
-    tabController: tabController,
-    fab: widget.fab,
-  );
-
-  /// Caching the rail navigation view.
-  late RailNavigationWidget railNavigationWidget = RailNavigationWidget(
-    navigationItems: widget.navigationItems,
-    tabController: tabController,
-    fab: widget.fab,
-  );
-
-  @override
-  void didUpdateWidget(covariant EquationScaffold oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.navigationItems != oldWidget.navigationItems ||
-        widget.fab != oldWidget.fab) {
-      bottomNavigationWidget = BottomNavigationWidget(
-        navigationItems: widget.navigationItems,
-        tabController: tabController,
-        fab: widget.fab,
-      );
-
-      railNavigationWidget = RailNavigationWidget(
-        navigationItems: widget.navigationItems,
-        tabController: tabController,
-        fab: widget.fab,
-      );
-    }
-  }
-
   @override
   void dispose() {
     // The 'tabController' is lazily initialized and it may never be used if
@@ -126,16 +92,19 @@ class _EquationScaffoldState extends State<EquationScaffold>
     // At this point, there's at least 1 navigation item and thus the widget
     // requires some responsiveness!
     return InheritedNavigation(
+      navigationItems: widget.navigationItems,
+      tabController: tabController,
+      fab: widget.fab,
       navigationIndex: ValueNotifier<int>(0),
       child: LayoutBuilder(
         builder: (context, dimensions) {
           // If the dimension of the screen is "small" enough, a bottom
           // navigation bar fits better
           if (dimensions.maxWidth <= bottomNavigationBreakpoint) {
-            return bottomNavigationWidget;
+            return const BottomNavigationWidget();
           }
 
-          return railNavigationWidget;
+          return const RailNavigationWidget();
         },
       ),
     );

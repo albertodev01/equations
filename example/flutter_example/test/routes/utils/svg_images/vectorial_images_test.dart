@@ -5,6 +5,28 @@ import '../../mock_wrapper.dart';
 
 void main() {
   group('Testing vectorial images', () {
+    testWidgets('CartesianPlaneBackground', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: CartesianPlaneBackground(),
+        ),
+      );
+
+      expect(find.byType(CartesianPlaneBackground), findsOneWidget);
+      expect(const CartesianPlaneBackground().assetName, equals('axis'));
+    });
+
+    testWidgets('GaussianCurveBackground', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: GaussianCurveBackground(),
+        ),
+      );
+
+      expect(find.byType(GaussianCurveBackground), findsOneWidget);
+      expect(const GaussianCurveBackground().assetName, equals('plot_opacity'));
+    });
+
     testWidgets('OtherComplexNumbers', (tester) async {
       await tester.pumpWidget(
         const MockWrapper(

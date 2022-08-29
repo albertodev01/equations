@@ -9,6 +9,12 @@ void main() {
 
       final inheritedNavigation = InheritedNavigation(
         navigationIndex: valueNotifier,
+        fab: null,
+        tabController: TabController(
+          length: 1,
+          vsync: const TestVSync(),
+        ),
+        navigationItems: const [],
         child: const SizedBox.shrink(),
       );
 
@@ -19,7 +25,13 @@ void main() {
       expect(
         inheritedNavigation.updateShouldNotify(
           InheritedNavigation(
-            navigationIndex: ValueNotifier<int>(0),
+            navigationIndex: valueNotifier,
+            fab: null,
+            tabController: TabController(
+              length: 1,
+              vsync: const TestVSync(),
+            ),
+            navigationItems: const [],
             child: const SizedBox.shrink(),
           ),
         ),
@@ -29,6 +41,12 @@ void main() {
         inheritedNavigation.updateShouldNotify(
           InheritedNavigation(
             navigationIndex: ValueNotifier<int>(1),
+            fab: null,
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
+            ),
+            navigationItems: const [],
             child: const SizedBox.shrink(),
           ),
         ),
@@ -46,6 +64,12 @@ void main() {
           MaterialApp(
             home: InheritedNavigation(
               navigationIndex: ValueNotifier<int>(1),
+              fab: null,
+              tabController: TabController(
+                length: 1,
+                vsync: const TestVSync(),
+              ),
+              navigationItems: const [],
               child: Builder(
                 builder: (context) {
                   reference = InheritedNavigation.of(context).navigationIndex;

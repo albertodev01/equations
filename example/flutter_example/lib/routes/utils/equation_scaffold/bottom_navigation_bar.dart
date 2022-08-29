@@ -39,14 +39,16 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<int>(
-      valueListenable: context.navigationIndex,
+      valueListenable: context.inheritedNavigation.navigationIndex,
       builder: (context, value, _) {
         return BottomNavigationBar(
           elevation: 6,
           items: _bottom,
           type: BottomNavigationBarType.fixed,
-          currentIndex: context.navigationIndex.value,
-          onTap: (newIndex) => context.navigationIndex.value = newIndex,
+          currentIndex: context.inheritedNavigation.navigationIndex.value,
+          onTap: (newIndex) {
+            context.inheritedNavigation.navigationIndex.value = newIndex;
+          },
         );
       },
     );

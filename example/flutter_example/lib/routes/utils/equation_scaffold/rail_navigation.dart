@@ -58,7 +58,7 @@ class _RailNavigationState extends State<RailNavigation> {
 
         // The rail
         ValueListenableBuilder<int>(
-          valueListenable: context.navigationIndex,
+          valueListenable: context.inheritedNavigation.navigationIndex,
           builder: (context, value, _) {
             return NavigationRail(
               groupAlignment: 0,
@@ -66,7 +66,7 @@ class _RailNavigationState extends State<RailNavigation> {
               selectedIndex: value,
               labelType: NavigationRailLabelType.all,
               onDestinationSelected: (newIndex) =>
-                  context.navigationIndex.value = newIndex,
+                  context.inheritedNavigation.navigationIndex.value = newIndex,
             );
           },
         ),

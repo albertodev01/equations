@@ -1,5 +1,29 @@
 import 'package:equations_solver/routes/utils/svg_images/svg_image.dart';
 
+/// A rotated cartesian plane.
+class CartesianPlaneBackground extends SvgImage {
+  /// Creates a [CartesianPlaneBackground] widget.
+  const CartesianPlaneBackground({
+    super.key,
+    super.size,
+  });
+
+  @override
+  String get assetName => 'axis';
+}
+
+/// A stylized gaussian curve.
+class GaussianCurveBackground extends SvgImage {
+  /// Creates a [GaussianCurveBackground] widget.
+  const GaussianCurveBackground({
+    super.key,
+    super.size,
+  });
+
+  @override
+  String get assetName => 'plot_opacity';
+}
+
 /// The "i" symbol of the complex unit in imaginary numbers.
 class OtherComplexNumbers extends SvgImage {
   /// Creates a [OtherComplexNumbers] widget.
