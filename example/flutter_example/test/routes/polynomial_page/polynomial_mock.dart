@@ -13,10 +13,10 @@ class MockPolynomialWidget extends StatelessWidget {
   final PolynomialType polynomialType;
   final Widget child;
   const MockPolynomialWidget({
-
     required this.textControllers,
     this.polynomialType = PolynomialType.linear,
-    this.child = const PolynomialBody(),super.key,
+    this.child = const PolynomialBody(),
+    super.key,
   });
 
   @override
