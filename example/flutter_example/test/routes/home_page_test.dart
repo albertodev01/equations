@@ -16,7 +16,8 @@ void main() {
         ),
       );
 
-      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(CustomScrollView), findsOneWidget);
+      expect(find.byType(SliverFillRemaining), findsOneWidget);
       expect(find.byType(AppLogo), findsOneWidget);
       expect(find.byType(HomeContents), findsOneWidget);
       expect(find.byType(EquationScaffold), findsOneWidget);

@@ -21,20 +21,14 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
+            tabController: controller,
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: Text('A')),
+              NavigationItem(title: 'Test 2', content: Text('B')),
+            ],
             navigationIndex: ValueNotifier<int>(0),
-            child: TabbedNavigationLayout(
-              tabController: controller,
-              navigationItems: const [
-                NavigationItem(
-                  title: 'Test',
-                  content: SizedBox(),
-                ),
-                NavigationItem(
-                  title: 'Test',
-                  content: SizedBox(),
-                ),
-              ],
-            ),
+            child: const TabbedNavigationLayout(),
           ),
         ),
       );
@@ -52,20 +46,14 @@ void main() {
         await tester.pumpWidget(
           MockWrapper(
             child: InheritedNavigation(
+              tabController: controller,
+              fab: null,
+              navigationItems: const [
+                NavigationItem(title: 'Test 1', content: Text('A')),
+                NavigationItem(title: 'Test 2', content: Text('B')),
+              ],
               navigationIndex: ValueNotifier<int>(0),
-              child: TabbedNavigationLayout(
-                tabController: controller,
-                navigationItems: const [
-                  NavigationItem(
-                    title: 'Test',
-                    content: Text('A'),
-                  ),
-                  NavigationItem(
-                    title: 'Test',
-                    content: Text('B'),
-                  ),
-                ],
-              ),
+              child: const TabbedNavigationLayout(),
             ),
           ),
         );

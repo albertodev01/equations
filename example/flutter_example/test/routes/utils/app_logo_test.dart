@@ -1,5 +1,5 @@
 import 'package:equations_solver/routes/utils/app_logo.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../mock_wrapper.dart';
@@ -10,7 +10,7 @@ void main() {
       await tester.pumpWidget(const MockWrapper(child: AppLogo()));
 
       expect(find.byType(AppLogo), findsOneWidget);
-      expect(find.byType(SvgPicture), findsOneWidget);
+      expect(find.byType(Image), findsOneWidget);
     });
   });
 

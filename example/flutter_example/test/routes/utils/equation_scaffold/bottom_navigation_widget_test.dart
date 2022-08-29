@@ -14,17 +14,17 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
-            navigationIndex: ValueNotifier<int>(0),
-            child: BottomNavigationWidget(
-              tabController: TabController(
-                length: 2,
-                vsync: const TestVSync(),
-              ),
-              navigationItems: const [
-                NavigationItem(title: 'Test 1', content: SizedBox()),
-                NavigationItem(title: 'Test 2', content: SizedBox()),
-              ],
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
             ),
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: SizedBox()),
+              NavigationItem(title: 'Test 2', content: SizedBox()),
+            ],
+            navigationIndex: ValueNotifier<int>(0),
+            child: const BottomNavigationWidget(),
           ),
         ),
       );
@@ -46,17 +46,17 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
-            navigationIndex: ValueNotifier<int>(0),
-            child: BottomNavigationWidget(
-              tabController: TabController(
-                length: 2,
-                vsync: const TestVSync(),
-              ),
-              navigationItems: const [
-                NavigationItem(title: 'Test 1', content: SizedBox()),
-                NavigationItem(title: 'Test 2', content: SizedBox()),
-              ],
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
             ),
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: SizedBox()),
+              NavigationItem(title: 'Test 2', content: SizedBox()),
+            ],
+            navigationIndex: ValueNotifier<int>(0),
+            child: const BottomNavigationWidget(),
           ),
         ),
       );

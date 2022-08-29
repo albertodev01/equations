@@ -22,20 +22,17 @@ void main() {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(
-            navigationIndex: ValueNotifier<int>(0),
-            child: RailNavigation(
-              tabController: controller,
-              navigationItems: const [
-                NavigationItem(
-                  title: 'Test',
-                  content: SizedBox(),
-                ),
-                NavigationItem(
-                  title: 'Test',
-                  content: SizedBox(),
-                ),
-              ],
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
             ),
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: SizedBox()),
+              NavigationItem(title: 'Test 2', content: SizedBox()),
+            ],
+            navigationIndex: ValueNotifier<int>(0),
+            child: const RailNavigation(),
           ),
         ),
       );
@@ -46,9 +43,6 @@ void main() {
       expect(find.byType(TabbedNavigationLayout), findsOneWidget);
       expect(find.byType(NavigationRail), findsOneWidget);
       expect(find.byType(VerticalDivider), findsOneWidget);
-
-      final railNavigation = tester.widget(finder) as RailNavigation;
-      expect(railNavigation.navigationItems.length, equals(2));
     });
   });
 
@@ -60,20 +54,17 @@ void main() {
           height: 400,
           child: MockWrapper(
             child: InheritedNavigation(
-              navigationIndex: ValueNotifier<int>(0),
-              child: RailNavigation(
-                tabController: controller,
-                navigationItems: const [
-                  NavigationItem(
-                    title: 'Test',
-                    content: Text('Page A'),
-                  ),
-                  NavigationItem(
-                    title: 'Test',
-                    content: Text('Page B'),
-                  ),
-                ],
+              tabController: TabController(
+                length: 2,
+                vsync: const TestVSync(),
               ),
+              fab: null,
+              navigationItems: const [
+                NavigationItem(title: 'Test 1', content: SizedBox()),
+                NavigationItem(title: 'Test 2', content: SizedBox()),
+              ],
+              navigationIndex: ValueNotifier<int>(0),
+              child: const RailNavigation(),
             ),
           ),
         ),
