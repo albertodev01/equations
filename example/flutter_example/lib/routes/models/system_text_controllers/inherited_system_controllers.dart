@@ -9,9 +9,9 @@ class InheritedSystemControllers extends InheritedWidget {
   /// Creates an [InheritedWidget] that exposes a [SystemTextControllers]
   /// object.
   const InheritedSystemControllers({
-    super.key,
     required this.systemTextControllers,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedSystemControllers] instance up in the

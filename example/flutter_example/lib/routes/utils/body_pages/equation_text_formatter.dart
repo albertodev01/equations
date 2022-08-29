@@ -7,8 +7,8 @@ class EquationTextFormatter extends StatelessWidget {
 
   /// Creates a [EquationTextFormatter] widget.
   const EquationTextFormatter({
-    super.key,
     required this.equation,
+    super.key,
   });
 
   @override

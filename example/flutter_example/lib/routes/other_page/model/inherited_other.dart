@@ -9,9 +9,9 @@ class InheritedOther extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [InheritedOther] object.
   const InheritedOther({
-    super.key,
     required this.otherState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedOther] instance up in the tree.

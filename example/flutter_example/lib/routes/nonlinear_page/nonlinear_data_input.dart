@@ -19,7 +19,7 @@ class NonlinearDataInput extends StatefulWidget {
   const NonlinearDataInput({super.key});
 
   @override
-  _NonlinearDataInputState createState() => _NonlinearDataInputState();
+  State<NonlinearDataInput> createState() => _NonlinearDataInputState();
 }
 
 class _NonlinearDataInputState extends State<NonlinearDataInput> {

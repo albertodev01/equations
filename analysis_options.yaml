@@ -14,14 +14,11 @@ dart_code_metrics:
     maximum-nesting: 5
   metrics-exclude:
     - test/**
-    - example/dart_example/test**
-    - example/flutter_example/test**
   rules:
     - avoid-collection-methods-with-unrelated-types
     - avoid-duplicate-exports
     - avoid-dynamic
     - avoid-global-state
-    - avoid-ignoring-return-values
     - avoid-missing-enum-constant-in-map
     - avoid-nested-conditional-expressions
     - avoid-shrink-wrap-in-lists.
@@ -47,9 +44,6 @@ dart_code_metrics:
     - prefer-trailing-comma
   rules-exclude:
     - test/**
-    - example/dart_example/test**
-    - example/flutter_example/test**
-    - example/flutter_example/integration_test**
 
 # All lint rules: https://dart-lang.github.io/linter/lints/options/options.html
 linter:
@@ -68,7 +62,6 @@ linter:
     - avoid_double_and_int_checks
     - avoid_dynamic_calls
     - avoid_empty_else
-    # - avoid_equals_and_hash_code_on_mutable_classes (Flutter only)
     - avoid_escaping_inner_quotes
     - avoid_field_initializers_in_const_classes
     - avoid_final_parameters

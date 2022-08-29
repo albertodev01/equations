@@ -8,9 +8,9 @@ class InheritedSystem extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [SystemState] object.
   const InheritedSystem({
-    super.key,
     required this.systemState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedSystem] instance up in the tree.

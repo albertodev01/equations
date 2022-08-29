@@ -15,9 +15,9 @@ class JacobiVectorInput extends StatelessWidget {
 
   /// Creates a [JacobiVectorInput] widget.
   const JacobiVectorInput({
-    super.key,
     required this.controllers,
     required this.vectorSize,
+    super.key,
   });
 
   @override

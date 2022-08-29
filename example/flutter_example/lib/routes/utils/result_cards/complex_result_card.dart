@@ -23,10 +23,10 @@ class ComplexResultCard extends StatelessWidget {
 
   /// Creates a [ComplexResultCard] widget.
   const ComplexResultCard({
-    super.key,
     required this.value,
     this.leading = '',
     this.withFraction = true,
+    super.key,
   });
 
   @override

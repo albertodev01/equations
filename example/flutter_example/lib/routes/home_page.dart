@@ -14,20 +14,33 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EquationScaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              // The logo at the top
-              AppLogo(),
+      body: CustomScrollView(
+        slivers: [
+          // We're using 'SliverFillRemaining' because it makes the contents
+          // fill the entire viewport and, on desktop or web, the scroll bar
+          // appears on the right edge of the window (while the contents ALWAYS
+          // stay at the center).
+          //
+          // A 'CustomScrollView' instead would be as small as possible because
+          // the enclosing 'Center' widget would make the scrollable as small as
+          // possible.
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The logo at the top
+                  AppLogo(),
 
-              // The body of the home, which is a series of cards redirecting
-              // the users to the various solvers
-              HomeContents(),
-            ],
+                  // The body of the home, which is a series of cards redirecting
+                  // the users to the various solvers
+                  HomeContents(),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -10,8 +10,8 @@ class RelaxationFactorInput extends StatelessWidget {
 
   /// Creates a [RelaxationFactorInput] widget.
   const RelaxationFactorInput({
-    super.key,
     required this.textEditingController,
+    super.key,
   });
 
   @override

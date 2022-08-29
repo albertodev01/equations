@@ -8,9 +8,9 @@ class InheritedNonlinear extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [NonlinearState] object.
   const InheritedNonlinear({
-    super.key,
     required this.nonlinearState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedNonlinear] instance up in the tree.

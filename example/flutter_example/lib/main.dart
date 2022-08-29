@@ -27,6 +27,9 @@ void main() {
 class EquationsApp extends StatelessWidget {
   static final _appRouter = generateRouter();
 
+  /// The current app version. This is shown in the home page.
+  static const version = '1.0.0';
+
   /// Creates an [EquationsApp] instance.
   const EquationsApp({
     super.key,

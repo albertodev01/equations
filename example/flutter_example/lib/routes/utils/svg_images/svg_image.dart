@@ -20,7 +20,7 @@ abstract class SvgImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
-      'assets/$assetName.svg',
+      'assets/svg/$assetName.svg',
       height: size,
       width: size,
     );

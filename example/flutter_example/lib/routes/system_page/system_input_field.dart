@@ -13,9 +13,9 @@ class SystemInputField extends StatefulWidget {
 
   /// Creates a [SystemInputField] widget.
   const SystemInputField({
-    super.key,
     required this.controller,
     this.placeholder = '',
+    super.key,
   });
 
   @override

@@ -76,5 +76,6 @@
   "diagonal": "Diagonale",
   "symmetric": "Simmetrica",
   "identity": "Identità",
-  "url_error": "Questa pagina non esiste!"
+  "url_error": "Questa pagina non esiste!",
+  "version": "Versione"
 }

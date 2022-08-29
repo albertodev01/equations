@@ -8,9 +8,9 @@ class InheritedPolynomial extends InheritedWidget {
 
   /// Creates an [InheritedWidget] that exposes a [PolynomialState] object.
   const InheritedPolynomial({
-    super.key,
     required this.polynomialState,
     required super.child,
+    super.key,
   });
 
   /// Retrieves the closest [InheritedPolynomial] instance up in the tree.

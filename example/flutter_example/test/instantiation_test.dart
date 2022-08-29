@@ -51,10 +51,6 @@ void main() {
         isA<OtherLogo>(),
       );
       expect(
-        ArrowUpSvg(),
-        isA<ArrowUpSvg>(),
-      );
-      expect(
         OtherComplexNumbers(),
         isA<OtherComplexNumbers>(),
       );
