@@ -10,8 +10,8 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// Wrapper of a [PlotWidget] widget that paints equations on the screen and
-/// highlights the area below the function.
+/// Wrapper of a [PlotWidget] widget that draws equations and highlights the
+/// area below the function.
 class IntegralPlotWidget extends StatelessWidget {
   /// Creates a [IntegralPlotWidget] widget.
   const IntegralPlotWidget({super.key});
@@ -25,7 +25,6 @@ class IntegralPlotWidget extends StatelessWidget {
             // Title
             const _PlotTitle(),
 
-            // The actual plot
             // The actual plot
             LayoutBuilder(
               builder: (context, dimensions) {

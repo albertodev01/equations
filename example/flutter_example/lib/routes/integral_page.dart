@@ -10,10 +10,10 @@ import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
 /// This page contains a series of integral evaluation algorithms. There only
-/// is a single page where the user simply writes the equation and then the
-/// algorithm evaluates the integral.
+/// is a single page where the user writes the equation and chooses the
+/// algorithm to evaluate the integral.
 ///
-/// The function is also plotted and the area is highlighted on the chart.
+/// The function is drawn on a cartesian plane and the area is highlighted.
 class IntegralPage extends StatefulWidget {
   /// Creates a [IntegralPage] widget.
   const IntegralPage({super.key});

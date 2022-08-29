@@ -39,7 +39,7 @@ void main() {
   });
 
   group('Golden tests - EquationTextFormatter', () {
-    testWidgets('EquationTextFormatter', (tester) async {
+    testWidgets('GoBackButton', (tester) async {
       await tester.pumpWidget(
         const MockWrapper(
           child: SizedBox(
@@ -49,9 +49,30 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(GoBackButton),
         matchesGoldenFile('goldens/go_back_button.png'),
+      );
+    });
+
+    testWidgets('GoBackButton', (tester) async {
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: SizedBox(
+            width: 90,
+            height: 90,
+            child: GoBackButton(),
+          ),
+        ),
+      );
+
+      await tester.press(find.byType(GoBackButton));
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(GoBackButton),
+        matchesGoldenFile('goldens/go_back_button_pressed.png'),
       );
     });
   });

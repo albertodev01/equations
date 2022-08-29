@@ -20,10 +20,6 @@ class HomePage extends StatelessWidget {
           // fill the entire viewport and, on desktop or web, the scroll bar
           // appears on the right edge of the window (while the contents ALWAYS
           // stay at the center).
-          //
-          // A 'CustomScrollView' instead would be as small as possible because
-          // the enclosing 'Center' widget would make the scrollable as small as
-          // possible.
           SliverFillRemaining(
             hasScrollBody: false,
             child: Center(

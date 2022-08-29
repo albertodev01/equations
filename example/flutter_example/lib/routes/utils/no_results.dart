@@ -12,7 +12,7 @@ class NoResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(80, 35, 80, 35),
+        padding: const EdgeInsets.fromLTRB(80, 35, 80, 5),
         child: Text(
           context.l10n.no_solutions,
           style: const TextStyle(
