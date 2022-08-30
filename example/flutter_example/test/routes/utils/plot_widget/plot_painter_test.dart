@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../mock_wrapper.dart';
 
 void main() {
-  Widget _buildPolynomialPainter({
+  Widget buildPolynomialPainter({
     int range = 5,
     ColorArea colorArea = const ColorArea(
       startPoint: 5,
@@ -38,7 +38,7 @@ void main() {
     );
   }
 
-  Widget _buildNonlinearPainter({
+  Widget buildNonlinearPainter({
     int range = 5,
     ColorArea colorArea = const ColorArea(
       startPoint: 5,
@@ -64,7 +64,7 @@ void main() {
   group('Golden tests - PlotPainter (no area)', () {
     testWidgets('Polynomial - low range', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           range: 2,
         ),
       );
@@ -76,7 +76,7 @@ void main() {
 
     testWidgets('Polynomial - default', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(),
+        buildPolynomialPainter(),
       );
       await expectLater(
         find.byKey(const Key('PlotWidget-Golden')),
@@ -86,7 +86,7 @@ void main() {
 
     testWidgets('Polynomial - high range', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           range: 9,
         ),
       );
@@ -98,7 +98,7 @@ void main() {
 
     testWidgets('Polynomial - with edges', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(coefficients: [1, 0]),
+        buildPolynomialPainter(coefficients: [1, 0]),
       );
       await expectLater(
         find.byKey(const Key('PlotWidget-Golden')),
@@ -108,7 +108,7 @@ void main() {
 
     testWidgets('Nonlinear - low range', (tester) async {
       await tester.pumpWidget(
-        _buildNonlinearPainter(
+        buildNonlinearPainter(
           range: 2,
         ),
       );
@@ -120,7 +120,7 @@ void main() {
 
     testWidgets('Nonlinear - default', (tester) async {
       await tester.pumpWidget(
-        _buildNonlinearPainter(),
+        buildNonlinearPainter(),
       );
       await expectLater(
         find.byKey(const Key('PlotWidget-Golden')),
@@ -130,7 +130,7 @@ void main() {
 
     testWidgets('Nonlinear - high range', (tester) async {
       await tester.pumpWidget(
-        _buildNonlinearPainter(
+        buildNonlinearPainter(
           range: 9,
         ),
       );
@@ -144,7 +144,7 @@ void main() {
   group('Golden tests - PlotPainter (with area)', () {
     testWidgets('Color only', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           colorArea: ColorArea(
             color: Colors.lightGreen.withAlpha(80),
             startPoint: -5,
@@ -160,7 +160,7 @@ void main() {
 
     testWidgets('Color and ranges', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           colorArea: ColorArea(
             color: Colors.lightGreen.withAlpha(80),
             startPoint: -1,
@@ -176,7 +176,7 @@ void main() {
 
     testWidgets('Color and ranges swapped', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           colorArea: ColorArea(
             color: Colors.lightGreen.withAlpha(80),
             startPoint: 2,
@@ -194,7 +194,7 @@ void main() {
 
     testWidgets('Color and left range only', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           colorArea: ColorArea(
             color: Colors.lightGreen.withAlpha(80),
             startPoint: -1,
@@ -210,7 +210,7 @@ void main() {
 
     testWidgets('Color and right range only', (tester) async {
       await tester.pumpWidget(
-        _buildPolynomialPainter(
+        buildPolynomialPainter(
           colorArea: ColorArea(
             color: Colors.lime.withAlpha(80),
             startPoint: -5,

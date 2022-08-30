@@ -29,7 +29,7 @@ void main() {
   ];
   const knownValues = [7, 3, 6, -2];
 
-  Future<void> _testRowReduction(
+  Future<void> testRowReduction(
     WidgetTester tester, [
     int size = 1,
   ]) async {
@@ -98,9 +98,10 @@ void main() {
     expect(find.byType(RealResultCard), findsNothing);
   }
 
-  Future<void> _testFactorization(
+  Future<void> testFactorization(
     WidgetTester tester, [
     int size = 1,
+    // ignore: avoid_positional_boolean_parameters
     bool cholesky = false,
   ]) async {
     // Moving to the 'Bracketing' page
@@ -183,9 +184,10 @@ void main() {
     expect(find.byType(RealResultCard), findsNothing);
   }
 
-  Future<void> _testIterative(
+  Future<void> testIterative(
     WidgetTester tester, [
     int size = 1,
+    // ignore: avoid_positional_boolean_parameters
     bool jacobi = false,
   ]) async {
     // Moving to the 'Bracketing' page
@@ -294,10 +296,10 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        await _testRowReduction(tester);
-        await _testRowReduction(tester, 2);
-        await _testRowReduction(tester, 3);
-        await _testRowReduction(tester, 4);
+        await testRowReduction(tester);
+        await testRowReduction(tester, 2);
+        await testRowReduction(tester, 3);
+        await testRowReduction(tester, 4);
       },
     );
 
@@ -309,10 +311,10 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        await _testFactorization(tester);
-        await _testFactorization(tester, 2);
-        await _testFactorization(tester, 3);
-        await _testFactorization(tester, 4);
+        await testFactorization(tester);
+        await testFactorization(tester, 2);
+        await testFactorization(tester, 3);
+        await testFactorization(tester, 4);
       },
     );
 
@@ -324,10 +326,10 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        await _testFactorization(tester, 1, true);
-        await _testFactorization(tester, 2, true);
-        await _testFactorization(tester, 3, true);
-        await _testFactorization(tester, 4, true);
+        await testFactorization(tester, 1, true);
+        await testFactorization(tester, 2, true);
+        await testFactorization(tester, 3, true);
+        await testFactorization(tester, 4, true);
       },
     );
 
@@ -339,10 +341,10 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        await _testIterative(tester);
-        await _testIterative(tester, 2);
-        await _testIterative(tester, 3);
-        await _testIterative(tester, 4);
+        await testIterative(tester);
+        await testIterative(tester, 2);
+        await testIterative(tester, 3);
+        await testIterative(tester, 4);
       },
     );
 
@@ -354,10 +356,10 @@ void main() {
         app.main();
         await tester.pumpAndSettle();
 
-        await _testIterative(tester, 1, true);
-        await _testIterative(tester, 2, true);
-        await _testIterative(tester, 3, true);
-        await _testIterative(tester, 4, true);
+        await testIterative(tester, 1, true);
+        await testIterative(tester, 2, true);
+        await testIterative(tester, 3, true);
+        await testIterative(tester, 4, true);
       },
     );
   });

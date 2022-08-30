@@ -9,7 +9,7 @@ import 'utils.dart';
 void main() {
   var needsOpenPage = true;
 
-  Future<void> _testPolynomial(WidgetTester tester, int degree) async {
+  Future<void> testPolynomial(WidgetTester tester, int degree) async {
     if (needsOpenPage) {
       // Opening the nonlinear page
       await tester.tap(find.byKey(const Key('PolynomialLogo-Container')));
@@ -67,7 +67,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testPolynomial(tester, 1);
+        await testPolynomial(tester, 1);
       },
     );
 
@@ -78,7 +78,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testPolynomial(tester, 2);
+        await testPolynomial(tester, 2);
       },
     );
 
@@ -89,7 +89,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testPolynomial(tester, 3);
+        await testPolynomial(tester, 3);
       },
     );
 
@@ -100,7 +100,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testPolynomial(tester, 4);
+        await testPolynomial(tester, 4);
       },
     );
   });
