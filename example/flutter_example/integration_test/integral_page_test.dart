@@ -8,7 +8,7 @@ import 'utils.dart';
 void main() {
   var needsOpenPage = true;
 
-  Future<void> _testIntegral(
+  Future<void> testIntegral(
     WidgetTester tester, [
     String type = '',
   ]) async {
@@ -80,7 +80,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testIntegral(tester);
+        await testIntegral(tester);
       },
     );
 
@@ -91,7 +91,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testIntegral(tester, 'Trapezoid');
+        await testIntegral(tester, 'Trapezoid');
       },
     );
 
@@ -102,7 +102,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testIntegral(tester, 'Midpoint');
+        await testIntegral(tester, 'Midpoint');
       },
     );
   });

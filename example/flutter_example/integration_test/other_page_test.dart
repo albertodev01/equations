@@ -10,7 +10,7 @@ import 'utils.dart';
 void main() {
   var needsOpenPage = true;
 
-  Future<void> _testMatrix(WidgetTester tester) async {
+  Future<void> testMatrix(WidgetTester tester) async {
     if (needsOpenPage) {
       // Opening the system page
       await tester.tap(find.byKey(const Key('OtherLogo-Container')));
@@ -45,7 +45,7 @@ void main() {
     expect(find.byType(RealResultCard), findsNothing);
   }
 
-  Future<void> _testComplex(WidgetTester tester) async {
+  Future<void> testComplex(WidgetTester tester) async {
     // Moving to the 'Bracketing' page
     tester
         .widget<InheritedNavigation>(find.byType(InheritedNavigation))
@@ -105,7 +105,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testMatrix(tester);
+        await testMatrix(tester);
       },
     );
 
@@ -116,7 +116,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testComplex(tester);
+        await testComplex(tester);
       },
     );
   });

@@ -9,7 +9,7 @@ import 'utils.dart';
 void main() {
   var needsOpenPage = true;
 
-  Future<void> _testSinglePoint(
+  Future<void> testSinglePoint(
     WidgetTester tester, [
     String dropdownValue = '',
   ]) async {
@@ -65,7 +65,7 @@ void main() {
     expect(find.byType(RealResultCard), findsNothing);
   }
 
-  Future<void> _testBracketing(
+  Future<void> testBracketing(
     WidgetTester tester, [
     String dropdownValue = '',
   ]) async {
@@ -130,7 +130,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testSinglePoint(tester);
+        await testSinglePoint(tester);
       },
     );
 
@@ -141,7 +141,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testSinglePoint(tester, 'Steffensen');
+        await testSinglePoint(tester, 'Steffensen');
       },
     );
 
@@ -152,7 +152,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testBracketing(tester);
+        await testBracketing(tester);
       },
     );
 
@@ -163,7 +163,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testBracketing(tester, 'Secant');
+        await testBracketing(tester, 'Secant');
       },
     );
 
@@ -174,7 +174,7 @@ void main() {
 
         app.main();
         await tester.pumpAndSettle();
-        await _testBracketing(tester, 'Brent');
+        await testBracketing(tester, 'Brent');
       },
     );
   });

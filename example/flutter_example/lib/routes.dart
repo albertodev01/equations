@@ -26,25 +26,26 @@ const systemPagePath = '/systems';
 /// Route name for the page containing various utilities.
 const otherPagePath = '/other';
 
+/// Builds a [FadeTransition] for a [GoRoute] route.
+CustomTransitionPage<void> _builder(
+  BuildContext _,
+  GoRouterState state,
+  Widget childPage,
+) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    transitionsBuilder: (context, animation, _, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+    child: childPage,
+  );
+}
+
 /// Generates the [GoRouter] instance that manages the app navigation.
 GoRouter generateRouter({String initialRoute = homePagePath}) {
-  CustomTransitionPage<void> _builder(
-    BuildContext _,
-    GoRouterState state,
-    Widget childPage,
-  ) {
-    return CustomTransitionPage<void>(
-      key: state.pageKey,
-      transitionsBuilder: (context, animation, _, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-      child: childPage,
-    );
-  }
-
   return GoRouter(
     initialLocation: initialRoute,
     routes: [
