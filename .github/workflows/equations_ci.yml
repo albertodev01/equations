@@ -34,7 +34,7 @@ jobs:
           dart pub global run coverage:test_with_coverage
 
       - name: Making sure that code coverage is 100
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+        uses: VeryGoodOpenSource/very_good_coverage@v1.2.1
         with:
           min_coverage: 100
           
@@ -69,7 +69,12 @@ jobs:
           flutter pub run dart_code_metrics:metrics analyze lib test
 
       - name: Runing unit, widget and golden tests
-        run: flutter test
+        run: flutter test --coverage
+
+      - name: Making sure that code coverage is at least 99
+        uses: VeryGoodOpenSource/very_good_coverage@v1.2.1
+        with:
+          min_coverage: 99
 
   verify_equation_dart_example:
     name: Dart example

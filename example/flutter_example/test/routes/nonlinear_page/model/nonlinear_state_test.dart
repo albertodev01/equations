@@ -43,6 +43,17 @@ void main() {
       expect(nonlinearState.nonlinearType, equals(NonlinearType.singlePoint));
       expect(nonlinearState.state, equals(const NonlinearResult()));
       expect(count, equals(2));
+
+      nonlinearState.solveWithSinglePoint(
+        function: 'x-2',
+        precision: 1.0e-10,
+        initialGuess: '2',
+        method: SinglePointMethods.steffensen,
+      );
+
+      expect(nonlinearState.nonlinearType, equals(NonlinearType.singlePoint));
+      expect(nonlinearState.state.nonlinear, isNotNull);
+      expect(count, equals(3));
     });
 
     test('Making sure that bracketing equations can be solved and cleared', () {
@@ -102,6 +113,17 @@ void main() {
       expect(nonlinearState.nonlinearType, equals(NonlinearType.singlePoint));
       expect(nonlinearState.state.nonlinear, isNull);
       expect(count, equals(1));
+
+      nonlinearState.solveWithSinglePoint(
+        function: 'x^2',
+        precision: 1.0e-10,
+        initialGuess: '',
+        method: SinglePointMethods.newton,
+      );
+
+      expect(nonlinearState.nonlinearType, equals(NonlinearType.singlePoint));
+      expect(nonlinearState.state.nonlinear, isNull);
+      expect(count, equals(2));
     });
   });
 }
