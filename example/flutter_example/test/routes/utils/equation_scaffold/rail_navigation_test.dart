@@ -35,6 +35,35 @@ void main() {
       expect(find.byType(NavigationRail), findsOneWidget);
       expect(find.byType(VerticalDivider), findsOneWidget);
     });
+
+    testWidgets('Making sure that routes can be changed', (tester) async {
+      final navigationIndex = ValueNotifier<int>(0);
+
+      await tester.pumpWidget(
+        MockWrapper(
+          child: InheritedNavigation(
+            tabController: TabController(
+              length: 2,
+              vsync: const TestVSync(),
+            ),
+            fab: null,
+            navigationItems: const [
+              NavigationItem(title: 'Test 1', content: SizedBox()),
+              NavigationItem(title: 'Test 2', content: SizedBox()),
+            ],
+            navigationIndex: navigationIndex,
+            child: const RailNavigation(),
+          ),
+        ),
+      );
+
+      expect(navigationIndex.value, isZero);
+
+      await tester.tap(find.text('Test 2'));
+      await tester.pumpAndSettle();
+
+      expect(navigationIndex.value, equals(1));
+    });
   });
 
   group('Golden tests - RailNavigation', () {

@@ -64,6 +64,56 @@ void main() {
     });
 
     test(
+      'Making sure that singular matrices return no results - rowReduction',
+      () {
+        final systemState = SystemState(SystemType.rowReduction)
+          ..rowReductionSolver(
+            flatMatrix: ['1', '2', '1', '2'],
+            knownValues: ['0', '-1'],
+            size: 2,
+          );
+
+        expect(systemState.systemType, equals(SystemType.rowReduction));
+        expect(systemState.state, equals(const SystemResult()));
+        expect(systemState.state.systemSolver, isNull);
+      },
+    );
+
+    test(
+      'Making sure that singular matrices return no results - factorization',
+      () {
+        final systemState = SystemState(SystemType.factorization)
+          ..factorizationSolver(
+            method: FactorizationMethods.lu,
+            flatMatrix: ['1', '2', '1', '2'],
+            knownValues: ['0', '-1'],
+            size: 2,
+          );
+
+        expect(systemState.systemType, equals(SystemType.factorization));
+        expect(systemState.state, equals(const SystemResult()));
+        expect(systemState.state.systemSolver, isNull);
+      },
+    );
+
+    test(
+      'Making sure that singular matrices return no results - iterative',
+      () {
+        final systemState = SystemState(SystemType.iterative)
+          ..iterativeSolver(
+            method: IterativeMethods.sor,
+            flatMatrix: ['1', '2', '1', '2'],
+            knownValues: ['0', '-1'],
+            size: 2,
+          );
+
+        expect(systemState.systemType, equals(SystemType.iterative));
+        expect(systemState.state, equals(const SystemResult()));
+        expect(systemState.state.systemSolver, isNull);
+      },
+    );
+
+    test(
       'Making sure that systems can be solved and cleared using row reduction'
       ' methods',
       () {
