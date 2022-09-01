@@ -20,8 +20,8 @@ import 'package:flutter/material.dart';
 ///  - Single point methods (like Newton's method)
 ///  - Bracketing methods (like secant method or bisection)
 ///
-/// Each tab also features a [EquationDrawerWidget] which plots the function on a
-/// cartesian plane.
+/// Each tab also features a [EquationDrawerWidget] which plots the function on
+/// a cartesian plane.
 class NonlinearPage extends StatefulWidget {
   /// Creates a [NonlinearPage] widget.
   const NonlinearPage({super.key});

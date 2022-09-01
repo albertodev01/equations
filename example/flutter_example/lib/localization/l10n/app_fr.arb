@@ -79,8 +79,9 @@
   "url_error": "Cette page n'existe pas!",
   "version": "Version",
   "input_allowed_values": "Valeurs autorisées",
-  "input_allowed_numbers": " - Nombres décimaux et entiers",
-  "input_allowed_fractions": " - Fractions",
-  "input_allowed_constants": " - Ces constantes: pi (3.1415), e (2.7182)",
-  "input_allowed_functions": "Ces fonctions sont également autorisées:"
+  "input_allowed_numbers": " - Nombres décimaux et entiers.",
+  "input_allowed_fractions": " - Fractions.",
+  "input_allowed_constants": " - Constantes: pi (3.1415), e (2.7182) et sqrt2 (1.4142)",
+  "input_allowed_functions": "L'equation f(x) permet à ces fonctions:",
+  "input_allowed_multiplication_sign": "La multiplication nécessite le signe. Par exemple:"
 }

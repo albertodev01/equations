@@ -37,17 +37,18 @@ void main() {
 
       expect(find.byType(AlertDialog), findsOneWidget);
       expect(find.text('OK'), findsOneWidget);
+      expect(find.byType(Card), findsNothing);
 
-      expect(find.text(' - sqrt(x)'), findsNothing);
-      expect(find.text(' - sin(x)'), findsNothing);
-      expect(find.text(' - cos(x)'), findsNothing);
-      expect(find.text(' - tan(x)'), findsNothing);
-      expect(find.text(' - log(x)'), findsNothing);
-      expect(find.text(' - acos(x)'), findsNothing);
-      expect(find.text(' - asin(x)'), findsNothing);
-      expect(find.text(' - atan(x)'), findsNothing);
-      expect(find.text(' - csc(x)'), findsNothing);
-      expect(find.text(' - sec(x)'), findsNothing);
+      expect(find.text('sqrt(x)'), findsNothing);
+      expect(find.text('sin(x)'), findsNothing);
+      expect(find.text('cos(x)'), findsNothing);
+      expect(find.text('tan(x)'), findsNothing);
+      expect(find.text('log(x)'), findsNothing);
+      expect(find.text('acos(x)'), findsNothing);
+      expect(find.text('asin(x)'), findsNothing);
+      expect(find.text('atan(x)'), findsNothing);
+      expect(find.text('csc(x)'), findsNothing);
+      expect(find.text('sec(x)'), findsNothing);
 
       // Close the dialog
       await tester.tap(find.text('OK'));
@@ -70,17 +71,18 @@ void main() {
 
       expect(find.byType(AlertDialog), findsOneWidget);
       expect(find.text('OK'), findsOneWidget);
+      expect(find.byType(Card), findsNWidgets(10));
 
-      expect(find.text(' - sqrt(x)'), findsOneWidget);
-      expect(find.text(' - sin(x)'), findsOneWidget);
-      expect(find.text(' - cos(x)'), findsOneWidget);
-      expect(find.text(' - tan(x)'), findsOneWidget);
-      expect(find.text(' - log(x)'), findsOneWidget);
-      expect(find.text(' - acos(x)'), findsOneWidget);
-      expect(find.text(' - asin(x)'), findsOneWidget);
-      expect(find.text(' - atan(x)'), findsOneWidget);
-      expect(find.text(' - csc(x)'), findsOneWidget);
-      expect(find.text(' - sec(x)'), findsOneWidget);
+      expect(find.text('sqrt(x)'), findsOneWidget);
+      expect(find.text('sin(x)'), findsOneWidget);
+      expect(find.text('cos(x)'), findsOneWidget);
+      expect(find.text('tan(x)'), findsOneWidget);
+      expect(find.text('log(x)'), findsOneWidget);
+      expect(find.text('acos(x)'), findsOneWidget);
+      expect(find.text('asin(x)'), findsOneWidget);
+      expect(find.text('atan(x)'), findsOneWidget);
+      expect(find.text('csc(x)'), findsOneWidget);
+      expect(find.text('sec(x)'), findsOneWidget);
 
       // Close the dialog
       await tester.tap(find.text('OK'));

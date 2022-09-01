@@ -10,8 +10,8 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// Wrapper of a [EquationDrawerWidget] widget that draws equations and highlights the
-/// area below the function.
+/// Wrapper of a [EquationDrawerWidget] widget that draws equations and
+/// highlights the area below the function.
 class IntegralPlotWidget extends StatelessWidget {
   /// Creates a [IntegralPlotWidget] widget.
   const IntegralPlotWidget({super.key});
@@ -60,8 +60,8 @@ class _PlotTitle extends StatelessWidget {
   }
 }
 
-/// A wrapper of [EquationDrawerWidget] that listens to [IntegralState] to either draw
-/// the function or clear the chart.
+/// A wrapper of [EquationDrawerWidget] that listens to [IntegralState] to
+/// either draw the function or clear the chart.
 class _PlotWidgetListener extends StatelessWidget {
   /// Creates a [_PlotWidgetListener] widget.
   const _PlotWidgetListener();
