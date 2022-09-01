@@ -30,22 +30,33 @@ class InputKindDialogButton extends StatelessWidget {
     super.key,
   });
 
-  void _buttonPressed(BuildContext context) {
-    showDialog(
+  Future<void> _buttonPressed(BuildContext context) async {
+    await showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
           scrollable: true,
           title: Text('${context.l10n.input_allowed_values}:'),
-          content: inputKindMessage == InputKindMessage.numbers
-              ? const _AllowedNumbers()
-              : const _AllowsFunctions(),
-          actions: [
-            ElevatedButton(
-              onPressed: Navigator.of(context).pop,
-              child: const Text('OK'),
-            ),
-          ],
+          content: Column(
+            children: [
+              if (inputKindMessage == InputKindMessage.numbers)
+                const _AllowedNumbers()
+              else
+                const _AllowsFunctions(),
+
+              // Button that closes the dialog
+              const Divider(
+                height: 35,
+              ),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: Navigator.of(context).pop,
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -56,11 +67,11 @@ class InputKindDialogButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(
         Icons.info_outline,
-        size: 14,
+        size: 18,
       ),
-      color: Colors.lightGreen,
-      splashRadius: 14,
-      onPressed: () => _buttonPressed(context),
+      color: Colors.lightBlueAccent,
+      splashRadius: 18,
+      onPressed: () async => _buttonPressed(context),
     );
   }
 }
@@ -95,20 +106,120 @@ class _AllowsFunctions extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Allows numbers
         const _AllowedNumbers(),
-        const SizedBox(height: 10),
+
+        // Separator line
+        const Divider(
+          height: 35,
+        ),
+
+        // Lists the supported functions
         Text(context.l10n.input_allowed_functions),
-        const SizedBox(height: 10),
-        const Text(' - sqrt(x)'),
-        const Text(' - sin(x)'),
-        const Text(' - cos(x)'),
-        const Text(' - tan(x)'),
-        const Text(' - log(x)'),
-        const Text(' - acos(x)'),
-        const Text(' - asin(x)'),
-        const Text(' - atan(x)'),
-        const Text(' - csc(x)'),
-        const Text(' - sec(x)'),
+        const SizedBox(height: 15),
+        Wrap(
+          runSpacing: 5,
+          spacing: 5,
+          children: const [
+            _FunctionCard(functionName: 'sqrt(x)'),
+            _FunctionCard(functionName: 'sin(x)'),
+            _FunctionCard(functionName: 'cos(x)'),
+            _FunctionCard(functionName: 'tan(x)'),
+            _FunctionCard(functionName: 'log(x)'),
+            _FunctionCard(functionName: 'acos(x)'),
+            _FunctionCard(functionName: 'asin(x)'),
+            _FunctionCard(functionName: 'atan(x)'),
+            _FunctionCard(functionName: 'csc(x)'),
+            _FunctionCard(functionName: 'sec(x)'),
+          ],
+        ),
+
+        // Warning about the multiplication
+        const _MultiplicationSign(),
+      ],
+    );
+  }
+}
+
+/// A wrapper of [Card] that holds a mathematical function sign. This is used
+/// within [_AllowsFunctions].
+class _FunctionCard extends StatelessWidget {
+  /// The function name.
+  final String functionName;
+  const _FunctionCard({
+    required this.functionName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(5),
+      shadowColor: Colors.blue,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Text(functionName),
+      ),
+    );
+  }
+}
+
+class _MultiplicationSign extends StatelessWidget {
+  /// Creates a [_MultiplicationSign] widget.
+  const _MultiplicationSign();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Warning about the multiplication
+        Padding(
+          padding: const EdgeInsets.only(
+            top: 20,
+            bottom: 12,
+          ),
+          child: Text(context.l10n.input_allowed_multiplication_sign),
+        ),
+
+        // Good example
+        const Text.rich(
+          TextSpan(
+            text: ' - ',
+            children: [
+              TextSpan(
+                text: 'OK',
+                style: TextStyle(
+                  color: Colors.lightGreen,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: ': 2*x-cos(3*x)',
+              ),
+            ],
+          ),
+        ),
+
+        // Bad example
+        const Text.rich(
+          TextSpan(
+            text: ' - ',
+            children: [
+              TextSpan(
+                text: 'NO',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: ': 2x-cos(3x)',
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

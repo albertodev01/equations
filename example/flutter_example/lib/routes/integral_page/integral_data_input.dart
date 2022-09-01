@@ -135,7 +135,7 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
 
               const Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 12,
+                  horizontal: 16,
                 ),
                 child: InputKindDialogButton(
                   inputKindMessage: InputKindMessage.equations,

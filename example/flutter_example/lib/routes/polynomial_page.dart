@@ -18,8 +18,8 @@ import 'package:flutter/material.dart';
 ///  - Cubic
 ///  - Quartic
 ///
-/// Each tab also has a [EquationDrawerWidget] that draws the function in a cartesian
-/// plane.
+/// Each tab also has a [EquationDrawerWidget] that draws the function in a
+/// cartesian plane.
 class PolynomialPage extends StatefulWidget {
   /// Creates a [PolynomialPage] widget.
   const PolynomialPage({super.key});

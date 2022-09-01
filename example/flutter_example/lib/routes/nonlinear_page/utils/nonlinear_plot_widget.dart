@@ -10,8 +10,8 @@ import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// Wrapper of a [EquationDrawerWidget] widget that paints nonlinear equations on the
-/// screen.
+/// Wrapper of a [EquationDrawerWidget] widget that paints nonlinear equations
+/// on the screen.
 class NonlinearPlotWidget extends StatelessWidget {
   /// Creates a [NonlinearPlotWidget] widget.
   const NonlinearPlotWidget({super.key});
@@ -57,8 +57,8 @@ class _PlotTitle extends StatelessWidget {
   }
 }
 
-/// A wrapper of [EquationDrawerWidget] that listens to [NonlinearState] to either draw
-/// the equation or clear the chart.
+/// A wrapper of [EquationDrawerWidget] that listens to [NonlinearState] to
+/// either draw the equation or clear the chart.
 class _PlotWidgetListener extends StatelessWidget {
   /// Creates a [_PlotWidgetListener] widget.
   const _PlotWidgetListener();
