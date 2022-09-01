@@ -11,7 +11,7 @@ import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
@@ -28,7 +28,7 @@ const extraBackgroundBreakpoint = 1300.0;
 /// Determines whether the contents should stay on one or two column(s).
 const doubleColumnPageBreakpoint = 1100.0;
 
-/// The maximum size (width and height) of a [PlotWidget].
+/// The maximum size (width and height) of a [EquationDrawerWidget].
 const maxWidthPlot = 600.0;
 
 /// The minimum available space required to show the chart.

@@ -5,12 +5,12 @@ import 'package:equations_solver/routes/integral_page/model/inherited_integral.d
 import 'package:equations_solver/routes/integral_page/model/integral_state.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// Wrapper of a [PlotWidget] widget that draws equations and highlights the
+/// Wrapper of a [EquationDrawerWidget] widget that draws equations and highlights the
 /// area below the function.
 class IntegralPlotWidget extends StatelessWidget {
   /// Creates a [IntegralPlotWidget] widget.
@@ -46,7 +46,7 @@ class IntegralPlotWidget extends StatelessWidget {
   }
 }
 
-/// A wrapper of [PageTitle] placed above a [PlotWidget].
+/// A wrapper of [PageTitle] placed above a [EquationDrawerWidget].
 class _PlotTitle extends StatelessWidget {
   /// Creates a [_PlotTitle] widget.
   const _PlotTitle();
@@ -60,7 +60,7 @@ class _PlotTitle extends StatelessWidget {
   }
 }
 
-/// A wrapper of [PlotWidget] that listens to [IntegralState] to either draw
+/// A wrapper of [EquationDrawerWidget] that listens to [IntegralState] to either draw
 /// the function or clear the chart.
 class _PlotWidgetListener extends StatelessWidget {
   /// Creates a [_PlotWidgetListener] widget.
@@ -74,7 +74,7 @@ class _PlotWidgetListener extends StatelessWidget {
         final integral = context.integralState.state.numericalIntegration;
 
         if (integral != null) {
-          return PlotWidget(
+          return EquationDrawerWidget(
             plotMode: IntegralPlot(
               function: integral,
             ),
@@ -84,7 +84,7 @@ class _PlotWidgetListener extends StatelessWidget {
           );
         }
 
-        return const PlotWidget<IntegralPlot>();
+        return const EquationDrawerWidget<IntegralPlot>();
       },
     );
   }

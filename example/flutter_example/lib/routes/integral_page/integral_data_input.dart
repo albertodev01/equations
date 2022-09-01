@@ -8,6 +8,7 @@ import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dar
 import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:flutter/material.dart';
 
 /// This widget contains a series of input widgets for [IntegralBody] to parse
@@ -132,8 +133,14 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
                 child: Text(context.l10n.solve),
               ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12,
+                ),
+                child: InputKindDialogButton(
+                  inputKindMessage: InputKindMessage.equations,
+                ),
+              ),
 
               // Cleaning the inputs
               ElevatedButton(

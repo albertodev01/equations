@@ -1,8 +1,8 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,7 +16,7 @@ void main() {
       child: SizedBox(
         width: 300,
         height: 400,
-        child: PlotWidget(
+        child: EquationDrawerWidget(
           plotMode: PolynomialPlot(
             algebraic: Algebraic.fromReal([1, 2, -3, -2]),
           ),
@@ -51,7 +51,7 @@ void main() {
             child: SizedBox(
               width: 500,
               height: 580,
-              child: PlotWidget(
+              child: EquationDrawerWidget(
                 key: const Key('PlotWidget-Golden'),
                 plotMode: PolynomialPlot(
                   algebraic: Algebraic.fromReal([1, 2, -3, -2]),
@@ -79,7 +79,7 @@ void main() {
             child: SizedBox(
               width: 500,
               height: 580,
-              child: PlotWidget(
+              child: EquationDrawerWidget(
                 key: const Key('PlotWidget-Golden'),
                 plotMode: PolynomialPlot(
                   algebraic: Algebraic.fromReal([1, 2, -3, -2]),

@@ -1,7 +1,7 @@
-import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_painter.dart';
 import 'package:flutter/material.dart';
 
-/// Used in [PlotterPainter] to color a portion of area below the function.
+/// Used in [EquationPainter] to color a portion of area below the function.
 class ColorArea {
   /// The [Color] of the area below the function.
   ///
@@ -14,7 +14,7 @@ class ColorArea {
   /// The point on the `x` axis where the area to color ends.
   final double endPoint;
 
-  /// Creates a [ColorArea] class to give instructions to a [PlotterPainter]
+  /// Creates a [ColorArea] class to give instructions to a [EquationPainter]
   /// about coloring the area below a function.
   const ColorArea({
     required this.startPoint,

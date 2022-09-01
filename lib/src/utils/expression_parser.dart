@@ -27,10 +27,12 @@ typedef _Evaluator = num Function(num value);
 ///   - sin(x) (sine of `x`)
 ///   - cos(x) (cosine of `x`)
 ///   - tan(x) (tangent of `x`)
-///   - log() (natural logarithm of `x`)
-///   - acos() (arc cosine of `x`)
-///   - asin() (arc sine of `x`)
-///   - atan() (arc tangent of `x`)
+///   - log(x) (natural logarithm of `x`)
+///   - acos(x) (arc cosine of `x`)
+///   - asin(x) (arc sine of `x`)
+///   - atan(x) (arc tangent of `x`)
+///   - csc(x) (cosecant of `x`)
+///   - sec(x) (secant of `x`)
 ///
 /// An exception of type [ExpressionParserException] is thrown if the parsed is
 /// malformed. This parser is also able to recognize some constants:

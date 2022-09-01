@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_painter.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -24,7 +24,7 @@ void main() {
           clipBehavior: Clip.antiAlias,
           child: CustomPaint(
             key: const Key('PlotWidget-Golden'),
-            painter: PlotterPainter(
+            painter: EquationPainter(
               plotMode: PolynomialPlot(
                 algebraic: Algebraic.fromReal(coefficients),
               ),
@@ -49,7 +49,7 @@ void main() {
       borderRadius: const BorderRadius.all(Radius.circular(5)),
       child: CustomPaint(
         key: const Key('PlotWidget-Golden'),
-        painter: PlotterPainter(
+        painter: EquationPainter(
           plotMode: const NonlinearPlot(
             nonLinear: Newton(function: 'e^x+x^3', x0: -1),
           ),

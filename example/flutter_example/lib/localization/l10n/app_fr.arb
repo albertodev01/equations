@@ -77,5 +77,10 @@
   "symmetric": "Symétrique",
   "identity": "Identité",
   "url_error": "Cette page n'existe pas!",
-  "version": "Version"
+  "version": "Version",
+  "input_allowed_values": "Valeurs autorisées",
+  "input_allowed_numbers": " - Nombres décimaux et entiers",
+  "input_allowed_fractions": " - Fractions",
+  "input_allowed_constants": " - Ces constantes: pi (3.1415), e (2.7182)",
+  "input_allowed_functions": "Ces fonctions sont également autorisées:"
 }

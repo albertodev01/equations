@@ -1,8 +1,8 @@
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 /// This listenable class handles the state of a material [Slider] widget. In
-/// particular, it's used to keep track of the zoom of a [PlotWidget] widget.
+/// particular, it's used to keep track of the zoom of a [EquationDrawerWidget] widget.
 class PlotZoomState extends ChangeNotifier {
   double _zoom = 0;
 

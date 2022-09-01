@@ -7,7 +7,7 @@ import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.d
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 /// This page contains a series of polynomial equations solvers. There are 4
@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 ///  - Cubic
 ///  - Quartic
 ///
-/// Each tab also has a [PlotWidget] that draws the function in a cartesian
+/// Each tab also has a [EquationDrawerWidget] that draws the function in a cartesian
 /// plane.
 class PolynomialPage extends StatefulWidget {
   /// Creates a [PolynomialPage] widget.

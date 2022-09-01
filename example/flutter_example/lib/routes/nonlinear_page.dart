@@ -11,7 +11,7 @@ import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 /// This page contains a series of nonlinear equations solvers. There are 2 tabs
@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 ///  - Single point methods (like Newton's method)
 ///  - Bracketing methods (like secant method or bisection)
 ///
-/// Each tab also features a [PlotWidget] which plots the function on a
+/// Each tab also features a [EquationDrawerWidget] which plots the function on a
 /// cartesian plane.
 class NonlinearPage extends StatefulWidget {
   /// Creates a [NonlinearPage] widget.
