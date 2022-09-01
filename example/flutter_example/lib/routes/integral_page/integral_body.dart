@@ -53,21 +53,24 @@ class _ResponsiveBody extends StatelessWidget {
         }
 
         // For wider screens - plot on the right and results on the right
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Input and results
-            SizedBox(
-              width: size.maxWidth / 3,
-              child: const _DoubleColumnLayout(),
-            ),
+        return Center(
+          child: SingleChildScrollView(
+            key: const Key('SingleChildScrollView-desktop-responsive'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                // Input and results
+                Expanded(
+                  child: _DoubleColumnLayout(),
+                ),
 
-            // Plot
-            SizedBox(
-              width: size.maxWidth / 2.3,
-              child: const IntegralPlotWidget(),
+                // Plot
+                Expanded(
+                  child: IntegralPlotWidget(),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );
@@ -84,6 +87,7 @@ class _SingleColumnLayout extends StatelessWidget {
     return SingleChildScrollView(
       key: const Key('SingleChildScrollView-mobile-responsive'),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           PageTitle(
             pageTitle: context.l10n.integrals,
@@ -120,23 +124,21 @@ class _DoubleColumnLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        key: const Key('SingleChildScrollView-desktop-responsive'),
-        child: Column(
-          children: [
-            PageTitle(
-              pageTitle: context.l10n.integrals,
-              pageLogo: const IntegralLogo(
-                size: 50,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PageTitle(
+            pageTitle: context.l10n.integrals,
+            pageLogo: const IntegralLogo(
+              size: 50,
             ),
-            const IntegralDataInput(),
-            const IntegralResultsWidget(),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        ),
+          ),
+          const IntegralDataInput(),
+          const IntegralResultsWidget(),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
       ),
     );
   }

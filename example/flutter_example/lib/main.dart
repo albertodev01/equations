@@ -55,8 +55,49 @@ class EquationsApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
       ),
 
+      // Hides scroll bars on mobile but always shows them on desktop
+      scrollBehavior: const _CustomScrollBehavior(),
+
       // Hiding the debug banner
       debugShowCheckedModeBanner: false,
     );
+  }
+}
+
+/// This custom implementation of [MaterialScrollBehavior] makes the scroll bar
+/// **always** visible on desktop platforms.
+///
+/// On mobile devices, the scroll bar never appears.
+class _CustomScrollBehavior extends MaterialScrollBehavior {
+  /// Creates a [_CustomScrollBehavior] configuration.
+  const _CustomScrollBehavior();
+
+  @override
+  Widget buildScrollbar(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    switch (axisDirectionToAxis(details.direction)) {
+      case Axis.horizontal:
+        // Disable scroll bars in the X axis.
+        return child;
+      case Axis.vertical:
+        // Enable scroll bars in the Y axis.
+        switch (Theme.of(context).platform) {
+          case TargetPlatform.linux:
+          case TargetPlatform.macOS:
+          case TargetPlatform.windows:
+            return Scrollbar(
+              controller: details.controller,
+              thumbVisibility: true,
+              child: child,
+            );
+          case TargetPlatform.android:
+          case TargetPlatform.fuchsia:
+          case TargetPlatform.iOS:
+            return child;
+        }
+    }
   }
 }
