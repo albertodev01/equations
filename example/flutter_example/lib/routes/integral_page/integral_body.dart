@@ -61,7 +61,7 @@ class _ResponsiveBody extends StatelessWidget {
               children: const [
                 // Input and results
                 Expanded(
-                  child: _DoubleColumnLayout(),
+                  child: _DoubleColumnLeftContent(),
                 ),
 
                 // Plot
@@ -116,10 +116,10 @@ class _SingleColumnLayout extends StatelessWidget {
   }
 }
 
-/// Lays the page contents on two columns.
-class _DoubleColumnLayout extends StatelessWidget {
-  /// Creates a [_DoubleColumnLayout] widget.
-  const _DoubleColumnLayout();
+/// The left column [_ResponsiveBody] when the viewport is large enough.
+class _DoubleColumnLeftContent extends StatelessWidget {
+  /// Creates a [_DoubleColumnLeftContent] widget.
+  const _DoubleColumnLeftContent();
 
   @override
   Widget build(BuildContext context) {

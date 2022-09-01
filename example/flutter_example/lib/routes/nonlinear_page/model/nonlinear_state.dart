@@ -39,7 +39,7 @@ enum BracketingMethods {
 class NonlinearState extends ChangeNotifier {
   var _state = const NonlinearResult();
 
-  /// The type of polynomial this bloc has to solve.
+  /// The type of nonlinear equations to solve.
   final NonlinearType nonlinearType;
 
   /// Creates a [NonlinearState] object.
@@ -60,7 +60,7 @@ class NonlinearState extends ChangeNotifier {
 
   /// Tries to return a [BracketingMethods] value from a
   /// [NonlinearDropdownItems] value.
-  static BracketingMethods brackedingResolve(NonlinearDropdownItems item) {
+  static BracketingMethods bracketingResolve(NonlinearDropdownItems item) {
     if (item == NonlinearDropdownItems.secant) {
       return BracketingMethods.secant;
     }

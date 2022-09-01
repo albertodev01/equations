@@ -23,7 +23,9 @@ void main() {
               integralType: IntegralType.simpson,
             ),
           child: const MockWrapper(
-            child: IntegralPlotWidget(),
+            child: SingleChildScrollView(
+              child: IntegralPlotWidget(),
+            ),
           ),
         ),
       );
@@ -53,6 +55,8 @@ void main() {
     }
 
     testWidgets('IntegralPlotWidget - simpson', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 800));
+
       await tester.pumpWidget(
         mockedTree(
           state: IntegralState()
@@ -72,6 +76,8 @@ void main() {
     });
 
     testWidgets('IntegralPlotWidget - midpoint', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 800));
+
       await tester.pumpWidget(
         mockedTree(
           state: IntegralState()
@@ -91,6 +97,8 @@ void main() {
     });
 
     testWidgets('IntegralPlotWidget - trapezoid', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 800));
+
       await tester.pumpWidget(
         mockedTree(
           state: IntegralState()

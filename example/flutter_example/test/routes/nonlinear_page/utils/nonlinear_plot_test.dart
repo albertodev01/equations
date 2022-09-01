@@ -22,7 +22,9 @@ void main() {
               method: SinglePointMethods.newton,
             ),
           child: const MockWrapper(
-            child: NonlinearPlotWidget(),
+            child: SingleChildScrollView(
+              child: NonlinearPlotWidget(),
+            ),
           ),
         ),
       );
@@ -52,6 +54,8 @@ void main() {
     }
 
     testWidgets('NonlinearPlotWidget - single point', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(900, 900));
+
       await tester.pumpWidget(
         mockedTree(
           state: NonlinearState(NonlinearType.singlePoint)
@@ -70,6 +74,8 @@ void main() {
     });
 
     testWidgets('NonlinearPlotWidget - bracketing', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(900, 900));
+
       await tester.pumpWidget(
         mockedTree(
           state: NonlinearState(NonlinearType.bracketing)

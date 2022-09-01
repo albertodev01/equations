@@ -78,26 +78,25 @@ class _CustomScrollBehavior extends MaterialScrollBehavior {
     Widget child,
     ScrollableDetails details,
   ) {
-    switch (axisDirectionToAxis(details.direction)) {
-      case Axis.horizontal:
-        // Disable scroll bars in the X axis.
+    // No scroll bars in the horizontal axis
+    if (axisDirectionToAxis(details.direction) == Axis.horizontal) {
+      return child;
+    }
+
+    // Show scroll bars when scrolling vertically but only on desktop
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        return Scrollbar(
+          controller: details.controller,
+          thumbVisibility: true,
+          child: child,
+        );
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.iOS:
         return child;
-      case Axis.vertical:
-        // Enable scroll bars in the Y axis.
-        switch (Theme.of(context).platform) {
-          case TargetPlatform.linux:
-          case TargetPlatform.macOS:
-          case TargetPlatform.windows:
-            return Scrollbar(
-              controller: details.controller,
-              thumbVisibility: true,
-              child: child,
-            );
-          case TargetPlatform.android:
-          case TargetPlatform.fuchsia:
-          case TargetPlatform.iOS:
-            return child;
-        }
     }
   }
 }

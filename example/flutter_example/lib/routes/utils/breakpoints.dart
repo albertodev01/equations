@@ -1,6 +1,7 @@
 import 'package:equations_solver/routes/integral_page/integral_body.dart';
 import 'package:equations_solver/routes/integral_page/integral_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
+import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_analyzer_results.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
@@ -71,6 +72,10 @@ const precisonSliderWidth = 300.0;
 
 /// The width of a [SystemInputField] widget.
 const systemInputFieldSize = 60.0;
+
+/// The length of an [EquationInput] widget used inside a [NonlinearDataInput]
+/// to parse the algorithm values.
+const nonlinearValuesWidth = 80.0;
 
 /// The length of an [EquationInput] widget used inside a [IntegralDataInput] to
 /// parse the values of the lower and upper integration limits.

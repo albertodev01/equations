@@ -1,9 +1,7 @@
-import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
-import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_plot_widget.dart';
+import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_title_localizer.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
@@ -40,72 +38,9 @@ class NonlinearBody extends StatelessWidget {
 }
 
 /// Determines whether the contents should appear in 1 or 2 columns.
-class _ResponsiveBody extends StatefulWidget {
+class _ResponsiveBody extends StatelessWidget {
   /// Creates a [_ResponsiveBody] widget.
   const _ResponsiveBody();
-
-  @override
-  __ResponsiveBodyState createState() => __ResponsiveBodyState();
-}
-
-class __ResponsiveBodyState extends State<_ResponsiveBody> {
-  /// Manually caching the page title.
-  late final Widget pageTitleWidget = PageTitle(
-    pageTitle: getLocalizedName(),
-    pageLogo: const NonlinearLogo(
-      size: 50,
-    ),
-  );
-
-  /// Caching the single column layout subtree (small screens configuration).
-  late final singleColumnLayout = SingleChildScrollView(
-    key: const Key('SingleChildScrollView-mobile-responsive'),
-    child: Column(
-      children: [
-        pageTitleWidget,
-        const NonlinearDataInput(),
-        const NonlinearResults(),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          child: LayoutBuilder(
-            builder: (_, dimensions) {
-              return Visibility(
-                visible: dimensions.maxWidth >= minimumChartWidth,
-                child: const NonlinearPlotWidget(),
-              );
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-
-  /// Caching the double column layout subtree (large screens configuration)
-  late final doubleColumnLayout = Center(
-    child: SingleChildScrollView(
-      key: const Key('SingleChildScrollView-desktop-responsive'),
-      child: Column(
-        children: [
-          pageTitleWidget,
-          const NonlinearDataInput(),
-          const NonlinearResults(),
-          const SizedBox(
-            height: 40,
-          ),
-        ],
-      ),
-    ),
-  );
-
-  String getLocalizedName() {
-    final nonlinearType = context.nonlinearState.nonlinearType;
-
-    return nonlinearType == NonlinearType.singlePoint
-        ? context.l10n.single_point
-        : context.l10n.bracketing;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,29 +48,98 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
       builder: (context, size) {
         if (size.maxWidth <= doubleColumnPageBreakpoint) {
           // For mobile devices - all in a column
-          return singleColumnLayout;
+          return const _SingleColumnLayout();
         }
 
         // For wider screens - plot on the right and results on the right
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Input and results
-            SizedBox(
-              width: size.maxWidth / 3,
-              height: double.infinity,
-              child: doubleColumnLayout,
-            ),
+        return Center(
+          child: SingleChildScrollView(
+            key: const Key('SingleChildScrollView-desktop-responsive'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                // Input and results
+                Expanded(
+                  child: _DoubleColumnLeftContent(),
+                ),
 
-            // Plot
-            SizedBox(
-              width: size.maxWidth / 2.3,
-              height: double.infinity,
-              child: const NonlinearPlotWidget(),
+                // Plot
+                Expanded(
+                  child: NonlinearPlotWidget(),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
+    );
+  }
+}
+
+/// Lays the page contents on a single column.
+class _SingleColumnLayout extends StatelessWidget with NonlinearTitleLocalizer {
+  /// Creates a [_SingleColumnLayout] widget.
+  const _SingleColumnLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      key: const Key('SingleChildScrollView-mobile-responsive'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PageTitle(
+            pageTitle: getLocalizedName(context),
+            pageLogo: const NonlinearLogo(
+              size: 50,
+            ),
+          ),
+          const NonlinearDataInput(),
+          const NonlinearResults(),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30,
+            ),
+            child: LayoutBuilder(
+              builder: (_, dimensions) {
+                return Visibility(
+                  visible: dimensions.maxWidth >= minimumChartWidth,
+                  child: const NonlinearPlotWidget(),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The left column [_ResponsiveBody] when the viewport is large enough.
+class _DoubleColumnLeftContent extends StatelessWidget
+    with NonlinearTitleLocalizer {
+  /// Creates a [_DoubleColumnLeftContent] widget.
+  const _DoubleColumnLeftContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PageTitle(
+            pageTitle: getLocalizedName(context),
+            pageLogo: const NonlinearLogo(
+              size: 50,
+            ),
+          ),
+          const NonlinearDataInput(),
+          const NonlinearResults(),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
+      ),
     );
   }
 }

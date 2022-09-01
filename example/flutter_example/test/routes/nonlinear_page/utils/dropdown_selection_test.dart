@@ -1,5 +1,6 @@
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
@@ -136,6 +137,8 @@ void main() {
 
   group('Golden tests - NonlinearDropdownSelection', () {
     testWidgets('NonlinearDropdownSelection - single point', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 250));
+
       await tester.pumpWidget(
         const MockNonlinearWidget(
           child: NonlinearDropdownSelection(),
@@ -148,6 +151,8 @@ void main() {
     });
 
     testWidgets('NonlinearDropdownSelection - bracketing', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 250));
+
       await tester.pumpWidget(
         MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,

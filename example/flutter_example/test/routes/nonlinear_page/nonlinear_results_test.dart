@@ -92,6 +92,8 @@ void main() {
 
   group('Golden tests - NonlinearResults', () {
     testWidgets('NonlinearResults', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(650, 3000));
+
       await tester.pumpWidget(
         MockNonlinearWidget(
           textControllers: [
