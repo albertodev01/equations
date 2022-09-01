@@ -9,7 +9,9 @@ import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/dropdown_selection.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/precision_slider.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:flutter/material.dart';
 
 /// This widget contains a series of input widgets needed to parse the
@@ -69,7 +71,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
         );
       } else {
         context.nonlinearState.solveWithBracketing(
-          method: NonlinearState.brackedingResolve(algorithm),
+          method: NonlinearState.bracketingResolve(algorithm),
           function: context.textControllers.first.text,
           lowerBound: context.textControllers[1].text,
           upperBound: context.textControllers[2].text,
@@ -132,8 +134,14 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
                 child: Text(context.l10n.solve),
               ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: InputKindDialogButton(
+                  inputKindMessage: InputKindMessage.equations,
+                ),
+              ),
 
               // Cleaning the inputs
               ElevatedButton(
@@ -165,7 +173,7 @@ class _GuessesInput extends StatelessWidget {
           key: const Key('EquationInput-first-param'),
           controller: context.textControllers[1],
           placeholderText: 'x0',
-          baseWidth: 80,
+          baseWidth: nonlinearValuesWidth,
           maxLength: 8,
           onlyRealValues: true,
         ),
@@ -174,7 +182,7 @@ class _GuessesInput extends StatelessWidget {
             key: const Key('EquationInput-second-param'),
             controller: context.textControllers[2],
             placeholderText: 'x1',
-            baseWidth: 80,
+            baseWidth: nonlinearValuesWidth,
             maxLength: 8,
             onlyRealValues: true,
           ),

@@ -3,6 +3,7 @@ import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_plot_widget.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ void main() {
       expect(find.byType(GoBackButton), findsOneWidget);
       expect(find.byType(NonlinearDataInput), findsOneWidget);
       expect(find.byType(NonlinearResults), findsOneWidget);
+      expect(find.byType(InputKindDialogButton), findsOneWidget);
     });
 
     testWidgets(

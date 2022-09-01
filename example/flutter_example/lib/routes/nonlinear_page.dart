@@ -15,13 +15,13 @@ import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget
 import 'package:flutter/material.dart';
 
 /// This page contains a series of nonlinear equations solvers. There are 2 tabs
-/// that group a series of well-known root finding algorithms:
+/// with a series of well-known root finding algorithms:
 ///
 ///  - Single point methods (like Newton's method)
 ///  - Bracketing methods (like secant method or bisection)
 ///
-/// Each tab also features a [EquationDrawerWidget] which plots the function on
-/// a cartesian plane.
+/// Each tab also has a [EquationDrawerWidget] which draws functions on a
+/// cartesian plane.
 class NonlinearPage extends StatefulWidget {
   /// Creates a [NonlinearPage] widget.
   const NonlinearPage({super.key});

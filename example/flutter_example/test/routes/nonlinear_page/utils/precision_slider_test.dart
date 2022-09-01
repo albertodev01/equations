@@ -63,6 +63,8 @@ void main() {
 
   group('Golden tests - PrecisionSlider', () {
     testWidgets('PrecisionSlider', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 200));
+
       await tester.pumpWidget(
         const MockNonlinearWidget(
           child: PrecisionSlider(),

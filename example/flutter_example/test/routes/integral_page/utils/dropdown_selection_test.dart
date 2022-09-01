@@ -99,6 +99,8 @@ void main() {
 
   group('Golden tests - IntegralDropdownSelection', () {
     testWidgets('IntegralDropdownSelection - simpson', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 200));
+
       await tester.pumpWidget(
         MockIntegralWidget(
           dropdownValue: IntegralDropdownItems.simpson.name,
@@ -112,6 +114,8 @@ void main() {
     });
 
     testWidgets('IntegralDropdownSelection - midpoint', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 200));
+
       await tester.pumpWidget(
         MockIntegralWidget(
           dropdownValue: IntegralDropdownItems.midpoint.name,
@@ -125,6 +129,8 @@ void main() {
     });
 
     testWidgets('IntegralDropdownSelection - trapezoid', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 200));
+
       await tester.pumpWidget(
         MockIntegralWidget(
           dropdownValue: IntegralDropdownItems.trapezoid.name,

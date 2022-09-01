@@ -19,25 +19,24 @@ class NonlinearPlotWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Title
-            const _PlotTitle(),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Title
+          const _PlotTitle(),
 
-            // The actual plot
-            LayoutBuilder(
-              builder: (context, dimensions) {
-                final width = min<double>(dimensions.maxWidth, maxWidthPlot);
+          // The actual plot
+          LayoutBuilder(
+            builder: (context, dimensions) {
+              final width = min<double>(dimensions.maxWidth, maxWidthPlot);
 
-                return SizedBox(
-                  width: width,
-                  child: const _PlotWidgetListener(),
-                );
-              },
-            ),
-          ],
-        ),
+              return SizedBox(
+                width: width,
+                child: const _PlotWidgetListener(),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

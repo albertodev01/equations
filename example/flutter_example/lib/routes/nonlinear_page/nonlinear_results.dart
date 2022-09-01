@@ -15,7 +15,7 @@ class NonlinearResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Separator line
+        // Separator line.
         const SizedBox(
           height: 80,
         ),
@@ -25,7 +25,7 @@ class NonlinearResults extends StatelessWidget {
           icon: const EquationSolution(),
         ),
 
-        // Showing the solutions of the nonlinear equation
+        // Shows the solutions of the nonlinear equation.
         const _NonlinearSolutions(),
       ],
     );

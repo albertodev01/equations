@@ -191,6 +191,8 @@ void main() {
 
   group('Golden tests - IntegralDataInput', () {
     testWidgets('IntegralDataInput - simpson', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 500));
+
       await tester.pumpWidget(
         MockIntegralWidget(
           textControllers: [
@@ -209,6 +211,8 @@ void main() {
     });
 
     testWidgets('IntegralDataInput - midpoint', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 500));
+
       await tester.pumpWidget(
         MockIntegralWidget(
           textControllers: [
@@ -227,6 +231,8 @@ void main() {
     });
 
     testWidgets('IntegralDataInput - trapezoid', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 500));
+
       await tester.pumpWidget(
         MockIntegralWidget(
           textControllers: [
