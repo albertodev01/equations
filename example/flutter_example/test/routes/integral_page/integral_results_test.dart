@@ -85,39 +85,4 @@ void main() {
       },
     );
   });
-
-  group('Golden tests - IntegralResultsWidget', () {
-    testWidgets('IntegralResultsWidget', (tester) async {
-      await tester.pumpWidget(
-        MockIntegralWidget(
-          textControllers: [
-            TextEditingController(),
-            TextEditingController(),
-            TextEditingController(),
-          ],
-        ),
-      );
-
-      final equationInput = find.byKey(const Key('EquationInput-function'));
-      final lowerInput = find.byKey(const Key('IntegralInput-lower-bound'));
-      final upperInput = find.byKey(const Key('IntegralInput-upper-bound'));
-
-      // Filling the forms
-      await tester.enterText(equationInput, 'x+2');
-      await tester.enterText(lowerInput, '1');
-      await tester.enterText(upperInput, '3');
-
-      // Solving the equation
-      await tester.tap(find.byKey(const Key('Integral-button-solve')));
-      await tester.pumpAndSettle();
-
-      await tester.ensureVisible(find.byType(IntegralResultsWidget).last);
-      await tester.pumpAndSettle();
-
-      await expectLater(
-        find.byType(IntegralResultsWidget),
-        matchesGoldenFile('goldens/integral_results.png'),
-      );
-    });
-  });
 }
