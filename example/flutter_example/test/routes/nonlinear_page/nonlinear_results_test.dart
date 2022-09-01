@@ -89,39 +89,4 @@ void main() {
       },
     );
   });
-
-  group('Golden tests - NonlinearResults', () {
-    testWidgets('NonlinearResults', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(650, 3000));
-
-      await tester.pumpWidget(
-        MockNonlinearWidget(
-          textControllers: [
-            TextEditingController(),
-            TextEditingController(),
-          ],
-        ),
-      );
-
-      final equationInput = find.byKey(const Key('EquationInput-function'));
-      final paramInput = find.byKey(const Key('EquationInput-first-param'));
-      final solveButton = find.byKey(const Key('Nonlinear-button-solve'));
-
-      // Filling the forms
-      await tester.enterText(equationInput, 'x-3');
-      await tester.enterText(paramInput, '3');
-
-      // Solving the equation
-      await tester.tap(solveButton);
-      await tester.pumpAndSettle();
-
-      await tester.ensureVisible(find.byType(NonlinearResults).last);
-      await tester.pumpAndSettle();
-
-      await expectLater(
-        find.byType(NonlinearResults),
-        matchesGoldenFile('goldens/nonlinear_result.png'),
-      );
-    });
-  });
 }
