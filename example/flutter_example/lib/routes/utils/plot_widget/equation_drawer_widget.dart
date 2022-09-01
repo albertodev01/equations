@@ -1,7 +1,7 @@
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_painter.dart';
 import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plotter_painter.dart';
 import 'package:flutter/material.dart';
 
 /// This widget draws a cartesian plane and, if there's a [plotMode], it also
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 ///
 /// If [plotMode] is `null`, the plot_zoom doesn't appear and the widget only
 /// draws a cartesian plane (with no function within).
-class PlotWidget<T> extends StatelessWidget {
+class EquationDrawerWidget<T> extends StatelessWidget {
   /// Provides the ability to evaluate a real function on a point.
   final PlotMode<T>? plotMode;
 
@@ -36,8 +36,8 @@ class PlotWidget<T> extends StatelessWidget {
   /// the entire region on the right is colored).
   final double? upperAreaLimit;
 
-  /// Creates a [PlotWidget] instance.
-  const PlotWidget({
+  /// Creates a [EquationDrawerWidget] instance.
+  const EquationDrawerWidget({
     super.key,
     this.areaColor = Colors.transparent,
     this.plotMode,
@@ -110,7 +110,7 @@ class _PlotBody<T> extends StatelessWidget {
                 final normalized = sizes.normalize().maxWidth;
 
                 return CustomPaint(
-                  painter: PlotterPainter<T>(
+                  painter: EquationPainter<T>(
                     plotMode: plotMode,
                     range: context.plotZoomState.zoom.round(),
                     colorArea: ColorArea(

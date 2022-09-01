@@ -30,9 +30,6 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     placeholderText: 'f(x)',
   );
 
-  /// Manually caching the inputs.
-  final guessesInput = const _GuessesInput();
-
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
@@ -107,7 +104,7 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
           ),
 
           // The guesses required by the app
-          guessesInput,
+          const _GuessesInput(),
 
           // Some spacing
           const SizedBox(height: 40),

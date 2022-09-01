@@ -1,10 +1,10 @@
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_widget.dart';
+import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:flutter/widgets.dart';
 
 /// An [InheritedWidget] that exposes a [PlotZoomState] object.
 class InheritedPlotZoom extends InheritedWidget {
-  /// The zoom state of a [PlotWidget].
+  /// The zoom state of a [EquationDrawerWidget].
   final PlotZoomState plotZoomState;
 
   /// Creates an [InheritedWidget] that exposes a [PlotZoomState] object.

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// A [CustomPainter] that creates a XY cartesian plane and draws any kind of
 /// mathematical function on it. Thanks to its [range] parameter, the user is
 /// able to define the "scale" of the plot (or the "zoom").
-class PlotterPainter<T> extends CustomPainter {
+class EquationPainter<T> extends CustomPainter {
   /// Provides the ability to evaluate a real function on a point.
   ///
   /// If this is `null` then the painter only draws a cartesian plane (without
@@ -21,7 +21,7 @@ class PlotterPainter<T> extends CustomPainter {
 
   /// Draws a cartesian plane with a grey grid lines and black (thick) X and Y
   /// axis. The function instead is plotted in [Colors.blueAccent].
-  const PlotterPainter({
+  const EquationPainter({
     required this.plotMode,
     this.range = 5,
     this.colorArea = const ColorArea(
@@ -42,7 +42,7 @@ class PlotterPainter<T> extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant PlotterPainter<T> oldDelegate) {
+  bool shouldRepaint(covariant EquationPainter<T> oldDelegate) {
     return (range != oldDelegate.range) ||
         (plotMode != oldDelegate.plotMode) ||
         (colorArea != oldDelegate.colorArea);

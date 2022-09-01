@@ -8,14 +8,14 @@ on:
 jobs:
   flutter_web_example_deployment:
     name: Equations example - Flutter web deployment
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: example/flutter_example
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v2
+        uses: actions/checkout@v3.0.2
+      - uses: subosito/flutter-action@v2.6.1
         with:
           channel: 'stable'
 
@@ -23,7 +23,7 @@ jobs:
         run: flutter pub get
 
       - name: Building for the web
-        run: flutter build web --csp --release
+        run: flutter build web --csp
 
       - name: Setting the git username
         run: git config user.name github-actions

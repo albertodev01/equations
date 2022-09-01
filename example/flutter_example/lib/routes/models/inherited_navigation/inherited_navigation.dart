@@ -1,7 +1,12 @@
+import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 
-/// An [InheritedWidget] that exposes a [ValueNotifier] object.
+/// An [InheritedWidget] that exposes a series of values to control the
+/// [EquationScaffold] tabs.
+///
+/// The [navigationIndex] property is responsible for notifying listeners about
+/// the new selected index (which also changes the currently visible tab).
 class InheritedNavigation extends InheritedWidget {
   /// The non-empty list of navigation items.
   final List<NavigationItem> navigationItems;
@@ -15,7 +20,7 @@ class InheritedNavigation extends InheritedWidget {
   /// The navigation state.
   final ValueNotifier<int> navigationIndex;
 
-  /// Creates an [InheritedWidget] that exposes a [ValueNotifier] object.
+  /// Creates an [InheritedWidget] that exposes a series of values.
   const InheritedNavigation({
     required this.navigationIndex,
     required this.navigationItems,
