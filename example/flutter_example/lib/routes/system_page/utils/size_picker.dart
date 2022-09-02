@@ -1,6 +1,7 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
+import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:flutter/material.dart';
 
 /// This widget has 2 arrows that, respectively, decrease and increase the value
@@ -20,7 +21,10 @@ class SizePicker extends StatelessWidget {
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
-          onPressed: context.numberSwitcherState.decrease,
+          onPressed: () {
+            context.numberSwitcherState.decrease();
+            context.otherState.clear();
+          },
           child: const Icon(Icons.arrow_back),
         ),
 
@@ -46,9 +50,6 @@ class SizePicker extends StatelessWidget {
               case 4:
                 text = context.l10n.matrix_size4;
                 break;
-              case 5:
-                text = context.l10n.matrix_size5;
-                break;
             }
 
             return Text(
@@ -69,7 +70,10 @@ class SizePicker extends StatelessWidget {
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
-          onPressed: context.numberSwitcherState.increase,
+          onPressed: () {
+            context.numberSwitcherState.increase();
+            context.otherState.clear();
+          },
           child: const Icon(Icons.arrow_forward),
         ),
       ],

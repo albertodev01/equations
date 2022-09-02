@@ -298,6 +298,27 @@ void main() {
       expect(matrix == RealMatrix(columns: 2, rows: 2), isTrue);
       expect(RealMatrix(columns: 2, rows: 2).hashCode, equals(matrix.hashCode));
 
+      expect(
+        RealMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 1,
+          data: [5.0],
+        ),
+        equals(
+          RealMatrix.fromFlattenedData(
+            rows: 1,
+            columns: 1,
+            data: [5.0],
+          ),
+        ),
+      );
+
+      expect(
+        RealMatrix.fromFlattenedData(rows: 1, columns: 1, data: [5.0]) ==
+            RealMatrix.fromFlattenedData(rows: 1, columns: 1, data: [5.01]),
+        isFalse,
+      );
+
       // Inequality tests
       expect(
         RealMatrix(columns: 2, rows: 2, identity: true) == matrix,

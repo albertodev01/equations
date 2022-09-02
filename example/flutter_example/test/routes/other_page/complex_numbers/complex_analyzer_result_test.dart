@@ -20,39 +20,20 @@ void main() {
       expect(find.byType(RealResultCard), findsNothing);
     });
 
-    testWidgets(
-      'Making sure that the widget is responsive - small screens test',
-      (tester) async {
-        await tester.pumpWidget(
-          const MockComplexNumbers(
-            complexMockData: true,
-          ),
-        );
+    testWidgets('Making sure that the widget is responsive', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(2000, 2000));
 
-        expect(
-          find.byType(Wrap),
-          findsNothing,
-        );
-      },
-    );
+      await tester.pumpWidget(
+        const MockComplexNumbers(
+          complexMockData: true,
+        ),
+      );
 
-    testWidgets(
-      'Making sure that the widget is responsive - large screens test',
-      (tester) async {
-        await tester.binding.setSurfaceSize(const Size(2000, 2000));
-
-        await tester.pumpWidget(
-          const MockComplexNumbers(
-            complexMockData: true,
-          ),
-        );
-
-        expect(
-          find.byType(Wrap),
-          findsOneWidget,
-        );
-      },
-    );
+      expect(
+        find.byType(Wrap),
+        findsOneWidget,
+      );
+    });
 
     testWidgets(
       'Making sure that analysis results can correctly be displayed',

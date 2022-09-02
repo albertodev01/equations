@@ -40,7 +40,6 @@
   "matrix_size2": "2x2 matrice",
   "matrix_size3": "3x3 matrice",
   "matrix_size4": "4x4 matrice",
-  "matrix_size5": "5x5 matrice",
   "matrix_description": "La matrice avec les coefficients des équations",
   "vector_description": "Le vecteur avec les valeurs connues",
   "sor_w": "Facteur de relaxation",

@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
+import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// Creates an NxN square matrix whose entries are [SystemInputField] widgets.
@@ -40,6 +41,12 @@ class _MatrixOutputState extends State<MatrixOutput> {
     overflow: TextOverflow.ellipsis,
   );
 
+  /// The controllers of each [SystemInputField].
+  final controllers = List<TextEditingController>.generate(
+    16,
+    (_) => TextEditingController(),
+  );
+
   /// The [Table] widget representing the matrix.
   late Table table = Table(
     children: _tableChildren(),
@@ -49,42 +56,30 @@ class _MatrixOutputState extends State<MatrixOutput> {
   List<TableRow> _tableChildren() {
     return List<TableRow>.generate(
       widget.matrix.rowCount,
-      _buildRow,
+      _createTableRow,
       growable: false,
     );
   }
 
   /// Builds the row output of the table.
-  TableRow _buildRow(int index) {
-    final children = <Widget>[];
-
-    for (var j = 0; j < widget.matrix.columnCount; ++j) {
-      final value = widget.matrix(index, j);
-      children.add(
-        Padding(
-          padding: const EdgeInsets.all(5),
-          child: TextFormField(
-            readOnly: true,
-            initialValue: value.toStringAsFixed(widget.decimalDigits),
-            textAlign: TextAlign.center,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
-                ),
-              ),
-              fillColor: Colors.white,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 3,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
+  TableRow _createTableRow(int rowIndex) {
     return TableRow(
-      children: children,
+      children: List<Widget>.generate(
+        widget.matrix.columnCount,
+        (index) {
+          final value = widget.matrix(rowIndex, index);
+          controllers[index].text = value.toStringAsFixed(widget.decimalDigits);
+
+          return Padding(
+            padding: const EdgeInsets.all(5),
+            child: SystemInputField(
+              controller: controllers[index],
+              isReadOnly: true,
+            ),
+          );
+        },
+        growable: false,
+      ),
     );
   }
 
@@ -97,6 +92,15 @@ class _MatrixOutputState extends State<MatrixOutput> {
         children: _tableChildren(),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    for (final controller in controllers) {
+      controller.dispose();
+    }
+
+    super.dispose();
   }
 
   @override
@@ -118,7 +122,10 @@ class _MatrixOutputState extends State<MatrixOutput> {
             ),
 
             // The matrix
-            table,
+            SizedBox(
+              width: widget.matrix.rowCount * matrixOutputWidth,
+              child: table,
+            ),
           ],
         ),
       ),

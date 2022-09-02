@@ -215,6 +215,7 @@ class _Results extends StatelessWidget {
         ),
 
         MatrixOutput(
+          key: const Key('MatrixAnalyzerResults-cofactor-matrix'),
           matrix: cofactorMatrix,
           description: context.l10n.cofactor,
         ),
