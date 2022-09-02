@@ -49,7 +49,7 @@ class _OtherPageState extends State<OtherPage> {
           child: InheritedNumberSwitcher(
             numberSwitcherState: NumberSwitcherState(
               min: 1,
-              max: 5,
+              max: 4,
             ),
             child: const MatrixOtherBody(),
           ),

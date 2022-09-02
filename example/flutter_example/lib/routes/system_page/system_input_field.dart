@@ -11,10 +11,17 @@ class SystemInputField extends StatefulWidget {
   /// The placeholder text to show in the input field.
   final String placeholder;
 
+  /// Whether the field is in read-only mode or not. When `true`, the background
+  /// color is set to [Colors.white].
+  ///
+  /// By default, this is set to `false`.
+  final bool isReadOnly;
+
   /// Creates a [SystemInputField] widget.
   const SystemInputField({
     required this.controller,
     this.placeholder = '',
+    this.isReadOnly = false,
     super.key,
   });
 
@@ -40,6 +47,7 @@ class _SystemInputFieldState extends State<SystemInputField> {
       child: TextFormField(
         key: const Key('SystemInputField-TextFormField'),
         controller: widget.controller,
+        readOnly: widget.isReadOnly,
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           border: const OutlineInputBorder(
@@ -47,6 +55,7 @@ class _SystemInputFieldState extends State<SystemInputField> {
               Radius.circular(5),
             ),
           ),
+          fillColor: widget.isReadOnly ? Colors.white : null,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 3,
           ),

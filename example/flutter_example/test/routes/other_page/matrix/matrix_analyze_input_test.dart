@@ -174,19 +174,5 @@ void main() {
         matchesGoldenFile('goldens/matrix_analyze_input_4x4.png'),
       );
     });
-
-    testWidgets('MatrixAnalyzerInput - 5x5', (tester) async {
-      await tester.pumpWidget(
-        MockMatrixOther(
-          min: 5,
-          controllers: generateControllers(),
-          child: const MatrixAnalyzerInput(),
-        ),
-      );
-      await expectLater(
-        find.byType(MockWrapper),
-        matchesGoldenFile('goldens/matrix_analyze_input_5x5.png'),
-      );
-    });
   });
 }

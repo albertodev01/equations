@@ -46,7 +46,6 @@ void main() {
       appLocalizations.matrix_size2,
       appLocalizations.matrix_size3,
       appLocalizations.matrix_size4,
-      appLocalizations.matrix_size5,
       appLocalizations.matrix_description,
       appLocalizations.vector_description,
       appLocalizations.sor_w,
@@ -92,7 +91,7 @@ void main() {
       appLocalizations.input_allowed_multiplication_sign,
     ];
 
-    expect(values.length, equals(85));
+    expect(values.length, equals(84));
 
     for (final element in values) {
       expect(element.length, greaterThan(1));
