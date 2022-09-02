@@ -11,10 +11,10 @@ import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/compl
 ///  - the square root
 ///  - the polar coordinates conversion
 class ComplexNumberAnalyzer extends Analyzer<ComplexResultWrapper> {
-  /// The real part of the complex number be analyzed.
+  /// Real part of the complex number.
   final String realPart;
 
-  /// The imaginary part of the complex number be analyzed.
+  /// Imaginary part of the complex number.
   final String imaginaryPart;
 
   /// Creates a [ComplexNumberAnalyzer] object.

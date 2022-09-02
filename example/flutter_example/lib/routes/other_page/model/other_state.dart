@@ -11,13 +11,12 @@ class OtherState extends ChangeNotifier {
   /// The current state.
   OtherResult get state => _state;
 
-  /// Analyzes a matrix from a series of String coefficients.
+  /// Analyzes a matrix from a series of [String] coefficients.
   void matrixAnalyze({
     required List<String> matrix,
     required int size,
   }) {
     try {
-      // Parsing coefficients
       final resultWrapper = MatrixDataAnalyzer(
         flatMatrix: matrix,
         size: size,
@@ -33,7 +32,7 @@ class OtherState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Analyzes a complex number parsing the real and the imaginary parts.
+  /// Parses the complex number and analyzes it.
   void complexAnalyze({
     required String realPart,
     required String imaginaryPart,

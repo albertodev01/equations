@@ -9,9 +9,8 @@ void main() {
       expect(doubleColumnPageBreakpoint, equals(1100.0));
       expect(maxWidthPlot, equals(600.0));
       expect(minimumChartWidth, equals(350.0));
-      expect(matricesPageDoubleColumn, equals(1200.0));
       expect(matricesPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
-      expect(complexPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
+      expect(complexNumbersPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
       expect(cardWidgetsWidth, equals(275.0));
       expect(polynomialInputFieldWidth, equals(70.0));
       expect(nonlinearDropdownWidth, equals(200.0));

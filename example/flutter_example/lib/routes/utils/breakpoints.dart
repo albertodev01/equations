@@ -35,10 +35,6 @@ const maxWidthPlot = 600.0;
 /// The minimum available space required to show the chart.
 const minimumChartWidth = 350;
 
-/// Determines whether the [MatrixAnalyzerResults] widget should show data in
-/// one or two columns.
-const matricesPageDoubleColumn = 1200.0;
-
 /// The width of a single column in the [MatrixAnalyzerResults] page when there
 /// are multiple columns in the page.
 ///
@@ -49,7 +45,7 @@ const matricesPageColumnWidth = cardWidgetsWidth + 30 * 2;
 /// there are multiple columns in the page.
 ///
 /// We want to add a padding of `30` on both sides, hence the `30 * 2`.
-const complexPageColumnWidth = cardWidgetsWidth + 30 * 2;
+const complexNumbersPageColumnWidth = cardWidgetsWidth + 30 * 2;
 
 /// The width of the cards widgets: [RealResultCard], [ComplexResultCard] and
 /// [BoolResultCard].

@@ -41,10 +41,6 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
 
   /// Form and chart cleanup.
   void cleanInput() {
-    for (final controller in context.textControllers) {
-      controller.clear();
-    }
-
     formKey.currentState?.reset();
     context.nonlinearState.clear();
     context.plotZoomState.reset();
@@ -52,6 +48,10 @@ class _NonlinearDataInputState extends State<NonlinearDataInput> {
     context.dropdownValue.value = context.textControllers.length == 2
         ? NonlinearDropdownItems.newton.name
         : NonlinearDropdownItems.bisection.name;
+
+    for (final controller in context.textControllers) {
+      controller.clear();
+    }
 
     FocusScope.of(context).unfocus();
   }

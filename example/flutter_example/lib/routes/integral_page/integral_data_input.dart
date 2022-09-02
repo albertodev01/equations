@@ -49,13 +49,13 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
 
   /// Form and chart cleanup.
   void cleanInput() {
-    functionController.clear();
-    lowerBoundController.clear();
-    upperBoundController.clear();
-
     formKey.currentState?.reset();
     context.integralState.clear();
     context.plotZoomState.reset();
+
+    for (final controller in context.textControllers) {
+      controller.clear();
+    }
 
     FocusScope.of(context).unfocus();
   }

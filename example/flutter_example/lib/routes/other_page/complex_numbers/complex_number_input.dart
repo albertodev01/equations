@@ -31,6 +31,7 @@ class ComplexNumberInput extends StatefulWidget {
 
 class _ComplexNumberInputState extends State<ComplexNumberInput> {
   String? _validationLogic(String? value) {
+    // Only numbers are allowed, no unknowns like 'x' or 'y'
     if (value != null) {
       if (!value.isNumericalExpression) {
         return context.l10n.wrong_input;

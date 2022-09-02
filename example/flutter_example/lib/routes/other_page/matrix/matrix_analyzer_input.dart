@@ -4,10 +4,10 @@ import 'package:equations_solver/routes/models/text_controllers/inherited_text_c
 import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:flutter/material.dart';
 
-/// Contains the [MatrixInput] widget needed to parse the values of the matrix
-/// to be analyzed.
+/// Contains the [MatrixInput] widget that parses the matrix to analyze.
 class MatrixAnalyzerInput extends StatefulWidget {
   /// Creates a [MatrixAnalyzerInput] widget.
   const MatrixAnalyzerInput({super.key});
@@ -102,8 +102,14 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
                 child: Text(context.l10n.analyze),
               ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: InputKindDialogButton(
+                  inputKindMessage: InputKindMessage.numbers,
+                ),
+              ),
 
               // Cleaning the inputs
               ElevatedButton(
@@ -112,6 +118,11 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
                 child: Text(context.l10n.clean),
               ),
             ],
+          ),
+
+          // Some spacing
+          const SizedBox(
+            height: 30,
           ),
         ],
       ),
