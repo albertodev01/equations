@@ -96,6 +96,8 @@ void main() {
 
   group('Golden tests - ComplexAnalyzerInput', () {
     testWidgets('ComplexAnalyzerInput', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(350, 200));
+
       await tester.pumpWidget(
         MockComplexNumbers(
           controllers: [

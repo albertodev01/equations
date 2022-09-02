@@ -1,6 +1,7 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/models/number_switcher/number_switcher_state.dart';
+import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,16 @@ import 'package:flutter/material.dart';
 class SizePicker extends StatelessWidget {
   /// Creates a [SizePicker] widget.
   const SizePicker({super.key});
+
+  /// Ensures that, whenever the matrix size changes, the form is cleared.
+  void _clearState(BuildContext context) {
+    for (final controller in context.textControllers) {
+      controller.clear();
+    }
+
+    context.otherState.clear();
+    FocusScope.of(context).unfocus();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +34,7 @@ class SizePicker extends StatelessWidget {
           ),
           onPressed: () {
             context.numberSwitcherState.decrease();
-            context.otherState.clear();
+            _clearState(context);
           },
           child: const Icon(Icons.arrow_back),
         ),
@@ -72,7 +83,7 @@ class SizePicker extends StatelessWidget {
           ),
           onPressed: () {
             context.numberSwitcherState.increase();
-            context.otherState.clear();
+            _clearState(context);
           },
           child: const Icon(Icons.arrow_forward),
         ),
