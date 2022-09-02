@@ -54,6 +54,8 @@ void main() {
 
   group('Golden tests - MockComplexNumbers', () {
     testWidgets('MockComplexNumbers', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 800));
+
       await tester.pumpWidget(
         const MockComplexNumbers(
           complexMockData: true,

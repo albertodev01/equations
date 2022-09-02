@@ -25,6 +25,8 @@ void main() {
 
   group('Golden tests - ComplexNumberInput', () {
     testWidgets('ComplexNumberInput - no values', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(200, 80));
+
       await tester.pumpWidget(
         MockWrapper(
           child: ComplexNumberInput(
@@ -40,6 +42,8 @@ void main() {
     });
 
     testWidgets('ComplexNumberInput - values', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(200, 80));
+
       await tester.pumpWidget(
         MockWrapper(
           child: ComplexNumberInput(
