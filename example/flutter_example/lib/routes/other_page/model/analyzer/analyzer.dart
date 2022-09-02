@@ -14,7 +14,7 @@ abstract class Analyzer<T extends ResultWrapper> {
   ///
   /// Throws if one or more strings don't represent a valid fraction or number.
   List<double> valuesParser(List<String> source) {
-    return source.map(_parser.evaluate).toList();
+    return source.map(_parser.evaluate).toList(growable: false);
   }
 
   /// Converts a [String] into a [double].

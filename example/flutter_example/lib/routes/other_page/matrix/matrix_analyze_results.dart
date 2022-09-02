@@ -14,37 +14,11 @@ import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.da
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
-/// This widget shows the matrix analysis results produced by an [OtherState]
-/// class.
+/// This widget shows the matrix analysis results. The state is stored in an
+/// [OtherState] object.
 class MatrixAnalyzerResults extends StatelessWidget {
   /// Creates a [MatrixAnalyzerResults] widget.
   const MatrixAnalyzerResults({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        // Separator line
-        SizedBox(
-          height: 80,
-        ),
-
-        // Showing the analysis results
-        _MatrixResults(),
-
-        // Additional spacing
-        SizedBox(
-          height: 50,
-        ),
-      ],
-    );
-  }
-}
-
-/// Either prints nothing or the analysis results.
-class _MatrixResults extends StatelessWidget {
-  /// Creates a [_MatrixResults] widget.
-  const _MatrixResults();
 
   @override
   Widget build(BuildContext context) {
@@ -54,18 +28,23 @@ class _MatrixResults extends StatelessWidget {
         final result = context.otherState.state.results;
 
         if (result != null && result is MatrixResultWrapper) {
-          return _Results(
-            transpose: result.transpose,
-            cofactorMatrix: result.cofactorMatrix,
-            inverse: result.inverse,
-            trace: result.trace,
-            rank: result.rank,
-            characteristicPolynomial: result.characteristicPolynomial,
-            eigenvalues: result.eigenvalues,
-            determinant: result.determinant,
-            isSymmetric: result.isSymmetric,
-            isDiagonal: result.isDiagonal,
-            isIdentity: result.isIdentity,
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 40,
+            ),
+            child: _Results(
+              transpose: result.transpose,
+              cofactorMatrix: result.cofactorMatrix,
+              inverse: result.inverse,
+              trace: result.trace,
+              rank: result.rank,
+              characteristicPolynomial: result.characteristicPolynomial,
+              eigenvalues: result.eigenvalues,
+              determinant: result.determinant,
+              isSymmetric: result.isSymmetric,
+              isDiagonal: result.isDiagonal,
+              isIdentity: result.isIdentity,
+            ),
           );
         }
 
@@ -242,57 +221,25 @@ class _Results extends StatelessWidget {
       ],
     );
 
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        // For mobile devices - all in a column
-        if (dimensions.maxWidth <= matricesPageDoubleColumn) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Numerical properties
-              propertiesWidget,
-
-              // Some spacing
-              const SizedBox(
-                height: 80,
-              ),
-
-              // Char. polynomial & eigenvalues
-              eigenvaluesWidget,
-
-              // Spacing
-              const SizedBox(
-                height: 80,
-              ),
-
-              // Inverse, transpose, cofactors...
-              matricesWidget,
-            ],
-          );
-        }
-
-        // For wider screens - splitting numerical results in multiple columns
-        return Wrap(
-          spacing: 80,
-          runSpacing: 40,
-          alignment: WrapAlignment.spaceAround,
-          runAlignment: WrapAlignment.center,
-          children: [
-            SizedBox(
-              width: matricesPageColumnWidth,
-              child: propertiesWidget,
-            ),
-            SizedBox(
-              width: matricesPageColumnWidth,
-              child: eigenvaluesWidget,
-            ),
-            SizedBox(
-              width: matricesPageColumnWidth,
-              child: matricesWidget,
-            ),
-          ],
-        );
-      },
+    return Wrap(
+      spacing: 40,
+      runSpacing: 40,
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.spaceAround,
+      children: [
+        SizedBox(
+          width: matricesPageColumnWidth,
+          child: propertiesWidget,
+        ),
+        SizedBox(
+          width: matricesPageColumnWidth,
+          child: eigenvaluesWidget,
+        ),
+        SizedBox(
+          width: matricesPageColumnWidth,
+          child: matricesWidget,
+        ),
+      ],
     );
   }
 }

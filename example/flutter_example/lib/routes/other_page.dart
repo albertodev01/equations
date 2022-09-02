@@ -10,8 +10,8 @@ import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:flutter/material.dart';
 
-/// This page contains a series of utilities to analyze matrices (determinant,
-/// eigenvalues, trace, decompositions...) and complex numbers.
+/// This page contains a series of utilities to analyze matrices and complex
+/// numbers.
 class OtherPage extends StatefulWidget {
   /// Creates a [OtherPage] widget.
   const OtherPage({super.key});

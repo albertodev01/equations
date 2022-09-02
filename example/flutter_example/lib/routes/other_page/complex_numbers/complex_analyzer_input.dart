@@ -2,12 +2,13 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/models/text_controllers/inherited_text_controllers.dart';
 import 'package:equations_solver/routes/other_page/complex_numbers/complex_number_input.dart';
 import 'package:equations_solver/routes/other_page/model/inherited_other.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:flutter/material.dart';
 
 /// A wrapper of [ComplexNumberInput] with two buttons:
 ///
-///  - One for analyzing the complex number
-///  - One for clearing the state and the page
+///  - one for analyzing the complex number;
+///  - one for clearing the state and the page.
 class ComplexAnalyzerInput extends StatefulWidget {
   /// Creates a [ComplexAnalyzerInput] widget.
   const ComplexAnalyzerInput({super.key});
@@ -85,8 +86,14 @@ class _ComplexAnalyzerInputState extends State<ComplexAnalyzerInput> {
                 child: Text(context.l10n.analyze),
               ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: InputKindDialogButton(
+                  inputKindMessage: InputKindMessage.numbers,
+                ),
+              ),
 
               // Cleaning the inputs
               ElevatedButton(

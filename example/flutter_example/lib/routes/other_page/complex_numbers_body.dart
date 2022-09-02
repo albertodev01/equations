@@ -7,7 +7,7 @@ import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.
 import 'package:flutter/material.dart';
 
 /// This widget analyzes a complex number and computes various properties, such
-/// as modulus. polar coordinates and more.
+/// as modulus, polar coordinates and more.
 class ComplexNumberOtherBody extends StatelessWidget {
   /// Creates a [ComplexNumberOtherBody] widget.
   const ComplexNumberOtherBody({super.key});

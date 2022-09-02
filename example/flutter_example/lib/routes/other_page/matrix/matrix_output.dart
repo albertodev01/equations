@@ -1,6 +1,5 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
-import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 /// Creates an NxN square matrix whose entries are [SystemInputField] widgets.
@@ -46,7 +45,7 @@ class _MatrixOutputState extends State<MatrixOutput> {
     children: _tableChildren(),
   );
 
-  /// Builds the [TableRow]s widget that will allow for the value input.
+  /// Builds the [TableRow] widgets for the matrix values input.
   List<TableRow> _tableChildren() {
     return List<TableRow>.generate(
       widget.matrix.rowCount,
@@ -74,6 +73,7 @@ class _MatrixOutputState extends State<MatrixOutput> {
                   Radius.circular(5),
                 ),
               ),
+              fillColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 3,
               ),
@@ -101,30 +101,25 @@ class _MatrixOutputState extends State<MatrixOutput> {
 
   @override
   Widget build(BuildContext context) {
-    final boxWidth = widget.matrix.rowCount * matrixOutputWidth;
-
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 15,
       ),
       child: Center(
-        child: SizedBox(
-          width: boxWidth,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // The description
-              description,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // The description
+            description,
 
-              // Some spacing
-              const SizedBox(
-                height: 10,
-              ),
+            // Some spacing
+            const SizedBox(
+              height: 10,
+            ),
 
-              // The matrix
-              table,
-            ],
-          ),
+            // The matrix
+            table,
+          ],
         ),
       ),
     );

@@ -83,10 +83,19 @@ void main() {
       appLocalizations.symmetric,
       appLocalizations.identity,
       appLocalizations.url_error,
+      appLocalizations.version,
+      appLocalizations.input_allowed_values,
+      appLocalizations.input_allowed_numbers,
+      appLocalizations.input_allowed_fractions,
+      appLocalizations.input_allowed_constants,
+      appLocalizations.input_allowed_functions,
+      appLocalizations.input_allowed_multiplication_sign,
     ];
 
+    expect(values.length, equals(85));
+
     for (final element in values) {
-      expect(element.length, greaterThan(0));
+      expect(element.length, greaterThan(1));
     }
   }
 

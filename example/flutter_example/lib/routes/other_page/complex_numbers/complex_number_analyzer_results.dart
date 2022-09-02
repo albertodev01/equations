@@ -18,45 +18,24 @@ class ComplexNumberAnalyzerResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
-        // Separator line
-        SizedBox(
-          height: 80,
-        ),
-
-        // Showing the analysis results
-        _ComplexAnalysis(),
-
-        // Additional spacing
-        SizedBox(
-          height: 50,
-        ),
-      ],
-    );
-  }
-}
-
-/// Either prints nothing or the analysis results.
-class _ComplexAnalysis extends StatelessWidget {
-  /// Creates a [_ComplexAnalysis] widget.
-  const _ComplexAnalysis();
-
-  @override
-  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: context.otherState,
       builder: (context, _) {
         final result = context.otherState.state.results;
 
         if (result != null && result is ComplexResultWrapper) {
-          return _Results(
-            abs: result.abs,
-            conjugate: result.conjugate,
-            phase: result.phase,
-            polarComplex: result.polarComplex,
-            reciprocal: result.reciprocal,
-            sqrt: result.sqrt,
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 40,
+            ),
+            child: _Results(
+              abs: result.abs,
+              conjugate: result.conjugate,
+              phase: result.phase,
+              polarComplex: result.polarComplex,
+              reciprocal: result.reciprocal,
+              sqrt: result.sqrt,
+            ),
           );
         }
 
@@ -152,45 +131,21 @@ class _Results extends StatelessWidget {
       ],
     );
 
-    return LayoutBuilder(
-      builder: (context, dimensions) {
-        // For mobile devices - all in a column
-        if (dimensions.maxWidth <= matricesPageDoubleColumn) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Numerical properties
-              propertiesWidget,
-
-              // Some spacing
-              const SizedBox(
-                height: 80,
-              ),
-
-              // Polar coordinates
-              coordinatesWidget,
-            ],
-          );
-        }
-
-        // For wider screens - splitting numerical results in two columns
-        return Wrap(
-          spacing: 80,
-          runSpacing: 40,
-          alignment: WrapAlignment.spaceAround,
-          runAlignment: WrapAlignment.center,
-          children: [
-            SizedBox(
-              width: complexPageColumnWidth,
-              child: propertiesWidget,
-            ),
-            SizedBox(
-              width: complexPageColumnWidth,
-              child: coordinatesWidget,
-            ),
-          ],
-        );
-      },
+    return Wrap(
+      spacing: 40,
+      runSpacing: 40,
+      alignment: WrapAlignment.center,
+      runAlignment: WrapAlignment.spaceAround,
+      children: [
+        SizedBox(
+          width: complexNumbersPageColumnWidth,
+          child: propertiesWidget,
+        ),
+        SizedBox(
+          width: complexNumbersPageColumnWidth,
+          child: coordinatesWidget,
+        ),
+      ],
     );
   }
 }
