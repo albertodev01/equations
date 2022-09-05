@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 
-/// Wrapper class that holds the [Algebraic] type computed by [PolynomialState].
+/// Wrapper class that holds an [Algebraic] object created by [PolynomialState].
 class PolynomialResult {
   /// The [Algebraic] object holding the polynomial data.
   ///

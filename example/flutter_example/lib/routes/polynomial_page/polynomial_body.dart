@@ -1,17 +1,15 @@
-import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomial.dart';
-import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_results.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/polynomial_plot_widget.dart';
+import 'package:equations_solver/routes/polynomial_page/utils/polynomial_title_localizer.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
 import 'package:flutter/material.dart';
 
-/// This widget is used to solve polynomial equations and plot the function in
-/// a cartesian plane.
+/// This widget is used to solve polynomial equations. It also draws the
+/// function in a cartesian plane.
 ///
 /// This widget is responsive: contents may be laid out on a single column or
 /// on two columns according with the available space.
@@ -40,81 +38,9 @@ class PolynomialBody extends StatelessWidget {
 }
 
 /// Determines whether the contents should appear in 1 or 2 columns.
-class _ResponsiveBody extends StatefulWidget {
+class _ResponsiveBody extends StatelessWidget {
   /// Creates a [_ResponsiveBody] widget.
   const _ResponsiveBody();
-
-  @override
-  __ResponsiveBodyState createState() => __ResponsiveBodyState();
-}
-
-class __ResponsiveBodyState extends State<_ResponsiveBody> {
-  /// Manually caching the page title.
-  late final Widget pageTitleWidget = PageTitle(
-    pageTitle: getLocalizedName(),
-    pageLogo: const PolynomialLogo(
-      size: 50,
-    ),
-  );
-
-  /// Caching the single column layout subtree (small screens configuration).
-  late final singleColumnLayout = SingleChildScrollView(
-    key: const Key('SingleChildScrollView-mobile-responsive'),
-    child: Column(
-      children: [
-        pageTitleWidget,
-        const PolynomialDataInput(),
-        const PolynomialResults(),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 30,
-          ),
-          child: LayoutBuilder(
-            builder: (_, dimensions) {
-              return Visibility(
-                visible: dimensions.maxWidth >= minimumChartWidth,
-                child: const PolynomialPlotWidget(),
-              );
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-
-  /// Caching the double column layout subtree (large screens configuration)
-  late final doubleColumnLayout = Center(
-    child: SingleChildScrollView(
-      key: const Key('SingleChildScrollView-desktop-responsive'),
-      child: Column(
-        children: [
-          pageTitleWidget,
-          const PolynomialDataInput(),
-          const PolynomialResults(),
-          const SizedBox(
-            height: 40,
-          ),
-        ],
-      ),
-    ),
-  );
-
-  /// Getting the title of the page according with the type of polynomial that
-  /// is going to be solved.
-  String getLocalizedName() {
-    final polynomialType = context.polynomialState.polynomialType;
-
-    switch (polynomialType) {
-      case PolynomialType.linear:
-        return context.l10n.firstDegree;
-      case PolynomialType.quadratic:
-        return context.l10n.secondDegree;
-      case PolynomialType.cubic:
-        return context.l10n.thirdDegree;
-      case PolynomialType.quartic:
-        return context.l10n.fourthDegree;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,29 +48,97 @@ class __ResponsiveBodyState extends State<_ResponsiveBody> {
       builder: (context, size) {
         if (size.maxWidth <= doubleColumnPageBreakpoint) {
           // For mobile devices - all in a column
-          return singleColumnLayout;
+          return const _SingleColumnLayout();
         }
 
         // For wider screens - plot on the right and results on the left
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            // Input and results
-            SizedBox(
-              width: size.maxWidth / 3,
-              height: double.infinity,
-              child: doubleColumnLayout,
-            ),
+        return Center(
+          child: SingleChildScrollView(
+            key: const Key('SingleChildScrollView-desktop-responsive'),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                // Input and results
+                Expanded(
+                  child: _DoubleColumnLeftContent(),
+                ),
 
-            // Plot
-            SizedBox(
-              width: size.maxWidth / 2.3,
-              height: double.infinity,
-              child: const PolynomialPlotWidget(),
+                // Plot
+                Expanded(
+                  child: PolynomialPlotWidget(),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
+    );
+  }
+}
+
+/// Lays the page contents on a single column.
+class _SingleColumnLayout extends StatelessWidget
+    with PolynomialTitleLocalizer {
+  /// Creates a [_SingleColumnLayout] widget.
+  const _SingleColumnLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      key: const Key('SingleChildScrollView-mobile-responsive'),
+      child: Column(
+        children: [
+          PageTitle(
+            pageTitle: getLocalizedName(context),
+            pageLogo: const PolynomialLogo(
+              size: 50,
+            ),
+          ),
+          const PolynomialDataInput(),
+          const PolynomialResults(),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30,
+            ),
+            child: LayoutBuilder(
+              builder: (_, dimensions) {
+                return Visibility(
+                  visible: dimensions.maxWidth >= minimumChartWidth,
+                  child: const PolynomialPlotWidget(),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The left column [_ResponsiveBody] when the viewport is large enough.
+class _DoubleColumnLeftContent extends StatelessWidget
+    with PolynomialTitleLocalizer {
+  /// Creates a [_DoubleColumnLeftContent] widget.
+  const _DoubleColumnLeftContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          PageTitle(
+            pageTitle: getLocalizedName(context),
+            pageLogo: const PolynomialLogo(
+              size: 50,
+            ),
+          ),
+          const PolynomialDataInput(),
+          const PolynomialResults(),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
+      ),
     );
   }
 }

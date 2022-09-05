@@ -1,4 +1,6 @@
+import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dart';
+import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
 import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_plot_widget.dart';
@@ -111,14 +113,25 @@ void main() {
     testWidgets(
       'Making sure that single point equations works',
       (tester) async {
+        late String title;
+
         await tester.pumpWidget(
           MockNonlinearWidget(
             textControllers: [
               TextEditingController(),
               TextEditingController(),
             ],
+            child: Builder(
+              builder: (context) {
+                title = context.l10n.single_point;
+
+                return const NonlinearBody();
+              },
+            ),
           ),
         );
+
+        expect(find.text(title), findsOneWidget);
 
         final equationInput = find.byKey(const Key('EquationInput-function'));
         final paramInput = find.byKey(const Key('EquationInput-first-param'));
@@ -142,6 +155,8 @@ void main() {
     );
 
     testWidgets('Making sure that bracketing equations works', (tester) async {
+      late String title;
+
       await tester.pumpWidget(
         MockNonlinearWidget(
           nonlinearType: NonlinearType.bracketing,
@@ -151,8 +166,17 @@ void main() {
             TextEditingController(),
             TextEditingController(),
           ],
+          child: Builder(
+            builder: (context) {
+              title = context.l10n.bracketing;
+
+              return const NonlinearBody();
+            },
+          ),
         ),
       );
+
+      expect(find.text(title), findsOneWidget);
 
       final equationInput = find.byKey(const Key('EquationInput-function'));
       final paramInput1 = find.byKey(const Key('EquationInput-first-param'));

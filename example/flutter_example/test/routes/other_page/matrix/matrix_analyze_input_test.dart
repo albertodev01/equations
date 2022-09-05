@@ -121,6 +121,8 @@ void main() {
 
   group('Golden tests - MatrixAnalyzerInput', () {
     testWidgets('MatrixAnalyzerInput - 1x1', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(450, 350));
+
       await tester.pumpWidget(
         MockMatrixOther(
           controllers: generateControllers(),
@@ -134,6 +136,8 @@ void main() {
     });
 
     testWidgets('MatrixAnalyzerInput - 2x2', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(350, 370));
+
       await tester.pumpWidget(
         MockMatrixOther(
           min: 2,
@@ -148,6 +152,8 @@ void main() {
     });
 
     testWidgets('MatrixAnalyzerInput - 3x3', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(350, 450));
+
       await tester.pumpWidget(
         MockMatrixOther(
           min: 3,
@@ -162,6 +168,8 @@ void main() {
     });
 
     testWidgets('MatrixAnalyzerInput - 4x4', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(350, 500));
+
       await tester.pumpWidget(
         MockMatrixOther(
           min: 4,

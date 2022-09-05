@@ -1,10 +1,12 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/polynomial_page.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_body.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_wrapper.dart';
+import 'polynomial_page/polynomial_mock.dart';
 
 void main() {
   group("Testing the 'PolynomialPage' widget", () {
@@ -86,6 +88,103 @@ void main() {
       expect(find.text(secondDegree), findsOneWidget);
       expect(find.text(thirdDegree), findsOneWidget);
       expect(find.text(fourthDegree), findsOneWidget);
+    });
+  });
+
+  group('Golden tests - NonlinearBody', () {
+    Future<void> solvePolynomial(WidgetTester tester) async {
+      final firstInput = find.byKey(
+        const Key('PolynomialInputField-coefficient-0'),
+      );
+      final secondInput = find.byKey(
+        const Key('PolynomialInputField-coefficient-1'),
+      );
+      final solveButton = find.byKey(const Key('Polynomial-button-solve'));
+
+      // Filling the form
+      await tester.enterText(firstInput, '1');
+      await tester.enterText(secondInput, '2');
+
+      // Solving the equation
+      await tester.tap(solveButton);
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.byType(ComplexResultCard).last);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('PolynomialBody - small screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(600, 1400));
+
+      await tester.pumpWidget(
+        MockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
+        ),
+      );
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/polynomial_body_small_screen.png'),
+      );
+    });
+
+    testWidgets('PolynomialBody - large screen', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 900));
+
+      await tester.pumpWidget(
+        MockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
+        ),
+      );
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/polynomial_body_large_screen.png'),
+      );
+    });
+
+    testWidgets('PolynomialBody - small screen with data', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(600, 1500));
+
+      await tester.pumpWidget(
+        MockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
+        ),
+      );
+
+      await solvePolynomial(tester);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/polynomial_body_small_screen_with_data.png'),
+      );
+    });
+
+    testWidgets('PolynomialBody - large screen with data', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1300, 1100));
+
+      await tester.pumpWidget(
+        MockPolynomialWidget(
+          textControllers: [
+            TextEditingController(),
+            TextEditingController(),
+          ],
+        ),
+      );
+
+      await solvePolynomial(tester);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/polynomial_body_large_screen_with_data.png'),
+      );
     });
   });
 }
