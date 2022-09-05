@@ -91,7 +91,7 @@ void main() {
     });
   });
 
-  group('Golden tests - NonlinearBody', () {
+  group('Golden tests - PolynomialBody', () {
     Future<void> solvePolynomial(WidgetTester tester) async {
       final firstInput = find.byKey(
         const Key('PolynomialInputField-coefficient-0'),

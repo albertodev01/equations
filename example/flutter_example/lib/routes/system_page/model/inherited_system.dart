@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 /// An [InheritedWidget] that exposes a [SystemState] object.
 class InheritedSystem extends InheritedWidget {
-  /// The state of the polynomial page.
+  /// The state of the systems page.
   final SystemState systemState;
 
   /// Creates an [InheritedWidget] that exposes a [SystemState] object.
