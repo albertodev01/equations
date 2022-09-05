@@ -1,10 +1,13 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/system_page.dart';
+import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
+import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_wrapper.dart';
+import 'system_page/system_mock.dart';
 
 void main() {
   group("Testing the 'SystemPage' widget", () {
@@ -62,6 +65,126 @@ void main() {
       expect(find.text(rowReduction), findsOneWidget);
       expect(find.text(factorization), findsNWidgets(2));
       expect(find.text(iterative), findsOneWidget);
+    });
+  });
+
+  group('Golden tests - SystemBody', () {
+    Future<void> solveSystem(
+      WidgetTester tester, {
+      SystemType systemType = SystemType.rowReduction,
+    }) async {
+      if (systemType == SystemType.iterative) {
+        await tester.enterText(
+          find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor')),
+          '1',
+        );
+        await tester.pumpAndSettle();
+      }
+
+      await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+      await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+
+      final solveButton = find.byKey(const Key('System-button-solve'));
+
+      // Solving the equation
+      await tester.tap(solveButton);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('SystemBody - row reduction', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 900));
+
+      await tester.pumpWidget(
+        const MockSystemWidget(),
+      );
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_rowreduction.png'),
+      );
+    });
+
+    testWidgets('SystemBody - row reduction with solution', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 900));
+
+      await tester.pumpWidget(
+        const MockSystemWidget(),
+      );
+
+      await solveSystem(tester);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_rowreduction_solution.png'),
+      );
+    });
+
+    testWidgets('SystemBody - factorization', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 900));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          dropdownValue: SystemDropdownItems.lu.asString(),
+          systemType: SystemType.factorization,
+        ),
+      );
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_factorization.png'),
+      );
+    });
+
+    testWidgets('SystemBody - factorization with solution', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 950));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          dropdownValue: SystemDropdownItems.lu.asString(),
+          systemType: SystemType.factorization,
+        ),
+      );
+
+      await solveSystem(tester, systemType: SystemType.factorization);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_factorization_solution.png'),
+      );
+    });
+
+    testWidgets('SystemBody - iterative', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1050));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          dropdownValue: SystemDropdownItems.sor.asString(),
+          systemType: SystemType.iterative,
+        ),
+      );
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_iterative.png'),
+      );
+    });
+
+    testWidgets('SystemBody - iterative with solution', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1100));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          dropdownValue: SystemDropdownItems.sor.asString(),
+          systemType: SystemType.iterative,
+        ),
+      );
+
+      await solveSystem(tester, systemType: SystemType.iterative);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_iterative_solution.png'),
+      );
     });
   });
 }

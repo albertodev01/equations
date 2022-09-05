@@ -56,6 +56,11 @@ class _SystemDataInputState extends State<SystemDataInput> {
 
   /// Form cleanup.
   void cleanInput() {
+    // Making sure to also clear the form completely
+    formKey.currentState?.reset();
+    context.systemState.clear();
+    context.numberSwitcherState.reset();
+
     for (final controller in context.systemTextControllers.matrixControllers) {
       controller.clear();
     }
@@ -69,11 +74,6 @@ class _SystemDataInputState extends State<SystemDataInput> {
     }
 
     context.systemTextControllers.wSorController.clear();
-
-    // Making sure to also clear the form completely
-    formKey.currentState?.reset();
-    context.systemState.clear();
-    context.numberSwitcherState.reset();
 
     FocusScope.of(context).unfocus();
   }
