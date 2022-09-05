@@ -92,6 +92,8 @@ void main() {
 
   group('Golden tests - PolynomialResults', () {
     testWidgets('PolynomialResults', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 500));
+
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedPolynomial(

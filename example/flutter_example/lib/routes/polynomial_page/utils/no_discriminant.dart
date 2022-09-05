@@ -10,7 +10,7 @@ class NoDiscriminant extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(80, 35, 80, 15),
+        padding: const EdgeInsets.fromLTRB(80, 35, 80, 0),
         child: Text(
           context.l10n.no_discriminant,
           style: const TextStyle(

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 /// Mixin for [NonlinearBody] widgets that helps localizing the page title.
 mixin NonlinearTitleLocalizer on StatelessWidget {
-  /// Localizes the title of a nonlinear tab.
+  /// Localizes the title of a nonlinear solver tab.
   String getLocalizedName(BuildContext context) {
     final nonlinearType = context.nonlinearState.nonlinearType;
 

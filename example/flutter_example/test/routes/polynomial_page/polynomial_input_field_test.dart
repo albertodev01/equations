@@ -57,6 +57,8 @@ void main() {
 
   group('Golden test - PolynomialInputField', () {
     testWidgets('PolynomialInputField', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(100, 100));
+
       await tester.pumpWidget(
         MockWrapper(
           child: PolynomialInputField(

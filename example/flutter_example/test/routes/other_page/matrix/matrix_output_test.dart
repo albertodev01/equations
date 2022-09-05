@@ -78,6 +78,8 @@ void main() {
 
   group('Golden tests - MatrixOutput', () {
     testWidgets('MatrixOutput - 1x1', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(80, 90));
+
       await tester.pumpWidget(
         MockMatrixOther(
           child: MatrixOutput(
@@ -90,6 +92,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/matrix_output_1x1.png'),
@@ -97,6 +100,8 @@ void main() {
     });
 
     testWidgets('MatrixOutput - 2x2', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 150));
+
       await tester.pumpWidget(
         MockMatrixOther(
           child: MatrixOutput(
@@ -109,6 +114,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/matrix_output_2x2.png'),
@@ -116,6 +122,8 @@ void main() {
     });
 
     testWidgets('MatrixOutput - 2x2 no decimals', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 150));
+
       await tester.pumpWidget(
         MockMatrixOther(
           child: MatrixOutput(
@@ -129,6 +137,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/matrix_output_2x2_nodecimals.png'),
@@ -136,6 +145,8 @@ void main() {
     });
 
     testWidgets('MatrixOutput - 3x3', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(230, 230));
+
       await tester.pumpWidget(
         MockMatrixOther(
           child: MatrixOutput(
@@ -148,6 +159,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/matrix_output_3x3.png'),

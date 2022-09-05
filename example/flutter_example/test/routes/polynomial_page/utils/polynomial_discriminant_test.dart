@@ -2,6 +2,7 @@ import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomi
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/utils/polynomial_discriminant.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
@@ -26,6 +27,8 @@ void main() {
 
   group('Golden test - PolynomialDiscriminant', () {
     testWidgets('PolynomialDiscriminant', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 200));
+
       await tester.pumpWidget(
         InheritedPolynomial(
           polynomialState: PolynomialState(PolynomialType.linear)

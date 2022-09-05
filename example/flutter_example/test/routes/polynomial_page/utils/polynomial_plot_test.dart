@@ -47,6 +47,8 @@ void main() {
     }
 
     testWidgets('PolynomialPlotWidget - linear equation', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(600, 750));
+
       await tester.pumpWidget(
         mockedTree(
           state: PolynomialState(PolynomialType.linear)

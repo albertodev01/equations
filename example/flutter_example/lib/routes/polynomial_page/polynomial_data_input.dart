@@ -5,10 +5,11 @@ import 'package:equations_solver/routes/polynomial_page/model/inherited_polynomi
 import 'package:equations_solver/routes/polynomial_page/model/polynomial_state.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/utils/body_pages/equation_text_formatter.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:flutter/material.dart';
 
-/// This widget contains a series of [PolynomialInputField] widgets needed to
-/// parse the coefficients of the polynomial to be solved.
+/// This widget contains a series of [PolynomialInputField] widgets that parse
+/// the coefficients of the polynomial equation.
 class PolynomialDataInput extends StatelessWidget {
   /// Creates a [PolynomialDataInput] widget.
   const PolynomialDataInput({super.key});
@@ -65,16 +66,6 @@ class __InputWidget extends State<_InputWidget> {
   /// Form validation key.
   final formKey = GlobalKey<FormState>();
 
-  /// The input fields are placed inside a [Wrap] widget which will take care of
-  /// responsively laying out children in the UI according with the available
-  /// width.
-  ///
-  /// This is cached because the number of input fields won't change.
-  late final Widget cachedWrap = _InputFieldsWrapWidget(
-    controllers: context.textControllers,
-    inputLength: context.textControllers.length,
-  );
-
   /// Validates the input and, if it's valid, sends the data to the state class.
   void _processInput() {
     if (formKey.currentState?.validate() ?? false) {
@@ -99,13 +90,13 @@ class __InputWidget extends State<_InputWidget> {
 
   /// Form cleanup.
   void _cleanInput() {
-    for (final controller in context.textControllers) {
-      controller.clear();
-    }
-
     formKey.currentState?.reset();
     context.polynomialState.clear();
     context.plotZoomState.reset();
+
+    for (final controller in context.textControllers) {
+      controller.clear();
+    }
 
     FocusScope.of(context).unfocus();
   }
@@ -125,7 +116,7 @@ class __InputWidget extends State<_InputWidget> {
           padding: const EdgeInsets.only(left: 60, right: 60),
           child: Form(
             key: formKey,
-            child: cachedWrap,
+            child: const _InputFieldsWrapWidget(),
           ),
         ),
 
@@ -143,8 +134,14 @@ class __InputWidget extends State<_InputWidget> {
               child: Text(context.l10n.solve),
             ),
 
-            // Some spacing
-            const SizedBox(width: 30),
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              child: InputKindDialogButton(
+                inputKindMessage: InputKindMessage.numbers,
+              ),
+            ),
 
             // Cleaning the inputs
             ElevatedButton(
@@ -161,16 +158,7 @@ class __InputWidget extends State<_InputWidget> {
 
 /// Generates the input fields of the coefficients and puts them in a [Wrap].
 class _InputFieldsWrapWidget extends StatelessWidget {
-  /// The [TextEditingController]s of each input field.
-  final List<TextEditingController> controllers;
-
-  /// How many input fields the screen has to display.
-  final int inputLength;
-
-  const _InputFieldsWrapWidget({
-    required this.controllers,
-    required this.inputLength,
-  });
+  const _InputFieldsWrapWidget();
 
   /// Increments by [index] the char code unit to get a specific letter. For
   /// example:
@@ -187,11 +175,13 @@ class _InputFieldsWrapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controllers = context.textControllers;
+
     return Wrap(
       spacing: 30,
       alignment: WrapAlignment.center,
       children: [
-        for (var i = 0; i < inputLength; ++i)
+        for (var i = 0; i < controllers.length; ++i)
           PolynomialInputField(
             // This key is used for testing purposes
             key: Key('PolynomialInputField-coefficient-$i'),

@@ -17,6 +17,8 @@ void main() {
 
   group('Golden tests - NoDiscriminant', () {
     testWidgets('NoDiscriminant', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(350, 80));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: NoDiscriminant(),

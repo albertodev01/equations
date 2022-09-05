@@ -20,7 +20,7 @@ enum PolynomialType {
   /// How many coefficients the associated polynomial type has.
   final int coefficients;
 
-  /// Creates a [PolynomialType] enumeration type.
+  /// Creates a [PolynomialType] enumeration.
   const PolynomialType(this.coefficients);
 }
 

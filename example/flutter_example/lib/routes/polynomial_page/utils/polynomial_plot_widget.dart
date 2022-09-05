@@ -58,7 +58,7 @@ class _PlotTitle extends StatelessWidget {
 }
 
 /// A wrapper of [EquationDrawerWidget] that listens to [PolynomialState] to
-/// either draw the polynomial or clear the chart.
+/// either draw the polynomial or clean the chart.
 class _PlotWidgetListener extends StatelessWidget {
   /// Creates a [_PlotWidgetListener] widget.
   const _PlotWidgetListener();

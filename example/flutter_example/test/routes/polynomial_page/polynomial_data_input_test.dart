@@ -199,6 +199,8 @@ void main() {
 
   group('Golden tests - PolynomialDataInput', () {
     testWidgets('PolynomialDataInput - linear', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 250));
+
       await tester.pumpWidget(
         MockPolynomialWidget(
           textControllers: [
@@ -208,6 +210,7 @@ void main() {
           child: const PolynomialDataInput(),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/polynomial_data_input_linear.png'),
@@ -215,6 +218,8 @@ void main() {
     });
 
     testWidgets('PolynomialDataInput - quadratic', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 250));
+
       await tester.pumpWidget(
         MockPolynomialWidget(
           polynomialType: PolynomialType.quadratic,
@@ -233,6 +238,8 @@ void main() {
     });
 
     testWidgets('PolynomialDataInput - cubic', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 250));
+
       await tester.pumpWidget(
         MockPolynomialWidget(
           polynomialType: PolynomialType.cubic,
@@ -252,6 +259,8 @@ void main() {
     });
 
     testWidgets('PolynomialDataInput - quartic', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(600, 250));
+
       await tester.pumpWidget(
         MockPolynomialWidget(
           polynomialType: PolynomialType.quartic,

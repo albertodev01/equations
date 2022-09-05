@@ -62,6 +62,8 @@ void main() {
 
   group('Golden tests - MatrixAnalyzerResults', () {
     testWidgets('MatrixAnalyzerResults - results', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1400));
+
       await tester.pumpWidget(
         const MockMatrixOther(
           matrixMockData: true,
@@ -73,6 +75,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/matrix_analyze_results_onecolumn.png'),
@@ -80,6 +83,8 @@ void main() {
     });
 
     testWidgets('MatrixAnalyzerResults - results', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+
       await tester.pumpWidget(
         const MockMatrixOther(
           matrixMockData: true,
@@ -88,6 +93,7 @@ void main() {
           ),
         ),
       );
+
       await expectLater(
         find.byType(MockWrapper),
         matchesGoldenFile('goldens/matrix_analyze_results.png'),
