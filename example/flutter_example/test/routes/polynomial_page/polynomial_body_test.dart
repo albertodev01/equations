@@ -87,7 +87,7 @@ void main() {
     testWidgets(
       'Making sure the chart does NOT appear on smaller screens',
       (tester) async {
-        await tester.binding.setSurfaceSize(const Size(200, 2000));
+        await tester.binding.setSurfaceSize(const Size(250, 1800));
 
         await tester.pumpWidget(
           MockPolynomialWidget(

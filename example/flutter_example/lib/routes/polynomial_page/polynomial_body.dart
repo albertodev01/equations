@@ -96,6 +96,7 @@ class _SingleColumnLayout extends StatelessWidget
           ),
           const PolynomialDataInput(),
           const PolynomialResults(),
+          const SizedBox(height: 25),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 30,
