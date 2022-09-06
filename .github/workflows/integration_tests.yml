@@ -47,7 +47,7 @@ jobs:
         run: flutter pub get
 
       - name: Runing unit, widget and golden tests
-        run: flutter test .\integration_test -d macos
+        run: flutter test integration_test -d macos
 
   flutter_example_integration_tests_linux:
     name: Flutter example - integration tests on Linux
@@ -67,4 +67,4 @@ jobs:
         run: flutter pub get
 
       - name: Runing unit, widget and golden tests
-        run: flutter test .\integration_test -d linux
+        run: flutter test integration_test -d linux
