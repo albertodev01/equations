@@ -223,7 +223,8 @@ void main() {
       await expectLater(
         find.byKey(const Key('EquationDrawerWidget-Golden')),
         matchesGoldenFile(
-            'goldens/equation_painter_area_color_right_range.png'),
+          'goldens/equation_painter_area_color_right_range.png',
+        ),
       );
     });
   });

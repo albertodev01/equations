@@ -95,7 +95,7 @@ void main() {
       expect(count, equals(3));
     });
 
-    test('Making sure that exceptions are handled', () {
+    test('Making sure that exceptions are handled - Single point', () {
       var count = 0;
       final nonlinearState = NonlinearState(NonlinearType.singlePoint)
         ..addListener(() => ++count);
@@ -122,6 +122,39 @@ void main() {
       );
 
       expect(nonlinearState.nonlinearType, equals(NonlinearType.singlePoint));
+      expect(nonlinearState.state.nonlinear, isNull);
+      expect(count, equals(2));
+    });
+
+    test('Making sure that exceptions are handled - Bracketing', () {
+      var count = 0;
+      final nonlinearState = NonlinearState(NonlinearType.bracketing)
+        ..addListener(() => ++count);
+
+      expect(nonlinearState.nonlinearType, equals(NonlinearType.bracketing));
+      expect(nonlinearState.state, equals(const NonlinearResult()));
+
+      nonlinearState.solveWithBracketing(
+        function: 'x-2',
+        precision: 1.0e-10,
+        lowerBound: '',
+        upperBound: '1',
+        method: BracketingMethods.bisection,
+      );
+
+      expect(nonlinearState.nonlinearType, equals(NonlinearType.bracketing));
+      expect(nonlinearState.state.nonlinear, isNull);
+      expect(count, equals(1));
+
+      nonlinearState.solveWithBracketing(
+        function: 'x-2',
+        precision: 1.0e-10,
+        lowerBound: '0',
+        upperBound: '',
+        method: BracketingMethods.bisection,
+      );
+
+      expect(nonlinearState.nonlinearType, equals(NonlinearType.bracketing));
       expect(nonlinearState.state.nonlinear, isNull);
       expect(count, equals(2));
     });
