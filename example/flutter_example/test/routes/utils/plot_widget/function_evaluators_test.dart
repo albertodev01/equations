@@ -1,41 +1,41 @@
 import 'package:equations/equations.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
+import 'package:equations_solver/routes/utils/plot_widget/function_evaluators.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group("Testing the 'PlotMode' analyzers", () {
     test('Making sure that objects comparison works properly', () {
       expect(
-        PolynomialPlot(
+        PolynomialEvaluator(
           algebraic: Algebraic.fromReal([1, 4]),
         ),
         equals(
-          PolynomialPlot(
+          PolynomialEvaluator(
             algebraic: Algebraic.fromReal([1, 4]),
           ),
         ),
       );
 
       expect(
-        PolynomialPlot(
+        PolynomialEvaluator(
           algebraic: Algebraic.fromReal([1, 4]),
         ).hashCode,
         equals(
-          PolynomialPlot(
+          PolynomialEvaluator(
             algebraic: Algebraic.fromReal([1, 4]),
           ).hashCode,
         ),
       );
 
       expect(
-        const NonlinearPlot(
+        const NonlinearEvaluator(
           nonLinear: Newton(
             function: 'x-3',
             x0: 1,
           ),
         ),
         equals(
-          const NonlinearPlot(
+          const NonlinearEvaluator(
             nonLinear: Newton(
               function: 'x-3',
               x0: 1,
@@ -45,14 +45,14 @@ void main() {
       );
 
       expect(
-        const NonlinearPlot(
+        const NonlinearEvaluator(
           nonLinear: Newton(
             function: 'x-3',
             x0: 1,
           ),
         ).hashCode,
         equals(
-          const NonlinearPlot(
+          const NonlinearEvaluator(
             nonLinear: Newton(
               function: 'x-3',
               x0: 1,
@@ -62,7 +62,7 @@ void main() {
       );
 
       expect(
-        const IntegralPlot(
+        const IntegralEvaluator(
           function: SimpsonRule(
             function: 'x-2',
             lowerBound: 1,
@@ -70,7 +70,7 @@ void main() {
           ),
         ).hashCode,
         equals(
-          const IntegralPlot(
+          const IntegralEvaluator(
             function: SimpsonRule(
               function: 'x-2',
               lowerBound: 1,
@@ -85,7 +85,7 @@ void main() {
       'Making sure that function evaluation works as expected with '
       'polynomial equations.',
       () {
-        final plot = PolynomialPlot(
+        final plot = PolynomialEvaluator(
           algebraic: Algebraic.fromReal([1, -5]),
         );
 
@@ -97,7 +97,7 @@ void main() {
       'Making sure that function evaluation works as expected with '
       'nonlinear equations.',
       () {
-        const plot = NonlinearPlot(
+        const plot = NonlinearEvaluator(
           nonLinear: Newton(
             function: 'x-5',
             x0: 1,
@@ -112,7 +112,7 @@ void main() {
       'Making sure that function evaluation works as expected with '
       'integrals.',
       () {
-        const plot = IntegralPlot(
+        const plot = IntegralEvaluator(
           function: SimpsonRule(
             function: 'x',
             lowerBound: 1,

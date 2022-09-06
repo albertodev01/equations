@@ -1,7 +1,7 @@
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/equation_painter.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
+import 'package:equations_solver/routes/utils/plot_widget/function_evaluators.dart';
 import 'package:flutter/material.dart';
 
 /// This widget draws a cartesian plane and, if there's a [plotMode], it also
@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 /// draws a cartesian plane (with no function within).
 class EquationDrawerWidget<T> extends StatelessWidget {
   /// Provides the ability to evaluate a real function on a point.
-  final PlotMode<T>? plotMode;
+  final FunctionEvaluator<T>? plotMode;
 
   /// The color that highlights the area below a function.
   ///
@@ -72,8 +72,8 @@ class EquationDrawerWidget<T> extends StatelessWidget {
 }
 
 class _PlotBody<T> extends StatelessWidget {
-  /// The [PlotMode] object.
-  final PlotMode<T>? plotMode;
+  /// The [FunctionEvaluator] object.
+  final FunctionEvaluator<T>? plotMode;
 
   /// The color that highlights the area below a function.
   final Color areaColor;

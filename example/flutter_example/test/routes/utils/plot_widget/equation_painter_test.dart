@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
 import 'package:equations_solver/routes/utils/plot_widget/equation_painter.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
+import 'package:equations_solver/routes/utils/plot_widget/function_evaluators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -23,9 +23,9 @@ void main() {
           color: Colors.white,
           clipBehavior: Clip.antiAlias,
           child: CustomPaint(
-            key: const Key('PlotWidget-Golden'),
+            key: const Key('EquationDrawerWidget-Golden'),
             painter: EquationPainter(
-              plotMode: PolynomialPlot(
+              plotMode: PolynomialEvaluator(
                 algebraic: Algebraic.fromReal(coefficients),
               ),
               range: range,
@@ -48,29 +48,31 @@ void main() {
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(5)),
       child: CustomPaint(
-        key: const Key('PlotWidget-Golden'),
+        key: const Key('EquationDrawerWidget-Golden'),
         painter: EquationPainter(
-          plotMode: const NonlinearPlot(
+          plotMode: const NonlinearEvaluator(
             nonLinear: Newton(function: 'e^x+x^3', x0: -1),
           ),
           range: range,
           colorArea: colorArea,
         ),
-        size: const Size.square(200),
+        size: const Size.square(350),
       ),
     );
   }
 
   group('Golden tests - PlotPainter (no area)', () {
     testWidgets('Polynomial - low range', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(270, 270));
+
       await tester.pumpWidget(
         buildPolynomialPainter(
           range: 2,
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_polynomial_low.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_polynomial_low.png'),
       );
     });
 
@@ -79,8 +81,8 @@ void main() {
         buildPolynomialPainter(),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_polynomial.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_polynomial.png'),
       );
     });
 
@@ -91,8 +93,8 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_polynomial_high.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_polynomial_high.png'),
       );
     });
 
@@ -101,8 +103,8 @@ void main() {
         buildPolynomialPainter(coefficients: [1, 0]),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_polynomial_edges.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_polynomial_edges.png'),
       );
     });
 
@@ -113,8 +115,8 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_nonlinear_low.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_nonlinear_low.png'),
       );
     });
 
@@ -123,8 +125,8 @@ void main() {
         buildNonlinearPainter(),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_nonlinear.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_nonlinear.png'),
       );
     });
 
@@ -135,8 +137,8 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_nonlinear_high.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_nonlinear_high.png'),
       );
     });
   });
@@ -153,8 +155,8 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_area_color.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_area_color.png'),
       );
     });
 
@@ -169,8 +171,8 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_area_color_and_ranges.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_area_color_and_ranges.png'),
       );
     });
 
@@ -185,9 +187,9 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
         matchesGoldenFile(
-          'goldens/plot_painter_area_color_and_ranges_swapped.png',
+          'goldens/equation_painter_area_color_and_ranges_swapped.png',
         ),
       );
     });
@@ -203,8 +205,8 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_area_color_left_range.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_painter_area_color_left_range.png'),
       );
     });
 
@@ -219,8 +221,9 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_painter_area_color_right_range.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile(
+            'goldens/equation_painter_area_color_right_range.png'),
       );
     });
   });

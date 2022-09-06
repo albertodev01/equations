@@ -6,7 +6,7 @@ import 'package:equations_solver/routes/integral_page/model/integral_state.dart'
 import 'package:equations_solver/routes/utils/body_pages/page_title.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
+import 'package:equations_solver/routes/utils/plot_widget/function_evaluators.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +54,7 @@ class _PlotTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageTitle(
       pageTitle: context.l10n.chart,
-      pageLogo: const PlotIcon(),
+      pageLogo: const CartesianPlane(),
     );
   }
 }
@@ -74,7 +74,7 @@ class _PlotWidgetListener extends StatelessWidget {
 
         if (integral != null) {
           return EquationDrawerWidget(
-            plotMode: IntegralPlot(
+            plotMode: IntegralEvaluator(
               function: integral,
             ),
             areaColor: Colors.amber.withAlpha(60),
@@ -83,7 +83,7 @@ class _PlotWidgetListener extends StatelessWidget {
           );
         }
 
-        return const EquationDrawerWidget<IntegralPlot>();
+        return const EquationDrawerWidget<IntegralEvaluator>();
       },
     );
   }

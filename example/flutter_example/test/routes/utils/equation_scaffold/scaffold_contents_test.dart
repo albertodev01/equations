@@ -26,11 +26,13 @@ void main() {
 
   group('Golden tests - ScaffoldContents', () {
     testWidgets('ScaffoldContents', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 500));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: ScaffoldContents(
             body: Center(
-              child: Text('scaffold contents'),
+              child: Text('ScaffoldContents'),
             ),
           ),
         ),

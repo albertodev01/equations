@@ -26,15 +26,13 @@ void main() {
 
   group('Golden tests - PageTitle', () {
     testWidgets('PageTitle', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 150));
+
       await tester.pumpWidget(
         const MockWrapper(
-          child: SizedBox(
-            width: 300,
-            height: 300,
-            child: PageTitle(
-              pageLogo: PolynomialLogo(),
-              pageTitle: 'Demo title',
-            ),
+          child: PageTitle(
+            pageLogo: PolynomialLogo(),
+            pageTitle: 'Demo title',
           ),
         ),
       );

@@ -31,7 +31,7 @@ void main() {
       );
 
       expect(find.byType(IntegralPlotWidget), findsOneWidget);
-      expect(find.byType(PlotIcon), findsOneWidget);
+      expect(find.byType(CartesianPlane), findsOneWidget);
     });
   });
 

@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -76,10 +77,12 @@ void main() {
 
   group('Golden tests - PolynomialLogo', () {
     testWidgets('PolynomialLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(210));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: PolynomialLogo(
-            size: 500,
+            size: 200,
           ),
         ),
       );
@@ -90,10 +93,12 @@ void main() {
     });
 
     testWidgets('NonlinearLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(210));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: NonlinearLogo(
-            size: 500,
+            size: 200,
           ),
         ),
       );
@@ -104,10 +109,12 @@ void main() {
     });
 
     testWidgets('SystemsLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(210));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: SystemsLogo(
-            size: 500,
+            size: 200,
           ),
         ),
       );
@@ -118,10 +125,12 @@ void main() {
     });
 
     testWidgets('IntegralLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(210));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: IntegralLogo(
-            size: 500,
+            size: 200,
           ),
         ),
       );
@@ -132,10 +141,12 @@ void main() {
     });
 
     testWidgets('OtherLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(210));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: OtherLogo(
-            size: 500,
+            size: 200,
           ),
         ),
       );

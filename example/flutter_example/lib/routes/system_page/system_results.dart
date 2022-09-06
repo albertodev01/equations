@@ -64,7 +64,7 @@ class _SystemSolutions extends StatelessWidget {
       },
       child: const Padding(
         padding: EdgeInsets.only(
-          bottom: 15,
+          bottom: 30,
         ),
         child: NoResults(),
       ),

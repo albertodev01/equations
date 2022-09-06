@@ -24,6 +24,8 @@ void main() {
 
   group('Golden tests - EquationTextFormatter', () {
     testWidgets('EquationTextFormatter', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 80));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: SizedBox(

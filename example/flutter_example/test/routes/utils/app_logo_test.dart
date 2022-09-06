@@ -14,8 +14,10 @@ void main() {
     });
   });
 
-  group('Golden tests - NoResults', () {
-    testWidgets('NoResults', (tester) async {
+  group('Golden tests - AppLogo', () {
+    testWidgets('AppLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(280, 90));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: AppLogo(),

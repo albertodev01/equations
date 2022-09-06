@@ -75,8 +75,8 @@ void main() {
         isA<Atoms>(),
       );
       expect(
-        PlotIcon(),
-        isA<PlotIcon>(),
+        CartesianPlane(),
+        isA<CartesianPlane>(),
       );
       expect(
         EquationSolution(),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// A widget representing a section title in a page.
+/// The section title at the top of each route.
 class PageTitle extends StatelessWidget {
   /// The section title.
   final String pageTitle;
 
-  /// A small image on the left of the text. Generally, this widget should be
-  /// a 50 x 50 square.
+  /// A small image on the left of the text.
+  ///
+  /// Generally, this widget is 50x50 large.
   final Widget pageLogo;
 
   /// Creates a [PageTitle] widget.

@@ -43,6 +43,8 @@ void main() {
 
   group('Golden tests - BottomNavigationWidget', () {
     testWidgets('BottomNavigationWidget', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 500));
+
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(

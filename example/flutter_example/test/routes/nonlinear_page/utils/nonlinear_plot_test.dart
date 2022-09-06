@@ -30,7 +30,7 @@ void main() {
       );
 
       expect(find.byType(NonlinearPlotWidget), findsOneWidget);
-      expect(find.byType(PlotIcon), findsOneWidget);
+      expect(find.byType(CartesianPlane), findsOneWidget);
     });
   });
 
