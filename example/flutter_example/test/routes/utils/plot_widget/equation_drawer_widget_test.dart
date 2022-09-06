@@ -2,22 +2,22 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
 import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
+import 'package:equations_solver/routes/utils/plot_widget/function_evaluators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
 
 void main() {
-  late final Widget plotWidget;
+  late final Widget equationDrawerWidget;
 
   setUpAll(() {
-    plotWidget = Center(
+    equationDrawerWidget = Center(
       child: SizedBox(
         width: 300,
         height: 400,
         child: EquationDrawerWidget(
-          plotMode: PolynomialPlot(
+          plotMode: PolynomialEvaluator(
             algebraic: Algebraic.fromReal([1, 2, -3, -2]),
           ),
         ),
@@ -25,11 +25,11 @@ void main() {
     );
   });
 
-  group("Testing the 'PlotWidget' widget", () {
+  group("Testing the 'EquationDrawerWidget' widget", () {
     testWidgets('Making sure that the widget can be rendered', (tester) async {
       await tester.pumpWidget(
         MockWrapper(
-          child: plotWidget,
+          child: equationDrawerWidget,
         ),
       );
 
@@ -38,8 +38,8 @@ void main() {
     });
   });
 
-  group('Golden tests - PlotWidget', () {
-    testWidgets('PlotWidget', (tester) async {
+  group('Golden tests - EquationDrawerWidget', () {
+    testWidgets('EquationDrawerWidget', (tester) async {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedPlotZoom(
@@ -52,8 +52,8 @@ void main() {
               width: 500,
               height: 580,
               child: EquationDrawerWidget(
-                key: const Key('PlotWidget-Golden'),
-                plotMode: PolynomialPlot(
+                key: const Key('EquationDrawerWidget-Golden'),
+                plotMode: PolynomialEvaluator(
                   algebraic: Algebraic.fromReal([1, 2, -3, -2]),
                 ),
               ),
@@ -62,12 +62,12 @@ void main() {
         ),
       );
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_widget.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_drawer_widget.png'),
       );
     });
 
-    testWidgets('PlotWidget - zoom', (tester) async {
+    testWidgets('EquationDrawerWidget - zoom', (tester) async {
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedPlotZoom(
@@ -80,8 +80,8 @@ void main() {
               width: 500,
               height: 580,
               child: EquationDrawerWidget(
-                key: const Key('PlotWidget-Golden'),
-                plotMode: PolynomialPlot(
+                key: const Key('EquationDrawerWidget-Golden'),
+                plotMode: PolynomialEvaluator(
                   algebraic: Algebraic.fromReal([1, 2, -3, -2]),
                 ),
               ),
@@ -95,8 +95,8 @@ void main() {
       await tester.pumpAndSettle();
 
       await expectLater(
-        find.byKey(const Key('PlotWidget-Golden')),
-        matchesGoldenFile('goldens/plot_widget_zoom.png'),
+        find.byKey(const Key('EquationDrawerWidget-Golden')),
+        matchesGoldenFile('goldens/equation_drawer_widget_zoom.png'),
       );
     });
   });

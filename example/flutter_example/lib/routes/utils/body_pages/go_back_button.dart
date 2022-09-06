@@ -11,7 +11,7 @@ class GoBackButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       splashRadius: 24,
-      onPressed: () => context.pop(),
+      onPressed: context.pop,
     );
   }
 }

@@ -23,6 +23,8 @@ void main() {
 
   group('Golden tests - EquationInput', () {
     testWidgets('EquationInput', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(160, 90));
+
       await tester.pumpWidget(
         MockWrapper(
           child: EquationInput(

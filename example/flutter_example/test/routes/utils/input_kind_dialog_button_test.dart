@@ -94,6 +94,8 @@ void main() {
 
   group('Golden tests - InputKindDialogButton', () {
     testWidgets('InputKindDialogButton - pressed', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(80, 80));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: InputKindDialogButton(
@@ -112,6 +114,8 @@ void main() {
     });
 
     testWidgets('InputKindDialogButton - numbers', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(700, 500));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: InputKindDialogButton(
@@ -130,6 +134,8 @@ void main() {
     });
 
     testWidgets('InputKindDialogButton - equations', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(800, 600));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: InputKindDialogButton(

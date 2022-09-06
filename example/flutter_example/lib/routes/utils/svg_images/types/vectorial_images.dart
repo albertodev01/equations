@@ -85,9 +85,9 @@ class HalfRightAngle extends SvgImage {
 }
 
 /// A cartesian plane with a stylized gaussian curve.
-class PlotIcon extends SvgImage {
-  /// Creates an [PlotIcon] widget.
-  const PlotIcon({
+class CartesianPlane extends SvgImage {
+  /// Creates an [CartesianPlane] widget.
+  const CartesianPlane({
     super.key,
     super.size,
   });

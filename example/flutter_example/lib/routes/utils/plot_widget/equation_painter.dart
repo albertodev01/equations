@@ -1,5 +1,5 @@
 import 'package:equations_solver/routes/utils/plot_widget/color_area.dart';
-import 'package:equations_solver/routes/utils/plot_widget/plot_mode.dart';
+import 'package:equations_solver/routes/utils/plot_widget/function_evaluators.dart';
 import 'package:flutter/material.dart';
 
 /// A [CustomPainter] that creates a XY cartesian plane and draws any kind of
@@ -10,7 +10,7 @@ class EquationPainter<T> extends CustomPainter {
   ///
   /// If this is `null` then the painter only draws a cartesian plane (without
   /// a function).
-  final PlotMode<T>? plotMode;
+  final FunctionEvaluator<T>? plotMode;
 
   /// The 'scale' of the plot
   final int range;

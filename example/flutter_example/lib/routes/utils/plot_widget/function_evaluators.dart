@@ -2,12 +2,12 @@ import 'package:equations/equations.dart';
 
 /// This class provides the ability to evaluate a function on a given point. The
 /// [equation] dependency defines the behavior of [evaluateOn].
-abstract class PlotMode<T> {
+abstract class FunctionEvaluator<T> {
   /// The equation object that defines the [evaluateOn] method.
   final T equation;
 
-  /// Creates an instance of [PlotMode].
-  const PlotMode(this.equation);
+  /// Creates an instance of [FunctionEvaluator].
+  const FunctionEvaluator(this.equation);
 
   @override
   bool operator ==(Object other) {
@@ -15,7 +15,7 @@ abstract class PlotMode<T> {
       return true;
     }
 
-    if (other is PlotMode<T>) {
+    if (other is FunctionEvaluator<T>) {
       return runtimeType == other.runtimeType && equation == other.equation;
     } else {
       return false;
@@ -30,9 +30,9 @@ abstract class PlotMode<T> {
 }
 
 /// Polynomial functions evaluator.
-class PolynomialPlot extends PlotMode<Algebraic> {
-  /// Creates an instance of [PolynomialPlot].
-  const PolynomialPlot({
+class PolynomialEvaluator extends FunctionEvaluator<Algebraic> {
+  /// Creates an instance of [PolynomialEvaluator].
+  const PolynomialEvaluator({
     required Algebraic algebraic,
   }) : super(algebraic);
 
@@ -41,9 +41,9 @@ class PolynomialPlot extends PlotMode<Algebraic> {
 }
 
 /// Nonlinear functions evaluator.
-class NonlinearPlot extends PlotMode<NonLinear> {
-  /// Creates an instance of [NonlinearPlot].
-  const NonlinearPlot({
+class NonlinearEvaluator extends FunctionEvaluator<NonLinear> {
+  /// Creates an instance of [NonlinearEvaluator].
+  const NonlinearEvaluator({
     required NonLinear nonLinear,
   }) : super(nonLinear);
 
@@ -52,9 +52,9 @@ class NonlinearPlot extends PlotMode<NonLinear> {
 }
 
 /// Integral functions evaluator.
-class IntegralPlot extends PlotMode<NumericalIntegration> {
-  /// Creates an instance of [IntegralPlot].
-  const IntegralPlot({
+class IntegralEvaluator extends FunctionEvaluator<NumericalIntegration> {
+  /// Creates an instance of [IntegralEvaluator].
+  const IntegralEvaluator({
     required NumericalIntegration function,
   }) : super(function);
 

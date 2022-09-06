@@ -40,6 +40,8 @@ void main() {
 
   group('Golden tests - RailNavigationWidget', () {
     testWidgets('RailNavigationWidget', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(500, 500));
+
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedNavigation(

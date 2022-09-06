@@ -23,6 +23,8 @@ void main() {
 
   group('Golden tests - SectionTitle', () {
     testWidgets('SectionTitle', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(230, 40));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: SectionTitle(

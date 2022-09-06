@@ -23,7 +23,7 @@ void main() {
       );
 
       expect(find.byType(PolynomialPlotWidget), findsOneWidget);
-      expect(find.byType(PlotIcon), findsOneWidget);
+      expect(find.byType(CartesianPlane), findsOneWidget);
     });
   });
 

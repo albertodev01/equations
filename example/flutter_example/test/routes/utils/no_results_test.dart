@@ -21,6 +21,8 @@ void main() {
 
   group('Golden tests - NoResults', () {
     testWidgets('NoResults', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 80));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: NoResults(),

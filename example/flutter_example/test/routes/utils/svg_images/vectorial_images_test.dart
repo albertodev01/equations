@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mock_wrapper.dart';
@@ -6,6 +7,8 @@ import '../../mock_wrapper.dart';
 void main() {
   group('Testing vectorial images', () {
     testWidgets('CartesianPlaneBackground', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(50));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: CartesianPlaneBackground(),
@@ -82,15 +85,15 @@ void main() {
       expect(const HalfRightAngle().assetName, equals('angle'));
     });
 
-    testWidgets('PlotIcon', (tester) async {
+    testWidgets('CartesianPlane', (tester) async {
       await tester.pumpWidget(
         const MockWrapper(
-          child: PlotIcon(),
+          child: CartesianPlane(),
         ),
       );
 
-      expect(find.byType(PlotIcon), findsOneWidget);
-      expect(const PlotIcon().assetName, equals('plot'));
+      expect(find.byType(CartesianPlane), findsOneWidget);
+      expect(const CartesianPlane().assetName, equals('plot'));
     });
 
     testWidgets('EquationSolution', (tester) async {
