@@ -7,8 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// The app's main entrypoint.
 ///
-/// The [LicenseRegistry.addLicense] call can be ignored by the code coverage
-/// tool since it will be tested by integration tests.
+/// The [LicenseRegistry.addLicense] call can be excluded from code coverage
+/// since it will be tested by integration tests.
 void main() {
   // coverage:ignore-start
   LicenseRegistry.addLicense(() async* {
@@ -83,8 +83,10 @@ class _CustomScrollBehavior extends MaterialScrollBehavior {
       return child;
     }
 
-    // Show scroll bars when scrolling vertically but only on desktop
+    // Show scroll bars when scrolling vertically but only on desktop. This part
+    // can be ignored by code coverage because it's tested in integration tests.
     switch (Theme.of(context).platform) {
+      // coverage:ignore-start
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
@@ -97,6 +99,7 @@ class _CustomScrollBehavior extends MaterialScrollBehavior {
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
         return child;
+      // coverage:ignore-end
     }
   }
 }

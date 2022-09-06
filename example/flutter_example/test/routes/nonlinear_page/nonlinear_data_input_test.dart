@@ -160,6 +160,14 @@ void main() {
           find.byType(InheritedNonlinear),
         );
         expect(inheritedWidget.nonlinearState.state.nonlinear, isNotNull);
+
+        // Cleaning
+        await tester.tap(find.byKey(const Key('Nonlinear-button-clean')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('x-3'), findsNothing);
+        expect(find.text('1'), findsNothing);
+        expect(find.text('4'), findsNothing);
       },
     );
 
