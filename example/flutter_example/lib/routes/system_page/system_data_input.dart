@@ -10,6 +10,7 @@ import 'package:equations_solver/routes/system_page/utils/matrix_input.dart';
 import 'package:equations_solver/routes/system_page/utils/size_picker.dart';
 import 'package:equations_solver/routes/system_page/utils/sor_relaxation_factor.dart';
 import 'package:equations_solver/routes/system_page/utils/vector_input.dart';
+import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:flutter/material.dart';
 
 /// A wrapper of [MatrixInput] which also handles other specific inputs to
@@ -151,7 +152,9 @@ class _SystemDataInputState extends State<SystemDataInput> {
           ),
 
           // Size changer
-          const SizePicker(),
+          const SizePicker(
+            isInOtherPage: false,
+          ),
 
           // Some spacing
           const SizedBox(
@@ -201,15 +204,7 @@ class _SystemDataInputState extends State<SystemDataInput> {
 
           // The optional input for the initial guesses vector
           // Vector input
-          AnimatedBuilder(
-            animation: context.numberSwitcherState,
-            builder: (context, _) {
-              return JacobiVectorInput(
-                controllers: context.systemTextControllers.jacobiControllers,
-                vectorSize: context.numberSwitcherState.state,
-              );
-            },
-          ),
+          const JacobiVectorInput(),
 
           // Spacing
           const SizedBox(height: 45),
@@ -225,8 +220,14 @@ class _SystemDataInputState extends State<SystemDataInput> {
                 child: Text(context.l10n.solve),
               ),
 
-              // Some spacing
-              const SizedBox(width: 30),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
+                child: InputKindDialogButton(
+                  inputKindMessage: InputKindMessage.numbers,
+                ),
+              ),
 
               // Cleaning the inputs
               ElevatedButton(
@@ -252,7 +253,7 @@ class _RelaxationFactor extends StatelessWidget {
     return ValueListenableBuilder<String>(
       valueListenable: context.dropdownValue,
       builder: (context, value, child) {
-        final sorValue = SystemDropdownItems.sor.asString().toLowerCase();
+        final sorValue = SystemDropdownItems.sor.asString.toLowerCase();
 
         if (value.toLowerCase() == sorValue) {
           return child!;
@@ -261,9 +262,7 @@ class _RelaxationFactor extends StatelessWidget {
         // Nothing is displayed if SOR isn't the currently selected option.
         return const SizedBox.shrink();
       },
-      child: RelaxationFactorInput(
-        textEditingController: context.systemTextControllers.wSorController,
-      ),
+      child: const RelaxationFactorInput(),
     );
   }
 }

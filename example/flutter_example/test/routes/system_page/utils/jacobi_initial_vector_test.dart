@@ -1,3 +1,4 @@
+import 'package:equations_solver/routes/models/number_switcher/inherited_number_switcher.dart';
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:equations_solver/routes/system_page/utils/dropdown_selection.dart';
@@ -14,22 +15,14 @@ void main() {
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.iterative,
-          dropdownValue: SystemDropdownItems.jacobi.asString(),
-          child: JacobiVectorInput(
-            controllers: [
-              TextEditingController(),
-              TextEditingController(),
-              TextEditingController(),
-              TextEditingController(),
-            ],
-            vectorSize: 2,
-          ),
+          dropdownValue: SystemDropdownItems.jacobi.asString,
+          child: const JacobiVectorInput(),
         ),
       );
 
       expect(find.byType(JacobiVectorInput), findsOneWidget);
       expect(find.byType(VectorInput), findsOneWidget);
-      expect(find.byType(SystemInputField), findsNWidgets(2));
+      expect(find.byType(SystemInputField), findsOneWidget);
     });
 
     testWidgets(
@@ -39,16 +32,8 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.lu.asString(),
-            child: JacobiVectorInput(
-              controllers: [
-                TextEditingController(),
-                TextEditingController(),
-                TextEditingController(),
-                TextEditingController(),
-              ],
-              vectorSize: 2,
-            ),
+            dropdownValue: SystemDropdownItems.lu.asString,
+            child: const JacobiVectorInput(),
           ),
         );
 
@@ -57,5 +42,98 @@ void main() {
         expect(find.byType(SystemInputField), findsNothing);
       },
     );
+  });
+
+  group('Golden tests - JacobiVectorInput', () {
+    testWidgets('JacobiVectorInput - 1', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 150));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          systemType: SystemType.iterative,
+          dropdownValue: SystemDropdownItems.jacobi.asString,
+          child: const JacobiVectorInput(),
+        ),
+      );
+      await expectLater(
+        find.byType(JacobiVectorInput),
+        matchesGoldenFile('goldens/jacobi_vector_input_1.png'),
+      );
+    });
+
+    testWidgets('JacobiVectorInput - 2', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 200));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          systemType: SystemType.iterative,
+          dropdownValue: SystemDropdownItems.jacobi.asString,
+          child: const JacobiVectorInput(),
+        ),
+      );
+
+      tester
+          .widget<InheritedNumberSwitcher>(find.byType(InheritedNumberSwitcher))
+          .numberSwitcherState
+          .increase();
+
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(JacobiVectorInput),
+        matchesGoldenFile('goldens/jacobi_vector_input_2.png'),
+      );
+    });
+
+    testWidgets('JacobiVectorInput - 3', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 250));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          systemType: SystemType.iterative,
+          dropdownValue: SystemDropdownItems.jacobi.asString,
+          child: const JacobiVectorInput(),
+        ),
+      );
+
+      tester
+          .widget<InheritedNumberSwitcher>(find.byType(InheritedNumberSwitcher))
+          .numberSwitcherState
+        ..increase()
+        ..increase();
+
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(JacobiVectorInput),
+        matchesGoldenFile('goldens/jacobi_vector_input_3.png'),
+      );
+    });
+
+    testWidgets('JacobiVectorInput - 4', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 300));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          systemType: SystemType.iterative,
+          dropdownValue: SystemDropdownItems.jacobi.asString,
+          child: const JacobiVectorInput(),
+        ),
+      );
+
+      tester
+          .widget<InheritedNumberSwitcher>(find.byType(InheritedNumberSwitcher))
+          .numberSwitcherState
+        ..increase()
+        ..increase()
+        ..increase();
+
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(JacobiVectorInput),
+        matchesGoldenFile('goldens/jacobi_vector_input_4.png'),
+      );
+    });
   });
 }

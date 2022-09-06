@@ -5,6 +5,7 @@ import 'package:equations_solver/routes/utils/no_results.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'system_mock.dart';
@@ -62,6 +63,8 @@ void main() {
 
   group('Golden tests - SystemResults', () {
     testWidgets('SystemResults - no results', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 250));
+
       await tester.pumpWidget(
         const MockSystemWidget(
           child: SystemResults(),
@@ -74,6 +77,8 @@ void main() {
     });
 
     testWidgets('SystemResults - no results', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 450));
+
       await tester.pumpWidget(
         MockSystemWidget(
           child: InheritedSystem(

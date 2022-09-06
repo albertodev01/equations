@@ -31,7 +31,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.lu.asString(),
+            dropdownValue: SystemDropdownItems.lu.asString,
           ),
         );
 
@@ -92,7 +92,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.lu.asString(),
+            dropdownValue: SystemDropdownItems.lu.asString,
           ),
         );
 
@@ -120,7 +120,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.cholesky.asString(),
+            dropdownValue: SystemDropdownItems.cholesky.asString,
           ),
         );
 
@@ -148,7 +148,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.iterative,
-            dropdownValue: SystemDropdownItems.sor.asString(),
+            dropdownValue: SystemDropdownItems.sor.asString,
           ),
         );
 
@@ -180,7 +180,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.iterative,
-            dropdownValue: SystemDropdownItems.jacobi.asString(),
+            dropdownValue: SystemDropdownItems.jacobi.asString,
           ),
         );
 
@@ -248,6 +248,34 @@ void main() {
         expect(find.byKey(const Key('SystemEntry-1-1')), findsOneWidget);
         expect(find.byKey(const Key('VectorEntry-0')), findsOneWidget);
         expect(find.byKey(const Key('VectorEntry-1')), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Making sure that the number switcher also clears everything when '
+      'changing values',
+      (tester) async {
+        await tester.pumpWidget(
+          const MockSystemWidget(),
+        );
+
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byKey(const Key('System-button-solve')));
+        await tester.pumpAndSettle();
+
+        expect(find.text('1'), findsNWidgets(2));
+        expect(find.byType(RealResultCard), findsOneWidget);
+
+        // Changing the size
+        await tester.tap(find.byKey(const Key('SizePicker-Forward-Button')));
+        await tester.pumpAndSettle();
+
+        // Making sure the form is clean
+        expect(find.text('1'), findsNothing);
+        expect(find.byType(RealResultCard), findsNothing);
       },
     );
   });

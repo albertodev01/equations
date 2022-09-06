@@ -56,7 +56,7 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           MockSystemWidget(
-            dropdownValue: SystemDropdownItems.lu.asString(),
+            dropdownValue: SystemDropdownItems.lu.asString,
             systemType: SystemType.factorization,
             child: const SystemDataInput(),
           ),
@@ -81,7 +81,7 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           MockSystemWidget(
-            dropdownValue: SystemDropdownItems.cholesky.asString(),
+            dropdownValue: SystemDropdownItems.cholesky.asString,
             systemType: SystemType.factorization,
             child: const SystemDataInput(),
           ),
@@ -106,7 +106,7 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           MockSystemWidget(
-            dropdownValue: SystemDropdownItems.sor.asString(),
+            dropdownValue: SystemDropdownItems.sor.asString,
             systemType: SystemType.iterative,
             child: const SingleChildScrollView(
               child: SystemDataInput(),
@@ -133,7 +133,7 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           MockSystemWidget(
-            dropdownValue: SystemDropdownItems.jacobi.asString(),
+            dropdownValue: SystemDropdownItems.jacobi.asString,
             systemType: SystemType.iterative,
             child: const SingleChildScrollView(
               child: SystemDataInput(),
@@ -173,7 +173,7 @@ void main() {
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.factorization,
-          dropdownValue: SystemDropdownItems.lu.asString(),
+          dropdownValue: SystemDropdownItems.lu.asString,
           child: const SystemDataInput(),
         ),
       );
@@ -187,7 +187,7 @@ void main() {
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.factorization,
-          dropdownValue: SystemDropdownItems.cholesky.asString(),
+          dropdownValue: SystemDropdownItems.cholesky.asString,
           child: const SystemDataInput(),
         ),
       );
@@ -201,7 +201,7 @@ void main() {
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.iterative,
-          dropdownValue: SystemDropdownItems.sor.asString(),
+          dropdownValue: SystemDropdownItems.sor.asString,
           child: const SingleChildScrollView(
             child: SystemDataInput(),
           ),
@@ -217,7 +217,7 @@ void main() {
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.iterative,
-          dropdownValue: SystemDropdownItems.jacobi.asString(),
+          dropdownValue: SystemDropdownItems.jacobi.asString,
           child: const SingleChildScrollView(
             child: SystemDataInput(),
           ),

@@ -1,16 +1,13 @@
 import 'package:equations_solver/localization/localization.dart';
+import 'package:equations_solver/routes/models/system_text_controllers/inherited_system_controllers.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
 import 'package:flutter/material.dart';
 
 /// This very simple widget allows the input of the relaxation factor `w` of the
 /// SOR system solving algorithm.
 class RelaxationFactorInput extends StatelessWidget {
-  /// The text controller.
-  final TextEditingController textEditingController;
-
   /// Creates a [RelaxationFactorInput] widget.
   const RelaxationFactorInput({
-    required this.textEditingController,
     super.key,
   });
 
@@ -26,7 +23,7 @@ class RelaxationFactorInput extends StatelessWidget {
           // Input
           SystemInputField(
             key: const Key('SystemSolver-Iterative-RelaxationFactor'),
-            controller: textEditingController,
+            controller: context.systemTextControllers.wSorController,
             placeholder: 'w',
           ),
 

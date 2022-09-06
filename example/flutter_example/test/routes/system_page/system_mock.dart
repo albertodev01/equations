@@ -77,7 +77,7 @@ class _MockSystemWidgetState extends State<MockSystemWidget> {
           ),
           child: InheritedDropdownValue(
             dropdownValue: ValueNotifier<String>(
-              widget.dropdownValue ?? SystemDropdownItems.lu.asString(),
+              widget.dropdownValue ?? SystemDropdownItems.lu.asString,
             ),
             child: InheritedSystemControllers(
               systemTextControllers: SystemTextControllers(

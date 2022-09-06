@@ -124,7 +124,7 @@ void main() {
 
       await tester.pumpWidget(
         MockSystemWidget(
-          dropdownValue: SystemDropdownItems.lu.asString(),
+          dropdownValue: SystemDropdownItems.lu.asString,
           systemType: SystemType.factorization,
         ),
       );
@@ -140,7 +140,7 @@ void main() {
 
       await tester.pumpWidget(
         MockSystemWidget(
-          dropdownValue: SystemDropdownItems.lu.asString(),
+          dropdownValue: SystemDropdownItems.lu.asString,
           systemType: SystemType.factorization,
         ),
       );
@@ -158,7 +158,7 @@ void main() {
 
       await tester.pumpWidget(
         MockSystemWidget(
-          dropdownValue: SystemDropdownItems.sor.asString(),
+          dropdownValue: SystemDropdownItems.sor.asString,
           systemType: SystemType.iterative,
         ),
       );
@@ -174,7 +174,7 @@ void main() {
 
       await tester.pumpWidget(
         MockSystemWidget(
-          dropdownValue: SystemDropdownItems.sor.asString(),
+          dropdownValue: SystemDropdownItems.sor.asString,
           systemType: SystemType.iterative,
         ),
       );

@@ -104,7 +104,7 @@ class MockMatrixOther extends StatelessWidget {
           child: InheritedNumberSwitcher(
             numberSwitcherState: NumberSwitcherState(
               min: min,
-              max: 5,
+              max: 4,
             ),
             child: child,
           ),

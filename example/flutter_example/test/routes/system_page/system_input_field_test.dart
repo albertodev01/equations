@@ -22,6 +22,8 @@ void main() {
 
   group('Golden tests - SystemInputField', () {
     testWidgets('SystemInputField - without placeholder', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(100, 100));
+
       await tester.pumpWidget(
         MockWrapper(
           child: SystemInputField(
@@ -36,6 +38,8 @@ void main() {
     });
 
     testWidgets('SystemInputField - with placeholder', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(100, 100));
+
       await tester.pumpWidget(
         MockWrapper(
           child: SystemInputField(

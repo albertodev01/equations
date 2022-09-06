@@ -13,7 +13,7 @@ void main() {
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.iterative,
-          dropdownValue: SystemDropdownItems.sor.asString(),
+          dropdownValue: SystemDropdownItems.sor.asString,
           child: const SingleChildScrollView(
             child: SystemDataInput(),
           ),
@@ -34,7 +34,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.lu.asString(),
+            dropdownValue: SystemDropdownItems.lu.asString,
             child: const SingleChildScrollView(
               child: SystemDataInput(),
             ),
@@ -48,13 +48,13 @@ void main() {
 
   group('Golden tests - RelaxationFactorInput', () {
     testWidgets('RelaxationFactorInput', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(140, 140));
+
       await tester.pumpWidget(
         MockSystemWidget(
           systemType: SystemType.iterative,
-          dropdownValue: SystemDropdownItems.sor.asString(),
-          child: RelaxationFactorInput(
-            textEditingController: TextEditingController(),
-          ),
+          dropdownValue: SystemDropdownItems.sor.asString,
+          child: const RelaxationFactorInput(),
         ),
       );
       await expectLater(
