@@ -45,7 +45,7 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
 
   /// Updates the currently selected value in the dropdown.
   void changeSelected(SystemDropdownItems newValue) =>
-      context.dropdownValue.value = newValue.asString();
+      context.dropdownValue.value = newValue.asString;
 
   /// The currently selected system type.
   SystemType get systemType => context.systemState.systemType;
@@ -53,7 +53,7 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
   @override
   Widget build(BuildContext context) {
     // Gauss is the only supported row reduction system and it doesn't require
-    // an algorithm so we can remove the dropdown.
+    // an algorithm. As such, we can remove the dropdown.
     if (systemType == SystemType.rowReduction) {
       return const SizedBox.shrink();
     }
@@ -95,33 +95,22 @@ class SystemDropdownSelectionState extends State<SystemDropdownSelection> {
 /// The possible values of the [SystemDropdownSelection] dropdown.
 enum SystemDropdownItems {
   /// LU factorization.
-  lu,
+  lu('LU'),
 
   /// Cholesky factorization.
-  cholesky,
+  cholesky('Cholesky'),
 
   /// SOR iterative method.
-  sor,
+  sor('SOR'),
 
   /// Jacobi iterative method.
-  jacobi,
-}
+  jacobi('Jacobi');
 
-/// Extension method on [SystemDropdownItems] to convert a value to a string.
-extension SystemDropdownItemsExt on SystemDropdownItems {
-  /// Converts the enum into a [String].
-  String asString() {
-    switch (this) {
-      case SystemDropdownItems.lu:
-        return 'LU';
-      case SystemDropdownItems.cholesky:
-        return 'Cholesky';
-      case SystemDropdownItems.sor:
-        return 'SOR';
-      case SystemDropdownItems.jacobi:
-        return 'Jacobi';
-    }
-  }
+  /// The string representation of the value.
+  final String asString;
+
+  /// Creates a [SystemDropdownItems] enumeration
+  const SystemDropdownItems(this.asString);
 }
 
 /// Extension method on [String] to convert into a [SystemDropdownItems] the

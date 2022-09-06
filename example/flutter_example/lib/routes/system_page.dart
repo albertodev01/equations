@@ -89,19 +89,19 @@ class _SystemPageState extends State<SystemPage> {
       title: context.l10n.row_reduction,
       content: InheritedSystem(
         systemState: SystemState(SystemType.rowReduction),
-        child: InheritedNumberSwitcher(
-          numberSwitcherState: NumberSwitcherState(
-            min: 1,
-            max: 4,
-          ),
-          child: InheritedDropdownValue(
-            dropdownValue: ValueNotifier<String>(''),
-            child: InheritedSystemControllers(
-              systemTextControllers: SystemTextControllers(
-                matrixControllers: matrixRowReductionControllers,
-                vectorControllers: vectorRowReductionControllers,
-                jacobiControllers: jacobiControllers,
-                wSorController: wSorController,
+        child: InheritedDropdownValue(
+          dropdownValue: ValueNotifier<String>(''),
+          child: InheritedSystemControllers(
+            systemTextControllers: SystemTextControllers(
+              matrixControllers: matrixRowReductionControllers,
+              vectorControllers: vectorRowReductionControllers,
+              jacobiControllers: jacobiControllers,
+              wSorController: wSorController,
+            ),
+            child: InheritedNumberSwitcher(
+              numberSwitcherState: NumberSwitcherState(
+                min: 1,
+                max: 4,
               ),
               child: const SystemBody(),
             ),
@@ -113,21 +113,21 @@ class _SystemPageState extends State<SystemPage> {
       title: context.l10n.factorization,
       content: InheritedSystem(
         systemState: SystemState(SystemType.factorization),
-        child: InheritedNumberSwitcher(
-          numberSwitcherState: NumberSwitcherState(
-            min: 1,
-            max: 4,
+        child: InheritedDropdownValue(
+          dropdownValue: ValueNotifier<String>(
+            SystemDropdownItems.lu.asString,
           ),
-          child: InheritedDropdownValue(
-            dropdownValue: ValueNotifier<String>(
-              SystemDropdownItems.lu.asString(),
+          child: InheritedSystemControllers(
+            systemTextControllers: SystemTextControllers(
+              matrixControllers: matrixFactorizationControllers,
+              vectorControllers: vectorFactorizationControllers,
+              jacobiControllers: jacobiControllers,
+              wSorController: wSorController,
             ),
-            child: InheritedSystemControllers(
-              systemTextControllers: SystemTextControllers(
-                matrixControllers: matrixFactorizationControllers,
-                vectorControllers: vectorFactorizationControllers,
-                jacobiControllers: jacobiControllers,
-                wSorController: wSorController,
+            child: InheritedNumberSwitcher(
+              numberSwitcherState: NumberSwitcherState(
+                min: 1,
+                max: 4,
               ),
               child: const SystemBody(),
             ),
@@ -139,21 +139,21 @@ class _SystemPageState extends State<SystemPage> {
       title: context.l10n.iterative,
       content: InheritedSystem(
         systemState: SystemState(SystemType.iterative),
-        child: InheritedNumberSwitcher(
-          numberSwitcherState: NumberSwitcherState(
-            min: 1,
-            max: 4,
+        child: InheritedDropdownValue(
+          dropdownValue: ValueNotifier<String>(
+            SystemDropdownItems.sor.asString,
           ),
-          child: InheritedDropdownValue(
-            dropdownValue: ValueNotifier<String>(
-              SystemDropdownItems.sor.asString(),
+          child: InheritedSystemControllers(
+            systemTextControllers: SystemTextControllers(
+              matrixControllers: matrixIterativeControllers,
+              vectorControllers: vectorIterativeControllers,
+              jacobiControllers: jacobiControllers,
+              wSorController: wSorController,
             ),
-            child: InheritedSystemControllers(
-              systemTextControllers: SystemTextControllers(
-                matrixControllers: matrixIterativeControllers,
-                vectorControllers: vectorIterativeControllers,
-                jacobiControllers: jacobiControllers,
-                wSorController: wSorController,
+            child: InheritedNumberSwitcher(
+              numberSwitcherState: NumberSwitcherState(
+                min: 1,
+                max: 4,
               ),
               child: const SystemBody(),
             ),

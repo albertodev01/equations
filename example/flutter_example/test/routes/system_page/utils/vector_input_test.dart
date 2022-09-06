@@ -27,6 +27,8 @@ void main() {
 
   group('Golden tests - VectorInput', () {
     testWidgets('VectorInput - 1', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 150));
+
       await tester.pumpWidget(
         MockWrapper(
           child: VectorInput(
@@ -44,6 +46,8 @@ void main() {
     });
 
     testWidgets('VectorInput - 2', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 200));
+
       await tester.pumpWidget(
         MockWrapper(
           child: VectorInput(
@@ -62,6 +66,8 @@ void main() {
     });
 
     testWidgets('VectorInput - 3', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 250));
+
       await tester.pumpWidget(
         MockWrapper(
           child: VectorInput(
@@ -81,6 +87,8 @@ void main() {
     });
 
     testWidgets('VectorInput - 4', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(150, 300));
+
       await tester.pumpWidget(
         MockWrapper(
           child: VectorInput(

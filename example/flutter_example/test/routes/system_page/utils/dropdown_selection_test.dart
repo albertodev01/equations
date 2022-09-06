@@ -11,10 +11,10 @@ import '../system_mock.dart';
 void main() {
   group("Testing the 'SystemDropdownSelection' widget", () {
     test("Testing the 'SystemDropdownItemsExt' extension method", () {
-      expect(SystemDropdownItems.lu.asString(), equals('LU'));
-      expect(SystemDropdownItems.cholesky.asString(), equals('Cholesky'));
-      expect(SystemDropdownItems.sor.asString(), equals('SOR'));
-      expect(SystemDropdownItems.jacobi.asString(), equals('Jacobi'));
+      expect(SystemDropdownItems.lu.asString, equals('LU'));
+      expect(SystemDropdownItems.cholesky.asString, equals('Cholesky'));
+      expect(SystemDropdownItems.sor.asString, equals('SOR'));
+      expect(SystemDropdownItems.jacobi.asString, equals('Jacobi'));
     });
 
     test("Testing the 'StringExt' extension method", () {
@@ -62,7 +62,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.lu.asString(),
+            dropdownValue: SystemDropdownItems.lu.asString,
             child: const SystemDropdownSelection(),
           ),
         );
@@ -83,7 +83,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.iterative,
-            dropdownValue: SystemDropdownItems.sor.asString(),
+            dropdownValue: SystemDropdownItems.sor.asString,
             child: const SystemDropdownSelection(),
           ),
         );
@@ -103,7 +103,7 @@ void main() {
         await tester.pumpWidget(
           MockSystemWidget(
             systemType: SystemType.factorization,
-            dropdownValue: SystemDropdownItems.lu.asString(),
+            dropdownValue: SystemDropdownItems.lu.asString,
             child: const SystemDropdownSelection(),
           ),
         );
@@ -119,6 +119,8 @@ void main() {
 
   group('Golden tests - SystemDropdownSelection', () {
     testWidgets('SystemDropdownSelection - gauss', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 150));
+
       await tester.pumpWidget(
         MockWrapper(
           child: InheritedSystem(
@@ -143,7 +145,7 @@ void main() {
             systemState: SystemState(SystemType.factorization),
             child: InheritedDropdownValue(
               dropdownValue: ValueNotifier<String>(
-                SystemDropdownItems.lu.asString(),
+                SystemDropdownItems.lu.asString,
               ),
               child: const SystemDropdownSelection(),
             ),
@@ -163,7 +165,7 @@ void main() {
             systemState: SystemState(SystemType.factorization),
             child: InheritedDropdownValue(
               dropdownValue: ValueNotifier<String>(
-                SystemDropdownItems.cholesky.asString(),
+                SystemDropdownItems.cholesky.asString,
               ),
               child: const SystemDropdownSelection(),
             ),
@@ -183,7 +185,7 @@ void main() {
             systemState: SystemState(SystemType.iterative),
             child: InheritedDropdownValue(
               dropdownValue: ValueNotifier<String>(
-                SystemDropdownItems.jacobi.asString(),
+                SystemDropdownItems.jacobi.asString,
               ),
               child: const SystemDropdownSelection(),
             ),
@@ -203,7 +205,7 @@ void main() {
             systemState: SystemState(SystemType.iterative),
             child: InheritedDropdownValue(
               dropdownValue: ValueNotifier<String>(
-                SystemDropdownItems.sor.asString(),
+                SystemDropdownItems.sor.asString,
               ),
               child: const SystemDropdownSelection(),
             ),

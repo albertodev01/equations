@@ -30,6 +30,8 @@ void main() {
 
   group('Golden tests - MatrixInput', () {
     testWidgets('MatrixInput - 1x1', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(110, 110));
+
       await tester.pumpWidget(
         MockWrapper(
           child: MatrixInput(
@@ -47,6 +49,8 @@ void main() {
     });
 
     testWidgets('MatrixInput - 2x2', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(170, 170));
+
       await tester.pumpWidget(
         MockWrapper(
           child: MatrixInput(
@@ -67,6 +71,8 @@ void main() {
     });
 
     testWidgets('MatrixInput - 3x3', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(200, 200));
+
       await tester.pumpWidget(
         MockWrapper(
           child: MatrixInput(
@@ -92,6 +98,8 @@ void main() {
     });
 
     testWidgets('MatrixInput - 4x4', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(230, 230));
+
       await tester.pumpWidget(
         MockWrapper(
           child: MatrixInput(

@@ -40,7 +40,7 @@ class _SystemSolutions extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: context.systemState,
-      builder: (context, _) {
+      builder: (context, child) {
         final system = context.systemState.state.systemSolver;
 
         if (system != null) {
@@ -60,8 +60,14 @@ class _SystemSolutions extends StatelessWidget {
           );
         }
 
-        return const NoResults();
+        return child!;
       },
+      child: const Padding(
+        padding: EdgeInsets.only(
+          bottom: 15,
+        ),
+        child: NoResults(),
+      ),
     );
   }
 }

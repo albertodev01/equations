@@ -68,7 +68,9 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
           ),
 
           // Size changer
-          const SizePicker(),
+          const SizePicker(
+            isInOtherPage: true,
+          ),
 
           // Some spacing
           const SizedBox(
