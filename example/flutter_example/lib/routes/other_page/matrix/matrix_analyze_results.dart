@@ -162,21 +162,20 @@ class _Results extends StatelessWidget {
 
         // Spacing
         const SizedBox(
-          height: 20,
+          height: 40,
         ),
 
         SectionTitle(
           pageTitle: context.l10n.eigenvalues,
           icon: const EquationSolution(),
         ),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: eigenvalues.length,
-          itemBuilder: (context, index) => ComplexResultCard(
-            value: eigenvalues[index],
-          ),
-        ),
+
+        ...[
+          for (final eigenvalue in eigenvalues)
+            ComplexResultCard(
+              value: eigenvalue,
+            ),
+        ],
       ],
     );
 

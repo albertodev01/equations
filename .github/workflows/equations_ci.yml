@@ -71,9 +71,29 @@ jobs:
       - name: Runing unit, widget and golden tests
         run: flutter test
 
+  flutter_example_integration_tests_windows:
+    name: Flutter example - integration tests on Windows
+    needs: [verify_equation_flutter_example]
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: example/flutter_example
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.0.2
+      - uses: subosito/flutter-action@v2.6.1
+        with:
+          channel: 'stable'
+
+      - name: Installing dependencies
+        run: flutter pub get
+
+      - name: Runing integration tests
+        run: flutter test .\integration_test -d windows
+
   verify_equation_dart_example:
     name: Dart example
-    needs: [verify_equation_flutter_example]
+    needs: [flutter_example_integration_tests_windows]
     runs-on: windows-latest
     defaults:
       run:

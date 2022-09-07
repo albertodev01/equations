@@ -1,68 +1,90 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
+import 'package:equations_solver/routes/utils/collapsible.dart';
+import 'package:equations_solver/routes/utils/result_cards/colored_text.dart';
 import 'package:flutter/material.dart';
 
-/// This widget shows a [double] value into a [Card] widget and optionally
-/// places the fractional representation at the bottom.
+/// This widget shows a [double] value into a [Card] widget and expands to show
+/// other details.
 class RealResultCard extends StatelessWidget {
   /// The number to be displayed.
   ///
-  /// This value is printed with 8 decimal digits.
+  /// This value is printed with [resultCardPrecisionDigits] decimal digits.
   final double value;
 
-  /// Text to be displayed in front of the complex number.
+  /// Text displayed in front of [value].
   ///
   /// By default, this value is an empty string.
   final String leading;
-
-  /// Decides whether a fraction has to appear at the bottom.
-  ///
-  /// This is `true` by default.
-  final bool withFraction;
 
   /// Creates a [RealResultCard] widget.
   const RealResultCard({
     required this.value,
     this.leading = '',
-    this.withFraction = true,
     super.key,
   });
 
-  String _nanToString(BuildContext context, double value) {
-    if (!value.isFinite) {
+  String _printDecimal({
+    required BuildContext context,
+    required double value,
+    bool isPrimary = true,
+  }) {
+    if ((value.isNaN) || (value.isInfinite)) {
       return context.l10n.not_computed;
     }
 
-    return value.toStringAsFixed(8);
+    return isPrimary
+        ? value.toStringAsFixed(resultCardPrecisionDigits)
+        : '$value';
+  }
+
+  String _printFraction({
+    required BuildContext context,
+    required double value,
+  }) {
+    if ((value.isNaN) || (value.isInfinite)) {
+      return context.l10n.not_computed;
+    }
+
+    return value.toFraction().toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget? subtitle;
+    final fraction = _printFraction(context: context, value: value);
+    final primaryText = _printDecimal(context: context, value: value);
+    final secondaryText = _printDecimal(
+      context: context,
+      value: value,
+      isPrimary: false,
+    );
 
-    if (withFraction && value.isFinite) {
-      final fraction = Fraction.fromDouble(value);
+    return SizedBox(
+      width: cardWidgetsWidth,
+      child: Card(
+        margin: const EdgeInsets.only(top: 35),
+        elevation: 5,
+        child: Collapsible(
+          primary: Text('$leading$primaryText'),
+          secondary: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Not approximated value
+              ColoredText(
+                leading: context.l10n.more_digits,
+                value: secondaryText,
+              ),
 
-      subtitle = Text(
-        '${context.l10n.fraction}: $fraction',
-        key: const Key('Fraction-ResultCard'),
-      );
-    }
+              const SizedBox(height: 15),
 
-    final valueString = _nanToString(context, value);
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 35),
-        child: SizedBox(
-          width: cardWidgetsWidth,
-          child: Card(
-            elevation: 5,
-            child: ListTile(
-              title: Text('$leading$valueString'),
-              subtitle: subtitle,
-            ),
+              // Fraction
+              ColoredText(
+                leading: context.l10n.fraction,
+                value: ': $fraction',
+              ),
+            ],
           ),
         ),
       ),

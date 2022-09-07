@@ -1,56 +1,107 @@
 import 'package:equations/equations.dart';
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
+import 'package:equations_solver/routes/utils/collapsible.dart';
+import 'package:equations_solver/routes/utils/result_cards/colored_text.dart';
 import 'package:flutter/material.dart';
 
-/// This widget shows a [Complex] value into a [Card] widget and places the
-/// fractional representation of the real/imaginary part at the bottom.
+/// This widget shows a [Complex] value into a [Card] widget and expands to show
+/// other details.
 class ComplexResultCard extends StatelessWidget {
-  /// The complex number to be displayed.
+  /// The number to be displayed.
   ///
-  /// This value is printed with 10 decimal digits.
+  /// This value is printed with [resultCardPrecisionDigits] decimal digits.
   final Complex value;
 
-  /// Text to be displayed in front of the complex number.
+  /// Text displayed in front of [value].
   ///
   /// By default, this value is an empty string.
   final String leading;
 
-  /// Decides whether a fraction has to appear at the bottom.
+  /// Widget displayed after [value].
   ///
-  /// This is `true` by default.
-  final bool withFraction;
+  /// By default, this value is initialized with [SizedBox.shrink].
+  final Widget trailing;
 
   /// Creates a [ComplexResultCard] widget.
   const ComplexResultCard({
     required this.value,
     this.leading = '',
-    this.withFraction = true,
+    this.trailing = const SizedBox.shrink(),
     super.key,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    Widget? subtitle;
-
-    if (withFraction) {
-      subtitle = Text(
-        '${context.l10n.fraction}: ${value.toStringAsFraction()}',
-        key: const Key('Fraction-ComplexResultCard'),
-      );
+  String _printComplex({
+    required BuildContext context,
+    required Complex value,
+    bool isPrimary = true,
+  }) {
+    if (value.real.isNaN ||
+        value.imaginary.isNaN ||
+        value.real.isInfinite ||
+        value.imaginary.isInfinite) {
+      return context.l10n.not_computed;
     }
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 35),
-        child: SizedBox(
-          width: cardWidgetsWidth,
-          child: Card(
-            elevation: 5,
-            child: ListTile(
-              title: Text('$leading${value.toStringAsFixed(8)}'),
-              subtitle: subtitle,
-            ),
+    return isPrimary
+        ? value.toStringAsFixed(resultCardPrecisionDigits)
+        : '$value';
+  }
+
+  String _printComplexFraction({
+    required BuildContext context,
+    required Complex value,
+  }) {
+    if (value.real.isNaN ||
+        value.imaginary.isNaN ||
+        value.real.isInfinite ||
+        value.imaginary.isInfinite) {
+      return context.l10n.not_computed;
+    }
+
+    return value.toStringAsFraction();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fraction = _printComplexFraction(context: context, value: value);
+    final primaryText = _printComplex(context: context, value: value);
+    final secondaryText = _printComplex(
+      context: context,
+      value: value,
+      isPrimary: false,
+    );
+
+    return SizedBox(
+      width: cardWidgetsWidth,
+      child: Card(
+        margin: const EdgeInsets.only(top: 35),
+        elevation: 5,
+        child: Collapsible(
+          primary: Row(
+            children: [
+              Expanded(child: Text('$leading$primaryText')),
+              trailing,
+            ],
+          ),
+          secondary: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Not approximated value
+              ColoredText(
+                leading: context.l10n.more_digits,
+                value: secondaryText,
+              ),
+
+              const SizedBox(height: 15),
+
+              // Fraction
+              ColoredText(
+                leading: context.l10n.fraction,
+                value: ': $fraction',
+              ),
+            ],
           ),
         ),
       ),

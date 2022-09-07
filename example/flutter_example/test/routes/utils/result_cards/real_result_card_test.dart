@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:equations_solver/routes/utils/collapsible.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,27 +13,27 @@ void main() {
       await tester.pumpWidget(
         const MockWrapper(
           child: RealResultCard(
-            value: 0.5,
+            value: pi,
           ),
         ),
       );
 
       expect(find.byType(RealResultCard), findsOneWidget);
-      expect(find.byKey(const Key('Fraction-ResultCard')), findsOneWidget);
+      expect(find.byType(Collapsible), findsOneWidget);
+      expect(find.text('3.14159'), findsOneWidget);
     });
 
-    testWidgets('Making sure that the fraction can be hidden', (tester) async {
+    testWidgets('Making sure that the leading string appears', (tester) async {
       await tester.pumpWidget(
         const MockWrapper(
           child: RealResultCard(
-            value: 0.5,
-            withFraction: false,
+            leading: 'text ',
+            value: pi,
           ),
         ),
       );
 
-      expect(find.byType(RealResultCard), findsOneWidget);
-      expect(find.byKey(const Key('Fraction-ResultCard')), findsNothing);
+      expect(find.text('text 3.14159'), findsOneWidget);
     });
 
     testWidgets(
@@ -53,46 +56,66 @@ void main() {
 
   group('Golden tests - RealResultCard', () {
     testWidgets('RealResultCard', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 150));
+
       await tester.pumpWidget(
         const MockWrapper(
-          child: RealResultCard(
-            value: 13,
-            leading: 'f(x): ',
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: RealResultCard(
+              value: pi,
+            ),
           ),
         ),
       );
+
       await expectLater(
         find.byType(RealResultCard),
         matchesGoldenFile('goldens/real_result_card.png'),
       );
     });
 
-    testWidgets('RealResultCard - no fraction', (tester) async {
+    testWidgets('RealResultCard - leading value', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 150));
+
       await tester.pumpWidget(
         const MockWrapper(
-          child: RealResultCard(
-            value: 13,
-            withFraction: false,
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: RealResultCard(
+              value: pi,
+              leading: 'pi: ',
+            ),
           ),
         ),
       );
+
       await expectLater(
         find.byType(RealResultCard),
-        matchesGoldenFile('goldens/real_result_card_nofraction.png'),
+        matchesGoldenFile('goldens/real_result_card_leading.png'),
       );
     });
 
-    testWidgets('RealResultCard - decimals', (tester) async {
+    testWidgets('RealResultCard - expanded', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 250));
+
       await tester.pumpWidget(
         const MockWrapper(
-          child: RealResultCard(
-            value: -2.43,
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: RealResultCard(
+              value: pi,
+            ),
           ),
         ),
       );
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+
       await expectLater(
         find.byType(RealResultCard),
-        matchesGoldenFile('goldens/real_result_card_decimals.png'),
+        matchesGoldenFile('goldens/real_result_card_expanded.png'),
       );
     });
   });

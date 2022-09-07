@@ -1,4 +1,6 @@
 import 'package:equations/equations.dart';
+import 'package:equations_solver/routes/utils/collapsible.dart';
+import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/polynomial_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,313 +21,127 @@ void main() {
       );
 
       expect(find.byType(PolynomialResultCard), findsOneWidget);
-      expect(find.byType(ListTile), findsWidgets);
+      expect(find.byType(Collapsible), findsWidgets);
+      expect(find.byType(ComplexResultCard), findsNWidgets(3));
     });
   });
 
-  testWidgets(
-    "Making sure that 'didUpdateWidget' is executed",
-    (tester) async {
-      var algebraic = Algebraic.fromReal(
-        const [1, 2],
-      );
-
-      await tester.pumpWidget(
-        MockWrapper(
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PolynomialResultCard(
-                    algebraic: algebraic,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        algebraic = Algebraic.fromReal(
-                          const [1, 2, 3, 4],
-                        );
-                      });
-                    },
-                    child: const Text('Rebuild'),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      );
-
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-0')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-1')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-2')),
-        findsNothing,
-      );
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-3')),
-        findsNothing,
-      );
-
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-0')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-1')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-2')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const Key('PolynomialResultCard-Item-3')),
-        findsOneWidget,
-      );
-    },
-  );
-
   group('Golden tests - PolynomialResultCard', () {
     testWidgets(
-      'PolynomialResultCard - no fraction - constant',
+      'PolynomialResultCard - constant',
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(300, 150));
+
         await tester.pumpWidget(
           MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1]),
-              withFraction: false,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: PolynomialResultCard(
+                algebraic: Algebraic.fromReal([1]),
+              ),
             ),
           ),
         );
         await expectLater(
           find.byType(PolynomialResultCard),
           matchesGoldenFile(
-            'goldens/polynomial_result_card_nofraction_constant.png',
+            'goldens/polynomial_result_card_constant.png',
           ),
         );
       },
     );
 
     testWidgets(
-      'PolynomialResultCard - no fraction - linear',
+      'PolynomialResultCard - linear',
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(300, 250));
+
         await tester.pumpWidget(
           MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2.5]),
-              withFraction: false,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: PolynomialResultCard(
+                algebraic: Algebraic.fromReal([1, 2.5]),
+              ),
             ),
           ),
         );
         await expectLater(
           find.byType(PolynomialResultCard),
           matchesGoldenFile(
-            'goldens/polynomial_result_card_nofraction_linear.png',
+            'goldens/polynomial_result_card_linear.png',
           ),
         );
       },
     );
 
     testWidgets(
-      'PolynomialResultCard - no fraction - quadratic',
+      'PolynomialResultCard - quadratic',
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(300, 350));
+
         await tester.pumpWidget(
           MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3]),
-              withFraction: false,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: PolynomialResultCard(
+                algebraic: Algebraic.fromReal([1, 2, 3]),
+              ),
             ),
           ),
         );
         await expectLater(
           find.byType(PolynomialResultCard),
           matchesGoldenFile(
-            'goldens/polynomial_result_card_nofraction_quadratic.png',
+            'goldens/polynomial_result_card_quadratic.png',
           ),
         );
       },
     );
 
     testWidgets(
-      'PolynomialResultCard - no fraction - cubic',
+      'PolynomialResultCard - cubic',
       (tester) async {
+        await tester.binding.setSurfaceSize(const Size(300, 450));
+
         await tester.pumpWidget(
           MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3 / 4, 4]),
-              withFraction: false,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: PolynomialResultCard(
+                algebraic: Algebraic.fromReal([1, 2, 3 / 4, 4]),
+              ),
             ),
           ),
         );
         await expectLater(
           find.byType(PolynomialResultCard),
           matchesGoldenFile(
-            'goldens/polynomial_result_card_nofraction_cubic.png',
+            'goldens/polynomial_result_card_cubic.png',
           ),
         );
       },
     );
 
     testWidgets(
-      'PolynomialResultCard - no fraction - quartic',
+      'PolynomialResultCard - quartic',
       (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3, 4, 5]),
-              withFraction: false,
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_nofraction_quartic.png',
-          ),
-        );
-      },
-    );
+        await tester.binding.setSurfaceSize(const Size(300, 550));
 
-    testWidgets(
-      'PolynomialResultCard - no fraction - quintic',
-      (tester) async {
         await tester.pumpWidget(
           MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3, 4, 5, 6]),
-              withFraction: false,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: PolynomialResultCard(
+                algebraic: Algebraic.fromReal([1, 2, 3, 4, 5]),
+              ),
             ),
           ),
         );
         await expectLater(
           find.byType(PolynomialResultCard),
           matchesGoldenFile(
-            'goldens/polynomial_result_card_nofraction_quintic.png',
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'PolynomialResultCard - fraction - constant',
-      (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1]),
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_fraction_constant.png',
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'PolynomialResultCard - fraction - linear',
-      (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2.5]),
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_fraction_linear.png',
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'PolynomialResultCard - fraction - quadratic',
-      (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3]),
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_fraction_quadratic.png',
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'PolynomialResultCard - fraction - cubic',
-      (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3 / 4, 4]),
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_fraction_cubic.png',
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'PolynomialResultCard - fraction - quartic',
-      (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3, 4, 5]),
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_fraction_quartic.png',
-          ),
-        );
-      },
-    );
-
-    testWidgets(
-      'PolynomialResultCard - fraction - quintic',
-      (tester) async {
-        await tester.pumpWidget(
-          MockWrapper(
-            child: PolynomialResultCard(
-              algebraic: Algebraic.fromReal([1, 2, 3, 4, 5, 6]),
-            ),
-          ),
-        );
-        await expectLater(
-          find.byType(PolynomialResultCard),
-          matchesGoldenFile(
-            'goldens/polynomial_result_card_fraction_quintic.png',
+            'goldens/polynomial_result_card_quartic.png',
           ),
         );
       },
