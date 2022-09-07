@@ -47,6 +47,7 @@ class _IntegralSolutions extends StatelessWidget {
         if (integration != null) {
           return RealResultCard(
             value: integration.integrate().result,
+            leading: 'F(x) = ',
           );
         }
 

@@ -83,5 +83,5 @@
   "input_allowed_constants": " - Costanti: pi (3.1415), e (2.7182) and sqrt2 (1.4142).",
   "input_allowed_functions": "L'equazione f(x) permette queste funzioni:",
   "input_allowed_multiplication_sign": "La moltiplicazione richiede il segno. Per esempio:",
-  "more_digits": "Più cifre: "
+  "more_digits": "Senza approssimazione: "
 }

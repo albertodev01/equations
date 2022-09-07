@@ -266,7 +266,7 @@ void main() {
         await tester.tap(find.byKey(const Key('System-button-solve')));
         await tester.pumpAndSettle();
 
-        expect(find.text('1'), findsNWidgets(2));
+        expect(find.text('1'), findsNWidgets(3));
         expect(find.byType(RealResultCard), findsOneWidget);
 
         // Changing the size

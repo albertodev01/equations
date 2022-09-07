@@ -21,7 +21,7 @@ void main() {
 
       expect(find.byType(ComplexResultCard), findsOneWidget);
       expect(find.byType(Collapsible), findsOneWidget);
-      expect(find.text('5.00000 - 3.00000i'), findsOneWidget);
+      expect(find.text('5 - 3i'), findsOneWidget);
     });
 
     testWidgets('Making sure that the leading string appears', (tester) async {
@@ -34,7 +34,7 @@ void main() {
         ),
       );
 
-      expect(find.text('Text: 5.00000 - 3.00000i'), findsOneWidget);
+      expect(find.text('Text: 5 - 3i'), findsOneWidget);
     });
 
     testWidgets('Making sure that the trailing widget appears', (tester) async {

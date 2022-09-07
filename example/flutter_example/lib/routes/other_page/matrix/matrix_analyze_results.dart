@@ -174,6 +174,7 @@ class _Results extends StatelessWidget {
           for (final eigenvalue in eigenvalues)
             ComplexResultCard(
               value: eigenvalue,
+              leading: 'x = ',
             ),
         ],
       ],
