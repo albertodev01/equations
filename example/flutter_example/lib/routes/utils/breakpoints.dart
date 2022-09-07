@@ -10,11 +10,13 @@ import 'package:equations_solver/routes/other_page/matrix/matrix_output.dart';
 import 'package:equations_solver/routes/polynomial_page/polynomial_input_field.dart';
 import 'package:equations_solver/routes/system_page/system_body.dart';
 import 'package:equations_solver/routes/system_page/system_input_field.dart';
+import 'package:equations_solver/routes/utils/collapsible.dart';
 import 'package:equations_solver/routes/utils/equation_input.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:equations_solver/routes/utils/plot_widget/equation_drawer_widget.dart';
 import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/complex_result_card.dart';
+import 'package:equations_solver/routes/utils/result_cards/polynomial_result_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +52,17 @@ const complexNumbersPageColumnWidth = cardWidgetsWidth + 30 * 2;
 /// The width of the cards widgets: [RealResultCard], [ComplexResultCard] and
 /// [BoolResultCard].
 const cardWidgetsWidth = 275.0;
+
+/// Determines how many **required** decimal digits are shown in decimal values
+/// in result cards:
+///
+///  - [RealResultCard]
+///  - [ComplexResultCard]
+///  - [PolynomialResultCard]
+const resultCardPrecisionDigits = 5;
+
+/// Padding and margin of the [Collapsible] widget.
+const collapsibleInnerSpacing = 16.0;
 
 /// The width of a [PolynomialInputField] widget.
 const polynomialInputFieldWidth = 70.0;

@@ -12,6 +12,8 @@ void main() {
       expect(matricesPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
       expect(complexNumbersPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
       expect(cardWidgetsWidth, equals(275.0));
+      expect(resultCardPrecisionDigits, equals(5));
+      expect(collapsibleInnerSpacing, equals(16.0));
       expect(polynomialInputFieldWidth, equals(70.0));
       expect(nonlinearDropdownWidth, equals(200.0));
       expect(systemDropdownWidth, equals(250.0));

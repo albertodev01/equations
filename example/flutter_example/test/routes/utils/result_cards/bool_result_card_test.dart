@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:equations_solver/routes/utils/result_cards/bool_result_card.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -22,6 +24,8 @@ void main() {
 
   group('Golden tests - BoolResultCard', () {
     testWidgets('BoolResultCard - true', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 150));
+
       await tester.pumpWidget(
         const MockWrapper(
           child: BoolResultCard(
