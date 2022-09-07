@@ -259,14 +259,15 @@ void main() {
           const MockSystemWidget(),
         );
 
-        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
-        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+        await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '-5');
+        await tester.enterText(find.byKey(const Key('VectorEntry-0')), '7');
         await tester.pumpAndSettle();
 
         await tester.tap(find.byKey(const Key('System-button-solve')));
         await tester.pumpAndSettle();
 
-        expect(find.text('1'), findsNWidgets(3));
+        expect(find.text('-5'), findsOneWidget);
+        expect(find.text('7'), findsOneWidget);
         expect(find.byType(RealResultCard), findsOneWidget);
 
         // Changing the size
@@ -274,7 +275,8 @@ void main() {
         await tester.pumpAndSettle();
 
         // Making sure the form is clean
-        expect(find.text('1'), findsNothing);
+        expect(find.text('-5'), findsNothing);
+        expect(find.text('7'), findsNothing);
         expect(find.byType(RealResultCard), findsNothing);
       },
     );

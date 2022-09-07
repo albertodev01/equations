@@ -8,10 +8,11 @@ class ColoredText extends StatelessWidget {
   /// The actual string value.
   final String value;
 
-  /// Creates a [_ColoredText] widget.
+  /// Creates a [ColoredText] widget.
   const ColoredText({
     required this.leading,
     required this.value,
+    super.key,
   });
 
   @override

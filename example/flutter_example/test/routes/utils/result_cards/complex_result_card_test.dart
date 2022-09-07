@@ -133,7 +133,7 @@ void main() {
     });
 
     testWidgets('ComplexResultCard - expanded', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(300, 250));
+      await tester.binding.setSurfaceSize(const Size(300, 300));
 
       await tester.pumpWidget(
         const MockWrapper(
