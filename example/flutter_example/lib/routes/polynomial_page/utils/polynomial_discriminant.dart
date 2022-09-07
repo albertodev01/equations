@@ -18,6 +18,7 @@ class PolynomialDiscriminant extends StatelessWidget {
         if (algebraic != null) {
           return ComplexResultCard(
             value: algebraic.discriminant(),
+            leading: 'D(x) = ',
           );
         }
 

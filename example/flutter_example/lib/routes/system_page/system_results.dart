@@ -49,9 +49,10 @@ class _SystemSolutions extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              for (final solution in solutions)
+              for (var i = 0; i < solutions.length; ++i)
                 RealResultCard(
-                  value: solution,
+                  value: solutions[i],
+                  leading: '${String.fromCharCode('a'.codeUnitAt(0) + i)} = ',
                 ),
               const SizedBox(
                 height: 30,

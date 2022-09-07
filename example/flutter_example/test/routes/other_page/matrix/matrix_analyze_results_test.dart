@@ -54,7 +54,7 @@ void main() {
         expect(find.byType(NoResults), findsNothing);
         expect(find.byType(CircularProgressIndicator), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(3));
-        expect(find.byType(ComplexResultCard), findsNWidgets(2));
+        expect(find.byType(ComplexResultCard), findsNWidgets(5));
         expect(find.byType(MatrixOutput), findsNWidgets(3));
       },
     );

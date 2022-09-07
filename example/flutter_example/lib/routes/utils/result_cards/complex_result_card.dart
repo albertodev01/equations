@@ -3,6 +3,7 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/collapsible.dart';
 import 'package:equations_solver/routes/utils/result_cards/colored_text.dart';
+import 'package:equations_solver/routes/utils/result_cards/number_printer_extension.dart';
 import 'package:flutter/material.dart';
 
 /// This widget shows a [Complex] value into a [Card] widget and expands to show
@@ -44,7 +45,7 @@ class ComplexResultCard extends StatelessWidget {
     }
 
     return isPrimary
-        ? value.toStringAsFixed(resultCardPrecisionDigits)
+        ? value.toStringApproximated(resultCardPrecisionDigits)
         : '$value';
   }
 
@@ -80,7 +81,14 @@ class ComplexResultCard extends StatelessWidget {
         child: Collapsible(
           primary: Row(
             children: [
-              Expanded(child: Text('$leading$primaryText')),
+              Expanded(
+                child: Text(
+                  '$leading$primaryText',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
               trailing,
             ],
           ),

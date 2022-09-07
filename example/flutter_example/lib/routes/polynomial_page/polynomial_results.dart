@@ -68,6 +68,7 @@ class _PolynomialSolutions extends StatelessWidget {
               for (final root in roots)
                 ComplexResultCard(
                   value: root,
+                  leading: 'x = ',
                 ),
             ],
           );

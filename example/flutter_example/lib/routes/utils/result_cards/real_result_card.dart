@@ -3,6 +3,7 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/utils/breakpoints.dart';
 import 'package:equations_solver/routes/utils/collapsible.dart';
 import 'package:equations_solver/routes/utils/result_cards/colored_text.dart';
+import 'package:equations_solver/routes/utils/result_cards/number_printer_extension.dart';
 import 'package:flutter/material.dart';
 
 /// This widget shows a [double] value into a [Card] widget and expands to show
@@ -35,7 +36,7 @@ class RealResultCard extends StatelessWidget {
     }
 
     return isPrimary
-        ? value.toStringAsFixed(resultCardPrecisionDigits)
+        ? value.toStringApproximated(resultCardPrecisionDigits)
         : '$value';
   }
 
@@ -66,7 +67,12 @@ class RealResultCard extends StatelessWidget {
         margin: const EdgeInsets.only(top: 35),
         elevation: 5,
         child: Collapsible(
-          primary: Text('$leading$primaryText'),
+          primary: Text(
+            '$leading$primaryText',
+            style: const TextStyle(
+              fontSize: 15,
+            ),
+          ),
           secondary: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
