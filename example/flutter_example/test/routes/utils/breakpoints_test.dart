@@ -8,7 +8,6 @@ void main() {
       expect(extraBackgroundBreakpoint, equals(1300.0));
       expect(doubleColumnPageBreakpoint, equals(1100.0));
       expect(maxWidthPlot, equals(600.0));
-      expect(minimumChartWidth, equals(350.0));
       expect(matricesPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
       expect(complexNumbersPageColumnWidth, equals(cardWidgetsWidth + 30 * 2));
       expect(cardWidgetsWidth, equals(275.0));

@@ -34,9 +34,6 @@ const doubleColumnPageBreakpoint = 1100.0;
 /// The maximum size (width and height) of a [EquationDrawerWidget].
 const maxWidthPlot = 600.0;
 
-/// The minimum available space required to show the chart.
-const minimumChartWidth = 350;
-
 /// The width of a single column in the [MatrixAnalyzerResults] page when there
 /// are multiple columns in the page.
 ///
