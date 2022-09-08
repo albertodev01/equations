@@ -116,13 +116,12 @@ class SystemState extends ChangeNotifier {
         knownValues: vector,
       );
 
-      if (solver.hasSolution()) {
-        _state = SystemResult(
-          systemSolver: solver,
-        );
-      } else {
-        _state = const SystemResult();
-      }
+      final hasSolution = solver.hasSolution();
+
+      _state = SystemResult(
+        systemSolver: hasSolution ? solver : null,
+        isSingular: !hasSolution,
+      );
     } on Exception {
       _state = const SystemResult();
     }
@@ -163,13 +162,12 @@ class SystemState extends ChangeNotifier {
           break;
       }
 
-      if (solver.hasSolution()) {
-        _state = SystemResult(
-          systemSolver: solver,
-        );
-      } else {
-        _state = const SystemResult();
-      }
+      final hasSolution = solver.hasSolution();
+
+      _state = SystemResult(
+        systemSolver: hasSolution ? solver : null,
+        isSingular: !hasSolution,
+      );
     } on Exception {
       _state = const SystemResult();
     }
@@ -221,13 +219,12 @@ class SystemState extends ChangeNotifier {
           break;
       }
 
-      if (solver.hasSolution()) {
-        _state = SystemResult(
-          systemSolver: solver,
-        );
-      } else {
-        _state = const SystemResult();
-      }
+      final hasSolution = solver.hasSolution();
+
+      _state = SystemResult(
+        systemSolver: hasSolution ? solver : null,
+        isSingular: !hasSolution,
+      );
     } on Exception {
       _state = const SystemResult();
     }

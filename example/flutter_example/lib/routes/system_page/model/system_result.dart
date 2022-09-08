@@ -9,9 +9,15 @@ class SystemResult {
   /// solutions.
   final SystemSolver? systemSolver;
 
+  /// Whether the matrix is singular or not.
+  ///
+  /// By default, this is set to `false`.
+  final bool isSingular;
+
   /// Creates a [SystemResult] object.
   const SystemResult({
     this.systemSolver,
+    this.isSingular = false,
   });
 
   @override
@@ -22,12 +28,20 @@ class SystemResult {
 
     if (other is SystemResult) {
       return runtimeType == other.runtimeType &&
-          systemSolver == other.systemSolver;
+          systemSolver == other.systemSolver &&
+          isSingular == other.isSingular;
     } else {
       return false;
     }
   }
 
   @override
-  int get hashCode => systemSolver.hashCode;
+  int get hashCode {
+    var result = 17;
+
+    result = result * 37 + systemSolver.hashCode;
+    result = result * 37 + isSingular.hashCode;
+
+    return result;
+  }
 }

@@ -2,6 +2,7 @@ import 'package:equations_solver/routes/system_page/model/inherited_system.dart'
 import 'package:equations_solver/routes/system_page/model/system_state.dart';
 import 'package:equations_solver/routes/system_page/system_results.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/result_cards/message_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
@@ -39,6 +40,29 @@ void main() {
     );
 
     testWidgets(
+      'Making sure that singular matrices show an error message',
+      (tester) async {
+        await tester.pumpWidget(
+          MockSystemWidget(
+            child: InheritedSystem(
+              systemState: SystemState(SystemType.rowReduction)
+                ..rowReductionSolver(
+                  flatMatrix: ['1', '2', '2', '4'],
+                  knownValues: ['3', '2'],
+                  size: 2,
+                ),
+              child: const SystemResults(),
+            ),
+          ),
+        );
+
+        expect(find.byType(NoResults), findsNothing);
+        expect(find.byType(MessageCard), findsOneWidget);
+        expect(find.byType(RealResultCard), findsNothing);
+      },
+    );
+
+    testWidgets(
       'Making sure that, when there are solutions, result cards appear',
       (tester) async {
         await tester.pumpWidget(
@@ -56,6 +80,7 @@ void main() {
         );
 
         expect(find.byType(NoResults), findsNothing);
+        expect(find.byType(MessageCard), findsNothing);
         expect(find.byType(RealResultCard), findsNWidgets(2));
       },
     );
