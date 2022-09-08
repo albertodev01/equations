@@ -69,10 +69,25 @@ void main() {
   });
 
   group('Golden tests - SystemBody', () {
-    Future<void> solveSystem(
+    Future<void> createSingularMatrix(
       WidgetTester tester, {
       SystemType systemType = SystemType.rowReduction,
     }) async {
+      await tester.tap(find.byKey(const Key('SizePicker-Forward-Button')));
+      await tester.pumpAndSettle();
+
+      // Fill the matrix
+      await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
+      await tester.enterText(find.byKey(const Key('SystemEntry-0-1')), '2');
+      await tester.enterText(find.byKey(const Key('SystemEntry-1-0')), '2');
+      await tester.enterText(find.byKey(const Key('SystemEntry-1-1')), '4');
+
+      // Fills the vector
+      await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+      await tester.enterText(find.byKey(const Key('VectorEntry-1')), '2');
+
+      final solveButton = find.byKey(const Key('System-button-solve'));
+
       if (systemType == SystemType.iterative) {
         await tester.enterText(
           find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor')),
@@ -81,8 +96,25 @@ void main() {
         await tester.pumpAndSettle();
       }
 
+      // Solving the equation
+      await tester.tap(solveButton);
+      await tester.pumpAndSettle();
+    }
+
+    Future<void> solveSystem(
+      WidgetTester tester, {
+      SystemType systemType = SystemType.rowReduction,
+    }) async {
       await tester.enterText(find.byKey(const Key('SystemEntry-0-0')), '1');
       await tester.enterText(find.byKey(const Key('VectorEntry-0')), '1');
+
+      if (systemType == SystemType.iterative) {
+        await tester.enterText(
+          find.byKey(const Key('SystemSolver-Iterative-RelaxationFactor')),
+          '1',
+        );
+        await tester.pumpAndSettle();
+      }
 
       final solveButton = find.byKey(const Key('System-button-solve'));
 
@@ -116,6 +148,21 @@ void main() {
       await expectLater(
         find.byType(Scaffold),
         matchesGoldenFile('goldens/system_body_rowreduction_solution.png'),
+      );
+    });
+
+    testWidgets('SystemBody - row reduction (singular matrix)', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 950));
+
+      await tester.pumpWidget(
+        const MockSystemWidget(),
+      );
+
+      await createSingularMatrix(tester);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_rowreduction_singular.png'),
       );
     });
 
@@ -153,6 +200,24 @@ void main() {
       );
     });
 
+    testWidgets('SystemBody - factorization (singular matrix)', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1050));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          dropdownValue: SystemDropdownItems.lu.asString,
+          systemType: SystemType.factorization,
+        ),
+      );
+
+      await createSingularMatrix(tester, systemType: SystemType.factorization);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_factorization_singular.png'),
+      );
+    });
+
     testWidgets('SystemBody - iterative', (tester) async {
       await tester.binding.setSurfaceSize(const Size(400, 1050));
 
@@ -184,6 +249,24 @@ void main() {
       await expectLater(
         find.byType(Scaffold),
         matchesGoldenFile('goldens/system_body_iterative_solution.png'),
+      );
+    });
+
+    testWidgets('SystemBody - iterative (singular matrix)', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(400, 1150));
+
+      await tester.pumpWidget(
+        MockSystemWidget(
+          dropdownValue: SystemDropdownItems.sor.asString,
+          systemType: SystemType.iterative,
+        ),
+      );
+
+      await createSingularMatrix(tester, systemType: SystemType.iterative);
+
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('goldens/system_body_iterative_singular.png'),
       );
     });
   });
