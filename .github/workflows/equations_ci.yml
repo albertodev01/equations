@@ -71,8 +71,8 @@ jobs:
       - name: Runing unit, widget and golden tests
         run: flutter test
 
-  flutter_example_integration_tests_windows:
-    name: Flutter example - integration tests on Windows
+  flutter_example_integration_tests:
+    name: Flutter example - integration tests
     needs: [verify_equation_flutter_example]
     runs-on: windows-latest
     defaults:
@@ -93,7 +93,7 @@ jobs:
 
   verify_equation_dart_example:
     name: Dart example
-    needs: [flutter_example_integration_tests_windows]
+    needs: [flutter_example_integration_tests]
     runs-on: windows-latest
     defaults:
       run:
