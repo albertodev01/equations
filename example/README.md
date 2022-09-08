@@ -1,6 +1,6 @@
 # Examples
 
-This folder contains some examples showing how the `equations` package can be used. In particular:
+This folder contains some examples to show how the `equations` package could be used. In particular:
 
   - the `dart_example/` folder contains a Dart CLI app that uses the `equations` package;
   - the `flutter_example/` folder contains a Flutter app that uses the `equations` package.
