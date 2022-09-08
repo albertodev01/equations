@@ -20,6 +20,7 @@ void main() {
       );
 
       expect(systemResult.systemSolver, isA<LUSolver>());
+      expect(systemResult.isSingular, isFalse);
     });
 
     test('Making sure that objects can be properly compared', () {

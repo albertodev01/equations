@@ -74,8 +74,9 @@ void main() {
           );
 
         expect(systemState.systemType, equals(SystemType.rowReduction));
-        expect(systemState.state, equals(const SystemResult()));
+        expect(systemState.state, equals(const SystemResult(isSingular: true)));
         expect(systemState.state.systemSolver, isNull);
+        expect(systemState.state.isSingular, isTrue);
       },
     );
 
@@ -91,8 +92,9 @@ void main() {
           );
 
         expect(systemState.systemType, equals(SystemType.factorization));
-        expect(systemState.state, equals(const SystemResult()));
+        expect(systemState.state, equals(const SystemResult(isSingular: true)));
         expect(systemState.state.systemSolver, isNull);
+        expect(systemState.state.isSingular, isTrue);
       },
     );
 
@@ -108,8 +110,9 @@ void main() {
           );
 
         expect(systemState.systemType, equals(SystemType.iterative));
-        expect(systemState.state, equals(const SystemResult()));
+        expect(systemState.state, equals(const SystemResult(isSingular: true)));
         expect(systemState.state.systemSolver, isNull);
+        expect(systemState.state.isSingular, isTrue);
       },
     );
 
@@ -133,12 +136,14 @@ void main() {
 
         expect(systemState.systemType, equals(SystemType.iterative));
         expect(systemState.state.systemSolver, isNotNull);
+        expect(systemState.state.isSingular, isFalse);
         expect(count, equals(1));
 
         systemState.clear();
 
         expect(systemState.systemType, equals(SystemType.iterative));
         expect(systemState.state.systemSolver, isNull);
+        expect(systemState.state.isSingular, isFalse);
         expect(count, equals(2));
       },
     );
@@ -162,12 +167,14 @@ void main() {
 
         expect(systemState.systemType, equals(SystemType.rowReduction));
         expect(systemState.state.systemSolver, isNotNull);
+        expect(systemState.state.isSingular, isFalse);
         expect(count, equals(1));
 
         systemState.clear();
 
         expect(systemState.systemType, equals(SystemType.rowReduction));
         expect(systemState.state.systemSolver, isNull);
+        expect(systemState.state.isSingular, isFalse);
         expect(count, equals(2));
       },
     );
@@ -192,12 +199,14 @@ void main() {
 
         expect(systemState.systemType, equals(SystemType.factorization));
         expect(systemState.state.systemSolver, isNotNull);
+        expect(systemState.state.isSingular, isFalse);
         expect(count, equals(1));
 
         systemState.clear();
 
         expect(systemState.systemType, equals(SystemType.factorization));
         expect(systemState.state.systemSolver, isNull);
+        expect(systemState.state.isSingular, isFalse);
         expect(count, equals(2));
       },
     );
@@ -216,8 +225,9 @@ void main() {
         size: 2,
       );
 
-      expect(systemState.state, equals(const SystemResult()));
+      expect(systemState.state, equals(const SystemResult(isSingular: true)));
       expect(systemState.state.systemSolver, isNull);
+      expect(systemState.state.isSingular, isTrue);
       expect(count, equals(1));
 
       systemState.rowReductionSolver(
@@ -228,6 +238,7 @@ void main() {
 
       expect(systemState.state, equals(const SystemResult()));
       expect(systemState.state.systemSolver, isNull);
+      expect(systemState.state.isSingular, isFalse);
       expect(count, equals(2));
 
       systemState.iterativeSolver(
@@ -239,6 +250,7 @@ void main() {
 
       expect(systemState.state, equals(const SystemResult()));
       expect(systemState.state.systemSolver, isNull);
+      expect(systemState.state.isSingular, isFalse);
       expect(count, equals(3));
 
       systemState.factorizationSolver(
@@ -250,6 +262,7 @@ void main() {
 
       expect(systemState.state, equals(const SystemResult()));
       expect(systemState.state.systemSolver, isNull);
+      expect(systemState.state.isSingular, isFalse);
       expect(count, equals(4));
     });
   });
