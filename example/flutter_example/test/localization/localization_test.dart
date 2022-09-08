@@ -2,8 +2,15 @@ import 'package:equations_solver/localization/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'english_strings.dart';
+import 'french_strings.dart';
+import 'italian_strings.dart';
+
 void main() {
-  void checklocalizedStringsLengths(AppLocalizations appLocalizations) {
+  void checklocalizedStringsLengths({
+    required AppLocalizations appLocalizations,
+    required List<String> localizedValues,
+  }) {
     final values = [
       appLocalizations.appTitle,
       appLocalizations.polynomials,
@@ -89,12 +96,15 @@ void main() {
       appLocalizations.input_allowed_constants,
       appLocalizations.input_allowed_functions,
       appLocalizations.input_allowed_multiplication_sign,
+      appLocalizations.more_digits,
+      appLocalizations.nonlinear_error,
     ];
 
-    expect(values.length, equals(84));
+    expect(values.length, equals(86));
+    expect(values.length, equals(localizedValues.length));
 
-    for (final element in values) {
-      expect(element.length, greaterThan(1));
+    for (var i = 0; i < values.length; ++i) {
+      values[i] = localizedValues[i];
     }
   }
 
@@ -136,7 +146,10 @@ void main() {
     );
 
     expect(localizations.localeName, equals('en'));
-    checklocalizedStringsLengths(localizations);
+    checklocalizedStringsLengths(
+      appLocalizations: localizations,
+      localizedValues: englishStrings.values.toList(growable: false),
+    );
   });
 
   testWidgets('Making sure that Italian is correctly loaded', (tester) async {
@@ -158,7 +171,10 @@ void main() {
     );
 
     expect(localizations.localeName, equals('it'));
-    checklocalizedStringsLengths(localizations);
+    checklocalizedStringsLengths(
+      appLocalizations: localizations,
+      localizedValues: italianStrings.values.toList(growable: false),
+    );
   });
 
   testWidgets('Making sure that French is correctly loaded', (tester) async {
@@ -180,6 +196,9 @@ void main() {
     );
 
     expect(localizations.localeName, equals('fr'));
-    checklocalizedStringsLengths(localizations);
+    checklocalizedStringsLengths(
+      appLocalizations: localizations,
+      localizedValues: frenchStrings.values.toList(growable: false),
+    );
   });
 }

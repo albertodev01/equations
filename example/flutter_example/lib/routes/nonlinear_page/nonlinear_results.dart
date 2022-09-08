@@ -76,7 +76,7 @@ class _NonlinearSolutions extends StatelessWidget {
             );
           } on Exception {
             return MessageCard(
-              message: context.l10n.nonlinear_error,
+              message: context.l10n.nonlinear_fail_converge,
             );
           }
         }
