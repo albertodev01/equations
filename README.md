@@ -11,13 +11,13 @@
 
 ---
 
-Thanks to the `equations` package you will be able to solve numerical analysis problems with ease. It's been written purely in Dart, meaning that it has no platform-specific dependencies and it doens't require Flutter to work. You can use, for example, `equations` with Flutter for web, desktop and mobile. Here's a summary of what you can do with this package:
+The `equations` package is used to solve numerical analysis problems with ease. It's purely written in Dart, meaning that it has no platform-specific dependencies and it doesn't require Flutter to work. You can use `equations`, for example, in a Dart CLI project or a Flutter cross-platform application. Here's a summary of what you can do with this package:
 
-  - Solve polynomial equations with `Algebraic` types;
-  - Solve nonlinear equations with `Nonlinear` types;
-  - Solve linear systems of equations with `SystemSolver` types;
-  - Evaluate integrals with `NumericalIntegration` types;
-  - Interpolate data points with `Interpolation ` types.
+  - solve polynomial equations with `Algebraic` types;
+  - solve nonlinear equations with `Nonlinear` types;
+  - solve linear systems of equations with `SystemSolver` types;
+  - evaluate integrals with `NumericalIntegration` types;
+  - interpolate data points with `Interpolation ` types.
 
 In addition, you can also find utilities to work with:
 
@@ -25,12 +25,12 @@ In addition, you can also find utilities to work with:
   - Complex number, using the `Complex` type;
   - Fractions, using the `Fraction` and `MixedFraction` types.
 
-This package is entirely null safe and it's build on top of the latest Dart version. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps) :rocket:
+This package is entirely null safe and it's built on top of the latest Dart version. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps) :rocket:
 
 <p align="center"><img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/circle_logo.svg" alt="Equation Solver logo" width="55" height="55" /></p>
 <p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
 
-The source code of the above website can be found at `example/flutter_example`. In the following lines, you'll find an overview of the various types in this package and their APIs; make sure to visit the [pub.dev documentation](https://pub.dev/documentation/equations/latest/) for details about methods signatures and docstring comments.
+The source code of the above website can be found at `example/flutter_example`. Visit the official [pub.dev documentation](https://pub.dev/documentation/equations/latest/) for details about methods signatures and inline documentation.
 
 ---
 
@@ -202,7 +202,7 @@ final solutions = luSolver.solve(); // [-1, 4, 3]
 final determinant = luSolver.determinant(); // -84.0
 ```
 
-If you just want to work with matrices (for operations, decompositions, eigenvalues, etc...) you can consider using either `RealMatrix` (to work with the `double` data type) or `ComplexMatrix` (to work with the `Complex` data type). Both classes are of type `Matrix<T>` so they have the same public API.
+If you just want to work with matrices (for operations, decompositions, eigenvalues, etc...) you can consider using either `RealMatrix` (to work with `double`) or `ComplexMatrix` (to work with `Complex`). Both are subclasses of `Matrix<T>` so they have the same public API:
 
 ```dart
 final matrixA = RealMatrix.fromData(
@@ -241,7 +241,7 @@ final eigenvalues = matrixA.eigenvalues();
 final characPolynomial = matrixA.characteristicPolynomial();
 ```
 
-You can use `toString()` to print the content of the matrix but there's also the possibility to use `toStringAugmented()` which prints the augmented matrix (the matrix + one extra column with the known values vector).
+You can use `toString()` to print the matrix contents. The `toStringAugmented()` method prints the augmented matrix (the matrix + one extra column with the known values vector).
 
 ```dart
 final lu = LUSolver(
@@ -276,13 +276,13 @@ The `ComplexMatrix` has the same API and the same usage as `RealMatrix` with the
 
 # Numerical integration
 
-The **numerical integration** term refers to a group of algorithms for calculating the numerical value of a definite integral (on a given interval). The function must be continuous within the integration bounds. This package currently supports the following algorithms:
+The "**numerical integration**" term refers to a group of algorithms for calculating the numerical value of a definite integral (on a given interval). The function must be continuous within the integration bounds. This package currently supports the following algorithms:
 
  - `MidpointRule`
  - `SimpsonRule`
  - `TrapezoidalRule`
 
-Other than the integration bounds (called `lowerBound` and `lowerBound`), the classes also have an optional parameter called `intervals`. It already has a good default value but if you wanted to change the number of parts in which the interval will be split, just make sure to set it!
+Other than the integration bounds (called `lowerBound` and `lowerBound`), the classes also have an optional parameter called `intervals`. It already has a good default value but of course you can change it!
 
 ```dart
 const simpson = SimpsonRule(
@@ -305,10 +305,10 @@ print('${results.result.toStringAsFixed(3)}');
 print('${results.guesses.length}');
 ```
 
-The `integrate()` function returns an `IntegralResults` which is a simple wrapper for 2 values:
+The `integrate()` function returns an `IntegralResults` which simply is a wrapper for 2 values:
 
-  1. `result`: the actual result, which is the value of the definite integral evaluated within `lowerBound` and `lowerBound`,
-  2. `guesses`: the various intermetiate values that brought to the final result.
+  1. `result`: the value of the definite integral evaluated within `lowerBound` and `lowerBound`,
+  2. `guesses`: the various intermediate values that brought to the final result.
 
 # Interpolation
 
