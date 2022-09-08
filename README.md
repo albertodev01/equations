@@ -25,7 +25,7 @@ In addition, you can also find utilities to work with:
   - Complex number, using the `Complex` type;
   - Fractions, using the `Fraction` and `MixedFraction` types.
 
-This package is entirely null safe and it's built on top of the latest Dart version. There is a demo, built with Flutter, that shows an example on how this library can be used (especially for numerical analysis apps) :rocket:
+This package is entirely null safe and it's built on top of the latest Dart version. There is a demo, built with Flutter, that shows an example of how this library can be used (especially for numerical analysis apps) :rocket:
 
 <p align="center"><img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/circle_logo.svg" alt="Equation Solver logo" width="55" height="55" /></p>
 <p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
@@ -47,7 +47,7 @@ Use one of the following classes to find the roots of a polynomial equation (als
 | `Quartic`   | <em>f(x) = ax<sup>4</sup> + bx<sup>3</sup> + cx<sup>2</sup> + dx + e</em> | a, b, c, d, e ∈ C |
 | `DurandKerner` | Any polynomial P(x<sub>i</sub>) where x<sub>i</sub> are coefficients      | x<sub>i</sub> ∈ C |
 
-There's a formula for polynomials up to the fourth degree, as explained by the [Galois theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of polynomials whose degree is 5 or higher must be seeked using DurandKerner's method (or any other root-finding algorithm). For this reason, we suggest the following approach:
+There's a formula for polynomials up to the fourth degree, as explained by the [Galois theory](https://en.wikipedia.org/wiki/Galois_theory). Roots of polynomials whose degree is 5 or higher must be found using DurandKerner's method (or any other root-finding algorithm). For this reason, we suggest the following approach:
 
   - use `Linear` to find the roots of a polynomial whose degree is 1;
   - use `Quadratic` to find the roots of a polynomial whose degree is 2;
@@ -55,7 +55,7 @@ There's a formula for polynomials up to the fourth degree, as explained by the [
   - use `Quartic` to find the roots of a polynomial whose degree is 4;
   - use `DurandKerner` to find the roots of a polynomial whose degree is 5 or higher.
 
-Since `DurandKerner` works with any polynomial, you could also use it (for example) to solve a cubic equation. However, `DurandKerner` internally uses loops, derivatives, and other mechanics to approximate the actual roots. When the degree is 4 or lower, prefer working with `Quartic`, `Cubic`, `Quadratic` or `Linear` because they use direct formulas to find the roots (and thus they're more precise). Here's an example on how to find the roots of a cubic:
+Since `DurandKerner` works with any polynomial, you could also use it (for example) to solve a cubic equation. However, `DurandKerner` internally uses loops, derivatives, and other mechanics to approximate the actual roots. When the degree is 4 or lower, prefer working with `Quartic`, `Cubic`, `Quadratic` or `Linear` because they use direct formulas to find the roots (and thus they're more precise). Here's an example of how to find the roots of a cubic:
 
 ```dart
 // f(x) = (2-3i)x^3 + 6/5ix^2 - (-5+i)x - (9+6i)
@@ -113,7 +113,7 @@ for (final root in equation.solutions()) {
 }
 ```
 
-As we've already pointed out, both ways are equivalent but `DurandKerner` is computationally slower than `Cubic` and it doesn't guaranteed to always converge to the correct roots. Use `DurandKerner` only when the degree of your polynomial is greater or equal than 5.
+As we've already pointed out, both ways are equivalent but `DurandKerner` is computationally slower than `Cubic` and it doesn't guarantee to always converge to the correct roots. Use `DurandKerner` only when the degree of your polynomial is greater or equal to 5.
 
 ```dart
 final quadratic = Algebraic.from(const [
@@ -127,7 +127,7 @@ final quartic = Algebraic.fromReal(const [
 ]);
 ```
 
-The factory constructor `Algebraic.from()` automatically returns the best type of `Algebraic` according with the number of parameters you've passed.
+The factory constructor `Algebraic.from()` automatically returns the best type of `Algebraic` according to the number of parameters you've passed.
 
 # Nonlinear equations
 
@@ -143,7 +143,7 @@ Use one of the following classes, representing a root-finding algorithm, to find
 | `Brent`      | a, b ∈ R          |
 | `RegulaFalsi`| a, b ∈ R          |
 
-Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/): a fast, stable and well tested grammar parser. Here's a simple example of how you can find the roots of an equation using the Newton's method:
+Expressions are parsed using [petitparser](https://pub.dev/packages/petitparser/): a fast, stable and well-tested grammar parser. Here's a simple example of how you can find the roots of an equation using Newton's method:
 
 ```dart
 final newton = Newton("2*x+cos(x)", -1, maxSteps: 5);
@@ -174,7 +174,7 @@ Certain algorithms don't always guarantee to converge to the correct root so car
 
 # Systems of equations
 
-Use one of the following classes to solve systems of linear equations. Only real coefficients are allowed (so `double` is ok but `Complex` isn't) and you must define `N` equations in `N` variables (so **square** matrices only are allowed). This package supports the following algorithms:
+Use one of the following classes to solve systems of linear equations. Only real coefficients are allowed (so `double` is ok, but `Complex` isn't) and you must define `N` equations in `N` variables (so **square** matrices only are allowed). This package supports the following algorithms:
 
 | Solver name           | Iterative method   |
 |:---------------------:|:------------------:|
@@ -344,7 +344,7 @@ print(y.toStringAsFixed(3));
 print('\n${newton.forwardDifferenceTable()}');
 ```
 
-Since the Newton interpolation algorithm internally builds the "divided differences table", the API exposes two methods (`forwardDifferenceTable()` and `backwardDifferenceTable()`) to print those tables. Of course, you won't find `forwardDifferenceTable()` in other interpolation types because they just don't use it. By default, `NewtonInterpolation` uses the forward difference method but if you want the backwards one, just pass `forwardDifference: false` in the constructor.
+Since the Newton interpolation algorithm internally builds the "divided differences table", the API exposes two methods (`forwardDifferenceTable()` and `backwardDifferenceTable()`) to print those tables. Of course, you won't find `forwardDifferenceTable()` in other interpolation types because they just don't use it. By default, `NewtonInterpolation` uses the forward difference method but if you want the backward one, just pass `forwardDifference: false` in the constructor.
 
 ```dart
 const polynomial = PolynomialInterpolation(
