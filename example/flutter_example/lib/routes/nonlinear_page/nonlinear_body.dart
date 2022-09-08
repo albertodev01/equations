@@ -44,34 +44,36 @@ class _ResponsiveBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, size) {
-        if (size.maxWidth <= doubleColumnPageBreakpoint) {
-          // For mobile devices - all in a column
-          return const _SingleColumnLayout();
-        }
+    return FocusTraversalGroup(
+      child: LayoutBuilder(
+        builder: (context, size) {
+          if (size.maxWidth <= doubleColumnPageBreakpoint) {
+            // For mobile devices - all in a column
+            return const _SingleColumnLayout();
+          }
 
-        // For wider screens - plot on the right and results on the right
-        return Center(
-          child: SingleChildScrollView(
-            key: const Key('SingleChildScrollView-desktop-responsive'),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                // Input and results
-                Expanded(
-                  child: _DoubleColumnLeftContent(),
-                ),
+          // For wider screens - plot on the right and results on the right
+          return Center(
+            child: SingleChildScrollView(
+              key: const Key('SingleChildScrollView-desktop-responsive'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: const [
+                  // Input and results
+                  Expanded(
+                    child: _DoubleColumnLeftContent(),
+                  ),
 
-                // Plot
-                Expanded(
-                  child: NonlinearPlotWidget(),
-                ),
-              ],
+                  // Plot
+                  Expanded(
+                    child: NonlinearPlotWidget(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
