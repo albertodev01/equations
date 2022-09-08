@@ -53,25 +53,7 @@ class _ResponsiveBody extends StatelessWidget {
           }
 
           // For wider screens - plot on the right and results on the right
-          return Center(
-            child: SingleChildScrollView(
-              key: const Key('SingleChildScrollView-desktop-responsive'),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
-                  // Input and results
-                  Expanded(
-                    child: _DoubleColumnLeftContent(),
-                  ),
-
-                  // Plot
-                  Expanded(
-                    child: NonlinearPlotWidget(),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return const _DoubleColumnLayout();
         },
       ),
     );
@@ -98,20 +80,42 @@ class _SingleColumnLayout extends StatelessWidget with NonlinearTitleLocalizer {
           ),
           const NonlinearDataInput(),
           const NonlinearResults(),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30,
-            ),
-            child: LayoutBuilder(
-              builder: (_, dimensions) {
-                return Visibility(
-                  visible: dimensions.maxWidth >= minimumChartWidth,
-                  child: const NonlinearPlotWidget(),
-                );
-              },
-            ),
-          ),
+          const NonlinearPlotWidget(),
         ],
+      ),
+    );
+  }
+}
+
+/// Lays the page contents on two columns.
+class _DoubleColumnLayout extends StatelessWidget {
+  /// Creates a [_DoubleColumnLayout] widget.
+  const _DoubleColumnLayout();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        key: const Key('SingleChildScrollView-desktop-responsive'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            // Input and results
+            Expanded(
+              child: _DoubleColumnLeftContent(),
+            ),
+
+            // Plot
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                child: NonlinearPlotWidget(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
