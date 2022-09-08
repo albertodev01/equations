@@ -1,6 +1,7 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes/nonlinear_page/model/inherited_nonlinear.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
+import 'package:equations_solver/routes/utils/result_cards/message_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/vectorial_images.dart';
@@ -44,34 +45,40 @@ class _NonlinearSolutions extends StatelessWidget {
 
         if (nonlinear != null) {
           // Computation results
-          final results = nonlinear.solve();
+          try {
+            final results = nonlinear.solve();
 
-          final guess = results.guesses.last;
-          final convergence = results.convergence;
-          final efficiency = results.efficiency;
+            final guess = results.guesses.last;
+            final convergence = results.convergence;
+            final efficiency = results.efficiency;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // The guess
-              RealResultCard(
-                leading: 'x0: ',
-                value: guess,
-              ),
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // The guess
+                RealResultCard(
+                  leading: 'x0: ',
+                  value: guess,
+                ),
 
-              // The convergence of the algorithm
-              RealResultCard(
-                leading: '${context.l10n.convergence}: ',
-                value: convergence,
-              ),
+                // The convergence of the algorithm
+                RealResultCard(
+                  leading: '${context.l10n.convergence}: ',
+                  value: convergence,
+                ),
 
-              // The efficiency of the algorithm
-              RealResultCard(
-                leading: '${context.l10n.efficiency}: ',
-                value: efficiency,
-              ),
-            ],
-          );
+                // The efficiency of the algorithm
+                RealResultCard(
+                  leading: '${context.l10n.efficiency}: ',
+                  value: efficiency,
+                ),
+              ],
+            );
+          } on Exception {
+            return MessageCard(
+              message: context.l10n.nonlinear_error,
+            );
+          }
         }
 
         return const NoResults();
