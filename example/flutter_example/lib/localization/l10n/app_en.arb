@@ -83,5 +83,6 @@
   "input_allowed_constants": " - Constants: pi (3.1415), e (2.7182) and sqrt2 (1.4142).",
   "input_allowed_functions": "The equation f(x) allows these functions:",
   "input_allowed_multiplication_sign": "The multiplication requires the sign. For example:",
-  "more_digits": "No approximation: "
+  "more_digits": "No approximation: ",
+  "nonlinear_error": "The method didn't converge to a solution."
 }

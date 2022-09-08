@@ -1,4 +1,5 @@
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
+import 'package:equations_solver/routes/utils/result_cards/message_card.dart';
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:equations_solver/routes/utils/section_title.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,37 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(SnackBar), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Making sure that a message appears when the method fails to converge.',
+      (tester) async {
+        await tester.pumpWidget(
+          MockNonlinearWidget(
+            textControllers: [
+              TextEditingController(),
+              TextEditingController(),
+            ],
+          ),
+        );
+
+        // Filling the forms
+        await tester.enterText(
+          find.byKey(const Key('EquationInput-function')),
+          'x-3',
+        );
+        await tester.enterText(
+          find.byKey(const Key('EquationInput-first-param')),
+          '0',
+        );
+
+        // Solving the equation
+        await tester.tap(find.byKey(const Key('Nonlinear-button-solve')));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(RealResultCard), findsNothing);
+        expect(find.byType(MessageCard), findsOneWidget);
       },
     );
 
