@@ -1,6 +1,6 @@
 name: equation_solver_cli
 description: A sample command-line application.
-version: 1.0.3
+version: 1.0.2
 publish_to: none
 
 environment:

@@ -1,10 +1,9 @@
 ## 4.1.0
  - Updated Dart SDK constraints to `">=2.18.0 <3.0.0"`
- - Added the missing `exp` function from the expression parsing grammar
  - Improved docstring comments
  - Updated the `analysis_options.yaml` file with more rules
  - Added more rules from the `dart_code_metrics` package
- - Updated the Flutter demo in the `example/` folder
+ - Updated the Flutter and Dart demos in the `example/` folder
  - README updates
  - Dependencies versions update
 
