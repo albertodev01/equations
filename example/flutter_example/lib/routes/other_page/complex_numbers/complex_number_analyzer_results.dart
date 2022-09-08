@@ -78,57 +78,61 @@ class _Results extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Properties
-    final propertiesWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionTitle(
-          pageTitle: context.l10n.properties,
-          icon: const SquareRoot(),
-        ),
-        RealResultCard(
-          value: abs,
-          leading: '${context.l10n.abs}: ',
-        ),
-        RealResultCard(
-          value: phase,
-          leading: '${context.l10n.phase}: ',
-        ),
-        ComplexResultCard(
-          value: sqrt,
-          leading: '${context.l10n.sqrt}: ',
-        ),
-        ComplexResultCard(
-          value: conjugate,
-          leading: '${context.l10n.conjugate}: ',
-        ),
-        ComplexResultCard(
-          value: reciprocal,
-          leading: '${context.l10n.reciprocal}: ',
-        ),
-      ],
+    final propertiesWidget = FocusTraversalGroup(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SectionTitle(
+            pageTitle: context.l10n.properties,
+            icon: const SquareRoot(),
+          ),
+          RealResultCard(
+            value: abs,
+            leading: '${context.l10n.abs}: ',
+          ),
+          RealResultCard(
+            value: phase,
+            leading: '${context.l10n.phase}: ',
+          ),
+          ComplexResultCard(
+            value: sqrt,
+            leading: '${context.l10n.sqrt}: ',
+          ),
+          ComplexResultCard(
+            value: conjugate,
+            leading: '${context.l10n.conjugate}: ',
+          ),
+          ComplexResultCard(
+            value: reciprocal,
+            leading: '${context.l10n.reciprocal}: ',
+          ),
+        ],
+      ),
     );
 
     // Polar coordinates
-    final coordinatesWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionTitle(
-          pageTitle: context.l10n.polar_coordinates,
-          icon: const HalfRightAngle(),
-        ),
-        RealResultCard(
-          value: polarComplex.r,
-          leading: '${context.l10n.length}: ',
-        ),
-        RealResultCard(
-          value: polarComplex.phiDegrees,
-          leading: '${context.l10n.angle_deg}: ',
-        ),
-        RealResultCard(
-          value: polarComplex.phiRadians,
-          leading: '${context.l10n.angle_rad}: ',
-        ),
-      ],
+    final coordinatesWidget = FocusTraversalGroup(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SectionTitle(
+            pageTitle: context.l10n.polar_coordinates,
+            icon: const HalfRightAngle(),
+          ),
+          RealResultCard(
+            value: polarComplex.r,
+            leading: '${context.l10n.length}: ',
+          ),
+          RealResultCard(
+            value: polarComplex.phiDegrees,
+            leading: '${context.l10n.angle_deg}: ',
+          ),
+          RealResultCard(
+            value: polarComplex.phiRadians,
+            leading: '${context.l10n.angle_rad}: ',
+          ),
+        ],
+      ),
     );
 
     return Wrap(

@@ -142,102 +142,104 @@ class _SystemDataInputState extends State<SystemDataInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          // Some spacing
-          const SizedBox(
-            height: 60,
-          ),
+    return FocusTraversalGroup(
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            // Some spacing
+            const SizedBox(
+              height: 60,
+            ),
 
-          // Size changer
-          const SizePicker(
-            isInOtherPage: false,
-          ),
+            // Size changer
+            const SizePicker(
+              isInOtherPage: false,
+            ),
 
-          // Some spacing
-          const SizedBox(
-            height: 35,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 35,
+            ),
 
-          // Matrix input
-          AnimatedBuilder(
-            animation: context.numberSwitcherState,
-            builder: (context, _) {
-              return MatrixInput(
-                matrixControllers:
-                    context.systemTextControllers.matrixControllers,
-                matrixSize: context.numberSwitcherState.state,
-              );
-            },
-          ),
+            // Matrix input
+            AnimatedBuilder(
+              animation: context.numberSwitcherState,
+              builder: (context, _) {
+                return MatrixInput(
+                  matrixControllers:
+                      context.systemTextControllers.matrixControllers,
+                  matrixSize: context.numberSwitcherState.state,
+                );
+              },
+            ),
 
-          // The description associated to the matrix widget
-          matrixText,
+            // The description associated to the matrix widget
+            matrixText,
 
-          // Some spacing
-          const SizedBox(
-            height: 30,
-          ),
+            // Some spacing
+            const SizedBox(
+              height: 30,
+            ),
 
-          // Vector input
-          AnimatedBuilder(
-            animation: context.numberSwitcherState,
-            builder: (context, _) {
-              return VectorInput(
-                vectorControllers:
-                    context.systemTextControllers.vectorControllers,
-                vectorSize: context.numberSwitcherState.state,
-              );
-            },
-          ),
+            // Vector input
+            AnimatedBuilder(
+              animation: context.numberSwitcherState,
+              builder: (context, _) {
+                return VectorInput(
+                  vectorControllers:
+                      context.systemTextControllers.vectorControllers,
+                  vectorSize: context.numberSwitcherState.state,
+                );
+              },
+            ),
 
-          // The description associated to the matrix widget
-          vectorText,
+            // The description associated to the matrix widget
+            vectorText,
 
-          // Algorithm type picker
-          const SystemDropdownSelection(),
+            // Algorithm type picker
+            const SystemDropdownSelection(),
 
-          // The optional input for the relaxation value
-          const _RelaxationFactor(),
+            // The optional input for the relaxation value
+            const _RelaxationFactor(),
 
-          // The optional input for the initial guesses vector
-          // Vector input
-          const JacobiVectorInput(),
+            // The optional input for the initial guesses vector
+            // Vector input
+            const JacobiVectorInput(),
 
-          // Spacing
-          const SizedBox(height: 45),
+            // Spacing
+            const SizedBox(height: 45),
 
-          // Two buttons needed to "solve" and "clear" the system
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Solving the system
-              ElevatedButton(
-                key: const Key('System-button-solve'),
-                onPressed: solve,
-                child: Text(context.l10n.solve),
-              ),
-
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16,
+            // Two buttons needed to "solve" and "clear" the system
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Solving the system
+                ElevatedButton(
+                  key: const Key('System-button-solve'),
+                  onPressed: solve,
+                  child: Text(context.l10n.solve),
                 ),
-                child: InputKindDialogButton(
-                  inputKindMessage: InputKindMessage.numbers,
-                ),
-              ),
 
-              // Cleaning the inputs
-              ElevatedButton(
-                key: const Key('System-button-clean'),
-                onPressed: cleanInput,
-                child: Text(context.l10n.clean),
-              ),
-            ],
-          ),
-        ],
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                  ),
+                  child: InputKindDialogButton(
+                    inputKindMessage: InputKindMessage.numbers,
+                  ),
+                ),
+
+                // Cleaning the inputs
+                ElevatedButton(
+                  key: const Key('System-button-clean'),
+                  onPressed: cleanInput,
+                  child: Text(context.l10n.clean),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

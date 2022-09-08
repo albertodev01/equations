@@ -107,119 +107,125 @@ class _Results extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Numerical properties
-    final propertiesWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Properties
-        SectionTitle(
-          pageTitle: context.l10n.properties,
-          icon: const Atoms(),
-        ),
+    final propertiesWidget = FocusTraversalGroup(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Properties
+          SectionTitle(
+            pageTitle: context.l10n.properties,
+            icon: const Atoms(),
+          ),
 
-        RealResultCard(
-          value: rank * 1.0,
-          leading: '${context.l10n.rank}: ',
-        ),
+          RealResultCard(
+            value: rank * 1.0,
+            leading: '${context.l10n.rank}: ',
+          ),
 
-        RealResultCard(
-          value: trace,
-          leading: '${context.l10n.trace}: ',
-        ),
+          RealResultCard(
+            value: trace,
+            leading: '${context.l10n.trace}: ',
+          ),
 
-        RealResultCard(
-          value: determinant,
-          leading: '${context.l10n.determinant}: ',
-        ),
+          RealResultCard(
+            value: determinant,
+            leading: '${context.l10n.determinant}: ',
+          ),
 
-        BoolResultCard(
-          value: isDiagonal,
-          leading: '${context.l10n.diagonal}: ',
-        ),
+          BoolResultCard(
+            value: isDiagonal,
+            leading: '${context.l10n.diagonal}: ',
+          ),
 
-        BoolResultCard(
-          value: isSymmetric,
-          leading: '${context.l10n.symmetric}: ',
-        ),
+          BoolResultCard(
+            value: isSymmetric,
+            leading: '${context.l10n.symmetric}: ',
+          ),
 
-        BoolResultCard(
-          value: isIdentity,
-          leading: '${context.l10n.identity}: ',
-        ),
-      ],
+          BoolResultCard(
+            value: isIdentity,
+            leading: '${context.l10n.identity}: ',
+          ),
+        ],
+      ),
     );
 
     // Eigenvalues and characteristic polynomial
-    final eigenvaluesWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionTitle(
-          pageTitle: context.l10n.characteristicPolynomial,
-          icon: const PolynomialLogo(),
-        ),
-        PolynomialResultCard(
-          algebraic: characteristicPolynomial,
-        ),
+    final eigenvaluesWidget = FocusTraversalGroup(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SectionTitle(
+            pageTitle: context.l10n.characteristicPolynomial,
+            icon: const PolynomialLogo(),
+          ),
+          PolynomialResultCard(
+            algebraic: characteristicPolynomial,
+          ),
 
-        // Spacing
-        const SizedBox(
-          height: 40,
-        ),
+          // Spacing
+          const SizedBox(
+            height: 40,
+          ),
 
-        SectionTitle(
-          pageTitle: context.l10n.eigenvalues,
-          icon: const EquationSolution(),
-        ),
+          SectionTitle(
+            pageTitle: context.l10n.eigenvalues,
+            icon: const EquationSolution(),
+          ),
 
-        ...[
-          for (final eigenvalue in eigenvalues)
-            ComplexResultCard(
-              value: eigenvalue,
-              leading: 'x = ',
-            ),
+          ...[
+            for (final eigenvalue in eigenvalues)
+              ComplexResultCard(
+                value: eigenvalue,
+                leading: 'x = ',
+              ),
+          ],
         ],
-      ],
+      ),
     );
 
     // Operations on the matrix
-    final matricesWidget = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionTitle(
-          pageTitle: context.l10n.matrices,
-          icon: const SquareMatrix(),
-        ),
+    final matricesWidget = FocusTraversalGroup(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SectionTitle(
+            pageTitle: context.l10n.matrices,
+            icon: const SquareMatrix(),
+          ),
 
-        // Spacing
-        const SizedBox(
-          height: 20,
-        ),
+          // Spacing
+          const SizedBox(
+            height: 20,
+          ),
 
-        MatrixOutput(
-          matrix: transpose,
-          description: context.l10n.transpose,
-        ),
+          MatrixOutput(
+            matrix: transpose,
+            description: context.l10n.transpose,
+          ),
 
-        // Spacing
-        const SizedBox(
-          height: 20,
-        ),
+          // Spacing
+          const SizedBox(
+            height: 20,
+          ),
 
-        MatrixOutput(
-          matrix: inverse,
-          description: context.l10n.inverse,
-        ),
+          MatrixOutput(
+            matrix: inverse,
+            description: context.l10n.inverse,
+          ),
 
-        // Spacing
-        const SizedBox(
-          height: 20,
-        ),
+          // Spacing
+          const SizedBox(
+            height: 20,
+          ),
 
-        MatrixOutput(
-          key: const Key('MatrixAnalyzerResults-cofactor-matrix'),
-          matrix: cofactorMatrix,
-          description: context.l10n.cofactor,
-        ),
-      ],
+          MatrixOutput(
+            key: const Key('MatrixAnalyzerResults-cofactor-matrix'),
+            matrix: cofactorMatrix,
+            description: context.l10n.cofactor,
+          ),
+        ],
+      ),
     );
 
     return Wrap(
