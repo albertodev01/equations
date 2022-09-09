@@ -3,7 +3,6 @@ import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dar
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_body.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_data_input.dart';
 import 'package:equations_solver/routes/nonlinear_page/nonlinear_results.dart';
-import 'package:equations_solver/routes/nonlinear_page/utils/nonlinear_plot_widget.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:equations_solver/routes/utils/input_kind_dialog_button.dart';
 import 'package:equations_solver/routes/utils/no_results.dart';
@@ -77,35 +76,6 @@ void main() {
         expect(
           find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
           findsOneWidget,
-        );
-      },
-    );
-
-    testWidgets(
-      'Making sure the chart does NOT appear on smaller screens',
-      (tester) async {
-        await tester.binding.setSurfaceSize(const Size(250, 2000));
-
-        await tester.pumpWidget(
-          MockNonlinearWidget(
-            textControllers: [
-              TextEditingController(),
-              TextEditingController(),
-            ],
-          ),
-        );
-
-        expect(
-          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
-          findsOneWidget,
-        );
-        expect(
-          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
-          findsNothing,
-        );
-        expect(
-          find.byType(NonlinearPlotWidget),
-          findsNothing,
         );
       },
     );
