@@ -84,35 +84,6 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Making sure the chart does NOT appear on smaller screens',
-      (tester) async {
-        await tester.binding.setSurfaceSize(const Size(250, 1800));
-
-        await tester.pumpWidget(
-          MockPolynomialWidget(
-            textControllers: [
-              TextEditingController(),
-              TextEditingController(),
-            ],
-          ),
-        );
-
-        expect(
-          find.byKey(const Key('SingleChildScrollView-mobile-responsive')),
-          findsOneWidget,
-        );
-        expect(
-          find.byKey(const Key('SingleChildScrollView-desktop-responsive')),
-          findsNothing,
-        );
-        expect(
-          find.byType(PolynomialPlotWidget),
-          findsNothing,
-        );
-      },
-    );
-
     testWidgets('Making sure that solving linear eq. works', (tester) async {
       await tester.pumpWidget(
         MockPolynomialWidget(
