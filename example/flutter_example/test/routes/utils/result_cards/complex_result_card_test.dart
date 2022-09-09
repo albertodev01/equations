@@ -154,5 +154,28 @@ void main() {
         matchesGoldenFile('goldens/complex_result_card_expanded.png'),
       );
     });
+
+    testWidgets('ComplexResultCard - expanded with NaN', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 300));
+
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: ComplexResultCard(
+              value: Complex(double.negativeInfinity, double.nan),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(ComplexResultCard),
+        matchesGoldenFile('goldens/complex_result_card_expanded_with_nan.png'),
+      );
+    });
   });
 }

@@ -31,7 +31,7 @@ class RealResultCard extends StatelessWidget {
     required double value,
     bool isPrimary = true,
   }) {
-    if ((value.isNaN) || (value.isInfinite)) {
+    if (!value.isFinite) {
       return context.l10n.not_computed;
     }
 
@@ -44,11 +44,11 @@ class RealResultCard extends StatelessWidget {
     required BuildContext context,
     required double value,
   }) {
-    if ((value.isNaN) || (value.isInfinite)) {
+    try {
+      return value.toFraction().toString();
+    } on Exception {
       return context.l10n.not_computed;
     }
-
-    return value.toFraction().toString();
   }
 
   @override

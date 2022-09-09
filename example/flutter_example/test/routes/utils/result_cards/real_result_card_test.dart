@@ -118,5 +118,28 @@ void main() {
         matchesGoldenFile('goldens/real_result_card_expanded.png'),
       );
     });
+
+    testWidgets('RealResultCard - expanded with NaN', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(300, 250));
+
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: RealResultCard(
+              value: double.nan,
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+
+      await expectLater(
+        find.byType(RealResultCard),
+        matchesGoldenFile('goldens/real_result_card_expanded_with_nan.png'),
+      );
+    });
   });
 }

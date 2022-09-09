@@ -37,10 +37,7 @@ class ComplexResultCard extends StatelessWidget {
     required Complex value,
     bool isPrimary = true,
   }) {
-    if (value.real.isNaN ||
-        value.imaginary.isNaN ||
-        value.real.isInfinite ||
-        value.imaginary.isInfinite) {
+    if (!value.real.isFinite || !value.imaginary.isFinite) {
       return context.l10n.not_computed;
     }
 
@@ -53,14 +50,11 @@ class ComplexResultCard extends StatelessWidget {
     required BuildContext context,
     required Complex value,
   }) {
-    if (value.real.isNaN ||
-        value.imaginary.isNaN ||
-        value.real.isInfinite ||
-        value.imaginary.isInfinite) {
+    try {
+      return value.toStringAsFraction();
+    } on Exception {
       return context.l10n.not_computed;
     }
-
-    return value.toStringAsFraction();
   }
 
   @override
