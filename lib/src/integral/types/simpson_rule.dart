@@ -50,7 +50,7 @@ class SimpsonRule extends NumericalIntegration {
     // The second iteration.
     for (var i = 2; i < intervals - 1; i += 2) {
       evenSum += evaluateFunction(lowerBound + i * h);
-      guesses[i] = oddSum;
+      guesses[i] = evenSum;
     }
 
     // Returning the result.
