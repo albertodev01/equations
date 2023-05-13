@@ -1,6 +1,7 @@
 ## 5.0.0
  - **BREAKING**: Removed the `IntegralResults` type and replaced with an equivalent record
  - **BREAKING**: Removed the `NonlinearResults` type and replaced with an equivalent record
+ - **BREAKING**: Added the `base` modifier to `Algebraic`, `NumericalIntegration`, `Interpolation`, `NonLinear`, and `SystemSolver` types
  - Updated Dart SDK constraints to `^3.0.0`
  - Updated the `analysis_options.yaml` file with more rules
  - Added more rules from the `dart_code_metrics` package
