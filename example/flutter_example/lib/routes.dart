@@ -74,7 +74,6 @@ GoRouter generateRouter({String initialRoute = homePagePath}) {
         pageBuilder: (_, state) => _builder(_, state, const OtherPage()),
       ),
     ],
-    urlPathStrategy: UrlPathStrategy.path,
     errorBuilder: (_, __) => const ErrorPage(),
   );
 }

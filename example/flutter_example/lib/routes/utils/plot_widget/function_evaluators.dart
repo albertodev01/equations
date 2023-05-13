@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 
 /// This class provides the ability to evaluate a function on a given point. The
 /// [equation] dependency defines the behavior of [evaluateOn].
-abstract class FunctionEvaluator<T> {
+sealed class FunctionEvaluator<T> {
   /// The equation object that defines the [evaluateOn] method.
   final T equation;
 

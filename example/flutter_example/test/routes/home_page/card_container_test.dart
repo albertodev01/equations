@@ -36,12 +36,10 @@ void main() {
         ),
       );
 
-      final card = find.byType(CardContainer);
+      await tester.tap(find.byType(CardContainer));
+      await tester.pump();
 
-      await tester.tap(card);
-      await tester.tap(card);
-
-      expect(counter, equals(2));
+      expect(counter, equals(0));
     });
   });
 

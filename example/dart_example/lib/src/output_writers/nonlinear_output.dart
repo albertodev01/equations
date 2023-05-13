@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:equation_solver_cli/src/output_writers/output.dart';
+import 'package:equation_solver_cli/src/output.dart';
 import 'package:equations/equations.dart';
 
 /// Solves a nonlinear equation using various root-finding algorithms.
@@ -21,8 +21,11 @@ class NonlinearOutput extends Output {
     final brent = const Brent(function: equation, a: 0.5, b: 1).solve();
     final chords = const Chords(function: equation, a: 0.5, b: 1).solve();
     final riddler = const Riddler(function: equation, a: 0.5, b: 1).solve();
-    final regulaFalsi =
-        const RegulaFalsi(function: equation, a: 0.5, b: 1).solve();
+    final regulaFalsi = const RegulaFalsi(
+      function: equation,
+      a: 0.5,
+      b: 1,
+    ).solve();
 
     final output = StringBuffer()
       ..write(' > Equation: ')

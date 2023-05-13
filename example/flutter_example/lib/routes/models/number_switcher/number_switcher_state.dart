@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-/// This listenable class keeps the state of an [int] in the `min <= x <= max`
+/// This listenable class keeps the state of an [int] in the [min] <= x <= [max]
 /// range.
 class NumberSwitcherState extends ChangeNotifier {
   int _counter;

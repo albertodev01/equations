@@ -4,10 +4,13 @@ import 'package:equations_solver/routes/utils/result_cards/complex_result_card.d
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
 import 'utils.dart';
 
 void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   var needsOpenPage = true;
 
   Future<void> testMatrix(WidgetTester tester) async {

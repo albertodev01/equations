@@ -4,13 +4,13 @@ import 'package:equations_solver/routes/integral_page.dart';
 /// Wrapper class that holds the [NumericalIntegration] type computed by
 /// [IntegralPage].
 class IntegralResult {
-  /// The [NumericalIntegration] object holding the polynomial data.
+  /// The [NumericalIntegration] object.
   ///
-  /// When `null`, it means that there has been an error while computing the
-  /// solution.
+  /// When `null`, it means that there an error occurred while evaluating the
+  /// integral.
   final NumericalIntegration? numericalIntegration;
 
-  /// Creates a [IntegralResult] object.
+  /// Creates an [IntegralResult] object.
   const IntegralResult({
     this.numericalIntegration,
   });

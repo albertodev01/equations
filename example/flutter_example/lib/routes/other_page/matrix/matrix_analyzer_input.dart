@@ -79,8 +79,8 @@ class _MatrixAnalyzerInputState extends State<MatrixAnalyzerInput> {
             ),
 
             // Matrix input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
+            ListenableBuilder(
+              listenable: context.numberSwitcherState,
               builder: (context, _) {
                 return MatrixInput(
                   matrixControllers: context.textControllers,

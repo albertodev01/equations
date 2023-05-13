@@ -124,7 +124,7 @@ void main() {
     }
 
     testWidgets('SystemBody - row reduction', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 900));
+      await tester.binding.setSurfaceSize(const Size(420, 900));
 
       await tester.pumpWidget(
         const MockSystemWidget(),
@@ -137,7 +137,7 @@ void main() {
     });
 
     testWidgets('SystemBody - row reduction with solution', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 900));
+      await tester.binding.setSurfaceSize(const Size(420, 900));
 
       await tester.pumpWidget(
         const MockSystemWidget(),
@@ -152,7 +152,7 @@ void main() {
     });
 
     testWidgets('SystemBody - row reduction (singular matrix)', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 950));
+      await tester.binding.setSurfaceSize(const Size(420, 950));
 
       await tester.pumpWidget(
         const MockSystemWidget(),
@@ -167,7 +167,7 @@ void main() {
     });
 
     testWidgets('SystemBody - factorization', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 900));
+      await tester.binding.setSurfaceSize(const Size(420, 900));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -183,7 +183,7 @@ void main() {
     });
 
     testWidgets('SystemBody - factorization with solution', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 950));
+      await tester.binding.setSurfaceSize(const Size(420, 950));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -201,7 +201,7 @@ void main() {
     });
 
     testWidgets('SystemBody - factorization (singular matrix)', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 1050));
+      await tester.binding.setSurfaceSize(const Size(420, 1050));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -219,7 +219,7 @@ void main() {
     });
 
     testWidgets('SystemBody - iterative', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 1050));
+      await tester.binding.setSurfaceSize(const Size(420, 1050));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -235,7 +235,7 @@ void main() {
     });
 
     testWidgets('SystemBody - iterative with solution', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 1100));
+      await tester.binding.setSurfaceSize(const Size(420, 1100));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -253,7 +253,7 @@ void main() {
     });
 
     testWidgets('SystemBody - iterative (singular matrix)', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(400, 1150));
+      await tester.binding.setSurfaceSize(const Size(420, 1150));
 
       await tester.pumpWidget(
         MockSystemWidget(

@@ -31,38 +31,30 @@ class IntegralState extends ChangeNotifier {
     required IntegralType integralType,
   }) {
     try {
-      final NumericalIntegration integration;
-
       const parser = ExpressionParser();
       final lower = parser.evaluate(lowerBound);
       final upper = parser.evaluate(upperBound);
 
-      switch (integralType) {
-        case IntegralType.midPoint:
-          integration = MidpointRule(
+      final integration = switch (integralType) {
+        IntegralType.midPoint => MidpointRule(
             function: function,
             lowerBound: lower,
             upperBound: upper,
             intervals: intervals,
-          );
-          break;
-        case IntegralType.simpson:
-          integration = SimpsonRule(
+          ),
+        IntegralType.simpson => SimpsonRule(
             function: function,
             lowerBound: lower,
             upperBound: upper,
             intervals: intervals,
-          );
-          break;
-        case IntegralType.trapezoid:
-          integration = TrapezoidalRule(
+          ),
+        IntegralType.trapezoid => TrapezoidalRule(
             function: function,
             lowerBound: lower,
             upperBound: upper,
             intervals: intervals,
-          );
-          break;
-      }
+          )
+      };
 
       // Integrating and returning the result
       _state = IntegralResult(

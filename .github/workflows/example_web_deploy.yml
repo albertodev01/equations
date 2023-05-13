@@ -8,18 +8,18 @@ on:
 jobs:
   flutter_web_example_deployment:
     name: Equations example - Flutter web deployment
-    runs-on: windows-latest
+    runs-on: macos-latest
     defaults:
       run:
         working-directory: example/flutter_example
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
-      - uses: subosito/flutter-action@v2.6.1
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
-      - name: Installing the dependencies
+      - name: Installing dependencies
         run: flutter pub get
 
       - name: Building for the web

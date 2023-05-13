@@ -7,10 +7,13 @@ import 'package:equations_solver/routes/system_page.dart';
 import 'package:equations_solver/routes/utils/body_pages/go_back_button.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
 import 'utils.dart';
 
 void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   group('Integration tests on the Home page', () {
     testWidgets(
       'Testing route transition animations',

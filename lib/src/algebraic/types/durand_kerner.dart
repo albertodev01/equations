@@ -5,7 +5,7 @@ import 'package:equations/src/utils/math_utils.dart';
 
 /// The Durand–Kerner method, also known as Weierstrass method, is a root
 /// finding algorithm for solving polynomial equations. With this class, you
-/// can find all the roots of a polynomial of any degree.
+/// can find all roots of a polynomial of any degree.
 ///
 /// This is the preferred approach:
 ///
@@ -15,14 +15,14 @@ import 'package:equations/src/utils/math_utils.dart';
 ///  - when the polynomial degree is 2, use [Quadratic];
 ///  - when the polynomial degree is 1, use [Linear].
 ///
-/// This algorithm requires an initial set of values to find the roots. This
+/// The algorithm requires an initial set of values to find the roots. This
 /// implementation generates some random values if the user doesn't provide
-/// some initial points to the algorithm.
+/// initial points to the algorithm.
 ///
 /// Note that this algorithm does **NOT** always converge. To be more clear, it
 /// is **NOT** true that for every polynomial, the set of initial vectors that
 /// eventually converges to roots is open and dense.
-class DurandKerner extends Algebraic with MathUtils {
+final class DurandKerner extends Algebraic with MathUtils {
   /// The initial guess from which the algorithm has to start finding the roots.
   ///
   /// By default, this is an empty list because this class can provide some
@@ -58,6 +58,7 @@ class DurandKerner extends Algebraic with MathUtils {
   ///   ],
   ///   initialGuess: [
   ///     Complex(1, -2),
+  ///     // missing a value here!
   ///   ],
   /// );
   /// ```
@@ -69,7 +70,7 @@ class DurandKerner extends Algebraic with MathUtils {
   /// The maximum steps to be made by the algorithm.
   final int maxSteps;
 
-  /// Instantiates a new object to find all the roots of a polynomial equation
+  /// Creates a new object that finds all the roots of a polynomial equation
   /// using the Durand-Kerner algorithm. The polynomial can have both complex
   /// ([Complex]) and real ([double]) values.
   ///
@@ -80,7 +81,7 @@ class DurandKerner extends Algebraic with MathUtils {
   ///   - [maxSteps]: the maximum steps to be made by the algorithm.
   ///
   /// Note that the coefficient with the highest degree goes first. For example,
-  /// the coefficients of the `-5x^2 + 3x + i = 0` has to be inserted in the
+  /// the coefficients of the `-5x^2 + 3x + i = 0` have to be inserted in the
   /// following way:
   ///
   /// ```dart
@@ -103,9 +104,9 @@ class DurandKerner extends Algebraic with MathUtils {
     this.maxSteps = 2000,
   }) : super(coefficients);
 
-  /// Instantiates a new object to find all the roots of a polynomial equation
-  /// using the Durand-Kerner algorithm. The polynomial can have both complex
-  /// ([Complex]) and real ([double]) values.
+  /// Creates a new object that finds all the roots of a polynomial equation
+  /// using the Durand-Kerner algorithm. The polynomial can only have real
+  /// ([double]) values.
   ///
   ///   - [coefficients]: the coefficients of the polynomial;
   ///   - [initialGuess]: the initial guess from which the algorithm has to
@@ -256,7 +257,7 @@ class DurandKerner extends Algebraic with MathUtils {
   @override
   List<Complex> solutions() {
     // In case the polynomial was a constant, just return an empty array because
-    // there are no solutions
+    // there are no solutions.
     if (coefficients.length <= 1) {
       return [];
     }
@@ -369,8 +370,7 @@ class DurandKerner extends Algebraic with MathUtils {
     return result;
   }
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   DurandKerner copyWith({
     List<Complex>? coefficients,
     List<Complex>? initialGuess,

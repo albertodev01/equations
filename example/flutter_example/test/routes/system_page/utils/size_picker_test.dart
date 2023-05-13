@@ -162,7 +162,7 @@ void main() {
     }
 
     testWidgets('SizePicker - 1x1 matrix', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(250, 60));
+      await tester.binding.setSurfaceSize(const Size(350, 60));
 
       await tester.pumpWidget(
         mockSliderForGolder(),
@@ -174,7 +174,7 @@ void main() {
     });
 
     testWidgets('SizePicker - 2x2 matrix', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(250, 60));
+      await tester.binding.setSurfaceSize(const Size(350, 60));
 
       await tester.pumpWidget(
         mockSliderForGolder(
@@ -188,7 +188,7 @@ void main() {
     });
 
     testWidgets('SizePicker - 3x3 matrix', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(250, 60));
+      await tester.binding.setSurfaceSize(const Size(350, 60));
 
       await tester.pumpWidget(
         mockSliderForGolder(
@@ -202,7 +202,7 @@ void main() {
     });
 
     testWidgets('SizePicker - 4x4 matrix', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(250, 60));
+      await tester.binding.setSurfaceSize(const Size(350, 60));
 
       await tester.pumpWidget(
         mockSliderForGolder(

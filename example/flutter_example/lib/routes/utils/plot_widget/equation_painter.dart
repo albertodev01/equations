@@ -43,9 +43,9 @@ class EquationPainter<T> extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant EquationPainter<T> oldDelegate) {
-    return (range != oldDelegate.range) ||
-        (plotMode != oldDelegate.plotMode) ||
-        (colorArea != oldDelegate.colorArea);
+    return range != oldDelegate.range ||
+        plotMode != oldDelegate.plotMode ||
+        colorArea != oldDelegate.colorArea;
   }
 
   void _drawMainAxis(Canvas canvas, Size size) {

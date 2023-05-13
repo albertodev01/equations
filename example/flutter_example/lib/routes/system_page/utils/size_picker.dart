@@ -73,25 +73,16 @@ class SizePicker extends StatelessWidget {
         const SizedBox(width: 15),
 
         // The size
-        AnimatedBuilder(
-          animation: context.numberSwitcherState,
+        ListenableBuilder(
+          listenable: context.numberSwitcherState,
           builder: (context, _) {
-            late final String text;
-
-            switch (context.numberSwitcherState.state) {
-              case 1:
-                text = context.l10n.matrix_size1;
-                break;
-              case 2:
-                text = context.l10n.matrix_size2;
-                break;
-              case 3:
-                text = context.l10n.matrix_size3;
-                break;
-              case 4:
-                text = context.l10n.matrix_size4;
-                break;
-            }
+            final text = switch (context.numberSwitcherState.state) {
+              1 => context.l10n.matrix_size1,
+              2 => context.l10n.matrix_size2,
+              3 => context.l10n.matrix_size3,
+              4 => context.l10n.matrix_size4,
+              _ => '-'
+            };
 
             return Text(
               text,

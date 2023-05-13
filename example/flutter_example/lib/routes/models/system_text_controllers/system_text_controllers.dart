@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 
 /// Wrapper for a series of [TextEditingController]s used by [SystemPage] to
 /// handle users inputs.
-class SystemTextControllers {
+final class SystemTextControllers {
   /// The text input controllers for the matrix.
   ///
-  /// This is asking for `A` in the `Ax = b` equation where:
+  /// These controllers hold the values of the `A` matrix in the `Ax = b`
+  /// equation, where:
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector
@@ -14,7 +15,8 @@ class SystemTextControllers {
 
   /// The text input controllers for the vector.
   ///
-  /// This is asking for `b` in the `Ax = b` equation where:
+  /// These controllers hold the values of the `b` vector in the `Ax = b`
+  /// equation, where:
   ///
   ///  - `A` is the matrix
   ///  - `b` is the known values vector

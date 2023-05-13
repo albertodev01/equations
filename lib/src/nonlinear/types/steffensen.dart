@@ -6,10 +6,12 @@ import 'package:equations/equations.dart';
 ///
 ///   - Similar to [Newton] as they use the same approach and both have a
 ///   quadratic convergence.
-///   - This method does **not** use the derivative _f'(x)_ of the function
+///
+///   - This method does **not** use the derivative _f'(x)_ of the function.
+///
 ///   - If _x0_ is too far from the root, the method might fail so the
 ///   convergence is not guaranteed.
-class Steffensen extends NonLinear {
+final class Steffensen extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
@@ -41,10 +43,10 @@ class Steffensen extends NonLinear {
   }
 
   @override
-  int get hashCode => 37 * super.hashCode + x0.hashCode;
+  int get hashCode => Object.hash(function, x0, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     var diff = tolerance + 1;
     var n = 1;
     var x = x0;
@@ -61,7 +63,7 @@ class Steffensen extends NonLinear {
       ++n;
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/result_wrapper.dart';
 
 /// Analyzes a certain data type and returns a series of results.
-abstract class Analyzer<T extends ResultWrapper> {
+abstract base class Analyzer<T extends ResultWrapper> {
   /// This is required to parse the coefficients received from the user as 'raw'
   /// strings.
   static const _parser = ExpressionParser();

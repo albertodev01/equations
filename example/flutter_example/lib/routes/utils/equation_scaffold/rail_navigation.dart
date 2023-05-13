@@ -44,7 +44,7 @@ class _RailNavigationState extends State<RailNavigation> {
           width: 1,
         ),
 
-        // The rail
+        // The navigation rail
         ValueListenableBuilder<int>(
           valueListenable: context.inheritedNavigation.navigationIndex,
           builder: (context, value, _) {

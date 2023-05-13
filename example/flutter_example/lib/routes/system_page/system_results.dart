@@ -57,8 +57,8 @@ class _SystemSolutionsState extends State<_SystemSolutions> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.systemState,
+    return ListenableBuilder(
+      listenable: context.systemState,
       builder: (context, child) {
         final state = context.systemState.state;
 

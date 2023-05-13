@@ -3,7 +3,7 @@ import 'package:equations/equations.dart';
 /// Concrete implementation of [Algebraic] that represents a fourth degree
 /// polynomial equation in the form _ax^4 + bx^3 + cx^2 + dx + e = 0_.
 ///
-/// This equation has exactly 4 solutions:
+/// This equation has 4 solutions, which can be combined as follows:
 ///
 ///  - 2 distinct real roots and 2 complex conjugate roots
 ///  - 4 real roots and 0 complex roots
@@ -11,7 +11,7 @@ import 'package:equations/equations.dart';
 ///  - Multiple roots which can be all equal or paired (complex or real)
 ///
 /// The above cases depend on the value of the discriminant.
-class Quartic extends Algebraic {
+final class Quartic extends Algebraic {
   /// These are examples of quartic equations, where the coefficient with the
   /// highest degree goes first:
   ///
@@ -42,7 +42,7 @@ class Quartic extends Algebraic {
     Complex e = const Complex.zero(),
   }) : super([a, b, c, d, e]);
 
-  /// These are examples of quartic equations, where the coefficient with the
+  /// This is an example of a quartic equations, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart
@@ -167,8 +167,7 @@ class Quartic extends Algebraic {
   /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
   Complex get e => coefficients[4];
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   Quartic copyWith({
     Complex? a,
     Complex? b,

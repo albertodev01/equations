@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 const _assertionError = 'There must be at least 1 navigation item.';
 
 /// A simple wrapper of [Scaffold]. This widget is meant to be used across the
-/// entire app to setup the minimal "skeleton" of the UI. This scaffold is made
-/// up of two parts:
+/// entire application to setup the minimal "skeleton" of the UI. This scaffold
+/// is made up of many parts:
 ///
 ///  - an [AppBar] with no title and a dark/light theme switcher;
 ///  - the body of the [Scaffold];

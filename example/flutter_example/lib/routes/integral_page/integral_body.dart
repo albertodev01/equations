@@ -20,8 +20,8 @@ class IntegralBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: const [
+    return const Stack(
+      children: [
         // Scrollable contents of the page
         Positioned.fill(
           child: _ResponsiveBody(),
@@ -93,12 +93,12 @@ class _DoubleColumnLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: SingleChildScrollView(
-        key: const Key('SingleChildScrollView-desktop-responsive'),
+        key: Key('SingleChildScrollView-desktop-responsive'),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
+          children: [
             // Input and results
             Expanded(
               child: _DoubleColumnLeftContent(),

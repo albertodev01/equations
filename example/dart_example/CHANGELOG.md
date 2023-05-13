@@ -1,3 +1,7 @@
+## 1.0.3
+ - Updated Dart SDK constraints to `^3.0.0`
+ - Dependencies versions update
+
 ## 1.0.2
  - Updated Dart SDK constraints to `">=2.18.0 <3.0.0"`
  - Dependencies versions update

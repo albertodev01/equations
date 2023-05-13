@@ -86,19 +86,14 @@ enum IntegralDropdownItems {
 /// Extension method on [String] to convert into a [IntegralDropdownItems] the
 /// string value.
 extension StringExt on String {
+  static const _argumentErrorMessage =
+      'The given string does NOT map to a IntegralDropdownItems value';
+
   /// Converts a [String] into a [IntegralDropdownItems] value.
-  IntegralDropdownItems toIntegralDropdownItems() {
-    switch (toLowerCase()) {
-      case 'simpson':
-        return IntegralDropdownItems.simpson;
-      case 'midpoint':
-        return IntegralDropdownItems.midpoint;
-      case 'trapezoid':
-        return IntegralDropdownItems.trapezoid;
-      default:
-        throw ArgumentError(
-          'The given string does NOT map to a IntegralDropdownItems value',
-        );
-    }
-  }
+  IntegralDropdownItems toIntegralDropdownItems() => switch (toLowerCase()) {
+        'simpson' => IntegralDropdownItems.simpson,
+        'midpoint' => IntegralDropdownItems.midpoint,
+        'trapezoid' => IntegralDropdownItems.trapezoid,
+        _ => throw ArgumentError(_argumentErrorMessage)
+      };
 }

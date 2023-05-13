@@ -5,12 +5,14 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 /// Eigendecomposition, also known as spectral decomposition, is a decomposition
 /// of a matrix A into a product `A = V x D x V^-1` where:
 ///
-///   - V is a square matrix whose i<sup>th</sup> column is the eigenvector of A;
-///   - D is the diagonal matrix whose diagonal elements are the corresponding
+///  - V is a square matrix whose i<sup>th</sup> column is the eigenvector of A;
+///
+///  - D is the diagonal matrix whose diagonal elements are the corresponding
 ///   eigenvalues of A;
-///   - V^-1 is the inverse of V.
+///
+///  - V^-1 is the inverse of V.
 /// {@endtemplate}
-abstract class EigenDecomposition<K, T extends Matrix<K>>
+abstract base class EigenDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
   /// Creates a [EigenDecomposition] object.
   const EigenDecomposition({

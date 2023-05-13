@@ -7,10 +7,10 @@ import 'package:equations/equations.dart';
 ///   - The method is extremely powerful but it's not guaranteed to converge to
 ///   a root of `f(x)`.
 ///
-///   - It may fail for example due to a division by zero, if the derivative
-///   evaluated at a certain value is 0, or because the initial guess is too far
-///   from the solution.
-class Newton extends NonLinear {
+///   - The algorithm may fail for example due to a division by zero, if the
+///   derivative evaluated at a certain value is 0, or because the initial guess
+///   is too far from the solution.
+final class Newton extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
@@ -42,10 +42,10 @@ class Newton extends NonLinear {
   }
 
   @override
-  int get hashCode => 37 * super.hashCode + x0.hashCode;
+  int get hashCode => Object.hash(function, x0, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     var diff = tolerance + 1;
     var n = 0;
     var currx0 = x0;
@@ -66,7 +66,7 @@ class Newton extends NonLinear {
       ++n;
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

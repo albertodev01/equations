@@ -3,7 +3,7 @@ import 'package:equations/equations.dart';
 /// A point in the cartesian coordinate system used by [Interpolation] types to
 /// represent interpolation nodes. This class simply represents the `x` and `y`
 /// coordinates of a point on a cartesian plane.
-class InterpolationNode {
+final class InterpolationNode {
   /// The x coordinate.
   final double x;
 
@@ -30,20 +30,15 @@ class InterpolationNode {
   }
 
   @override
-  int get hashCode {
-    var result = 2011;
-
-    result = result * 37 + x.hashCode;
-
-    return result * 37 + y.hashCode;
-  }
+  int get hashCode => Object.hash(x, y);
 
   @override
   String toString() => '($x; $y)';
 
   /// Prints the [x] and [y] values of this [InterpolationNode] instance with
   /// [fractionDigits] decimal digits. The output produced by this method is the
-  /// same that would result in calling `toStringAsFixed` on a [double]:
+  /// same that would result in calling `toStringAsFixed` on a [double]. For
+  /// example:
   ///
   /// ```dart
   /// const example = InterpolationNode(

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:equation_solver_cli/src/output_writers/output.dart';
+import 'package:equation_solver_cli/src/output.dart';
 import 'package:equations/equations.dart';
 
 /// Evaluates an integral using various algorithms.

@@ -5,17 +5,14 @@ on:
     branches:
       - master
       - develop
-  pull_request:
-    types:
-      - opened
 
 jobs:
   verify_equation_package:
-    name: Equations package - CI action
+    name: Equations package action
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3.0.2
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
 
       - name: Installing dependencies
         run: dart pub get
@@ -34,12 +31,12 @@ jobs:
           dart pub global run coverage:test_with_coverage
 
       - name: Making sure that code coverage is 100
-        uses: VeryGoodOpenSource/very_good_coverage@v1.2.1
+        uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
           min_coverage: 100
           
       - name: Uploading coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -52,8 +49,8 @@ jobs:
         working-directory: example/flutter_example
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
-      - uses: subosito/flutter-action@v2.6.1
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
@@ -61,7 +58,7 @@ jobs:
         run: flutter pub get
 
       - name: Making sure the package is formatted
-        run: flutter format --set-exit-if-changed .
+        run: dart format --set-exit-if-changed .
 
       - name: Making sure that there are no analysis warnings or errors
         run: |
@@ -80,8 +77,8 @@ jobs:
         working-directory: example/flutter_example
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.0.2
-      - uses: subosito/flutter-action@v2.6.1
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
@@ -99,8 +96,8 @@ jobs:
       run:
         working-directory: example/dart_example
     steps:
-      - uses: actions/checkout@v3.0.2
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
 
       - name: Installing dependencies
         run: dart pub get

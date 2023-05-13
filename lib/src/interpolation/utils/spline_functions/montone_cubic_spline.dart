@@ -7,7 +7,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// The spline is guaranteed to pass through each control point exactly. In
 /// addition, assuming the control points are monotonic, then the interpolated
 /// values will also be monotonic.
-class MonotoneCubicSpline extends SplineFunction with MathUtils {
+final class MonotoneCubicSpline extends SplineFunction with MathUtils {
   /// Creates a [MonotoneCubicSpline] object from the given nodes.
   const MonotoneCubicSpline({
     required super.nodes,

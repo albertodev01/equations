@@ -3,7 +3,7 @@ import 'package:equations/src/utils/factorial.dart';
 
 /// Newton interpolation is an interpolation polynomial for a given set of data
 /// points. It can be expressed using forward or backward divided differences.
-class NewtonInterpolation extends Interpolation {
+base class NewtonInterpolation extends Interpolation {
   /// Required to compute the factorial of a number.
   static const _factorial = Factorial();
 

@@ -65,8 +65,8 @@ class _PlotWidgetListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.polynomialState,
+    return ListenableBuilder(
+      listenable: context.polynomialState,
       builder: (context, _) {
         final algebraic = context.polynomialState.state.algebraic;
 

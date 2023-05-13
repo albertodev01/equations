@@ -16,8 +16,8 @@ class SystemBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: const [
+    return const Stack(
+      children: [
         // Scrollable contents of the page
         Positioned.fill(
           child: _SystemBodyContents(),
@@ -52,20 +52,13 @@ class __SystemBodyContentsState extends State<_SystemBodyContents> {
     ),
   );
 
-  /// Getting the title of the page according with the kind of algorithms that
-  /// are going to be used.
-  String get localizedName {
-    final systemType = context.systemState.systemType;
-
-    switch (systemType) {
-      case SystemType.rowReduction:
-        return context.l10n.row_reduction;
-      case SystemType.factorization:
-        return context.l10n.factorization;
-      case SystemType.iterative:
-        return context.l10n.iterative;
-    }
-  }
+  /// Getting the page title according with the kind of algorithms that are
+  /// going to be used.
+  String get localizedName => switch (context.systemState.systemType) {
+        SystemType.rowReduction => context.l10n.row_reduction,
+        SystemType.factorization => context.l10n.factorization,
+        SystemType.iterative => context.l10n.iterative
+      };
 
   @override
   Widget build(BuildContext context) {

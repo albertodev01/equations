@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:equation_solver_cli/src/output_writers/output.dart';
+import 'package:equation_solver_cli/src/output.dart';
 import 'package:equations/equations.dart';
 
 /// Solves a system of equations and shows details of the associated matrix.

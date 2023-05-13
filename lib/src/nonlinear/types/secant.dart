@@ -5,9 +5,10 @@ import 'package:equations/equations.dart';
 /// **Characteristics**:
 ///
 ///   - The method is not guaranteed to converge to a root of _f(x)_.
+///
 ///   - The secant method does not require the root to remain bracketed, like
 ///   the bisection method does for example, so it doesn't always converge.
-class Secant extends NonLinear {
+final class Secant extends NonLinear {
   /// The first guess.
   final double a;
 
@@ -44,17 +45,10 @@ class Secant extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, a, b, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     final guesses = <double>[];
     var n = 1;
 
@@ -87,7 +81,7 @@ class Secant extends NonLinear {
       fnew = evaluateOn(x0);
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

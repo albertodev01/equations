@@ -1,7 +1,7 @@
 import 'package:equations_solver/routes/polynomial_page/polynomial_data_input.dart';
 import 'package:flutter/material.dart';
 
-/// This widget appends a blue `f(x) =  ` text in front of an equation. This is
+/// This widget appends a blue `f(x) = ` text in front of an equation. This is
 /// used in [PolynomialDataInput].
 class EquationTextFormatter extends StatelessWidget {
   /// The equation.

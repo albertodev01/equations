@@ -5,7 +5,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro qr_decomposition_class_header}
 ///
 /// This class performs the QR decomposition on [RealMatrix] types.
-class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
+final class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
     with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const QRDecompositionReal({

@@ -8,7 +8,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro eigendecomposition_class_header}
 ///
 /// This class performs the eigendecomposition on [ComplexMatrix] types.
-class EigendecompositionComplex
+final class EigendecompositionComplex
     extends EigenDecomposition<Complex, ComplexMatrix> with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const EigendecompositionComplex({
@@ -770,7 +770,6 @@ class EigendecompositionComplex
               }
 
               // Solve real equations
-
             } else {
               x = hessenbergCache.get(i, i + 1);
               y = hessenbergCache.get(i + 1, i);

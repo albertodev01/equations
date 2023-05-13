@@ -11,7 +11,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///  - [QRDecomposition]
 ///  - [SingleValueDecomposition]
 ///  - [EigenDecomposition]
-abstract class Decomposition<K, T extends Matrix<K>> {
+abstract base class Decomposition<K, T extends Matrix<K>> {
   /// The matrix to be decomposed.
   final T matrix;
 

@@ -3,7 +3,7 @@ import 'package:equations_solver/routes/nonlinear_page/model/nonlinear_state.dar
 
 /// Wrapper class that holds the [NonLinear] type computed by [NonlinearState].
 class NonlinearResult {
-  /// The [NonLinear] object holding the nonlinear equation data.
+  /// The [NonLinear] object that holds the nonlinear equation data.
   ///
   /// When `null`, it means that there has been an error while computing the
   /// roots.

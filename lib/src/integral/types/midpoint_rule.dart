@@ -3,17 +3,15 @@ import 'package:equations/equations.dart';
 /// The "midpoint rule" is a technique for approximating the value of a
 /// definite integral.
 ///
-/// This algorithm requires the `m` parameter which indicates how many
+/// This algorithm requires the [intervals] parameter, which indicates how many
 /// partitions have to be computed by the algorithm.
 ///
 /// The midpoint rule estimates a definite integral using a Riemann sum with
 /// sub-intervals of equal width.
-class MidpointRule extends NumericalIntegration {
-  /// Expects the [function] to be integrated and the integration bounds
-  /// ([lowerBound], [upperBound]).
+base class MidpointRule extends NumericalIntegration {
+  /// Creates a [MidpointRule] object.
   ///
-  /// The [intervals] variable represents the number of parts in which the
-  /// `[lowerBound, upperBound]` interval has to be split by the algorithm.
+  /// By default, [intervals] is set to `30`.
   const MidpointRule({
     required super.function,
     required super.lowerBound,
@@ -22,7 +20,7 @@ class MidpointRule extends NumericalIntegration {
   });
 
   @override
-  IntegralResults integrate() {
+  ({List<double> guesses, double result}) integrate() {
     // The 'step' of the algorithm.
     final h = (upperBound - lowerBound) / intervals;
 
@@ -42,7 +40,7 @@ class MidpointRule extends NumericalIntegration {
       growable: false,
     );
 
-    return IntegralResults(
+    return (
       guesses: guesses,
       result: integralResult * h,
     );

@@ -102,8 +102,8 @@ class _PlotBody<T> extends StatelessWidget {
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
-        child: AnimatedBuilder(
-          animation: context.plotZoomState,
+        child: ListenableBuilder(
+          listenable: context.plotZoomState,
           builder: (context, state) {
             return LayoutBuilder(
               builder: (context, sizes) {
@@ -138,8 +138,8 @@ class _PlotSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.plotZoomState,
+    return ListenableBuilder(
+      listenable: context.plotZoomState,
       builder: (context, state) {
         return Slider(
           min: 2,

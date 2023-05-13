@@ -116,21 +116,17 @@ enum SystemDropdownItems {
 /// Extension method on [String] to convert into a [SystemDropdownItems] the
 /// string value.
 extension StringExt on String {
+  static const _argumentErrorMessage =
+      'The given string does NOT map to a SystemDropdownItems value';
+
   /// Converts a [String] into a [SystemDropdownItems] value.
   SystemDropdownItems toSystemDropdownItems() {
-    switch (toLowerCase()) {
-      case 'lu':
-        return SystemDropdownItems.lu;
-      case 'cholesky':
-        return SystemDropdownItems.cholesky;
-      case 'sor':
-        return SystemDropdownItems.sor;
-      case 'jacobi':
-        return SystemDropdownItems.jacobi;
-      default:
-        throw ArgumentError(
-          'The given string does NOT map to a SystemDropdownItems value',
-        );
-    }
+    return switch (toLowerCase()) {
+      'lu' => SystemDropdownItems.lu,
+      'cholesky' => SystemDropdownItems.cholesky,
+      'sor' => SystemDropdownItems.sor,
+      'jacobi' => SystemDropdownItems.jacobi,
+      _ => throw ArgumentError(_argumentErrorMessage)
+    };
   }
 }

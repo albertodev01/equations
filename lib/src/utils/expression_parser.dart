@@ -42,7 +42,7 @@ typedef _Evaluator = num Function(num value);
 ///  - sqrt2 (the square root of 2)
 ///  - sqrt3 (the square root of 3)
 ///  - G (Gauss constant)
-class ExpressionParser {
+final class ExpressionParser {
   /// Gauss constant.
   static const _g = 0.834626841674;
 
@@ -52,11 +52,10 @@ class ExpressionParser {
   /// A "cached" instance of a parser to be used to evaluate expressions on a
   /// given point.
   static final Parser<_Evaluator> _parser = () {
-    final builder = ExpressionBuilder<_Evaluator>();
+    final builder = ExpressionBuilder<_Evaluator>()
 
-    // This primitive is fundamental as it recognizes real numbers from the
-    // input and parses them using 'parse'.
-    builder.group()
+      // This primitive is fundamental as it recognizes real numbers from the
+      // input and parses them using 'parse'.
       ..primitive(
         digit()
             .plus()
@@ -78,9 +77,10 @@ class ExpressionParser {
       ..primitive(string('pi').trim().map((_) => (value) => math.pi))
       ..primitive(string('sqrt2').trim().map((_) => (value) => math.sqrt2))
       ..primitive(string('sqrt3').trim().map((_) => (value) => _sqrt3))
-      ..primitive(string('G').trim().map((_) => (value) => _g))
+      ..primitive(string('G').trim().map((_) => (value) => _g));
 
-      // Enable the parentheses
+    // Enable the parentheses
+    builder.group()
       ..wrapper(char('(').trim(), char(')').trim(), (_, a, __) => a)
 
       // Adding various mathematical operators
@@ -172,14 +172,15 @@ class ExpressionParser {
     return builder.build().end();
   }();
 
-  /// Builds a new expression parser accepting strings with a single `x`
+  /// Builds a new expression parser that accepts strings with a single `x`
   /// variable. For example, valid expressions are:
   ///
   ///   - `2 + x`
   ///   - `3 * x - 6`
   ///   - `x^2 + cos(x / 2)`
   ///
-  /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**.
+  /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**. You always
+  /// have to specify the `*` symbol to multiply two values.
   const ExpressionParser();
 
   /// Evaluates the mathematical [expression] and returns the result. This

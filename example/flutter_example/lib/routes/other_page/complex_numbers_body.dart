@@ -10,12 +10,14 @@ import 'package:flutter/material.dart';
 /// as modulus, polar coordinates and more.
 class ComplexNumberOtherBody extends StatelessWidget {
   /// Creates a [ComplexNumberOtherBody] widget.
-  const ComplexNumberOtherBody({super.key});
+  const ComplexNumberOtherBody({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: const [
+    return const Stack(
+      children: [
         // Scrollable contents of the page
         Positioned.fill(
           child: _PageBody(),

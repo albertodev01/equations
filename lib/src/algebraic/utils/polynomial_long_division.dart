@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 ///
 /// The only constraint of this procedure is that the degree of the denominator
 /// cannot exceed the degree of the numerator. If this condition is not
-/// satisfied, an exception will be thrown.
+/// satisfied, an exception is thrown.
 class PolynomialLongDivision {
   /// The numerator.
   final Algebraic polyNumerator;
@@ -13,7 +13,7 @@ class PolynomialLongDivision {
   /// The denominator.
   final Algebraic polyDenominator;
 
-  /// Creates a [PolynomialLongDivision] instance.
+  /// Creates a [PolynomialLongDivision] object.
   const PolynomialLongDivision({
     required this.polyNumerator,
     required this.polyDenominator,
@@ -23,7 +23,7 @@ class PolynomialLongDivision {
   /// remainder in the [AlgebraicDivision] class.
   ///
   /// An exception of type [PolynomialLongDivisionException] is thrown if the
-  /// degree of the denominator cannot exceed the degree of the numerator.
+  /// degree of the denominator exceeds the degree of the numerator.
   AlgebraicDivision divide() {
     if (polyNumerator.degree < polyDenominator.degree) {
       throw const PolynomialLongDivisionException(
@@ -142,13 +142,7 @@ class PolynomialLongDivision {
   }
 
   @override
-  int get hashCode {
-    var result = 2011;
-
-    result = result * 37 + polyNumerator.hashCode;
-
-    return result * 37 + polyDenominator.hashCode;
-  }
+  int get hashCode => Object.hash(polyNumerator, polyDenominator);
 
   @override
   String toString() {

@@ -8,9 +8,10 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method requires the root to be bracketed between two points `a` and
 ///   `b` otherwise it won't work.
+///
 ///   - The rate of convergence is `sqrt(2)` and the convergence is guaranteed
-///   for not we--behaved functions.
-class Riddler extends NonLinear {
+///   for not well-behaved functions.
+final class Riddler extends NonLinear {
   /// The starting point of the interval.
   final double a;
 
@@ -47,17 +48,10 @@ class Riddler extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, a, b, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     // Exit immediately if the root is not bracketed
     if (evaluateOn(a) * evaluateOn(b) >= 0) {
       throw NonlinearException('The root is not bracketed in [$a, $b]');
@@ -107,7 +101,7 @@ class Riddler extends NonLinear {
       ++n;
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

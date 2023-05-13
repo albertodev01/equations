@@ -36,12 +36,5 @@ class SystemResult {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + systemSolver.hashCode;
-    result = result * 37 + isSingular.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(systemSolver, isSingular);
 }

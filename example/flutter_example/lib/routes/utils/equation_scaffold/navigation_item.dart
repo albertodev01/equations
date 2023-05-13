@@ -2,7 +2,7 @@ import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
 /// An interactive item within an [EquationScaffold] navigation bar widget.
-class NavigationItem {
+final class NavigationItem {
   /// The title of the item.
   final String title;
 
@@ -42,14 +42,5 @@ class NavigationItem {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + title.hashCode;
-    result = result * 37 + icon.hashCode;
-    result = result * 37 + activeIcon.hashCode;
-    result = result * 37 + content.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(title, icon, activeIcon, content);
 }

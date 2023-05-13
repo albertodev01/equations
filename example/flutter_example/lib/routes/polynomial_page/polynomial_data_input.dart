@@ -15,28 +15,21 @@ class PolynomialDataInput extends StatelessWidget {
   const PolynomialDataInput({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final polynomialType = context.polynomialState.polynomialType;
-
-    switch (polynomialType) {
-      case PolynomialType.linear:
-        return const _InputWidget(
-          equationTemplate: 'ax + b',
-        );
-      case PolynomialType.quadratic:
-        return const _InputWidget(
-          equationTemplate: 'ax^2 + bx + c',
-        );
-      case PolynomialType.cubic:
-        return const _InputWidget(
-          equationTemplate: 'ax^3 + bx^2 + cx + d',
-        );
-      case PolynomialType.quartic:
-        return const _InputWidget(
-          equationTemplate: 'ax^4 + bx^3 + cx^2 + dx + e',
-        );
-    }
-  }
+  Widget build(BuildContext context) =>
+      switch (context.polynomialState.polynomialType) {
+        PolynomialType.linear => const _InputWidget(
+            equationTemplate: 'ax + b',
+          ),
+        PolynomialType.quadratic => const _InputWidget(
+            equationTemplate: 'ax^2 + bx + c',
+          ),
+        PolynomialType.cubic => const _InputWidget(
+            equationTemplate: 'ax^3 + bx^2 + cx + d',
+          ),
+        PolynomialType.quartic => const _InputWidget(
+            equationTemplate: 'ax^4 + bx^3 + cx^2 + dx + e',
+          )
+      };
 }
 
 /// The actual input container.

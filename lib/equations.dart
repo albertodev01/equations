@@ -8,7 +8,7 @@
 ///  - interpolate data points using interpolation algorithms.
 ///
 /// Additionally, the package also has utilities to work with complex numbers,
-/// real/complex matrices, fractions and expression parsing.
+/// real/complex matrices, fractions, and expression parsing.
 library equations;
 
 export 'package:fraction/fraction.dart';
@@ -27,7 +27,6 @@ export 'src/integral/numerical_integration.dart';
 export 'src/integral/types/midpoint_rule.dart';
 export 'src/integral/types/simpson_rule.dart';
 export 'src/integral/types/trapezoidal_rule.dart';
-export 'src/integral/utils/integral_results.dart';
 export 'src/interpolation/interpolation.dart';
 export 'src/interpolation/types/linear_interpolation.dart';
 export 'src/interpolation/types/newton_interpolation.dart';
@@ -43,7 +42,6 @@ export 'src/nonlinear/types/regula_falsi.dart';
 export 'src/nonlinear/types/riddler.dart';
 export 'src/nonlinear/types/secant.dart';
 export 'src/nonlinear/types/steffensen.dart';
-export 'src/nonlinear/utils/results_nonlinear.dart';
 export 'src/system/system.dart';
 export 'src/system/types/cholesky.dart';
 export 'src/system/types/gauss.dart';

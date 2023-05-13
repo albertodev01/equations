@@ -7,7 +7,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro svd_class_header}
 ///
 /// This class performs the SVD procedure on [RealMatrix] types.
-class SVDReal extends SingleValueDecomposition<double, RealMatrix>
+final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const SVDReal({
@@ -356,7 +356,6 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
               matrixV[i][j] = t;
             }
           }
-          break;
 
         case 2:
           var f = arrayE[index - 1];
@@ -375,7 +374,6 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
               matrixU[i][j] = t;
             }
           }
-          break;
 
         case 3:
           // QR step with shifting
@@ -446,7 +444,6 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
 
           arrayE[p - 2] = f;
           step = step + 1;
-          break;
 
         case 4:
           // Changing sign to singular values to make them positive.
@@ -484,7 +481,6 @@ class SVDReal extends SingleValueDecomposition<double, RealMatrix>
 
           step = 0;
           p--;
-          break;
       }
     }
 

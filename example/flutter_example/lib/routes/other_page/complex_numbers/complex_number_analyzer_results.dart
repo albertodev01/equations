@@ -18,8 +18,8 @@ class ComplexNumberAnalyzerResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.otherState,
+    return ListenableBuilder(
+      listenable: context.otherState,
       builder: (context, _) {
         final result = context.otherState.state.results;
 

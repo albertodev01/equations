@@ -2,27 +2,26 @@ import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
 
-/// Solves a system of linear equations using the SOR iterative method.
-/// The given input matrix, representing the system of linear equations, must
-/// be square.
+/// Solves a system of linear equations using the SOR iterative method. The
+/// given input matrix, representing the system of linear equations, must be
+/// square.
 ///
 /// A theorem due to Kahan (1958) shows that SOR fails to converge if `w` is not
 /// in the (0, 2) range.
-class SORSolver extends SystemSolver {
+final class SORSolver extends SystemSolver {
   /// The relaxation factor `w` (omega).
   final double w;
 
   /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
 
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  /// {@macro systems_constructor_intro}
   ///
-  ///   - [matrix] is the matrix containing the equations;
-  ///   - [knownValues] is the vector with the known values;
-  ///   - [precision] determines how accurate the algorithm has to be;
-  ///   - [w] is the relaxation factor;
-  ///   - [maxSteps] the maximum number of iterations the algorithm.
+  ///  - [matrix] is the matrix containing the equations;
+  ///  - [knownValues] is the vector with the known values;
+  ///  - [precision] determines how accurate the algorithm has to be;
+  ///  - [w] is the relaxation factor;
+  ///  - [maxSteps] the maximum number of iterations the algorithm.
   SORSolver({
     required super.matrix,
     required super.knownValues,
@@ -45,14 +44,9 @@ class SORSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + w.hashCode;
-    result = result * 37 + maxSteps.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hashAll(
+        [matrix, precision, ...knownValues, maxSteps, w],
+      );
 
   @override
   List<double> solve() {

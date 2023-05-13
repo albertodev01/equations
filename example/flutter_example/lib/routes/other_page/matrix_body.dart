@@ -14,8 +14,8 @@ class MatrixOtherBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: const [
+    return const Stack(
+      children: [
         // Scrollable contents of the page
         Positioned.fill(
           child: _PageBody(),

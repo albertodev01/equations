@@ -1,15 +1,17 @@
 import 'package:equations/equations.dart';
 
-/// A solver for systems of linear equations whose coefficients are only real
-/// numbers. There **must** be `n` equations in `n` unknowns.
+/// An abstract class that represents a system of equations, which can be solved
+/// using various algorithms that manipulate the data of a matrix and a vector.
+///
+/// System solvers of linear equations require the coefficients to be real
+/// numbers and there **must** be `n` equations in `n` unknowns.
 ///
 /// The coefficients of the various equations are put inside a square matrix,
-/// which is generally called `A`, and the known values are represented by a
-/// vector, usually known as `b`. From this, we get an equation in the form
-/// `Ax = b`.
+/// generally called `A`. The known values are represented by a vector, usually
+/// known as `b`. From this, we get an equation in the form `Ax = b`.
 ///
 /// The method [solve] returns the `x` vector of the `Ax = b` equation.
-abstract class SystemSolver {
+abstract base class SystemSolver {
   /// The equations to be solved.
   final RealMatrix matrix;
 
@@ -21,8 +23,9 @@ abstract class SystemSolver {
 
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  /// This class can only be built with square matrices. In particular:
   ///
-  ///   - [matrix] is the matrix containing the equations;
+  ///   - [matrix] is the matrix with the equations;
   ///   - [knownValues] is the vector with the known values.
   ///
   /// An exception of type [SystemSolverException] is thrown if the matrix is
@@ -80,25 +83,12 @@ abstract class SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    // Like we did in operator==, iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < knownValues.length; ++i) {
-      result = result * 37 + knownValues[i].hashCode;
-    }
-
-    result = result * 37 + matrix.hashCode;
-    result = result * 37 + precision.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hashAll([matrix, precision, ...knownValues]);
 
   @override
   String toString() => matrix.toString();
 
-  /// Prints the augmented matrix of this instance, which is the equations
+  /// Prints the **augmented matrix** of this instance, which is the equations
   /// matrix plus the known values vector to the right. For example, if...
   ///
   /// ```txt
@@ -200,13 +190,12 @@ abstract class SystemSolver {
     return solutions;
   }
 
-  /// The dimension of the system (which is N equations in N unknowns).
+  /// The dimension of the system (N equations in N unknowns).
   int get size => knownValues.length;
 
   /// Computes the determinant of the associated matrix.
   double determinant() => matrix.determinant();
 
-  /// Solves the `Ax = b` equation and returns the `x` vector containing the
-  /// solutions of the system.
+  /// Solves the `Ax = b` equation and returns the `x` vector.
   List<double> solve();
 }

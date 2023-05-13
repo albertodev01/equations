@@ -26,7 +26,7 @@ void main() {
 
   group('Golden tests - PageTitle', () {
     testWidgets('PageTitle', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(300, 150));
+      await tester.binding.setSurfaceSize(const Size(340, 150));
 
       await tester.pumpWidget(
         const MockWrapper(

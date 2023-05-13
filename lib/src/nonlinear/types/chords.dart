@@ -6,9 +6,10 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
+///
 ///   - The values of `f(a)` and `f(b)` must have opposite signs AND there must
 ///   be at least one root in `[a, b]`. These are 2 required conditions.
-class Chords extends NonLinear {
+final class Chords extends NonLinear {
   /// The starting point of the interval.
   final double a;
 
@@ -45,17 +46,10 @@ class Chords extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, a, b, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     final guesses = <double>[];
     var n = 1;
 
@@ -79,7 +73,7 @@ class Chords extends NonLinear {
       ++n;
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

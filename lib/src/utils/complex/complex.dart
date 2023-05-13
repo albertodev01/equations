@@ -6,7 +6,7 @@ import 'package:equations/equations.dart';
 /// the real part and `bi` is the imaginary (or complex) part.
 ///
 /// A [Complex] object is **immutable**.
-class Complex implements Comparable<Complex> {
+final class Complex implements Comparable<Complex> {
   /// The real part of the complex number.
   final double real;
 
@@ -100,14 +100,7 @@ class Complex implements Comparable<Complex> {
   }
 
   @override
-  int get hashCode {
-    var result = 83;
-
-    result = result * 37 + real.hashCode;
-    result = result * 37 + imaginary.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(real, imaginary);
 
   @override
   int compareTo(Complex other) {
@@ -126,8 +119,7 @@ class Complex implements Comparable<Complex> {
     return 0;
   }
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   Complex copyWith({
     double? real,
     double? imaginary,

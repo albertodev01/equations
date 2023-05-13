@@ -68,7 +68,7 @@ void main() {
 
   group('Golden tests - RailNavigation', () {
     testWidgets('RailNavigation', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(80, 350));
+      await tester.binding.setSurfaceSize(const Size(120, 350));
 
       await tester.pumpWidget(
         SizedBox(

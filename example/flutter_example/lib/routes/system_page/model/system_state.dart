@@ -140,27 +140,22 @@ class SystemState extends ChangeNotifier {
       final matrix = _valueParser(flatMatrix);
       final vector = _valueParser(knownValues);
 
-      final SystemSolver solver;
       final realMatrix = RealMatrix.fromFlattenedData(
         rows: size,
         columns: size,
         data: matrix,
       );
 
-      switch (method) {
-        case FactorizationMethods.lu:
-          solver = LUSolver(
+      final solver = switch (method) {
+        FactorizationMethods.lu => LUSolver(
             matrix: realMatrix,
             knownValues: vector,
-          );
-          break;
-        case FactorizationMethods.cholesky:
-          solver = CholeskySolver(
+          ),
+        FactorizationMethods.cholesky => CholeskySolver(
             matrix: realMatrix,
             knownValues: vector,
-          );
-          break;
-      }
+          )
+      };
 
       final hasSolution = solver.hasSolution();
 
@@ -187,37 +182,30 @@ class SystemState extends ChangeNotifier {
     try {
       final matrix = _valueParser(flatMatrix);
       final vector = _valueParser(knownValues);
+      const parser = ExpressionParser();
 
-      final SystemSolver solver;
       final realMatrix = RealMatrix.fromFlattenedData(
         rows: size,
         columns: size,
         data: matrix,
       );
 
-      switch (method) {
-        case IterativeMethods.sor:
-          const parser = ExpressionParser();
-          solver = SORSolver(
+      final solver = switch (method) {
+        IterativeMethods.sor => SORSolver(
             matrix: realMatrix,
             knownValues: vector,
             w: parser.evaluate(w),
-          );
-          break;
-        case IterativeMethods.gaussSeidel:
-          solver = GaussSeidelSolver(
+          ),
+        IterativeMethods.gaussSeidel => GaussSeidelSolver(
             matrix: realMatrix,
             knownValues: vector,
-          );
-          break;
-        case IterativeMethods.jacobi:
-          solver = JacobiSolver(
+          ),
+        IterativeMethods.jacobi => JacobiSolver(
             matrix: realMatrix,
             knownValues: vector,
             x0: _valueParser(jacobiInitialVector),
-          );
-          break;
-      }
+          )
+      };
 
       final hasSolution = solver.hasSolution();
 
@@ -238,9 +226,8 @@ class SystemState extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<double> _valueParser(List<String> source) {
-    const parser = ExpressionParser();
-
-    return source.map(parser.evaluate).toList(growable: false);
-  }
+  /// Tries to parse each value of [source] of number and evaluates the
+  /// numerical expression.
+  List<double> _valueParser(List<String> source) =>
+      source.map(const ExpressionParser().evaluate).toList(growable: false);
 }

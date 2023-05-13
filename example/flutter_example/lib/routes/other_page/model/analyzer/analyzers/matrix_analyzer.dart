@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/analyzer.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/matrix_result_wrapper.dart';
 
-/// Analyzes a matrix and computes various results:
+/// Analyzes a matrix and computes various values:
 ///
 ///  - the transposed matrix
 ///  - the cofactor matrix
@@ -15,7 +15,7 @@ import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/matri
 ///  - whether it's diagonal or not
 ///  - whether it's symmetric or not
 ///  - whether it's identity or not
-class MatrixDataAnalyzer extends Analyzer<MatrixResultWrapper> {
+final class MatrixDataAnalyzer extends Analyzer<MatrixResultWrapper> {
   /// The matrix size.
   final int size;
 

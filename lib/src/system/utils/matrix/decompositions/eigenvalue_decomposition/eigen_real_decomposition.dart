@@ -8,8 +8,8 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro eigendecomposition_class_header}
 ///
 /// This class performs the eigendecomposition on [RealMatrix] types.
-class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
-    with MathUtils {
+final class EigendecompositionReal
+    extends EigenDecomposition<double, RealMatrix> with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const EigendecompositionReal({
     required super.matrix,
@@ -759,7 +759,6 @@ class EigendecompositionReal extends EigenDecomposition<double, RealMatrix>
               }
 
               // Solve real equations
-
             } else {
               x = hessenbergCache.get(i, i + 1);
               y = hessenbergCache.get(i + 1, i);

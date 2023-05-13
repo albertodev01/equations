@@ -5,10 +5,11 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 /// QR decomposition, also known as a QR factorization or QU factorization, is
 /// a decomposition of a matrix A into a product `A = QR` of:
 ///
-///   - an orthogonal matrix Q;
-///   - an upper triangular matrix R.
+///  - an orthogonal matrix Q;
+///
+///  - an upper triangular matrix R.
 /// {@endtemplate}
-abstract class QRDecomposition<K, T extends Matrix<K>>
+abstract base class QRDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
   /// Creates a [QRDecomposition] object.
   const QRDecomposition({

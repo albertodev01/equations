@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- This is required to make the web application run on GitHub Pages -->
   <base href="/equations/">
 
   <meta charset="UTF-8">
@@ -41,16 +42,18 @@
       var loading = document.querySelector('#loading');
       loading.textContent = localizedMessage(0);
 
+      // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: async function(engineInitializer) {
+          loading.textContent = localizedMessage(1);
+          let appRunner = await engineInitializer.initializeEngine();
+
+          loading.textContent = localizedMessage(2);
+          await appRunner.runApp();
         }
-      }).then(function(engineInitializer) {
-        loading.textContent = localizedMessage(1);
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        loading.textContent = localizedMessage(2);
-        return appRunner.runApp();
       });
     });
   </script>

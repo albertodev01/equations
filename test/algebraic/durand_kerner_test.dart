@@ -346,13 +346,13 @@ void main() {
         ).solutions(),
       ];
 
-      final solutions = <List<Complex>>[
-        const [
+      const solutions = <List<Complex>>[
+        [
           Complex.fromReal(2),
           Complex.fromReal(-3),
           Complex.fromReal(-0.5),
         ],
-        const [
+        [
           Complex(-0.823, -0.5491),
           Complex(0.2501, 1.3561),
           Complex.fromReal(1.5048),
@@ -360,25 +360,25 @@ void main() {
           Complex.fromReal(4.6407),
           Complex(-0.823, 0.5491),
         ],
-        const [
+        [
           Complex(-1.2215, 0.6934),
           Complex(0.9715, 0.911),
           Complex(0.9715, -0.911),
           Complex(-1.2215, -0.6934),
         ],
-        const [
+        [
           Complex(0.1416, 0.0007),
           Complex(-0.4731, 1.3384),
           Complex(0.3314, -1.3391),
         ],
-        const [
+        [
           Complex(-0.7022, -1.1129),
           Complex(1.2952, 0.3689),
           Complex(1.0034, -1.2234),
           Complex(-1.4083, 0.5424),
           Complex(-0.1881, 1.425),
         ],
-        const [
+        [
           Complex.fromReal(-1),
           Complex.fromReal(-1),
         ],

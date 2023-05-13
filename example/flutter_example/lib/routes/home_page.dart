@@ -3,8 +3,8 @@ import 'package:equations_solver/routes/utils/app_logo.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold.dart';
 import 'package:flutter/material.dart';
 
-/// The home page shows a series of cards representing the various solvers of
-/// the app.
+/// The home page shows a series of cards that represents the available solvers
+/// in the application.
 class HomePage extends StatelessWidget {
   /// Creates a [HomePage] widget.
   const HomePage({
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EquationScaffold(
+    return const EquationScaffold(
       body: CustomScrollView(
         slivers: [
           // We're using 'SliverFillRemaining' because it makes the contents
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   // The logo at the top
                   AppLogo(),
 

@@ -29,10 +29,10 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final value = matrix.itemAt(2, 3);
 /// ```
 ///
-/// Both versions return the same value but the first one is of course less
-/// verbose and you should prefer it. In the example, we're retrieving the value
-/// of the element at position `(1, 3)` in the matrix.
-class RealMatrix extends Matrix<double> with MathUtils {
+/// Both versions return the same value but the first one is less verbose and
+/// preferred. In the example, `value` holds the value of the element at
+/// position `(1, 3)` in the matrix.
+base class RealMatrix extends Matrix<double> with MathUtils {
   /// {@macro matrix_constructor_intro}
   RealMatrix({
     required super.rows,
