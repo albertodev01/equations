@@ -36,7 +36,11 @@ final class Steffensen extends NonLinear {
     }
 
     if (other is Steffensen) {
-      return super == other && x0 == other.x0;
+      return runtimeType == other.runtimeType &&
+          function == other.function &&
+          tolerance == other.tolerance &&
+          maxSteps == other.maxSteps &&
+          x0 == other.x0;
     } else {
       return false;
     }

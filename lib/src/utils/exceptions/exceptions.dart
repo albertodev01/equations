@@ -29,8 +29,8 @@ abstract class EquationException implements Exception {
 
     if (other is EquationException) {
       return runtimeType == other.runtimeType &&
-          message == other.message &&
-          messagePrefix == other.messagePrefix;
+          messagePrefix == other.messagePrefix &&
+          message == other.message;
     } else {
       return false;
     }

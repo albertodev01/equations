@@ -67,6 +67,7 @@ void main() {
       expect(const RegulaFalsi(function: 'x-2', a: 0, b: 2) == regula, isFalse);
       expect(regula, equals(const RegulaFalsi(function: 'x-2', a: 1, b: 2)));
       expect(const RegulaFalsi(function: 'x-2', a: 0, b: 2) == regula, isFalse);
+      expect(const RegulaFalsi(function: 'x-2', a: 1, b: 1) == regula, isFalse);
       expect(
         const RegulaFalsi(function: 'x-2', a: 1, b: 2).hashCode,
         equals(regula.hashCode),

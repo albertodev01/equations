@@ -59,6 +59,7 @@ void main() {
       expect(chords, equals(const Chords(function: 'x^2-2', a: 1, b: 2)));
       expect(chords == const Chords(function: 'x^2-2', a: 1, b: 2), isTrue);
       expect(const Chords(function: 'x^2-2', a: 0, b: 2) == chords, isFalse);
+      expect(const Chords(function: 'x^2-2', a: 1, b: 3) == chords, isFalse);
       expect(
         const Chords(function: 'x^2-2', a: 1, b: 2).hashCode,
         equals(chords.hashCode),
