@@ -62,18 +62,16 @@ class _SystemDataInputState extends State<SystemDataInput> {
     context.systemState.clear();
     context.numberSwitcherState.reset();
 
+    // Clear all input forms on screen
     for (final controller in context.systemTextControllers.matrixControllers) {
       controller.clear();
     }
-
     for (final controller in context.systemTextControllers.vectorControllers) {
       controller.clear();
     }
-
     for (final controller in context.systemTextControllers.jacobiControllers) {
       controller.clear();
     }
-
     context.systemTextControllers.wSorController.clear();
 
     FocusScope.of(context).unfocus();
@@ -104,7 +102,6 @@ class _SystemDataInputState extends State<SystemDataInput> {
             knownValues: vectorInputs,
             size: size,
           );
-          break;
         case SystemType.factorization:
           context.systemState.factorizationSolver(
             flatMatrix: systemInputs,
@@ -112,7 +109,6 @@ class _SystemDataInputState extends State<SystemDataInput> {
             size: size,
             method: SystemState.factorizationResolve(algorithm),
           );
-          break;
         case SystemType.iterative:
           final initialGuesses = context.systemTextControllers.jacobiControllers
               .sublist(0, size)
@@ -127,7 +123,6 @@ class _SystemDataInputState extends State<SystemDataInput> {
             jacobiInitialVector: initialGuesses,
             w: context.systemTextControllers.wSorController.text,
           );
-          break;
       }
     } else {
       // The user entered invalid values,
@@ -163,8 +158,8 @@ class _SystemDataInputState extends State<SystemDataInput> {
             ),
 
             // Matrix input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
+            ListenableBuilder(
+              listenable: context.numberSwitcherState,
               builder: (context, _) {
                 return MatrixInput(
                   matrixControllers:
@@ -183,8 +178,8 @@ class _SystemDataInputState extends State<SystemDataInput> {
             ),
 
             // Vector input
-            AnimatedBuilder(
-              animation: context.numberSwitcherState,
+            ListenableBuilder(
+              listenable: context.numberSwitcherState,
               builder: (context, _) {
                 return VectorInput(
                   vectorControllers:

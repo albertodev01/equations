@@ -11,7 +11,7 @@ export 'spline_functions/montone_cubic_spline.dart';
 /// polynomial interpolation because it yields similar results, even when using
 /// low-degree polynomials, while avoiding Runge's phenomenon for higher
 /// degrees.
-abstract class SplineFunction {
+abstract base class SplineFunction {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
@@ -79,17 +79,7 @@ abstract class SplineFunction {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < nodes.length; ++i) {
-      result = result * 37 + nodes[i].hashCode;
-    }
-
-    return result;
-  }
+  int get hashCode => Object.hashAll(nodes);
 
   @override
   String toString() => nodes.join(', ');

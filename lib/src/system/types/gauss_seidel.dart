@@ -4,19 +4,18 @@ import 'package:equations/equations.dart';
 /// The given input matrix, representing the system of linear equations, must
 /// be square.
 ///
-/// Note that the usage of [GaussSeidelSolver] is the same as using [SORSolver]
+/// Gauss-Seidel is the same as SOR when `w` = 1.
 /// with `w = 1`.
-class GaussSeidelSolver extends SystemSolver {
+final class GaussSeidelSolver extends SystemSolver {
   /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
 
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  /// {@macro systems_constructor_intro}
   ///
-  ///   - [matrix] is the matrix containing the equations;
-  ///   - [knownValues] is the vector with the known values;
-  ///   - [precision] determines how accurate the algorithm has to be;
-  ///   - [maxSteps] the maximum number of iterations the algorithm.
+  ///  - [matrix] is the matrix containing the equations;
+  ///  - [knownValues] is the vector with the known values;
+  ///  - [precision] determines how accurate the algorithm has to be;
+  ///  - [maxSteps] the maximum number of iterations the algorithm.
   ///
   /// By default, [maxSteps] is set to `30`.
   GaussSeidelSolver({
@@ -40,7 +39,9 @@ class GaussSeidelSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode => 37 * super.hashCode + maxSteps.hashCode;
+  int get hashCode => Object.hashAll(
+        [matrix, precision, ...knownValues, maxSteps],
+      );
 
   @override
   List<double> solve() {

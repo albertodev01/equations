@@ -1,34 +1,17 @@
 import 'package:equations_solver/localization/localization.dart';
 import 'package:equations_solver/routes.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-/// The app's main entrypoint.
-///
-/// The [LicenseRegistry.addLicense] call can be excluded from code coverage
-/// since it will be tested by integration tests.
+/// The application's main entrypoint.
 void main() {
-  // coverage:ignore-start
-  LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('google_fonts/OFL.txt');
-    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
-  });
-  // coverage:ignore-end
-
-  // Running the app
   runApp(
     const EquationsApp(),
   );
 }
 
-/// The root widget of the app.
+/// The root widget of the application.
 class EquationsApp extends StatelessWidget {
   static final _appRouter = generateRouter();
-
-  /// The current app version. This is shown in the home page.
-  static const version = '1.0.0';
 
   /// Creates an [EquationsApp] instance.
   const EquationsApp({
@@ -49,11 +32,6 @@ class EquationsApp extends StatelessWidget {
       // Localization setup
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-
-      // Theme
-      theme: ThemeData.light().copyWith(
-        textTheme: GoogleFonts.latoTextTheme(),
-      ),
 
       // Hides scroll bars on mobile but always shows them on desktop
       scrollBehavior: const _CustomScrollBehavior(),

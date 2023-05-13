@@ -28,20 +28,16 @@ abstract class EquationException implements Exception {
     }
 
     if (other is EquationException) {
-      return runtimeType == other.runtimeType && message == other.message;
+      return runtimeType == other.runtimeType &&
+          message == other.message &&
+          messagePrefix == other.messagePrefix;
     } else {
       return false;
     }
   }
 
   @override
-  int get hashCode {
-    var result = 83;
-    result = result * 37 + message.hashCode;
-    result = result * 37 + messagePrefix.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(message, messagePrefix);
 
   @override
   String toString() => '$messagePrefix: $message';

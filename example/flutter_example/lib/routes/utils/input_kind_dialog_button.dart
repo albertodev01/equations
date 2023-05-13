@@ -117,10 +117,10 @@ class _AllowsFunctions extends StatelessWidget {
         // Lists the supported functions
         Text(context.l10n.input_allowed_functions),
         const SizedBox(height: 15),
-        Wrap(
+        const Wrap(
           runSpacing: 5,
           spacing: 5,
-          children: const [
+          children: [
             _FunctionCard(functionName: 'sqrt(x)'),
             _FunctionCard(functionName: 'sin(x)'),
             _FunctionCard(functionName: 'cos(x)'),

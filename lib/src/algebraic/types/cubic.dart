@@ -5,14 +5,14 @@ import 'package:equations/equations.dart';
 /// Concrete implementation of [Algebraic] that represents a third degree
 /// polynomial equation in the form `ax^3 + bx^2 + cx + d = 0`.
 ///
-/// This equation exactly has 3 solutions:
+/// This equation has 3 solutions, which can be combined as follows:
 ///
 ///  - 3 distinct real roots and 0 complex roots
 ///  - 3 real roots (some of them are equal) and 0 complex roots
 ///  - 1 real root and 2 complex conjugate roots
 ///
 /// The above cases depend on the value of the discriminant.
-class Cubic extends Algebraic {
+final class Cubic extends Algebraic {
   /// These are examples of cubic equations, where the coefficient with the
   /// highest degree goes first:
   ///
@@ -120,8 +120,7 @@ class Cubic extends Algebraic {
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_
   Complex get d => coefficients[3];
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   Cubic copyWith({
     Complex? a,
     Complex? b,

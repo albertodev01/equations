@@ -1,16 +1,14 @@
 import 'package:equations/equations.dart';
 
-/// Abstract class representing an **interpolation** strategy that finds new
-/// data points based on a given discrete set of data points, called **nodes**.
+/// An abstract class that represents an interpolation strategy, used to find
+/// new data points based on a given discrete set of data points (called nodes).
 /// The algorithms implemented by this package are:
 ///
 ///  - [LinearInterpolation];
 ///  - [PolynomialInterpolation];
 ///  - [NewtonInterpolation];
 ///  - [SplineInterpolation].
-///
-/// Subclasses of [Interpolation] should only override the `compute()` method.
-abstract class Interpolation {
+abstract base class Interpolation {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
@@ -50,17 +48,7 @@ abstract class Interpolation {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < nodes.length; ++i) {
-      result = result * 37 + nodes[i].hashCode;
-    }
-
-    return result;
-  }
+  int get hashCode => Object.hashAll(nodes);
 
   /// Returns the `y` value of the `y = f(x)` equation.
   ///

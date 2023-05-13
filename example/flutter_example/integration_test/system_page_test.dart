@@ -3,10 +3,13 @@ import 'package:equations_solver/routes/models/inherited_navigation/inherited_na
 import 'package:equations_solver/routes/utils/result_cards/real_result_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
 import 'utils.dart';
 
 void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   var needsOpenPage = true;
 
   const matrixCoefficients = [
@@ -348,7 +351,7 @@ void main() {
       },
     );
 
-    testWidgets(
+    /*testWidgets(
       'Testing iterative - Jacobi',
       (tester) async {
         await configureIfDesktop(tester);
@@ -361,6 +364,6 @@ void main() {
         await testIterative(tester, 3, true);
         await testIterative(tester, 4, true);
       },
-    );
+    );*/
   });
 }

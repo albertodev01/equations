@@ -67,8 +67,7 @@ class _MatrixInputState extends State<MatrixInput> {
 
   @override
   Widget build(BuildContext context) {
-    // We're adding '5' to the overall width to make sure that tiles aren't too
-    // close each other.
+    // Adding '5' to the overall width to make sure that tiles aren't too close.
     final boxWidth = widget.matrixSize * (systemInputFieldSize + 5);
 
     return Center(

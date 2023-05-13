@@ -39,8 +39,8 @@ class _IntegralSolutions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.integralState,
+    return ListenableBuilder(
+      listenable: context.integralState,
       builder: (context, _) {
         final integration = context.integralState.state.numericalIntegration;
 

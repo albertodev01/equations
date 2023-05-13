@@ -20,8 +20,8 @@ class PrecisionSlider extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Slider
-            AnimatedBuilder(
-              animation: context.precisionState,
+            ListenableBuilder(
+              listenable: context.precisionState,
               builder: (context, state) {
                 return Slider(
                   min: 2,
@@ -59,8 +59,8 @@ class _SliderLabels extends StatelessWidget {
           Text(context.l10n.precision),
 
           // The label representing the precision
-          AnimatedBuilder(
-            animation: context.precisionState,
+          ListenableBuilder(
+            listenable: context.precisionState,
             builder: (context, state) {
               return Text('1.0e-${context.precisionState.value.round()}');
             },

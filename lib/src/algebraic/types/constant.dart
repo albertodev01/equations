@@ -1,16 +1,16 @@
 import 'package:equations/equations.dart';
 
-/// Concrete implementation of [Algebraic] which represents a constant value
+/// Concrete implementation of [Algebraic] that represents a constant value
 /// `a`. It can be either real or complex.
 ///
-/// **Examples**:
+/// For example:
 ///
 ///   - f(x) = 5
 ///   - f(x) = 3 + 6i
 ///
 /// In the context of a polynomial with one variable, the non-zero constant
 /// function is a polynomial of degree 0.
-class Constant extends Algebraic {
+final class Constant extends Algebraic {
   /// The only coefficient of the polynomial is represented by a [Complex]
   /// number [a].
   Constant({
@@ -38,9 +38,9 @@ class Constant extends Algebraic {
   /// The constant coefficient.
   Complex get a => coefficients.first;
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
-  Constant copyWith({Complex? a}) => Constant(
-        a: a ?? this.a,
-      );
+  /// {@template algebraic_deep_copy}
+  /// Creates a **deep** copy of this object and replaces (if non-null) the
+  /// given values with the old ones.
+  /// {@endtemplate}
+  Constant copyWith({Complex? a}) => Constant(a: a ?? this.a);
 }

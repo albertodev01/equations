@@ -1,7 +1,7 @@
 <p align="center">
 <img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/equations_logo.svg" height="92" alt="dart_equations logo" />
 </p>
-<p align="center">An equation solving library written purely in Dart</p>
+<p align="center">An equation-solving library written purely in Dart.</p>
 <p align="center">
     <a href="https://codecov.io/gh/albertodev01/equations"><img src="https://codecov.io/gh/albertodev01/equations/branch/master/graph/badge.svg?token=OQFZFHPD3S"/></a>
     <a href="https://github.com/albertodev01/equations/actions"><img src="https://github.com/albertodev01/equations/workflows/equations_ci/badge.svg" alt="CI status" /></a>
@@ -11,7 +11,7 @@
 
 ---
 
-The `equations` package is used to solve numerical analysis problems with ease. It's purely written in Dart, meaning that it has no platform-specific dependencies and it doesn't require Flutter to work. You can use `equations`, for example, in a Dart CLI project or a Flutter cross-platform application. Here's a summary of what you can do with this package:
+The `equations` package is used to solve numerical analysis problems with ease. It's purely written in Dart, meaning it has no platform-specific dependencies and doesn't require Flutter to work. You can use `equations`, for example, in a Dart CLI project or a Flutter cross-platform application. Here's a summary of what you can do with this package:
 
   - solve polynomial equations with `Algebraic` types;
   - solve nonlinear equations with `Nonlinear` types;
@@ -25,12 +25,12 @@ In addition, you can also find utilities to work with:
   - Complex number, using the `Complex` type;
   - Fractions, using the `Fraction` and `MixedFraction` types.
 
-This package is entirely null safe and it's built on top of the latest Dart version. There is a demo, built with Flutter, that shows an example of how this library can be used (especially for numerical analysis apps) :rocket:
+This package has a type-safe API and requires Dart 3.0 (or higher versions). There is a demo project created with Flutter that shows an example of how this library could be used to develop a numerical analysis application  :rocket:
 
 <p align="center"><img src="https://raw.githubusercontent.com/albertodev01/equations/master/assets/circle_logo.svg" alt="Equation Solver logo" width="55" height="55" /></p>
 <p align="center"><a href="https://albertodev01.github.io/equations/">Equation Solver - Flutter web demo</a></p>
 
-The source code of the above website can be found at `example/flutter_example`. Visit the official [pub.dev documentation](https://pub.dev/documentation/equations/latest/) for details about methods signatures and inline documentation.
+The source code of the Flutter application can be found at `example/flutter_example/`. Visit the official [pub.dev documentation](https://pub.dev/documentation/equations/latest/) for details about methods signatures and inline documentation.
 
 ---
 
@@ -71,7 +71,7 @@ final isReal = equation.isRealEquation; // false
 final discr = equation.discriminant(); // -31299.688 + 27460.192i
 
 // f(x) = (2 - 3i)x^3 + 1.2ix^2 + (5 - 1i)x + (-9 - 6i)
-print("$equation");
+print('$equation');
 
 // f(x) = (2 - 3i)x^3 + 6/5ix^2 + (5 - 1i)x + (-9 - 6i)
 print(equation.toStringWithFractions());
@@ -113,7 +113,7 @@ for (final root in equation.solutions()) {
 }
 ```
 
-As we've already pointed out, both ways are equivalent but `DurandKerner` is computationally slower than `Cubic` and it doesn't guarantee to always converge to the correct roots. Use `DurandKerner` only when the degree of your polynomial is greater or equal to 5.
+As we've already pointed out, both ways are equivalent. However, `DurandKerner` is computationally slower than `Cubic` and doesn't always guarantee to converge to the correct roots. Use `DurandKerner` only when the degree of your polynomial is greater or equal to 5.
 
 ```dart
 final quadratic = Algebraic.from(const [
@@ -131,7 +131,7 @@ The factory constructor `Algebraic.from()` automatically returns the best type o
 
 # Nonlinear equations
 
-Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package supports the following root finding methods:
+Use one of the following classes, representing a root-finding algorithm, to find a root of an equation. Only real numbers are allowed. This package supports the following root-finding methods:
 
 | Solver name  | Params field      |
 |:------------:|:-----------------:|
@@ -185,7 +185,7 @@ Use one of the following classes to solve systems of linear equations. Only real
 | `LUSolver`            | :x:                |
 | `SORSolver`           | :heavy_check_mark: |
 
-These solvers are used to find the `x` in the `Ax = b` equation. Methods require, at least, the system matrix `A` and the known values vector `b`. Iterative methods may require additional parameters such as an initial guess or a particular configuration value.
+These solvers are used to find the `x` in the `Ax = b` equation. Methods require, at least, the system matrix `A` and the known values vector `b`. Iterative methods may require additional parameters such as an initial guess or a particular configuration value. For example:
 
 ```dart
 // Solve a system using LU decomposition
@@ -241,7 +241,7 @@ final eigenvalues = matrixA.eigenvalues();
 final characPolynomial = matrixA.characteristicPolynomial();
 ```
 
-You can use `toString()` to print the matrix contents. The `toStringAugmented()` method prints the augmented matrix (the matrix + one extra column with the known values vector).
+You can use `toString()` to print the matrix contents. The `toStringAugmented()` method prints the augmented matrix (the matrix + one extra column with the known values vector). For example:
 
 ```dart
 final lu = LUSolver(
@@ -319,7 +319,7 @@ This package can also perform linear, polynomial or spline interpolations using 
  - `NewtonInterpolation`
  - `SplineInterpolation`
 
-You'll always find the `compute(double x)` method in any `Interpolation` type but some classes may have additional methods that others haven't. For example:
+You'll always find the `compute(double x)` method in any `Interpolation` type, but some classes may have additional methods that others haven't. For example:
 
 ```dart
 const newton = NewtonInterpolation(

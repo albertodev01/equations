@@ -113,23 +113,16 @@ enum NonlinearDropdownItems {
 /// Extension method on [String] to convert into a [NonlinearDropdownItems] the
 /// string value.
 extension StringExt on String {
+  static const _argumentErrorMessage =
+      'The given string does NOT map to a NonlinearDropdownItems value';
+
   /// Converts a [String] into a [NonlinearDropdownItems] value.
-  NonlinearDropdownItems toNonlinearDropdownItems() {
-    switch (toLowerCase()) {
-      case 'newton':
-        return NonlinearDropdownItems.newton;
-      case 'steffensen':
-        return NonlinearDropdownItems.steffensen;
-      case 'bisection':
-        return NonlinearDropdownItems.bisection;
-      case 'secant':
-        return NonlinearDropdownItems.secant;
-      case 'brent':
-        return NonlinearDropdownItems.brent;
-      default:
-        throw ArgumentError(
-          'The given string does NOT map to a NonlinearDropdownItems value',
-        );
-    }
-  }
+  NonlinearDropdownItems toNonlinearDropdownItems() => switch (toLowerCase()) {
+        'newton' => NonlinearDropdownItems.newton,
+        'steffensen' => NonlinearDropdownItems.steffensen,
+        'bisection' => NonlinearDropdownItems.bisection,
+        'secant' => NonlinearDropdownItems.secant,
+        'brent' => NonlinearDropdownItems.brent,
+        _ => throw ArgumentError(_argumentErrorMessage)
+      };
 }

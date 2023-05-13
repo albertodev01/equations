@@ -3,7 +3,6 @@ import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/models/plot_zoom/inherited_plot_zoom.dart';
 import 'package:equations_solver/routes/models/plot_zoom/plot_zoom_state.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// A wrapper of a [MaterialApp] with localization support to be used in widget
 /// tests.
@@ -34,9 +33,6 @@ class MockWrapper extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       navigatorObservers: navigatorObservers,
-      theme: ThemeData.light().copyWith(
-        textTheme: GoogleFonts.latoTextTheme(),
-      ),
       debugShowCheckedModeBanner: false,
       home: InheritedPlotZoom(
         plotZoomState: PlotZoomState(
@@ -74,9 +70,6 @@ class MockWrapperWithNavigator extends StatelessWidget {
       routeInformationProvider: appRouter.routeInformationProvider,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData.light().copyWith(
-        textTheme: GoogleFonts.latoTextTheme(),
-      ),
       debugShowCheckedModeBanner: false,
     );
   }

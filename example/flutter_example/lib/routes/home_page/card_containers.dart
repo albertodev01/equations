@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// A series of [Card] widgets representing the various kind of solvers
-/// supported by the app. A [CardContainer] widget has an icon on the left and
-/// some text on the right.
+/// A series of [Card] widgets representing the various of solvers supported by
+/// the application. A [CardContainer] widget has an icon on the left and some
+/// text on the right.
 class CardContainer extends StatelessWidget {
   /// The container description.
   final String title;

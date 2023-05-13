@@ -2,7 +2,7 @@ import 'package:equations_solver/routes/utils/plot_widget/equation_painter.dart'
 import 'package:flutter/material.dart';
 
 /// Used in [EquationPainter] to color a portion of area below the function.
-class ColorArea {
+final class ColorArea {
   /// The [Color] of the area below the function.
   ///
   /// By default, this is set to [Colors.transparent].
@@ -39,15 +39,7 @@ class ColorArea {
   }
 
   @override
-  int get hashCode {
-    var result = 17;
-
-    result = result * 37 + color.hashCode;
-    result = result * 37 + startPoint.hashCode;
-    result = result * 37 + endPoint.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(color, startPoint, endPoint);
 
   @override
   String toString() {

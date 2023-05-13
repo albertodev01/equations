@@ -41,7 +41,6 @@ class _CollapsibleState extends State<Collapsible>
   @override
   void dispose() {
     controller.dispose();
-
     super.dispose();
   }
 
@@ -103,7 +102,9 @@ class _PrimaryWidget extends StatelessWidget {
     return Row(
       children: [
         // Left spacing
-        const SizedBox(width: collapsibleInnerSpacing),
+        const SizedBox(
+          width: collapsibleInnerSpacing,
+        ),
 
         // The actual contents of the top part. This is wrapped in 'Expanded' so
         // that it takes as much space as possible AND text can go to a new
@@ -133,7 +134,9 @@ class _PrimaryWidget extends StatelessWidget {
         ),
 
         // Right spacing
-        const SizedBox(width: collapsibleInnerSpacing / 2),
+        const SizedBox(
+          width: collapsibleInnerSpacing / 2,
+        ),
       ],
     );
   }

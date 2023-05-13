@@ -6,7 +6,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/complex_svd.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is
-/// [double].
+/// [Complex].
 ///
 /// ```dart
 /// final matrix = ComplexMatrix(
@@ -28,10 +28,10 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 /// final value = matrix.itemAt(2, 3);
 /// ```
 ///
-/// Both versions return the same value but the first one is of course less
-/// verbose and you should prefer it. In the example, we're retrieving the value
-/// of the element at position `(1, 3)` in the matrix.
-class ComplexMatrix extends Matrix<Complex> {
+/// Both versions return the same value but the first one is less verbose and
+/// preferred. In the example, `value` holds the value of the element at
+/// position `(1, 3)` in the matrix.
+base class ComplexMatrix extends Matrix<Complex> {
   /// {@macro matrix_constructor_intro}
   ComplexMatrix({
     required super.rows,

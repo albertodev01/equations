@@ -7,7 +7,7 @@ import 'package:equations/src/utils/math_utils.dart';
 ///  {@macro svd_class_header}
 ///
 /// This class performs the SVD procedure on [ComplexMatrix] types.
-class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
+final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     with MathUtils {
   /// Requires the [matrix] matrix to be decomposed.
   const SVDComplex({
@@ -351,7 +351,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
               matrixV[i][j] = t;
             }
           }
-          break;
 
         case 2:
           var f = arrayE[index - 1];
@@ -370,7 +369,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
               matrixU[i][j] = t;
             }
           }
-          break;
 
         case 3:
           // QR step with shifting
@@ -440,7 +438,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
 
           arrayE[p - 2] = f;
           step = step + 1;
-          break;
 
         case 4:
           // Changing sign to singular values to make them positive.
@@ -477,7 +474,6 @@ class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
           }
           step = 0;
           p--;
-          break;
       }
     }
 

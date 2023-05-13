@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/analyzer.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/complex_result_wrapper.dart';
 
-/// Analyzes a complex number and computes various results:
+/// Analyzes a complex number and computes various values:
 ///
 ///  - the module
 ///  - the conjugate
@@ -10,7 +10,7 @@ import 'package:equations_solver/routes/other_page/model/analyzer/wrappers/compl
 ///  - the reciprocal
 ///  - the square root
 ///  - the polar coordinates conversion
-class ComplexNumberAnalyzer extends Analyzer<ComplexResultWrapper> {
+final class ComplexNumberAnalyzer extends Analyzer<ComplexResultWrapper> {
   /// Real part of the complex number.
   final String realPart;
 

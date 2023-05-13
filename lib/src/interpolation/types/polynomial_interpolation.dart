@@ -7,7 +7,7 @@ import 'package:equations/equations.dart';
 /// data set.
 ///
 /// This can also be seen as a generalization of linear interpolation.
-class PolynomialInterpolation extends Interpolation {
+base class PolynomialInterpolation extends Interpolation {
   /// Creates a [PolynomialInterpolation] instance from the given interpolation
   /// nodes.
   const PolynomialInterpolation({

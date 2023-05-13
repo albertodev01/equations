@@ -64,26 +64,18 @@ class _IntegralDataInputState extends State<IntegralDataInput> {
   void solve() {
     if (formKey.currentState?.validate() ?? false) {
       final dropdown = context.dropdownValue.value;
-      IntegralType type;
-
-      switch (dropdown.toIntegralDropdownItems()) {
-        case IntegralDropdownItems.simpson:
-          type = IntegralType.simpson;
-          break;
-        case IntegralDropdownItems.trapezoid:
-          type = IntegralType.trapezoid;
-          break;
-        case IntegralDropdownItems.midpoint:
-          type = IntegralType.midPoint;
-          break;
-      }
+      final integralType = switch (dropdown.toIntegralDropdownItems()) {
+        IntegralDropdownItems.simpson => IntegralType.simpson,
+        IntegralDropdownItems.trapezoid => IntegralType.trapezoid,
+        IntegralDropdownItems.midpoint => IntegralType.midPoint
+      };
 
       context.integralState.solveIntegral(
         function: functionController.text,
         lowerBound: lowerBoundController.text,
         upperBound: upperBoundController.text,
         intervals: 32,
-        integralType: type,
+        integralType: integralType,
       );
     } else {
       // Error message in case of malformed inputs

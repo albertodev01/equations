@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 ///
 /// This equation has exactly 2 roots, both real or both complex, depending
 /// on the value of the discriminant.
-class Quadratic extends Algebraic {
+final class Quadratic extends Algebraic {
   /// These are examples of quadratic equations, where the coefficient with the
   /// highest degree goes first:
   ///
@@ -33,7 +33,7 @@ class Quadratic extends Algebraic {
     Complex c = const Complex.zero(),
   }) : super([a, b, c]);
 
-  /// These are examples of quadratic equations, where the coefficient with the
+  /// This is an example of a quadratic equation, where the coefficient with the
   /// highest degree goes first:
   ///
   /// ```dart
@@ -88,8 +88,7 @@ class Quadratic extends Algebraic {
   /// _f(x) = ax^2 + bx + c = 0_
   Complex get c => coefficients[2];
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   Quadratic copyWith({
     Complex? a,
     Complex? b,

@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 /// The content of the [EquationScaffold] scaffold, which is simply a [Stack]
 /// with two children:
 ///
-///   - A background widget that draws an SVG image as background,
-///   - A foreground widget which is the actual content of the page.
+///  1. A background widget that draws an SVG image as background;
+///  2. A foreground widget which is the actual content of the page.
 ///
 /// If there is enough space in the horizontal axis, an additional background
 /// image is added.
@@ -51,7 +51,7 @@ class ScaffoldContents extends StatelessWidget {
   }
 }
 
-/// The contents of the scaffold in the background.
+/// The background image in the [ScaffoldContents] widget.
 class _ScaffoldBackground extends StatelessWidget {
   /// Creates a [_ScaffoldBackground] widget.
   const _ScaffoldBackground();
@@ -68,7 +68,9 @@ class _ScaffoldBackground extends StatelessWidget {
   }
 }
 
-/// The contents of the scaffold in the background.
+/// The secondary background image in the [ScaffoldContents] widget, which may
+/// not always be visible. The visibility of the image depends on the
+/// [extraBackgroundBreakpoint] break point.
 class _ScaffoldExtraBackground extends StatelessWidget {
   /// Creates a [_ScaffoldExtraBackground] widget.
   const _ScaffoldExtraBackground();

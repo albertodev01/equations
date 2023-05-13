@@ -46,7 +46,7 @@ void main() {
 
   group('Golden tests - JacobiVectorInput', () {
     testWidgets('JacobiVectorInput - 1', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(150, 150));
+      await tester.binding.setSurfaceSize(const Size(150, 170));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -62,7 +62,7 @@ void main() {
     });
 
     testWidgets('JacobiVectorInput - 2', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(150, 200));
+      await tester.binding.setSurfaceSize(const Size(150, 220));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -86,7 +86,7 @@ void main() {
     });
 
     testWidgets('JacobiVectorInput - 3', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(150, 250));
+      await tester.binding.setSurfaceSize(const Size(150, 270));
 
       await tester.pumpWidget(
         MockSystemWidget(
@@ -111,7 +111,7 @@ void main() {
     });
 
     testWidgets('JacobiVectorInput - 4', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(150, 300));
+      await tester.binding.setSurfaceSize(const Size(150, 340));
 
       await tester.pumpWidget(
         MockSystemWidget(

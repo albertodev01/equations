@@ -1,5 +1,4 @@
 import 'package:equations_solver/localization/localization.dart';
-import 'package:equations_solver/main.dart';
 import 'package:equations_solver/routes.dart';
 import 'package:equations_solver/routes/home_page/card_containers.dart';
 import 'package:equations_solver/routes/utils/svg_images/types/sections_logos.dart';
@@ -23,36 +22,36 @@ class HomeContents extends StatelessWidget {
             key: const Key('PolynomialLogo-Container'),
             title: context.l10n.polynomials,
             image: const PolynomialLogo(),
-            onTap: () => context.push(polynomialPagePath),
+            onTap: () async => context.push(polynomialPagePath),
           ),
           CardContainer(
             key: const Key('NonlinearLogo-Container'),
             title: context.l10n.functions,
             image: const NonlinearLogo(),
-            onTap: () => context.push(nonlinearPagePath),
+            onTap: () async => context.push(nonlinearPagePath),
           ),
           CardContainer(
             key: const Key('SystemsLogo-Container'),
             title: context.l10n.systems,
             image: const SystemsLogo(),
-            onTap: () => context.push(systemPagePath),
+            onTap: () async => context.push(systemPagePath),
           ),
           CardContainer(
             key: const Key('IntegralsLogo-Container'),
             title: context.l10n.integrals,
             image: const IntegralLogo(),
-            onTap: () => context.push(integralPagePath),
+            onTap: () async => context.push(integralPagePath),
           ),
           CardContainer(
             key: const Key('OtherLogo-Container'),
             title: context.l10n.other,
             image: const OtherLogo(),
-            onTap: () => context.push(otherPagePath),
+            onTap: () async => context.push(otherPagePath),
           ),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Text('${context.l10n.version}: ${EquationsApp.version}'),
+              child: Text('${context.l10n.version}: 1.0.0'),
             ),
           ),
         ],

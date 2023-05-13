@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 
 /// A wrapper class, returned by a [Complex] object, that represents a complex
 /// number in polar coordinates.
-class PolarComplex implements Comparable<PolarComplex> {
+final class PolarComplex implements Comparable<PolarComplex> {
   /// The absolute value/modulus of the complex number.
   final double r;
 
@@ -68,8 +68,7 @@ class PolarComplex implements Comparable<PolarComplex> {
     return 0;
   }
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   PolarComplex copyWith({
     double? r,
     double? phiRadians,

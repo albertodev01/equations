@@ -2,15 +2,17 @@ import 'package:equations/equations.dart';
 import 'package:equations/src/system/system.dart';
 
 /// Implementation of the "Cholesky decomposition" algorithm for solving a
-/// system of linear equations. It only works with Hermitian, positive-definite
-/// matrices.
-class CholeskySolver extends SystemSolver {
+/// system of linear equations. It only works with square, Hermitian,
+/// positive-definite matrices.
+final class CholeskySolver extends SystemSolver {
+  /// {@template systems_constructor_intro}
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  /// {@endtemplate}
   ///
-  ///   - [matrix] is the matrix containing the equations;
-  ///   - [knownValues] is the vector with the known values;
-  ///   - the matrix must be Hermitian and positive-definite.
+  ///  - [matrix] is the matrix containing the equations;
+  ///  - [knownValues] is the vector with the known values;
+  ///  - the matrix must be Hermitian and positive-definite.
   ///
   /// Note that, when applicable, the Cholesky decomposition is almost twice as
   /// efficient as the LU decomposition when it comes to linear systems solving.

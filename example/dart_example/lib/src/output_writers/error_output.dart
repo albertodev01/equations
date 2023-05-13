@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:equation_solver_cli/src/output_writers/output.dart';
+import 'package:equation_solver_cli/src/output.dart';
 
 /// Prints an error message to the console stating that the given argument is
 /// not valid.

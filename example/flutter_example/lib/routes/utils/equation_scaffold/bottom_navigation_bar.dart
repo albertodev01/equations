@@ -32,9 +32,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       activeIcon: i.activeIcon,
       label: i.title,
     );
-  }).toList(
-    growable: false,
-  );
+  }).toList(growable: false);
 
   @override
   Widget build(BuildContext context) {

@@ -29,7 +29,7 @@ class _IntegralPageState extends State<IntegralPage> {
    * disposed.
    *
    * In order to keep the controllers alive (and thus persist the text), we need
-   * to save theme here, which is ABOVE the tabs.
+   * to save them here.
    */
   final integralControllers = [
     TextEditingController(),

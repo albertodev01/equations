@@ -1,15 +1,16 @@
 import 'package:equations/equations.dart';
 
 /// Implementation of the "Gaussian elimination" algorithm, also known as "row
-/// reduction", for solving a system of linear equations.
-class GaussianElimination extends SystemSolver {
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+/// reduction", for solving a system of linear equations. This method only works
+/// with square matrices.
+final class GaussianElimination extends SystemSolver {
+  /// {@macro systems_constructor_intro}
   ///
-  ///   - [matrix] is the matrix containing the equations;
-  ///   - [knownValues] is the vector with the known values.
+  ///  - [matrix] is the matrix containing the equations;
+  ///  - [knownValues] is the vector with the known values.
   ///
-  /// Swaps rows/columns and uses back substitution to solve the system.
+  /// This algorithm swaps rows/columns and uses back substitution to solve the
+  /// system.
   GaussianElimination({
     required super.matrix,
     required super.knownValues,

@@ -5,11 +5,13 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 /// Single Value Decomposition decomposition, also known as a SVD, is a
 /// decomposition of a matrix A into a product `A = U x E x Vt` of:
 ///
-///   - a square unitary matrix U;
-///   - a rectangular diagonal matrix E with positive values on the diagonal;
-///   - a square unitary matrix V.
+///  - a square unitary matrix U;
+///
+///  - a rectangular diagonal matrix E with positive values on the diagonal;
+///
+///  - a square unitary matrix V.
 /// {@endtemplate}
-abstract class SingleValueDecomposition<K, T extends Matrix<K>>
+abstract base class SingleValueDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
   /// Creates an [SingleValueDecomposition] object.
   const SingleValueDecomposition({

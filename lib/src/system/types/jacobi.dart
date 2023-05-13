@@ -8,21 +8,20 @@ import 'package:equations/equations.dart';
 ///
 /// This algorithm only works with strictly diagonally dominant systems of
 /// equations.
-class JacobiSolver extends SystemSolver {
-  /// The initial guess `x` (a vector) needed to start the algorithm.
+final class JacobiSolver extends SystemSolver {
+  /// The initial vector `x`, needed to start the algorithm.
   final List<double> x0;
 
   /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
 
-  /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
-  /// `n` equations in `n` unknowns and `b` is the vector of the known values.
+  /// {@macro systems_constructor_intro}
   ///
-  ///   - [matrix] is the matrix containing the equations;
-  ///   - [knownValues] is the vector with the known values;
-  ///   - [x0] is the initial guess (which is a vector);
-  ///   - [precision] tells how accurate the algorithm has to be;
-  ///   - [maxSteps] the maximum number of iterations the algorithm.
+  ///  - [matrix] is the matrix containing the equations;
+  ///  - [knownValues] is the vector with the known values;
+  ///  - [x0] is the initial guess (which is a vector);
+  ///  - [precision] tells how accurate the algorithm has to be;
+  ///  - [maxSteps] the maximum number of iterations the algorithm.
   ///
   /// The [matrix] `A` must be strictly diagonally dominant.
   factory JacobiSolver({
@@ -92,17 +91,9 @@ class JacobiSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    // Like we did in operator==, iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < x0.length; ++i) {
-      result = result * 37 + x0[i].hashCode;
-    }
-
-    return result * 37 + maxSteps.hashCode;
-  }
+  int get hashCode => Object.hashAll(
+        [matrix, precision, ...knownValues, maxSteps, ...x0],
+      );
 
   @override
   List<double> solve() {

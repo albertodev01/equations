@@ -4,7 +4,7 @@
 /// of all positive integers less than or equal to `n`. For example:
 ///
 ///  - 5! = 5 * 4 * 3 * 2 * 1 = 120
-class Factorial {
+final class Factorial {
   /// A cache with the most common factorial values.
   static const _factorialsCache = <int, int>{
     0: 1,
@@ -30,7 +30,7 @@ class Factorial {
     20: 2432902008176640000,
   };
 
-  /// Creates a [Factorial] instance.
+  /// Creates a [Factorial] object.
   const Factorial();
 
   /// Efficiently computes the factorial of a number.

@@ -38,8 +38,8 @@ class JacobiVectorInput extends StatelessWidget {
             key: const Key('Jacobi-Vector-Input-Column'),
             children: [
               // Input.
-              AnimatedBuilder(
-                animation: context.numberSwitcherState,
+              ListenableBuilder(
+                listenable: context.numberSwitcherState,
                 builder: (context, _) {
                   return VectorInput(
                     vectorControllers:

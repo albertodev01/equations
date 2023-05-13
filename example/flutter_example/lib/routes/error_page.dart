@@ -14,7 +14,7 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EquationScaffold(
+    return const EquationScaffold(
       body: CustomScrollView(
         slivers: [
           // We're using 'SliverFillRemaining' because it makes the contents
@@ -26,7 +26,7 @@ class ErrorPage extends StatelessWidget {
             child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   // The error image at the top
                   UrlError(
                     size: 85,

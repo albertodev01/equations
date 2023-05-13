@@ -1,11 +1,30 @@
-import 'package:equation_solver_cli/equation_solver_cli.dart'
-    as equation_solver_cli;
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:equation_solver_cli/equation_solver_cli.dart';
 
 /// The main entrypoint expects only 1 argument, which is used to determine the
-/// kind of demo to be run.
+/// kind of demo.
 void main(List<String> arguments) {
-  // Parsing arguments and running the app.
-  equation_solver_cli.Console(
-    args: arguments,
-  ).run();
+  stdout.encoding = utf8;
+
+  // Only one argument is expected
+  if (arguments.length == 1) {
+    final output = switch (arguments.first) {
+      '-p' => const PolynomialOutput(),
+      '-n' => const NonlinearOutput(),
+      '-i' => const IntegralOutput(),
+      '-m' => const MatrixOutput(),
+      _ => const ErrorOutput(),
+    };
+
+    // ignore: cascade_invocations
+    output.processOutput();
+  } else {
+    // Error message when 0 or more than 1 arguments
+    stdout.writeln(
+      '\n > Error: exactly one argument is required but ${arguments.length} '
+      'have been provided)\n',
+    );
+  }
 }

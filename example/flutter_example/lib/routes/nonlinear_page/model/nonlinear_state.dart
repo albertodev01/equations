@@ -81,41 +81,33 @@ class NonlinearState extends ChangeNotifier {
     required BracketingMethods method,
   }) {
     try {
-      final NonLinear solver;
-
       const parser = ExpressionParser();
       final lower = parser.evaluate(lowerBound);
       final upper = parser.evaluate(upperBound);
 
-      switch (method) {
-        case BracketingMethods.bisection:
-          solver = Bisection(
+      final solver = switch (method) {
+        BracketingMethods.bisection => Bisection(
             function: function,
             a: lower,
             b: upper,
             maxSteps: 20,
             tolerance: precision,
-          );
-          break;
-        case BracketingMethods.secant:
-          solver = Secant(
+          ),
+        BracketingMethods.secant => Secant(
             function: function,
             a: lower,
             b: upper,
             maxSteps: 20,
             tolerance: precision,
-          );
-          break;
-        case BracketingMethods.brent:
-          solver = Brent(
+          ),
+        BracketingMethods.brent => Brent(
             function: function,
             a: lower,
             b: upper,
             maxSteps: 20,
             tolerance: precision,
-          );
-          break;
-      }
+          )
+      };
 
       _state = NonlinearResult(
         nonlinear: solver,
@@ -135,29 +127,23 @@ class NonlinearState extends ChangeNotifier {
     required SinglePointMethods method,
   }) {
     try {
-      final NonLinear solver;
-
       const parser = ExpressionParser();
       final x0 = parser.evaluate(initialGuess);
 
-      switch (method) {
-        case SinglePointMethods.newton:
-          solver = Newton(
+      final solver = switch (method) {
+        SinglePointMethods.newton => Newton(
             function: function,
             x0: x0,
             maxSteps: 20,
             tolerance: precision,
-          );
-          break;
-        case SinglePointMethods.steffensen:
-          solver = Steffensen(
+          ),
+        SinglePointMethods.steffensen => Steffensen(
             function: function,
             x0: x0,
             maxSteps: 20,
             tolerance: precision,
-          );
-          break;
-      }
+          )
+      };
 
       _state = NonlinearResult(
         nonlinear: solver,

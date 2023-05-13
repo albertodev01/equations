@@ -6,9 +6,10 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
+///
 ///   - The root must be inside the `[a, b]` interval. For this reason, the
 ///   method will fail if `f(a) * f(b) >= 0`.
-class Brent extends NonLinear {
+final class Brent extends NonLinear {
   /// The starting point of the interval.
   final double a;
 
@@ -45,14 +46,7 @@ class Brent extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, a, b, tolerance, maxSteps);
 
   bool _condition1(double s, double a, double b) {
     final lower = (a * 3 + b) / 4;
@@ -73,7 +67,7 @@ class Brent extends NonLinear {
       !flag && ((c - d).abs() <= tolerance.abs());
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     final guesses = <double>[];
     var n = 1;
 
@@ -153,7 +147,7 @@ class Brent extends NonLinear {
       diff = (valueB - valueA).abs();
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

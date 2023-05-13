@@ -4,7 +4,8 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 /// {@macro qr_decomposition_class_header}
 ///
 /// This class performs the QR decomposition on [ComplexMatrix] types.
-class QRDecompositionComplex extends QRDecomposition<Complex, ComplexMatrix> {
+final class QRDecompositionComplex
+    extends QRDecomposition<Complex, ComplexMatrix> {
   static const _zero = Complex.zero();
 
   /// Requires the [matrix] matrix to be decomposed.

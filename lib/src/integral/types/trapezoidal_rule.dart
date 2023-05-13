@@ -3,16 +3,14 @@ import 'package:equations/equations.dart';
 /// The "trapezoidal rule" is a technique for approximating the value of a
 /// definite integral.
 ///
-/// This algorithm requires the `m` parameter which indicates how many
+/// This algorithm requires the [intervals] parameter, which indicates how many
 /// partitions have to be computed by the algorithm.
 ///
-/// The bigger the value of `m`, the better the result approximation.
-class TrapezoidalRule extends NumericalIntegration {
-  /// Expects the [function] to be integrated and the integration bounds
-  /// ([lowerBound] and [upperBound]).
+/// The bigger the value of [intervals], the better the result approximation.
+base class TrapezoidalRule extends NumericalIntegration {
+  /// Creates a [TrapezoidalRule] object.
   ///
-  /// The [intervals] variable represents the number of parts in which the
-  /// `[lowerBound, upperBound]` interval has to be split by the algorithm.
+  /// By default, [intervals] is set to `20`.
   const TrapezoidalRule({
     required super.function,
     required super.lowerBound,
@@ -21,7 +19,7 @@ class TrapezoidalRule extends NumericalIntegration {
   });
 
   @override
-  IntegralResults integrate() {
+  ({List<double> guesses, double result}) integrate() {
     // The 'step' of the algorithm.
     final h = (upperBound - lowerBound) / intervals;
 
@@ -40,7 +38,7 @@ class TrapezoidalRule extends NumericalIntegration {
       guesses[i] = integralResult;
     }
 
-    return IntegralResults(
+    return (
       guesses: guesses,
       result: integralResult * h / 2,
     );

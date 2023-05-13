@@ -6,13 +6,13 @@ import 'package:equations/equations.dart';
 /// its generic nature, you can decide to work with [int], [double], [Complex]
 /// or any other kind of numerical type. This library implements:
 ///
-///  - [RealMatrix], that works with real numbers;
-///  - [ComplexMatrix], that works with complex numbers.
+///  - [RealMatrix] that works with [double];
+///  - [ComplexMatrix] that works with [Complex].
 ///
 /// By default, the cells of a matrix are initialized with zeroes. You can
 /// access elements of the matrix either by calling [itemAt] or by using the
-/// [call] method (which makes the instance 'callable').
-abstract class Matrix<T> {
+/// [call] method (which makes the object 'callable').
+abstract base class Matrix<T> {
   /// The number of rows of the matrix.
   final int rowCount;
 
@@ -166,20 +166,7 @@ abstract class Matrix<T> {
   }
 
   @override
-  int get hashCode {
-    var result = 83;
-
-    // Like we did in operator== iterating over all elements ensures that the
-    // hashCode is properly calculated.
-    for (var i = 0; i < _data.length; ++i) {
-      result = result * 37 + _data[i].hashCode;
-    }
-
-    result = result * 37 + rowCount.hashCode;
-    result = result * 37 + columnCount.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hashAll([rowCount, columnCount, ..._data]);
 
   @override
   String toString() {

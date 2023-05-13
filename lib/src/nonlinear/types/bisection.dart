@@ -6,8 +6,9 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
+///
 ///   - The values of `f(a)` and `f(b)` must have opposite signs.
-class Bisection extends NonLinear {
+final class Bisection extends NonLinear {
   /// The starting point of the interval.
   final double a;
 
@@ -44,17 +45,10 @@ class Bisection extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, a, b, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     var amp = tolerance + 1;
     var n = 1;
     final guesses = <double>[];
@@ -82,7 +76,7 @@ class Bisection extends NonLinear {
       }
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

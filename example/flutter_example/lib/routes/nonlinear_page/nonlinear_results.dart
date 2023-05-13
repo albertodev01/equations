@@ -38,8 +38,8 @@ class _NonlinearSolutions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: context.nonlinearState,
+    return ListenableBuilder(
+      listenable: context.nonlinearState,
       builder: (context, _) {
         final nonlinear = context.nonlinearState.state.nonlinear;
 

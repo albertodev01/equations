@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:equation_solver_cli/src/output_writers/output.dart';
+import 'package:equation_solver_cli/src/output.dart';
 import 'package:equations/equations.dart';
 
 /// Solves a polynomial equation whose degree and coefficients are randomly
@@ -21,7 +21,7 @@ class PolynomialOutput extends Output {
     final coefficients = <double>[];
 
     for (var i = 0; i < degree; ++i) {
-      final sign = random.nextInt(1).isEven ? -1.0 : 1.0;
+      final sign = random.nextBool() ? -1.0 : 1.0;
 
       // The first coefficient cannot be zero
       if (i == 0) {

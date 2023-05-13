@@ -1,3 +1,12 @@
+## 5.0.0
+ - **BREAKING**: Removed the `IntegralResults` type and replaced with an equivalent record
+ - **BREAKING**: Removed the `NonlinearResults` type and replaced with an equivalent record
+ - Updated Dart SDK constraints to `^3.0.0`
+ - Updated the `analysis_options.yaml` file with more rules
+ - Added more rules from the `dart_code_metrics` package
+ - Updated the Flutter and Dart demos in the `example/` folder
+ - Dependencies versions update
+
 ## 4.1.0
  - Updated Dart SDK constraints to `">=2.18.0 <3.0.0"`
  - Improved docstring comments

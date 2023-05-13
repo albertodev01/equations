@@ -84,12 +84,12 @@ class SylvesterMatrix {
   /// lower. To be more precise:
   ///
   ///  - With `optimize = true`, if the degree of the polynomial is lower than
-  ///  4 then the Sylvester matrix is not built. The computation of its
+  ///  4, then the Sylvester matrix is not built. The computation of its
   ///  determinant can be computationally heavy so we can just avoid such
   ///  complexity by using the simple formulas for lower degree polynomials.
   ///
-  /// - With `optimize = true`, the Sylvester matrix and its determinant are
-  /// always computed regardless the degree of the polynomial.
+  ///  - With `optimize = false`, the Sylvester matrix and its determinant are
+  ///  always computed regardless the degree of the polynomial.
   ///
   /// You should keep the default value of [optimize].
   Complex polynomialDiscriminant({bool optimize = true}) {
@@ -99,7 +99,7 @@ class SylvesterMatrix {
         polynomial is Cubic ||
         polynomial is Quartic;
 
-    // In case the optimization flag were 'true' and the degree of the
+    // In case the optimization flag was 'true' and the degree of the
     // polynomial is <= 4, then go for the easy way.
     if (optimize && quarticOrLower) {
       return polynomial.discriminant();

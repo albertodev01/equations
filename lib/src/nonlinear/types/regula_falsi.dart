@@ -7,10 +7,11 @@ import 'package:equations/equations.dart';
 ///
 ///   - The method requires the root to be bracketed between two points `a` and
 ///   `b` otherwise it won't work.
+///
 ///   - If you cannot assume that a function may be interpolated by a linear
 ///   function, then applying this method method could result in worse results
 ///   than the bisection method.
-class RegulaFalsi extends NonLinear {
+final class RegulaFalsi extends NonLinear {
   /// The starting point of the interval.
   final double a;
 
@@ -47,17 +48,10 @@ class RegulaFalsi extends NonLinear {
   }
 
   @override
-  int get hashCode {
-    var result = super.hashCode;
-
-    result = result * 37 + a.hashCode;
-    result = result * 37 + b.hashCode;
-
-    return result;
-  }
+  int get hashCode => Object.hash(function, a, b, tolerance, maxSteps);
 
   @override
-  NonlinearResults solve() {
+  ({List<double> guesses, double convergence, double efficiency}) solve() {
     // Exit immediately if the root is not bracketed
     if (evaluateOn(a) * evaluateOn(b) >= 0) {
       throw NonlinearException('The root is not bracketed in [$a, $b]');
@@ -98,7 +92,7 @@ class RegulaFalsi extends NonLinear {
       ++n;
     }
 
-    return NonlinearResults(
+    return (
       guesses: guesses,
       convergence: convergence(guesses, maxSteps),
       efficiency: efficiency(guesses, maxSteps),

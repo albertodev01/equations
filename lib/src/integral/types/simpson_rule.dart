@@ -4,17 +4,15 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 /// The "Simpson rule" is a technique for approximating the value of a
 /// definite integral.
 ///
-/// This algorithm requires the `m` parameter which indicates how many
+/// This algorithm requires the [intervals] parameter, which indicates how many
 /// partitions have to be computed by the algorithm.
 ///
-/// Note that `n` must be an even number. If `n` is not even, then a
+/// Note that [intervals] must be an even number. If [intervals] is not even, a
 /// [NumericalIntegrationException] object is thrown.
-class SimpsonRule extends NumericalIntegration {
-  /// Expects the [function] to be integrated and the integration bounds
-  /// ([lowerBound]n [upperBound]).
+base class SimpsonRule extends NumericalIntegration {
+  /// Creates a [SimpsonRule] object.
   ///
-  /// The [intervals] variable represents the number of parts in which the
-  /// `[lowerBound, upperBound]` interval has to be split by the algorithm.
+  /// By default, [intervals] is set to `32`.
   const SimpsonRule({
     required super.function,
     required super.lowerBound,
@@ -23,7 +21,7 @@ class SimpsonRule extends NumericalIntegration {
   });
 
   @override
-  IntegralResults integrate() {
+  ({List<double> guesses, double result}) integrate() {
     // Make sure to throw an exception if 'intervals' is odd.
     if (intervals % 2 != 0) {
       throw const NumericalIntegrationException(
@@ -50,13 +48,13 @@ class SimpsonRule extends NumericalIntegration {
     // The second iteration.
     for (var i = 2; i < intervals - 1; i += 2) {
       evenSum += evaluateFunction(lowerBound + i * h);
-      guesses[i] = oddSum;
+      guesses[i] = evenSum;
     }
 
     // Returning the result.
     final bounds = evaluateFunction(lowerBound) + evaluateFunction(upperBound);
 
-    return IntegralResults(
+    return (
       guesses: guesses,
       result: (bounds + (evenSum * 2) + (oddSum * 4)) * h / 3,
     );

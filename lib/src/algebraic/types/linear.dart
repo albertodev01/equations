@@ -4,7 +4,7 @@ import 'package:equations/equations.dart';
 /// polynomial equation in the form _ax + b = 0_.
 ///
 /// This equation has exactly 1 solution, which can be real or complex.
-class Linear extends Algebraic {
+final class Linear extends Algebraic {
   /// These are examples of linear equations, where the coefficient with the
   /// highest degree goes first:
   ///
@@ -39,6 +39,12 @@ class Linear extends Algebraic {
   ///   a: 2,
   ///   b: 5,
   /// );
+  ///
+  /// // f(x) = 3 - x
+  /// final eq = Linear.realEquation(
+  ///   a: -1,
+  ///   b: 3,
+  /// );
   /// ```
   ///
   /// If the coefficients of your polynomial contain complex numbers, consider
@@ -66,8 +72,7 @@ class Linear extends Algebraic {
   /// The second coefficient of the equation in the form _f(x) = ab + b_.
   Complex get b => coefficients[1];
 
-  /// Creates a **deep** copy of this object with the given fields replaced
-  /// with the new values.
+  /// {@macro algebraic_deep_copy}
   Linear copyWith({
     Complex? a,
     Complex? b,

@@ -2,7 +2,7 @@ import 'package:equations/equations.dart';
 import 'package:equations_solver/routes/other_page/model/analyzer/result_wrapper.dart';
 
 /// Wrapper that holds a series of data about a [Complex] value.
-class ComplexResultWrapper extends ResultWrapper {
+final class ComplexResultWrapper implements ResultWrapper {
   /// The polar representation of the complex number.
   final PolarComplex polarComplex;
 

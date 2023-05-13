@@ -6,8 +6,8 @@ import 'package:equations/equations.dart';
 ///
 /// This can also be seen as a special case of polynomial interpolation where
 /// the degree is set to 1.
-class LinearInterpolation extends Interpolation {
-  /// Creates a [LinearInterpolation] instance from the given interpolation
+base class LinearInterpolation extends Interpolation {
+  /// Creates a [LinearInterpolation] object from the given interpolation
   /// nodes.
   ///
   /// There **must** only be 2 nodes.
