@@ -67,6 +67,7 @@ void main() {
       expect(const Riddler(function: 'x-2', a: 0, b: 2) == regula, isFalse);
       expect(regula, equals(const Riddler(function: 'x-2', a: 1, b: 2)));
       expect(const Riddler(function: 'x-2', a: 0, b: 2) == regula, isFalse);
+      expect(const Riddler(function: 'x-2', a: 1, b: 1) == regula, isFalse);
       expect(
         const Riddler(function: 'x-2', a: 1, b: 2).hashCode,
         equals(regula.hashCode),

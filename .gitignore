@@ -32,6 +32,7 @@
 pubspec.lock
 build/
 **/failures/*.png
+coverage/
 
 # Android related
 **/android/**/gradle-wrapper.jar

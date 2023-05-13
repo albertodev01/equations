@@ -61,6 +61,10 @@ void main() {
         isFalse,
       );
       expect(
+        const Bisection(function: 'x-2', a: 1, b: 2.1) == bisection,
+        isFalse,
+      );
+      expect(
         const Bisection(function: 'x-2', a: 1, b: 2).hashCode,
         equals(bisection.hashCode),
       );
