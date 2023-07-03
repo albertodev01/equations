@@ -12,18 +12,18 @@ dependencies:
 
   flutter:
     sdk: flutter
+
   flutter_localizations:
     sdk: flutter
 
-  flutter_svg: ^2.0.5
-  go_router: ^7.0.1
+  flutter_svg: ^2.0.7
+  go_router: ^9.0.0
   intl: ^0.18.0
 
 dev_dependencies:
-  dart_code_metrics: ^5.7.3
-
   flutter_test:
     sdk: flutter
+
   integration_test:
     sdk: flutter
 

@@ -3,48 +3,6 @@ analyzer:
     strict-casts: true
     strict-inference: true
     strict-raw-types: true
-  plugins:
-    - dart_code_metrics
-
-dart_code_metrics:
-  anti-patterns:
-    - long-parameter-list
-  metrics:
-    number-of-parameters: 6
-    maximum-nesting: 5
-  metrics-exclude:
-    - test/**
-  rules:
-    - avoid-cascade-after-if-null
-    - avoid-collection-methods-with-unrelated-types
-    - avoid-double-slash-imports
-    - avoid-duplicate-exports
-    - avoid-dynamic
-    - avoid-global-state
-    - avoid-missing-enum-constant-in-map
-    - avoid-nested-conditional-expressions
-    - avoid-shrink-wrap-in-lists
-    - avoid-throw-in-catch-block
-    - avoid-unnecessary-type-assertions
-    - avoid-unnecessary-type-casts
-    - avoid-unrelated-type-assertions
-    - avoid-unused-parameters
-    - binary-expression-operand-order
-    - double-literal-format
-    - newline-before-return
-    - no-boolean-literal-compare
-    - no-equal-then-else
-    - no-empty-block
-    - no-object-declaration
-    - prefer-async-await
-    - prefer-correct-type-name
-    - prefer-enums-by-name
-    - prefer-first
-    - prefer-immediate-return
-    - prefer-last
-    - prefer-trailing-comma
-  rules-exclude:
-    - test/**
 
 # All lint rules: https://dart-lang.github.io/linter/lints/options/options.html
 linter:

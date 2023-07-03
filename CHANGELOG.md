@@ -1,3 +1,7 @@
+## 5.0.1
+ - Updates to the Dart and Flutter example projects
+ - Dependencies versions update
+
 ## 5.0.0
  - **BREAKING**: Removed the `IntegralResults` type and replaced with an equivalent record
  - **BREAKING**: Removed the `NonlinearResults` type and replaced with an equivalent record

@@ -18,15 +18,7 @@ void main() {
 
     test('Making sure that the generator produces correct routes', () {
       final appRoutes = generateRouter();
-      expect(appRoutes.routeConfiguration.routes.length, equals(6));
-
-      // Exact routes
-      /*expect(
-        appRoutes.routeConfiguration.routes.any(
-          (r) => r.path == polynomialPagePath,
-        ),
-        isTrue,
-      );*/
+      expect(appRoutes.configuration.routes.length, equals(6));
     });
 
     testWidgets(
