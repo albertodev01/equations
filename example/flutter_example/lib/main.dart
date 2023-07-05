@@ -22,9 +22,7 @@ class EquationsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       // Route management
-      routerDelegate: _appRouter.routerDelegate,
-      routeInformationParser: _appRouter.routeInformationParser,
-      routeInformationProvider: _appRouter.routeInformationProvider,
+      routerConfig: _appRouter,
 
       // Localized app title
       onGenerateTitle: (context) => context.l10n.appTitle,
