@@ -32,7 +32,7 @@ void main() {
         );
 
         expect(materialApp.supportedLocales.length, equals(3));
-        expect(materialApp.routeInformationParser, isNotNull);
+        expect(materialApp.routerConfig, isNotNull);
         expect(materialApp.debugShowCheckedModeBanner, isFalse);
       },
     );
