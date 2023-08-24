@@ -87,5 +87,5 @@ const englishStrings = {
   'input_allowed_multiplication_sign':
       'The multiplication requires the sign. For example:',
   'more_digits': 'No approximation: ',
-  'nonlinear_fail_converge': "The method didn't converge to a solution."
+  'nonlinear_fail_converge': "The method didn't converge to a solution.",
 };

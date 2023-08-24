@@ -9,7 +9,7 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 ///
 /// Note that [intervals] must be an even number. If [intervals] is not even, a
 /// [NumericalIntegrationException] object is thrown.
-base class SimpsonRule extends NumericalIntegration {
+base class SimpsonRule extends IntervalsIntegration {
   /// Creates a [SimpsonRule] object.
   ///
   /// By default, [intervals] is set to `32`.

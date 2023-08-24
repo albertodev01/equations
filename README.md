@@ -276,13 +276,14 @@ The `ComplexMatrix` has the same API and the same usage as `RealMatrix` with the
 
 # Numerical integration
 
-The "**numerical integration**" term refers to a group of algorithms for calculating the numerical value of a definite integral (on a given interval). The function must be continuous within the integration bounds. This package currently supports the following algorithms:
+The "**numerical integration**" term refers to a group of algorithms for calculating the numerical value of a definite integral. The function must be continuous within the integration bounds. This package currently supports the following algorithms:
 
  - `MidpointRule`
  - `SimpsonRule`
  - `TrapezoidalRule`
+ - `AdaptiveQuadrature`
 
-Other than the integration bounds (called `lowerBound` and `lowerBound`), the classes also have an optional parameter called `intervals`. It already has a good default value but of course you can change it!
+Other than the integration bounds (called `lowerBound` and `lowerBound`), some classes may also have an optional `intervals` parameter. It already has a good default value but of course you can change it! For example:
 
 ```dart
 const simpson = SimpsonRule(
@@ -305,7 +306,7 @@ print('${results.result.toStringAsFixed(3)}');
 print('${results.guesses.length}');
 ```
 
-The `integrate()` function returns an `IntegralResults` which simply is a wrapper for 2 values:
+Midpoint, trapezoidal and Simpson methods have the `intervals` parameter while the adaptive quadrature method doesn't (because it doesn't need it). The `integrate()` function returns an `IntegralResults` which simply is a wrapper for 2 values:
 
   1. `result`: the value of the definite integral evaluated within `lowerBound` and `lowerBound`,
   2. `guesses`: the various intermediate values that brought to the final result.

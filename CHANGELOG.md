@@ -1,3 +1,9 @@
+## 5.0.2
+ - Added a new subclass of `NumericalIntegration` called `AdaptiveQuadrature`, which implements the "adaptive quadrature" algorithm
+ - Updated Dart SDK constraints to `^3.1.0`
+ - Updates to the Dart and Flutter example projects
+ - Dependencies versions update
+
 ## 5.0.1
  - Updates to the Dart and Flutter example projects
  - Dependencies versions update

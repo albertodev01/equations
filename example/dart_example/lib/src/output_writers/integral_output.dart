@@ -28,6 +28,11 @@ class IntegralOutput extends Output {
       lowerBound: 0.5,
       upperBound: 2,
     ).integrate();
+    final adaptiveQuadrature = const AdaptiveQuadrature(
+      function: equation,
+      lowerBound: 0.5,
+      upperBound: 2,
+    ).integrate();
 
     final output = StringBuffer()
       ..write(' > Equation: ')
@@ -46,7 +51,12 @@ class IntegralOutput extends Output {
       ..write(' > Evaluation: ')
       ..writeln(trapezoidal.result)
       ..write(' > Steps: ')
-      ..writeln(trapezoidal.guesses.length);
+      ..writeln(trapezoidal.guesses.length)
+      ..writeln('\n  --- Adaptive quadrature --- ')
+      ..write(' > Evaluation: ')
+      ..writeln(adaptiveQuadrature.result)
+      ..write(' > Steps: ')
+      ..writeln(adaptiveQuadrature.guesses.length);
 
     stdout
       ..writeln('===== INTEGRALS EVALUATION =====\n')

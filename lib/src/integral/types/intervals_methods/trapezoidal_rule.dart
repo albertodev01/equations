@@ -7,7 +7,7 @@ import 'package:equations/equations.dart';
 /// partitions have to be computed by the algorithm.
 ///
 /// The bigger the value of [intervals], the better the result approximation.
-base class TrapezoidalRule extends NumericalIntegration {
+base class TrapezoidalRule extends IntervalsIntegration {
   /// Creates a [TrapezoidalRule] object.
   ///
   /// By default, [intervals] is set to `20`.
