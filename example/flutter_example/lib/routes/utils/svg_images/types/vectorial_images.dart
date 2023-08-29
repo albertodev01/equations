@@ -1,5 +1,17 @@
 import 'package:equations_solver/routes/utils/svg_images/svg_image.dart';
 
+/// The application logo.
+class ApplicationLogo extends SvgImage {
+  /// Creates a [ApplicationLogo] widget.
+  const ApplicationLogo({
+    super.key,
+    super.size,
+  });
+
+  @override
+  String get assetName => 'logo';
+}
+
 /// A rotated cartesian plane.
 class CartesianPlaneBackground extends SvgImage {
   /// Creates a [CartesianPlaneBackground] widget.

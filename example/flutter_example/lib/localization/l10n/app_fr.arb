@@ -84,5 +84,6 @@
   "input_allowed_functions": "L'equation f(x) permet à ces fonctions:",
   "input_allowed_multiplication_sign": "La multiplication nécessite le signe. Par exemple:",
   "more_digits": "Sans approximation: ",
-  "nonlinear_fail_converge": "La méthode n'a pas convergé vers une solution."
+  "nonlinear_fail_converge": "La méthode n'a pas convergé vers une solution.",
+  "fraction_warning": "La fraction est basée sur l'approximation décimale et donc elle ne représente pas correctement les valeurs irrationnelles."
 }

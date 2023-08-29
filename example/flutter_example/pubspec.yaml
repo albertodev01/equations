@@ -32,5 +32,4 @@ flutter:
   generate: true
 
   assets:
-    - assets/png/
     - assets/svg/
