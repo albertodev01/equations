@@ -17,6 +17,7 @@ jobs:
             "integration_test/nonlinear_page_test.dart",
             "integration_test/other_page_test.dart",
             "integration_test/polynomial_page_test.dart",
+            "integration_test/system_page_test.dart",
           ]
       fail-fast: true
     runs-on: windows-latest
