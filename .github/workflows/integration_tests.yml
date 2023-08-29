@@ -1,0 +1,33 @@
+name: integration_tests
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  flutter_example_integration_tests:
+    strategy:
+      matrix:
+        test_path:
+          [
+            "integration_test/home_page_test.dart", 
+            "integration_test/integral_page_test.dart",
+          ]
+      fail-fast: true
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: example/flutter_example
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Run integration test      
+        run: flutter test ${{ matrix.test_path }}
