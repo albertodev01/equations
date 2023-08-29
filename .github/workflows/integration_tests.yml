@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - develop
+      - playground_integration_test
 
 jobs:
   flutter_example_integration_tests:
@@ -30,4 +31,4 @@ jobs:
         run: flutter pub get
 
       - name: Run integration test      
-        run: flutter test ${{ matrix.test_path }}
+        run: flutter test ${{ matrix.test_path }} -d windows
