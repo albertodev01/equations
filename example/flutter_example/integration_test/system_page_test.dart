@@ -107,7 +107,6 @@ void main() {
     // ignore: avoid_positional_boolean_parameters
     bool cholesky = false,
   ]) async {
-    // Moving to the 'Bracketing' page
     tester
         .widget<InheritedNavigation>(find.byType(InheritedNavigation))
         .navigationIndex
@@ -145,7 +144,7 @@ void main() {
       knownValuesCounter++;
     }
 
-    if (cholesky) {
+    if (cholesky && size == 1) {
       await tester.ensureVisible(find.text('LU'));
       await tester.pumpAndSettle();
 
@@ -232,18 +231,20 @@ void main() {
     }
 
     if (jacobi) {
-      await tester.ensureVisible(find.text('SOR'));
-      await tester.pumpAndSettle();
+      if (size == 1) {
+        await tester.ensureVisible(find.text('SOR'));
+        await tester.pumpAndSettle();
 
-      // Changing the dropdown value
-      await tester.tap(find.text('SOR'));
-      await tester.pumpAndSettle();
+        // Changing the dropdown value
+        await tester.tap(find.text('SOR'));
+        await tester.pumpAndSettle();
 
-      await tester.ensureVisible(find.text('SOR').last);
-      await tester.pumpAndSettle();
+        await tester.ensureVisible(find.text('SOR').last);
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Jacobi').last);
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Jacobi').last);
+        await tester.pumpAndSettle();
+      }
 
       // Initial guess vector
       final totalInputs = matrixInputs + size;
@@ -351,7 +352,7 @@ void main() {
       },
     );
 
-    /*testWidgets(
+    testWidgets(
       'Testing iterative - Jacobi',
       (tester) async {
         await configureIfDesktop(tester);
@@ -364,6 +365,6 @@ void main() {
         await testIterative(tester, 3, true);
         await testIterative(tester, 4, true);
       },
-    );*/
+    );
   });
 }
