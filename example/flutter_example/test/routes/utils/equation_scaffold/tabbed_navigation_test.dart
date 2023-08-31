@@ -1,6 +1,7 @@
 import 'package:equations_solver/routes/models/inherited_navigation/inherited_navigation.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/navigation_item.dart';
 import 'package:equations_solver/routes/utils/equation_scaffold/tabbed_layout.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -73,6 +74,80 @@ void main() {
         expect(controller.index, equals(1));
         expect(find.text('B'), findsOneWidget);
         expect(find.text('A'), findsNothing);
+      },
+    );
+
+    // Tests the scroll physics of a TabBarView widget on the given platform.
+    Future<void> testSwipeOnPlatforms({
+      required WidgetTester tester,
+      required TargetPlatform platform,
+      required bool shouldSwipe,
+    }) async {
+      debugDefaultTargetPlatformOverride = platform;
+
+      try {
+        await tester.pumpWidget(
+          MockWrapper(
+            child: InheritedNavigation(
+              tabController: controller,
+              fab: null,
+              navigationItems: const [
+                NavigationItem(title: 'Test 1', content: Text('A')),
+                NavigationItem(title: 'Test 2', content: Text('B')),
+              ],
+              navigationIndex: ValueNotifier<int>(0),
+              child: const TabbedNavigationLayout(),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        final finder = find.byType(TabBarView);
+        final physics = tester.widget<TabBarView>(finder).physics;
+
+        if (shouldSwipe) {
+          expect(physics, isNull);
+        } else {
+          expect(physics, isNotNull);
+        }
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+      }
+    }
+
+    testWidgets(
+      'Making sure tabs can only be swiped on mobile devices',
+      (tester) async {
+        await testSwipeOnPlatforms(
+          tester: tester,
+          platform: TargetPlatform.android,
+          shouldSwipe: true,
+        );
+
+        await testSwipeOnPlatforms(
+          tester: tester,
+          platform: TargetPlatform.iOS,
+          shouldSwipe: true,
+        );
+
+        await testSwipeOnPlatforms(
+          tester: tester,
+          platform: TargetPlatform.fuchsia,
+          shouldSwipe: true,
+        );
+
+        await testSwipeOnPlatforms(
+          tester: tester,
+          platform: TargetPlatform.macOS,
+          shouldSwipe: false,
+        );
+
+        await testSwipeOnPlatforms(
+          tester: tester,
+          platform: TargetPlatform.windows,
+          shouldSwipe: false,
+        );
       },
     );
   });
