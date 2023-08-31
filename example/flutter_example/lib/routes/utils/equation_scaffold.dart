@@ -64,6 +64,21 @@ class _EquationScaffoldState extends State<EquationScaffold>
     vsync: this,
   );
 
+  /// Holds the state of the currently selected index of [BottomNavigationBar]
+  /// and [NavigationRail] widgets.
+  final navigationIndex = ValueNotifier<int>(0);
+
+  @override
+  void initState() {
+    super.initState();
+
+    // This is to make sure that the index is always updated with the controller
+    // value.
+    tabController.addListener(() {
+      navigationIndex.value = tabController.index;
+    });
+  }
+
   @override
   void dispose() {
     // The 'tabController' is lazily initialized and it may never be used if
@@ -95,7 +110,7 @@ class _EquationScaffoldState extends State<EquationScaffold>
       navigationItems: widget.navigationItems,
       tabController: tabController,
       fab: widget.fab,
-      navigationIndex: ValueNotifier<int>(0),
+      navigationIndex: navigationIndex,
       child: LayoutBuilder(
         builder: (context, dimensions) {
           // If the dimension of the screen is "small" enough, a bottom
