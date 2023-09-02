@@ -34,6 +34,13 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
+
+    // Detects whether the application is running on a mobile device or not.
+    final isMobile = platform == TargetPlatform.android ||
+        platform == TargetPlatform.iOS ||
+        platform == TargetPlatform.fuchsia;
+
     return ValueListenableBuilder<int>(
       valueListenable: context.inheritedNavigation.navigationIndex,
       builder: (_, value, child) {
@@ -42,7 +49,7 @@ class TabbedNavigationLayoutState extends State<TabbedNavigationLayout> {
         return child!;
       },
       child: TabBarView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: isMobile ? null : const NeverScrollableScrollPhysics(),
         controller: context.inheritedNavigation.tabController,
         children: tabPages,
       ),

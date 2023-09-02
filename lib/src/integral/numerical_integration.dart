@@ -5,12 +5,14 @@ import 'package:equations/equations.dart';
 /// integral on an interval.
 ///
 /// Numerical integration algorithms compute an approximate solution to a
-/// definite integral with a certain degree of accuracy. This package contains
-/// the following algorithms:
+/// definite integral with a certain degree of accuracy. `NumericalIntegration`
+/// is the direct supertype of:
 ///
-///  - [MidpointRule]
-///  - [SimpsonRule]
-///  - [TrapezoidalRule]
+///  1. [IntervalsIntegration], which is used for numerical integration
+///    algorithms that split the integration bounds into intervals.
+///
+///  2. [AdaptiveQuadrature], which uses the "adaptive quadrature" algorithm to
+///    evaluate the integral.
 ///
 /// The function must be continuous in the `[lowerBound, upperBound]`
 /// interval.
@@ -27,16 +29,11 @@ abstract base class NumericalIntegration {
   /// The upper bound of the integral.
   final double upperBound;
 
-  /// The number of parts in which the interval `[lowerBound, upperBound]` has
-  /// to be split by the algorithm.
-  final int intervals;
-
   /// Creates a [NumericalIntegration] object.
   const NumericalIntegration({
     required this.function,
     required this.lowerBound,
     required this.upperBound,
-    required this.intervals,
   });
 
   @override
@@ -48,7 +45,6 @@ abstract base class NumericalIntegration {
     if (other is NumericalIntegration) {
       return runtimeType == other.runtimeType &&
           function == other.function &&
-          intervals == other.intervals &&
           lowerBound == other.lowerBound &&
           upperBound == other.upperBound;
     } else {
@@ -57,14 +53,14 @@ abstract base class NumericalIntegration {
   }
 
   @override
-  int get hashCode => Object.hash(function, intervals, lowerBound, upperBound);
+  int get hashCode => Object.hash(function, lowerBound, upperBound);
 
   @override
   String toString() {
     final lower = lowerBound.toStringAsFixed(2);
     final upper = upperBound.toStringAsFixed(2);
 
-    return '$function on [$lower, $upper]\nUsing $intervals intervals';
+    return '$function on [$lower, $upper]';
   }
 
   /// Evaluates the given [function] on the [x] point.

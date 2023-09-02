@@ -133,7 +133,7 @@ void main() {
     });
 
     testWidgets('ComplexResultCard - expanded', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(300, 300));
+      await tester.binding.setSurfaceSize(const Size(300, 400));
 
       await tester.pumpWidget(
         const MockWrapper(
@@ -156,7 +156,7 @@ void main() {
     });
 
     testWidgets('ComplexResultCard - expanded with NaN', (tester) async {
-      await tester.binding.setSurfaceSize(const Size(300, 300));
+      await tester.binding.setSurfaceSize(const Size(300, 400));
 
       await tester.pumpWidget(
         const MockWrapper(

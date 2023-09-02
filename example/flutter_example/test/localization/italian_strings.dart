@@ -87,5 +87,5 @@ const italianStrings = {
   'input_allowed_multiplication_sign':
       'La moltiplicazione richiede il segno. Per esempio:',
   'more_digits': 'Senza approssimazione: ',
-  'nonlinear_fail_converge': 'Il metodo non ha converso ad una soluzione.'
+  'nonlinear_fail_converge': 'Il metodo non ha converso ad una soluzione.',
 };

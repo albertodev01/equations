@@ -87,5 +87,5 @@ const frenchStrings = {
   'input_allowed_multiplication_sign':
       'La multiplication nécessite le signe. Par exemple:',
   'more_digits': 'Sans approximation: ',
-  'nonlinear_fail_converge': "La méthode n'a pas convergé vers une solution."
+  'nonlinear_fail_converge': "La méthode n'a pas convergé vers une solution.",
 };

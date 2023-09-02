@@ -103,6 +103,17 @@ class ComplexResultCard extends StatelessWidget {
                 leading: context.l10n.fraction,
                 value: ': $fraction',
               ),
+
+              const SizedBox(height: 8),
+
+              // Warning
+              Text(
+                context.l10n.fraction_warning,
+                style: const TextStyle(
+                  color: Colors.blueGrey,
+                  fontSize: 12,
+                ),
+              ),
             ],
           ),
         ),

@@ -8,7 +8,7 @@ import 'package:equations/equations.dart';
 ///
 /// The midpoint rule estimates a definite integral using a Riemann sum with
 /// sub-intervals of equal width.
-base class MidpointRule extends NumericalIntegration {
+base class MidpointRule extends IntervalsIntegration {
   /// Creates a [MidpointRule] object.
   ///
   /// By default, [intervals] is set to `30`.

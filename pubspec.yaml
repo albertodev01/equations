@@ -1,16 +1,20 @@
 name: equations
 description: An equation-solving library that also works with complex numbers and fractions.
-version: 5.0.1
+version: 5.0.2
 repository: https://github.com/albertodev01/equations
-homepage: https://fluttercompletereference.com/
+homepage: https://pub.dev/packages/equations
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.1.0
 
 dependencies:
-  fraction: ^5.0.1
+  fraction: ^5.0.2
   petitparser: ^5.4.0
 
 dev_dependencies:
-  test: ^1.24.4
-  
+  test: ^1.24.6
+
+topics:
+  - equations
+  - numbers
+  - algebra

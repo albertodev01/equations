@@ -6,6 +6,19 @@ import '../../mock_wrapper.dart';
 
 void main() {
   group('Testing vectorial images', () {
+    testWidgets('ApplicationLogo', (tester) async {
+      await tester.binding.setSurfaceSize(const Size.square(50));
+
+      await tester.pumpWidget(
+        const MockWrapper(
+          child: ApplicationLogo(),
+        ),
+      );
+
+      expect(find.byType(ApplicationLogo), findsOneWidget);
+      expect(const ApplicationLogo().assetName, equals('logo'));
+    });
+
     testWidgets('CartesianPlaneBackground', (tester) async {
       await tester.binding.setSurfaceSize(const Size.square(50));
 

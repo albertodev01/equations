@@ -1,14 +1,14 @@
 name: equation_solver_cli
 description: A Dart CLI application that uses the API of the 'equations' package.
-version: 1.0.4
+version: 1.0.5
 publish_to: none
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.1.0
 
 dependencies:
   equations:
     path: ../../
 
 dev_dependencies:
-  test: ^1.24.4
+  test: ^1.24.6
