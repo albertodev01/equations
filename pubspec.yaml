@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   fraction: ^5.0.2
-  petitparser: ^5.4.0
+  petitparser: ^6.0.2
 
 dev_dependencies:
   test: ^1.24.6
