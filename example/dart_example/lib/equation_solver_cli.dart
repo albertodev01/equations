@@ -1,5 +1,5 @@
 /// A demo CLI application to showcase the 'equations' package API.
-library equation_solver_cli;
+library;
 
 export 'src/output.dart';
 export 'src/output_writers/error_output.dart';

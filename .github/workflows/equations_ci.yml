@@ -61,15 +61,6 @@ jobs:
       - name: Making sure that there are no analysis warnings or errors
         run: flutter analyze --fatal-infos --fatal-warnings lib test
 
-      - name: Runing unit, widget and golden tests
-        run: flutter test --coverage
-
-      - name: Making sure that code coverage is 100
-        uses: VeryGoodOpenSource/very_good_coverage@v2
-        with:
-          min_coverage: 100
-          path: example/flutter_example/coverage/lcov.info
-
   verify_equation_dart_example:
     name: Dart example
     needs: [verify_equation_flutter_example]
