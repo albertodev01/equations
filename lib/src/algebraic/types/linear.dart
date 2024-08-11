@@ -1,4 +1,4 @@
-import 'package:equations/equations.dart';
+part of '../algebraic.dart';
 
 /// Concrete implementation of [Algebraic] that represents a first degree
 /// polynomial equation in the form _ax + b = 0_.

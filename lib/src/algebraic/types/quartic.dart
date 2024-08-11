@@ -1,4 +1,4 @@
-import 'package:equations/equations.dart';
+part of '../algebraic.dart';
 
 /// Concrete implementation of [Algebraic] that represents a fourth degree
 /// polynomial equation in the form _ax^4 + bx^3 + cx^2 + dx + e = 0_.

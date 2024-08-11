@@ -1,10 +1,11 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/system.dart';
+import 'package:equations/src/system/utils/matrix_utils.dart';
 
 /// Implementation of the "Cholesky decomposition" algorithm for solving a
 /// system of linear equations. It only works with square, Hermitian,
 /// positive-definite matrices.
-final class CholeskySolver extends SystemSolver {
+final class CholeskySolver extends SystemSolver with RealMatrixUtils {
   /// {@template systems_constructor_intro}
   /// Given an equation in the form `Ax = b`, `A` is a square matrix containing
   /// `n` equations in `n` unknowns and `b` is the vector of the known values.
@@ -20,7 +21,7 @@ final class CholeskySolver extends SystemSolver {
     required super.matrix,
     required super.knownValues,
     super.precision,
-  }) : super();
+  });
 
   @override
   List<double> solve() {
@@ -29,11 +30,11 @@ final class CholeskySolver extends SystemSolver {
     // Solving Ly = b
     final L = cholesky.first.toListOfList();
     final b = knownValues;
-    final y = SystemSolver.forwardSubstitution(L, b);
+    final y = forwardSubstitution(L, b);
 
     // Solving Ux = y
     final transposedL = cholesky[1].toListOfList();
 
-    return SystemSolver.backSubstitution(transposedL, y);
+    return backSubstitution(transposedL, y);
   }
 }

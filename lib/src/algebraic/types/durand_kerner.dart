@@ -1,7 +1,4 @@
-import 'dart:math' as math;
-
-import 'package:equations/equations.dart';
-import 'package:equations/src/utils/math_utils.dart';
+part of '../algebraic.dart';
 
 /// The Durand–Kerner method, also known as Weierstrass method, is a root
 /// finding algorithm for solving polynomial equations. With this class, you
@@ -335,11 +332,11 @@ final class DurandKerner extends Algebraic with MathUtils {
         imaginaryBuffer: imaginaryBuffer,
       );
       final factor = bound * 0.65;
-      final multiplier = math.cos(0.25 * 2 * math.pi);
+      final multiplier = cos(0.25 * 2 * pi);
 
       for (var i = 0; i < coefficientsLength - 1; ++i) {
         real[i] = factor * multiplier;
-        complex[i] = factor * math.sqrt(1.0 - multiplier * multiplier);
+        complex[i] = factor * sqrt(1.0 - multiplier * multiplier);
       }
 
       return _solve(
@@ -405,10 +402,10 @@ final class DurandKerner extends Algebraic with MathUtils {
       final realSquare = realBuffer[i] * realBuffer[i];
       final imagSquare = imaginaryBuffer[i] * imaginaryBuffer[i];
 
-      bound = math.max(bound, realSquare + imagSquare);
+      bound = max(bound, realSquare + imagSquare);
     }
 
-    return 1.0 + math.sqrt(bound);
+    return 1.0 + sqrt(bound);
   }
 
   /// The Durand-Kerner algorithm that finds the roots of the polynomial.
@@ -500,7 +497,7 @@ final class DurandKerner extends Algebraic with MathUtils {
         realValues[j] = pa - qa;
         imaginaryValues[j] = pb - qb;
 
-        d = math.max(d, math.max(qa.abs(), qb.abs()));
+        d = max(d, max(qa.abs(), qb.abs()));
       }
 
       // Exiting early if convergence is reached.

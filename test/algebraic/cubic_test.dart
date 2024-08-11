@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
@@ -166,6 +168,16 @@ void main() {
       expect(cubic == cubic.copyWith(b: const Complex.fromReal(7)), isFalse);
     });
 
+    test(
+        'Regression: Make sure that the Ax^3 + B case is handles correctly '
+        'and does not throw division by 0 exceptions.', () {
+      final cubic = Cubic.realEquation(d: -1).solutions();
+
+      expect(cubic.first, equals(const Complex(1, 0)));
+      expect(cubic[1], equals(Complex(-1 / 2, sqrt(3) / 2)));
+      expect(cubic.last, equals(Complex(-1 / 2, -sqrt(3) / 2)));
+    });
+
     test('Batch tests', () {
       final equations = [
         Cubic.realEquation(
@@ -191,6 +203,14 @@ void main() {
         Cubic(
           a: const Complex.i(),
           b: const Complex(5, -8),
+        ).solutions(),
+        Cubic(
+          a: const Complex.fromReal(5),
+          d: const Complex.fromReal(3),
+        ).solutions(),
+        Cubic(
+          a: const Complex(-6, 2),
+          d: const Complex.i(),
         ).solutions(),
       ];
 
@@ -219,6 +239,16 @@ void main() {
           Complex.zero(),
           Complex.zero(),
           Complex(8, 5),
+        ],
+        const [
+          Complex(0.42172, 0.73043),
+          Complex.fromReal(-0.84343),
+          Complex(0.42172, -0.73043),
+        ],
+        const [
+          Complex(0.43666, 0.31895),
+          Complex(-0.49455, 0.21869),
+          Complex(0.05788, -0.53763),
         ],
       ];
 

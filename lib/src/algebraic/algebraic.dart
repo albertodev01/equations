@@ -1,6 +1,14 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
+import 'package:equations/src/utils/math_utils.dart';
+
+part 'types/constant.dart';
+part 'types/cubic.dart';
+part 'types/durand_kerner.dart';
+part 'types/linear.dart';
+part 'types/quadratic.dart';
+part 'types/quartic.dart';
 
 /// The message thrown by the constructor to indicate that the polynomial cannot
 /// correctly be created.
@@ -22,7 +30,7 @@ To solve a polynomial equation (unless it's a constant), the coefficient with th
 ///
 /// This class stores the coefficients list starting from the one with the
 /// **highest** degree.
-abstract base class Algebraic {
+sealed class Algebraic {
   /// The list with the polynomial coefficients.
   final List<Complex> coefficients;
 

@@ -255,7 +255,13 @@ final class Complex implements Comparable<Complex> {
   }
 
   /// Divides two complex numbers.
-  Complex operator /(Complex other) => this * other.reciprocal();
+  Complex operator /(Complex other) {
+    final realNum = (real * other.real) + (imaginary * other.imaginary);
+    final imagNum = (imaginary * other.real) - (real * other.imaginary);
+    final den = other.real * other.real + other.imaginary * other.imaginary;
+
+    return Complex(realNum / den, imagNum / den);
+  }
 
   /// Returns the negation of this complex number.
   Complex operator -() => negate;

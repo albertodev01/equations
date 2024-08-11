@@ -1,4 +1,4 @@
-import 'package:equations/equations.dart';
+part of '../algebraic.dart';
 
 /// Concrete implementation of [Algebraic] that represents a constant value
 /// `a`. It can be either real or complex.

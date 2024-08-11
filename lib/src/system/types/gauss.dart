@@ -1,9 +1,10 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix_utils.dart';
 
 /// Implementation of the "Gaussian elimination" algorithm, also known as "row
 /// reduction", for solving a system of linear equations. This method only works
 /// with square matrices.
-final class GaussianElimination extends SystemSolver {
+final class GaussianElimination extends SystemSolver with RealMatrixUtils {
   /// {@macro systems_constructor_intro}
   ///
   ///  - [matrix] is the matrix containing the equations;
@@ -59,6 +60,6 @@ final class GaussianElimination extends SystemSolver {
     }
 
     // Back substitution.
-    return SystemSolver.backSubstitution(A, b);
+    return backSubstitution(A, b);
   }
 }

@@ -1,4 +1,4 @@
-import 'package:equations/equations.dart';
+part of '../algebraic.dart';
 
 /// Concrete implementation of [Algebraic] that represents a second degree
 /// polynomial equation in the form _ax^2 + bx + c = 0_.

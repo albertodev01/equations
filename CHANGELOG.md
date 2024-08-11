@@ -1,3 +1,9 @@
+## 5.1.0
+ - Added new `Factorial.computeBigInt` method to calculate factorials using `BigInt` rather than `int`
+ - Fixed an issue in the `Cubic` class that would throw an error when trying to solve cubic equations in the `ax^3 + d = 0` form
+ - Updates to the Dart and Flutter example projects
+ - Dependencies versions update
+
 ## 5.0.2
  - Added a new subclass of `NumericalIntegration` called `AdaptiveQuadrature`, which implements the "adaptive quadrature" algorithm
  - Updated Dart SDK constraints to `^3.1.0`

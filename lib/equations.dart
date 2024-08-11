@@ -9,17 +9,11 @@
 ///
 /// Additionally, the package also has utilities to work with complex numbers,
 /// real/complex matrices, fractions, and expression parsing.
-library equations;
+library;
 
 export 'package:fraction/fraction.dart';
 
 export 'src/algebraic/algebraic.dart';
-export 'src/algebraic/types/constant.dart';
-export 'src/algebraic/types/cubic.dart';
-export 'src/algebraic/types/durand_kerner.dart';
-export 'src/algebraic/types/linear.dart';
-export 'src/algebraic/types/quadratic.dart';
-export 'src/algebraic/types/quartic.dart';
 export 'src/algebraic/utils/algebraic_division.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';

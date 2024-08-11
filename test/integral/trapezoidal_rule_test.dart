@@ -15,7 +15,7 @@ void main() {
   });
 
   group('Testing the behaviors of the TrapezoidalRule class.', () {
-    test("Making sure that a 'TrapezoidalRule' works properly.", () {
+    test('Making sure that TrapezoidalRule works properly.', () {
       expect(trapezoid.lowerBound, equals(1));
       expect(trapezoid.upperBound, equals(3));
       expect(trapezoid.intervals, equals(20));

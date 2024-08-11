@@ -762,8 +762,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     // Computing the determinant only if the matrix is square
     if (!isSquareMatrix) {
       throw const MatrixException(
-        "Can't compute the determinant of this "
-        "matrix because it's not square.",
+        'Cannot compute the determinant because the matrix is not square.',
       );
     }
 

@@ -1,3 +1,6 @@
+## 1.0.6
+ - Dependencies versions update
+
 ## 1.0.5
  - Added usage example of the `AdaptiveQuadrature` object
  - Updated Dart SDK constraints to `^3.1.0`

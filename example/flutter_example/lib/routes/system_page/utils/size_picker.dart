@@ -60,7 +60,7 @@ class SizePicker extends StatelessWidget {
         ElevatedButton(
           key: const Key('SizePicker-Back-Button'),
           style: ButtonStyle(
-            shape: MaterialStateProperty.all(const CircleBorder()),
+            shape: WidgetStateProperty.all(const CircleBorder()),
           ),
           onPressed: () {
             context.numberSwitcherState.decrease();
@@ -100,7 +100,7 @@ class SizePicker extends StatelessWidget {
         ElevatedButton(
           key: const Key('SizePicker-Forward-Button'),
           style: ButtonStyle(
-            shape: MaterialStateProperty.all(const CircleBorder()),
+            shape: WidgetStateProperty.all(const CircleBorder()),
           ),
           onPressed: () {
             context.numberSwitcherState.increase();

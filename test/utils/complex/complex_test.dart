@@ -503,6 +503,10 @@ void main() {
         final v2 = const Complex.fromReal(5) / const Complex.fromImaginary(-16);
         expect(v2.real, equals(0));
         expect(v2.imaginary, equals(0.3125));
+
+        final v3 = const Complex(-1, -3) / const Complex(4, 1);
+        expect(v3.real, equals(-7 / 17));
+        expect(v3.imaginary, equals(-11 / 17));
       },
     );
 

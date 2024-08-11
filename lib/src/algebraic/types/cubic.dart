@@ -1,6 +1,4 @@
-import 'dart:math' as math;
-
-import 'package:equations/equations.dart';
+part of '../algebraic.dart';
 
 /// Concrete implementation of [Algebraic] that represents a third degree
 /// polynomial equation in the form `ax^3 + bx^2 + cx + d = 0`.
@@ -85,9 +83,19 @@ final class Cubic extends Algebraic {
 
   @override
   List<Complex> solutions() {
+    if (b.isZero && c.isZero) {
+      final solution1 = (d.negate / a).nthRoot(3);
+
+      return [
+        solution1,
+        Complex(-1 / 2, sqrt(3) / 2) * solution1,
+        Complex(-1 / 2, -sqrt(3) / 2) * solution1,
+      ];
+    }
+
     const two = Complex.fromReal(2);
     const three = Complex.fromReal(3);
-    final sigma = Complex(-1 / 2, 1 / 2 * math.sqrt(3));
+    final sigma = Complex(-1 / 2, 1 / 2 * sqrt(3));
 
     final d0 = b * b - a * c * three;
     final d1 = (b.pow(3) * two) -
