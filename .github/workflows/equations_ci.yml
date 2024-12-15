@@ -1,10 +1,9 @@
 name: equations_ci
 
 on:
-  push:
+  pull_request:
     branches:
       - master
-      - develop
 
 jobs:
   verify_equation_package:
@@ -32,11 +31,6 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           min_coverage: 100
-          
-      - name: Uploading coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   verify_equation_flutter_example:
     name: Flutter example
@@ -78,7 +72,7 @@ jobs:
       run:
         working-directory: example/dart_example
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
 
       - name: Installing dependencies

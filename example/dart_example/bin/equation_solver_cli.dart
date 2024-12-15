@@ -8,22 +8,21 @@ import 'package:equation_solver_cli/equation_solver_cli.dart';
 void main(List<String> arguments) {
   stdout.encoding = utf8;
 
+  final output = switch (arguments.firstOrNull) {
+    '-p' => const PolynomialOutput(),
+    '-n' => const NonlinearOutput(),
+    '-i' => const IntegralOutput(),
+    '-m' => const MatrixOutput(),
+    _ => const ErrorOutput(),
+  };
+
   // Only one argument is expected
   if (arguments.length == 1) {
-    final output = switch (arguments.first) {
-      '-p' => const PolynomialOutput(),
-      '-n' => const NonlinearOutput(),
-      '-i' => const IntegralOutput(),
-      '-m' => const MatrixOutput(),
-      _ => const ErrorOutput(),
-    };
-
-    // ignore: cascade_invocations
     output.processOutput();
   } else {
     // Error message when 0 or more than 1 arguments
     stdout.writeln(
-      '\n > Error: exactly one argument is required but ${arguments.length} '
+      '\n > Error: exactly one argument is required (but ${arguments.length} '
       'have been provided)\n',
     );
   }

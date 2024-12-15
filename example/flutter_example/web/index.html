@@ -1,61 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- This is required to make the web application run on GitHub Pages -->
-  <base href="/equations/">
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Equation solver application">
+  <meta name="description" content="A new Flutter project.">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Equation solver application">
+  <meta name="apple-mobile-web-app-title" content="flutter_example">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-192.png">
 
-  <title>Equation Solver</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
 
+  <title>flutter_example</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles/styles.min.css">
-
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
-
-  <script src="flutter.js" defer></script>
-  <script src="messages.js" defer></script>
 </head>
 <body>
-  <img src="images/circle_logo.svg" alt="Logo" />
-  <div id="loading" class="status"> </div>
-  <div class="loading_spinner"></div>
-
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Updates the 'message' text
-      var loading = document.querySelector('#loading');
-      loading.textContent = localizedMessage(0);
-
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: async function(engineInitializer) {
-          loading.textContent = localizedMessage(1);
-          let appRunner = await engineInitializer.initializeEngine();
-
-          loading.textContent = localizedMessage(2);
-          await appRunner.runApp();
-        }
-      });
-    });
-  </script>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

@@ -187,6 +187,7 @@ void main() {
             b: const Complex.zero(),
             c: const Complex.fromReal(5),
             d: const Complex.fromReal(-6),
+            // Not adding `const` to run the test with a different object
             // ignore: prefer_const_constructors
             e: Complex.zero(),
           ),

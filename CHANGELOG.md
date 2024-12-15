@@ -1,6 +1,6 @@
 ## 5.1.0
- - Added new `Factorial.computeBigInt` method to calculate factorials using `BigInt` rather than `int`
- - Fixed an issue in the `Cubic` class that would throw an error when trying to solve cubic equations in the `ax^3 + d = 0` form
+ - Added a new `Factorial.computeBigInt` method to calculate factorials using `BigInt` rather than `int`
+ - Fixed a bug in the `Cubic` class that throws an error when trying to solve cubic equations in the `ax^3 + d = 0` form
  - Updates to the Dart and Flutter example projects
  - Dependencies versions update
 

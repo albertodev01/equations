@@ -1,0 +1,21 @@
+{
+    "@@locale": "en",
+    "title": "Equations Solver",
+    "polynomialEquationsTitle": "Polynomials",
+    "nonlinearEquationsTitle": "Equations",
+    "systemsOfEquationsTitle": "Systems",
+    "solvers": "Solvers",
+    "solversSubtitle": "Solve polynomial, nonlinear and systems of equations.",
+    "integrals": "Integrals",
+    "integralsSubtitle": "Evaluate integrals of continue functions on a given interval.",
+    "matrices": "Matrices",
+    "matricesSubtitle": "Extract information and decompose matrices using various algorithms.",
+    "complexNumbers": "Complex Numbers",
+    "complexNumberSubtitle": "Analyze complex numbers and compute their roots.",
+    "interpolation": "Interpolation",
+    "interpolatonSubtitle": "Interpolate two or more points using various algorithms.",
+    "firstDegree": "1° grado",
+    "secondDegree": "2° grado",
+    "thirdDegree": "3° grado",
+    "fourthDegree": "4° grado"
+}

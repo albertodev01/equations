@@ -3,6 +3,7 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 import 'package:equations/src/utils/factorial.dart';
 import 'package:test/test.dart';
 
+// Needed to allow non-const classes on purpose
 // ignore_for_file: prefer_const_constructors
 
 /// In order to achieve 100% code coverage, this file calls some constructors

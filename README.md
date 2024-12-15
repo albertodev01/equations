@@ -174,7 +174,7 @@ Certain algorithms don't always guarantee to converge to the correct root so car
 
 # Systems of equations
 
-Use one of the following classes to solve systems of linear equations. Only real coefficients are allowed (so `double` is ok, but `Complex` is not) and matrices must be square (so `n` equations in `n` variables). This package supports the following system-solving algorithms:
+Use one of the following classes to solve systems of linear equations. Only real coefficients are allowed and matrices must be square (so `n` equations in `n` variables). This package implements the following system-solving algorithms:
 
  - Cholesky
  - Gaussian elimination

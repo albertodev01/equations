@@ -24,6 +24,7 @@ linter:
     - avoid_field_initializers_in_const_classes
     - avoid_final_parameters
     - avoid_function_literals_in_foreach_calls
+    - avoid_futureor_void
     - avoid_implementing_value_types
     - avoid_init_to_null
     - avoid_js_rounded_ints
@@ -70,6 +71,7 @@ linter:
     - directives_ordering
     - discarded_futures
     - do_not_use_environment
+    - document_ignores
     - empty_catches
     - empty_constructor_bodies
     - empty_statements
@@ -82,6 +84,7 @@ linter:
     - implicit_call_tearoffs
     - implicit_reopen
     - invalid_case_patterns
+    - invalid_runtime_check_with_js_interop_types
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - library_annotations
@@ -102,12 +105,13 @@ linter:
     - no_logic_in_create_state
     - no_runtimeType_toString
     - no_self_assignments
+    - no_wildcard_variable_uses
     - non_constant_identifier_names
     - noop_primitive_operations
     - null_check_on_nullable_type_parameter
     - null_closures
     - omit_local_variable_types
-    - one_member_abstracts
+    - omit_obvious_local_variable_types
     - only_throw_errors
     - overridden_fields
     - package_api_docs
@@ -168,6 +172,7 @@ linter:
     - type_init_formals
     - type_literal_in_constant_pattern
     - unawaited_futures
+    - unintended_html_in_doc_comment
     - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
     - unnecessary_breaks
@@ -214,5 +219,6 @@ linter:
     - use_super_parameters
     - use_test_throws_matchers
     - use_to_and_as_if_applicable
+    - use_truncating_division
     - valid_regexps
     - void_checks

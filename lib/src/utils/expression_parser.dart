@@ -49,8 +49,7 @@ final class ExpressionParser {
   /// Square root of 3.
   static const _sqrt3 = 1.7320508075688;
 
-  /// A "cached" instance of a parser to be used to evaluate expressions on a
-  /// given point.
+  /// A "cached" instance of a parser that is used to evaluate expressions.
   static final Parser<_Evaluator> _parser = () {
     final builder = ExpressionBuilder<_Evaluator>()
 
@@ -62,11 +61,7 @@ final class ExpressionParser {
             .seq(char('.').seq(digit().plus()).optional())
             .flatten()
             .trim()
-            .map((a) {
-          final number = num.parse(a);
-
-          return (value) => number;
-        }),
+            .map((value) => (_) => num.parse(value)),
       )
 
       // Recognze the 'x' variable

@@ -512,9 +512,10 @@ void main() {
 
     test('Making sure that the negation works properly.', () {
       const value = Complex(3, -5);
-
       expect(-value, equals(const Complex(-3, 5)));
-      expect(-(-value), equals(value));
+
+      final negative = -value;
+      expect(-negative, equals(value));
     });
   });
 }

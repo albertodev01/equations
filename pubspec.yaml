@@ -1,18 +1,18 @@
 name: equations
 description: An equation-solving library that also works with complex numbers and fractions.
-version: 5.1.0
+version: 5.2.0
 repository: https://github.com/albertodev01/equations
 homepage: https://pub.dev/packages/equations
 
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.6.0
 
 dependencies:
-  fraction: ^5.0.3
+  fraction: ^5.0.4
   petitparser: ^6.0.2
 
 dev_dependencies:
-  test: ^1.25.8
+  test: ^1.25.12
 
 topics:
   - equations
