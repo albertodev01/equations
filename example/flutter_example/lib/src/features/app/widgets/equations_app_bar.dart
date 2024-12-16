@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 
 class EquationsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final TabBar? tabBar;
   const EquationsAppBar({
     required this.title,
-    this.tabBar,
     super.key,
   });
 
@@ -13,7 +11,6 @@ class EquationsAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
-      bottom: tabBar,
       actions: const [
         _InfoIconButton(),
       ],
@@ -21,13 +18,7 @@ class EquationsAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize {
-    if (tabBar != null) {
-      return const Size.fromHeight(kToolbarHeight + 60);
-    }
-
-    return const Size.fromHeight(kToolbarHeight);
-  }
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _InfoIconButton extends StatelessWidget {

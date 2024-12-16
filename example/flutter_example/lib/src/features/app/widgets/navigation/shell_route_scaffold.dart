@@ -1,10 +1,10 @@
 import 'package:equations_solver/src/features/app/models/breakpoints.dart';
 import 'package:equations_solver/src/features/app/routes/routes.dart';
 import 'package:equations_solver/src/features/app/widgets/equations_app_bar.dart';
-import 'package:equations_solver/src/features/app/widgets/equations_bottom_navigation.dart';
-import 'package:equations_solver/src/features/app/widgets/equations_drawer.dart';
-import 'package:equations_solver/src/features/app/widgets/equations_rail_navigation.dart';
+import 'package:equations_solver/src/features/app/widgets/navigation/equations_drawer.dart';
 import 'package:equations_solver/src/features/app/widgets/inherited_object.dart';
+import 'package:equations_solver/src/features/app/widgets/navigation/equations_bottom_navigation.dart';
+import 'package:equations_solver/src/features/app/widgets/navigation/equations_rail_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -56,6 +56,9 @@ class _ShellRouteScaffoldState extends State<ShellRouteScaffold> {
     final appBar = EquationsAppBar(
       title: widget.title,
     );
+    final body = Expanded(
+      child: widget.child,
+    );
 
     return InheritedObject<ValueNotifier<int>>(
       object: selectedTab,
@@ -68,9 +71,7 @@ class _ShellRouteScaffoldState extends State<ShellRouteScaffold> {
             drawer: const EquationsDrawer(),
             body: Row(
               children: [
-                Expanded(
-                  child: widget.child,
-                ),
+                body,
                 if (isDesktop) const EquationsRailNavigation(),
               ],
             ),

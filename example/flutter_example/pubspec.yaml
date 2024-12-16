@@ -6,6 +6,10 @@ publish_to: none
 environment:
   sdk: ^3.6.0
 
+workspace:
+  - packages/application_ui
+  - packages/equation_painter
+
 dependencies:
   equations:
     path: ../../

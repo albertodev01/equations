@@ -1,7 +1,7 @@
 import 'package:equations_solver/src/features/app/routes/routes.dart';
 import 'package:equations_solver/src/features/app/view/equations_app_view.dart';
 import 'package:equations_solver/src/features/app/view/error_view.dart';
-import 'package:equations_solver/src/features/app/widgets/shell_route_scaffold.dart';
+import 'package:equations_solver/src/features/app/widgets/navigation/shell_route_scaffold.dart';
 import 'package:equations_solver/src/features/complex_numbers/view/complex_numbers_view.dart';
 import 'package:equations_solver/src/features/integral/view/integrals_view.dart';
 import 'package:equations_solver/src/features/interpolation/view/interpolation_view.dart';
