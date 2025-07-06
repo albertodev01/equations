@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_complex_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigendecomposition_complex.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
-import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/complex_svd.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_complex.dart';
 
 /// A simple Dart implementation of an `m x n` matrix whose data type is
 /// [Complex].
@@ -15,8 +15,8 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 /// );
 /// ```
 ///
-/// By default, the cells of a matrix are initialized with all zeroes. You can
-/// access elements of the matrix very conveniently with the following syntax:
+/// By default, the cells of a matrix are initialized with all zeros. You can
+/// access elements of the matrix conveniently with the following syntax:
 ///
 /// ```dart
 /// final matrix = ComplexMatrix(
@@ -30,7 +30,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///
 /// Both versions return the same value but the first one is less verbose and
 /// preferred. In the example, `value` holds the value of the element at
-/// position `(1, 3)` in the matrix.
+/// position `(2, 3)` in the matrix.
 base class ComplexMatrix extends Matrix<Complex> {
   /// {@macro matrix_constructor_intro}
   ComplexMatrix({
@@ -60,9 +60,7 @@ base class ComplexMatrix extends Matrix<Complex> {
     required super.rows,
     required super.columns,
     required super.diagonalValue,
-  }) : super.diagonal(
-          defaultValue: const Complex.zero(),
-        );
+  }) : super.diagonal(defaultValue: const Complex.zero());
 
   void _setDataAt(List<Complex> flatMatrix, int row, int col, Complex value) =>
       flatMatrix[columnCount * row + col] = value;
@@ -133,25 +131,58 @@ base class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    // Performing the product
+    // Special case: zero matrix multiplication
+    if (isZero() || other.isZero()) {
+      return ComplexMatrix(rows: rowCount, columns: other.columnCount);
+    }
+
+    // Cache dimensions and data for better performance
+    final n = rowCount;
+    final m = columnCount;
+    final p = other.columnCount;
+    final a = flattenData;
+    final b = other.flattenData;
+
+    // Performing the product with block multiplication
     final flatMatrix = List<Complex>.generate(
-      rowCount * other.columnCount,
+      n * p,
       (_) => const Complex.zero(),
       growable: false,
     );
 
-    // Performing the multiplication
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < other.columnCount; j++) {
-        var sum = const Complex.zero();
-        for (var k = 0; k < other.rowCount; k++) {
-          sum += this(i, k) * other(k, j);
+    // Block multiplication for better cache locality
+    const blockSize = 16; // Smaller block size for complex numbers
+    for (var ii = 0; ii < n; ii += blockSize) {
+      final iEnd = (ii + blockSize < n) ? ii + blockSize : n;
+      for (var jj = 0; jj < p; jj += blockSize) {
+        final jEnd = (jj + blockSize < p) ? jj + blockSize : p;
+        for (var kk = 0; kk < m; kk += blockSize) {
+          final kEnd = (kk + blockSize < m) ? kk + blockSize : m;
+
+          // Multiply blocks
+          for (var i = ii; i < iEnd; i++) {
+            for (var j = jj; j < jEnd; j++) {
+              var sum = const Complex.zero();
+              for (var k = kk; k < kEnd; k++) {
+                final aik = a[m * i + k];
+                final bkj = b[p * k + j];
+                // Optimize complex multiplication by avoiding temporary objects
+                sum = Complex(
+                  sum.real +
+                      aik.real * bkj.real -
+                      aik.imaginary * bkj.imaginary,
+                  sum.imaginary +
+                      aik.real * bkj.imaginary +
+                      aik.imaginary * bkj.real,
+                );
+              }
+              flatMatrix[p * i + j] += sum;
+            }
+          }
         }
-        flatMatrix[other.columnCount * i + j] = sum;
       }
     }
 
-    // Building the new matrix
     return ComplexMatrix.fromFlattenedData(
       rows: rowCount,
       columns: other.columnCount,
@@ -228,10 +259,8 @@ base class ComplexMatrix extends Matrix<Complex> {
 
     final source = List<List<Complex>>.generate(
       rowCount - 1,
-      (_) => List<Complex>.generate(
-        columnCount - 1,
-        (_) => const Complex.zero(),
-      ),
+      (_) =>
+          List<Complex>.generate(columnCount - 1, (_) => const Complex.zero()),
     );
 
     for (var i = 0; i < rowCount; ++i) {
@@ -263,9 +292,7 @@ base class ComplexMatrix extends Matrix<Complex> {
       return ComplexMatrix.fromFlattenedData(
         rows: 1,
         columns: 1,
-        data: const [
-          Complex.fromReal(1),
-        ],
+        data: const [Complex.fromReal(1)],
       );
     }
 
@@ -308,7 +335,8 @@ base class ComplexMatrix extends Matrix<Complex> {
     // time. Note that, from here, we're sure that this matrix is square so no
     // need to check both the row count and the col count.
     if (rowCount == 2) {
-      final multiplier = const Complex(1, 0) /
+      final multiplier =
+          const Complex(1, 0) /
           (this(0, 0) * this(1, 1) - this(0, 1) * this(1, 0));
 
       return ComplexMatrix.fromFlattenedData(
@@ -472,17 +500,12 @@ base class ComplexMatrix extends Matrix<Complex> {
 
     // For 1x1 matrices, directly compute it
     if (rowCount == 1) {
-      return Linear(
-        b: -this(0, 0),
-      );
+      return Linear(b: -this(0, 0));
     }
 
     // For 2x2 matrices, use a direct formula which is faster
     if (rowCount == 2) {
-      return Quadratic(
-        b: -trace(),
-        c: determinant(),
-      );
+      return Quadratic(b: -trace(), c: determinant());
     }
 
     // For 3x3 matrices and bigger, use the Faddeev–LeVerrier algorithm
@@ -525,9 +548,7 @@ base class ComplexMatrix extends Matrix<Complex> {
     }
 
     // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
-    final eigenDecomposition = EigendecompositionComplex(
-      matrix: this,
-    );
+    final eigenDecomposition = EigendecompositionComplex(matrix: this);
 
     // The 'D' matrix contains real and complex coefficients of the eigenvalues
     // so we can ignore the other 2.
@@ -692,13 +713,16 @@ base class ComplexMatrix extends Matrix<Complex> {
 
   /// Computes the determinant of a 3x3 matrix
   Complex _compute3x3Determinant(ComplexMatrix source) {
-    final x = source.flattenData.first *
+    final x =
+        source.flattenData.first *
         ((source.flattenData[4] * source.flattenData[8]) -
             (source.flattenData[5] * source.flattenData[7]));
-    final y = source.flattenData[1] *
+    final y =
+        source.flattenData[1] *
         ((source.flattenData[3] * source.flattenData[8]) -
             (source.flattenData[5] * source.flattenData[6]));
-    final z = source.flattenData[2] *
+    final z =
+        source.flattenData[2] *
         ((source.flattenData[3] * source.flattenData[7]) -
             (source.flattenData[4] * source.flattenData[6]));
 
@@ -707,29 +731,39 @@ base class ComplexMatrix extends Matrix<Complex> {
 
   /// Computes the determinant of a 4x4 matrix
   Complex _compute4x4Determinant(ComplexMatrix source) {
-    final det2_01_01 = source.flattenData.first * source.flattenData[5] -
+    final det2_01_01 =
+        source.flattenData.first * source.flattenData[5] -
         source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 = source.flattenData.first * source.flattenData[6] -
+    final det2_01_02 =
+        source.flattenData.first * source.flattenData[6] -
         source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 = source.flattenData.first * source.flattenData[7] -
+    final det2_01_03 =
+        source.flattenData.first * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[4];
-    final det2_01_12 = source.flattenData[1] * source.flattenData[6] -
+    final det2_01_12 =
+        source.flattenData[1] * source.flattenData[6] -
         source.flattenData[2] * source.flattenData[5];
-    final det2_01_13 = source.flattenData[1] * source.flattenData[7] -
+    final det2_01_13 =
+        source.flattenData[1] * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[5];
-    final det2_01_23 = source.flattenData[2] * source.flattenData[7] -
+    final det2_01_23 =
+        source.flattenData[2] * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[6];
 
-    final det3_201_012 = source.flattenData[8] * det2_01_12 -
+    final det3_201_012 =
+        source.flattenData[8] * det2_01_12 -
         source.flattenData[9] * det2_01_02 +
         source.flattenData[10] * det2_01_01;
-    final det3_201_013 = source.flattenData[8] * det2_01_13 -
+    final det3_201_013 =
+        source.flattenData[8] * det2_01_13 -
         source.flattenData[9] * det2_01_03 +
         source.flattenData[11] * det2_01_01;
-    final det3_201_023 = source.flattenData[8] * det2_01_23 -
+    final det3_201_023 =
+        source.flattenData[8] * det2_01_23 -
         source.flattenData[10] * det2_01_03 +
         source.flattenData[11] * det2_01_02;
-    final det3_201_123 = source.flattenData[9] * det2_01_23 -
+    final det3_201_123 =
+        source.flattenData[9] * det2_01_23 -
         source.flattenData[10] * det2_01_13 +
         source.flattenData[11] * det2_01_12;
 
@@ -795,4 +829,7 @@ base class ComplexMatrix extends Matrix<Complex> {
 
     return prodL * prodU;
   }
+
+  @override
+  bool isZero() => flattenData.every((x) => x == const Complex.zero());
 }

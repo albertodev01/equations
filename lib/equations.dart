@@ -1,4 +1,4 @@
-/// This package is used to solve numerical analysis problems, such as:
+/// This package solves numerical analysis problems, such as:
 ///
 ///  - finding roots of polynomial equations;
 ///  - finding roots of nonlinear equations;
@@ -14,7 +14,7 @@ library;
 export 'package:fraction/fraction.dart';
 
 export 'src/algebraic/algebraic.dart';
-export 'src/algebraic/utils/algebraic_division.dart';
+export 'src/algebraic/utils/algebraic_inequality.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
 export 'src/integral/numerical_integration.dart';

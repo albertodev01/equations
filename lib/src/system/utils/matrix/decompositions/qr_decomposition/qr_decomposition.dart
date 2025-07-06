@@ -6,15 +6,12 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 /// a decomposition of a matrix A into a product `A = QR` of:
 ///
 ///  - an orthogonal matrix Q;
-///
 ///  - an upper triangular matrix R.
 /// {@endtemplate}
 abstract base class QRDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates a [QRDecomposition] object.
-  const QRDecomposition({
-    required super.matrix,
-  });
+  /// {@macro qr_decomposition_class_header}
+  const QRDecomposition({required super.matrix});
 
   /// Computes the `Q` and `R` matrices of the QR decomposition algorithm. In
   /// particular, this method returns the `Q` and `R` matrices of the

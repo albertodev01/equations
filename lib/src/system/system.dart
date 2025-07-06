@@ -61,20 +61,14 @@ abstract base class SystemSolver {
         return false;
       }
 
-      // Each successful comparison increases a counter by 1. If all elements
-      // are equal, then the counter will match the actual length of the
-      // coefficients list.
-      var equalsCount = 0;
-
       for (var i = 0; i < knownValues.length; ++i) {
-        if (knownValues[i] == other.knownValues[i]) {
-          ++equalsCount;
+        if (knownValues[i] != other.knownValues[i]) {
+          return false;
         }
       }
 
       // They must have the same runtime type AND all items must be equal.
       return runtimeType == other.runtimeType &&
-          equalsCount == knownValues.length &&
           matrix == other.matrix &&
           precision == other.precision;
     } else {
@@ -83,7 +77,8 @@ abstract base class SystemSolver {
   }
 
   @override
-  int get hashCode => Object.hashAll([matrix, precision, ...knownValues]);
+  int get hashCode =>
+      Object.hash(matrix, precision, Object.hashAll(knownValues));
 
   @override
   String toString() => matrix.toString();

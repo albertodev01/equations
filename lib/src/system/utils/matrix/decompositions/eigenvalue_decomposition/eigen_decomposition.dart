@@ -6,18 +6,14 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 /// of a matrix A into a product `A = V x D x V^-1` where:
 ///
 ///  - V is a square matrix whose i<sup>th</sup> column is the eigenvector of A;
-///
 ///  - D is the diagonal matrix whose diagonal elements are the corresponding
 ///   eigenvalues of A;
-///
 ///  - V^-1 is the inverse of V.
 /// {@endtemplate}
 abstract base class EigenDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates a [EigenDecomposition] object.
-  const EigenDecomposition({
-    required super.matrix,
-  });
+  /// {@macro eigendecomposition_class_header}
+  const EigenDecomposition({required super.matrix});
 
   /// Computes the `V`, `D` and `V^-1` matrices of the eigendecomposition
   /// algorithm. In particular, this method returns the `V`, `D and `V^-1`

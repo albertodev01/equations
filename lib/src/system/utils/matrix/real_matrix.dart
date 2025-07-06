@@ -1,13 +1,12 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
-import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigen_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigendecomposition_real.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
-import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/real_svd.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_real.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
-/// A simple Dart implementation of an `m x n` matrix whose data type is
-/// [double].
+/// A Dart implementation of an `MxM` matrix whose data type is [double].
 ///
 /// ```dart
 /// final matrix = RealMatrix(
@@ -25,23 +24,17 @@ import 'package:equations/src/utils/math_utils.dart';
 ///   columnCount: 6,
 /// );
 ///
-/// final value = matrix(2, 3);
-/// final value = matrix.itemAt(2, 3);
+/// final value1 = matrix(2, 3);
+/// final value2 = matrix.itemAt(2, 3);
 /// ```
 ///
 /// Both versions return the same value but the first one is less verbose and
-/// preferred. In the example, `value` holds the value of the element at
-/// position `(1, 3)` in the matrix.
+/// preferred. In the example, `value1` holds the value of the element at
+/// position `(2, 3)` in the matrix.
 base class RealMatrix extends Matrix<double> with MathUtils {
   /// {@macro matrix_constructor_intro}
-  RealMatrix({
-    required super.rows,
-    required super.columns,
-    super.identity,
-  }) : super(
-          defaultValue: 0,
-          identityOneValue: 1,
-        );
+  RealMatrix({required super.rows, required super.columns, super.identity})
+    : super(defaultValue: 0, identityOneValue: 1);
 
   /// {@macro matrix_fromData_constructor}
   RealMatrix.fromData({
@@ -62,9 +55,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     required super.rows,
     required super.columns,
     required super.diagonalValue,
-  }) : super.diagonal(
-          defaultValue: 0,
-        );
+  }) : super.diagonal(defaultValue: 0);
 
   void _setDataAt(List<double> flatMatrix, int row, int col, double value) =>
       flatMatrix[columnCount * row + col] = value;
@@ -142,18 +133,36 @@ base class RealMatrix extends Matrix<double> with MathUtils {
       growable: false,
     );
 
-    // Performing the multiplication
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < other.columnCount; j++) {
-        var sum = 0.0;
-        for (var k = 0; k < other.rowCount; k++) {
-          sum += this(i, k) * other(k, j);
+    // Cache dimensions and data for better performance
+    final n = rowCount;
+    final m = columnCount;
+    final p = other.columnCount;
+    final a = flattenData;
+    final b = other.flattenData;
+
+    // Block multiplication for better cache locality
+    const blockSize = 32; // Adjust based on cache line size
+    for (var ii = 0; ii < n; ii += blockSize) {
+      final iEnd = (ii + blockSize < n) ? ii + blockSize : n;
+      for (var jj = 0; jj < p; jj += blockSize) {
+        final jEnd = (jj + blockSize < p) ? jj + blockSize : p;
+        for (var kk = 0; kk < m; kk += blockSize) {
+          final kEnd = (kk + blockSize < m) ? kk + blockSize : m;
+
+          // Multiply blocks
+          for (var i = ii; i < iEnd; i++) {
+            for (var j = jj; j < jEnd; j++) {
+              var sum = 0.0;
+              for (var k = kk; k < kEnd; k++) {
+                sum += a[m * i + k] * b[p * k + j];
+              }
+              flatMatrix[p * i + j] += sum;
+            }
+          }
         }
-        flatMatrix[other.columnCount * i + j] = sum;
       }
     }
 
-    // Building the new matrix
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
       columns: other.columnCount,
@@ -256,11 +265,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
     // The cofactor matrix of an 1x1 matrix is always 1.
     if (rowCount == 1) {
-      return RealMatrix.fromFlattenedData(
-        rows: 1,
-        columns: 1,
-        data: [1],
-      );
+      return RealMatrix.fromFlattenedData(rows: 1, columns: 1, data: [1]);
     }
 
     final source = List<List<double>>.generate(
@@ -465,17 +470,12 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
     // For 1x1 matrices, directly compute it
     if (rowCount == 1) {
-      return Linear.realEquation(
-        b: -this(0, 0),
-      );
+      return Linear.realEquation(b: -this(0, 0));
     }
 
     // For 2x2 matries, use a direct formula which is faster
     if (rowCount == 2) {
-      return Quadratic.realEquation(
-        b: -trace(),
-        c: determinant(),
-      );
+      return Quadratic.realEquation(b: -trace(), c: determinant());
     }
 
     // For 3x3 matrices and bigger, use the Faddeev–LeVerrier algorithm
@@ -504,7 +504,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   List<Complex> eigenvalues() {
-    // Making sure that the matrix is squared
+    // Making sure that the matrix is square
     if (!isSquareMatrix) {
       throw const MatrixException(
         'Eigenvalues can be computed on square matrices only!',
@@ -519,9 +519,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     }
 
     // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
-    final eigenDecomposition = EigendecompositionReal(
-      matrix: this,
-    );
+    final eigenDecomposition = EigendecompositionReal(matrix: this);
 
     // The 'D' matrix contains real and complex coefficients of the eigenvalues
     // so we can ignore the other 2.
@@ -610,16 +608,8 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     }
 
     return [
-      RealMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: rowCount,
-        data: L,
-      ),
-      RealMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: rowCount,
-        data: U,
-      ),
+      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: L),
+      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: U),
     ];
   }
 
@@ -640,31 +630,61 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     }
 
     // Creating L and Lt matrices
-    final L = List.generate(
+    final L = List<double>.generate(
       rowCount * columnCount,
       (_) => 0.0,
       growable: false,
     );
-    final transpL = List.generate(
+    final transpL = List<double>.generate(
       rowCount * columnCount,
       (_) => 0.0,
       growable: false,
     );
 
+    // Block size for cache optimization
+    const blockSize = 32;
+
     // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j <= i; j++) {
+    for (var i = 0; i < rowCount; i += blockSize) {
+      final iEnd = (i + blockSize < rowCount) ? i + blockSize : rowCount;
+
+      // Process diagonal block
+      for (var j = i; j < iEnd; j++) {
+        // Compute diagonal element
         var sum = 0.0;
-        if (j == i) {
-          for (var k = 0; k < j; k++) {
-            sum += _getDataAt(L, j, k) * _getDataAt(L, j, k);
+        for (var k = 0; k < j; k++) {
+          sum += L[columnCount * j + k] * L[columnCount * j + k];
+        }
+        final diag = this(j, j) - sum;
+        if (diag <= 0) {
+          throw const SystemSolverException(
+            'The matrix is not positive-definite.',
+          );
+        }
+        L[columnCount * j + j] = sqrt(diag);
+
+        // Compute elements below diagonal
+        for (var k = j + 1; k < iEnd; k++) {
+          sum = 0.0;
+          for (var p = 0; p < j; p++) {
+            sum += L[columnCount * k + p] * L[columnCount * j + p];
           }
-          _setDataAt(L, j, j, sqrt(this(i, j) - sum));
-        } else {
-          for (var k = 0; k < j; k++) {
-            sum += _getDataAt(L, i, k) * _getDataAt(L, j, k);
+          L[columnCount * k + j] = (this(k, j) - sum) / L[columnCount * j + j];
+        }
+      }
+
+      // Process remaining blocks
+      for (var j = iEnd; j < rowCount; j += blockSize) {
+        final jEnd = (j + blockSize < rowCount) ? j + blockSize : rowCount;
+        for (var k = i; k < iEnd; k++) {
+          for (var l = j; l < jEnd; l++) {
+            var sum = 0.0;
+            for (var p = 0; p < k; p++) {
+              sum += L[columnCount * l + p] * L[columnCount * k + p];
+            }
+            L[columnCount * l + k] =
+                (this(l, k) - sum) / L[columnCount * k + k];
           }
-          _setDataAt(L, i, j, (this(i, j) - sum) / _getDataAt(L, j, j));
         }
       }
     }
@@ -672,7 +692,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     // Computing Lt, the transposed version of L
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < rowCount; j++) {
-        _setDataAt(transpL, i, j, _getDataAt(L, j, i));
+        transpL[columnCount * i + j] = L[columnCount * j + i];
       }
     }
 
@@ -709,13 +729,16 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   /// Computes the determinant of a 3x3 matrix.
   double _compute3x3Determinant(RealMatrix source) {
-    final x = source.flattenData.first *
+    final x =
+        source.flattenData.first *
         ((source.flattenData[4] * source.flattenData[8]) -
             (source.flattenData[5] * source.flattenData[7]));
-    final y = source.flattenData[1] *
+    final y =
+        source.flattenData[1] *
         ((source.flattenData[3] * source.flattenData[8]) -
             (source.flattenData[5] * source.flattenData[6]));
-    final z = source.flattenData[2] *
+    final z =
+        source.flattenData[2] *
         ((source.flattenData[3] * source.flattenData[7]) -
             (source.flattenData[4] * source.flattenData[6]));
 
@@ -724,29 +747,39 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   /// Computes the determinant of a 4x4 matrix.
   double _compute4x4Determinant(RealMatrix source) {
-    final det2_01_01 = source.flattenData.first * source.flattenData[5] -
+    final det2_01_01 =
+        source.flattenData.first * source.flattenData[5] -
         source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 = source.flattenData.first * source.flattenData[6] -
+    final det2_01_02 =
+        source.flattenData.first * source.flattenData[6] -
         source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 = source.flattenData.first * source.flattenData[7] -
+    final det2_01_03 =
+        source.flattenData.first * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[4];
-    final det2_01_12 = source.flattenData[1] * source.flattenData[6] -
+    final det2_01_12 =
+        source.flattenData[1] * source.flattenData[6] -
         source.flattenData[2] * source.flattenData[5];
-    final det2_01_13 = source.flattenData[1] * source.flattenData[7] -
+    final det2_01_13 =
+        source.flattenData[1] * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[5];
-    final det2_01_23 = source.flattenData[2] * source.flattenData[7] -
+    final det2_01_23 =
+        source.flattenData[2] * source.flattenData[7] -
         source.flattenData[3] * source.flattenData[6];
 
-    final det3_201_012 = source.flattenData[8] * det2_01_12 -
+    final det3_201_012 =
+        source.flattenData[8] * det2_01_12 -
         source.flattenData[9] * det2_01_02 +
         source.flattenData[10] * det2_01_01;
-    final det3_201_013 = source.flattenData[8] * det2_01_13 -
+    final det3_201_013 =
+        source.flattenData[8] * det2_01_13 -
         source.flattenData[9] * det2_01_03 +
         source.flattenData[11] * det2_01_01;
-    final det3_201_023 = source.flattenData[8] * det2_01_23 -
+    final det3_201_023 =
+        source.flattenData[8] * det2_01_23 -
         source.flattenData[10] * det2_01_03 +
         source.flattenData[11] * det2_01_02;
-    final det3_201_123 = source.flattenData[9] * det2_01_23 -
+    final det3_201_123 =
+        source.flattenData[9] * det2_01_23 -
         source.flattenData[10] * det2_01_13 +
         source.flattenData[11] * det2_01_12;
 
@@ -811,4 +844,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
     return prodL * prodU;
   }
+
+  @override
+  bool isZero() => flattenData.every((value) => value == 0);
 }

@@ -2,16 +2,16 @@ import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
 
-/// A Sylvester matrix is used to compute the discriminant of a polynomial
-/// starting from its coefficients.
+/// {@template sylvester_matrix}
+/// The Sylvester matrix is used to compute the discriminant of a polynomial
+/// of any degree.
+/// {@endtemplate}
 class SylvesterMatrix {
   /// The polynomial used to build the Sylvester matrix.
   final Algebraic polynomial;
 
-  /// Creates a [SylvesterMatrix] object.
-  const SylvesterMatrix({
-    required this.polynomial,
-  });
+  /// {@macro sylvester_matrix}
+  const SylvesterMatrix({required this.polynomial});
 
   @override
   bool operator ==(Object other) {
@@ -33,6 +33,14 @@ class SylvesterMatrix {
   ComplexMatrix buildMatrix() {
     // Computing the derivative of the polynomial and the size of the matrix
     final coefficients = polynomial.coefficients;
+
+    // Handle constant polynomial case
+    if (coefficients.length <= 1) {
+      throw const MatrixException(
+        'Cannot build Sylvester matrix for a constant polynomial',
+      );
+    }
+
     final derivative = polynomial.derivative().coefficients;
     final size = (coefficients.length - 1) + (derivative.length - 1);
 
@@ -43,24 +51,30 @@ class SylvesterMatrix {
       growable: false,
     );
 
-    /* Iterating over the coefficients and placing them in the matrix. Since the
-     * 2D array is "flattened", the way we have to access "cells" is this...
-     *
-     *  > flatData[arraySize * row + column] = value
-     *
-     * which is equivalent to 'flatData[row][column]' if 'flatData' was a 2D
-     * array.
-     */
-    for (var i = 0; i < size - coefficients.length + 1; ++i) {
-      for (var j = 0; j < coefficients.length; ++j) {
-        flatData[size * i + (j + i)] = coefficients[j];
+    // Pre-calculate positions for better performance
+    final coeffLength = coefficients.length;
+    final derivLength = derivative.length;
+
+    // Place polynomial coefficients
+    for (var i = 0; i < size - coeffLength + 1; ++i) {
+      for (var j = 0; j < coeffLength; ++j) {
+        final value = coefficients[j];
+        // Skip near-zero coefficients for numerical stability
+        if (value.abs() > 1e-10) {
+          flatData[size * i + (j + i)] = value;
+        }
       }
     }
 
+    // Place derivative coefficients
     var pos = 0;
-    for (var i = size - coefficients.length + 1; i < size; ++i) {
-      for (var j = 0; j < derivative.length; ++j) {
-        flatData[size * i + (j + pos)] = derivative[j];
+    for (var i = size - coeffLength + 1; i < size; ++i) {
+      for (var j = 0; j < derivLength; ++j) {
+        final value = derivative[j];
+        // Skip near-zero coefficients for numerical stability
+        if (value.abs() > 1e-10) {
+          flatData[size * i + (j + pos)] = value;
+        }
       }
       ++pos;
     }
@@ -78,30 +92,15 @@ class SylvesterMatrix {
 
   /// The discriminant of a polynomial P(x) is the determinant of the Sylvester
   /// matrix of P and P' (where P' is the derivative of P).
-  ///
-  /// By default, the [optimize] parameter is set to `true` so that the
-  /// Sylvester matrix is not computed for polynomials whose degree is 4 or
-  /// lower. To be more precise:
-  ///
-  ///  - With `optimize = true`, if the degree of the polynomial is lower than
-  ///  4, then the Sylvester matrix is not built. The computation of its
-  ///  determinant can be computationally heavy so we can just avoid such
-  ///  complexity by using the simple formulas for lower degree polynomials.
-  ///
-  ///  - With `optimize = false`, the Sylvester matrix and its determinant are
-  ///  always computed regardless the degree of the polynomial.
-  ///
-  /// You should keep the default value of [optimize].
-  Complex polynomialDiscriminant({bool optimize = true}) {
-    final quarticOrLower = polynomial is Constant ||
+  Complex polynomialDiscriminant() {
+    final quarticOrLower =
+        polynomial is Constant ||
         polynomial is Linear ||
         polynomial is Quadratic ||
         polynomial is Cubic ||
         polynomial is Quartic;
 
-    // In case the optimization flag was 'true' and the degree of the
-    // polynomial is <= 4, then go for the easy way.
-    if (optimize && quarticOrLower) {
+    if (quarticOrLower) {
       return polynomial.discriminant();
     } else {
       // The determinant of the Sylvester matrix
@@ -123,6 +122,11 @@ class SylvesterMatrix {
       final degree = coefficients.length - 1;
       final sign = math.pow(-1, degree * (degree - 1) / 2) as double;
       final denominator = coefficients.first;
+
+      // Check for near-zero denominator
+      if (denominator.abs() < 1e-10) {
+        throw const MatrixException('Leading coefficient is too close to zero');
+      }
 
       // Returning the determinant with the correct sign
       return Complex.fromReal(sign) / denominator * determinant;

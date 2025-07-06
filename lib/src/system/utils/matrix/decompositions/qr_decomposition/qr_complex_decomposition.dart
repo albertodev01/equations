@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
 
@@ -7,11 +8,10 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 final class QRDecompositionComplex
     extends QRDecomposition<Complex, ComplexMatrix> {
   static const _zero = Complex.zero();
+  static const _epsilon = 1e-10; // Small value for numerical stability
 
-  /// Requires the [matrix] matrix to be decomposed.
-  const QRDecompositionComplex({
-    required super.matrix,
-  });
+  /// {@macro qr_decomposition_class_header}
+  const QRDecompositionComplex({required super.matrix});
 
   @override
   List<ComplexMatrix> decompose() {
@@ -21,35 +21,38 @@ final class QRDecompositionComplex
     final diagonal = List<Complex>.generate(columns, (index) => _zero);
 
     for (var k = 0; k < columns; k++) {
-      // Compute 2-norm of k-th column.
+      // Compute 2-norm of k-th column using a more stable method
       var nrm = _zero;
       for (var i = k; i < rows; i++) {
-        nrm = _complexSideLen(nrm, matrixQR[i][k]);
+        nrm = _complexNorm(nrm, matrixQR[i][k]);
       }
 
-      if (nrm != _zero) {
-        // Form k-th Householder vector.
+      // Check for numerical stability
+      if (nrm.abs() < _epsilon) {
+        throw const MatrixException('Matrix is numerically singular');
+      }
+
+      // Form k-th Householder vector
+      for (var i = k; i < rows; i++) {
+        matrixQR[i][k] /= nrm;
+      }
+
+      matrixQR[k][k] += const Complex.fromReal(1);
+
+      // Apply transformation to remaining columns
+      for (var j = k + 1; j < columns; j++) {
+        var s = _zero;
+
         for (var i = k; i < rows; i++) {
-          matrixQR[i][k] /= nrm;
+          s += matrixQR[i][k] * matrixQR[i][j];
         }
 
-        matrixQR[k][k] += const Complex.fromReal(1);
+        if (matrixQR[k][k].abs() > _epsilon) {
+          s = -s / matrixQR[k][k];
+        }
 
-        // Apply transformation to remaining columns.
-        for (var j = k + 1; j < columns; j++) {
-          var s = _zero;
-
-          for (var i = k; i < rows; i++) {
-            s += matrixQR[i][k] * matrixQR[i][j];
-          }
-
-          if (matrixQR[k][k] != const Complex.zero()) {
-            s = -s / matrixQR[k][k];
-          }
-
-          for (var i = k; i < rows; i++) {
-            matrixQR[i][j] += s * matrixQR[i][k];
-          }
+        for (var i = k; i < rows; i++) {
+          matrixQR[i][j] += s * matrixQR[i][k];
         }
       }
 
@@ -59,10 +62,7 @@ final class QRDecompositionComplex
     // Computing the 'R' matrix
     final R = List<List<Complex>>.generate(
       columns,
-      (index) => List<Complex>.generate(
-        columns,
-        (index) => _zero,
-      ),
+      (index) => List<Complex>.generate(columns, (index) => _zero),
     );
 
     for (var i = 0; i < columns; i++) {
@@ -82,10 +82,7 @@ final class QRDecompositionComplex
     // Get Q
     final Q = List<List<Complex>>.generate(
       rows,
-      (index) => List<Complex>.generate(
-        columns,
-        (index) => _zero,
-      ),
+      (index) => List<Complex>.generate(columns, (index) => _zero),
     );
 
     for (var k = columns - 1; k >= 0; k--) {
@@ -96,7 +93,7 @@ final class QRDecompositionComplex
       Q[k][k] = const Complex.fromReal(1);
 
       for (var j = k; j < columns; j++) {
-        if (matrixQR[k][k] != _zero) {
+        if (matrixQR[k][k].abs() > _epsilon) {
           var s = _zero;
 
           for (var i = k; i < rows; i++) {
@@ -119,5 +116,16 @@ final class QRDecompositionComplex
     ];
   }
 
-  Complex _complexSideLen(Complex a, Complex b) => (a.pow(2) + b.pow(2)).sqrt();
+  /// Computes the norm of a complex number in a more numerically stable way
+  Complex _complexNorm(Complex a, Complex b) {
+    final aAbs = a.abs();
+    final bAbs = b.abs();
+    if (aAbs > bAbs) {
+      return a * Complex.fromReal(math.sqrt(1 + math.pow(bAbs / aAbs, 2)));
+    } else if (bAbs > 0) {
+      return b * Complex.fromReal(math.sqrt(math.pow(aAbs / bAbs, 2) + 1));
+    } else {
+      return _zero;
+    }
+  }
 }

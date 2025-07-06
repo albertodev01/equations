@@ -2,8 +2,12 @@ name: equations_ci
 
 on:
   pull_request:
+    paths-ignore:
+      - "**.md"
+  push:
     branches:
       - master
+      - develop
 
 jobs:
   verify_equation_package:

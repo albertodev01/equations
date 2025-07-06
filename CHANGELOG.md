@@ -1,7 +1,13 @@
-## 5.1.0
+## 6.0.0
+ - **BREAKING**: Renamed `DurandKerner` class to `GenericPolynomial`
+ - **BREAKING**: The `AlgebraicDivision` class is now a `typedef` of an equivalent record type
+ - Added a new `Algebraic.factor` method that factors the polynomial into irreducible factors.
+ - Added a new `Algebraic.solveInequality` method that solves polynomial inequalities.
+ - Added a new `Matrix<T>.isZero` method.
  - Added a new `Factorial.computeBigInt` method to calculate factorials using `BigInt` rather than `int`
- - Fixed a bug in the `Cubic` class that throws an error when trying to solve cubic equations in the `ax^3 + d = 0` form
- - Updates to the Dart and Flutter example projects
+ - Improvements to numerical stability of various algorithms
+ - Fixed numerical issues on polynonial and nonlinear solvers
+ - Documentation improvements
  - Dependencies versions update
 
 ## 5.0.2
@@ -34,17 +40,17 @@
  - Dependencies versions update
 
 ## 4.0.0
- - **BREAKING**: The `Complex.fromPolar` constructor now asks for required **named** parameters
- - **BREAKING**: The `Interpolation` constructor now asks for required **named** parameters
+ - **BREAKING**: The `Complex.fromPolar` constructor now requires **named** parameters
+ - **BREAKING**: The `Interpolation` constructor now requires **named** parameters
  - **BREAKING**: The `SylvesterMatrix` type now accepts an `Algebraic` type rather than a `List<Complex>`. As such, the `SylvesterMatrix.fromReal` constructor has been removed because a real polynomial can be built using `Algebraic.fromReal` instead
  - **BREAKING**: The `SystemSolver` type now accepts a `RealMatrix` type rather than a `List<List<double>>`. As such, the `size` parameter has also been removed because the size can be retrieved from the `RealMatrix` object itself
- - **BREAKING**: New names for `SytemSolver` parameters: changes `equations` to `matrix` and `constants` to `knownValues`
+ - **BREAKING**: New names for `SystemSolver` parameters: changed `equations` to `matrix` and `constants` to `knownValues`
  - Updated Dart SDK constraints to `">=2.17.0 <3.0.0"`
  - Added `csc` (cosecant) and `sec` (secant) trigonometric functions to the `ExpressionParser` type
  - Migrated Dart code to 2.17 with super parameters
  - Updated the `analysis_options.yaml` file with almost all rules
  - Added more rules from the `dart_code_metrics` package
- - Updated the Flutter demo in the `example/` folder. Now the project can be run all platforms (mobile, web and desktop)
+ - Updated the Flutter demo in the `example/` folder. Now the project can be run on all platforms (mobile, web and desktop)
  - Dependencies versions update
 
 ## 3.2.0
@@ -66,11 +72,11 @@
 
 ## 3.1.1
  - Dependencies versions update
- - Added more tests cases
+ - Added more test cases
  - Updated the Flutter demo in the `example/` folder
 
 ## 3.1.0
- - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (earlier it was passed to the `integrate()` function)
+ - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (previously it was passed to the `integrate()` function)
  - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
  - Fixed an issue in the `eigenvalue()` method
  - Fixed an issue in the `rank()` method
@@ -82,9 +88,9 @@
 ## 3.0.0
  - **BREAKING**: Replaced the `Laguerre` type with `DurandKerner` (the latter is a more reliable root-finding algorithm for polynomials)
  - **BREAKING**: Removed the `integrateOn` method on `Nonlinear`. Now numerical integration algorithms live on their own in the `src/integral` folder
- - **BREAKING**: renamed `firstGuess` and `secondGuess` to `a` and `b` respectively in `Secant` (for consistency with other `Nonlinear` types)
+ - **BREAKING**: Renamed `firstGuess` and `secondGuess` to `a` and `b` respectively in `Secant` (for consistency with other `Nonlinear` types)
  - Created the `Interpolation` type to work with points interpolation
- - Moved `NumericalIntegration` into a 'top-level' directoy inside `src/`
+ - Moved `NumericalIntegration` into a 'top-level' directory inside `src/`
  - Added the `LinearInterpolation`, `PolynomialInterpolation`, and `NewtonInterpolation` types
  - Added eigenvalues computation on `Matrix<T>` with the `eigenValues()` method
  - Added inverse matrix computation on `Matrix<T>` with the `inverse()` method
@@ -104,7 +110,7 @@
  - Dependencies versions update
  - Minor enhancement in the `PolynomialLongDivision` class
  - Added trace computation on matrices
- - Added french localization to the Flutter example app
+ - Added French localization to the Flutter example app
  
 ## 2.1.2
  - Dependencies versions update
@@ -116,9 +122,9 @@
  - Dependencies versions update
 
 ## 2.1.0
- - Changes on deep copy logic for lists (now the library uses `List.from()` on immutable objects)
+ - Changes in deep copy logic for lists (now the library uses `List.from()` on immutable objects)
  - Added the `PolynomialLongDivision` class to divide a polynomial by another
- - Now the `Algebraic` type supports `opeartor/` too so you can divide polynomials to get quotient and remainder
+ - Now the `Algebraic` type supports `operator/` too so you can divide polynomials to get quotient and remainder
  - Dependencies versions update
 
 ## 2.0.3
@@ -126,7 +132,7 @@
 
 ## 2.0.2
  - New extension method on `String` called `isRealFunction` that determines whether a string represents a real function or not
- - New extension method on `String` called `isNumericalExpression` that determines whether a string represents numerical expression or not
+ - New extension method on `String` called `isNumericalExpression` that determines whether a string represents a numerical expression or not
  - Minor changes to the `ExpressionParser` class
  - Written more tests for the `flutter_example` demo project
  - Dependencies versions update
@@ -142,7 +148,7 @@
 
 ## 2.0.0-nullsafety.5
   - Updated some dependencies versions
-  - Added support for numerical integration with the `NumericalIntegration` type.
+  - Added support for numerical integration with the `NumericalIntegration` type
   - Minor code improvements
 
 ## 2.0.0-nullsafety.4
@@ -160,20 +166,20 @@
   - New examples in the `example/` folder
 
 ## 2.0.0-nullsafety.2
-  - Created the `RealMatrix` and `ComplexMatrix` types to work with matrix
+  - Created the `RealMatrix` and `ComplexMatrix` types to work with matrices
   - Added support for linear systems solving using Gauss, LU decomposition and Cholesky decomposition
   - Added a new static method called `Algebraic.from()` which automatically builds a new polynomial
-    equation according with the number of coefficients.
+    equation according to the number of coefficients
   - Minor documentation fixes
 
 ## 2.0.0-nullsafety.1
-  - Added a new root-finding algorithm (`Brent` which implements the Brent's method)
+  - Added a new root-finding algorithm (`Brent` which implements Brent's method)
   - Added `Laguerre` (which implements Laguerre's method for polynomials root finding)
-  - Minor on various `Nonlinear` subtypes
+  - Minor improvements on various `Nonlinear` subtypes
   - Documentation fixes
 
 ## 2.0.0-nullsafety.0
-  - Package migrated to null safety (Dart 2.12).
+  - Package migrated to null safety (Dart 2.12)
   - Added a new `ExpressionParser` class (which is also internally used by `NonLinear`)
   - Minor fixes on `Algebraic` and `NonLinear`
 
@@ -184,4 +190,4 @@
 ## 1.0.0
  - Initial release
  - Use `Algebraic` for algebraic (polynomial) equations and `Nonlinear` for nonlinear equations
- - Easily work with complex number by using `Complex`
+ - Easily work with complex numbers by using `Complex`

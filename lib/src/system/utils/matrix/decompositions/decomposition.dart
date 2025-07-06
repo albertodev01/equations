@@ -3,6 +3,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_deco
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/single_value_decomposition.dart';
 
+/// {@template matrix_decomposition}
 /// Matrix decompositions, also knows as matrix factorizations, refer to a
 /// family of algorithms that a factorize a matrix into a product of matrices.
 ///
@@ -11,14 +12,13 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///  - [QRDecomposition]
 ///  - [SingleValueDecomposition]
 ///  - [EigenDecomposition]
+/// {@endtemplate}
 abstract base class Decomposition<K, T extends Matrix<K>> {
   /// The matrix to be decomposed.
   final T matrix;
 
-  /// Creates an instance of [Decomposition] to factor the given [matrix].
-  const Decomposition({
-    required this.matrix,
-  });
+  /// {@macro matrix_decomposition}
+  const Decomposition({required this.matrix});
 
   @override
   bool operator ==(Object other) {

@@ -1,27 +1,25 @@
 part of '../algebraic.dart';
 
-/// Concrete implementation of [Algebraic] that represents a constant value
-/// `a`. It can be either real or complex.
-///
-/// For example:
+/// {@template constant_algebraic}
+/// Concrete implementation of [Algebraic] that represents a constant value `a`.
+/// It can be either a real or complex number, such as:
 ///
 ///   - f(x) = 5
 ///   - f(x) = 3 + 6i
 ///
 /// In the context of a polynomial with one variable, the non-zero constant
 /// function is a polynomial of degree 0.
+/// {@endtemplate}
 final class Constant extends Algebraic {
-  /// The only coefficient of the polynomial is represented by a [Complex]
-  /// number [a].
-  Constant({
-    Complex a = const Complex.fromReal(1),
-  }) : super([a]);
+  /// {@macro constant_algebraic}
+  ///
+  /// The only coefficient of the polynomial is represented by [a].
+  Constant({Complex a = const Complex.fromReal(1)}) : super([a]);
 
-  /// The only coefficient of the polynomial is represented by a [double]
-  /// (real) number [a].
-  Constant.realEquation({
-    double a = 1,
-  }) : super.realEquation([a]);
+  /// {@macro constant_algebraic}
+  ///
+  /// The only real coefficient of the polynomial is represented by [a].
+  Constant.realEquation({double a = 1}) : super.realEquation([a]);
 
   @override
   num get degree => a.isZero ? double.negativeInfinity : 0;

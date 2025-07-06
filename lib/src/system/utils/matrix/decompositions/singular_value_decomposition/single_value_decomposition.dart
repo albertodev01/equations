@@ -6,17 +6,22 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 /// decomposition of a matrix A into a product `A = U x E x Vt` of:
 ///
 ///  - a square unitary matrix U;
-///
 ///  - a rectangular diagonal matrix E with positive values on the diagonal;
-///
 ///  - a square unitary matrix V.
+///
+/// The algorithm follows these steps:
+///  1. Bidiagonalization of the input matrix
+///  2. Generation of U matrix
+///  3. Generation of V matrix
+///  4. Iterative refinement of singular values
+///
+/// Numerical stability is maintained using epsilon values and proper
+/// handling of complex number operations.
 /// {@endtemplate}
 abstract base class SingleValueDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
-  /// Creates an [SingleValueDecomposition] object.
-  const SingleValueDecomposition({
-    required super.matrix,
-  });
+  /// {@macro svd_class_header}
+  const SingleValueDecomposition({required super.matrix});
 
   /// Computes the `E`, `U` and `V` matrices of the SVD algorithm. In particular
   /// this method returns the `E`, `U` and `V` matrices of the
