@@ -641,10 +641,9 @@ final class EigendecompositionComplex
           if (k != m) {
             p = hessenbergCache.get(k, k - 1);
             q = hessenbergCache.get(k + 1, k - 1);
-            r =
-                notlast
-                    ? hessenbergCache.get(k + 2, k - 1)
-                    : const Complex.zero();
+            r = notlast
+                ? hessenbergCache.get(k + 2, k - 1)
+                : const Complex.zero();
             x = p + q + r;
             if (x == const Complex.zero()) {
               continue;

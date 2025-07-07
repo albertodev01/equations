@@ -33,14 +33,13 @@ void main() {
 
     test('Empty matrix throws ArgumentError', () {
       expect(
-        () =>
-            SVDComplex(
-              matrix: ComplexMatrix.fromData(
-                rows: 0,
-                columns: 0,
-                data: const [],
-              ),
-            ).decompose(),
+        () => SVDComplex(
+          matrix: ComplexMatrix.fromData(
+            rows: 0,
+            columns: 0,
+            data: const [],
+          ),
+        ).decompose(),
         throwsArgumentError,
       );
     });

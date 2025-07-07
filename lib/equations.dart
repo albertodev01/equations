@@ -6,9 +6,6 @@
 ///  - evaluating definite integrals;
 ///  - manipulating and decomposing matrices;
 ///  - interpolate data points using interpolation algorithms.
-///
-/// Additionally, the package also has utilities to work with complex numbers,
-/// real/complex matrices, fractions, and expression parsing.
 library;
 
 export 'package:fraction/fraction.dart';

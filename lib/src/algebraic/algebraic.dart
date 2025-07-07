@@ -13,10 +13,9 @@ part 'types/quartic.dart';
 /// The message thrown by the constructor to indicate that the polynomial cannot
 /// be created correctly.
 const _exceptionError = '''
-To create a valid polynomial equation (except for constants), the coefficient with the highest degree cannot be zero. Therefore, ensure that your list either:
-
-1. Contains a single value (like `[5]` or `[-2]`) to represent a polynomial whose degree is zero.
-2. Contains one or more values AND the first parameter is not zero (like `[1, 0]` or `[-6, -3, 2, 8]`).
+To create a valid polynomial equation (except for constant values), the coefficient with the highest degree cannot be zero. Therefore, ensure that your list either:
+ 1. contains a single value (like `[5]` or `[-2]`) to represent a polynomial whose degree is zero (a constant value);
+ 2. contains one or more values AND the first parameter is not zero (for example, `[1, 0]` or `[-6, -3, 2, 8]`).
 ''';
 
 /// A record type that holds the quotient and the remainder of a division
@@ -56,7 +55,7 @@ typedef AlgebraicDivision = ({Algebraic quotient, Algebraic remainder});
 ///   Complex.fromReal(1), // x³
 ///   Complex.fromReal(5), // x²
 ///   Complex.fromReal(3), // x
-///   Complex.fromReal(-2), // -2
+///   Complex.fromReal(-2), // constant value
 /// ]);
 /// ```
 ///
@@ -142,7 +141,9 @@ sealed class Algebraic {
           e: coefficients[4],
         );
       default:
-        return GenericAlgebraic(coefficients: coefficients);
+        return GenericAlgebraic(
+          coefficients: coefficients,
+        );
     }
   }
 
@@ -185,6 +186,10 @@ sealed class Algebraic {
 
   /// Returns a string representation of the polynomial where the coefficients
   /// are converted into their fractional representation.
+  ///
+  /// This method provides a more readable representation of polynomials with
+  /// rational coefficients by converting decimal values to fractions where
+  /// possible.
   String toStringWithFractions() => _convertToString(asFraction: true);
 
   /// Represents the equation as a string. If [asFraction] is `true` then
@@ -266,7 +271,18 @@ sealed class Algebraic {
     return this is Constant || !coefficients.first.isZero;
   }
 
-  /// Evaluates the polynomial on the given [x] value.
+  /// Evaluates the polynomial at the given complex value [x].
+  ///
+  /// This method computes P(x) where P is this polynomial and x is the given
+  /// complex number. The evaluation is performed using Horner's method for
+  /// numerical stability.
+  ///
+  /// Example:
+  /// ```dart
+  /// final poly = Quadratic.realEquation(a: 1, b: 2, c: 1); // x² + 2x + 1
+  /// final result = poly.evaluateOn(Complex.fromReal(3));
+  /// // result = Complex(16, 0) because 3² + 2(3) + 1 = 9 + 6 + 1 = 16
+  /// ```
   Complex evaluateOn(Complex x) {
     var value = const Complex.zero();
     var power = coefficients.length - 1;
@@ -284,10 +300,35 @@ sealed class Algebraic {
     return value;
   }
 
-  /// Evaluates the polynomial on the given decimal [x] value.
+  /// Evaluates the polynomial at the given real value [x].
+  ///
+  /// This is a convenience method that converts the real number [x] to a
+  /// complex number and calls [evaluateOn]. It's useful when you know you're
+  /// working with real numbers and want to avoid the verbosity of creating
+  /// [Complex] objects.
+  ///
+  /// Example:
+  /// ```dart
+  /// final poly = Linear.realEquation(a: 2, b: 3); // 2x + 3
+  /// final result = poly.realEvaluateOn(5);
+  /// // result = Complex(13, 0) because 2(5) + 3 = 13
+
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
-  /// Evaluates the integral of the polynomial between [lower] and [upper].
+  /// Evaluates the definite integral of the polynomial from [lower] to [upper].
+  ///
+  /// This method computes ∫[lower, upper] P(x)dx where P is this polynomial.
+  /// The integral is computed analytically using the power rule for
+  /// integration. For example:
+  ///
+  /// ```dart
+  /// final poly = Linear.realEquation(a: 2, b: 3); // 2x + 3
+  /// final integral = poly.evaluateIntegralOn(0, 2);
+  /// // integral = Complex(10, 0) because ∫(2x+3)dx from 0 to 2 = 10
+  /// ```
+  ///
+  /// The method works with both real and complex coefficients, returning
+  /// complex results when necessary.
   Complex evaluateIntegralOn(double lower, double upper) {
     var upperSum = const Complex.zero();
     var lowerSum = const Complex.zero();
@@ -473,6 +514,20 @@ sealed class Algebraic {
   /// // Returns [Linear(b: -2i), Linear(b: 2i)]
   /// // Which represents (x - 2i)(x + 2i)
   /// ```
+  ///
+  /// Edge cases:
+  ///
+  /// - If the polynomial has no roots, returns a list containing only this
+  ///   polynomial (indicating it is already irreducible)
+  ///
+  /// - If the polynomial is constant (degree 0), returns a list containing
+  ///   only this polynomial
+  ///
+  /// - Repeated roots are handled correctly, with factors appearing multiple
+  ///   times according to their multiplicity
+  ///
+  /// The factorization is not guaranteed to be unique, especially for
+  /// polynomials with complex coefficients.
   List<Algebraic> factor() {
     final roots = solutions();
 
@@ -551,11 +606,10 @@ sealed class Algebraic {
     final roots = solutions();
 
     // Filter out complex roots and convert to real numbers
-    final realRoots =
-        roots
-            .where((root) => root.imaginary.abs() < precision)
-            .map((root) => root.real)
-            .toList();
+    final realRoots = roots
+        .where((root) => root.imaginary.abs() < precision)
+        .map((root) => root.real)
+        .toList();
 
     // If there are no real roots, check if the polynomial is always positive or
     // negative
@@ -631,6 +685,11 @@ sealed class Algebraic {
       };
 
   /// The polynomial discriminant, if it exists.
+  ///
+  /// The discriminant is a mathematical expression that provides information
+  /// about the nature of the roots of a polynomial equation. The discriminant
+  /// is well-defined for polynomials up to degree 4. For higher-degrees, it is
+  /// approximated with a numerical method.
   Complex discriminant();
 
   /// Finds the roots (the solutions) of the associated _P(x) = 0_ equation.

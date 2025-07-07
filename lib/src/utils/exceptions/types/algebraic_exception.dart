@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 class AlgebraicException extends EquationException {
   /// Represents an exception from the [Algebraic] class.
   const AlgebraicException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'AlgebraicException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'AlgebraicException',
+      );
 }

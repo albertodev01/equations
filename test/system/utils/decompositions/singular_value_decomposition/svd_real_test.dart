@@ -33,10 +33,9 @@ void main() {
 
     test('Empty matrix throws ArgumentError', () {
       expect(
-        () =>
-            SVDReal(
-              matrix: RealMatrix.fromData(rows: 0, columns: 0, data: []),
-            ).decompose(),
+        () => SVDReal(
+          matrix: RealMatrix.fromData(rows: 0, columns: 0, data: []),
+        ).decompose(),
         throwsArgumentError,
       );
     });

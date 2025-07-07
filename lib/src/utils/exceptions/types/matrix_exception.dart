@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 class MatrixException extends EquationException {
   /// Represents an exception from the [Matrix] class.
   const MatrixException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'MatrixException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'MatrixException',
+      );
 }

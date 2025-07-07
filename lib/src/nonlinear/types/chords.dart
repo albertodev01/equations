@@ -58,7 +58,8 @@ final class Chords extends NonLinear {
     final guesses = <double>[];
     var n = 1;
 
-    var x0 = (a * evaluateOn(b) - b * evaluateOn(a)) /
+    var x0 =
+        (a * evaluateOn(b) - b * evaluateOn(a)) /
         (evaluateOn(b) - evaluateOn(a));
     var diff = evaluateOn(x0).abs();
 

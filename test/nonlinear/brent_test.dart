@@ -8,8 +8,12 @@ void main() {
     test(
       'Making sure that the series converges when the root is bracketed.',
       () {
-        const brent =
-            Brent(function: 'x^3-sqrt(x+3)', a: 0, b: 2, maxSteps: 10);
+        const brent = Brent(
+          function: 'x^3-sqrt(x+3)',
+          a: 0,
+          b: 2,
+          maxSteps: 10,
+        );
 
         expect(brent.a, equals(0));
         expect(brent.b, equals(2));

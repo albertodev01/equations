@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 class NonlinearException extends EquationException {
   /// Represents an exception from the [NonLinear] class.
   const NonlinearException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'NonlinearException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'NonlinearException',
+      );
 }

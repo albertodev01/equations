@@ -943,15 +943,14 @@ void main() {
     });
 
     test('Inverse of 2x2 matrix', () {
-      final matrix =
-          ComplexMatrix.fromData(
-            rows: 2,
-            columns: 2,
-            data: const [
-              [Complex.i(), Complex.fromReal(5)],
-              [Complex.fromImaginary(-4), Complex(7, -6)],
-            ],
-          ).inverse();
+      final matrix = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [Complex.i(), Complex.fromReal(5)],
+          [Complex.fromImaginary(-4), Complex(7, -6)],
+        ],
+      ).inverse();
 
       expect(
         matrix(0, 0).real,
@@ -988,16 +987,15 @@ void main() {
     });
 
     test('Inverse of matrix', () {
-      final matrix =
-          ComplexMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [Complex.fromReal(2), Complex.fromReal(-1), Complex.fromReal(0)],
-              [Complex.fromReal(4), Complex.fromReal(0), Complex.fromReal(7)],
-              [Complex.fromReal(6), Complex.fromReal(1), Complex.fromReal(3)],
-            ],
-          ).inverse();
+      final matrix = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(2), Complex.fromReal(-1), Complex.fromReal(0)],
+          [Complex.fromReal(4), Complex.fromReal(0), Complex.fromReal(7)],
+          [Complex.fromReal(6), Complex.fromReal(1), Complex.fromReal(3)],
+        ],
+      ).inverse();
 
       expect(
         matrix(0, 0).real,

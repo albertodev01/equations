@@ -21,7 +21,8 @@ final class PolarComplex implements Comparable<PolarComplex> {
   });
 
   @override
-  String toString() => 'r = $r\n'
+  String toString() =>
+      'r = $r\n'
       'phi (rad) = $phiRadians\n'
       'phi (deg) = $phiDegrees';
 
@@ -73,10 +74,9 @@ final class PolarComplex implements Comparable<PolarComplex> {
     double? r,
     double? phiRadians,
     double? phiDegrees,
-  }) =>
-      PolarComplex(
-        r: r ?? this.r,
-        phiDegrees: phiDegrees ?? this.phiDegrees,
-        phiRadians: phiRadians ?? this.phiRadians,
-      );
+  }) => PolarComplex(
+    r: r ?? this.r,
+    phiDegrees: phiDegrees ?? this.phiDegrees,
+    phiRadians: phiRadians ?? this.phiRadians,
+  );
 }

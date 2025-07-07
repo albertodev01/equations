@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 class NumericalIntegrationException extends EquationException {
   /// Represents an exception from the [NumericalIntegration] class.
   const NumericalIntegrationException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'NumericalIntegrationException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'NumericalIntegrationException',
+      );
 }

@@ -123,11 +123,10 @@ final class Complex implements Comparable<Complex> {
   Complex copyWith({
     double? real,
     double? imaginary,
-  }) =>
-      Complex(
-        real ?? this.real,
-        imaginary ?? this.imaginary,
-      );
+  }) => Complex(
+    real ?? this.real,
+    imaginary ?? this.imaginary,
+  );
 
   @override
   String toString() => _convertToString();
@@ -173,10 +172,10 @@ final class Complex implements Comparable<Complex> {
   /// Converts this object into polar coordinates and wraps them in a new
   /// [PolarComplex] object.
   PolarComplex toPolarCoordinates() => PolarComplex(
-        r: abs(),
-        phiRadians: phase(),
-        phiDegrees: _radToDeg(phase()),
-      );
+    r: abs(),
+    phiRadians: phase(),
+    phiDegrees: _radToDeg(phase()),
+  );
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions.
@@ -236,15 +235,15 @@ final class Complex implements Comparable<Complex> {
 
   /// Sums two complex numbers.
   Complex operator +(Complex other) => Complex(
-        real + other.real,
-        imaginary + other.imaginary,
-      );
+    real + other.real,
+    imaginary + other.imaginary,
+  );
 
   /// Subtracts two complex numbers.
   Complex operator -(Complex other) => Complex(
-        real - other.real,
-        imaginary - other.imaginary,
-      );
+    real - other.real,
+    imaginary - other.imaginary,
+  );
 
   /// The products of two complex numbers.
   Complex operator *(Complex other) {
@@ -330,21 +329,21 @@ final class Complex implements Comparable<Complex> {
   /// Calculates the _base-e_ exponential of a complex number z where _e_ is the
   /// Euler constant.
   Complex exp() => Complex(
-        math.exp(real) * math.cos(imaginary),
-        math.exp(real) * math.sin(imaginary),
-      );
+    math.exp(real) * math.cos(imaginary),
+    math.exp(real) * math.sin(imaginary),
+  );
 
   /// Calculates the sine of this complex number.
   Complex sin() => Complex(
-        math.sin(real) * _cosh(imaginary),
-        math.cos(real) * _sinh(imaginary),
-      );
+    math.sin(real) * _cosh(imaginary),
+    math.cos(real) * _sinh(imaginary),
+  );
 
   /// Calculates the cosine of this complex number.
   Complex cos() => Complex(
-        math.cos(real) * _cosh(imaginary),
-        -math.sin(real) * _sinh(imaginary),
-      );
+    math.cos(real) * _cosh(imaginary),
+    -math.sin(real) * _sinh(imaginary),
+  );
 
   /// Calculates the tangent of this complex number.
   Complex tan() => sin() / cos();

@@ -1,8 +1,20 @@
 # Examples
 
-This folder contains some examples to show how the `equations` package could be used. In particular:
+This folder contains some examples to showcase the main features of `equations` package. For more information about solving equations and examples on how to use the classes from this package, check out the articles on the Wiki pages:
 
-  - the `dart_example/` folder contains a Dart CLI application that uses the `equations` package;
-  - the `flutter_example/` folder contains a Flutter application that uses the `equations` package.
+ - [Algebraic equations](https://github.com/albertodev01/equations/wiki/Algebraic-equations), for solving polynomial equations;
+ - [Nonlinear equations](https://github.com/albertodev01/equations/wiki/Nonlinear-equations), for solving nonlinear equations;
+ - [Systems of equations](https://github.com/albertodev01/equations/wiki/Systems-of-equations), for solving systems of equations;
+ - [Utilities](https://github.com/albertodev01/equations/wiki/Utilities), for working with matrices, evaluating integrals, interpolating data, and more.
 
-You can also play with the Flutter example online at [https://albertodev01.github.io/equations/](https://albertodev01.github.io/equations/).
+## Algebraic equations
+
+TODO
+
+## Nonlinear equations
+
+TODO
+
+## Systems of equations
+
+TODO

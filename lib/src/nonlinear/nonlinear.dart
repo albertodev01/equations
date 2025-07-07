@@ -51,9 +51,11 @@ abstract base class NonLinear {
     final size = guesses.length - 1;
 
     if (size >= 3) {
-      final numerator = (guesses[size] - guesses[size - 1]).abs() /
+      final numerator =
+          (guesses[size] - guesses[size - 1]).abs() /
           (guesses[size - 1] - guesses[size - 2]).abs();
-      final denominator = (guesses[size - 1] - guesses[size - 2]).abs() /
+      final denominator =
+          (guesses[size - 1] - guesses[size - 2]).abs() /
           (guesses[size - 2] - guesses[size - 3]).abs();
 
       return math.log(numerator) / math.log(denominator);

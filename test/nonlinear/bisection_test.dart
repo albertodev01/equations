@@ -8,8 +8,12 @@ void main() {
     test(
       'Making sure that the series converges when the root is in the interval.',
       () {
-        const bisection =
-            Bisection(function: 'x^3-x-2', a: 1, b: 2, maxSteps: 5);
+        const bisection = Bisection(
+          function: 'x^3-x-2',
+          a: 1,
+          b: 2,
+          maxSteps: 5,
+        );
 
         expect(bisection.maxSteps, equals(5));
         expect(bisection.tolerance, equals(1.0e-10));

@@ -221,8 +221,9 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     }
 
     // Scale all coefficients by dividing by the leading coefficient
-    final scaledCoefficients =
-        coefficients.map((c) => c / leadingCoeff).toList();
+    final scaledCoefficients = coefficients
+        .map((c) => c / leadingCoeff)
+        .toList();
     final degree = (scaledCoefficients.length - 1).toDouble();
 
     // Initialize roots using Aberth's method if no initial guesses provided

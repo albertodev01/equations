@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 class InterpolationException extends EquationException {
   /// Represents an exception from the [Interpolation] class.
   const InterpolationException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'InterpolationException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'InterpolationException',
+      );
 }

@@ -4,8 +4,8 @@ import 'package:equations/equations.dart';
 class PolynomialLongDivisionException extends EquationException {
   /// Represents an exception from the [PolynomialLongDivision] class.
   const PolynomialLongDivisionException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'PolynomialLongDivisionException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'PolynomialLongDivisionException',
+      );
 }

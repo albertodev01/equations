@@ -27,7 +27,8 @@ final class AdaptiveQuadrature extends NumericalIntegration {
     final fb = evaluateFunction(b);
 
     final q1 = h / 6 * (fa + 4 * evaluateFunction(c) + fb);
-    final q2 = h /
+    final q2 =
+        h /
         12 *
         (fa +
             4 * evaluateFunction(d) +

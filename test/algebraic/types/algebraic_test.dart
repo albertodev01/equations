@@ -631,26 +631,28 @@ void main() {
 
       test('Test 5', () {
         expect(
-          () => Cubic(
-            a: const Complex.fromReal(2),
-            c: const Complex(-3, 1),
-            d: const Complex.fromReal(1),
-          ).solveInequality(
-            inequalityType: AlgebraicInequalityType.greaterThan,
-          ),
+          () =>
+              Cubic(
+                a: const Complex.fromReal(2),
+                c: const Complex(-3, 1),
+                d: const Complex.fromReal(1),
+              ).solveInequality(
+                inequalityType: AlgebraicInequalityType.greaterThan,
+              ),
           throwsA(isA<AlgebraicException>()),
         );
       });
 
       test('Test 6', () {
         expect(
-          () => Quadratic(
-            a: const Complex.fromReal(2),
-            b: const Complex.fromReal(1),
-          ).solveInequality(
-            inequalityType: AlgebraicInequalityType.lessThan,
-            precision: -0.001,
-          ),
+          () =>
+              Quadratic(
+                a: const Complex.fromReal(2),
+                b: const Complex.fromReal(1),
+              ).solveInequality(
+                inequalityType: AlgebraicInequalityType.lessThan,
+                precision: -0.001,
+              ),
           throwsA(isA<AlgebraicException>()),
         );
       });
@@ -674,12 +676,13 @@ void main() {
       });
 
       test('Test 8', () {
-        final solutions = Linear(
-          a: const Complex.fromReal(7),
-          b: const Complex.fromReal(12),
-        ).solveInequality(
-          inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
-        );
+        final solutions =
+            Linear(
+              a: const Complex.fromReal(7),
+              b: const Complex.fromReal(12),
+            ).solveInequality(
+              inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
+            );
 
         expect(
           solutions.first,
@@ -694,25 +697,27 @@ void main() {
       });
 
       test('Test 9', () {
-        final solutions = Quadratic(
-          a: const Complex.fromReal(3),
-          b: const Complex.fromReal(5),
-          c: const Complex.fromReal(23),
-        ).solveInequality(
-          inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
-        );
+        final solutions =
+            Quadratic(
+              a: const Complex.fromReal(3),
+              b: const Complex.fromReal(5),
+              c: const Complex.fromReal(23),
+            ).solveInequality(
+              inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
+            );
 
         expect(solutions.first, isA<AlgebraicInequalityAllRealNumbers>());
       });
 
       test('Test 10', () {
-        final solutions = Quadratic(
-          a: const Complex.fromReal(3),
-          b: const Complex.fromReal(5),
-          c: const Complex.fromReal(23),
-        ).solveInequality(
-          inequalityType: AlgebraicInequalityType.lessThanOrEqualTo,
-        );
+        final solutions =
+            Quadratic(
+              a: const Complex.fromReal(3),
+              b: const Complex.fromReal(5),
+              c: const Complex.fromReal(23),
+            ).solveInequality(
+              inequalityType: AlgebraicInequalityType.lessThanOrEqualTo,
+            );
 
         expect(solutions.length, isZero);
       });

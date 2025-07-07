@@ -16,7 +16,8 @@ void main() {
     });
 
     test('Making that PolarComplex is properly converted into a string.', () {
-      const strResult = 'r = 10.0\n'
+      const strResult =
+          'r = 10.0\n'
           'phi (rad) = 6.28\n'
           'phi (deg) = 360.0';
 

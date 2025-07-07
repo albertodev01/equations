@@ -1,6 +1,7 @@
 ## 6.0.0
  - **BREAKING**: Renamed `DurandKerner` class to `GenericPolynomial`
  - **BREAKING**: The `AlgebraicDivision` class is now a `typedef` of an equivalent record type
+ - Updated Dart SDK constraints to `^3.8.0`
  - Added a new `Algebraic.factor` method that factors the polynomial into irreducible factors.
  - Added a new `Algebraic.solveInequality` method that solves polynomial inequalities.
  - Added a new `Matrix<T>.isZero` method.

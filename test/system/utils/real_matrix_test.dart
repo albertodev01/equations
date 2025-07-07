@@ -827,15 +827,14 @@ void main() {
     });
 
     test('Inverse of a 2x2 matrix is correct', () {
-      final matrix =
-          RealMatrix.fromData(
-            rows: 2,
-            columns: 2,
-            data: const [
-              [-4, 2],
-              [1, 3],
-            ],
-          ).inverse();
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [-4, 2],
+          [1, 3],
+        ],
+      ).inverse();
 
       expect(
         matrix(0, 0),
@@ -847,16 +846,15 @@ void main() {
     });
 
     test('Inverse of a matrix is correct', () {
-      final matrix =
-          RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [2, -1, 0],
-              [4, 0, 7],
-              [6, 1, 3],
-            ],
-          ).inverse();
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [2, -1, 0],
+          [4, 0, 7],
+          [6, 1, 3],
+        ],
+      ).inverse();
 
       expect(matrix(0, 0), const MoreOrLessEquals(0.159091, precision: 1.0e-6));
       expect(
