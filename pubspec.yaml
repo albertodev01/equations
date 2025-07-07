@@ -5,11 +5,11 @@ repository: https://github.com/albertodev01/equations
 homepage: https://pub.dev/packages/equations
 
 environment:
-  sdk: ^3.7.2
+  sdk: ^3.8.0
 
 dependencies:
   fraction: ^5.0.5
-  petitparser: ^6.1.0
+  petitparser: ^7.0.0
 
 dev_dependencies:
   test: ^1.25.15

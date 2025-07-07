@@ -39,18 +39,13 @@ final class GaussSeidelSolver extends SystemSolver {
   }
 
   @override
-  int get hashCode => Object.hashAll(
-        [matrix, precision, ...knownValues, maxSteps],
-      );
+  int get hashCode =>
+      Object.hashAll([matrix, precision, ...knownValues, maxSteps]);
 
   @override
   List<double> solve() {
     // When 'w = 1', the SOR method simplifies to the Gauss-Seidel method.
-    final sor = SORSolver(
-      matrix: matrix,
-      knownValues: knownValues,
-      w: 1,
-    );
+    final sor = SORSolver(matrix: matrix, knownValues: knownValues, w: 1);
 
     return sor.solve();
   }

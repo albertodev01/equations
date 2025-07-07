@@ -1,4 +1,4 @@
-name: example_web_deploy
+name: documentation_web_deploy
 
 on:
   push:
@@ -6,12 +6,9 @@ on:
       - master
 
 jobs:
-  flutter_web_example_deployment:
-    name: Equations example - Flutter web deployment
+  documentation_deployment:
+    name: HTML Documentation deployment
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: example/flutter_example
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,10 +17,10 @@ jobs:
           channel: 'stable'
 
       - name: Installing dependencies
-        run: flutter pub get
+        run: dart pub get
 
-      - name: Building for the web
-        run: flutter build web --csp
+      - name: Generating the documentation
+        run: dart doc
 
       - name: Setting the git username
         run: git config user.name github-actions
@@ -32,10 +29,10 @@ jobs:
         run: git config user.email github-actions@github.com
 
       - name: Adding web source
-        run: git --work-tree build/web add --all
+        run: git --work-tree doc/api add --all
 
       - name: Adding a commit message
         run: git commit -m "Automatic deployment by github-actions"
 
       - name: Automatic web deployment
-        run: git push origin HEAD:equations_web --force
+        run: git push origin HEAD:equations_doc --force

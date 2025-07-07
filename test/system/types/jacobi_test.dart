@@ -201,5 +201,101 @@ void main() {
         }
       }
     });
+
+    test('Diagonal dominance check', () {
+      final diagonallyDominant = JacobiSolver(
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [4, 1], // |4| > |1|
+            [1, 5], // |5| > |1|
+          ],
+        ),
+        knownValues: [7, 8],
+        x0: [1, 2],
+      );
+
+      final notDiagonallyDominant = JacobiSolver(
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [1, 2], // |1| < |2|
+            [3, 4],
+          ],
+        ),
+        knownValues: [7, 8],
+        x0: [1, 2],
+      );
+
+      expect(diagonallyDominant.isDiagonallyDominant, isTrue);
+      expect(notDiagonallyDominant.isDiagonallyDominant, isFalse);
+    });
+
+    test('Residual norm computation', () {
+      final jacobi = JacobiSolver(
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [4, 1],
+            [1, 3],
+          ],
+        ),
+        knownValues: [5, 4],
+        x0: [1, 1],
+      );
+
+      final solution = jacobi.solve();
+      final residualNorm = jacobi.computeResidualNorm(solution);
+
+      // The residual should be small for a good solution
+      expect(residualNorm, lessThan(1e-8));
+    });
+
+    test('Solve with info returns convergence information', () {
+      final jacobi = JacobiSolver(
+        matrix: RealMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            [4, 1],
+            [1, 3],
+          ],
+        ),
+        knownValues: [5, 4],
+        x0: [1, 1],
+      );
+
+      final info = jacobi.solveWithInfo();
+
+      expect(info['solution'], isA<List<double>>());
+      expect(info['iterations'], isA<int>());
+      expect(info['converged'], isA<bool>());
+      expect(info['finalResidual'], isA<double>());
+
+      expect(info['iterations'], greaterThan(0));
+      expect(info['converged'], isTrue);
+      expect(info['finalResidual'], lessThan(1e-8));
+    });
+
+    test('Throws exception for zero diagonal elements', () {
+      expect(
+        () => JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [0, 1], // Zero diagonal element
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 4],
+          x0: [1, 1],
+        ),
+        throwsA(isA<SystemSolverException>()),
+      );
+    });
   });
 }

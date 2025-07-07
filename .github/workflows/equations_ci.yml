@@ -4,10 +4,11 @@ on:
   pull_request:
     paths-ignore:
       - "**.md"
-  push:
-    branches:
-      - master
-      - develop
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
   verify_equation_package:
@@ -35,58 +36,3 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           min_coverage: 100
-
-  verify_equation_flutter_example:
-    name: Flutter example
-    needs: [verify_equation_package]
-    runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: example/flutter_example
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      - name: Installing dependencies
-        run: flutter pub get
-
-      - name: Making sure the package is formatted
-        run: dart format --set-exit-if-changed .
-
-      - name: Making sure that there are no analysis warnings or errors
-        run: flutter analyze --fatal-infos --fatal-warnings lib test
-
-      - name: Runing unit, widget and golden tests
-        run: flutter test --coverage
-
-      - name: Making sure that code coverage is 100
-        uses: VeryGoodOpenSource/very_good_coverage@v3
-        with:
-          min_coverage: 100
-          path: example/flutter_example/coverage/lcov.info
-
-  verify_equation_dart_example:
-    name: Dart example
-    needs: [verify_equation_flutter_example]
-    runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: example/dart_example
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v1
-
-      - name: Installing dependencies
-        run: dart pub get
-
-      - name: Making sure the package is formatted
-        run: dart format --set-exit-if-changed .
-
-      - name: Making sure that there are no analysis warnings or errors
-        run: dart analyze --fatal-infos --fatal-warnings lib test
-
-      - name: Runing unit tests
-        run: dart test
