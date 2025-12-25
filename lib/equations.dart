@@ -1,11 +1,15 @@
-/// This package solves numerical analysis problems, such as:
+/// The `equations` package helps you with:
 ///
-///  - finding roots of polynomial equations;
-///  - finding roots of nonlinear equations;
-///  - solving linear systems of equations;
-///  - evaluating definite integrals;
-///  - manipulating and decomposing matrices;
-///  - interpolate data points using interpolation algorithms.
+///  - solving polynomial equations and inequalities;
+///  - solve nonlinear equations;
+///  - solve linear systems of equations.
+///
+/// In addition, you can also find utilities to work with:
+///
+///  - real and complex matrices;
+///  - complex numbers;
+///  - integral evaluation;
+///  - data interpolation.
 library;
 
 export 'package:fraction/fraction.dart';

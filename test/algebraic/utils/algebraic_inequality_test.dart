@@ -8,9 +8,17 @@ void main() {
   group('AlgebraicInequalitySolution', () {
     test('AlgebraicInequalityInterval smoke test', () {
       expect(
-        AlgebraicInequalityInterval(start: 10, end: 5, isInclusive: false),
+        AlgebraicInequalityInterval(
+          start: 10,
+          end: 5,
+          isInclusive: false,
+        ),
         equals(
-          AlgebraicInequalityInterval(start: 10, end: 5, isInclusive: false),
+          AlgebraicInequalityInterval(
+            start: 10,
+            end: 5,
+            isInclusive: false,
+          ),
         ),
       );
       expect(

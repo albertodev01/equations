@@ -1,3 +1,4 @@
+/// {@template factorial}
 /// This class efficiently computes the factorial of a number using a cache.
 ///
 /// The factorial of a non-negative integer `n`, denoted by `n!`, is the product
@@ -7,6 +8,7 @@
 ///
 /// If you want to compute the factorial of large values with more precision,
 /// consider
+/// {@endtemplate}
 final class Factorial {
   /// A cache with the most common factorial values.
   static const _factorialsCache = <int, int>{
@@ -68,7 +70,13 @@ final class Factorial {
     30: BigInt.parse('265252859812191058636308480000000'),
   };
 
-  /// Creates a [Factorial] object.
+  /// Dynamic cache for computed int factorials.
+  static final _dynamicFactorialsCache = <int, int>{};
+
+  /// Dynamic cache for computed BigInt factorials.
+  static final _dynamicBigIntFactorialsCache = <int, BigInt>{};
+
+  /// {@macro factorial}
   const Factorial();
 
   /// Efficiently computes the factorial of a number with [int] precision.
@@ -78,13 +86,100 @@ final class Factorial {
   ///
   ///  - When [n] is less than or equal to `20`, this method executes in O(1)
   ///    time.
-  int compute(int n) => _factorialsCache[n] ?? n * compute(n - 1);
+  ///
+  ///  - Computed values are cached dynamically for efficient repeated calls.
+  int compute(int n) {
+    // Check static cache first
+    if (_factorialsCache.containsKey(n)) {
+      return _factorialsCache[n]!;
+    }
+
+    // Check dynamic cache
+    if (_dynamicFactorialsCache.containsKey(n)) {
+      return _dynamicFactorialsCache[n]!;
+    }
+
+    // Find the highest cached value (static or dynamic)
+    int? cachedValue;
+    int? cachedKey;
+
+    // Check static cache for highest value <= n
+    for (final key in _factorialsCache.keys) {
+      if (key <= n && (cachedKey == null || key > cachedKey)) {
+        cachedKey = key;
+        cachedValue = _factorialsCache[key];
+      }
+    }
+
+    // Check dynamic cache for highest value <= n
+    for (final key in _dynamicFactorialsCache.keys) {
+      if (key <= n && (cachedKey == null || key > cachedKey)) {
+        cachedKey = key;
+        cachedValue = _dynamicFactorialsCache[key];
+      }
+    }
+
+    // Start from the highest cached value and compute iteratively
+    var result = cachedValue ?? 1;
+    final start = (cachedKey ?? -1) + 1;
+
+    // Iterative computation (avoids stack overflow)
+    for (var i = start; i <= n; i++) {
+      result *= i;
+      // Cache intermediate values for future use
+      _dynamicFactorialsCache[i] = result;
+    }
+
+    return result;
+  }
 
   /// Efficiently computes the factorial of a number with [BigInt] precision.
   ///
   /// When [n] is less than or equal to `30`, this method executes in O(1) time.
+  ///
+  /// Computed values are cached dynamically for efficient repeated calls.
   BigInt computeBigInt(int n) {
-    final bigValue = BigInt.from(n);
-    return _bigIntfactorialsCache[n] ?? bigValue * computeBigInt(n - 1);
+    // Check static cache first
+    if (_bigIntfactorialsCache.containsKey(n)) {
+      return _bigIntfactorialsCache[n]!;
+    }
+
+    // Check dynamic cache
+    if (_dynamicBigIntFactorialsCache.containsKey(n)) {
+      return _dynamicBigIntFactorialsCache[n]!;
+    }
+
+    // Find the highest cached value (static or dynamic)
+    BigInt? cachedValue;
+    int? cachedKey;
+
+    // Check static cache for highest value <= n
+    for (final key in _bigIntfactorialsCache.keys) {
+      if (key <= n && (cachedKey == null || key > cachedKey)) {
+        cachedKey = key;
+        cachedValue = _bigIntfactorialsCache[key];
+      }
+    }
+
+    // Check dynamic cache for highest value <= n
+    for (final key in _dynamicBigIntFactorialsCache.keys) {
+      if (key <= n && (cachedKey == null || key > cachedKey)) {
+        cachedKey = key;
+        cachedValue = _dynamicBigIntFactorialsCache[key];
+      }
+    }
+
+    // Start from the highest cached value and compute iteratively
+    var result = cachedValue ?? BigInt.one;
+    final start = (cachedKey ?? -1) + 1;
+
+    // Iterative computation (avoids stack overflow)
+    for (var i = start; i <= n; i++) {
+      result *= BigInt.from(i);
+      // Cache intermediate values for future use
+      _dynamicBigIntFactorialsCache[i] = result;
+    }
+
+    return result;
   }
 }

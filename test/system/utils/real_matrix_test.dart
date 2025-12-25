@@ -184,7 +184,7 @@ void main() {
       );
     });
 
-    test("toString() works as expected.", () {
+    test('toString() works as expected.', () {
       final matrix = RealMatrix.fromData(
         columns: 3,
         rows: 3,

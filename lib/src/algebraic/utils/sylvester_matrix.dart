@@ -11,7 +11,9 @@ class SylvesterMatrix {
   final Algebraic polynomial;
 
   /// {@macro sylvester_matrix}
-  const SylvesterMatrix({required this.polynomial});
+  const SylvesterMatrix({
+    required this.polynomial,
+  });
 
   @override
   bool operator ==(Object other) {

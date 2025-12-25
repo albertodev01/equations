@@ -7,6 +7,7 @@ import 'package:petitparser/petitparser.dart';
 /// [ExpressionParser].
 typedef _Evaluator = num Function(num value);
 
+/// {@template expression_parser}
 /// Parses mathematical expressions with real numbers and the `x` variable (if
 /// any). The only allowed variable name is `x`: any other type of value isn't
 /// recognized. Some expressions examples are:
@@ -34,14 +35,15 @@ typedef _Evaluator = num Function(num value);
 ///   - csc(x) (cosecant of `x`)
 ///   - sec(x) (secant of `x`)
 ///
-/// An exception of type [ExpressionParserException] is thrown if the parsed is
-/// malformed. This parser is also able to recognize some constants:
+/// An exception of type [ExpressionParserException] is thrown if the expression
+/// is malformed. This parser is also able to recognize some constants:
 ///
 ///  - pi (pi, the ratio of the circumference on the diameter)
 ///  - e (Euler's number)
 ///  - sqrt2 (the square root of 2)
 ///  - sqrt3 (the square root of 3)
 ///  - G (Gauss constant)
+/// {@endtemplate}
 final class ExpressionParser {
   /// Gauss constant.
   static const _g = 0.834626841674;
@@ -65,7 +67,7 @@ final class ExpressionParser {
                   (_) => num.parse(value),
             ),
       )
-      // Recognze the 'x' variable
+      // Recognize the 'x' variable
       ..primitive(
         char('x').trim().map(
           (_) =>
@@ -213,15 +215,7 @@ final class ExpressionParser {
     return builder.build().end();
   }();
 
-  /// Builds a new expression parser that accepts strings with a single `x`
-  /// variable. For example, valid expressions are:
-  ///
-  ///   - `2 + x`
-  ///   - `3 * x - 6`
-  ///   - `x^2 + cos(x / 2)`
-  ///
-  /// Note that `2*(1+3)` is **valid** while `2(1+3)` is **invalid**. You always
-  /// have to specify the `*` symbol to multiply two values.
+  /// {@macro expression_parser}
   const ExpressionParser();
 
   /// Evaluates the mathematical [expression] and returns the result. This

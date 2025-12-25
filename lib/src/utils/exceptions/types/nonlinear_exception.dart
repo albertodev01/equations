@@ -1,8 +1,10 @@
 import 'package:equations/equations.dart';
 
+/// {@template nonlinear_exception}
 /// Exception object thrown by [NonLinear].
+/// {@endtemplate}
 class NonlinearException extends EquationException {
-  /// Represents an exception from the [NonLinear] class.
+  /// {@macro nonlinear_exception}
   const NonlinearException(String message)
     : super(
         message: message,

@@ -15,7 +15,8 @@ import 'package:equations/equations.dart';
 ///   x_i^(k+1) = (b_i - Σ_{j≠i} a_{ij} * x_j^(k)) / a_{ii}
 ///
 /// where k is the iteration number. The method converges if the matrix A
-/// is strictly diagonally dominant, meaning |a_{ii}| > Σ_{j≠i} |a_{ij}| for all i.
+/// is strictly diagonally dominant, meaning |a_{ii}| > Σ_{j≠i} |a_{ij}| for all
+/// values of i.
 ///
 /// Example:
 /// ```dart
@@ -157,7 +158,8 @@ final class JacobiSolver extends SystemSolver {
     return math.sqrt(residualNorm);
   }
 
-  /// Solves the system and returns both the solution and convergence information.
+  /// Solves the system and returns both the solution and convergence
+  /// information.
   ///
   /// Returns a map containing:
   /// - 'solution': the solution vector
@@ -246,7 +248,8 @@ final class JacobiSolver extends SystemSolver {
   /// Solves the system of linear equations using the Jacobi iterative method.
   ///
   /// The method iterates until either:
-  /// - The maximum change in any component between iterations is less than [precision]
+  /// - The maximum change in any component between iterations is less than
+  ///   [precision]
   /// - The maximum number of iterations [maxSteps] is reached
   ///
   /// Returns the solution vector x that satisfies Ax = b.

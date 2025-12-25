@@ -7,6 +7,30 @@ import 'package:equations/equations.dart';
 /// This implementation requires that the degree of the denominator be less than
 /// or equal to the degree of the numerator. If this condition is not met, a
 /// [PolynomialLongDivisionException] will be thrown.
+///
+/// ## Algorithm Overview
+///
+/// The polynomial long division algorithm works similarly to numerical long
+/// division:
+///
+///  1. Divide the leading term of the numerator by the leading term of the
+///     denominator
+///  2. Multiply the entire denominator by this quotient
+///  3. Subtract the result from the numerator
+///  4. Repeat until the degree of the remainder is less than the degree of the
+///     denominator
+///
+/// ## Example
+/// ```dart
+/// final division = PolynomialLongDivision(
+///   polyNumerator: Algebraic.fromReal([1, 3, -6]), // P(x) = x^2 + 3x - 6
+///   polyDenominator: Algebraic.fromReal([1, 7]),   // Q(x) = x + 7
+/// );
+///
+/// final result = division.divide();
+/// // result.quotient = x - 4
+/// // result.remainder = 22
+/// ```
 /// {@endtemplate}
 class PolynomialLongDivision {
   /// The polynomial to be divided (numerator).
@@ -24,15 +48,27 @@ class PolynomialLongDivision {
   /// Performs polynomial long division of [polyNumerator] by [polyDenominator].
   ///
   /// Returns an [AlgebraicDivision] containing both the quotient and remainder
-  /// of the division.
+  /// of the division. The remainder will always have a degree less than the
+  /// denominator polynomial.
   ///
   /// Throws a [PolynomialLongDivisionException] if the degree of
   /// [polyDenominator] is greater than the degree of [polyNumerator].
   ///
-  /// Special cases:
-  /// - If both polynomials are equal, returns a quotient of 1 and remainder of
-  ///   0.
+  /// ## Special Cases
+  /// - If both polynomials are equal, returns a quotient 1 and remainder 0
   /// - If both polynomials are constants, performs regular division
+  /// - If the denominator is zero, throws a division by zero exception
+  ///
+  /// ## Example
+  /// ```dart
+  /// final division = PolynomialLongDivision(
+  ///   polyNumerator: Algebraic.fromReal([3, -5, 10, -3]),  // 3x³ - 5x² + 10x - 3
+  ///   polyDenominator: Algebraic.fromReal([3, 1]),          // 3x + 1
+  /// );
+  /// final result = division.divide();
+  /// // result.quotient = x² - 2x + 4
+  /// // result.remainder = -7
+  /// ```
   AlgebraicDivision divide() {
     if (polyNumerator.degree < polyDenominator.degree) {
       throw const PolynomialLongDivisionException(
@@ -53,12 +89,19 @@ class PolynomialLongDivision {
   }
 
   /// Handles the case where both polynomials are equal.
+  ///
+  /// When dividing a polynomial by itself, the result is always:
+  /// - quotient = 1 (constant polynomial with value 1)
+  /// - remainder = 0 (zero polynomial)
   AlgebraicDivision _handleEqualPolynomials() => (
     quotient: Constant(),
     remainder: Constant(a: const Complex.zero()),
   );
 
-  /// Handles division of constant polynomials.
+  /// Handles division of constant polynomials (degree 0).
+  ///
+  /// This is equivalent to regular division of complex numbers.
+  /// Throws a [PolynomialLongDivisionException] if attempting to divide by 0.
   AlgebraicDivision _handleConstantDivision() {
     final denominator = (polyDenominator as Constant).a;
     if (denominator == const Complex.zero()) {
@@ -74,6 +117,15 @@ class PolynomialLongDivision {
   }
 
   /// Performs the actual polynomial long division algorithm.
+  ///
+  /// This method implements the standard polynomial long division algorithm:
+  /// 1. Reverse coefficient arrays (highest degree first)
+  /// 2. Iteratively divide leading terms and subtract multiples of the den.
+  /// 3. Continue until the remainder has degree less than the denominator
+  /// 4. Clean up the remainder by removing leading zeros
+  ///
+  /// The algorithm uses pre-allocated lists for better performance and
+  /// avoids creating unnecessary intermediate objects.
   AlgebraicDivision _performLongDivision() {
     final numerator = polyNumerator.coefficients.reversed.toList(
       growable: false,
@@ -98,28 +150,28 @@ class PolynomialLongDivision {
       growable: false,
     );
 
-    // Perform the division
+    // Perform the division algorithm
     while (numDegree >= denomDegree) {
-      // Clear tempDen efficiently
+      // Clear tempDen efficiently for reuse
       for (var i = 0; i < tempDen.length; i++) {
         tempDen[i] = const Complex.zero();
       }
 
-      // Set up the temporary denominator
+      // Set up the temporary denominator aligned with current position
       for (var i = 0; i <= denomDegree; i++) {
         tempDen[i + numDegree - denomDegree] = denominator[i];
       }
 
-      // Calculate the quotient coefficient
+      // Calculate the quotient coefficient for current degree
       quotient[numDegree - denomDegree] =
           numerator[numDegree] / tempDen[numDegree];
 
-      // Update the temporary denominator
+      // Scale the temporary denominator by the quotient coefficient
       for (var i = 0; i < numDegree - denomDegree + 1; i++) {
         tempDen[i] = tempDen[i] * quotient[numDegree - denomDegree];
       }
 
-      // Subtract from numerator
+      // Subtract the scaled denominator from the numerator
       for (var i = 0; i < numDegree + 1; i++) {
         numerator[i] = numerator[i] - tempDen[i];
       }
@@ -139,11 +191,13 @@ class PolynomialLongDivision {
       remainder.add(numerator[i]);
     }
 
-    // If all coefficients were zero, add a single zero
+    // If all coefficients were zero, add a single zero to represent zero
+    // polynomial
     if (remainder.isEmpty) {
       remainder.add(const Complex.zero());
     }
 
+    // Convert back to normal coefficient order (lowest degree first)
     return (
       quotient: Algebraic.from(quotient.reversed.toList()),
       remainder: Algebraic.from(remainder.reversed.toList()),

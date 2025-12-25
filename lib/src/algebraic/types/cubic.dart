@@ -120,7 +120,7 @@ final class Cubic extends Algebraic {
     return _solveGeneralCubic();
   }
 
-  /// Solves the depressed cubic equation ax³ + d = 0
+  /// Solves the depressed cubic equation ax³ + d = 0.
   List<Complex> _solveDepressedCubic() {
     final solution1 = (d.negate / a).nthRoot(3);
     final omega = Complex(-1 / 2, sqrt(3) / 2);
@@ -128,7 +128,7 @@ final class Cubic extends Algebraic {
     return [solution1, solution1 * omega, solution1 * omega.pow(2)];
   }
 
-  /// Solves the general cubic equation using Cardano's formula
+  /// Solves the general cubic equation using Cardano's formula.
   List<Complex> _solveGeneralCubic() {
     const two = Complex.fromReal(2);
     const three = Complex.fromReal(3);
@@ -210,22 +210,33 @@ final class Cubic extends Algebraic {
   }
 
   /// {@macro algebraic_deep_copy}
-  Cubic copyWith({Complex? a, Complex? b, Complex? c, Complex? d}) =>
-      Cubic(a: a ?? this.a, b: b ?? this.b, c: c ?? this.c, d: d ?? this.d);
+  Cubic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+    Complex? d,
+  }) => Cubic(
+    a: a ?? this.a,
+    b: b ?? this.b,
+    c: c ?? this.c,
+    d: d ?? this.d,
+  );
 
   /// {@macro first_coefficient_algebraic}
+  /// {@template cubic.equation_form}
   /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  /// {@endtemplate}
   Complex get a => coefficients.first;
 
   /// {@macro second_coefficient_algebraic}
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  /// {@macro cubic.equation_form}
   Complex get b => coefficients[1];
 
   /// {@macro third_coefficient_algebraic}
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  /// {@macro cubic.equation_form}
   Complex get c => coefficients[2];
 
   /// {@macro fourth_coefficient_algebraic}
-  /// _f(x) = ax^3 + bx^2 + cx + d = 0_
+  /// {@macro cubic.equation_form}
   Complex get d => coefficients[3];
 }

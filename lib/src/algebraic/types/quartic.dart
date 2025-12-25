@@ -179,11 +179,11 @@ final class Quartic extends Algebraic {
         c.abs() < epsilon &&
         d.abs() < epsilon &&
         e.abs() < epsilon) {
-      return [
-        const Complex.zero(),
-        const Complex.zero(),
-        const Complex.zero(),
-        const Complex.zero(),
+      return const [
+        Complex.zero(),
+        Complex.zero(),
+        Complex.zero(),
+        Complex.zero(),
       ];
     }
 
@@ -328,30 +328,32 @@ final class Quartic extends Algebraic {
   /// {@template first_coefficient_algebraic}
   /// The first coefficient of the equation in the form
   /// {@endtemplate}
+  /// {@template quartic.equation_form}
   /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
+  /// {@endtemplate}
   Complex get a => coefficients.first;
 
   /// {@template second_coefficient_algebraic}
   /// The second coefficient of the equation in the form
   /// {@endtemplate}
-  /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
+  /// {@macro quartic.equation_form}
   Complex get b => coefficients[1];
 
   /// {@template third_coefficient_algebraic}
   /// The third coefficient of the equation in the form
   /// {@endtemplate}
-  /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
+  /// {@macro quartic.equation_form}
   Complex get c => coefficients[2];
 
   /// {@template fourth_coefficient_algebraic}
   /// The fourth coefficient of the equation in the form
   /// {@endtemplate}
-  /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
+  /// {@macro quartic.equation_form}
   Complex get d => coefficients[3];
 
   /// {@template fifth_coefficient_algebraic}
   /// The fifth coefficient of the equation in the form
   /// {@endtemplate}
-  /// _f(x) = ax^4 + bx^3 + cx^2 + dx + e = 0_
+  /// {@macro quartic.equation_form}
   Complex get e => coefficients[4];
 }

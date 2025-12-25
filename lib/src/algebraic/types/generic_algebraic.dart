@@ -27,7 +27,8 @@ part of '../algebraic.dart';
 /// with the highest degree goes first:
 ///
 /// ```dart
-/// final genericAlgebraic = GenericAlgebraic(
+/// // P(x) = -5x^2 + 3x + i
+/// final genericAlgebraic1 = GenericAlgebraic(
 ///   coefficients: [
 ///     Complex.fromReal(-5),
 ///     Complex.fromReal(3),
@@ -36,6 +37,17 @@ part of '../algebraic.dart';
 ///   initialGuess: [
 ///     Complex(1, -2),
 ///     Complex.fromReal(3),
+///   ],
+/// );
+///
+/// // P(x) = (3 + 8i)x^4 - 2x^2 + (-1 + 5i)x + 6 + (3 + 4i)
+/// final genericAlgebraic2 = GenericAlgebraic(
+///   coefficients: [
+///     Complex(3, 8),
+///     Complex.fromReal(-2),
+///     Complex(-1, 5),
+///     Complex.fromReal(6),
+///     Complex(3, 4),
 ///   ],
 /// );
 /// ```
@@ -147,9 +159,14 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     // there is the possibility to return a more convenient object
     switch (coefficients.length) {
       case 1:
-        return Constant(a: coefficients.first).derivative();
+        return Constant(
+          a: coefficients.first,
+        ).derivative();
       case 2:
-        return Linear(a: coefficients.first, b: coefficients[1]).derivative();
+        return Linear(
+          a: coefficients.first,
+          b: coefficients[1],
+        ).derivative();
       case 3:
         return Quadratic(
           a: coefficients.first,

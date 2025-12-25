@@ -105,7 +105,8 @@ final class SORSolver extends SystemSolver {
     // Warn about non-diagonally dominant matrices (but don't throw)
     if (!_isDiagonallyDominant()) {
       // Note: This is just a warning, not an error, as SOR can still converge
-      // for some non-diagonally dominant matrices, but convergence is not guaranteed
+      // for some non-diagonally dominant matrices, but convergence is not
+      // guaranteed
     }
   }
 

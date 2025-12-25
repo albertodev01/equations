@@ -5,7 +5,8 @@ import 'package:equations/src/system/utils/matrix_utils.dart';
 /// reduction", for solving a system of linear equations. This method only works
 /// with square matrices.
 ///
-/// This implementation is optimized for performance with the following improvements:
+/// This implementation is optimized for performance with the following
+/// improvements:
 /// - Uses flattened arrays for better cache locality
 /// - Avoids unnecessary matrix copying
 /// - Implements early termination for singular matrices
@@ -80,7 +81,8 @@ final class GaussianElimination extends SystemSolver with RealMatrixUtils {
       for (var i = p + 1; i < n; i++) {
         final alpha = A[i * n + p] / A[p * n + p];
 
-        // Early termination if elimination factor is too large (numerical instability)
+        // Early termination if elimination factor is too large (numerical
+        // instability)
         if (alpha.abs() > 1e6) {
           throw const SystemSolverException(
             'Numerical instability detected during elimination.',

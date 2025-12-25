@@ -76,10 +76,12 @@ final class Linear extends Algebraic {
       Linear(a: a ?? this.a, b: b ?? this.b);
 
   /// {@macro first_coefficient_algebraic}
-  /// _f(x) = ax + b_.
+  /// {@template linear.equation_form}
+  /// _f(x) = ax + b = 0_
+  /// {@endtemplate}
   Complex get a => coefficients.first;
 
   /// {@macro second_coefficient_algebraic}
-  /// _f(x) = ax + b_.
+  /// {@macro linear.equation_form}
   Complex get b => coefficients[1];
 }

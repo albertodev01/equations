@@ -493,7 +493,11 @@ void main() {
                 'value',
                 const MoreOrLessEquals(-1.366025, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
         expect(
           solutions[1],
@@ -504,13 +508,21 @@ void main() {
                 'end',
                 const MoreOrLessEquals(0.366025, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
         expect(
           solutions.last,
           isA<AlgebraicInequalityGreaterThan>()
               .having((solution) => solution.value, 'value', 1)
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
       });
 
@@ -532,7 +544,11 @@ void main() {
                 'value',
                 const MoreOrLessEquals(-1.366025, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
         expect(
           solutions[1],
@@ -543,13 +559,21 @@ void main() {
                 'end',
                 const MoreOrLessEquals(0.366025, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', true),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                true,
+              ),
         );
         expect(
           solutions.last,
           isA<AlgebraicInequalityGreaterThan>()
               .having((solution) => solution.value, 'value', 1)
-              .having((solution) => solution.isInclusive, 'isInclusive', true),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                true,
+              ),
         );
       });
 
@@ -572,7 +596,11 @@ void main() {
                 const MoreOrLessEquals(-1.366025, precision: 1.0e-5),
               )
               .having((solution) => solution.end.round(), 'end', isZero)
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
         expect(
           solutions.last,
@@ -587,7 +615,11 @@ void main() {
                 'end',
                 const MoreOrLessEquals(1, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
       });
 
@@ -610,7 +642,11 @@ void main() {
                 const MoreOrLessEquals(-1.366025, precision: 1.0e-5),
               )
               .having((solution) => solution.end.round(), 'end', isZero)
-              .having((solution) => solution.isInclusive, 'isInclusive', true),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                true,
+              ),
         );
         expect(
           solutions.last,
@@ -625,7 +661,11 @@ void main() {
                 'end',
                 const MoreOrLessEquals(1, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', true),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                true,
+              ),
         );
       });
 
@@ -671,7 +711,11 @@ void main() {
                 'value',
                 const MoreOrLessEquals(-1.714285, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', false),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                false,
+              ),
         );
       });
 
@@ -692,7 +736,11 @@ void main() {
                 'value',
                 const MoreOrLessEquals(-1.714285, precision: 1.0e-5),
               )
-              .having((solution) => solution.isInclusive, 'isInclusive', true),
+              .having(
+                (solution) => solution.isInclusive,
+                'isInclusive',
+                true,
+              ),
         );
       });
 

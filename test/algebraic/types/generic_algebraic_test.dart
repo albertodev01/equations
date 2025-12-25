@@ -210,7 +210,12 @@ void main() {
       );
 
       // Objects equality
-      expect(genericAlgebraic, equals(genericAlgebraic.copyWith()));
+      expect(
+        genericAlgebraic,
+        equals(
+          genericAlgebraic.copyWith(),
+        ),
+      );
       expect(
         genericAlgebraic,
         equals(genericAlgebraic.copyWith(maxSteps: 2000)),
@@ -259,7 +264,6 @@ void main() {
     });
 
     test('Root clustering for multiple roots', () {
-      // Test polynomial with multiple roots: (x-2)^3
       final equation = GenericAlgebraic(
         coefficients: const [
           Complex.fromReal(1),

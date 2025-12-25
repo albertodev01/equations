@@ -7,7 +7,11 @@ import '../../double_approximation_matcher.dart';
 
 void main() {
   group('SylvesterMatrix', () {
-    final matrix = SylvesterMatrix(polynomial: Algebraic.fromReal([1, -7, 8]));
+    final matrix = SylvesterMatrix(
+      polynomial: Algebraic.fromReal(
+        [1, -7, 8],
+      ),
+    );
 
     test('Smoke test.', () {
       expect(
@@ -21,7 +25,12 @@ void main() {
     });
 
     test('Polynomial discriminant.', () {
-      expect(matrix.polynomialDiscriminant(), equals(const Complex(17, 0)));
+      expect(
+        matrix.polynomialDiscriminant(),
+        equals(
+          const Complex(17, 0),
+        ),
+      );
     });
 
     test('Matrix construction.', () {
@@ -45,7 +54,12 @@ void main() {
     });
 
     test('Determinant computation.', () {
-      expect(matrix.matrixDeterminant(), equals(-const Complex(17, 0)));
+      expect(
+        matrix.matrixDeterminant(),
+        equals(
+          -const Complex(17, 0),
+        ),
+      );
     });
 
     test('Objects comparison.', () {
@@ -88,7 +102,7 @@ void main() {
       expect(matrix.hashCode, equals(matrix2.hashCode));
     });
 
-    group('Batch tests', () {
+    group('Determinant tests', () {
       test('Test 1', () {
         final poly = Algebraic.fromReal([2, -1, 5]);
         final matrix = SylvesterMatrix(polynomial: poly);

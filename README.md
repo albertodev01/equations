@@ -10,9 +10,9 @@
 
 ---
 
-The `equations` package is written purely in Dart and helps you solve equations. Whether you're building a CLI application, a web server or a cross-platform Flutter project, `equations` has you covered. Here's what you can do with this package:
+The `equations` package is written purely in Dart and helps you solve equations. Whether you're building a CLI application, a web server or a cross-platform Flutter project, `equations` has you covered. Here's what you can do with this :
 
-  - solve polynomial equations with `Algebraic` types;
+  - solve polynomial equations and inequalities with `Algebraic` types;
   - solve nonlinear equations with `Nonlinear` types;
   - solve linear systems of equations with `SystemSolver` types;
 

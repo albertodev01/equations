@@ -1,8 +1,10 @@
 import 'package:equations/equations.dart';
 
+/// {@template matrix_exception}
 /// Exception object thrown by [Matrix].
+/// {@endtemplate}
 class MatrixException extends EquationException {
-  /// Represents an exception from the [Matrix] class.
+  /// {@macro matrix_exception}
   const MatrixException(String message)
     : super(
         message: message,

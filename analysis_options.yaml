@@ -15,6 +15,7 @@ linter:
     - always_put_required_named_parameters_first
     - always_use_package_imports
     - annotate_overrides
+    - annotate_redeclares
     - avoid_annotating_with_dynamic
     - avoid_bool_literals_in_conditional_expressions
     - avoid_catches_without_on_clauses
@@ -162,6 +163,7 @@ linter:
     - provide_deprecation_message
     - public_member_api_docs
     - recursive_getters
+    - remove_deprecations_in_breaking_versions
     - require_trailing_commas
     - secure_pubspec_urls
     - sized_box_for_whitespace
@@ -171,10 +173,10 @@ linter:
     - sort_pub_dependencies
     - sort_unnamed_constructors_first
     - strict_top_level_inference
+    - switch_on_type
     - test_types_in_equals
     - throw_in_finally
     - tighten_type_of_initializing_formals
-    - type_annotate_public_apis
     - type_init_formals
     - type_literal_in_constant_pattern
     - unawaited_futures
@@ -186,6 +188,7 @@ linter:
     - unnecessary_const
     - unnecessary_constructor_name
     - unnecessary_getters_setters
+    - unnecessary_ignore
     - unnecessary_lambdas
     - unnecessary_late
     - unnecessary_library_directive
@@ -204,6 +207,7 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads
+    - unnecessary_unawaited
     - unnecessary_underscores
     - unreachable_from_main
     - unrelated_type_equality_checks

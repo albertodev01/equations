@@ -113,7 +113,7 @@ void main() {
       expect(results.remainder, equals(Algebraic.fromReal([0])));
     });
 
-    group('Batch tests', () {
+    group('Division tests', () {
       test('Test 1: (3x^3 - 5x^2 + 10x - 3) / (3x + 1)', () {
         final dividend = Algebraic.fromReal([3, -5, 10, -3]);
         final divisor = Algebraic.fromReal([3, 1]);

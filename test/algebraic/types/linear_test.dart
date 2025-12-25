@@ -60,17 +60,6 @@ void main() {
       );
     });
 
-    test('toStringWithFractions', () {
-      // The equation
-      final equation = Linear(a: const Complex(4, 7), b: const Complex(5, 1));
-
-      // Its string representation
-      const equationStr = 'f(x) = (4 + 7i)x + (5 + 1i)';
-
-      // Making sure it's properly printed
-      expect(equation.toStringWithFractions(), equals(equationStr));
-    });
-
     test('realEquation', () {
       final linear = Linear.realEquation(a: 5, b: 1);
 
@@ -94,8 +83,22 @@ void main() {
     test('Objects comparison works properly', () {
       final fx = Linear(a: const Complex(2, 3), b: const Complex.i());
 
-      expect(fx, equals(Linear(a: const Complex(2, 3), b: const Complex.i())));
-      expect(Linear(a: const Complex(2, 3), b: const Complex.i()), equals(fx));
+      expect(
+        fx,
+        equals(
+          Linear(
+            a: const Complex(2, 3),
+            b: const Complex.i(),
+          ),
+        ),
+      );
+      expect(
+        Linear(
+          a: const Complex(2, 3),
+          b: const Complex.i(),
+        ),
+        equals(fx),
+      );
       expect(
         fx == Linear(a: const Complex(2, 3), b: const Complex.i()),
         isTrue,
@@ -114,45 +117,91 @@ void main() {
       final linear = Linear(a: const Complex.i(), b: const Complex(-3, 8));
 
       // Objects equality
-      expect(linear, equals(linear.copyWith()));
       expect(
         linear,
-        equals(linear.copyWith(a: const Complex.i(), b: const Complex(-3, 8))),
+        equals(linear.copyWith()),
+      );
+      expect(
+        linear,
+        equals(
+          linear.copyWith(
+            a: const Complex.i(),
+            b: const Complex(-3, 8),
+          ),
+        ),
       );
 
       // Objects inequality
       expect(linear == linear.copyWith(b: const Complex.zero()), isFalse);
     });
 
-    test('Batch tests', () {
-      final equations = [
-        Linear.realEquation(a: 2, b: 3).solutions(),
-        Linear(a: const Complex.i(), b: const Complex(4, -6)).solutions(),
-        Linear().solutions(),
-        Linear.realEquation(a: -61, b: -61).solutions(),
-        Linear(a: const Complex.i(), b: -const Complex.i()).solutions(),
-      ];
+    group('Solutions tests', () {
+      void verifyLinearSolutions(
+        Linear equation,
+        List<Complex> expectedSolutions,
+      ) {
+        final solutions = equation.solutions();
+        expect(solutions.length, equals(1));
 
-      final solutions = <List<Complex>>[
-        const [Complex.fromReal(-3 / 2)],
-        const [Complex(6, 4)],
-        const [Complex.zero()],
-        const [Complex.fromReal(-1)],
-        const [Complex.fromReal(1)],
-      ];
-
-      for (var i = 0; i < equations.length; ++i) {
-        for (var j = 0; j < equations[i].length; ++j) {
-          expect(
-            equations[i][j].real,
-            MoreOrLessEquals(solutions[i][j].real, precision: 1.0e-5),
-          );
-          expect(
-            equations[i][j].imaginary,
-            MoreOrLessEquals(solutions[i][j].imaginary, precision: 1.0e-5),
-          );
-        }
+        expect(
+          solutions.first.real,
+          MoreOrLessEquals(
+            expectedSolutions.first.real,
+            precision: 1.0e-5,
+          ),
+        );
+        expect(
+          solutions.first.imaginary,
+          MoreOrLessEquals(
+            expectedSolutions.first.imaginary,
+            precision: 1.0e-5,
+          ),
+        );
       }
+
+      test('Test 1', () {
+        final equation = Linear.realEquation(
+          a: 2,
+          b: 3,
+        );
+        verifyLinearSolutions(equation, const [
+          Complex.fromReal(-3 / 2),
+        ]);
+      });
+
+      test('Test 2', () {
+        final equation = Linear(
+          a: const Complex.i(),
+          b: const Complex(4, -6),
+        );
+        verifyLinearSolutions(equation, const [
+          Complex(6, 4),
+        ]);
+      });
+
+      test('Test 3', () {
+        final equation = Linear();
+        verifyLinearSolutions(equation, const [
+          Complex.zero(),
+        ]);
+      });
+
+      test('Test 4', () {
+        final equation = Linear.realEquation(a: -61, b: -61);
+        verifyLinearSolutions(equation, const [
+          Complex.fromReal(-1),
+        ]);
+      });
+
+      test('Test 4', () {
+        final equation = Linear(
+          a: const Complex.i(),
+          b: -const Complex.i(),
+        );
+        verifyLinearSolutions(equation, const [
+          Complex.fromReal(1),
+        ]);
+      });
     });
   });
 }

@@ -8,11 +8,11 @@ void main() {
       'Making sure that cubic spline interpolation works correctly (test '
       'points - set 1).',
       () {
-        const linear = LinearSpline(
+        final linear = LinearSpline(
           nodes: [
-            InterpolationNode(x: 3, y: -6),
-            InterpolationNode(x: 4, y: -2),
-            InterpolationNode(x: 5, y: 1),
+            const InterpolationNode(x: 3, y: -6),
+            const InterpolationNode(x: 4, y: -2),
+            const InterpolationNode(x: 5, y: 1),
           ],
         );
 
@@ -33,13 +33,13 @@ void main() {
       'Making sure that cubic spline interpolation works correctly (test '
       'points - set 2).',
       () {
-        const linear = LinearSpline(
+        final linear = LinearSpline(
           nodes: [
-            InterpolationNode(x: -2, y: 0),
-            InterpolationNode(x: 3, y: 2),
-            InterpolationNode(x: 4, y: 6),
-            InterpolationNode(x: 6, y: 7),
-            InterpolationNode(x: 10, y: 15),
+            const InterpolationNode(x: -2, y: 0),
+            const InterpolationNode(x: 3, y: 2),
+            const InterpolationNode(x: 4, y: 6),
+            const InterpolationNode(x: 6, y: 7),
+            const InterpolationNode(x: 10, y: 15),
           ],
         );
 
@@ -65,26 +65,26 @@ void main() {
     );
 
     test('Making sure that objects comparison works properly', () {
-      const linearInterpolation = LinearSpline(
+      final linearInterpolation = LinearSpline(
         nodes: [
-          InterpolationNode(x: -2, y: 0),
-          InterpolationNode(x: 3, y: 2),
-          InterpolationNode(x: 4, y: 6),
-          InterpolationNode(x: 6, y: 7),
-          InterpolationNode(x: 10, y: 15),
+          const InterpolationNode(x: -2, y: 0),
+          const InterpolationNode(x: 3, y: 2),
+          const InterpolationNode(x: 4, y: 6),
+          const InterpolationNode(x: 6, y: 7),
+          const InterpolationNode(x: 10, y: 15),
         ],
       );
 
       expect(
         linearInterpolation,
         equals(
-          const LinearSpline(
+          LinearSpline(
             nodes: [
-              InterpolationNode(x: -2, y: 0),
-              InterpolationNode(x: 3, y: 2),
-              InterpolationNode(x: 4, y: 6),
-              InterpolationNode(x: 6, y: 7),
-              InterpolationNode(x: 10, y: 15),
+              const InterpolationNode(x: -2, y: 0),
+              const InterpolationNode(x: 3, y: 2),
+              const InterpolationNode(x: 4, y: 6),
+              const InterpolationNode(x: 6, y: 7),
+              const InterpolationNode(x: 10, y: 15),
             ],
           ),
         ),
@@ -92,13 +92,13 @@ void main() {
 
       expect(
         linearInterpolation ==
-            const LinearSpline(
+            LinearSpline(
               nodes: [
-                InterpolationNode(x: -2, y: 0),
-                InterpolationNode(x: 3, y: 2),
-                InterpolationNode(x: 4, y: 6),
-                InterpolationNode(x: 6, y: 7),
-                InterpolationNode(x: 10, y: 15),
+                const InterpolationNode(x: -2, y: 0),
+                const InterpolationNode(x: 3, y: 2),
+                const InterpolationNode(x: 4, y: 6),
+                const InterpolationNode(x: 6, y: 7),
+                const InterpolationNode(x: 10, y: 15),
               ],
             ),
         isTrue,
@@ -106,13 +106,13 @@ void main() {
 
       expect(
         linearInterpolation ==
-            const LinearSpline(
+            LinearSpline(
               nodes: [
-                InterpolationNode(x: -2, y: 0),
-                InterpolationNode(x: 3, y: 2),
-                InterpolationNode(x: 5, y: 6),
-                InterpolationNode(x: 6, y: 7),
-                InterpolationNode(x: 10, y: 15),
+                const InterpolationNode(x: -2, y: 0),
+                const InterpolationNode(x: 3, y: 2),
+                const InterpolationNode(x: 5, y: 6),
+                const InterpolationNode(x: 6, y: 7),
+                const InterpolationNode(x: 10, y: 15),
               ],
             ),
         isFalse,
@@ -120,12 +120,12 @@ void main() {
 
       expect(
         linearInterpolation ==
-            const LinearSpline(
+            LinearSpline(
               nodes: [
-                InterpolationNode(x: -2, y: 0),
-                InterpolationNode(x: 3, y: 2),
-                InterpolationNode(x: 4, y: 6),
-                InterpolationNode(x: 6, y: 7),
+                const InterpolationNode(x: -2, y: 0),
+                const InterpolationNode(x: 3, y: 2),
+                const InterpolationNode(x: 4, y: 6),
+                const InterpolationNode(x: 6, y: 7),
               ],
             ),
         isFalse,
@@ -139,13 +139,13 @@ void main() {
       expect(
         linearInterpolation.hashCode,
         equals(
-          const LinearSpline(
+          LinearSpline(
             nodes: [
-              InterpolationNode(x: -2, y: 0),
-              InterpolationNode(x: 3, y: 2),
-              InterpolationNode(x: 4, y: 6),
-              InterpolationNode(x: 6, y: 7),
-              InterpolationNode(x: 10, y: 15),
+              const InterpolationNode(x: -2, y: 0),
+              const InterpolationNode(x: 3, y: 2),
+              const InterpolationNode(x: 4, y: 6),
+              const InterpolationNode(x: 6, y: 7),
+              const InterpolationNode(x: 10, y: 15),
             ],
           ).hashCode,
         ),

@@ -2,20 +2,28 @@ import 'package:equations/equations.dart';
 import 'package:equations/src/interpolation/utils/spline_function.dart';
 import 'package:equations/src/utils/math_utils.dart';
 
+/// {@template monotone_cubic_spline}
 /// Represents a monotone cubic spline from a given set of control points.
 ///
 /// The spline is guaranteed to pass through each control point exactly. In
 /// addition, assuming the control points are monotonic, then the interpolated
 /// values will also be monotonic.
+/// {@endtemplate}
 final class MonotoneCubicSpline extends SplineFunction with MathUtils {
-  /// Creates a [MonotoneCubicSpline] object from the given nodes.
-  const MonotoneCubicSpline({
+  /// Cached tangents (computed lazily on first use).
+  List<double>? _nodesM;
+
+  /// {@macro monotone_cubic_spline}
+  MonotoneCubicSpline({
     required super.nodes,
   });
 
-  @override
-  double interpolate(double x) {
-    // Monotonic cubic spline creation
+  /// Computes and caches the tangents for the spline.
+  List<double> _computeTangents() {
+    if (_nodesM != null) {
+      return _nodesM!;
+    }
+
     final nodesM = List<double>.generate(nodes.length, (_) => 0);
     final pointsD = List<double>.generate(nodes.length - 1, (_) => 0);
 
@@ -67,10 +75,39 @@ final class MonotoneCubicSpline extends SplineFunction with MathUtils {
       }
     }
 
+    _nodesM = nodesM;
+    return nodesM;
+  }
+
+  /// Finds the segment index containing x using binary search.
+  /// Returns the index i such that `nodes[i].x <= x < nodes[i+1].x`.
+  int _findSegment(double x) {
+    var left = 0;
+    var right = nodes.length - 2;
+
+    while (left <= right) {
+      final mid = (left + right) ~/ 2;
+      if (x < nodes[mid].x) {
+        right = mid - 1;
+      } else if (x >= nodes[mid + 1].x) {
+        left = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+
+    return left;
+  }
+
+  @override
+  double interpolate(double x) {
     // Interpolating
     if (x.isNaN) {
       return x;
     }
+
+    // Validate nodes by computing tangents (throws if nodes are invalid)
+    _computeTangents();
 
     if (x < nodes.first.x) {
       return nodes.first.y;
@@ -83,14 +120,14 @@ final class MonotoneCubicSpline extends SplineFunction with MathUtils {
     // Finding the i-th element of the last point with smaller 'x'.
     // We are sure that this will be within the spline due to the previous
     // boundary tests.
-    var i = 0;
-    while (x >= nodes[i + 1].x) {
-      ++i;
+    final i = _findSegment(x);
 
-      if (x == nodes[i].x) {
-        return nodes[i].y;
-      }
+    if (x == nodes[i].x) {
+      return nodes[i].y;
     }
+
+    // Get cached tangents (computed on first use)
+    final nodesM = _computeTangents();
 
     // Cubic Hermite spline interpolation.
     final h = nodes[i + 1].x - nodes[i].x;

@@ -143,14 +143,19 @@ void main() {
       expect(cubic, equals(cubic.copyWith()));
       expect(
         cubic,
-        equals(cubic.copyWith(a: const Complex(7, 0), c: const Complex(13, 0))),
+        equals(
+          cubic.copyWith(
+            a: const Complex(7, 0),
+            c: const Complex(13, 0),
+          ),
+        ),
       );
 
       // Objects inequality
       expect(cubic == cubic.copyWith(b: const Complex.fromReal(7)), isFalse);
     });
 
-    test('Regression:  Ax^3 + D case is correctly handled', () {
+    test('Regression: Ax^3 + D case is correctly handled', () {
       final cubic = Cubic.realEquation(d: -1).solutions();
 
       expect(cubic.first, equals(const Complex(1, 0)));
@@ -198,7 +203,7 @@ void main() {
       final solutions = depressed.solutions();
       expect(solutions.length, 3);
 
-      // Solutions should be 2, -1 + i√3, -1 - i√3
+      // Solutions should be 2, -1 + i*sqrt(3), -1 - i*sqrt(3)
       expect(solutions[0].real, closeTo(2, 1e-10));
       expect(solutions[1].real, closeTo(-1, 1e-10));
       expect(solutions[1].imaginary, closeTo(sqrt(3), 1e-10));

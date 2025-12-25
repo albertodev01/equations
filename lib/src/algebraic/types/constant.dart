@@ -4,8 +4,8 @@ part of '../algebraic.dart';
 /// Concrete implementation of [Algebraic] that represents a constant value `a`.
 /// It can be either a real or complex number, such as:
 ///
-///   - f(x) = 5
-///   - f(x) = 3 + 6i
+///   - P(x) = 5
+///   - P(x) = 3 + 6i
 ///
 /// In the context of a polynomial with one variable, the non-zero constant
 /// function is a polynomial of degree 0.

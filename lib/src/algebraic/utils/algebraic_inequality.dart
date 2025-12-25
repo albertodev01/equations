@@ -22,7 +22,9 @@ enum AlgebraicInequalityType {
 /// {@endtemplate}
 sealed class AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_solution}
-  const AlgebraicInequalitySolution({required this.isInclusive});
+  const AlgebraicInequalitySolution({
+    required this.isInclusive,
+  });
 
   /// Whether the inequality solution is inclusive of the boundaries or not.
   final bool isInclusive;
@@ -80,7 +82,11 @@ class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
   }
 
   @override
-  int get hashCode => Object.hash(start, end, isInclusive);
+  int get hashCode => Object.hash(
+    start,
+    end,
+    isInclusive,
+  );
 
   @override
   String toString() =>
@@ -116,7 +122,10 @@ class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
   }
 
   @override
-  int get hashCode => Object.hash(value, isInclusive);
+  int get hashCode => Object.hash(
+    value,
+    isInclusive,
+  );
 
   @override
   String toString() => 'SmallerThan(value: $value, isInclusive: $isInclusive)';
@@ -151,7 +160,10 @@ class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
   }
 
   @override
-  int get hashCode => Object.hash(value, isInclusive);
+  int get hashCode => Object.hash(
+    value,
+    isInclusive,
+  );
 
   @override
   String toString() => 'GreaterThan(value: $value, isInclusive: $isInclusive)';

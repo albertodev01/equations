@@ -14,8 +14,8 @@ void main() {
     );
   });
 
-  group('Testing the behaviors of the AdaptiveQuadrature class.', () {
-    test("Making sure that a 'AdaptiveQuadrature' works properly.", () {
+  group('AdaptiveQuadrature.', () {
+    test('Integration of sin(x)-3 on [2, -3].', () {
       expect(quadrature.lowerBound, equals(2));
       expect(quadrature.upperBound, equals(-3));
       expect(quadrature.function, equals('sin(x)-3'));
@@ -27,12 +27,12 @@ void main() {
       expect(results.guesses.length, greaterThan(0));
     });
 
-    test("Making sure that AdaptiveQuadrature's toString() method works.", () {
+    test('toString()', () {
       const strResult = 'sin(x)-3 on [2.00, -3.00]';
       expect(quadrature.toString(), equals(strResult));
     });
 
-    test('Making sure that MidpointRule can be properly compared.', () {
+    test('Object comparison.', () {
       const quadrature2 = AdaptiveQuadrature(
         function: 'sin(x)-3',
         lowerBound: 2,

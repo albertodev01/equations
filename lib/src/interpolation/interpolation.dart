@@ -1,18 +1,20 @@
 import 'package:equations/equations.dart';
 
+/// {@template interpolation}
 /// An abstract class that represents an interpolation strategy, used to find
 /// new data points based on a given discrete set of data points (called nodes).
-/// The algorithms implemented by this package are:
+/// The available interpolation algorithms are:
 ///
 ///  - [LinearInterpolation];
 ///  - [PolynomialInterpolation];
 ///  - [NewtonInterpolation];
 ///  - [SplineInterpolation].
+/// {@endtemplate}
 abstract base class Interpolation {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
-  /// Creates an [Interpolation] object with the given nodes.
+  /// {@macro interpolation}
   const Interpolation({
     required this.nodes,
   });
@@ -24,24 +26,16 @@ abstract base class Interpolation {
     }
 
     if (other is Interpolation) {
-      // The lengths of the coefficients must match.
       if (nodes.length != other.nodes.length) {
         return false;
       }
-
-      // Each successful comparison increases a counter by 1. If all elements
-      // are equal, then the counter will match the actual length of the
-      // coefficients list.
-      var equalsCount = 0;
-
       for (var i = 0; i < nodes.length; ++i) {
-        if (nodes[i] == other.nodes[i]) {
-          ++equalsCount;
+        if (nodes[i] != other.nodes[i]) {
+          return false;
         }
       }
 
-      // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType && equalsCount == nodes.length;
+      return runtimeType == other.runtimeType;
     } else {
       return false;
     }

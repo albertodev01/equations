@@ -1,8 +1,9 @@
 import 'package:equations/equations.dart';
 
+/// {@template intervals_integration}
 /// This class is extended by classes whose algorithms divide the integration
-/// bounds into smaller intervals to compute the result. There currently are
-/// three subclasses of `IntervalsIntegration`:
+/// bounds into smaller intervals to compute the result. There are currently
+/// three subclasses of [IntervalsIntegration]:
 ///
 ///  - [TrapezoidalRule]
 ///  - [SimpsonRule]
@@ -10,12 +11,24 @@ import 'package:equations/equations.dart';
 ///
 /// For a different approach that doesn't use [intervals], see
 /// [AdaptiveQuadrature].
+///
+/// ## Details
+///
+/// Interval-based methods (like the ones in this class) use a fixed number of
+/// equally-sized subintervals to approximate the integral. The accuracy depends
+/// on the number of intervals specified by the user.
+///
+/// In contrast, adaptive quadrature methods (see [AdaptiveQuadrature])
+/// automatically adjust the subinterval sizes based on the function's behavior,
+/// using more subdivisions where the function varies rapidly and fewer where it
+/// is smooth.
+/// {@endtemplate}
 abstract base class IntervalsIntegration extends NumericalIntegration {
   /// The number of parts in which the interval `[lowerBound, upperBound]` has
   /// to be split by the algorithm.
   final int intervals;
 
-  /// Creates a [IntervalsIntegration] object.
+  /// {@macro intervals_integration}
   const IntervalsIntegration({
     required super.function,
     required super.lowerBound,
@@ -41,7 +54,12 @@ abstract base class IntervalsIntegration extends NumericalIntegration {
   }
 
   @override
-  int get hashCode => Object.hash(function, lowerBound, upperBound, intervals);
+  int get hashCode => Object.hash(
+    function,
+    lowerBound,
+    upperBound,
+    intervals,
+  );
 
   @override
   String toString() {

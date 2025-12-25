@@ -84,7 +84,9 @@ sealed class Algebraic {
   /// If the coefficients of your polynomial contain complex numbers, use the
   /// [Algebraic.new] constructor instead.
   Algebraic.realEquation(List<double> coefficients)
-    : this(coefficients.map(Complex.fromReal).toList(growable: false));
+    : this(
+        coefficients.map(Complex.fromReal).toList(growable: false),
+      );
 
   /// {@template algebraic_from}
   /// Creates an [Algebraic] object according to the length of [coefficients].
@@ -162,7 +164,6 @@ sealed class Algebraic {
     }
 
     if (other is Algebraic) {
-      // Check all fields for equality
       if (coefficients.length != other.coefficients.length) {
         return false;
       }

@@ -96,18 +96,27 @@ final class Quadratic extends Algebraic {
   }
 
   /// {@macro algebraic_deep_copy}
-  Quadratic copyWith({Complex? a, Complex? b, Complex? c}) =>
-      Quadratic(a: a ?? this.a, b: b ?? this.b, c: c ?? this.c);
+  Quadratic copyWith({
+    Complex? a,
+    Complex? b,
+    Complex? c,
+  }) => Quadratic(
+    a: a ?? this.a,
+    b: b ?? this.b,
+    c: c ?? this.c,
+  );
 
   /// {@macro first_coefficient_algebraic}
+  /// {@template quadratic.equation_form}
   /// _f(x) = ax^2 + bx + c = 0_
+  /// {@endtemplate}
   Complex get a => coefficients.first;
 
   /// {@macro second_coefficient_algebraic}
-  /// _f(x) = ax^2 + bx + c = 0_
+  /// {@macro quadratic.equation_form}
   Complex get b => coefficients[1];
 
   /// {@macro third_coefficient_algebraic}
-  /// _f(x) = ax^2 + bx + c = 0_
+  /// {@macro quadratic.equation_form}
   Complex get c => coefficients[2];
 }
