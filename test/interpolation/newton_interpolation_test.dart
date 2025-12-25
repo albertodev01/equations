@@ -4,10 +4,9 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'NewtonInterpolation' type", () {
+  group('NewtonInterpolation', () {
     test(
-      "Making sure that a 'NewtonInterpolation' object is properly "
-      'constructed with forward differences table',
+      'Smoke test',
       () {
         const interpolation = NewtonInterpolation(
           nodes: [
@@ -40,7 +39,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       const interpolation = NewtonInterpolation(
         nodes: [
           InterpolationNode(x: 1, y: 3),

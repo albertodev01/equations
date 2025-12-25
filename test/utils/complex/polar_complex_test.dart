@@ -2,20 +2,20 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Testing the behaviors of the PolarComplex class.', () {
+  group('PolarComplex', () {
     const polar = PolarComplex(
       r: 10,
       phiRadians: 2 * 3.14,
       phiDegrees: 360,
     );
 
-    test('Making that PolarComplex values are properly constructed.', () {
+    test('Smoke test', () {
       expect(polar.r, equals(10));
       expect(polar.phiRadians, equals(2 * 3.14));
       expect(polar.phiDegrees, equals(360));
     });
 
-    test('Making that PolarComplex is properly converted into a string.', () {
+    test('toString()', () {
       const strResult =
           'r = 10.0\n'
           'phi (rad) = 6.28\n'
@@ -27,7 +27,7 @@ void main() {
       );
     });
 
-    test('Making that PolarComplex can be properly compared.', () {
+    test('Object comparison.', () {
       const polar2 = PolarComplex(
         r: -4,
         phiRadians: 3.14,
@@ -78,7 +78,7 @@ void main() {
       expect(polar2.compareTo(polar2), equals(0));
     });
 
-    test('Making sure that copyWith clones objects correctly', () {
+    test('copyWith()', () {
       const polarComplex = PolarComplex(
         r: 9,
         phiRadians: 1,

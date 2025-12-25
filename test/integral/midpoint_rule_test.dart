@@ -14,8 +14,8 @@ void main() {
     );
   });
 
-  group('Testing the behaviors of the MidpointRule class.', () {
-    test("Making sure that a 'MidpointRule' works properly.", () {
+  group('MidpointRule.', () {
+    test('Smoke test', () {
       expect(midpoint.lowerBound, equals(2));
       expect(midpoint.upperBound, equals(-3));
       expect(midpoint.intervals, equals(30));
@@ -27,7 +27,7 @@ void main() {
       expect(results.guesses.length, equals(midpoint.intervals));
     });
 
-    test("Making sure that MidpointRule's toString() method works.", () {
+    test('toString()', () {
       const strResult = 'sin(x)-3 on [2.00, -3.00]\nUsing 30 intervals';
       expect(midpoint.toString(), equals(strResult));
     });
@@ -97,36 +97,53 @@ void main() {
       );
     });
 
-    test('Batch tests', () {
-      final equations = [
-        'cos(x)-x^2',
-        'e^(x-1)/(x^2+3*x-8)',
-        'sin(x+2)*(x-1)+sqrt(x)',
-        'abs(x-2)*e^x',
-        'log(x+sqrt(x))',
-      ];
-
-      final solution = <List<double>>[
-        [2, 3, -7.101],
-        [4, 5.25, 1.769],
-        [3, 4, 0.235],
-        [-2, 0, 2.323],
-        [1, 1.25, 0.195],
-      ];
-
-      for (var i = 0; i < equations.length; ++i) {
+    group('Solutions tests', () {
+      void verifyMidpointRule(
+        String function,
+        double lowerBound,
+        double upperBound,
+        double expectedResult,
+      ) {
         final result = MidpointRule(
-          function: equations[i],
-          lowerBound: solution[i].first,
-          upperBound: solution[i][1],
+          function: function,
+          lowerBound: lowerBound,
+          upperBound: upperBound,
           intervals: 60,
         ).integrate();
 
         expect(
           result.result,
-          MoreOrLessEquals(solution[i][2], precision: 1.0e-3),
+          MoreOrLessEquals(expectedResult, precision: 1.0e-3),
         );
       }
+
+      test('Test 1', () {
+        verifyMidpointRule('cos(x)-x^2', 2, 3, -7.101);
+      });
+
+      test('Test 2', () {
+        verifyMidpointRule('e^(x-1)/(x^2+3*x-8)', 4, 5.25, 1.769);
+      });
+
+      test('Test 3', () {
+        verifyMidpointRule('sin(x+2)*(x-1)+sqrt(x)', 3, 4, 0.235);
+      });
+
+      test('Test 4', () {
+        verifyMidpointRule('abs(x-2)*e^x', -2, 0, 2.323);
+      });
+
+      test('Test 5', () {
+        verifyMidpointRule('log(x+sqrt(x))', 1, 1.25, 0.195);
+      });
+
+      test('Test 6', () {
+        verifyMidpointRule('x', 1, 2, 1.5);
+      });
+
+      test('Test 7', () {
+        verifyMidpointRule('0', -1, 1, 0);
+      });
     });
   });
 }

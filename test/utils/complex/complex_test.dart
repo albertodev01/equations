@@ -6,8 +6,8 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group('Testing constructors', () {
-    test('Making sure that the default constructor works as expected', () {
+  group('Constructors', () {
+    test('Default constructor', () {
       const complex = Complex(-2, 6);
 
       expect(complex.real, -2);
@@ -15,7 +15,7 @@ void main() {
     });
 
     test(
-      'Making sure that real numbers are properly converted into complex ones.',
+      'fromReal()',
       () {
         expect(const Complex.fromReal(7).real, equals(7));
         expect(const Complex.fromReal(7).imaginary, isZero);
@@ -25,7 +25,7 @@ void main() {
       },
     );
 
-    test("Making sure that named constructor for '0' and 'i' work.", () {
+    test('fromImaginary()', () {
       const zero = Complex.zero();
       expect(zero.real, isZero);
       expect(zero.imaginary, isZero);
@@ -36,8 +36,7 @@ void main() {
     });
 
     test(
-      'Making sure that const Complex objects are properly built from Fraction '
-      'objects',
+      'fromFraction()',
       () {
         final fromFraction = Complex.fromFraction(
           Fraction(3, 5),
@@ -92,7 +91,7 @@ void main() {
       },
     );
 
-    test('Polar coordinates conversions', () {
+    test('fromPolar()', () {
       // From polar
       final fromPolar = Complex.fromPolar(
         r: 2,
@@ -147,7 +146,7 @@ void main() {
       );
     });
 
-    test('Printing values', () {
+    test('toString()', () {
       expect('${const Complex(-2, 6)}', equals('-2 + 6i'));
       expect('${const Complex(-2, -6)}', equals('-2 - 6i'));
       expect('${const Complex(-2.1, 6.3)}', equals('-2.1 + 6.3i'));
@@ -231,8 +230,8 @@ void main() {
     });
   });
 
-  group('Testing objects equality', () {
-    test('Making sure that complex comparison is made via cross product', () {
+  group('Object comparison', () {
+    test('Object comparison', () {
       expect(const Complex(3, 12) == const Complex(3, 12), isTrue);
       expect(const Complex(3, 12) == const Complex(3, 12), isTrue);
       expect(const Complex(-3, -12) == const Complex(6, 13), isFalse);
@@ -249,8 +248,7 @@ void main() {
     });
 
     test(
-      "Making sure that 'compareTo' returns 1, -1 or 0 according with the "
-      'natural sorting',
+      'compareTo()',
       () {
         expect(const Complex(2, 1).compareTo(const Complex(3, 7)), equals(-1));
         expect(const Complex(3, 7).compareTo(const Complex(2, 1)), equals(1));
@@ -258,7 +256,17 @@ void main() {
       },
     );
 
-    test("Making sure that 'copyWith' clones objects correctly", () {
+    test('Ordering operators', () {
+      const five = Complex.fromReal(5);
+      const ten = Complex.fromReal(10);
+
+      expect(five > ten, isFalse);
+      expect(five >= ten, isFalse);
+      expect(five < ten, isTrue);
+      expect(five <= ten, isTrue);
+    });
+
+    test('copyWith()', () {
       const complex = Complex(8, -11);
 
       // Objects equality
@@ -270,9 +278,9 @@ void main() {
     });
   });
 
-  group('Testing the API of the const Complex class', () {
+  group('API', () {
     test(
-      'Making sure that the conjugate changes the sign of the imaginary part',
+      'conjugate()',
       () {
         expect(
           const Complex(3, 7).conjugate(),
@@ -285,7 +293,7 @@ void main() {
       },
     );
 
-    test('Making sure that the reciprocal is actually 1/(a + bi)', () {
+    test('reciprocal()', () {
       expect(
         const Complex(2, 1).reciprocal(),
         equals(const Complex(0.4, -0.2)),
@@ -302,7 +310,7 @@ void main() {
     });
 
     test(
-      "Making sure that modulus (or 'magnitude'/'absolute value') is correct",
+      'abs()',
       () {
         expect(
           const Complex(3, 7).abs(),
@@ -311,7 +319,7 @@ void main() {
       },
     );
 
-    test('Making sure that the exponential works properly', () {
+    test('exp()', () {
       final value = const Complex(3, 7).exp(); // e^(3 + 7i)
       expect(
         value.real,
@@ -334,8 +342,7 @@ void main() {
     });
 
     test(
-      'Making sure that sine, cosine, tangent and cotangents work properly on'
-      ' const Complex',
+      'sin(), cos(), tan() and cot()',
       () {
         const i = Complex.i();
 
@@ -360,7 +367,7 @@ void main() {
       },
     );
 
-    test('Making sure that the n-th root of the complex number is correct', () {
+    test('nthRoot()', () {
       final sqrt = const Complex(5, 1).sqrt();
       expect(
         sqrt.real,
@@ -403,8 +410,7 @@ void main() {
     });
 
     test(
-      "Making sure that the 'nthRoot' method also works when the phase is "
-      'negative',
+      'nthRoot() when the phase is negative',
       () {
         const negativePhase = Complex(-0.5, -1);
         final negativePhaseRoot = negativePhase.nthRoot(2);
@@ -423,7 +429,7 @@ void main() {
       },
     );
 
-    test("Making sure that the 'power' operation properly works", () {
+    test('pow()', () {
       final pow1 = const Complex(2, 7).pow(4);
       expect(pow1.real.round(), equals(1241));
       expect(pow1.imaginary.round(), equals(-2520));
@@ -438,8 +444,8 @@ void main() {
     });
   });
 
-  group('Testing complex numbers operators', () {
-    test('Making sure that the sum between two complex numbers is correct', () {
+  group('Operators', () {
+    test('opearator +', () {
       final value = const Complex(3, -5) + const Complex(-8, 13);
       expect(value.real, equals(-5));
       expect(value.imaginary, equals(8));
@@ -451,7 +457,7 @@ void main() {
     });
 
     test(
-      'Making sure that the difference between two complex numbers is correct',
+      'operator -',
       () {
         final value = const Complex(3, -5) - const Complex(-8, 13);
         expect(value.real, equals(11));
@@ -465,7 +471,7 @@ void main() {
     );
 
     test(
-      'Making sure that the product between two complex numbers is correct',
+      'operator *',
       () {
         final value = const Complex(3, -5) * const Complex(-8, 13);
         expect(value.real, equals(41));
@@ -478,18 +484,8 @@ void main() {
       },
     );
 
-    test('Making sure that complex objects are properly compared', () {
-      const five = Complex.fromReal(5);
-      const ten = Complex.fromReal(10);
-
-      expect(five > ten, isFalse);
-      expect(five >= ten, isFalse);
-      expect(five < ten, isTrue);
-      expect(five <= ten, isTrue);
-    });
-
     test(
-      'Making sure that the quotient between two complex numbers is correct',
+      'operator /',
       () {
         final value = const Complex(3, -5) / const Complex(-8, 13);
         final realValue = Fraction(-89, 233).toDouble();
@@ -510,7 +506,7 @@ void main() {
       },
     );
 
-    test('Making sure that the negation works properly.', () {
+    test('operator -()', () {
       const value = Complex(3, -5);
       expect(-value, equals(const Complex(-3, 5)));
 

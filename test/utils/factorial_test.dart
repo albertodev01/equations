@@ -66,44 +66,57 @@ void main() {
     factorial = const Factorial();
   });
 
-  group("Testing the 'Factorial' class", () {
-    test("Making sure that 'compute' works properly", () {
+  group('Factorial', () {
+    test('compute()', () {
       for (final entry in values.entries) {
         expect(factorial.compute(entry.key), equals(entry.value));
       }
     });
 
-    test("Making sure that 'computeBigInt' works properly", () {
+    test('computeBigInt()', () {
       for (final entry in bigIntValues.entries) {
         expect(factorial.computeBigInt(entry.key), equals(entry.value));
       }
     });
 
     test(
-      "Making sure that 'compute' works with value bigger than 21 but the "
-      'result is not exact',
+      'compute() with value bigger than 21 but the result is not exact',
       () {
         final value = factorial.compute(21);
         expect(
           value.toStringAsExponential(),
           equals('-4.249290049419215e+18'),
         );
+
+        // Check that the value is cached
+        final value2 = factorial.compute(21);
+        expect(
+          value2.toStringAsExponential(),
+          equals('-4.249290049419215e+18'),
+        );
       },
     );
 
     test(
-      "Making sure that 'computeBigInt' works with value bigger than 31",
+      'computeBigInt() with value bigger than 31',
       () {
         final value = factorial.computeBigInt(31);
         expect(
           value.toString(),
           equals('8222838654177922817725562880000000'),
         );
+
+        // Check that the value is cached
+        final value2 = factorial.computeBigInt(31);
+        expect(
+          value2.toString(),
+          equals('8222838654177922817725562880000000'),
+        );
       },
     );
 
     test(
-      "Making sure that 'compute' and 'computeBigInt' return the same values",
+      'compute() and computeBigInt() return the same values',
       () {
         final bigEntries = bigIntValues.entries.toList();
         final entries = values.entries.toList();

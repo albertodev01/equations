@@ -4,8 +4,8 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'LinearInterpolation' type", () {
-    test("Making sure that 'LinearInterpolation' is properly constructed", () {
+  group('LinearInterpolation', () {
+    test('Smoke test', () {
       final interpolation = LinearInterpolation(
         nodes: const [
           InterpolationNode(x: 1, y: 3),
@@ -32,7 +32,7 @@ void main() {
       );
     });
 
-    test("Making sure that an exception is thrown when nodes aren't 2", () {
+    test('Exception thrown when nodes are not 2', () {
       expect(
         () => LinearInterpolation(
           nodes: const [
@@ -53,7 +53,7 @@ void main() {
       );
     });
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       final interpolation = LinearInterpolation(
         nodes: const [
           InterpolationNode(x: 1, y: 3),

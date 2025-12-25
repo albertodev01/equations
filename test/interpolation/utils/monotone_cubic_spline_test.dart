@@ -5,10 +5,9 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'MonotoneCubicSpline' class", () {
+  group('MonotoneCubicSpline', () {
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 1).',
+      'Smoke test',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -35,8 +34,7 @@ void main() {
     );
 
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 2).',
+      'Smoke test 2',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -86,8 +84,7 @@ void main() {
     );
 
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 3).',
+      'Smoke test 3',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -111,8 +108,7 @@ void main() {
     );
 
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 4).',
+      'Smoke test 4',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -152,8 +148,8 @@ void main() {
     );
 
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 5).',
+      'Smoke test 5',
+
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -167,7 +163,7 @@ void main() {
       },
     );
 
-    test('Making sure that Hermite spline interpolation correctly works.', () {
+    test('Hermite spline interpolation correctly works.', () {
       final cubic = MonotoneCubicSpline(
         nodes: [
           const InterpolationNode(x: 1, y: -1),
@@ -186,8 +182,7 @@ void main() {
     });
 
     test(
-      'Making sure that when 2 nodes have the same "y" value, the "nodesM" '
-      'array manually sets values to zero',
+      'When 2 nodes have same y value, nodesM array sets values to 0',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -205,8 +200,7 @@ void main() {
     );
 
     test(
-      'Making sure that an exception is thrown if the given control points '
-      "don't have increasing 'x' values",
+      'Exception thrown if control points do not have increasing x values',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -224,8 +218,7 @@ void main() {
     );
 
     test(
-      'Making sure that an exception is thrown if the given control points '
-      "don't have increasing 'y' values",
+      'Exception thrown if control points do not have increasing y values',
       () {
         final cubic = MonotoneCubicSpline(
           nodes: [
@@ -242,7 +235,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       final cubicInterpolation = MonotoneCubicSpline(
         nodes: [
           const InterpolationNode(x: -2, y: 0),

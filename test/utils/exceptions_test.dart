@@ -3,8 +3,8 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 import 'package:test/test.dart';
 
 void main() {
-  group('Testing the correctness of exception objects', () {
-    test('Making sure that equality comparison works for exceptions', () {
+  group('Exceptions', () {
+    test('Object comparison.', () {
       const complexException = ComplexException('Message');
       const algebraicException = AlgebraicException('Message');
       const nonlinearException = NonlinearException('Message');
@@ -232,7 +232,7 @@ void main() {
       );
     });
 
-    test('Making sure "ComplexException" prints the correct message', () {
+    test('ComplexException toString()', () {
       const exception = ComplexException('Exception message');
 
       expect(
@@ -245,7 +245,7 @@ void main() {
       );
     });
 
-    test('Making sure "AlgebraicException" prints the correct message', () {
+    test('AlgebraicException toString()', () {
       const exception = AlgebraicException('Exception message');
 
       expect(exception.message, 'Exception message');
@@ -255,7 +255,7 @@ void main() {
       );
     });
 
-    test('Making sure "NonlinearException" prints the correct message', () {
+    test('NonlinearException toString()', () {
       const exception = NonlinearException('Exception message');
 
       expect(exception.message, 'Exception message');
@@ -266,7 +266,7 @@ void main() {
     });
 
     test(
-      'Making sure "ExpressionParserException" prints the correct message',
+      'ExpressionParserException toString()',
       () {
         const exception = ExpressionParserException('Exception message');
 
@@ -278,7 +278,7 @@ void main() {
       },
     );
 
-    test('Making sure "MatrixException" prints the correct message', () {
+    test('MatrixException toString()', () {
       const exception = MatrixException('Exception message');
 
       expect(exception.message, 'Exception message');
@@ -288,7 +288,7 @@ void main() {
       );
     });
 
-    test('Making sure "SystemSolverException" prints the correct message', () {
+    test('SystemSolverException toString()', () {
       const exception = SystemSolverException('Exception message');
 
       expect(exception.message, 'Exception message');
@@ -299,7 +299,7 @@ void main() {
     });
 
     test(
-      'Making sure "NumericalIntegrationException" prints the correct message',
+      'NumericalIntegrationException toString()',
       () {
         const exception = NumericalIntegrationException('Exception message');
 
@@ -312,8 +312,7 @@ void main() {
     );
 
     test(
-      'Making sure "PolynomialLongDivisionException" prints the correct '
-      'message',
+      'PolynomialLongDivisionException toString()',
       () {
         const exception = PolynomialLongDivisionException('Exception message');
 
@@ -325,7 +324,7 @@ void main() {
       },
     );
 
-    test('Making sure "InterpolationException" prints the correct message', () {
+    test('InterpolationException toString()', () {
       const exception = InterpolationException('Exception message');
 
       expect(exception.message, 'Exception message');

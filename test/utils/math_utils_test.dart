@@ -15,15 +15,15 @@ void main() {
     demo = const Demo();
   });
 
-  group("Testing the 'MathUtils' mixin", () {
-    test("Making sure that the 'hypot' method works correctly", () {
+  group('MathUtils', () {
+    test('hypot()', () {
       expect(demo.hypot(0, 0), isZero);
       expect(demo.hypot(0, 8), equals(8));
       expect(demo.hypot(8, 0), equals(8));
       expect(demo.hypot(3, 4), equals(5));
     });
 
-    test("Making sure that the 'complexHypot' method works correctly", () {
+    test('complexHypot()', () {
       expect(
         demo.complexHypot(const Complex.zero(), const Complex.zero()),
         equals(const Complex.zero()),

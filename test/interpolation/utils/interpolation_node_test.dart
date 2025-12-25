@@ -2,9 +2,9 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing the 'InterpolationNode' type", () {
+  group('InterpolationNode', () {
     test(
-      "Making sure that a 'InterpolationNode' object is properly constructed",
+      'Smoke test',
       () {
         const node = InterpolationNode(
           x: 1.5,
@@ -18,7 +18,7 @@ void main() {
     );
 
     test(
-      'Making sure that the instance is correctly converted into a string',
+      'toString()',
       () {
         const node = InterpolationNode(
           x: 1.5,
@@ -30,7 +30,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       const node = InterpolationNode(
         x: 1.5,
         y: 3,

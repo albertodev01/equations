@@ -2,10 +2,9 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing the 'SplineInterpolation' class", () {
+  group('SplineInterpolation', () {
     test(
-      'Making sure that, when the given nodes are monotonic, interpolation '
-      'happens with the "MonotoneCubicSpline" class.',
+      'Smoke test - MonotoneCubicSpline',
       () {
         const spline = SplineInterpolation(
           nodes: [
@@ -21,8 +20,7 @@ void main() {
     );
 
     test(
-      'Making sure that, when the given nodes are monotonic, interpolation '
-      'happens with the "LinearSpline" class.',
+      'Smoke test - LinearSpline',
       () {
         const spline = SplineInterpolation(
           nodes: [
@@ -37,7 +35,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       const interpolation = SplineInterpolation(
         nodes: [
           InterpolationNode(x: 3, y: -2),

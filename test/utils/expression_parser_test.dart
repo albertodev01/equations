@@ -6,8 +6,8 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group('Testing the correctness of exception objects', () {
-    test("Making sure that 'ExpressionParser' works with real numbers.", () {
+  group('ExpressionParser', () {
+    test('Smoke test', () {
       const parser = ExpressionParser();
 
       expect(parser.evaluate('5*3-4'), equals(11));
@@ -32,8 +32,7 @@ void main() {
     });
 
     test(
-      "Making sure that 'ExpressionParser' throws when 'evaluate' has the "
-      "'x' variable in the string.",
+      'Exception thrown when evaluate has x variable in the string.',
       () {
         const parser = ExpressionParser();
 
@@ -48,7 +47,7 @@ void main() {
       },
     );
 
-    test("Making sure that 'ExpressionParser' works with functions.", () {
+    test('Smoke test - functions', () {
       const parser = ExpressionParser();
 
       expect(
@@ -102,8 +101,7 @@ void main() {
     });
 
     test(
-      "Making sure that 'ExpressionParser' correctly recognizes with the 'x'"
-      ' variable.',
+      'Smoke test - x variable',
       () {
         const parser = ExpressionParser();
 
@@ -113,14 +111,13 @@ void main() {
     );
 
     test(
-      "Making sure that 'ExpressionParser' works with the 'x' variable "
-      "even if 'x' is not present.",
+      'Smoke test - x variable even if not present',
       () {
         expect(const ExpressionParser().evaluateOn('6*3 + 4', 0), equals(22));
       },
     );
 
-    test("Making sure that the 'String' extension method works correctly.", () {
+    test('String extension method works correctly.', () {
       expect('6*3 + 4'.isRealFunction, isTrue);
       expect('6*3 + 4'.isNumericalExpression, isTrue);
       expect('e*x - pi'.isRealFunction, isTrue);
@@ -130,7 +127,6 @@ void main() {
       expect('cos(pi) - 18 * 6'.isNumericalExpression, isTrue);
       expect('0'.isNumericalExpression, isTrue);
       expect('e^(2 + pi)'.isNumericalExpression, isTrue);
-
       expect('2x+6'.isRealFunction, isFalse);
       expect(''.isRealFunction, isFalse);
       expect('x'.isNumericalExpression, isFalse);

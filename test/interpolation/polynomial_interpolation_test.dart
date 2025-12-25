@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'PolynomialInterpolation' type", () {
+  group('PolynomialInterpolation', () {
     test(
-      "Making sure that 'PolynomialInterpolation' is properly constructed",
+      'Smoke test',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -48,7 +48,7 @@ void main() {
     );
 
     test(
-      'Making sure that the interpolating poly is correctly generated (1)',
+      'Smoke test 2',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -64,7 +64,7 @@ void main() {
     );
 
     test(
-      'Making sure that the interpolating poly is correctly generated (2)',
+      'Smoke test 3',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -84,7 +84,7 @@ void main() {
     );
 
     test(
-      'Making sure that the interpolating poly is correctly generated (3)',
+      'Smoke test 4',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -107,7 +107,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       const interpolation = PolynomialInterpolation(
         nodes: [
           InterpolationNode(x: 1, y: 3),

@@ -3,10 +3,9 @@ import 'package:equations/src/interpolation/utils/spline_function.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing the 'LinearSpline' class", () {
+  group('LinearSpline', () {
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 1).',
+      'Smoke test',
       () {
         final linear = LinearSpline(
           nodes: [
@@ -30,8 +29,7 @@ void main() {
     );
 
     test(
-      'Making sure that cubic spline interpolation works correctly (test '
-      'points - set 2).',
+      'Smoke test 2',
       () {
         final linear = LinearSpline(
           nodes: [
@@ -64,7 +62,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       final linearInterpolation = LinearSpline(
         nodes: [
           const InterpolationNode(x: -2, y: 0),
