@@ -127,5 +127,35 @@ void main() {
         }
       },
     );
+
+    test(
+      'compute() with dynamic cache',
+      () {
+        final value1 = factorial.compute(25);
+        expect(value1, isNotNull);
+
+        final value2 = factorial.compute(25);
+        expect(value2, equals(value1));
+
+        final value3 = factorial.compute(26);
+        expect(value3, isNotNull);
+        expect(value3, equals(value1 * 26));
+      },
+    );
+
+    test(
+      'computeBigInt() with dynamic cache',
+      () {
+        final value1 = factorial.computeBigInt(31);
+        expect(value1, isNotNull);
+
+        final value2 = factorial.computeBigInt(31);
+        expect(value2, equals(value1));
+
+        final value3 = factorial.computeBigInt(32);
+        expect(value3, isNotNull);
+        expect(value3, equals(value1 * BigInt.from(32)));
+      },
+    );
   });
 }

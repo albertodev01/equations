@@ -186,5 +186,31 @@ void main() {
         ),
       );
     });
+
+    test('Exception thrown for duplicate x-values', () {
+      expect(
+        () => const PolynomialInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: 1, y: 5), // Duplicate x-value
+          ],
+        ).compute(0),
+        throwsA(isA<InterpolationException>()),
+      );
+    });
+
+    test('Early return when x exactly matches a node x-value', () {
+      const interpolation = PolynomialInterpolation(
+        nodes: [
+          InterpolationNode(x: 0, y: -1),
+          InterpolationNode(x: 1, y: 1),
+          InterpolationNode(x: 4, y: 1),
+        ],
+      );
+      // When x exactly matches a node's x-value, return that node's y-value
+      expect(interpolation.compute(0), equals(-1));
+      expect(interpolation.compute(1), equals(1));
+      expect(interpolation.compute(4), equals(1));
+    });
   });
 }

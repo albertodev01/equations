@@ -427,6 +427,34 @@ void main() {
           ],
         );
       });
+
+      test('Test 21: Normalize coefficients if maxCoeff > maxCoefficient', () {
+        final quartic = Quartic(
+          a: const Complex.fromReal(9000000000),
+          b: const Complex.fromReal(8000000000),
+          c: const Complex.fromReal(7000000000),
+          d: const Complex.fromReal(6000000000),
+          e: const Complex.fromReal(5000000000),
+        );
+        final solutions = quartic.solutions();
+        expect(solutions.length, equals(4));
+      });
+
+      test(
+        'Test 22: Special case ax^4 + cx^2 + e = 0 with root.abs() < epsilon',
+        () {
+          final quartic = Quartic.realEquation(
+            c: -1e-12, // Very small negative c
+          );
+
+          final solutions = quartic.solutions();
+          expect(solutions.length, equals(4));
+
+          // Should have at least one zero solution
+          final hasZero = solutions.any((s) => s.abs() < 1e-10);
+          expect(hasZero, isTrue);
+        },
+      );
     });
   });
 }

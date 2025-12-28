@@ -1,26 +1,30 @@
 import 'package:equations/equations.dart';
 
-/// Implements Newton's method to find the roots of a given equation.
+/// {@template newton}
+/// Implements Newton's method (also known as the Newton-Raphson method) to find
+/// the roots of a given equation.
 ///
-/// **Characteristics**:
+///   - The method has quadratic convergence rate when it converges, making it
+///   one of the fastest root-finding algorithms.
 ///
 ///   - The method is extremely powerful but it's not guaranteed to converge to
-///   a root of `f(x)`.
+///   a root of `f(x)`. Convergence depends on the choice of the initial guess
+///   and the behavior of the function and its derivative.
 ///
-///   - The algorithm may fail for example due to a division by zero, if the
-///   derivative evaluated at a certain value is 0, or because the initial guess
-///   is too far from the solution.
+///   - The algorithm requires the derivative `f'(x)` to be computable and
+///   non-zero near the root. The method may fail if:
+///     - The derivative evaluated at a certain value is 0 or NaN
+///     - The initial guess is too far from the solution
+///     - The function has multiple roots or oscillates
+///
+///   - Newton's method uses the iterative formula:
+///     `x_{n+1} = x_n - f(x_n) / f'(x_n)`
+/// {@endtemplate}
 final class Newton extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Creates a [Newton] object object to find the root of an equation using
-  /// Newton's method.
-  ///
-  ///   - [function]: the function f(x);
-  ///   - [x0]: the initial guess x<sub>0</sub>;
-  ///   - [tolerance]: how accurate the algorithm has to be;
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
+  /// {@macro newton}
   const Newton({
     required super.function,
     required this.x0,
@@ -59,7 +63,10 @@ final class Newton extends NonLinear {
       final der = evaluateDerivativeOn(currx0);
 
       if ((der == 0) || (der.isNaN)) {
-        throw NonlinearException("Couldn't evaluate f'($currx0)");
+        throw NonlinearException(
+          "Couldn't evaluate f'($currx0). "
+          'The derivative is ${der.isNaN ? "NaN" : "zero"}',
+        );
       }
 
       diff = -evaluateOn(currx0) / der;

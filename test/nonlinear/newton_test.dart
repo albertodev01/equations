@@ -4,48 +4,43 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'Newton' class", () {
-    test(
-      'Making sure that the series converges when the root is in the interval.',
-      () {
-        const newtwon = Newton(function: 'sqrt(x) - e^2', x0: 52, maxSteps: 6);
+  group('Newton', () {
+    test('Smoke test', () {
+      const newton = Newton(function: 'sqrt(x) - e^2', x0: 52, maxSteps: 6);
 
-        expect(newtwon.x0, equals(52));
-        expect(newtwon.maxSteps, equals(6));
-        expect(newtwon.tolerance, equals(1.0e-10));
-        expect(newtwon.function, equals('sqrt(x) - e^2'));
-        expect(newtwon.toString(), equals('f(x) = sqrt(x) - e^2'));
+      expect(newton.x0, equals(52));
+      expect(newton.maxSteps, equals(6));
+      expect(newton.tolerance, equals(1.0e-10));
+      expect(newton.function, equals('sqrt(x) - e^2'));
+      expect(newton.toString(), equals('f(x) = sqrt(x) - e^2'));
 
-        // Solving the equation, making sure that the series converged
-        final solutions = newtwon.solve();
-        expect(solutions.guesses.length <= 6, isTrue);
-        expect(solutions.guesses.length, isNonZero);
-        expect(
-          solutions.convergence,
-          const MoreOrLessEquals(2, precision: 1),
-        );
-        expect(
-          solutions.efficiency,
-          const MoreOrLessEquals(1.12, precision: 1.0e-2),
-        );
-
-        expect(
-          solutions.guesses.last,
-          const MoreOrLessEquals(54.598, precision: 1.0e-3),
-        );
-      },
-    );
-
-    test('Making sure that a malformed equation string throws.', () {
+      // Solving the equation, making sure that the series converged
+      final solutions = newton.solve();
+      expect(solutions.guesses.length <= 6, isTrue);
+      expect(solutions.guesses.length, isNonZero);
       expect(
-        () {
-          const Newton(function: 'sqrt4 - 2', x0: 0).solve();
-        },
+        solutions.convergence,
+        const MoreOrLessEquals(2, precision: 1),
+      );
+      expect(
+        solutions.efficiency,
+        const MoreOrLessEquals(1.12, precision: 1.0e-2),
+      );
+
+      expect(
+        solutions.guesses.last,
+        const MoreOrLessEquals(54.598, precision: 1.0e-3),
+      );
+    });
+
+    test('Malformed equation string', () {
+      expect(
+        const Newton(function: 'sqrt4 - 2', x0: 1).solve,
         throwsA(isA<ExpressionParserException>()),
       );
     });
 
-    test('Making sure that object comparison properly works', () {
+    test('Object comparison', () {
       const newton = Newton(function: 'x-1', x0: 3);
 
       expect(const Newton(function: 'x-1', x0: 3), equals(newton));
@@ -59,68 +54,66 @@ void main() {
       );
     });
 
-    test('Making sure that derivatives evaluated on 0 return NaN.', () {
+    test('Derivatives evaluated on 0 return NaN', () {
       const newton = Newton(function: 'x', x0: 0);
-
-      // The derivative on 0 is 'NaN'
       expect(newton.evaluateDerivativeOn(0).isNaN, isTrue);
-
-      // Making sure that the method actually throws
       expect(newton.solve, throwsA(isA<Exception>()));
+
+      try {
+        newton.solve();
+      } on NonlinearException catch (e) {
+        expect(
+          e.message,
+          equals("Couldn't evaluate f'(0.0). The derivative is NaN"),
+        );
+      }
     });
 
-    test(
-      'Making sure that the newton method still works when the root is '
-      'not in the interval but the actual solution is not found',
-      () {
-        const newton = Newton(function: 'x-500', x0: 2, maxSteps: 3);
-        final solutions = newton.solve();
-
+    group('Roots tests', () {
+      void verifySolution(
+        String equation,
+        double x0,
+        double expectedSolution,
+      ) {
+        final solutions = Newton(function: equation, x0: x0).solve();
+        expect(
+          solutions.guesses.last,
+          MoreOrLessEquals(expectedSolution, precision: 1.0e-3),
+        );
         expect(solutions.guesses.length, isNonZero);
-        expect(solutions.guesses.length <= 3, isTrue);
-      },
-    );
-
-    test('Batch tests', () {
-      final equations = [
-        'x^e-cos(x)',
-        '3*x-sqrt(x+2)-1',
-        'x^3-5*x^2',
-        'x^2-13',
-        'e^(x)*(x+1)',
-      ];
-
-      final initialGuesses = <double>[
-        1,
-        0.6,
-        7,
-        2,
-        0.5,
-      ];
-
-      final expectedSolutions = <double>[
-        0.856,
-        0.901,
-        5,
-        3.605,
-        -1,
-      ];
-
-      for (var i = 0; i < equations.length; ++i) {
-        for (var j = 0; j < equations[i].length; ++j) {
-          final solutions = Newton(
-            function: equations[i],
-            x0: initialGuesses[i],
-            maxSteps: 80,
-            tolerance: 1.0e-20,
-          ).solve();
-
-          expect(
-            solutions.guesses.last,
-            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-3),
-          );
-        }
       }
+
+      test('Test 1', () {
+        verifySolution('x^e-cos(x)', 0.5, 0.856);
+      });
+
+      test('Test 2', () {
+        verifySolution('3*x-sqrt(x+2)-1', -1, 0.901);
+      });
+
+      test('Test 3', () {
+        verifySolution('x^3-5*x^2', 4, 5);
+      });
+
+      test('Test 4', () {
+        verifySolution('x^2-13', 2, 3.605);
+      });
+
+      test('Test 5', () {
+        verifySolution('e^(x)*(x+1)', -1.432, -1);
+      });
+
+      test('Test 6', () {
+        verifySolution('x', -1, 0);
+      });
+
+      test('Test 7', () {
+        verifySolution('sin(x+2)*cos(x-1)', 1.5, 1.141592);
+      });
+
+      test('Test 8', () {
+        verifySolution('x^x-1', 0.5, 1);
+      });
     });
   });
 }

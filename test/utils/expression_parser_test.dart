@@ -29,6 +29,14 @@ void main() {
         parser.evaluate('G'),
         const MoreOrLessEquals(0.8346268416, precision: 1.0e-10),
       );
+      expect(
+        parser.evaluate('sqrt2'),
+        const MoreOrLessEquals(1.41421356237, precision: 1.0e-10),
+      );
+      expect(
+        parser.evaluate('sqrt3'),
+        const MoreOrLessEquals(1.7320508075688, precision: 1.0e-10),
+      );
     });
 
     test(

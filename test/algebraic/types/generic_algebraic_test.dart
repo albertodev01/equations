@@ -473,6 +473,22 @@ void main() {
           Complex(1.01050, -0.61469),
         ]);
       });
+
+      test('Test 7: Initial guesses too close together', () {
+        final equation = GenericAlgebraic(
+          coefficients: const [
+            Complex.fromReal(1),
+            Complex.fromReal(-5),
+            Complex.fromReal(6),
+          ],
+          initialGuess: const [
+            Complex.fromReal(2),
+            Complex.fromReal(2.0000001), // Very close to first guess
+          ],
+        );
+        final solutions = equation.solutions();
+        expect(solutions.length, equals(2));
+      });
     });
   });
 }

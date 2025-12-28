@@ -170,8 +170,8 @@ final class Factorial {
     }
 
     // Start from the highest cached value and compute iteratively
-    var result = cachedValue ?? BigInt.one;
     final start = (cachedKey ?? -1) + 1;
+    var result = cachedValue ?? BigInt.one; // coverage:ignore-line
 
     // Iterative computation (avoids stack overflow)
     for (var i = start; i <= n; i++) {

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
 
+/// {@template nonlinear}
 /// An abstract class that represents a nonlinear equation, which can be solved
 /// with a particular root-finding algorithm. No complex numbers are allowed.
 ///
@@ -22,6 +23,7 @@ import 'package:equations/equations.dart';
 /// Each subclass of [NonLinear] has to override the [solve] method to build the
 /// scalar succession with a certain logic. It's expected to produce a series
 /// of values that progressively get closer to the real root.
+/// {@endtemplate}
 abstract base class NonLinear {
   /// The function f(x) for which the algorithm has to find a solution.
   final String function;
@@ -32,7 +34,7 @@ abstract base class NonLinear {
   /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
 
-  /// Creates a new [NonLinear] object.
+  /// {@macro nonlinear}
   const NonLinear({
     required this.function,
     required this.tolerance,
@@ -43,20 +45,30 @@ abstract base class NonLinear {
   String toString() => 'f(x) = $function';
 
   /// To get a meaningful result, it makes sense to compute the rate of
-  /// convergence only if the algorithm made **at least** 3 [steps]
-  /// (iterations).
+  /// convergence only if there are **at least** 4 guesses in the [guesses]
+  /// list (which means at least 3 iterations were performed).
   ///
-  /// If [steps] is 2 or lower, [double.nan] is returned.
+  /// If there are fewer than 4 guesses, [double.nan] is returned.
   double convergence(List<double> guesses, int steps) {
     final size = guesses.length - 1;
 
     if (size >= 3) {
-      final numerator =
-          (guesses[size] - guesses[size - 1]).abs() /
-          (guesses[size - 1] - guesses[size - 2]).abs();
-      final denominator =
-          (guesses[size - 1] - guesses[size - 2]).abs() /
-          (guesses[size - 2] - guesses[size - 3]).abs();
+      final diff1 = (guesses[size] - guesses[size - 1]).abs();
+      final diff2 = (guesses[size - 1] - guesses[size - 2]).abs();
+      final diff3 = (guesses[size - 2] - guesses[size - 3]).abs();
+
+      // Avoid division by zero if consecutive guesses are identical
+      if (diff2 == 0 || diff3 == 0) {
+        return double.nan;
+      }
+
+      final numerator = diff1 / diff2;
+      final denominator = diff2 / diff3;
+
+      // Avoid log(0) or log(negative) which would result in invalid values
+      if (numerator <= 0 || denominator <= 0) {
+        return double.nan;
+      }
 
       return math.log(numerator) / math.log(denominator);
     }
@@ -64,10 +76,13 @@ abstract base class NonLinear {
     return double.nan;
   }
 
-  /// The efficiency is evaluated only if the convergence is not [double.nan].
+  /// Computes the efficiency of the algorithm using the convergence rate.
   /// The formula is:
   ///
-  ///  - efficiency = convergenceRate <sup>1 / max_steps</sup>
+  ///  - efficiency = convergenceRate^(1/steps)
+  ///
+  /// If the convergence rate is [double.nan], the efficiency will also be
+  /// [double.nan].
   double efficiency(List<double> guesses, int steps) {
     final c = convergence(guesses, steps);
 
@@ -78,13 +93,28 @@ abstract base class NonLinear {
   num evaluateOn(double x) => const ExpressionParser().evaluateOn(function, x);
 
   /// Evaluates the derivative of the function on the given [x] value.
+  ///
+  /// Uses the central difference formula with an adaptive step size that
+  /// combines absolute and relative components for numerical stability:
+  ///
+  /// - When [x] is zero, returns [double.nan]
+  /// - For small [x], uses a minimum step size to avoid precision loss
+  /// - For large [x], uses a relative step size to maintain accuracy
   num evaluateDerivativeOn(double x) {
-    // Setting the precision to 1.0e-15
-    final h = math.pow(1.0e-15, 1 / 3) * x;
+    // When x is zero, h becomes zero, leading to NaN
+    if (x == 0) {
+      return double.nan;
+    }
+
+    // Use cube root of machine epsilon for the base step size
+    final epsilon = math.pow(1.0e-15, 1 / 3);
+
+    // Combine absolute and relative components: prevents h from being
+    // too small (precision issues) or too large (accuracy issues)
+    final h = epsilon * math.max(x.abs(), 1.0);
 
     final upper = evaluateOn(x + h);
     final lower = evaluateOn(x - h);
-
     return (upper - lower) / (h * 2);
   }
 

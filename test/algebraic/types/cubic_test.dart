@@ -351,6 +351,20 @@ void main() {
           Complex.fromReal(1),
         ]);
       });
+
+      test('Test 11: Double root case (d0.abs() >= epsilon)', () {
+        final equation = Cubic.realEquation(
+          b: -4,
+          c: 5,
+          d: -2,
+        );
+        final solutions = equation.solutions();
+        expect(solutions.length, equals(3));
+
+        final allSame =
+            solutions[0] == solutions[1] && solutions[1] == solutions[2];
+        expect(allSame, isFalse, reason: 'Should not be a triple root');
+      });
     });
   });
 }

@@ -163,6 +163,17 @@ void main() {
         );
         expect(dividend / divisor, equals(expected));
       });
+
+      test('Test 6: Division resulting in empty remainder (all zeros)', () {
+        final dividend = Algebraic.fromReal([2, 4, 2]); // 2x^2 + 4x + 2
+        final divisor = Algebraic.fromReal([1, 1]); // x + 1
+        final result = PolynomialLongDivision(
+          polyNumerator: dividend,
+          polyDenominator: divisor,
+        ).divide();
+        expect(result.remainder.coefficients.length, greaterThan(0));
+        expect(result.remainder.coefficients.every((c) => c.isZero), isTrue);
+      });
     });
   });
 }

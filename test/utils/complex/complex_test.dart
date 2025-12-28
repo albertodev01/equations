@@ -367,6 +367,29 @@ void main() {
       },
     );
 
+    test(
+      'sin() and cos() with large imaginary values (x.abs() > 20)',
+      () {
+        const largeImag = Complex(0, 25);
+        final sinLarge = largeImag.sin();
+        final cosLarge = largeImag.cos();
+
+        expect(sinLarge.real.isFinite, isTrue);
+        expect(sinLarge.imaginary.isFinite, isTrue);
+        expect(cosLarge.real.isFinite, isTrue);
+        expect(cosLarge.imaginary.isFinite, isTrue);
+
+        const largeNegImag = Complex(0, -25);
+        final sinLargeNeg = largeNegImag.sin();
+        final cosLargeNeg = largeNegImag.cos();
+
+        expect(sinLargeNeg.real.isFinite, isTrue);
+        expect(sinLargeNeg.imaginary.isFinite, isTrue);
+        expect(cosLargeNeg.real.isFinite, isTrue);
+        expect(cosLargeNeg.imaginary.isFinite, isTrue);
+      },
+    );
+
     test('nthRoot()', () {
       final sqrt = const Complex(5, 1).sqrt();
       expect(
