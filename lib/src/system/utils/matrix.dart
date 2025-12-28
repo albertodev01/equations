@@ -144,14 +144,12 @@ abstract base class Matrix<T> {
     }
 
     if (other is Matrix) {
-      // Quick size check
       if (rowCount != other.rowCount ||
           columnCount != other.columnCount ||
           _data.length != other._data.length) {
         return false;
       }
 
-      // Element-by-element comparison
       for (var i = 0; i < _data.length; ++i) {
         if (_data[i] != other._data[i]) {
           return false;
@@ -214,6 +212,9 @@ abstract base class Matrix<T> {
   }
 
   /// Returns a modifiable view of the matrix as a `List<List<T>>` object.
+  ///
+  /// Each inner list represents a row of the matrix. The returned list is
+  /// modifiable, but changes to it will not affect the original matrix.
   List<List<T>> toListOfList() => List<List<T>>.generate(
     rowCount,
     (row) => List<T>.generate(columnCount, (col) => this(row, col)),
@@ -221,12 +222,24 @@ abstract base class Matrix<T> {
   );
 
   /// An unmodifiable, flattened representation of the matrix data.
+  ///
+  /// The data is stored in row-major order (elements are arranged row by row).
+  /// For example, a 2×3 matrix `[[a, b, c], [d, e, f]]` would be flattened
+  /// as `[a, b, c, d, e, f]`.
   List<T> get flattenData => UnmodifiableListView<T>(_data);
 
   /// Returns a modifiable "flattened" view of the matrix as a `List<T>` object.
+  ///
+  /// The data is stored in row-major order (elements are arranged row by row).
+  /// The returned list is a copy of the internal data, so modifications to
+  /// it will not affect the original matrix.
   List<T> toList() => List<T>.from(_data);
 
   /// Determines whether the matrix is square or not.
+  ///
+  /// A square matrix has the same number of rows and columns. Many matrix
+  /// operations (such as determinant, inverse, eigenvalues) require the
+  /// matrix to be square.
   bool get isSquareMatrix => rowCount == columnCount;
 
   /// Use this method to retrieve the element at a given position in the matrix.
@@ -307,34 +320,36 @@ abstract base class Matrix<T> {
 
   /// Returns the sum of two matrices.
   ///
-  /// {@template matrix_operation_size_mismatch_error}
-  /// An exception is thrown if the size of the source matrix does **not** match
-  /// the size of the other matrix.
-  /// {@endtemplate}
+  /// Matrix addition is performed element-wise. Each element in the result
+  /// is the sum of the corresponding elements in the two matrices.
   Matrix<T> operator +(Matrix<T> other);
 
   /// Returns the difference of two matrices.
   ///
-  /// {@macro matrix_operation_size_mismatch_error}
+  /// Matrix subtraction is performed element-wise. Each element in the result
+  /// is the difference of the corresponding elements in the two matrices.
   Matrix<T> operator -(Matrix<T> other);
 
   /// Returns the product of two matrices.
   ///
-  /// {@template matrix_operation_inverted_size_mismatch_error}
-  /// An exception is thrown if the column count of the source matrix does
-  /// **not** match the row count of the other matrix.
-  /// {@endtemplate}
+  /// Matrix multiplication is performed using the standard matrix
+  /// multiplication algorithm. The element at position (i, j) in the result
+  /// is the dot product of row i of this matrix and column j of [other].
   Matrix<T> operator *(Matrix<T> other);
 
   /// Returns the division of two matrices.
   ///
-  /// {@macro matrix_operation_inverted_size_mismatch_error}
+  /// Matrix division is equivalent to multiplying this matrix by the inverse
+  /// of [other]. That is, `A / B` is equivalent to `A * B.inverse()`.
   Matrix<T> operator /(Matrix<T> other);
 
   /// Returns the transpose of this matrix.
   ///
   /// This is an operation that flips a matrix over its diagonal (switching the
-  /// row and column indices of the matrix to create a new one).
+  /// row and column indices of the matrix to create a new one). The transpose
+  /// of an `N×M` matrix is an `M×N` matrix where the element at position (i, j)
+  /// in the original matrix becomes the element at position (j, i) in the
+  /// transposed matrix.
   Matrix<T> transpose();
 
   /// A minor of a matrix `A` is the determinant of some smaller square matrix,
@@ -343,23 +358,14 @@ abstract base class Matrix<T> {
   /// This function only computes the **first minor**, which is the minor
   /// obtained by removing 1 row and 1 column from the source matrix. This
   /// is often useful for calculating cofactors.
-  ///
-  /// A [MatrixException] is thrown in the following cases:
-  ///
-  ///  - [row] or [col] is less than zero;
-  ///  - [row] or [col] is greater than the total row or column count;
-  ///  - [row] or [col] is 1.
   Matrix<T> minor(int row, int col);
 
   /// The matrix formed by all of the cofactors of a square matrix is called the
-  /// "cofactor matrix" (also called "the matrix of cofactors").
+  /// "cofactor matrix".
   ///
   /// In practice, this matrix is obtained by calling `minor(i, j)` for all
-  /// combinations of rows and columns of the matrix.
-  ///
-  /// {@template matrix_not_square_error}
-  /// A [MatrixException] is thrown if the matrix is not square.
-  /// {@endtemplate}
+  /// combinations of rows and columns of the matrix, then multiplying each
+  /// minor's determinant by (-1)<sup>i+j</sup> to get the cofactor.
   Matrix<T> cofactorMatrix();
 
   /// Returns the inverse of this matrix.
@@ -369,15 +375,20 @@ abstract base class Matrix<T> {
   /// the identity matrix.
   ///
   /// A square matrix has an inverse if and only if its determinant is *not* 0.
+  /// A matrix that has an inverse is called **invertible** or **non-singular**.
   ///
-  /// {@macro matrix_not_square_error}
+  /// A matrix without an inverse is called **singular**.
   Matrix<T> inverse();
 
   /// The trace of a square matrix `A`, denoted `tr(A)`, is defined as the
   /// sum of elements on the main diagonal (from the upper left to the lower
   /// right).
   ///
-  /// {@macro matrix_not_square_error}
+  /// The trace has several important properties:
+  ///  - tr(A + B) = tr(A) + tr(B)
+  ///  - tr(cA) = c × tr(A) for any scalar c
+  ///  - tr(AB) = tr(BA)
+  ///  - The trace equals the sum of the eigenvalues
   T trace();
 
   /// A diagonal matrix is a matrix in which all entries outside the main
@@ -390,14 +401,17 @@ abstract base class Matrix<T> {
   /// The identity matrix is a square matrix with ones on the main diagonal
   /// and zeros elsewhere. It is denoted by I<sub>n</sub>, or simply by I.
   ///
-  /// {@macro matrix_not_square_error}
+  /// The identity matrix has the property that for any matrix A of compatible
+  /// size, A x I = I x A = A.
   bool isIdentity();
 
   /// The **rank** of a matrix `A` is the dimension of the vector space
   /// generated by its columns. This corresponds to the maximal number of
   /// linearly independent columns of `A`.
   ///
-  /// The rank is generally denoted by rank(A) or rk(A).
+  /// The rank is generally denoted by rank(A) or rk(A). The rank of a matrix
+  /// is equal to the rank of its transpose, and it cannot exceed the minimum
+  /// of the number of rows and columns.
   int rank();
 
   /// The determinant can only be computed if the matrix is **square**, meaning

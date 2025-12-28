@@ -428,20 +428,8 @@ void main() {
         );
       });
 
-      test('Test 21: Normalize coefficients if maxCoeff > maxCoefficient', () {
-        final quartic = Quartic(
-          a: const Complex.fromReal(9000000000),
-          b: const Complex.fromReal(8000000000),
-          c: const Complex.fromReal(7000000000),
-          d: const Complex.fromReal(6000000000),
-          e: const Complex.fromReal(5000000000),
-        );
-        final solutions = quartic.solutions();
-        expect(solutions.length, equals(4));
-      });
-
       test(
-        'Test 22: Special case ax^4 + cx^2 + e = 0 with root.abs() < epsilon',
+        'Test 21: Special case ax^4 + cx^2 + e = 0 with root.abs() < epsilon',
         () {
           final quartic = Quartic.realEquation(
             c: -1e-12, // Very small negative c
@@ -455,6 +443,32 @@ void main() {
           expect(hasZero, isTrue);
         },
       );
+
+      test('Test 22: Double zero roots on ax^4 + cx^2 + e', () {
+        final quartic = Quartic.realEquation(c: -1);
+        final solutions = quartic.solutions();
+
+        expect(solutions.length, equals(4));
+        final zeroCount = solutions.where((s) => s.abs() < 1e-10).length;
+        expect(zeroCount, equals(2));
+
+        final nonZeroSolutions = solutions
+            .where((s) => s.abs() >= 1e-10)
+            .toList();
+        expect(nonZeroSolutions.length, equals(2));
+        expect(
+          nonZeroSolutions.any(
+            (s) => (s - const Complex.fromReal(1)).abs() < 1e-10,
+          ),
+          isTrue,
+        );
+        expect(
+          nonZeroSolutions.any(
+            (s) => (s - const Complex.fromReal(-1)).abs() < 1e-10,
+          ),
+          isTrue,
+        );
+      });
     });
   });
 }

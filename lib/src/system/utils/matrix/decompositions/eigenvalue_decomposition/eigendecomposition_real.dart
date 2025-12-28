@@ -7,22 +7,31 @@ import 'package:equations/src/utils/math_utils.dart';
 
 /// {@macro eigendecomposition_class_header}
 ///
-/// This class performs the eigendecomposition on [RealMatrix] types and has the
-/// following characteristics:
+/// This class performs the eigendecomposition on [RealMatrix] types.
 ///
-/// {@template eigendecomposition_characteristics}
-/// - Householder reduction for symmetric matrices
-/// - Hessenberg reduction for non-symmetric matrices
-/// - QL algorithm for diagonalization
-/// - Numerical stability improvements for better accuracy
+/// {@macro eigendecomposition_characteristics}
 ///
-/// Time complexity: O(n³) where n is the matrix size
-/// Space complexity: O(n²)
-/// {@endtemplate}
+/// For real matrices, eigenvalues and eigenvectors may be complex even if the
+/// input matrix is real. This implementation handles such cases by storing
+/// complex values appropriately.
+///
+/// Example:
+/// ```dart
+/// final matrix = RealMatrix.fromData(
+///   rows: 2,
+///   columns: 2,
+///   data: [
+///     [1, 2],
+///     [3, 4],
+///   ],
+/// );
+/// final decomposition = EigendecompositionReal(matrix: matrix);
+/// final [V, D, VInv] = decomposition.decompose();
+/// ```
 final class EigendecompositionReal
     extends EigenDecomposition<double, RealMatrix>
     with MathUtils {
-  /// Requires the [matrix] matrix to be decomposed.
+  /// {@macro eigendecomposition_class_header}
   const EigendecompositionReal({required super.matrix});
 
   @override
@@ -106,7 +115,12 @@ final class EigendecompositionReal
     return [V, D, V.inverse()];
   }
 
-  /// Using Householder reduction to obtain the tridiagonal form.
+  /// Uses Householder reduction to transform a symmetric matrix to tridiagonal
+  /// form.
+  ///
+  /// This is the first step in the eigendecomposition of symmetric matrices.
+  /// The tridiagonal form simplifies the subsequent eigenvalue computation.
+  /// The method modifies the input arrays in place.
   void _tridiagonalForm({
     required List<double> realEigenvalues,
     required List<double> complexEigenvalues,
@@ -217,8 +231,12 @@ final class EigendecompositionReal
     complexEigenvalues.first = 0.0;
   }
 
-  /// Applying the tridiagonal QL algorithm, which is an efficient method to
-  /// find eigenvalues of a matrix.
+  /// Applies the tridiagonal QL algorithm to find eigenvalues and eigenvectors.
+  ///
+  /// This is an efficient iterative method for computing eigenvalues of a
+  /// tridiagonal matrix. The algorithm uses implicit shifts and Givens
+  /// rotations to converge to the eigenvalues. The eigenvectors are updated
+  /// throughout the process.
   void _qlTridiagonal({
     required List<double> realEigenvalues,
     required List<double> complexEigenvalues,
@@ -325,7 +343,12 @@ final class EigendecompositionReal
     }
   }
 
-  /// Nonsymmetric reduction to the Hessenberg form.
+  /// Reduces a non-symmetric matrix to Hessenberg form using Householder
+  /// transformations.
+  ///
+  /// Hessenberg form is an intermediate step that simplifies eigenvalue
+  /// computation for non-symmetric matrices. A matrix in Hessenberg form has
+  /// zeros below the first subdiagonal.
   void _nonsymmetricHessReduction({
     required List<List<double>> hessenbergCache,
     required List<double> hessenbergValues,
@@ -428,7 +451,12 @@ final class EigendecompositionReal
     }
   }
 
-  /// Nonsymmetric reduction from the Hessenbergform to the real Schur form.
+  /// Reduces a matrix from Hessenberg form to real Schur form.
+  ///
+  /// The real Schur form is an upper quasi-triangular matrix that reveals the
+  /// eigenvalues. This method uses the QR algorithm with shifts to iteratively
+  /// converge to the Schur form. The eigenvectors are accumulated during the
+  /// transformation process.
   void _hessenbergToSchur({
     required List<double> realEigenvalues,
     required List<double> complexEigenvalues,

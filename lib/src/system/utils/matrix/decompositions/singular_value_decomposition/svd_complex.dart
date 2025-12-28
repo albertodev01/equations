@@ -7,19 +7,51 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro svd_class_header}
 ///
 /// This class performs the SVD procedure on [ComplexMatrix] types.
+///
+/// The implementation handles complex numbers throughout the decomposition
+/// process. The algorithm uses complex arithmetic for all operations and
+/// properly handles complex singular values and vectors.
+///
+/// The convergence criteria and numerical stability checks are adapted for
+/// complex number operations. The algorithm includes a maximum iteration limit
+/// to prevent infinite loops in pathological cases.
+///
+/// Example:
+/// ```dart
+/// final matrix = ComplexMatrix.fromData(
+///   rows: 2,
+///   columns: 3,
+///   data: [
+///     [Complex(1, 0), Complex(2, 1), Complex(3, -1)],
+///     [Complex(4, 1), Complex(5, 0), Complex(6, 2)],
+///   ],
+/// );
+/// final decomposition = SVDComplex(matrix: matrix);
+/// final [E, U, V] = decomposition.decompose();
+/// ```
 final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     with MathUtils {
-  /// Constants for numerical stability
-  static const _epsilon = 1e-10; // For complex operations
-  static const _tiny = 1e-300; // For very small values
-  static const _maxIterations = 1000; // Maximum iterations for convergence
+  /// Epsilon value for numerical stability in complex operations.
+  static const _epsilon = 1e-10;
+
+  /// Tiny value threshold for very small numbers.
+  static const _tiny = 1e-300;
+
+  /// Maximum number of iterations allowed for convergence.
+  static const _maxIterations = 1000;
 
   /// {@macro svd_class_header}
   const SVDComplex({required super.matrix});
 
-  /// Reduces the source matrix a to bidiagonal form.
+  /// Reduces the source matrix to bidiagonal form using Householder
+  /// reflections.
   ///
-  /// This is required for the computation of `U` and `V`.
+  /// This is the first step of the SVD algorithm and is required for the
+  /// computation of `U` and `V`. The bidiagonal form simplifies the
+  /// subsequent iterative refinement of singular values.
+  ///
+  /// The method modifies the input matrices in place and populates the
+  /// arrays with the necessary transformation data.
   void _bidiagonalForm({
     required List<List<Complex>> sourceMatrix,
     required List<List<Complex>> matrixU,
@@ -145,7 +177,12 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     arrayE[p - 1] = const Complex.zero();
   }
 
-  /// Generation of the `U` from a bidiagonal source.
+  /// Generates the `U` matrix from the bidiagonal transformation data.
+  ///
+  /// This method reconstructs the left singular vectors by accumulating the
+  /// Householder transformations applied during bidiagonalization. The
+  /// resulting matrix U is unitary (U^H U = I, where H denotes conjugate
+  /// transpose).
   void _generateU({
     required List<List<Complex>> matrixU,
     required List<Complex> arrayS,
@@ -193,7 +230,12 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     }
   }
 
-  /// Generation of the `V` from a bidiagonal source.
+  /// Generates the `V` matrix from the bidiagonal transformation data.
+  ///
+  /// This method reconstructs the right singular vectors by accumulating the
+  /// Householder transformations applied during bidiagonalization. The
+  /// resulting matrix V is unitary (V^H V = I, where H denotes conjugate
+  /// transpose).
   void _generateV({
     required List<List<Complex>> matrixV,
     required List<Complex> arrayE,

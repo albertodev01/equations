@@ -3,11 +3,8 @@ import 'dart:math' as math;
 import 'package:equations/equations.dart';
 
 /// {@template sor_solver}
-/// Solves a system of linear equations using the **Successive Over-Relaxation
-/// (SOR)** iterative method. The given input matrix, representing the system of
-/// linear equations, must be square.
-///
-/// ## Convergence
+/// Solves a system of linear equations using the Successive Over-Relaxation
+/// (SOR) iterative method.
 ///
 /// A theorem due to Kahan (1958) shows that SOR fails to converge if `w` is not
 /// in the (0, 2) range. The optimal value of `w` depends on the spectral radius
@@ -101,43 +98,13 @@ final class SORSolver extends SystemSolver {
         );
       }
     }
-
-    // Warn about non-diagonally dominant matrices (but don't throw)
-    if (!_isDiagonallyDominant()) {
-      // Note: This is just a warning, not an error, as SOR can still converge
-      // for some non-diagonally dominant matrices, but convergence is not
-      // guaranteed
-    }
-  }
-
-  /// Checks if the matrix is diagonally dominant.
-  ///
-  /// A matrix is diagonally dominant if for each row, the absolute value of
-  /// the diagonal element is greater than or equal to the sum of the absolute
-  /// values of the other elements in that row.
-  bool _isDiagonallyDominant() {
-    for (var i = 0; i < matrix.rowCount; ++i) {
-      var rowSum = 0.0;
-      final diagonalElement = matrix(i, i).abs();
-
-      for (var j = 0; j < matrix.columnCount; ++j) {
-        if (i != j) {
-          rowSum += matrix(i, j).abs();
-        }
-      }
-
-      if (diagonalElement < rowSum) {
-        return false;
-      }
-    }
-    return true;
   }
 
   /// Returns whether the matrix is diagonally dominant.
   ///
   /// This can be useful for users to check if SOR is likely to converge
   /// for their specific matrix.
-  bool get isDiagonallyDominant => _isDiagonallyDominant();
+  bool isDiagonallyDominant() => SystemSolver.isDiagonallyDominant(matrix);
 
   /// Computes the residual norm of the current solution.
   ///

@@ -56,7 +56,6 @@ final class LUSolver extends SystemSolver with RealMatrixUtils {
 
   @override
   List<double> solve() {
-    // Check if the system has a solution
     if (!hasSolution()) {
       throw const SystemSolverException(
         'The system has no solution: the matrix is singular (determinant = 0).',
@@ -64,15 +63,32 @@ final class LUSolver extends SystemSolver with RealMatrixUtils {
     }
 
     final lu = matrix.luDecomposition();
+    final L = lu[0];
+    final U = lu[1];
+    final P = lu[2];
 
-    // Solving Ly = b
-    final L = lu.first.toListOfList();
-    final b = knownValues;
-    final y = forwardSubstitution(L, b);
+    // Apply permutation to known values: Pb
+    final bPermuted = List<double>.generate(
+      knownValues.length,
+      (i) {
+        // Find j such that P[i, j] = 1, then (Pb)[i] = b[j]
+        for (var j = 0; j < knownValues.length; j++) {
+          if (P(i, j) == 1.0) {
+            return knownValues[j];
+          }
+        }
+        return knownValues[i]; // fallback (shouldn't happen)
+      },
+      growable: false,
+    );
+
+    // Solving Ly = Pb
+    final lList = L.toListOfList();
+    final y = forwardSubstitution(lList, bPermuted);
 
     // Solving Ux = y
-    final U = lu[1].toListOfList();
+    final uList = U.toListOfList();
 
-    return backSubstitution(U, y);
+    return backSubstitution(uList, y);
   }
 }

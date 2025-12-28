@@ -7,18 +7,15 @@ import 'package:equations/equations.dart';
 /// The given input matrix, representing the system of linear equations, must
 /// be square.
 ///
-/// This algorithm only works with strictly diagonally dominant systems of
-/// equations.
+/// The [matrix] `A` must be strictly diagonally dominant for guaranteed
+/// convergence. The method will check for zero diagonal elements and throw
+/// an exception if found, as this would cause division by zero.
 ///
-/// The Jacobi method solves the system Ax = b by iteratively updating each
-/// component x_i using the formula:
-///   x_i^(k+1) = (b_i - Σ_{j≠i} a_{ij} * x_j^(k)) / a_{ii}
-///
-/// where k is the iteration number. The method converges if the matrix A
-/// is strictly diagonally dominant, meaning |a_{ii}| > Σ_{j≠i} |a_{ij}| for all
-/// values of i.
+/// For non-diagonally dominant matrices, convergence is not guaranteed,
+/// but the method will still attempt to solve the system.
 ///
 /// Example:
+///
 /// ```dart
 /// final solver = JacobiSolver(
 ///   matrix: RealMatrix.fromData(
@@ -50,13 +47,6 @@ final class JacobiSolver extends SystemSolver {
   ///  - [x0] is the initial guess (which is a vector);
   ///  - [precision] tells how accurate the algorithm has to be;
   ///  - [maxSteps] the maximum number of iterations the algorithm.
-  ///
-  /// The [matrix] `A` must be strictly diagonally dominant for guaranteed
-  /// convergence. The method will check for zero diagonal elements and throw
-  /// an exception if found, as this would cause division by zero.
-  ///
-  /// For non-diagonally dominant matrices, convergence is not guaranteed,
-  /// but the method will still attempt to solve the system.
   factory JacobiSolver({
     required RealMatrix matrix,
     required List<double> knownValues,
@@ -82,12 +72,6 @@ final class JacobiSolver extends SystemSolver {
       }
     }
 
-    // Check diagonal dominance for convergence guarantee
-    if (!_isDiagonallyDominant(matrix)) {
-      // Note: Non-diagonally dominant matrices may still converge,
-      // but convergence is not guaranteed
-    }
-
     return JacobiSolver._(
       matrix: matrix,
       knownValues: knownValues,
@@ -106,37 +90,11 @@ final class JacobiSolver extends SystemSolver {
     this.maxSteps = 30,
   });
 
-  /// Checks if the matrix is diagonally dominant.
-  ///
-  /// A matrix A is diagonally dominant if for each row i:
-  ///   |a_{ii}| ≥ Σ_{j≠i} |a_{ij}|
-  ///
-  /// This is a sufficient (but not necessary) condition for the Jacobi method
-  /// to converge. Strict diagonal dominance (|a_{ii}| > Σ_{j≠i} |a_{ij}|)
-  /// guarantees convergence.
-  static bool _isDiagonallyDominant(RealMatrix matrix) {
-    for (var i = 0; i < matrix.rowCount; ++i) {
-      var rowSum = 0.0;
-      final diagonalElement = matrix(i, i).abs();
-
-      for (var j = 0; j < matrix.columnCount; ++j) {
-        if (i != j) {
-          rowSum += matrix(i, j).abs();
-        }
-      }
-
-      if (diagonalElement < rowSum) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   /// Returns whether the matrix is diagonally dominant.
   ///
   /// This can be useful for users to check if Jacobi is likely to converge
   /// for their specific matrix.
-  bool get isDiagonallyDominant => _isDiagonallyDominant(matrix);
+  bool isDiagonallyDominant() => SystemSolver.isDiagonallyDominant(matrix);
 
   /// Computes the residual norm of the current solution.
   ///
@@ -158,58 +116,6 @@ final class JacobiSolver extends SystemSolver {
     return math.sqrt(residualNorm);
   }
 
-  /// Solves the system and returns both the solution and convergence
-  /// information.
-  ///
-  /// Returns a map containing:
-  /// - 'solution': the solution vector
-  /// - 'iterations': number of iterations performed
-  /// - 'converged': whether the method converged within maxSteps
-  /// - 'finalResidual': the residual norm of the final solution
-  Map<String, dynamic> solveWithInfo() {
-    var k = 0;
-    var diff = precision + 1;
-
-    final size = knownValues.length;
-    final solutions = List<double>.from(x0);
-    final oldSolutions = List<double>.generate(size, (_) => 0);
-
-    while ((diff >= precision) && (k < maxSteps)) {
-      for (var i = 0; i < size; ++i) {
-        oldSolutions[i] = solutions[i];
-      }
-
-      for (var i = 0; i < size; ++i) {
-        var sigma = 0.0;
-        for (var j = 0; j < size; ++j) {
-          if (i != j) {
-            sigma += matrix(i, j) * oldSolutions[j];
-          }
-        }
-        solutions[i] = (knownValues[i] - sigma) / matrix(i, i);
-      }
-
-      diff = 0.0;
-      for (var i = 0; i < size; ++i) {
-        final change = (solutions[i] - oldSolutions[i]).abs();
-        if (change > diff) {
-          diff = change;
-        }
-      }
-
-      ++k;
-    }
-
-    final finalResidual = computeResidualNorm(solutions);
-
-    return {
-      'solution': solutions,
-      'iterations': k,
-      'converged': k < maxSteps,
-      'finalResidual': finalResidual,
-    };
-  }
-
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
@@ -217,18 +123,14 @@ final class JacobiSolver extends SystemSolver {
     }
 
     if (other is JacobiSolver) {
-      // The lengths of the coefficients must match.
       if (x0.length != other.x0.length) {
         return false;
       }
-
       for (var i = 0; i < x0.length; ++i) {
         if (x0[i] != other.x0[i]) {
           return false;
         }
       }
-
-      // They must have the same runtime type AND all items must be equal.
       return super == other && maxSteps == other.maxSteps;
     } else {
       return false;
@@ -245,14 +147,6 @@ final class JacobiSolver extends SystemSolver {
   );
 
   @override
-  /// Solves the system of linear equations using the Jacobi iterative method.
-  ///
-  /// The method iterates until either:
-  /// - The maximum change in any component between iterations is less than
-  ///   [precision]
-  /// - The maximum number of iterations [maxSteps] is reached
-  ///
-  /// Returns the solution vector x that satisfies Ax = b.
   List<double> solve() {
     // Exit conditions for the method.
     var k = 0;

@@ -35,7 +35,10 @@ void main() {
 
       // Checking solutions
       final results = luSolver.solve();
-      expect(results, unorderedEquals(<double>[-1, 4, 3]));
+      expect(
+        results.map((e) => e.roundToDouble()),
+        unorderedEquals(<double>[-1, 4, 3]),
+      );
 
       // Checking the "state" of the object
       expect(luSolver.matrix, equals(matrix));

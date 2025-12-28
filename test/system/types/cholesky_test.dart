@@ -4,57 +4,53 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'CholeskyDecomposition' class.", () {
-    test(
-      'Making sure that the CholeskySolver computes the correct results of a '
-      'system of linear equations.',
-      () {
-        final choleskySolver = CholeskySolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: [
-              [6, 15, 55],
-              [15, 55, 255],
-              [55, 225, 979],
-            ],
-          ),
-          knownValues: const [76, 295, 1259],
-        );
-
-        // This is needed because we want to make sure that the "original"
-        // matrix doesn't get side effects from the calculations (i.e. row
-        // swapping).
-        final matrix = RealMatrix.fromData(
+  group('CholeskySolver', () {
+    test('Smoke test', () {
+      final choleskySolver = CholeskySolver(
+        matrix: RealMatrix.fromData(
           rows: 3,
           columns: 3,
-          data: const [
+          data: [
             [6, 15, 55],
             [15, 55, 255],
             [55, 225, 979],
           ],
-        );
+        ),
+        knownValues: const [76, 295, 1259],
+      );
 
-        // Checking solutions
-        final results = choleskySolver.solve();
+      // This is needed because we want to make sure that the "original"
+      // matrix doesn't get side effects from the calculations (i.e. row
+      // swapping).
+      final matrix = RealMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [6, 15, 55],
+          [15, 55, 255],
+          [55, 225, 979],
+        ],
+      );
 
-        for (final sol in results) {
-          expect(sol, const MoreOrLessEquals(1, precision: 1.0e-1));
-        }
+      // Checking solutions
+      final results = choleskySolver.solve();
 
-        // Checking the "state" of the object
-        expect(choleskySolver.matrix, equals(matrix));
-        expect(choleskySolver.hasSolution(), isTrue);
-        expect(
-          choleskySolver.knownValues,
-          orderedEquals(const [76, 295, 1259]),
-        );
-        expect(choleskySolver.precision, equals(1.0e-10));
-        expect(choleskySolver.size, equals(3));
-      },
-    );
+      for (final sol in results) {
+        expect(sol, const MoreOrLessEquals(1, precision: 1.0e-1));
+      }
 
-    test('Making sure that the string conversion works properly.', () {
+      // Checking the "state" of the object
+      expect(choleskySolver.matrix, equals(matrix));
+      expect(choleskySolver.hasSolution(), isTrue);
+      expect(
+        choleskySolver.knownValues,
+        orderedEquals(const [76, 295, 1259]),
+      );
+      expect(choleskySolver.precision, equals(1.0e-10));
+      expect(choleskySolver.size, equals(3));
+    });
+
+    test('String conversion', () {
       final solver = CholeskySolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -81,8 +77,7 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
-    test('Making sure that an exception is thrown when the square root of a '
-        'negative number is found while Cholesky-decomposing the matrix.', () {
+    test('Throws exception if the matrix is not positive definite', () {
       final solver = CholeskySolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -99,8 +94,7 @@ void main() {
       expect(solver.solve, throwsA(isA<SystemSolverException>()));
     });
 
-    test('Making sure that the matrix is square because this method is only '
-        "able to solve systems of 'N' equations in 'N' variables.", () {
+    test('Throws exception if the matrix is not square', () {
       expect(
         () => CholeskySolver(
           matrix: RealMatrix.fromData(
@@ -117,8 +111,7 @@ void main() {
       );
     });
 
-    test('Making sure that the matrix is square AND the dimension of the '
-        'known values vector also matches the size of the matrix.', () {
+    test('Throws exception if vector and matrix have different sizes', () {
       expect(
         () => CholeskySolver(
           matrix: RealMatrix.fromData(
@@ -135,7 +128,7 @@ void main() {
       );
     });
 
-    test('Making sure that objects comparison works properly.', () {
+    test('Object comparison', () {
       final cholesky = CholeskySolver(
         matrix: RealMatrix.fromData(
           rows: 2,

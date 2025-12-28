@@ -593,24 +593,62 @@ void main() {
 
       // Decomposition
       final lu = matrix.luDecomposition();
-      expect(lu.length, equals(2));
+      expect(lu.length, equals(3)); // Now returns [L, U, P]
 
       // Checking L
-      final L = lu.first;
+      final L = lu[0];
       expect(L.rowCount, equals(matrix.rowCount));
       expect(L.columnCount, equals(matrix.columnCount));
       expect(L.isSquareMatrix, isTrue);
-      expect(L.flattenData, orderedEquals(<double>[1, 0, 0, 4, 1, 0, 7, 2, 1]));
+      // L should be lower triangular with 1s on diagonal
+      for (var i = 0; i < L.rowCount; i++) {
+        expect(L(i, i), equals(1.0));
+        for (var j = i + 1; j < L.columnCount; j++) {
+          expect(L(i, j), equals(0.0));
+        }
+      }
 
       // Checking U
       final U = lu[1];
       expect(U.rowCount, equals(matrix.rowCount));
       expect(U.columnCount, equals(matrix.columnCount));
       expect(U.isSquareMatrix, isTrue);
-      expect(
-        U.flattenData,
-        orderedEquals(<double>[1, 2, 3, 0, -3, -6, 0, 0, 0]),
-      );
+      // U should be upper triangular
+      for (var i = 0; i < U.rowCount; i++) {
+        for (var j = 0; j < i; j++) {
+          expect(U(i, j), equals(0.0));
+        }
+      }
+
+      // Checking P (permutation matrix)
+      final P = lu[2];
+      expect(P.rowCount, equals(matrix.rowCount));
+      expect(P.columnCount, equals(matrix.columnCount));
+      expect(P.isSquareMatrix, isTrue);
+      // P should be a permutation matrix (each row and column has one 1)
+      for (var i = 0; i < P.rowCount; i++) {
+        var rowSum = 0.0;
+        var colSum = 0.0;
+        for (var j = 0; j < P.columnCount; j++) {
+          rowSum += P(i, j);
+          colSum += P(j, i);
+          expect(P(i, j) == 0.0 || P(i, j) == 1.0, isTrue);
+        }
+        expect(rowSum, equals(1.0));
+        expect(colSum, equals(1.0));
+      }
+
+      // Verify PA = LU (with pivoting, we have PA = LU)
+      final pA = P * matrix;
+      final luMatrix = L * U;
+      for (var i = 0; i < pA.rowCount; i++) {
+        for (var j = 0; j < pA.columnCount; j++) {
+          expect(
+            pA(i, j),
+            MoreOrLessEquals(luMatrix(i, j), precision: 1.0e-10),
+          );
+        }
+      }
     });
 
     test('LU decomposition fails when matrix is not square.', () {

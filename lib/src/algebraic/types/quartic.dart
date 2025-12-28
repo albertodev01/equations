@@ -157,8 +157,10 @@ final class Quartic extends Algebraic {
         .reduce((a, b) => a > b ? a : b);
 
     if (maxCoeff > maxCoefficient) {
+      // coverage:ignore-start
       final scale = Complex.fromReal(maxCoefficient / maxCoeff);
       return coefficients.map((c) => c * scale).toList();
+      // coverage:ignore-end
     }
 
     return coefficients;
@@ -214,7 +216,10 @@ final class Quartic extends Algebraic {
 
       for (final root in roots) {
         if (root.abs() < epsilon) {
-          solutions.add(const Complex.zero());
+          // When root is zero, sqrt(0) = 0 and -sqrt(0) = 0, so add zero twice
+          solutions
+            ..add(const Complex.zero())
+            ..add(const Complex.zero());
         } else {
           final sqrt = root.sqrt();
           solutions

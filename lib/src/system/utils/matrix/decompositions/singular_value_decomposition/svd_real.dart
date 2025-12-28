@@ -7,14 +7,38 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro svd_class_header}
 ///
 /// This class performs the SVD procedure on [RealMatrix] types.
+///
+/// The implementation is optimized for real-valued matrices and uses real
+/// arithmetic throughout. The algorithm efficiently handles both square and
+/// rectangular matrices, with special optimizations for common cases.
+///
+/// Example:
+/// ```dart
+/// final matrix = RealMatrix.fromData(
+///   rows: 2,
+///   columns: 3,
+///   data: [
+///     [1, 2, 3],
+///     [4, 5, 6],
+///   ],
+/// );
+/// final decomposition = SVDReal(matrix: matrix);
+/// final [E, U, V] = decomposition.decompose();
+/// ```
 final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     with MathUtils {
   /// {@macro svd_class_header}
   const SVDReal({required super.matrix});
 
-  /// Reduces the source matrix a to bidiagonal form.
+  /// Reduces the source matrix to bidiagonal form using Householder
+  /// reflections.
   ///
-  /// This is required for the computation of `U` and `V`.
+  /// This is the first step of the SVD algorithm and is required for the
+  /// computation of `U` and `V`. The bidiagonal form simplifies the
+  /// subsequent iterative refinement of singular values.
+  ///
+  /// The method modifies the input matrices in place and populates the
+  /// arrays with the necessary transformation data.
   void _bidiagonalForm({
     required List<List<double>> sourceMatrix,
     required List<List<double>> matrixU,
@@ -137,7 +161,11 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     arrayE[p - 1] = 0.0;
   }
 
-  /// Generation of the `U` from a bidiagonal source.
+  /// Generates the `U` matrix from the bidiagonal transformation data.
+  ///
+  /// This method reconstructs the left singular vectors by accumulating the
+  /// Householder transformations applied during bidiagonalization. The
+  /// resulting matrix U is orthogonal (U^T U = I).
   void _generateU({
     required List<List<double>> matrixU,
     required List<double> arrayS,
@@ -185,7 +213,11 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     }
   }
 
-  /// Generation of the `V` from a bidiagonal source.
+  /// Generates the `V` matrix from the bidiagonal transformation data.
+  ///
+  /// This method reconstructs the right singular vectors by accumulating the
+  /// Householder transformations applied during bidiagonalization. The
+  /// resulting matrix V is orthogonal (V^T V = I).
   void _generateV({
     required List<List<double>> matrixV,
     required List<double> arrayE,

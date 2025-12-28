@@ -93,7 +93,7 @@ final class Brent extends NonLinear {
   bool _condition4(bool flag, double b, double c) =>
       flag && ((b - c).abs() <= tolerance.abs());
 
-  /// Checks if the convergence is too slow when using secant method (flag is false).
+  /// Checks if the convergence is too slow when using secant method.
   ///
   /// Returns `true` if `c` and `d` are very close, indicating that bisection
   /// should be used instead.

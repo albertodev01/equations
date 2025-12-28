@@ -1,11 +1,17 @@
-import 'package:equations/equations.dart';
-
-/// A mixin that contains utility methods for the [RealMatrix] class.
+/// A mixin that contains utility methods for solving linear systems using
+/// triangular matrices.
+///
+/// This mixin provides efficient algorithms for forward and back substitution,
+/// which are commonly used in matrix decomposition methods such as LU
+/// decomposition, Cholesky decomposition, and Gaussian elimination.
 mixin RealMatrixUtils {
-  /// Back substitution is an iterative process that solves equation matrices
-  /// in the form `Ux = b`, where `U` is an upper triangular matrix.
+  /// Solves a system of linear equations using back substitution.
   ///
-  /// In this case, [source] represents `U` and [vector] represents `b`.
+  /// Back substitution is an iterative process that solves equation matrices
+  /// in the form `Ux = b`, where `U` is an upper triangular matrix. This
+  /// algorithm solves the system by starting from the last row and working
+  /// backwards, using previously computed values to solve for the remaining
+  /// unknowns.
   List<double> backSubstitution(
     List<List<double>> source,
     List<double> vector,
@@ -24,10 +30,13 @@ mixin RealMatrixUtils {
     return solutions;
   }
 
-  /// Forward substitution is an iterative process that solves equation matrices
-  /// in the form `Lx = b`, where `L` is a lower triangular matrix.
+  /// Solves a system of linear equations using forward substitution.
   ///
-  /// In this case, [source] represents `L` and [vector] represents `b`.
+  /// Forward substitution is an iterative process that solves equation matrices
+  /// in the form `Lx = b`, where `L` is a lower triangular matrix. This
+  /// algorithm solves the system by starting from the first row and working
+  /// forwards, using previously computed values to solve for the remaining
+  /// unknowns.
   List<double> forwardSubstitution(
     List<List<double>> source,
     List<double> vector,

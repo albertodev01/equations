@@ -304,7 +304,7 @@ base class ComplexMatrix extends Matrix<Complex> {
     // Computing cofactors
     for (var i = 0; i < rowCount; ++i) {
       for (var j = 0; j < columnCount; ++j) {
-        final sign = Complex.fromReal(pow(-1, i + j) * 1.0);
+        final sign = Complex.fromReal(pow(-1, i + j).toDouble());
         source[i][j] = sign * minor(i, j).determinant();
       }
     }
@@ -632,18 +632,15 @@ base class ComplexMatrix extends Matrix<Complex> {
     // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
-        'LU decomposition only works with square matrices!',
+        'Cholesky decomposition only works with square matrices!',
       );
     }
 
-    // Exit immediately because if [0,0] is a negative number, the algorithm
-    // cannot even start since the square root of a negative number in R is not
-    // allowed.
-    if (this(0, 0) <= const Complex.zero()) {
+    final firstDiag = this(0, 0);
+    if (firstDiag.imaginary.abs() > 1.0e-12 || firstDiag.real <= 0) {
       throw const SystemSolverException('The matrix is not positive-definite.');
     }
 
-    // Creating L and Lt matrices
     final L = List<Complex>.generate(
       rowCount * columnCount,
       (_) => const Complex.zero(),
@@ -655,25 +652,61 @@ base class ComplexMatrix extends Matrix<Complex> {
       growable: false,
     );
 
-    // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j <= i; j++) {
+    const blockSize = 16;
+    for (var i = 0; i < rowCount; i += blockSize) {
+      final iEnd = (i + blockSize < rowCount) ? i + blockSize : rowCount;
+
+      for (var j = i; j < iEnd; j++) {
         var sum = const Complex.zero();
-        if (j == i) {
-          for (var k = 0; k < j; k++) {
-            sum += _getDataAt(L, j, k) * _getDataAt(L, j, k);
+        for (var k = 0; k < j; k++) {
+          final ljk = _getDataAt(L, j, k);
+          sum += ljk * ljk;
+        }
+        final diag = this(j, j) - sum;
+        if (diag.imaginary.abs() > 1.0e-12 || diag.real <= 0) {
+          throw const SystemSolverException(
+            'The matrix is not positive-definite.',
+          );
+        }
+        _setDataAt(L, j, j, diag.sqrt());
+
+        // Compute elements below diagonal
+        for (var k = j + 1; k < iEnd; k++) {
+          sum = const Complex.zero();
+          for (var p = 0; p < j; p++) {
+            sum += _getDataAt(L, k, p) * _getDataAt(L, j, p);
           }
-          _setDataAt(L, j, j, (this(i, j) - sum).sqrt());
-        } else {
-          for (var k = 0; k < j; k++) {
-            sum += _getDataAt(L, i, k) * _getDataAt(L, j, k);
+          final ljj = _getDataAt(L, j, j);
+          if (ljj == const Complex.zero()) {
+            throw const SystemSolverException(
+              'Division by zero in Cholesky decomposition. Matrix is singular.',
+            );
           }
-          _setDataAt(L, i, j, (this(i, j) - sum) / _getDataAt(L, j, j));
+          _setDataAt(L, k, j, (this(k, j) - sum) / ljj);
+        }
+      }
+
+      // Process remaining blocks
+      for (var j = iEnd; j < rowCount; j += blockSize) {
+        final jEnd = (j + blockSize < rowCount) ? j + blockSize : rowCount;
+        for (var k = i; k < iEnd; k++) {
+          for (var l = j; l < jEnd; l++) {
+            var sum = const Complex.zero();
+            for (var p = 0; p < k; p++) {
+              sum += _getDataAt(L, l, p) * _getDataAt(L, k, p);
+            }
+            final lkk = _getDataAt(L, k, k);
+            if (lkk == const Complex.zero()) {
+              throw const SystemSolverException(
+                'Division by 0 in Cholesky decomposition. Matrix is singular.',
+              );
+            }
+            _setDataAt(L, l, k, (this(l, k) - sum) / lkk);
+          }
         }
       }
     }
 
-    // Computing Lt, the transposed version of L
     for (var i = 0; i < rowCount; i++) {
       for (var j = 0; j < rowCount; j++) {
         _setDataAt(transpL, i, j, _getDataAt(L, j, i));

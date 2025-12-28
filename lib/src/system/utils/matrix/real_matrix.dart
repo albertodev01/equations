@@ -345,19 +345,14 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   double trace() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException('The matrix is not square!');
     }
 
-    // The trace value
     var trace = 0.0;
-
-    // Computing the trace
     for (var i = 0; i < columnCount; ++i) {
       trace += this(i, i);
     }
-
     return trace;
   }
 
@@ -404,8 +399,6 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     // If it's a square matrix, we can use the LU decomposition which is faster
     if (isSquareMatrix) {
       final lower = luDecomposition().first;
-
-      // Linearly independent columns
       var independentCols = 0;
 
       for (var i = 0; i < lower.rowCount; ++i) {
@@ -419,8 +412,6 @@ base class RealMatrix extends Matrix<double> with MathUtils {
       return independentCols;
     }
 
-    // If the matrix is rectangular and it's not 1x1, then use the "traditional"
-    // algorithm
     var rank = 0;
     final matrix = toListOfList();
 
@@ -461,19 +452,16 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   Algebraic characteristicPolynomial() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
         'Eigenvalues can be computed on square matrices only!',
       );
     }
 
-    // For 1x1 matrices, directly compute it
     if (rowCount == 1) {
       return Linear.realEquation(b: -this(0, 0));
     }
 
-    // For 2x2 matries, use a direct formula which is faster
     if (rowCount == 2) {
       return Quadratic.realEquation(b: -trace(), c: determinant());
     }
@@ -481,9 +469,6 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     // For 3x3 matrices and bigger, use the Faddeev–LeVerrier algorithm
     var supportMatrix = this;
     var oldTrace = supportMatrix.trace();
-
-    // The coefficients of the characteristic polynomial. The coefficient of the
-    // highest degree is always 1.
     final coefficients = <double>[1, -trace()];
 
     for (var i = 1; i < rowCount; ++i) {
@@ -504,16 +489,12 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   List<Complex> eigenvalues() {
-    // Making sure that the matrix is square
     if (!isSquareMatrix) {
       throw const MatrixException(
         'Eigenvalues can be computed on square matrices only!',
       );
     }
 
-    // From now on, we're sure that the matrix is square. If it's 1x1 or 2x2,
-    // computing the roots of the characteristic polynomial is faster and more
-    // precise.
     if (rowCount == 1 || rowCount == 2) {
       return characteristicPolynomial().solutions();
     }
@@ -521,8 +502,6 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
     final eigenDecomposition = EigendecompositionReal(matrix: this);
 
-    // The 'D' matrix contains real and complex coefficients of the eigenvalues
-    // so we can ignore the other 2.
     final decomposition = eigenDecomposition.decompose()[1];
     final eigenvalues = <Complex>[];
 
@@ -530,8 +509,6 @@ base class RealMatrix extends Matrix<double> with MathUtils {
       // The real value is ALWAYS in the diagonal.
       final real = decomposition(i, i);
 
-      // The imaginary part can be either on the right or the left of the main
-      // diagonal, depending on the sign.
       if (i > 0 && i < (decomposition.rowCount - 1)) {
         // Values on the left and right of the diagonal.
         final pre = decomposition(i, i - 1);
@@ -543,8 +520,6 @@ base class RealMatrix extends Matrix<double> with MathUtils {
           eigenvalues.add(Complex(real, pre == 0 ? post : pre));
         }
       } else {
-        // Here the loop is either at (0,0) or at the bottom of the diagonal so
-        // we need to check only one side.
         if (i == 0) {
           eigenvalues.add(Complex(real, decomposition(i, i + 1)));
         } else {
@@ -558,40 +533,81 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   List<RealMatrix> luDecomposition() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
         'LU decomposition only works with square matrices!',
       );
     }
 
+    final n = rowCount;
+    const precision = 1.0e-10;
+
+    final A = List<double>.generate(
+      n * n,
+      (index) => this(index ~/ n, index % n),
+      growable: false,
+    );
+
     // Creating L and U matrices
     final L = List<double>.generate(
-      rowCount * columnCount,
+      n * n,
       (_) => 0.0,
       growable: false,
     );
     final U = List<double>.generate(
-      rowCount * columnCount,
+      n * n,
       (_) => 0.0,
       growable: false,
     );
+    final P = List<int>.generate(n, (i) => i, growable: false);
 
-    // Computing L and U
-    for (var i = 0; i < rowCount; ++i) {
-      for (var k = i; k < rowCount; k++) {
+    for (var i = 0; i < n; ++i) {
+      var maxRow = i;
+      var maxVal = _getDataAt(A, i, i).abs();
+
+      for (var k = i + 1; k < n; k++) {
+        final val = _getDataAt(A, k, i).abs();
+        if (val > maxVal) {
+          maxVal = val;
+          maxRow = k;
+        }
+      }
+
+      if (maxVal <= precision) {
+        throw const MatrixException('Matrix is singular or nearly singular.');
+      }
+
+      if (maxRow != i) {
+        for (var j = 0; j < n; j++) {
+          final temp = _getDataAt(A, i, j);
+          _setDataAt(A, i, j, _getDataAt(A, maxRow, j));
+          _setDataAt(A, maxRow, j, temp);
+        }
+
+        for (var j = 0; j < i; j++) {
+          final temp = _getDataAt(L, i, j);
+          _setDataAt(L, i, j, _getDataAt(L, maxRow, j));
+          _setDataAt(L, maxRow, j, temp);
+        }
+
+        final tempP = P[i];
+        P[i] = P[maxRow];
+        P[maxRow] = tempP;
+      }
+
+      // Compute U[i, k] for k >= i
+      for (var k = i; k < n; k++) {
         // Summation of L(i, j) * U(j, k)
         var sum = 0.0;
         for (var j = 0; j < i; j++) {
           sum += _getDataAt(L, i, j) * _getDataAt(U, j, k);
         }
 
-        // Evaluating U(i, k)
-        _setDataAt(U, i, k, this(i, k) - sum);
+        _setDataAt(U, i, k, _getDataAt(A, i, k) - sum);
       }
 
-      // Lower Triangular
-      for (var k = i; k < rowCount; k++) {
+      // Compute L[k, i] for k > i
+      for (var k = i; k < n; k++) {
         if (i == k) {
           _setDataAt(L, i, i, 1);
         } else {
@@ -601,35 +617,45 @@ base class RealMatrix extends Matrix<double> with MathUtils {
             sum += _getDataAt(L, k, j) * _getDataAt(U, j, i);
           }
 
-          // Evaluating L(k, i)
-          _setDataAt(L, k, i, (this(k, i) - sum) / _getDataAt(U, i, i));
+          final uii = _getDataAt(U, i, i);
+          if (uii.abs() <= precision) {
+            throw const MatrixException(
+              'Division by zero in LU decomposition. Matrix is singular.',
+            );
+          }
+          _setDataAt(L, k, i, (_getDataAt(A, k, i) - sum) / uii);
         }
       }
     }
 
+    final pMatrix = List<double>.generate(
+      n * n,
+      (_) => 0.0,
+      growable: false,
+    );
+    for (var i = 0; i < n; i++) {
+      _setDataAt(pMatrix, i, P[i], 1);
+    }
+
     return [
-      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: L),
-      RealMatrix.fromFlattenedData(rows: rowCount, columns: rowCount, data: U),
+      RealMatrix.fromFlattenedData(rows: n, columns: n, data: L),
+      RealMatrix.fromFlattenedData(rows: n, columns: n, data: U),
+      RealMatrix.fromFlattenedData(rows: n, columns: n, data: pMatrix),
     ];
   }
 
   @override
   List<RealMatrix> choleskyDecomposition() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
       throw const MatrixException(
         'LU decomposition only works with square matrices!',
       );
     }
 
-    // Exit immediately because if [0,0] is a negative number, the algorithm
-    // cannot even start since the square root of a negative number in R is not
-    // allowed.
     if (this(0, 0) <= 0) {
       throw const SystemSolverException('The matrix is not positive-definite.');
     }
 
-    // Creating L and Lt matrices
     final L = List<double>.generate(
       rowCount * columnCount,
       (_) => 0.0,
@@ -640,11 +666,8 @@ base class RealMatrix extends Matrix<double> with MathUtils {
       (_) => 0.0,
       growable: false,
     );
-
-    // Block size for cache optimization
     const blockSize = 32;
 
-    // Computing the L matrix so that A = L * Lt (where 'Lt' is L transposed)
     for (var i = 0; i < rowCount; i += blockSize) {
       final iEnd = (i + blockSize < rowCount) ? i + blockSize : rowCount;
 
@@ -823,7 +846,8 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     // determinant computation happens via LU decomposition. Look at this well
     // known relation:
     //
-    //  det(A) = det(L x U) = det(L) x det(U)
+    //  PA = LU, so det(A) = det(P)^(-1) * det(L) * det(U)
+    //  where det(P) = (-1)^number_of_swaps
     //
     // In particular, the determinant of a lower triangular and an upper
     // triangular matrix is the product of the items in the diagonal.
@@ -842,7 +866,46 @@ base class RealMatrix extends Matrix<double> with MathUtils {
       prodU *= lu[1](i, i);
     }
 
-    return prodL * prodU;
+    // Compute determinant of permutation matrix P
+    // det(P) = sign of permutation = (-1)^number_of_swaps
+    // For a permutation matrix, we can compute the sign by finding cycles
+    final P = lu[2];
+
+    // Find the permutation vector: for each row i, find which column has 1
+    final perm = List<int>.generate(rowCount, (i) {
+      for (var j = 0; j < rowCount; j++) {
+        if (P(i, j) == 1.0) {
+          return j;
+        }
+      }
+      return i; // fallback (shouldn't happen)
+    });
+
+    // Compute sign of permutation by counting inversions
+    // or by decomposing into cycles (simpler: count cycles of even length)
+    final visited = List<bool>.generate(rowCount, (_) => false);
+    var sign = 1;
+    for (var i = 0; i < rowCount; i++) {
+      if (!visited[i] && perm[i] != i) {
+        // Found a cycle, count its length
+        var cycleLength = 0;
+        var j = i;
+        while (!visited[j]) {
+          visited[j] = true;
+          cycleLength++;
+          j = perm[j];
+        }
+        // A cycle of length k has sign (-1)^(k-1)
+        if (cycleLength.isEven) {
+          sign = -sign;
+        }
+      }
+    }
+    final detP = sign.toDouble();
+
+    // det(A) = det(P)^(-1) * det(L) * det(U) = det(P) * det(L) * det(U)
+    // since det(P) = ±1, det(P)^(-1) = det(P)
+    return detP * prodL * prodU;
   }
 
   @override

@@ -230,8 +230,8 @@ void main() {
         w: 1.5,
       );
 
-      expect(diagonallyDominant.isDiagonallyDominant, isTrue);
-      expect(notDiagonallyDominant.isDiagonallyDominant, isFalse);
+      expect(diagonallyDominant.isDiagonallyDominant(), isTrue);
+      expect(notDiagonallyDominant.isDiagonallyDominant(), isFalse);
     });
 
     test('Residual norm computation', () {

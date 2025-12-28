@@ -5,9 +5,28 @@ import 'package:equations/src/utils/math_utils.dart';
 /// {@macro qr_decomposition_class_header}
 ///
 /// This class performs the QR decomposition on [RealMatrix] types.
+///
+/// The implementation uses Householder reflections to compute the
+/// decomposition. The algorithm is numerically stable and handles edge cases
+/// such as zero columns and near-singular matrices.
+///
+/// Example:
+/// ```dart
+/// final matrix = RealMatrix.fromData(
+///   rows: 3,
+///   columns: 2,
+///   data: [
+///     [1, 2],
+///     [3, 4],
+///     [5, 6],
+///   ],
+/// );
+/// final decomposition = QRDecompositionReal(matrix: matrix);
+/// final [Q, R] = decomposition.decompose();
+/// ```
 final class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
     with MathUtils {
-  /// Small value for numerical stability
+  /// Small value for numerical stability checks.
   static const _epsilon = 1e-10;
 
   /// {@macro qr_decomposition_class_header}

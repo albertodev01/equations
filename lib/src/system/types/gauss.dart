@@ -1,24 +1,72 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix_utils.dart';
 
-/// Implementation of the "Gaussian elimination" algorithm, also known as "row
-/// reduction", for solving a system of linear equations. This method only works
-/// with square matrices.
+/// {@template gaussian_elimination}
+/// Solves a system of linear equations using the Gaussian elimination
+/// algorithm, also known as row reduction.
+///
+/// Gaussian elimination is a direct method that transforms the system `Ax = b`
+/// into an upper triangular form through a series of row operations, then
+/// solves the system using back substitution. This implementation uses
+/// partial pivoting to improve numerical stability by selecting the largest
+/// pivot element in each column.
+///
+/// ## When to Use
+///
+/// Gaussian elimination is a general-purpose solver that works for any
+/// non-singular square matrix. It's particularly useful when:
+///
+/// - You need a direct method (no iteration required)
+/// - The matrix isn't symmetric positive-definite (see[CholeskySolver] instead)
+/// - You only need to solve one system (use [LUSolver] for multiple systems)
+/// - You want a straightforward, well-understood algorithm
+///
+/// ## Performance Optimizations
 ///
 /// This implementation is optimized for performance with the following
 /// improvements:
+///
 /// - Uses flattened arrays for better cache locality
 /// - Avoids unnecessary matrix copying
 /// - Implements early termination for singular matrices
 /// - Uses efficient memory access patterns
+///
+/// ## Example
+///
+/// ```dart
+/// final matrix = RealMatrix.fromData(
+///   rows: 3,
+///   columns: 3,
+///   data: [
+///     [2, 1, 1],
+///     [4, -6, 0],
+///     [-2, 7, 2],
+///   ],
+/// );
+///
+/// final solver = GaussianElimination(
+///   matrix: matrix,
+///   knownValues: [5, -2, 9],
+/// );
+///
+/// final solution = solver.solve();
+/// // Returns: [1, 1, 2]
+/// ```
+/// {@endtemplate}
 final class GaussianElimination extends SystemSolver with RealMatrixUtils {
   /// {@macro systems_constructor_intro}
   ///
-  ///  - [matrix] is the matrix containing the equations;
-  ///  - [knownValues] is the vector with the known values.
+  /// {@macro gaussian_elimination}
   ///
-  /// This algorithm swaps rows/columns and uses back substitution to solve the
-  /// system.
+  /// Parameters:
+  ///   - [matrix] is the matrix containing the equations
+  ///   - [knownValues] is the vector with the known values;
+  ///   - [precision] determines the tolerance for detecting singular matrices
+  ///     (defaults to `1.0e-10`).
+  ///
+  /// The algorithm uses partial pivoting to swap rows/columns and back substitution
+  /// to solve the system. Throws a [SystemSolverException] if the matrix is
+  /// singular or nearly singular.
   GaussianElimination({
     required super.matrix,
     required super.knownValues,
@@ -77,9 +125,12 @@ final class GaussianElimination extends SystemSolver with RealMatrixUtils {
         b[maxRow] = temp;
       }
 
+      // Cache the pivot element to avoid repeated access
+      final pivotElement = A[p * n + p];
+
       // Eliminate column below pivot
       for (var i = p + 1; i < n; i++) {
-        final alpha = A[i * n + p] / A[p * n + p];
+        final alpha = A[i * n + p] / pivotElement;
 
         // Early termination if elimination factor is too large (numerical
         // instability)

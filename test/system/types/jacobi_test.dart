@@ -229,8 +229,8 @@ void main() {
         x0: [1, 2],
       );
 
-      expect(diagonallyDominant.isDiagonallyDominant, isTrue);
-      expect(notDiagonallyDominant.isDiagonallyDominant, isFalse);
+      expect(diagonallyDominant.isDiagonallyDominant(), isTrue);
+      expect(notDiagonallyDominant.isDiagonallyDominant(), isFalse);
     });
 
     test('Residual norm computation', () {
@@ -252,32 +252,6 @@ void main() {
 
       // The residual should be small for a good solution
       expect(residualNorm, lessThan(1e-8));
-    });
-
-    test('Solve with info returns convergence information', () {
-      final jacobi = JacobiSolver(
-        matrix: RealMatrix.fromData(
-          rows: 2,
-          columns: 2,
-          data: const [
-            [4, 1],
-            [1, 3],
-          ],
-        ),
-        knownValues: [5, 4],
-        x0: [1, 1],
-      );
-
-      final info = jacobi.solveWithInfo();
-
-      expect(info['solution'], isA<List<double>>());
-      expect(info['iterations'], isA<int>());
-      expect(info['converged'], isA<bool>());
-      expect(info['finalResidual'], isA<double>());
-
-      expect(info['iterations'], greaterThan(0));
-      expect(info['converged'], isTrue);
-      expect(info['finalResidual'], lessThan(1e-8));
     });
 
     test('Throws exception for zero diagonal elements', () {

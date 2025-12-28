@@ -489,6 +489,42 @@ void main() {
         final solutions = equation.solutions();
         expect(solutions.length, equals(2));
       });
+
+      test('Test 8: Aberth guesses are very close', () {
+        final equation = GenericAlgebraic(
+          coefficients: const [
+            Complex.fromReal(1),
+            Complex.fromReal(0.001),
+            Complex.fromReal(0.001),
+            Complex.fromReal(0.001),
+          ],
+          // Larger than typical spacing for small radius
+          minGuessDistance: 0.01,
+        );
+
+        final solutions = equation.solutions();
+        expect(solutions.length, equals(3));
+      });
+
+      test(
+        'Test 9: Polynomial causing small radius',
+        () {
+          final equation = GenericAlgebraic(
+            coefficients: const [
+              Complex.fromReal(1),
+              Complex.fromReal(0.0001),
+              Complex.fromReal(0.0001),
+              Complex.fromReal(0.0001),
+              Complex.fromReal(0.0001),
+            ],
+            // Larger than spacing for very small radius
+            minGuessDistance: 0.001,
+          );
+
+          final solutions = equation.solutions();
+          expect(solutions.length, equals(4));
+        },
+      );
     });
   });
 }

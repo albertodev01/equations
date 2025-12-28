@@ -5,10 +5,33 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 /// {@macro qr_decomposition_class_header}
 ///
 /// This class performs the QR decomposition on [ComplexMatrix] types.
+///
+/// The implementation uses Householder reflections with special handling for
+/// complex numbers to ensure numerical stability. The algorithm computes the
+/// 2-norm of columns using a numerically stable method to avoid overflow and
+/// underflow issues.
+///
+/// Example:
+/// ```dart
+/// final matrix = ComplexMatrix.fromData(
+///   rows: 3,
+///   columns: 2,
+///   data: [
+///     [Complex(1, 0), Complex(2, 1)],
+///     [Complex(3, -1), Complex(4, 0)],
+///     [Complex(5, 2), Complex(6, -1)],
+///   ],
+/// );
+/// final decomposition = QRDecompositionComplex(matrix: matrix);
+/// final [Q, R] = decomposition.decompose();
+/// ```
 final class QRDecompositionComplex
     extends QRDecomposition<Complex, ComplexMatrix> {
+  /// Zero complex number constant.
   static const _zero = Complex.zero();
-  static const _epsilon = 1e-10; // Small value for numerical stability
+
+  /// Small value for numerical stability checks.
+  static const _epsilon = 1e-10;
 
   /// {@macro qr_decomposition_class_header}
   const QRDecompositionComplex({required super.matrix});
@@ -116,7 +139,13 @@ final class QRDecompositionComplex
     ];
   }
 
-  /// Computes the norm of a complex number in a more numerically stable way
+  /// Computes the norm of a complex number in a numerically stable way.
+  ///
+  /// This method computes sqrt(|a|² + |b|²) using a scaling approach to
+  /// prevent overflow and underflow when dealing with very large or very small
+  /// complex numbers.
+  ///
+  /// Returns the norm as a [Complex] number.
   Complex _complexNorm(Complex a, Complex b) {
     final aAbs = a.abs();
     final bAbs = b.abs();
