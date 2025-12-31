@@ -4,9 +4,9 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 /// {@template simpson_rule}
 /// Simpson's Rule is a numerical integration technique that approximates the
 /// value of a definite integral using quadratic polynomials. Given a definite
-/// integral in the form ∫[a,b] f(x) dx, Simpson's rule approximates it as:
+/// integral in the form ∫`[a,b]` f(x) dx, Simpson's rule approximates it as:
 ///
-/// ∫[a,b] f(x) dx ≈ (h/3) * [f(x₀) + 4f(x₁) + 2f(x₂) + ... + 4f(xₙ₋₁) + f(xₙ)]
+/// ∫`[a,b]` f(x) dx ≈ (h/3) * `[f(x₀) + 4f(x₁) + 2f(x₂) + ... + 4f(xₙ₋₁) + f(xₙ)]`
 ///
 /// where:
 /// - h = (b - a) / n is the step size
@@ -18,7 +18,7 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 /// polynomials of degree 3 or less. Here are the requirements for this method:
 ///
 /// - [intervals] must be an even number (required for quadratic approximation);
-/// - the function should be continuous on [lowerBound, upperBound];
+/// - the function should be continuous on `[lowerBound, upperBound]`;
 /// - for best accuracy, the function should be smooth (few discontinuities).
 /// {@endtemplate}
 base class SimpsonRule extends IntervalsIntegration {

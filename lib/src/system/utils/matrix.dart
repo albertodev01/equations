@@ -433,7 +433,10 @@ abstract base class Matrix<T> {
   /// 5×5 or larger matrices, consider using the [eigenvalues] method which is
   /// faster and more accurate.
   ///
-  /// {@macro matrix_not_square_error}
+  /// {@template matrix_not_square_error}
+  /// A [MatrixException] is thrown if the matrix is not square (i.e., if
+  /// [rowCount] != [columnCount]).
+  /// {@endtemplate}
   Algebraic characteristicPolynomial();
 
   /// Returns the eigenvalues associated with this matrix.

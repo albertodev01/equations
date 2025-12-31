@@ -8,7 +8,7 @@ import 'package:equations/equations.dart';
 ///
 ///   - This method does **not** require the derivative _f'(x)_ of the function.
 ///   Instead, it approximates the derivative using the formula:
-///   _g(x) = [f(x + f(x)) - f(x)] / f(x) = f(x + f(x))/f(x) - 1_
+///   _g(x) = `[f(x + f(x)) - f(x)]` / f(x) = f(x + f(x))/f(x) - 1_
 ///
 ///   - The method is extremely powerful but it's not guaranteed to converge to
 ///   a root of `f(x)`. Convergence depends on the choice of the initial guess

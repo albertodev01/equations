@@ -4,9 +4,9 @@ import 'package:equations/src/utils/exceptions/types/numerical_integration_excep
 /// {@template trapezoidal_rule}
 /// The trapezoidal rule is a numerical integration technique for approximating
 /// definite integrals using linear interpolation. Given a definite integral in
-/// the form ∫[a,b] f(x) dx, the trapezoidal rule approximates it as:
+/// the form ∫`[a,b]` f(x) dx, the trapezoidal rule approximates it as:
 ///
-/// ∫[a,b] f(x) dx ≈ (h/2) * [f(x₀) + 2f(x₁) + 2f(x₂) + ... + 2f(xₙ₋₁) + f(xₙ)]
+/// ∫`[a,b]` f(x) dx ≈ (h/2) * `[f(x₀) + 2f(x₁) + 2f(x₂) + ... + 2f(xₙ₋₁) + f(xₙ)]`
 ///
 /// where:
 /// - h = (b - a) / n is the step size

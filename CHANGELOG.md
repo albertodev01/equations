@@ -9,6 +9,7 @@
  - Improvements to numerical stability of various algorithms
  - Fixed numerical issues on polynonial and nonlinear solvers
  - Documentation improvements
+ - Removed demo Dart and Flutter applications from the `example/` folder
  - Dependencies versions update
 
 ## 5.0.2

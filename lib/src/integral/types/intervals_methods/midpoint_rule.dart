@@ -3,9 +3,9 @@ import 'package:equations/equations.dart';
 /// {@template midpoint_rule}
 /// The midpoint rule is a numerical integration technique for approximating
 /// definite integrals using Riemann sums. Given a definite integral in the
-/// form ∫[a,b] f(x) dx, the midpoint rule approximates it as:
+/// form ∫`[a,b]` f(x) dx, the midpoint rule approximates it as:
 ///
-///   ∫[a,b] f(x) dx ≈ h * Σ[i=0 to n-1] f(xᵢ)
+///   ∫`[a,b]` f(x) dx ≈ h * Σ`[i=0 to n-1]` f(xᵢ)
 ///
 /// where:
 /// - h = (b - a) / n is the step size

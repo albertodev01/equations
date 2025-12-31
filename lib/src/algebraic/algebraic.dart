@@ -318,7 +318,7 @@ sealed class Algebraic {
 
   /// Evaluates the definite integral of the polynomial from [lower] to [upper].
   ///
-  /// This method computes ∫[lower, upper] P(x)dx where P is this polynomial.
+  /// This method computes ∫`[lower, upper]` P(x)dx where P is this polynomial.
   /// The integral is computed analytically using the power rule for
   /// integration. For example:
   ///
