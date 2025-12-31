@@ -1,32 +1,37 @@
 import 'package:equations/equations.dart';
 
-/// Implements Seffensen's method to find the roots of a given equation.
+/// {@template steffensen}
+/// Implements Steffensen's method to find the roots of a given equation.
 ///
-/// **Characteristics**:
+///   - The method has quadratic convergence rate when it converges, similar to
+///   [Newton]'s method, making it one of the fastest root-finding algorithms.
 ///
-///   - Similar to [Newton] as they use the same approach and both have a
-///   quadratic convergence.
+///   - This method does **not** require the derivative _f'(x)_ of the function.
+///   Instead, it approximates the derivative using the formula:
+///   _g(x) = `[f(x + f(x)) - f(x)]` / f(x) = f(x + f(x))/f(x) - 1_
 ///
-///   - This method does **not** use the derivative _f'(x)_ of the function.
+///   - The method is extremely powerful but it's not guaranteed to converge to
+///   a root of `f(x)`. Convergence depends on the choice of the initial guess
+///   and the behavior of the function. The method may fail if:
+///     - The initial guess `x0` is too far from the solution
+///     - The function value `f(x)` is very small, causing numerical instability
+///     - The approximated derivative `g(x)` becomes zero, infinite, or NaN
+///     - The function has multiple roots or oscillates
 ///
-///   - If _x0_ is too far from the root, the method might fail so the
-///   convergence is not guaranteed.
+///   - Steffensen's method uses the iterative formula:
+///     `x_{n+1} = x_n - f(x_n) / g(x_n)`
+///     where `g(x_n) = f(x_n + f(x_n))/f(x_n) - 1` approximates the derivative.
+/// {@endtemplate}
 final class Steffensen extends NonLinear {
   /// The initial guess x<sub>0</sub>.
   final double x0;
 
-  /// Creates a [Steffensen] object to find the root of an equation by using
-  /// Steffensen's method.
-  ///
-  ///   - [function]: the function f(x);
-  ///   - [x0]: the initial guess x<sub>0</sub>;
-  ///   - [tolerance]: how accurate the algorithm has to be;
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
+  /// {@macro steffensen}
   const Steffensen({
     required super.function,
     required this.x0,
     super.tolerance = 1.0e-10,
-    super.maxSteps = 15,
+    super.maxSteps = 30,
   });
 
   @override
@@ -56,14 +61,38 @@ final class Steffensen extends NonLinear {
     var x = x0;
     final guesses = <double>[];
 
-    while ((diff >= tolerance) && (n < maxSteps)) {
+    while ((diff >= tolerance) && (n <= maxSteps)) {
       final fx = evaluateOn(x);
+
+      // If we've found the exact root, we're done
+      if (fx == 0) {
+        guesses.add(x);
+        break;
+      }
+
+      // Check for division by zero when computing gx
+      if (fx.isNaN || fx.isInfinite) {
+        throw NonlinearException(
+          "Couldn't evaluate f($x). "
+          'The function value is ${fx.isNaN ? "NaN" : "infinite"}.',
+        );
+      }
+
       final gx = (evaluateOn(x + fx) / fx) - 1;
 
-      x = x - fx / gx;
+      // Check for division by zero or invalid values when using gx
+      if ((gx == 0) || (gx.isNaN) || (gx.isInfinite)) {
+        throw NonlinearException(
+          "Couldn't compute the next iteration at x = $x. "
+          'The value g(x) is not well defined',
+        );
+      }
+
+      final delta = fx / gx;
+      x -= delta;
       guesses.add(x);
 
-      diff = (-fx / gx).abs();
+      diff = delta.abs();
       ++n;
     }
 

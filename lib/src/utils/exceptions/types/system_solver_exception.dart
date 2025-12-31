@@ -1,11 +1,13 @@
 import 'package:equations/equations.dart';
 
+/// {@template system_solver_exception}
 /// Exception object thrown by [SystemSolver].
+/// {@endtemplate}
 class SystemSolverException extends EquationException {
-  /// Represents an exception from the [SystemSolver] class.
+  /// {@macro system_solver_exception}
   const SystemSolverException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'SystemSolverException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'SystemSolverException',
+      );
 }

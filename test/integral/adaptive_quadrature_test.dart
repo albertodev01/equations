@@ -14,8 +14,8 @@ void main() {
     );
   });
 
-  group('Testing the behaviors of the AdaptiveQuadrature class.', () {
-    test("Making sure that a 'AdaptiveQuadrature' works properly.", () {
+  group('AdaptiveQuadrature.', () {
+    test('Integration of sin(x)-3 on [2, -3].', () {
       expect(quadrature.lowerBound, equals(2));
       expect(quadrature.upperBound, equals(-3));
       expect(quadrature.function, equals('sin(x)-3'));
@@ -27,12 +27,12 @@ void main() {
       expect(results.guesses.length, greaterThan(0));
     });
 
-    test("Making sure that AdaptiveQuadrature's toString() method works.", () {
+    test('toString()', () {
       const strResult = 'sin(x)-3 on [2.00, -3.00]';
       expect(quadrature.toString(), equals(strResult));
     });
 
-    test('Making sure that MidpointRule can be properly compared.', () {
+    test('Object comparison.', () {
       const quadrature2 = AdaptiveQuadrature(
         function: 'sin(x)-3',
         lowerBound: 2,
@@ -96,35 +96,52 @@ void main() {
       );
     });
 
-    test('Batch tests', () {
-      final equations = [
-        'cos(x)-x^2',
-        'e^(x-1)/(x^2+3*x-8)',
-        'sin(x+2)*(x-1)+sqrt(x)',
-        'abs(x-2)*e^x',
-        'log(x+sqrt(x))',
-      ];
-
-      final solution = <List<double>>[
-        [2, 3, -7.101],
-        [4, 5.25, 1.769],
-        [3, 4, 0.235],
-        [-2, 0, 2.323],
-        [1, 1.25, 0.195],
-      ];
-
-      for (var i = 0; i < equations.length; ++i) {
+    group('Solutions tests', () {
+      void verifyAdaptiveQuadrature(
+        String function,
+        double lowerBound,
+        double upperBound,
+        double expectedResult,
+      ) {
         final result = AdaptiveQuadrature(
-          function: equations[i],
-          lowerBound: solution[i].first,
-          upperBound: solution[i][1],
+          function: function,
+          lowerBound: lowerBound,
+          upperBound: upperBound,
         ).integrate();
 
         expect(
           result.result,
-          MoreOrLessEquals(solution[i][2], precision: 1.0e-3),
+          MoreOrLessEquals(expectedResult, precision: 1.0e-3),
         );
       }
+
+      test('Test 1', () {
+        verifyAdaptiveQuadrature('cos(x)-x^2', 2, 3, -7.101);
+      });
+
+      test('Test 2', () {
+        verifyAdaptiveQuadrature('e^(x-1)/(x^2+3*x-8)', 4, 5.25, 1.769);
+      });
+
+      test('Test 3', () {
+        verifyAdaptiveQuadrature('sin(x+2)*(x-1)+sqrt(x)', 3, 4, 0.235);
+      });
+
+      test('Test 4', () {
+        verifyAdaptiveQuadrature('abs(x-2)*e^x', -2, 0, 2.323);
+      });
+
+      test('Test 5', () {
+        verifyAdaptiveQuadrature('log(x+sqrt(x))', 1, 1.25, 0.195);
+      });
+
+      test('Test 6', () {
+        verifyAdaptiveQuadrature('x', 1, 2, 1.5);
+      });
+
+      test('Test 7', () {
+        verifyAdaptiveQuadrature('0', -1, 1, 0);
+      });
     });
   });
 }

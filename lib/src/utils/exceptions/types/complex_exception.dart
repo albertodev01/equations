@@ -1,11 +1,13 @@
 import 'package:equations/equations.dart';
 
+/// {@template complex_exception}
 /// Exception object thrown by [Complex].
+/// {@endtemplate}
 class ComplexException extends EquationException {
-  /// Represents an exception from the [Complex] class.
+  /// {@macro complex_exception}
   const ComplexException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'ComplexException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'ComplexException',
+      );
 }

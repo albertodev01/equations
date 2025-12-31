@@ -1,4 +1,6 @@
-/// Base class for exception objects in this package.
+/// {@template equation_exception}
+/// Base class for exception objects in the equations package.
+/// {@endtemplate}
 abstract class EquationException implements Exception {
   /// The error message.
   final String message;
@@ -15,7 +17,7 @@ abstract class EquationException implements Exception {
   /// always put before the actual error message.
   final String messagePrefix;
 
-  /// Requires the [message] to be associated to the error object.
+  /// {@macro equation_exception}
   const EquationException({
     required this.message,
     required this.messagePrefix,

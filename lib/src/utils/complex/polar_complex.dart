@@ -1,8 +1,11 @@
 import 'package:equations/equations.dart';
 
+/// {@template polar_complex}
 /// A wrapper class, returned by a [Complex] object, that represents a complex
 /// number in polar coordinates.
+/// {@endtemplate}
 final class PolarComplex implements Comparable<PolarComplex> {
+  /// {@macro polar_complex}
   /// The absolute value/modulus of the complex number.
   final double r;
 
@@ -12,8 +15,7 @@ final class PolarComplex implements Comparable<PolarComplex> {
   /// The 'phi' angle expressed in degrees.
   final double phiDegrees;
 
-  /// The angle [r] is required both in radians ([phiRadians]) and degrees.
-  /// ([phiDegrees]).
+  /// {@macro polar_complex}
   const PolarComplex({
     required this.r,
     required this.phiRadians,
@@ -21,7 +23,8 @@ final class PolarComplex implements Comparable<PolarComplex> {
   });
 
   @override
-  String toString() => 'r = $r\n'
+  String toString() =>
+      'r = $r\n'
       'phi (rad) = $phiRadians\n'
       'phi (deg) = $phiDegrees';
 
@@ -73,10 +76,9 @@ final class PolarComplex implements Comparable<PolarComplex> {
     double? r,
     double? phiRadians,
     double? phiDegrees,
-  }) =>
-      PolarComplex(
-        r: r ?? this.r,
-        phiDegrees: phiDegrees ?? this.phiDegrees,
-        phiRadians: phiRadians ?? this.phiRadians,
-      );
+  }) => PolarComplex(
+    r: r ?? this.r,
+    phiDegrees: phiDegrees ?? this.phiDegrees,
+    phiRadians: phiRadians ?? this.phiRadians,
+  );
 }

@@ -1,11 +1,13 @@
 import 'package:equations/equations.dart';
 
+/// {@template algebraic_exception}
 /// Exception object thrown by [Algebraic].
+/// {@endtemplate}
 class AlgebraicException extends EquationException {
-  /// Represents an exception from the [Algebraic] class.
+  /// {@macro algebraic_exception}
   const AlgebraicException(String message)
-      : super(
-          message: message,
-          messagePrefix: 'AlgebraicException',
-        );
+    : super(
+        message: message,
+        messagePrefix: 'AlgebraicException',
+      );
 }

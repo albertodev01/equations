@@ -1,8 +1,10 @@
 import 'package:equations/equations.dart';
 
+/// {@template interpolation_node}
 /// A point in the cartesian coordinate system used by [Interpolation] types to
 /// represent interpolation nodes. This class simply represents the `x` and `y`
 /// coordinates of a point on a cartesian plane.
+/// {@endtemplate}
 final class InterpolationNode {
   /// The x coordinate.
   final double x;

@@ -1,16 +1,32 @@
 import 'package:equations/equations.dart';
 
-/// Implements the regula falsi method (also known as "_false position method_")
-/// to find the roots of a given equation.
+/// {@template regula_falsi}
+/// Implements the regula falsi method (also known as the "_false position
+/// method_") to find the roots of a given equation.
 ///
-/// **Characteristics**:
+///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
+///     continuous function on the interval `[a, b]`.
 ///
-///   - The method requires the root to be bracketed between two points `a` and
-///   `b` otherwise it won't work.
+///   - The values of `f(a)` and `f(b)` must have opposite signs (i.e.,
+///     `f(a) * f(b) < 0`), which ensures that at least one root exists in the
+///     interval by the Intermediate Value Theorem.
 ///
-///   - If you cannot assume that a function may be interpolated by a linear
-///   function, then applying this method method could result in worse results
-///   than the bisection method.
+///   - The method has linear convergence rate, similar to bisection, but
+///     typically converges faster when the function is well-approximated by a
+///     linear function near the root.
+///
+///   - If the function cannot be well-approximated by a linear function, the
+///     method may converge slower than bisection, especially when one endpoint
+///     of the interval remains fixed for many iterations.
+///
+///   - The algorithm uses the formula:
+///     `c = (f(a) * b - f(b) * a) / (f(a) - f(b))`
+///     which finds the intersection of the line through `(a, f(a))` and
+///     `(b, f(b))` with the x-axis.
+///
+///   - The interval is repeatedly narrowed by replacing one endpoint with the
+///     computed intersection point, maintaining the bracketing condition.
+/// {@endtemplate}
 final class RegulaFalsi extends NonLinear {
   /// The starting point of the interval.
   final double a;
@@ -18,20 +34,13 @@ final class RegulaFalsi extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Creates a [RegulaFalsi] object to find the root of an equation by using
-  /// the regula falsi method.
-  ///
-  ///   - [function]: the function f(x);
-  ///   - [a]: the first interval in which evaluate `f(a)`;
-  ///   - [b]: the second interval in which evaluate `f(b)`;
-  ///   - [tolerance]: how accurate the algorithm has to be;
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
+  /// {@macro regula_falsi}
   const RegulaFalsi({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
-    super.maxSteps = 15,
+    super.maxSteps = 30,
   });
 
   @override
@@ -57,43 +66,79 @@ final class RegulaFalsi extends NonLinear {
 
   @override
   ({List<double> guesses, double convergence, double efficiency}) solve() {
-    // Exit immediately if the root is not bracketed
-    if (evaluateOn(a) * evaluateOn(b) >= 0) {
-      throw NonlinearException('The root is not bracketed in [$a, $b]');
+    // Validate that the root is bracketed in the interval
+    final evalA = evaluateOn(a);
+    final evalB = evaluateOn(b);
+
+    if (evalA * evalB > 0) {
+      throw NonlinearException(
+        'The root is not bracketed in [$a, $b]. '
+        'f(a) and f(b) must have opposite signs.',
+      );
+    }
+
+    // Check if we've already found the root at one of the initial points
+    if (evalA == 0) {
+      return (
+        guesses: [a],
+        convergence: convergence([a], maxSteps),
+        efficiency: efficiency([a], maxSteps),
+      );
+    }
+    if (evalB == 0) {
+      return (
+        guesses: [b],
+        convergence: convergence([b], maxSteps),
+        efficiency: efficiency([b], maxSteps),
+      );
     }
 
     final guesses = <double>[];
-    var toleranceCheck = true;
     var n = 1;
+    var intervalA = a;
+    var intervalB = b;
+    var fa = evalA;
 
-    var tempA = a;
-    var tempB = b;
+    while (n <= maxSteps) {
+      // Evaluate function at the current interval endpoints
+      final fb = evaluateOn(intervalB);
 
-    while (toleranceCheck && (n <= maxSteps)) {
-      // Evaluating on A and B the function
-      final fa = evaluateOn(tempA);
-      final fb = evaluateOn(tempB);
-
-      // Computing the guess
-      final c = (fa * tempB - fb * tempA) / (fa - fb);
+      // Compute the intersection point using the regula falsi formula:
+      // c = (f(a) * b - f(b) * a) / (f(a) - f(b))
+      final c = (fa * intervalB - fb * intervalA) / (fa - fb);
       final fc = evaluateOn(c);
 
-      // Making sure the evaluation is not zero
+      // Check for invalid function values
+      if (fc.isNaN || fc.isInfinite) {
+        throw NonlinearException(
+          'Function evaluation resulted in invalid value at iteration $n. '
+          'f($c) = $fc. The function may not be well-defined at this point.',
+        );
+      }
+
+      // Add the guess to the list
+      guesses.add(c);
+
+      // Check if we've found the exact root
       if (fc == 0) {
         break;
       }
 
-      // Shrink the interval
-      if (fa * fc < 0) {
-        tempB = c;
-      } else {
-        tempA = c;
+      // Check if we've reached the desired tolerance
+      if (fc.abs() <= tolerance) {
+        break;
       }
 
-      // Add the root to the list
-      guesses.add(c);
+      // Shrink the interval while maintaining the bracketing condition
+      if (fa * fc < 0) {
+        // Root is in [intervalA, c]
+        intervalB = c;
+      } else {
+        // Root is in [c, intervalB]
+        intervalA = c;
+        fa = fc;
+      }
 
-      toleranceCheck = fc.abs() > tolerance;
       ++n;
     }
 

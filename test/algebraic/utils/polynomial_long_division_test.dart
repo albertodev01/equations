@@ -2,24 +2,21 @@ import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Testing the behaviors of the PolynomialLongDivision class.', () {
+  group('PolynomialLongDivision', () {
     final results = PolynomialLongDivision(
       polyNumerator: Algebraic.fromReal([1, -3, 6, 7.8]),
       polyDenominator: Algebraic.fromReal([2, -9]),
     );
 
-    test('Making sure that values are properly constructed.', () {
+    test('Smoke test', () {
       expect(
         results.polyNumerator,
         equals(Algebraic.fromReal([1, -3, 6, 7.8])),
       );
-      expect(
-        results.polyDenominator,
-        equals(Algebraic.fromReal([2, -9])),
-      );
+      expect(results.polyDenominator, equals(Algebraic.fromReal([2, -9])));
     });
 
-    test("Making sure that 'toString()' is properly overridden", () {
+    test('toString()', () {
       final results = PolynomialLongDivision(
         polyNumerator: Algebraic.fromReal([1, 2, 3]),
         polyDenominator: Algebraic.fromReal([2, 1]),
@@ -28,7 +25,7 @@ void main() {
       expect(results.toString(), equals('(1x^2 + 2x + 3) / (2x + 1)'));
     });
 
-    test('Making sure that instances can be properly compared.', () {
+    test('Object comparison', () {
       final results2 = PolynomialLongDivision(
         polyNumerator: Algebraic.fromReal([1, -3, 6, 7.8]),
         polyDenominator: Algebraic.fromReal([2, -9]),
@@ -83,23 +80,16 @@ void main() {
       );
     });
 
-    test(
-      'Making sure that an exception is thrown if the degree of the '
-      'denominator is bigger than the degree of the numerator.',
-      () {
-        final results = PolynomialLongDivision(
-          polyNumerator: Algebraic.fromReal([1, 2, 3]),
-          polyDenominator: Algebraic.fromReal([2, 1, 0, -1]),
-        );
+    test('Exception is thrown if degree denominator > degree numerator', () {
+      final results = PolynomialLongDivision(
+        polyNumerator: Algebraic.fromReal([1, 2, 3]),
+        polyDenominator: Algebraic.fromReal([2, 1, 0, -1]),
+      );
 
-        expect(
-          results.divide,
-          throwsA(isA<PolynomialLongDivisionException>()),
-        );
-      },
-    );
+      expect(results.divide, throwsA(isA<PolynomialLongDivisionException>()));
+    });
 
-    test("Making sure that the 'divide()' method works properly", () {
+    test('divide() method', () {
       final polyLongDivision = PolynomialLongDivision(
         polyNumerator: Algebraic.fromReal([1, 3, -6]),
         polyDenominator: Algebraic.fromReal([1, 7]),
@@ -111,63 +101,79 @@ void main() {
       expect(results.remainder, equals(Algebraic.fromReal([22])));
     });
 
-    test(
-      'Making sure that quotient 1 and remainder 0 are returned when '
-      'dividing the same polynomials',
-      () {
-        final polyLongDivision = PolynomialLongDivision(
-          polyNumerator: Algebraic.fromReal([1, 3, -6]),
-          polyDenominator: Algebraic.fromReal([1, 3, -6]),
-        );
+    test('Quotient 1 and remainder 0 if polynomials are equal', () {
+      final polyLongDivision = PolynomialLongDivision(
+        polyNumerator: Algebraic.fromReal([1, 3, -6]),
+        polyDenominator: Algebraic.fromReal([1, 3, -6]),
+      );
 
-        final results = polyLongDivision.divide();
+      final results = polyLongDivision.divide();
 
-        expect(results.quotient, equals(Algebraic.fromReal([1])));
-        expect(results.remainder, equals(Algebraic.fromReal([0])));
-      },
-    );
+      expect(results.quotient, equals(Algebraic.fromReal([1])));
+      expect(results.remainder, equals(Algebraic.fromReal([0])));
+    });
 
-    test('Batch tests', () {
-      final dividends = [
-        Algebraic.fromReal([3, -5, 10, -3]),
-        Algebraic.fromReal([2, -9, 0, 15]),
-        Algebraic.fromReal([1, 5]),
-        Algebraic.fromReal([1, -3, 0]),
-        Algebraic.fromReal([26]),
-      ];
-      final divisors = [
-        Algebraic.fromReal([3, 1]),
-        Algebraic.fromReal([2, -5]),
-        Algebraic.fromReal([1, 5]),
-        Algebraic.fromReal([1, 0, 1]),
-        Algebraic.fromReal([2]),
-      ];
-      final results = [
-        AlgebraicDivision(
+    group('Division tests', () {
+      test('Test 1: (3x^3 - 5x^2 + 10x - 3) / (3x + 1)', () {
+        final dividend = Algebraic.fromReal([3, -5, 10, -3]);
+        final divisor = Algebraic.fromReal([3, 1]);
+        final expected = (
           quotient: Algebraic.fromReal([1, -2, 4]),
           remainder: Algebraic.fromReal([-7]),
-        ),
-        AlgebraicDivision(
+        );
+        expect(dividend / divisor, equals(expected));
+      });
+
+      test('Test 2: (2x^3 - 9x^2 + 15) / (2x - 5)', () {
+        final dividend = Algebraic.fromReal([2, -9, 0, 15]);
+        final divisor = Algebraic.fromReal([2, -5]);
+        final expected = (
           quotient: Algebraic.fromReal([1, -2, -5]),
           remainder: Algebraic.fromReal([-10]),
-        ),
-        AlgebraicDivision(
+        );
+        expect(dividend / divisor, equals(expected));
+      });
+
+      test('Test 3: (x + 5) / (x + 5)', () {
+        final dividend = Algebraic.fromReal([1, 5]);
+        final divisor = Algebraic.fromReal([1, 5]);
+        final expected = (
           quotient: Algebraic.fromReal([1]),
           remainder: Algebraic.fromReal([0]),
-        ),
-        AlgebraicDivision(
+        );
+        expect(dividend / divisor, equals(expected));
+      });
+
+      test('Test 4: (x^2 - 3x) / (x^2 + 1)', () {
+        final dividend = Algebraic.fromReal([1, -3, 0]);
+        final divisor = Algebraic.fromReal([1, 0, 1]);
+        final expected = (
           quotient: Algebraic.fromReal([1]),
           remainder: Algebraic.fromReal([-3, -1]),
-        ),
-        AlgebraicDivision(
+        );
+        expect(dividend / divisor, equals(expected));
+      });
+
+      test('Test 5: 26 / 2', () {
+        final dividend = Algebraic.fromReal([26]);
+        final divisor = Algebraic.fromReal([2]);
+        final expected = (
           quotient: Algebraic.fromReal([13]),
           remainder: Algebraic.fromReal([0]),
-        ),
-      ];
+        );
+        expect(dividend / divisor, equals(expected));
+      });
 
-      for (var i = 0; i < results.length; ++i) {
-        expect(dividends[i] / divisors[i], equals(results[i]));
-      }
+      test('Test 6: Division resulting in empty remainder (all zeros)', () {
+        final dividend = Algebraic.fromReal([2, 4, 2]); // 2x^2 + 4x + 2
+        final divisor = Algebraic.fromReal([1, 1]); // x + 1
+        final result = PolynomialLongDivision(
+          polyNumerator: dividend,
+          polyDenominator: divisor,
+        ).divide();
+        expect(result.remainder.coefficients.length, greaterThan(0));
+        expect(result.remainder.coefficients.every((c) => c.isZero), isTrue);
+      });
     });
   });
 }

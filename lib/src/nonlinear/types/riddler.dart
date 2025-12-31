@@ -2,15 +2,30 @@ import 'dart:math';
 
 import 'package:equations/equations.dart';
 
-/// Implements the Riddler's method to find the roots of a given equation.
+/// {@template riddler}
+/// Implements Riddler's method (also known as the Ridders' method) to find the
+/// roots of a given equation.
 ///
-/// **Characteristics**:
+/// Uses exponential interpolation to find the root. It's a modification of the
+/// false position method that improves convergence.
 ///
 ///   - The method requires the root to be bracketed between two points `a` and
-///   `b` otherwise it won't work.
+///     `b` (i.e., `f(a) * f(b) < 0`), otherwise it won't work.
 ///
-///   - The rate of convergence is `sqrt(2)` and the convergence is guaranteed
-///   for not well-behaved functions.
+///   - The rate of convergence is approximately `sqrt(2)` (superlinear), which
+///     is faster than bisection but slower than Newton's method.
+///
+///   - The convergence is guaranteed for continuous functions when the root is
+///     properly bracketed, making it more reliable than methods like Newton's
+///     method for ill-behaved functions.
+///
+///   - The algorithm uses the formula:
+///     `x = x2 + (x2 - x0) * sign(y0 - y1) * y2 / sqrt(y2^2 - y0 * y1)`
+///     where `x2` is the midpoint and `y0`, `y1`, `y2` are function values.
+///
+///   - The method may fail if the expression under the square root becomes
+///     negative or zero, in which case the algorithm falls back to bisection.
+/// {@endtemplate}
 final class Riddler extends NonLinear {
   /// The starting point of the interval.
   final double a;
@@ -18,20 +33,13 @@ final class Riddler extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Creates a [Riddler] object to find the root of an equation using Riddler's
-  /// method.
-  ///
-  ///   - [function]: the function f(x);
-  ///   - [a]: the first interval in which evaluate `f(a)`;
-  ///   - [b]: the second interval in which evaluate `f(b)`;
-  ///   - [tolerance]: how accurate the algorithm has to be;
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
+  /// {@macro riddler}
   const Riddler({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
-    super.maxSteps = 15,
+    super.maxSteps = 30,
   });
 
   @override
@@ -57,9 +65,15 @@ final class Riddler extends NonLinear {
 
   @override
   ({List<double> guesses, double convergence, double efficiency}) solve() {
-    // Exit immediately if the root is not bracketed
-    if (evaluateOn(a) * evaluateOn(b) >= 0) {
-      throw NonlinearException('The root is not bracketed in [$a, $b]');
+    // Validate that the root is bracketed in the interval
+    final evalA = evaluateOn(a);
+    final evalB = evaluateOn(b);
+
+    if (evalA * evalB >= 0) {
+      throw NonlinearException(
+        'The root is not bracketed in [$a, $b]. '
+        'f(a) and f(b) must have opposite signs.',
+      );
     }
 
     final guesses = <double>[];
@@ -67,40 +81,78 @@ final class Riddler extends NonLinear {
 
     var x0 = a;
     var x1 = b;
-    var y0 = evaluateOn(x0);
-    var y1 = evaluateOn(x1);
+    var y0 = evalA.toDouble();
+    var y1 = evalB.toDouble();
 
     while (n <= maxSteps) {
+      // Calculate the midpoint
       final x2 = (x0 + x1) / 2;
-      final y2 = evaluateOn(x2);
+      final y2 = evaluateOn(x2).toDouble();
 
-      // The guess on the n-th iteration
-      final x = x2 + (x2 - x0) * (y0 - y1).sign * y2 / sqrt(y2 * y2 - y0 * y1);
-
-      // Add the root to the list
-      guesses.add(x);
-
-      // Tolerance
-      if (min<double>((x - x0).abs(), (x - x1).abs()) < tolerance) {
+      // Check if we've found the exact root at the midpoint
+      if (y2 == 0) {
+        guesses.add(x2);
         break;
       }
 
-      final y = evaluateOn(x);
+      // Check for invalid function values
+      if (y2.isNaN || y2.isInfinite) {
+        throw NonlinearException(
+          "Couldn't evaluate f($x2). "
+          'The function value is ${y2.isNaN ? "NaN" : "infinite"}.',
+        );
+      }
 
-      // Fixing signs
+      // Compute the expression under the square root: y2^2 - y0 * y1
+      final discriminant = y2 * y2 - y0 * y1;
+
+      // Use Riddler's formula if the discriminant is positive and non-zero
+      // Otherwise, fall back to bisection for numerical stability
+      double x;
+      if (discriminant > 0) {
+        final sqrtDiscriminant = sqrt(discriminant);
+        if (sqrtDiscriminant == 0) {
+          // Fall back to bisection
+          x = x2;
+        } else {
+          // x = x2 + (x2 - x0) * sign(y0 - y1) * y2 / sqrt(y2^2 - y0 * y1)
+          x = x2 + (x2 - x0) * (y0 - y1).sign * y2 / sqrtDiscriminant;
+        }
+      } else {
+        // Discriminant is negative or zero, fall back to bisection
+        x = x2;
+      }
+
+      // Ensure the new guess is within the current interval
+      // If it's outside, clamp it to the interval bounds
+      if (x < x0 || x > x1) {
+        x = x2; // Use midpoint if the formula gives an invalid result
+      }
+
+      // Check convergence: either the interval is small enough or the function
+      // value is close to zero
+      final y = evaluateOn(x).toDouble();
+      guesses.add(x);
+
+      if (y.abs() < tolerance || (x1 - x0).abs() < tolerance) {
+        break;
+      }
+
+      // Early exit if we've found the exact root
+      if (y == 0) {
+        break;
+      }
+
+      // Update the interval based on the sign of the function values
+      // The root must be between points with opposite signs
       if (y2.sign != y.sign) {
         x0 = x2;
         y0 = y2;
         x1 = x;
         y1 = y;
       } else {
-        if (y1.sign != y.sign) {
-          x0 = x;
-          y0 = y;
-        } else {
-          x1 = x;
-          y1 = y;
-        }
+        x0 = x;
+        y0 = y;
       }
 
       ++n;

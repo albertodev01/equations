@@ -3,10 +3,9 @@ import 'package:equations/src/interpolation/utils/spline_function.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group("Testing the 'SplineFunction' class", () {
+  group('SplineFunction', () {
     test(
-      'Making sure that an exception is thrown when the control points do '
-      'NOT have increasing values on the "x" coordinate',
+      'Exception thrown when control points do not have increasing x values',
       () {
         expect(
           () => SplineFunction.generate(
@@ -22,8 +21,7 @@ void main() {
     );
 
     test(
-      'Making sure that an exception is thrown when there are less than 2 '
-      'control points in the nodes list.',
+      'Exception thrown when less than 2 control points in the list.',
       () {
         expect(
           () => SplineFunction.generate(
@@ -37,8 +35,7 @@ void main() {
     );
 
     test(
-      'Making sure that "MonotoneCubicSpline" is returned when the given '
-      'nodes are monotonic.',
+      'MonotoneCubicSpline returned when nodes are monotonic.',
       () {
         expect(
           SplineFunction.generate(
@@ -53,8 +50,7 @@ void main() {
     );
 
     test(
-      'Making sure that "MonotoneCubicSpline" is returned when the given '
-      'nodes are NOT monotonic.',
+      'LinearSpline returned when nodes are not monotonic.',
       () {
         expect(
           SplineFunction.generate(

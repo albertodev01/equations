@@ -2,10 +2,12 @@ import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
 
+/// {@template complex}
 /// A Dart representation of a complex number in the form `a + bi` where `a` is
 /// the real part and `bi` is the imaginary (or complex) part.
 ///
 /// A [Complex] object is **immutable**.
+/// {@endtemplate}
 final class Complex implements Comparable<Complex> {
   /// The real part of the complex number.
   final double real;
@@ -108,11 +110,14 @@ final class Complex implements Comparable<Complex> {
     //
     // Instead, '>' and '<' are more reliable in terms of machine precision so
     // 0 is just a fallback.
-    if (abs() > other.abs()) {
+    final thisAbs = abs();
+    final otherAbs = other.abs();
+
+    if (thisAbs > otherAbs) {
       return 1;
     }
 
-    if (abs() < other.abs()) {
+    if (thisAbs < otherAbs) {
       return -1;
     }
 
@@ -123,11 +128,10 @@ final class Complex implements Comparable<Complex> {
   Complex copyWith({
     double? real,
     double? imaginary,
-  }) =>
-      Complex(
-        real ?? this.real,
-        imaginary ?? this.imaginary,
-      );
+  }) => Complex(
+    real ?? this.real,
+    imaginary ?? this.imaginary,
+  );
 
   @override
   String toString() => _convertToString();
@@ -172,11 +176,14 @@ final class Complex implements Comparable<Complex> {
 
   /// Converts this object into polar coordinates and wraps them in a new
   /// [PolarComplex] object.
-  PolarComplex toPolarCoordinates() => PolarComplex(
-        r: abs(),
-        phiRadians: phase(),
-        phiDegrees: _radToDeg(phase()),
-      );
+  PolarComplex toPolarCoordinates() {
+    final phi = phase();
+    return PolarComplex(
+      r: abs(),
+      phiRadians: phi,
+      phiDegrees: _radToDeg(phi),
+    );
+  }
 
   /// Converts this complex number into a string. If [asFraction] is `true` then
   /// the real and the imaginary part are converted into fractions.
@@ -236,15 +243,15 @@ final class Complex implements Comparable<Complex> {
 
   /// Sums two complex numbers.
   Complex operator +(Complex other) => Complex(
-        real + other.real,
-        imaginary + other.imaginary,
-      );
+    real + other.real,
+    imaginary + other.imaginary,
+  );
 
   /// Subtracts two complex numbers.
   Complex operator -(Complex other) => Complex(
-        real - other.real,
-        imaginary - other.imaginary,
-      );
+    real - other.real,
+    imaginary - other.imaginary,
+  );
 
   /// The products of two complex numbers.
   Complex operator *(Complex other) {
@@ -255,7 +262,13 @@ final class Complex implements Comparable<Complex> {
   }
 
   /// Divides two complex numbers.
-  Complex operator /(Complex other) => this * other.reciprocal();
+  Complex operator /(Complex other) {
+    final realNum = (real * other.real) + (imaginary * other.imaginary);
+    final imagNum = (imaginary * other.real) - (real * other.imaginary);
+    final den = other.real * other.real + other.imaginary * other.imaginary;
+
+    return Complex(realNum / den, imagNum / den);
+  }
 
   /// Returns the negation of this complex number.
   Complex operator -() => negate;
@@ -309,13 +322,7 @@ final class Complex implements Comparable<Complex> {
   /// is the real part and `b` is the imaginary part.
   ///
   /// This is is the modulus/magnitude/absolute value of the complex number.
-  double abs() {
-    if ((real != 0) || (imaginary != 0)) {
-      return math.sqrt(real * real + imaginary * imaginary);
-    }
-
-    return 0;
-  }
+  double abs() => math.sqrt(real * real + imaginary * imaginary);
 
   /// Converts rectangular coordinates to polar coordinates by computing an arc
   /// tangent of y/x in the range from -pi to pi.
@@ -323,22 +330,25 @@ final class Complex implements Comparable<Complex> {
 
   /// Calculates the _base-e_ exponential of a complex number z where _e_ is the
   /// Euler constant.
-  Complex exp() => Complex(
-        math.exp(real) * math.cos(imaginary),
-        math.exp(real) * math.sin(imaginary),
-      );
+  Complex exp() {
+    final expReal = math.exp(real);
+    return Complex(
+      expReal * math.cos(imaginary),
+      expReal * math.sin(imaginary),
+    );
+  }
 
   /// Calculates the sine of this complex number.
   Complex sin() => Complex(
-        math.sin(real) * _cosh(imaginary),
-        math.cos(real) * _sinh(imaginary),
-      );
+    math.sin(real) * _cosh(imaginary),
+    math.cos(real) * _sinh(imaginary),
+  );
 
   /// Calculates the cosine of this complex number.
   Complex cos() => Complex(
-        math.cos(real) * _cosh(imaginary),
-        -math.sin(real) * _sinh(imaginary),
-      );
+    math.cos(real) * _cosh(imaginary),
+    -math.sin(real) * _sinh(imaginary),
+  );
 
   /// Calculates the tangent of this complex number.
   Complex tan() => sin() / cos();
@@ -347,10 +357,28 @@ final class Complex implements Comparable<Complex> {
   Complex cot() => cos() / sin();
 
   /// Calculates the hyperbolic cosine.
-  double _cosh(num x) => (math.exp(x) + math.exp(-x)) / 2;
+  ///
+  /// Uses a more numerically stable computation for large values.
+  double _cosh(num x) {
+    if (x.abs() > 20) {
+      // For large values, exp(-x) becomes negligible, so we can simplify
+      return math.exp(x.abs()) / 2;
+    }
+    return (math.exp(x) + math.exp(-x)) / 2;
+  }
 
   /// Calculates the hyperbolic sine.
-  double _sinh(num x) => (math.exp(x) - math.exp(-x)) / 2;
+  ///
+  /// Uses a more numerically stable computation for large values.
+  double _sinh(num x) {
+    if (x.abs() > 20) {
+      // For large positive values, exp(-x) becomes negligible
+      // For large negative values, exp(x) becomes negligible
+      final sign = x >= 0 ? 1 : -1;
+      return sign * math.exp(x.abs()) / 2;
+    }
+    return (math.exp(x) - math.exp(-x)) / 2;
+  }
 
   /// Calculates the square root of this complex number.
   Complex sqrt() {

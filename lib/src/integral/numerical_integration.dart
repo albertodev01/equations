@@ -1,5 +1,6 @@
 import 'package:equations/equations.dart';
 
+/// {@template numerical_integration}
 /// When it comes to analysis, the term **numerical integration** indicates a
 /// group of algorithms for calculating the numerical value of a definite
 /// integral on an interval.
@@ -8,7 +9,7 @@ import 'package:equations/equations.dart';
 /// definite integral with a certain degree of accuracy. `NumericalIntegration`
 /// is the direct supertype of:
 ///
-///  1. [IntervalsIntegration], which is used for numerical integration
+///  1. [IntervalsIntegration], which is used by numerical integration
 ///    algorithms that split the integration bounds into intervals.
 ///
 ///  2. [AdaptiveQuadrature], which uses the "adaptive quadrature" algorithm to
@@ -16,8 +17,9 @@ import 'package:equations/equations.dart';
 ///
 /// The function must be continuous in the `[lowerBound, upperBound]`
 /// interval.
+/// {@endtemplate}
 abstract base class NumericalIntegration {
-  /// Internal functions evaluator.
+  /// Internal function evaluator.
   static const _evaluator = ExpressionParser();
 
   /// The function to be integrated on the given interval.
@@ -29,7 +31,7 @@ abstract base class NumericalIntegration {
   /// The upper bound of the integral.
   final double upperBound;
 
-  /// Creates a [NumericalIntegration] object.
+  /// {@macro numerical_integration}
   const NumericalIntegration({
     required this.function,
     required this.lowerBound,
@@ -53,7 +55,11 @@ abstract base class NumericalIntegration {
   }
 
   @override
-  int get hashCode => Object.hash(function, lowerBound, upperBound);
+  int get hashCode => Object.hash(
+    function,
+    lowerBound,
+    upperBound,
+  );
 
   @override
   String toString() {
@@ -63,7 +69,7 @@ abstract base class NumericalIntegration {
     return '$function on [$lower, $upper]';
   }
 
-  /// Evaluates the given [function] on the [x] point.
+  /// Evaluates the given [function] at the [x] point.
   double evaluateFunction(double x) => _evaluator.evaluateOn(function, x);
 
   /// Calculates the numerical value of the **definite** [function] integral
@@ -74,6 +80,6 @@ abstract base class NumericalIntegration {
   ///    the algorithm on each step;
   ///
   ///  - a `result` named field, which contains the evaluation of the integral
-  ///    in the `[a, b]` interval.
+  ///    in the `[lowerBound, upperBound]` interval.
   ({List<double> guesses, double result}) integrate();
 }

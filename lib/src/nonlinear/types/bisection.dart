@@ -1,13 +1,22 @@
 import 'package:equations/equations.dart';
 
-/// Implements the 'bisection' method to find the roots of a given equation.
-///
-/// **Characteristics**:
+/// {@template bisection}
+/// Implements the bisection method to find a root of a given equation.
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
 ///
-///   - The values of `f(a)` and `f(b)` must have opposite signs.
+///   - The values of `f(a)` and `f(b)` must have opposite signs (i.e.,
+///   `f(a) * f(b) < 0`), which ensures that at least one root exists in the
+///   interval by the Intermediate Value Theorem.
+///
+///   - The method has linear convergence rate, making it slower than methods
+///   like Newton's method, but it is very robust and always converges when the
+///   conditions are met.
+///
+///   - The interval is repeatedly bisected, and the subinterval containing the
+///   root is selected based on the sign of the function at the midpoint.
+/// {@endtemplate}
 final class Bisection extends NonLinear {
   /// The starting point of the interval.
   final double a;
@@ -15,20 +24,13 @@ final class Bisection extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Creates a [Bisection] object to find the root of an equation by using the
-  /// bisection method.
-  ///
-  ///   - [function]: the function f(x);
-  ///   - [a]: the first interval in which evaluate `f(a)`;
-  ///   - [b]: the second interval in which evaluate `f(b)`;
-  ///   - [tolerance]: how accurate the algorithm has to be;
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
+  /// {@macro bisection}
   const Bisection({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
-    super.maxSteps = 15,
+    super.maxSteps = 30,
   });
 
   @override
@@ -54,31 +56,55 @@ final class Bisection extends NonLinear {
 
   @override
   ({List<double> guesses, double convergence, double efficiency}) solve() {
-    var amp = tolerance + 1;
-    var n = 1;
+    // Validate that the root is bracketed in the interval
+    final evalA = evaluateOn(a);
+    final evalB = evaluateOn(b);
+
+    if (evalA * evalB >= 0) {
+      throw NonlinearException(
+        'The root is not bracketed in [$a, $b]. '
+        'f(a) and f(b) must have opposite signs.',
+      );
+    }
+
     final guesses = <double>[];
+    var n = 1;
     var pA = a;
     var pB = b;
-    var fa = evaluateOn(pA);
+    var fa = evalA;
 
-    while ((amp >= tolerance) && (n <= maxSteps)) {
-      ++n;
-      amp = (pB - pA).abs();
-      final x0 = pA + amp * 0.5;
+    while (n <= maxSteps) {
+      // Calculate the interval width
+      final amp = (pB - pA).abs();
 
-      guesses.add(x0);
+      // Check if we've reached the desired tolerance
+      if (amp < tolerance) {
+        break;
+      }
+
+      // Compute the midpoint
+      final x0 = (pA + pB) / 2;
       final fx = evaluateOn(x0);
 
+      // Add the guess to the list
+      guesses.add(x0);
+
+      // If we've found the exact root, we're done
+      if (fx == 0) {
+        break;
+      }
+
+      // Update the interval based on the sign of the function
       if (fa * fx < 0) {
+        // Root is in [pA, x0]
         pB = x0;
       } else {
-        if (fa * fx > 0) {
-          pA = x0;
-          fa = fx;
-        } else {
-          amp = 0;
-        }
+        // Root is in [x0, pB]
+        pA = x0;
+        fa = fx;
       }
+
+      ++n;
     }
 
     return (

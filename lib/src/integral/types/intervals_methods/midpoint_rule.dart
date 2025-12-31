@@ -1,15 +1,26 @@
 import 'package:equations/equations.dart';
 
-/// The "midpoint rule" is a technique for approximating the value of a
-/// definite integral.
+/// {@template midpoint_rule}
+/// The midpoint rule is a numerical integration technique for approximating
+/// definite integrals using Riemann sums. Given a definite integral in the
+/// form ∫`[a,b]` f(x) dx, the midpoint rule approximates it as:
+///
+///   ∫`[a,b]` f(x) dx ≈ h * Σ`[i=0 to n-1]` f(xᵢ)
+///
+/// where:
+/// - h = (b - a) / n is the step size
+/// - xᵢ = a + h/2 + i*h is the midpoint of the i-th subinterval
+/// - n is the number of intervals
+///
+/// The midpoint rule has an error bound of O(h^2), making it more accurate than
+/// the trapezoidal rule for many functions. The error decreases as the number
+/// of intervals increases.
 ///
 /// This algorithm requires the [intervals] parameter, which indicates how many
-/// partitions have to be computed by the algorithm.
-///
-/// The midpoint rule estimates a definite integral using a Riemann sum with
-/// sub-intervals of equal width.
+/// partitions must be computed by the algorithm.
+/// {@endtemplate}
 base class MidpointRule extends IntervalsIntegration {
-  /// Creates a [MidpointRule] object.
+  /// {@macro midpoint_rule}
   ///
   /// By default, [intervals] is set to `30`.
   const MidpointRule({
@@ -21,7 +32,7 @@ base class MidpointRule extends IntervalsIntegration {
 
   @override
   ({List<double> guesses, double result}) integrate() {
-    // The 'step' of the algorithm.
+    // The step size of the algorithm.
     final h = (upperBound - lowerBound) / intervals;
 
     // This variable will keep track of the actual result.
@@ -31,8 +42,9 @@ base class MidpointRule extends IntervalsIntegration {
     final guesses = List<double>.generate(
       intervals,
       (index) {
-        final midpoint = lowerBound + h / 2;
-        final guess = evaluateFunction(midpoint + index * h);
+        // Calculate the midpoint of the i-th subinterval
+        final midpoint = lowerBound + h / 2 + index * h;
+        final guess = evaluateFunction(midpoint);
         integralResult += guess;
 
         return guess;

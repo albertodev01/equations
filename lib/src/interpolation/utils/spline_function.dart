@@ -5,17 +5,19 @@ import 'package:equations/src/interpolation/utils/spline_functions/montone_cubic
 export 'spline_functions/linear_spline.dart';
 export 'spline_functions/montone_cubic_spline.dart';
 
+/// {@template spline_function}
 /// A **spline** is a special function defined piecewise by polynomials.
 ///
 /// In interpolating problems, spline interpolation is often preferred to
 /// polynomial interpolation because it yields similar results, even when using
 /// low-degree polynomials, while avoiding Runge's phenomenon for higher
 /// degrees.
+/// {@endtemplate}
 abstract base class SplineFunction {
   /// The interpolation nodes.
   final List<InterpolationNode> nodes;
 
-  /// Creates a [SplineFunction] object with the given nodes.
+  /// {@macro spline_function}
   const SplineFunction({
     required this.nodes,
   });
@@ -55,24 +57,16 @@ abstract base class SplineFunction {
     }
 
     if (other is SplineFunction) {
-      // The lengths of the coefficients must match.
       if (nodes.length != other.nodes.length) {
         return false;
       }
-
-      // Each successful comparison increases a counter by 1. If all elements
-      // are equal, then the counter will match the actual length of the
-      // coefficients list.
-      var equalsCount = 0;
-
       for (var i = 0; i < nodes.length; ++i) {
-        if (nodes[i] == other.nodes[i]) {
-          ++equalsCount;
+        if (nodes[i] != other.nodes[i]) {
+          return false;
         }
       }
 
-      // They must have the same runtime type AND all items must be equal.
-      return runtimeType == other.runtimeType && equalsCount == nodes.length;
+      return runtimeType == other.runtimeType;
     } else {
       return false;
     }

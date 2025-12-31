@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'PolynomialInterpolation' type", () {
+  group('PolynomialInterpolation', () {
     test(
-      "Making sure that 'PolynomialInterpolation' is properly constructed",
+      'Smoke test',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -48,7 +48,7 @@ void main() {
     );
 
     test(
-      'Making sure that the interpolating poly is correctly generated (1)',
+      'Smoke test 2',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -64,7 +64,7 @@ void main() {
     );
 
     test(
-      'Making sure that the interpolating poly is correctly generated (2)',
+      'Smoke test 3',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -84,7 +84,7 @@ void main() {
     );
 
     test(
-      'Making sure that the interpolating poly is correctly generated (3)',
+      'Smoke test 4',
       () {
         const interpolation = PolynomialInterpolation(
           nodes: [
@@ -107,7 +107,7 @@ void main() {
       },
     );
 
-    test('Making sure that objects comparison works properly', () {
+    test('Object comparison.', () {
       const interpolation = PolynomialInterpolation(
         nodes: [
           InterpolationNode(x: 1, y: 3),
@@ -185,6 +185,32 @@ void main() {
           ).hashCode,
         ),
       );
+    });
+
+    test('Exception thrown for duplicate x-values', () {
+      expect(
+        () => const PolynomialInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: 1, y: 5), // Duplicate x-value
+          ],
+        ).compute(0),
+        throwsA(isA<InterpolationException>()),
+      );
+    });
+
+    test('Early return when x exactly matches a node x-value', () {
+      const interpolation = PolynomialInterpolation(
+        nodes: [
+          InterpolationNode(x: 0, y: -1),
+          InterpolationNode(x: 1, y: 1),
+          InterpolationNode(x: 4, y: 1),
+        ],
+      );
+      // When x exactly matches a node's x-value, return that node's y-value
+      expect(interpolation.compute(0), equals(-1));
+      expect(interpolation.compute(1), equals(1));
+      expect(interpolation.compute(4), equals(1));
     });
   });
 }

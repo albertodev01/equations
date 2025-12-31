@@ -1,14 +1,14 @@
 import 'package:equations/equations.dart';
 
+/// {@template chords}
 /// Implements the 'chords' method to find the roots of a given equation.
-///
-/// **Characteristics**:
 ///
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
 ///
 ///   - The values of `f(a)` and `f(b)` must have opposite signs AND there must
 ///   be at least one root in `[a, b]`. These are 2 required conditions.
+/// {@endtemplate}
 final class Chords extends NonLinear {
   /// The starting point of the interval.
   final double a;
@@ -16,20 +16,13 @@ final class Chords extends NonLinear {
   /// The ending point of the interval.
   final double b;
 
-  /// Creates a [Chords] object to find the root of an equation by using the
-  /// chords method.
-  ///
-  ///   - [function]: the function f(x);
-  ///   - [a]: the first interval in which evaluate `f(a)`;
-  ///   - [b]: the second interval in which evaluate `f(b)`;
-  ///   - [tolerance]: how accurate the algorithm has to be;
-  ///   - [maxSteps]: how many iterations at most the algorithm has to do.
+  /// {@macro chords}
   const Chords({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
-    super.maxSteps = 15,
+    super.maxSteps = 30,
   });
 
   @override
@@ -58,9 +51,28 @@ final class Chords extends NonLinear {
     final guesses = <double>[];
     var n = 1;
 
-    var x0 = (a * evaluateOn(b) - b * evaluateOn(a)) /
-        (evaluateOn(b) - evaluateOn(a));
+    final evalA = evaluateOn(a);
+    final evalB = evaluateOn(b);
+
+    if (evalA * evalB >= 0) {
+      throw NonlinearException(
+        'The root is not bracketed in [$a, $b]. '
+        'f(a) and f(b) must have opposite signs.',
+      );
+    }
+
+    var x0 = (a * evalB - b * evalA) / (evalB - evalA);
     var diff = evaluateOn(x0).abs();
+
+    // If the initial guess already satisfies the tolerance, add it and return
+    if (diff < tolerance) {
+      guesses.add(x0);
+      return (
+        guesses: guesses,
+        convergence: convergence(guesses, maxSteps),
+        efficiency: efficiency(guesses, maxSteps),
+      );
+    }
 
     while ((diff >= tolerance) && (n <= maxSteps)) {
       final fa = evaluateOn(a);
@@ -74,7 +86,7 @@ final class Chords extends NonLinear {
       }
 
       guesses.add(x0);
-      diff = fx.abs();
+      diff = evaluateOn(x0).abs();
       ++n;
     }
 

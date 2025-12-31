@@ -1,26 +1,21 @@
-/// This package is used to solve numerical analysis problems, such as:
+/// The `equations` package helps you with:
 ///
-///  - finding roots of polynomial equations;
-///  - finding roots of nonlinear equations;
-///  - solving linear systems of equations;
-///  - evaluating definite integrals;
-///  - manipulating and decomposing matrices;
-///  - interpolate data points using interpolation algorithms.
+///  - solving polynomial equations and inequalities;
+///  - solve nonlinear equations;
+///  - solve linear systems of equations.
 ///
-/// Additionally, the package also has utilities to work with complex numbers,
-/// real/complex matrices, fractions, and expression parsing.
-library equations;
+/// In addition, you can also find utilities to work with:
+///
+///  - real and complex matrices;
+///  - complex numbers;
+///  - integral evaluation;
+///  - data interpolation.
+library;
 
 export 'package:fraction/fraction.dart';
 
 export 'src/algebraic/algebraic.dart';
-export 'src/algebraic/types/constant.dart';
-export 'src/algebraic/types/cubic.dart';
-export 'src/algebraic/types/durand_kerner.dart';
-export 'src/algebraic/types/linear.dart';
-export 'src/algebraic/types/quadratic.dart';
-export 'src/algebraic/types/quartic.dart';
-export 'src/algebraic/utils/algebraic_division.dart';
+export 'src/algebraic/utils/algebraic_inequality.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
 export 'src/integral/numerical_integration.dart';
