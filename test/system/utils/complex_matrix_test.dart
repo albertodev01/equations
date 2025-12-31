@@ -779,6 +779,51 @@ void main() {
       expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
     });
 
+    test(
+      'Cholesky decomposition on large matrix to trigger block processing',
+      () {
+        final data = <List<Complex>>[];
+        for (var i = 0; i < 40; i++) {
+          final row = <Complex>[];
+          for (var j = 0; j < 40; j++) {
+            if (i == j) {
+              row.add(Complex.fromReal(40.0 + i));
+            } else {
+              row.add(const Complex.fromReal(0.1));
+            }
+          }
+          data.add(row);
+        }
+
+        final matrix = ComplexMatrix.fromData(
+          rows: 40,
+          columns: 40,
+          data: data,
+        );
+
+        final cholesky = matrix.choleskyDecomposition();
+        expect(cholesky.length, equals(2));
+
+        // Verify L * L^T = original matrix
+        final L = cholesky[0];
+        final lt = cholesky[1];
+        final reconstructed = L * lt;
+
+        for (var i = 0; i < 40; i++) {
+          for (var j = 0; j < 40; j++) {
+            expect(
+              reconstructed(i, j).real,
+              MoreOrLessEquals(matrix(i, j).real, precision: 1.0e-5),
+            );
+            expect(
+              reconstructed(i, j).imaginary,
+              MoreOrLessEquals(matrix(i, j).imaginary, precision: 1.0e-5),
+            );
+          }
+        }
+      },
+    );
+
     test('qrDecomposition', () {
       final matrix = ComplexMatrix.fromData(
         rows: 2,
@@ -847,6 +892,41 @@ void main() {
       expect(matrix.transposedValue(0, 1), equals(const Complex.fromReal(3)));
       expect(matrix.transposedValue(1, 0), equals(const Complex.fromReal(2)));
       expect(matrix.transposedValue(1, 1), equals(const Complex.fromReal(4)));
+    });
+
+    test('Zero matrix multiplication optimization', () {
+      final zeroMatrix1 = ComplexMatrix(rows: 2, columns: 3);
+      final zeroMatrix2 = ComplexMatrix(rows: 3, columns: 2);
+      final result = zeroMatrix1 * zeroMatrix2;
+
+      expect(result.rowCount, equals(2));
+      expect(result.columnCount, equals(2));
+      expect(result.isZero(), isTrue);
+
+      // Test with one zero matrix (first operand is zero)
+      final nonZeroMatrix = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 2,
+        data: const [
+          [Complex.fromReal(1), Complex.fromReal(2)],
+          [Complex.fromReal(3), Complex.fromReal(4)],
+          [Complex.fromReal(5), Complex.fromReal(6)],
+        ],
+      );
+      final result2 = zeroMatrix1 * nonZeroMatrix;
+      expect(result2.isZero(), isTrue);
+
+      // Test with one zero matrix (second operand is zero)
+      final nonZeroMatrix2 = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(1), Complex.fromReal(2), Complex.fromReal(3)],
+          [Complex.fromReal(4), Complex.fromReal(5), Complex.fromReal(6)],
+        ],
+      );
+      final result3 = nonZeroMatrix2 * zeroMatrix2;
+      expect(result3.isZero(), isTrue);
     });
 
     test('Transposed matrix is correct (2x2)', () {

@@ -77,7 +77,8 @@ final class LUSolver extends SystemSolver with RealMatrixUtils {
             return knownValues[j];
           }
         }
-        return knownValues[i]; // fallback (shouldn't happen)
+        // Fallback value, shouldn't happen
+        return knownValues[i]; // coverage:ignore-line
       },
       growable: false,
     );

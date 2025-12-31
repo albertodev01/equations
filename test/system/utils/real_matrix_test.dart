@@ -734,6 +734,42 @@ void main() {
       expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
     });
 
+    test(
+      'Cholesky decomposition on large matrix to trigger block processing',
+      () {
+        final data = <List<double>>[];
+        for (var i = 0; i < 40; i++) {
+          final row = <double>[];
+          for (var j = 0; j < 40; j++) {
+            if (i == j) {
+              row.add(40.0 + i);
+            } else {
+              row.add(0.1);
+            }
+          }
+          data.add(row);
+        }
+
+        final matrix = RealMatrix.fromData(rows: 40, columns: 40, data: data);
+
+        final cholesky = matrix.choleskyDecomposition();
+        expect(cholesky.length, equals(2));
+
+        final L = cholesky[0];
+        final lt = cholesky[1];
+        final reconstructed = L * lt;
+
+        for (var i = 0; i < 40; i++) {
+          for (var j = 0; j < 40; j++) {
+            expect(
+              reconstructed(i, j),
+              MoreOrLessEquals(matrix(i, j), precision: 1.0e-5),
+            );
+          }
+        }
+      },
+    );
+
     test('qrDecomposition', () {
       final matrix = RealMatrix.fromData(
         rows: 2,

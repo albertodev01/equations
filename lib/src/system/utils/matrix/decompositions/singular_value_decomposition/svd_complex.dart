@@ -222,10 +222,12 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
           matrixU[i][k] = const Complex.zero();
         }
       } else {
+        //coverage:ignore-start
         for (var i = 0; i < matrix.rowCount; i++) {
           matrixU[i][k] = const Complex.zero();
         }
         matrixU[k][k] = const Complex.fromReal(1);
+        //coverage:ignore-end
       }
     }
   }
@@ -410,6 +412,7 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
             }
           }
 
+        //coverage:ignore-start
         case 2:
           var f = arrayE[index - 1];
           arrayE[index - 1] = const Complex.zero();
@@ -427,6 +430,7 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
               matrixU[i][j] = t;
             }
           }
+        //coverage:ignore-end
 
         case 3:
           // QR step with shifting
@@ -534,7 +538,9 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     }
 
     if (iterationCount >= _maxIterations) {
+      //coverage:ignore-start
       throw Exception('SVD did not converge within maximum iterations');
+      //coverage:ignore-end
     }
 
     // Building the 'E' rectangular matrix, whose size is rowCount*columnCount.

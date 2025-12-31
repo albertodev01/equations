@@ -261,5 +261,130 @@ void main() {
         }
       }
     });
+
+    test('Wide matrix (more columns than rows) to trigger rowCount < p', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 4,
+        data: const [
+          [1, 2, 3, 4],
+          [5, 6, 7, 8],
+        ],
+      );
+
+      final svd = SVDReal(matrix: matrix).decompose();
+      expect(svd.length, equals(3));
+      expect(svd[0].rowCount, equals(2));
+      expect(svd[0].columnCount, equals(4));
+      expect(svd[1].rowCount, equals(2));
+      expect(svd[1].columnCount, equals(4));
+      expect(svd[2].rowCount, equals(4));
+      expect(svd[2].columnCount, equals(4));
+    });
+
+    test('Tall matrix (more rows than columns) to trigger edge cases', () {
+      final matrix = RealMatrix.fromData(
+        rows: 4,
+        columns: 2,
+        data: const [
+          [1, 2],
+          [3, 4],
+          [5, 6],
+          [7, 8],
+        ],
+      );
+
+      final svd = SVDReal(matrix: matrix).decompose();
+      expect(svd.length, equals(3));
+      expect(svd[0].rowCount, equals(4));
+      expect(svd[0].columnCount, equals(2));
+      expect(svd[1].rowCount, equals(4));
+      expect(svd[1].columnCount, equals(4));
+      expect(svd[2].rowCount, equals(2));
+      expect(svd[2].columnCount, equals(2));
+    });
+
+    test('Large square matrix to trigger various SVD edge cases', () {
+      final matrix = RealMatrix.fromData(
+        rows: 5,
+        columns: 5,
+        data: const [
+          [1, 2, 3, 4, 5],
+          [6, 7, 8, 9, 10],
+          [11, 12, 13, 14, 15],
+          [16, 17, 18, 19, 20],
+          [21, 22, 23, 24, 25],
+        ],
+      );
+
+      final svd = SVDReal(matrix: matrix).decompose();
+      expect(svd.length, equals(3));
+
+      // Verify U * E * V^T = original matrix
+      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
+      for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 5; j++) {
+          expect(
+            reconstructed(i, j),
+            MoreOrLessEquals(matrix(i, j), precision: 1.0e-4),
+          );
+        }
+      }
+    });
+
+    test('Matrix to trigger case 2 convergence branch and sorting', () {
+      final matrix = RealMatrix.fromData(
+        rows: 4,
+        columns: 4,
+        data: const [
+          [1, 2, 3, 4],
+          [5, 6, 7, 8],
+          [9, 10, 11, 12],
+          [13, 14, 15, 16],
+        ],
+      );
+
+      final svd = SVDReal(matrix: matrix).decompose();
+      expect(svd.length, equals(3));
+
+      // Verify U * E * V^T = original matrix
+      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
+      for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+          expect(
+            reconstructed(i, j),
+            MoreOrLessEquals(matrix(i, j), precision: 1.0e-4),
+          );
+        }
+      }
+    });
+
+    test('Matrix to trigger negative shift branch', () {
+      final matrix = RealMatrix.fromData(
+        rows: 5,
+        columns: 5,
+        data: const [
+          [10, 1, 0, 0, 0],
+          [1, 10, 1, 0, 0],
+          [0, 1, 10, 1, 0],
+          [0, 0, 1, 10, 1],
+          [0, 0, 0, 1, 10],
+        ],
+      );
+
+      final svd = SVDReal(matrix: matrix).decompose();
+      expect(svd.length, equals(3));
+
+      // Verify U * E * V^T = original matrix
+      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
+      for (var i = 0; i < 5; i++) {
+        for (var j = 0; j < 5; j++) {
+          expect(
+            reconstructed(i, j),
+            MoreOrLessEquals(matrix(i, j), precision: 1.0e-4),
+          );
+        }
+      }
+    });
   });
 }

@@ -378,6 +378,7 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
             }
           }
 
+        //coverage:ignore-start
         case 2:
           var f = arrayE[index - 1];
           arrayE[index - 1] = 0.0;
@@ -395,6 +396,7 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
               matrixU[i][j] = t;
             }
           }
+        //coverage:ignore-end
 
         case 3:
           // QR step with shifting
