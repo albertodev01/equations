@@ -24,5 +24,4 @@
 
 - [ ] I have provided a description of the proposed changes.
 - [ ] I added unit tests for all relevant code.
-- [ ] In `example/flutter_example`, if needed, I have also added widget and golden tests.
 - [ ] I added documentation for all relevant code.

@@ -1,6 +1,10 @@
 name: documentation_web_deploy
 
 on:
+  # Manually run the workflow from the GitHub Actions UI with the
+  # 'Run workflow' button.
+  workflow_dispatch:
+
   push:
     branches:
       - master
@@ -9,6 +13,8 @@ jobs:
   documentation_deployment:
     name: HTML Documentation deployment
     runs-on: macos-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
