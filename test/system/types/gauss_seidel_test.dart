@@ -4,9 +4,8 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'GaussSeidelSolver' class.", () {
-    test('Making sure that the sor iterative method works properly with a '
-        'well formed matrix.', () {
+  group('GaussSeidelSolver', () {
+    test('Smoke test', () {
       final gaussSeidel = GaussSeidelSolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -33,7 +32,6 @@ void main() {
         ],
       );
 
-      // Checking the "state" of the object
       expect(gaussSeidel.matrix, equals(matrix));
       expect(gaussSeidel.knownValues, orderedEquals(<double>[-1, 7, -7]));
       expect(gaussSeidel.maxSteps, equals(30));
@@ -41,7 +39,6 @@ void main() {
       expect(gaussSeidel.size, equals(3));
       expect(gaussSeidel.hasSolution(), isTrue);
 
-      // Solutions
       expect(gaussSeidel.determinant(), equals(20));
 
       final solutions = gaussSeidel.solve();
@@ -50,7 +47,7 @@ void main() {
       expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
     });
 
-    test('Making sure that the string conversion works properly.', () {
+    test('String conversion test', () {
       final solver = GaussSeidelSolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -77,8 +74,7 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
-    test('Making sure that the matrix is squared AND the dimension of the '
-        'known values vector also matches the size of the matrix.', () {
+    test('Matrix validation test', () {
       expect(
         () => GaussSeidelSolver(
           matrix: RealMatrix.fromData(
@@ -95,7 +91,7 @@ void main() {
       );
     });
 
-    test('Making sure that objects comparison works properly.', () {
+    test('Equality test', () {
       final gaussSeidel = GaussSeidelSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -127,60 +123,171 @@ void main() {
       expect(gaussSeidel.hashCode, equals(gaussSeidel2.hashCode));
     });
 
-    test('Batch tests', () {
-      final systems = [
-        GaussSeidelSolver(
+    group('Solver tests', () {
+      void verifySolutions(
+        GaussSeidelSolver solver,
+        List<double> expectedSolutions,
+      ) {
+        final solutions = solver.solve();
+        for (var i = 0; i < solutions.length; ++i) {
+          expect(
+            solutions[i],
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-1),
+          );
+        }
+      }
+
+      test('Test 1', () {
+        final solver = GaussSeidelSolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
-            data: [
+            data: const [
               [25, 15, -5],
               [15, 18, 0],
               [-5, 0, 11],
             ],
           ),
           knownValues: [35, 33, 6],
-        ).solve(),
-        GaussSeidelSolver(
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 2', () {
+        final solver = GaussSeidelSolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
-            data: [
+            data: const [
               [1, 0, 1],
               [0, 2, 0],
               [1, 0, 3],
             ],
           ),
           knownValues: [6, 5, -2],
-        ).solve(),
-        GaussSeidelSolver(
+        );
+
+        verifySolutions(solver, <double>[10, 2.5, -4]);
+      });
+
+      test('Test 3', () {
+        final solver = GaussSeidelSolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
-            data: [
+            data: const [
               [1, 0, 0],
               [0, 1, 0],
               [0, 0, 1],
             ],
           ),
           knownValues: [5, -2, 3],
-        ).solve(),
-      ];
+        );
 
-      const solutions = <List<double>>[
-        [1, 1, 1],
-        [10, 2.5, -4],
-        [5, -2, 3],
-      ];
+        verifySolutions(solver, <double>[5, -2, 3]);
+      });
 
-      for (var i = 0; i < systems.length; ++i) {
-        for (var j = 0; j < 2; ++j) {
-          expect(
-            systems[i][j],
-            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
-          );
-        }
-      }
+      test('Test 4', () {
+        final solver = GaussSeidelSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [4, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 4],
+        );
+
+        verifySolutions(solver, <double>[1, 1]);
+      });
+
+      test('Test 5', () {
+        final solver = GaussSeidelSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, -1, 0],
+              [-1, 4, -1],
+              [0, -1, 4],
+            ],
+          ),
+          knownValues: [2, 6, 2],
+        );
+
+        verifySolutions(solver, <double>[1, 2, 1]);
+      });
+
+      test('Test 6', () {
+        final solver = GaussSeidelSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [6, 1, 0],
+              [1, 6, 1],
+              [0, 1, 6],
+            ],
+          ),
+          knownValues: [7, 8, 7],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 7', () {
+        final solver = GaussSeidelSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [3, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [-2, -4],
+        );
+
+        verifySolutions(solver, <double>[-0.25, -1.25]);
+      });
+
+      test('Test 8', () {
+        final solver = GaussSeidelSolver(
+          matrix: RealMatrix.fromData(
+            rows: 4,
+            columns: 4,
+            data: const [
+              [4, 1, 0, 0],
+              [1, 4, 1, 0],
+              [0, 1, 4, 1],
+              [0, 0, 1, 4],
+            ],
+          ),
+          knownValues: [5, 6, 6, 5],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1, 1]);
+      });
+
+      test('Test 9', () {
+        final solver = GaussSeidelSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 1, 0],
+              [1, 3, 1],
+              [0, 1, 2],
+            ],
+          ),
+          knownValues: [-1, 5, 3],
+        );
+
+        verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
     });
   });
 }

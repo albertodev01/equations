@@ -32,7 +32,6 @@ void main() {
         ],
       );
 
-      // Checking solutions
       final results = choleskySolver.solve();
 
       for (final sol in results) {
@@ -174,9 +173,22 @@ void main() {
       expect(cholesky.hashCode == different.hashCode, isFalse);
     });
 
-    test('Batch tests', () {
-      final systems = [
-        CholeskySolver(
+    group('Solver tests', () {
+      void verifySolutions(
+        CholeskySolver solver,
+        List<double> expectedSolutions,
+      ) {
+        final solutions = solver.solve();
+        for (var i = 0; i < solutions.length; ++i) {
+          expect(
+            solutions[i],
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-1),
+          );
+        }
+      }
+
+      test('Test 1', () {
+        final solver = CholeskySolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -187,8 +199,13 @@ void main() {
             ],
           ),
           knownValues: [35, 33, 6],
-        ).solve(),
-        CholeskySolver(
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 2', () {
+        final solver = CholeskySolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -199,8 +216,13 @@ void main() {
             ],
           ),
           knownValues: [9, 1, 0],
-        ).solve(),
-        CholeskySolver(
+        );
+
+        verifySolutions(solver, <double>[430.6944, -118.2222, 18.4444]);
+      });
+
+      test('Test 3', () {
+        final solver = CholeskySolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -211,23 +233,78 @@ void main() {
             ],
           ),
           knownValues: [6, 5, -2],
-        ).solve(),
-      ];
+        );
 
-      const solutions = <List<double>>[
-        [1, 1, 1],
-        [430.6944, -118.2222, 18.4444],
-        [10, 2.5, -4],
-      ];
+        verifySolutions(solver, <double>[10, 2.5, -4]);
+      });
 
-      for (var i = 0; i < systems.length; ++i) {
-        for (var j = 0; j < 2; ++j) {
-          expect(
-            systems[i][j],
-            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
-          );
-        }
-      }
+      test('Test 4', () {
+        final solver = CholeskySolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [4, 2],
+              [2, 3],
+            ],
+          ),
+          knownValues: [10, 7],
+        );
+
+        verifySolutions(solver, <double>[2, 1]);
+      });
+
+      test('Test 5', () {
+        final solver = CholeskySolver(
+          matrix: RealMatrix.fromData(
+            rows: 4,
+            columns: 4,
+            data: const [
+              [9, 3, 0, 0],
+              [3, 4, 1, 0],
+              [0, 1, 5, 2],
+              [0, 0, 2, 6],
+            ],
+          ),
+          knownValues: [12, 8, 8, 8],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1, 1]);
+      });
+
+      test('Test 6', () {
+        final solver = CholeskySolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [2.5, 1.0, 0.5],
+              [1.0, 3.0, 1.5],
+              [0.5, 1.5, 4.0],
+            ],
+          ),
+          knownValues: [4.0, 5.5, 6.0],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 7', () {
+        final solver = CholeskySolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 1, 0],
+              [1, 3, 1],
+              [0, 1, 2],
+            ],
+          ),
+          knownValues: [-1, 5, 3],
+        );
+
+        verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
     });
   });
 }

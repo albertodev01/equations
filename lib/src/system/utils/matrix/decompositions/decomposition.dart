@@ -46,9 +46,6 @@ abstract base class Decomposition<K, T extends Matrix<K>> {
   @override
   int get hashCode => matrix.hashCode;
 
-  @override
-  String toString() => '$matrix';
-
   /// Factorizes [matrix] and returns a list of matrices that, when multiplied
   /// together in order, reconstruct the original matrix.
   ///

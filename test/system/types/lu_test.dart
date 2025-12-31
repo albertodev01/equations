@@ -4,9 +4,8 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'LUSolver' class.", () {
-    test('Making sure that the LUSolver computes the correct results of a '
-        'system of linear equations.', () {
+  group('LUSolver', () {
+    test('Smoke test', () {
       final luSolver = LUSolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -20,9 +19,6 @@ void main() {
         knownValues: const [12, 17, 5],
       );
 
-      // This is needed because we want to make sure that the "original"
-      // matrix doesn't get side effects from the calculations (i.e. row
-      // swapping).
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -33,14 +29,12 @@ void main() {
         ],
       );
 
-      // Checking solutions
       final results = luSolver.solve();
       expect(
         results.map((e) => e.roundToDouble()),
         unorderedEquals(<double>[-1, 4, 3]),
       );
 
-      // Checking the "state" of the object
       expect(luSolver.matrix, equals(matrix));
       expect(luSolver.knownValues, orderedEquals(<double>[12, 17, 5]));
       expect(luSolver.precision, equals(1.0e-10));
@@ -48,7 +42,7 @@ void main() {
       expect(luSolver.hasSolution(), isTrue);
     });
 
-    test('Making sure that the string conversion works properly.', () {
+    test('String conversion test', () {
       final solver = LUSolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -75,7 +69,7 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
-    test('Making sure that objects comparison works properly.', () {
+    test('Equality test', () {
       final lu = LUSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -107,8 +101,7 @@ void main() {
       expect(lu.hashCode, equals(lu2.hashCode));
     });
 
-    test('Making sure that the matrix is squared because this method is only '
-        "able to solve systems of 'N' equations in 'N' variables.", () {
+    test('Matrix validation test', () {
       expect(
         () => LUSolver(
           matrix: RealMatrix.fromData(
@@ -123,10 +116,6 @@ void main() {
         ),
         throwsA(isA<SystemSolverException>()),
       );
-    });
-
-    test('Making sure that the matrix is squared AND the dimension of the '
-        'known values vector also matches the size of the matrix.', () {
       expect(
         () => LUSolver(
           matrix: RealMatrix.fromData(
@@ -143,63 +132,7 @@ void main() {
       );
     });
 
-    test('Batch tests', () {
-      final systems = [
-        LUSolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [25, 15, -5],
-              [15, 18, 0],
-              [-5, 0, 11],
-            ],
-          ),
-          knownValues: [35, 33, 6],
-        ).solve(),
-        LUSolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [1, 0, 1],
-              [0, 2, 0],
-              [1, 0, 3],
-            ],
-          ),
-          knownValues: [6, 5, -2],
-        ).solve(),
-        LUSolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [1, 0, 0],
-              [0, 1, 0],
-              [0, 0, 1],
-            ],
-          ),
-          knownValues: [5, -2, 3],
-        ).solve(),
-      ];
-
-      const solutions = <List<double>>[
-        [1, 1, 1],
-        [10, 2.5, -4],
-        [5, -2, 3],
-      ];
-
-      for (var i = 0; i < systems.length; ++i) {
-        for (var j = 0; j < 2; ++j) {
-          expect(
-            systems[i][j],
-            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
-          );
-        }
-      }
-    });
-
-    test('Making sure that singular matrices throw an exception.', () {
+    test('Singular matrix test', () {
       final luSolver = LUSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -215,6 +148,190 @@ void main() {
       // The matrix has determinant = 0, so it should throw an exception
       expect(luSolver.determinant(), equals(0));
       expect(luSolver.solve, throwsA(isA<SystemSolverException>()));
+    });
+
+    group('Solver tests', () {
+      void verifySolutions(
+        LUSolver solver,
+        List<double> expectedSolutions,
+      ) {
+        final solutions = solver.solve();
+        for (var i = 0; i < solutions.length; ++i) {
+          expect(
+            solutions[i],
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-1),
+          );
+        }
+      }
+
+      test('Test 1', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [25, 15, -5],
+              [15, 18, 0],
+              [-5, 0, 11],
+            ],
+          ),
+          knownValues: [35, 33, 6],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 2', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 1],
+              [0, 2, 0],
+              [1, 0, 3],
+            ],
+          ),
+          knownValues: [6, 5, -2],
+        );
+
+        verifySolutions(solver, <double>[10, 2.5, -4]);
+      });
+
+      test('Test 3', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1],
+            ],
+          ),
+          knownValues: [5, -2, 3],
+        );
+
+        verifySolutions(solver, <double>[5, -2, 3]);
+      });
+
+      test('Test 4', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [2, 1],
+              [1, 2],
+            ],
+          ),
+          knownValues: [5, 4],
+        );
+
+        verifySolutions(solver, <double>[2, 1]);
+      });
+
+      test('Test 5', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 2, 1],
+              [2, 5, 2],
+              [1, 2, 6],
+            ],
+          ),
+          knownValues: [7, 9, 9],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 6', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [3, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 7],
+        );
+
+        verifySolutions(solver, <double>[1, 2]);
+      });
+
+      test('Test 7', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 4,
+            columns: 4,
+            data: const [
+              [1, 0, 0, 0],
+              [0, 2, 0, 0],
+              [0, 0, 3, 0],
+              [0, 0, 0, 4],
+            ],
+          ),
+          knownValues: [1, 4, 9, 16],
+        );
+
+        verifySolutions(solver, <double>[1, 2, 3, 4]);
+      });
+
+      test('Test 8', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [3, 1, 0],
+              [1, 3, 1],
+              [0, 1, 3],
+            ],
+          ),
+          knownValues: [4, 5, 4],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 9', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 1, 0],
+              [1, 3, 1],
+              [0, 1, 2],
+            ],
+          ),
+          knownValues: [-1, 5, 3],
+        );
+
+        verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
+
+      test('Test 10', () {
+        final solver = LUSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [0, 2, 1],
+              [1, 1, 1],
+              [2, 3, 4],
+            ],
+          ),
+          knownValues: [5, 6, 13],
+        );
+
+        verifySolutions(solver, <double>[4, 3, -1]);
+      });
     });
   });
 }

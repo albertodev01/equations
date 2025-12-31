@@ -103,45 +103,41 @@ void main() {
       }
     });
 
-    test(
-      'Decomposition of 3x2 matrix',
-      () {
-        final matrix = ComplexMatrix.fromData(
-          rows: 3,
-          columns: 2,
-          data: const [
-            [Complex(1, 1), Complex(2, -1)],
-            [Complex(3, 2), Complex(4, 0)],
-            [Complex(5, -1), Complex(6, 2)],
-          ],
-        );
+    test('Decomposition of 3x2 matrix', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 2,
+        data: const [
+          [Complex(1, 1), Complex(2, -1)],
+          [Complex(3, 2), Complex(4, 0)],
+          [Complex(5, -1), Complex(6, 2)],
+        ],
+      );
 
-        final qr = QRDecompositionComplex(matrix: matrix);
-        final result = qr.decompose();
+      final qr = QRDecompositionComplex(matrix: matrix);
+      final result = qr.decompose();
 
-        expect(result.length, equals(2));
-        expect(result[0].rowCount, equals(3));
-        expect(result[0].columnCount, equals(2));
-        expect(result[1].rowCount, equals(2));
-        expect(result[1].columnCount, equals(2));
+      expect(result.length, equals(2));
+      expect(result[0].rowCount, equals(3));
+      expect(result[0].columnCount, equals(2));
+      expect(result[1].rowCount, equals(2));
+      expect(result[1].columnCount, equals(2));
 
-        // Verify Q*R = A
-        final product = result[0] * result[1];
-        for (var i = 0; i < 3; i++) {
-          for (var j = 0; j < 2; j++) {
-            expect(
-              product(i, j).real.round(),
-              closeTo(matrix(i, j).real.round(), 1e-10),
-            );
-            expect(
-              product(i, j).imaginary.round(),
-              closeTo(matrix(i, j).imaginary.round(), 1e-10),
-            );
-          }
+      // Verify Q*R = A
+      final product = result[0] * result[1];
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 2; j++) {
+          expect(
+            product(i, j).real.round(),
+            closeTo(matrix(i, j).real.round(), 1e-10),
+          );
+          expect(
+            product(i, j).imaginary.round(),
+            closeTo(matrix(i, j).imaginary.round(), 1e-10),
+          );
         }
-      },
-      skip: true,
-    );
+      }
+    }, skip: true);
 
     test('Throws on singular matrix', () {
       final matrix = ComplexMatrix.fromData(

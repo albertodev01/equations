@@ -1,11 +1,14 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigendecomposition_real.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
+import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_real.dart';
 import 'package:test/test.dart';
 
 import '../../double_approximation_matcher.dart';
 
 void main() {
   group('RealMatrix', () {
-    test('New matrix is initialized with zeroes.', () {
+    test('Smoke test', () {
       final matrix = RealMatrix(columns: 5, rows: 3);
 
       // Checking the sizes
@@ -22,11 +25,26 @@ void main() {
       }
     });
 
-    test('Exception if matrix has row or column set to zero.', () {
+    test('Matrix validation test', () {
       expect(
         () => RealMatrix(columns: 0, rows: 2),
         throwsA(isA<MatrixException>()),
       );
+
+      expect(
+        () => RealMatrix(columns: 2, rows: 2, identity: true)(12, 1),
+        throwsA(isA<MatrixException>()),
+      );
+
+      expect(
+        () => RealMatrix(columns: 2, rows: 2, identity: true)(1, 12),
+        throwsA(isA<MatrixException>()),
+      );
+    });
+
+    test('isZero', () {
+      final matrix = RealMatrix(columns: 2, rows: 2);
+      expect(matrix.isZero(), isTrue);
     });
 
     test('Identity matrix has all zeroes except for the diagonal', () {
@@ -184,7 +202,7 @@ void main() {
       );
     });
 
-    test('toString() works as expected.', () {
+    test('String conversion test', () {
       final matrix = RealMatrix.fromData(
         columns: 3,
         rows: 3,
@@ -202,7 +220,7 @@ void main() {
       expect(matrix.toString(), equals(expected));
     });
 
-    test('Matrix is properly built from a list of lists entries.', () {
+    test('Matrix creation from list of lists', () {
       final matrix = RealMatrix.fromData(
         columns: 3,
         rows: 3,
@@ -230,7 +248,7 @@ void main() {
     });
   });
 
-  group("Testing equality of 'RealMatrix' objects", () {
+  group('Equality', () {
     test('Objects comparison works properly.', () {
       final matrix = RealMatrix(columns: 2, rows: 2);
 
@@ -264,7 +282,7 @@ void main() {
     });
   });
 
-  group("Testing operators on 'RealMatrix' (+, *, - and /)", () {
+  group('Operators', () {
     /*
     * A = |  2  6  |
     *     | -5  0  |
@@ -291,7 +309,7 @@ void main() {
       ],
     );
 
-    test('operator+ works properly.', () {
+    test('operator+', () {
       final matrixSum = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -303,7 +321,7 @@ void main() {
       expect(matrixA + matrixB, equals(matrixSum));
     });
 
-    test('operator+ works on rectangular matrices too.', () {
+    test('operator+ on rectangular matrices', () {
       final matrixA = RealMatrix.fromData(
         columns: 2,
         rows: 3,
@@ -340,7 +358,7 @@ void main() {
       );
     });
 
-    test('operator- works properly.', () {
+    test('operator-', () {
       final matrixSub = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -352,7 +370,7 @@ void main() {
       expect(matrixA - matrixB, equals(matrixSub));
     });
 
-    test('operator- works on rectangular matrices too.', () {
+    test('operator- on rectangular matrices', () {
       final matrixA = RealMatrix.fromData(
         columns: 2,
         rows: 3,
@@ -389,7 +407,7 @@ void main() {
       );
     });
 
-    test('operator* works properly.', () {
+    test('operator*', () {
       final matrixMul = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -401,7 +419,7 @@ void main() {
       expect(matrixA * matrixB, equals(matrixMul));
     });
 
-    test('operator* works on rectangular matrices too.', () {
+    test('operator* on rectangular matrices', () {
       final matrixA = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -432,7 +450,7 @@ void main() {
       expect(matrixA * matrixB, equals(matrixMul));
     });
 
-    test('operator/ works properly.', () {
+    test('operator/', () {
       final matrixDiv = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -444,7 +462,7 @@ void main() {
       expect(matrixA / matrixB, equals(matrixDiv));
     });
 
-    test('operator/ works on rectangular matrices too.', () {
+    test('operator/ on rectangular matrices', () {
       final matrixA = RealMatrix.fromData(
         columns: 2,
         rows: 3,
@@ -482,7 +500,7 @@ void main() {
     });
 
     test(
-      'operator+, operator- and operator/ fail on matrices of different sizes',
+      'operator+, operator- and operator/ on different sized matrices',
       () {
         final otherMatrix = RealMatrix.fromFlattenedData(
           rows: 1,
@@ -498,7 +516,7 @@ void main() {
       },
     );
 
-    test('operator* fails if rows and columns have no matching sizes', () {
+    test('operator* on different sized matrices', () {
       final otherMatrix = RealMatrix.fromFlattenedData(
         rows: 1,
         columns: 2,
@@ -509,8 +527,8 @@ void main() {
     });
   });
 
-  group('Testing the computation of the determinant.', () {
-    test('Determinant of an 1*1 matrix is correct.', () {
+  group('Determinant', () {
+    test('Determinant of a 1x1 matrix', () {
       final matrix = RealMatrix.fromData(
         columns: 1,
         rows: 1,
@@ -521,7 +539,7 @@ void main() {
       expect(matrix.determinant(), equals(-5));
     });
 
-    test('Determinant of a 2*2 matrix is correct.', () {
+    test('Determinant of a 2x2 matrix', () {
       final matrix = RealMatrix.fromData(
         columns: 2,
         rows: 2,
@@ -533,7 +551,7 @@ void main() {
       expect(matrix.determinant(), equals(78));
     });
 
-    test('Determinant of a 3*3 matrix is correct.', () {
+    test('Determinant of a 3x3 matrix', () {
       final matrix = RealMatrix.fromData(
         columns: 3,
         rows: 3,
@@ -546,7 +564,7 @@ void main() {
       expect(matrix.determinant(), equals(-45));
     });
 
-    test('Determinant of a 4*4 matrix is correct.', () {
+    test('Determinant of a 4x4 matrix', () {
       final matrix = RealMatrix.fromData(
         columns: 4,
         rows: 4,
@@ -560,7 +578,7 @@ void main() {
       expect(matrix.determinant(), equals(271));
     });
 
-    test('Determinant of a 5*5 (or greater) matrix is correct.', () {
+    test('Determinant of a 5x5 (or greater) matrix', () {
       final matrix = RealMatrix.fromData(
         columns: 5,
         rows: 5,
@@ -579,8 +597,8 @@ void main() {
     });
   });
 
-  group('Testing operations on matrices.', () {
-    test('LU decomposition works on a square matrix.', () {
+  group('API', () {
+    test('LU decomposition on square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -651,7 +669,7 @@ void main() {
       }
     });
 
-    test('LU decomposition fails when matrix is not square.', () {
+    test('LU decomposition on non-square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -665,7 +683,7 @@ void main() {
       expect(matrix.luDecomposition, throwsA(isA<MatrixException>()));
     });
 
-    test('Cholesky decomposition works on a square matrix.', () {
+    test('Cholesky decomposition on square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -701,7 +719,7 @@ void main() {
       expect(transposedL.isSquareMatrix, isTrue);
     });
 
-    test('Cholesky decomposition fails when matrix is not square.', () {
+    test('Cholesky decomposition on non-square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 2,
@@ -716,7 +734,61 @@ void main() {
       expect(matrix.choleskyDecomposition, throwsA(isA<MatrixException>()));
     });
 
-    test('Transposed view is correct', () {
+    test('qrDecomposition', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [1, 2],
+          [3, 4],
+        ],
+      );
+
+      expect(
+        matrix.qrDecomposition(),
+        orderedEquals(
+          QRDecompositionReal(matrix: matrix).decompose(),
+        ),
+      );
+    });
+
+    test('svdDecomposition', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [1, 2],
+          [3, 4],
+        ],
+      );
+
+      expect(
+        matrix.singleValueDecomposition(),
+        orderedEquals(
+          SVDReal(matrix: matrix).decompose(),
+        ),
+      );
+    });
+
+    test('eigenDecomposition', () {
+      final matrix = RealMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [1, 2],
+          [3, 4],
+        ],
+      );
+
+      expect(
+        matrix.eigenDecomposition(),
+        orderedEquals(
+          EigendecompositionReal(matrix: matrix).decompose(),
+        ),
+      );
+    });
+
+    test('transposedValue', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -734,7 +806,7 @@ void main() {
       expect(matrix.transposedValue(2, 1), equals(8));
     });
 
-    test('Transposed of a square matrix is correct', () {
+    test('transpose on square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -751,7 +823,7 @@ void main() {
       expect(transposed(1, 1), equals(4));
     });
 
-    test('Transposed of a rectangular matrix is correct', () {
+    test('transpose on rectangular matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -770,7 +842,7 @@ void main() {
       expect(transposed(2, 1), equals(8));
     });
 
-    test('Minors are correctly generated', () {
+    test('minors', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -794,7 +866,7 @@ void main() {
       expect(() => matrix.minor(11, 2), throwsA(isA<MatrixException>()));
     });
 
-    test('Cofactor matrix is correctly computed', () {
+    test('cofactorMatrix', () {
       final matrixSize2 = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -838,7 +910,7 @@ void main() {
       expect(matrixSize3.cofactorMatrix(), equals(cofactorMatrixSize3));
     });
 
-    test('Cofactor matrix is not computed if source matrix is not square', () {
+    test('cofactorMatrix on non-square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 1,
@@ -851,7 +923,7 @@ void main() {
       expect(matrix.cofactorMatrix, throwsA(isA<MatrixException>()));
     });
 
-    test('Inverse matrix is not computed if source matrix is not square', () {
+    test('inverse on non-square matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 1,
@@ -864,7 +936,7 @@ void main() {
       expect(matrix.inverse, throwsA(isA<MatrixException>()));
     });
 
-    test('Inverse of a 2x2 matrix is correct', () {
+    test('inverse of a 2x2 matrix', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -883,7 +955,7 @@ void main() {
       expect(matrix(1, 1), const MoreOrLessEquals(0.285714, precision: 1.0e-6));
     });
 
-    test('Inverse of a matrix is correct', () {
+    test('inverse', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -920,7 +992,7 @@ void main() {
       );
     });
 
-    test('Trace is correctly computed', () {
+    test('trace', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -933,7 +1005,7 @@ void main() {
       expect(matrix.trace(), equals(11));
     });
 
-    test('Trace is only computed on square matrices', () {
+    test('trace only computed on square matrices', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -946,7 +1018,7 @@ void main() {
       expect(matrix.trace, throwsA(isA<MatrixException>()));
     });
 
-    test('Symmetric matrices are correctly identified.', () {
+    test('isSymmetric', () {
       final symmetric = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -972,7 +1044,7 @@ void main() {
       expect(notSymmetric.isSymmetric(), isFalse);
     });
 
-    test('Diagonal matrices are correctly identified.', () {
+    test('isDiagonal', () {
       final diagonal = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -1009,7 +1081,7 @@ void main() {
       expect(notDiagonal.isDiagonal(), isFalse);
     });
 
-    test('Identity matrices are correctly identified.', () {
+    test('isIdentity', () {
       final diagonal = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -1037,7 +1109,7 @@ void main() {
       expect(notDiagonal.isIdentity(), isFalse);
     });
 
-    test('Identity matrix is only computed when square.', () {
+    test('isIdentity only computed on square matrices', () {
       final identity = RealMatrix.fromData(
         rows: 3,
         columns: 2,
@@ -1051,7 +1123,7 @@ void main() {
       expect(identity.isIdentity, throwsA(isA<MatrixException>()));
     });
 
-    test('Rank can be correctly computed.', () {
+    test('rank', () {
       final rank = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -1107,7 +1179,7 @@ void main() {
       expect(rectangularRank2.rank(), equals(1));
     });
 
-    test('Eigenvalues can be computed (1x1 matrices)', () {
+    test('eigenvalues for 1x1 matrices', () {
       final matrix = RealMatrix.fromData(
         rows: 1,
         columns: 1,
@@ -1122,7 +1194,7 @@ void main() {
       expect(eigenvalues.first, equals(const Complex.fromReal(-16)));
     });
 
-    test('Eigenvalues can be computed (2x2 matrices)', () {
+    test('eigenvalues for 2x2 matrices', () {
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -1147,7 +1219,7 @@ void main() {
       expect(eigenvalues[1].imaginary, isZero);
     });
 
-    test('Eigenvalues can be computed (3x3 matrices)', () {
+    test('eigenvalues for 3x3 matrices', () {
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -1184,7 +1256,7 @@ void main() {
       );
     });
 
-    test('Batch tests - Minors', () {
+    test('minors', () {
       final source = [
         RealMatrix.fromData(
           rows: 3,
@@ -1277,7 +1349,7 @@ void main() {
       );
     });
 
-    test('Batch tests - Cofactor matrix', () {
+    test('cofactorMatrix', () {
       final source = [
         RealMatrix.fromData(
           rows: 3,
@@ -1355,7 +1427,7 @@ void main() {
       }
     });
 
-    test('Batch tests - Inverse matrix', () {
+    test('inverse', () {
       final source = [
         RealMatrix.fromData(
           rows: 3,
@@ -1438,7 +1510,7 @@ void main() {
       }
     });
 
-    test('Batch tests - Rank of a matrix', () {
+    test('rank', () {
       final source = [
         RealMatrix.fromData(
           rows: 3,
@@ -1491,7 +1563,7 @@ void main() {
       }
     });
 
-    test('Batch tests - Characteristic polynomial', () {
+    test('characteristicPolynomial', () {
       final polynomials = [
         RealMatrix.fromData(
           rows: 3,
@@ -1568,7 +1640,7 @@ void main() {
       }
     });
 
-    test('Batch tests - Eigenvalues', () {
+    test('eigenvalues', () {
       final eigenvalues = [
         RealMatrix.fromData(
           rows: 2,

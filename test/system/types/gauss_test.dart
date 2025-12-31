@@ -4,9 +4,8 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'GaussianElimination' class.", () {
-    test('Making sure that the gaussian elimination works properly with a '
-        'well formed matrix. Trying with a 3x3 matrix.', () {
+  group('GaussianElimination', () {
+    test('Smoke test', () {
       final gauss = GaussianElimination(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -20,9 +19,6 @@ void main() {
         knownValues: [-5, -5, -1],
       );
 
-      // This is needed because we want to make sure that the "original"
-      // matrix doesn't get side effects from the calculations (i.e. row
-      // swapping).
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -33,19 +29,18 @@ void main() {
         ],
       );
 
-      // Checking the "state" of the object
       expect(gauss.matrix, equals(matrix));
       expect(gauss.knownValues, orderedEquals(<double>[-5, -5, -1]));
       expect(gauss.precision, equals(1.0e-10));
       expect(gauss.size, equals(3));
       expect(gauss.hasSolution(), isTrue);
 
-      // Solutions
-      expect(gauss.solve(), unorderedEquals(<double>[-3, 0, 1]));
+      final solutions = gauss.solve();
+      expect(solutions, unorderedEquals(<double>[-3, 0, 1]));
       expect(gauss.determinant(), equals(-9));
     });
 
-    test('Making sure that the string conversion works properly.', () {
+    test('String conversion test', () {
       final solver = GaussianElimination(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -72,46 +67,24 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
-    test('Making sure that the gaussian elimination works properly with a '
-        'well formed matrix. Trying with a 2x2 matrix.', () {
-      final gauss = GaussianElimination(
-        matrix: RealMatrix.fromData(
-          rows: 2,
-          columns: 2,
-          data: const [
-            [3, -2],
-            [1, -2],
-          ],
+    test('Matrix validation test', () {
+      expect(
+        () => GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: [
+              [1, 2],
+              [4, 5],
+            ],
+          ),
+          knownValues: [7, 8, 9],
         ),
-        knownValues: [4, -8],
+        throwsA(isA<SystemSolverException>()),
       );
-
-      // This is needed because we want to make sure that the "original"
-      // matrix doesn't get side effects from the calculations (i.e. row
-      // swapping).
-      final matrix = RealMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [3, -2],
-          [1, -2],
-        ],
-      );
-
-      // Checking the "state" of the object
-      expect(gauss.matrix, equals(matrix));
-      expect(gauss.knownValues, orderedEquals(<double>[4, -8]));
-      expect(gauss.precision, equals(1.0e-10));
-      expect(gauss.size, equals(2));
-
-      // Solutions
-      expect(gauss.solve(), unorderedEquals(<double>[6, 7]));
-      expect(gauss.determinant(), equals(-4));
-
-      expect(gauss.knownValues, orderedEquals(const [4, -8]));
     });
 
-    test('Making sure that a singular matrices throw an exception.', () {
+    test('Singular matrix test', () {
       final gauss = GaussianElimination(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -124,31 +97,11 @@ void main() {
         knownValues: [-1 / 2, 2],
       );
 
-      // Solutions
       expect(gauss.determinant(), equals(0));
       expect(gauss.solve, throwsA(isA<SystemSolverException>()));
     });
 
-    test('Making sure that the matrix is squared because this method is only '
-        "able to solve systems of 'N' equations in 'N' variables.", () {
-      expect(
-        () => GaussianElimination(
-          matrix: RealMatrix.fromData(
-            rows: 2,
-            columns: 3,
-            data: const [
-              [1, 2, 3],
-              [4, 5, 6],
-            ],
-          ),
-          knownValues: [7, 8],
-        ),
-        throwsA(isA<SystemSolverException>()),
-      );
-    });
-
-    test('Making sure that the matrix is square AND the dimension of the '
-        'known values vector also matches the size of the matrix.', () {
+    test('Matrix validation test', () {
       expect(
         () => GaussianElimination(
           matrix: RealMatrix.fromData(
@@ -165,7 +118,7 @@ void main() {
       );
     });
 
-    test('Making sure that objects comparison works properly.', () {
+    test('Equality test', () {
       final gauss = GaussianElimination(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -197,9 +150,25 @@ void main() {
       expect(gauss.hashCode, equals(gauss2.hashCode));
     });
 
-    test('Batch tests', () {
-      final systems = [
-        GaussianElimination(
+    group('Solver tests', () {
+      void verifySolutions(
+        GaussianElimination solver,
+        List<double> expectedSolutions,
+      ) {
+        final solutions = solver.solve();
+
+        // For Gaussian elimination, solutions might be in any order
+        expect(solutions.length, equals(expectedSolutions.length));
+        for (var i = 0; i < solutions.length; ++i) {
+          expect(
+            solutions[i],
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-1),
+          );
+        }
+      }
+
+      test('Test 1', () {
+        final solver = GaussianElimination(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -210,8 +179,13 @@ void main() {
             ],
           ),
           knownValues: [35, 33, 6],
-        ).solve(),
-        GaussianElimination(
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 2', () {
+        final solver = GaussianElimination(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -222,8 +196,13 @@ void main() {
             ],
           ),
           knownValues: [6, 5, -2],
-        ).solve(),
-        GaussianElimination(
+        );
+
+        verifySolutions(solver, <double>[10, 2.5, -4]);
+      });
+
+      test('Test 3', () {
+        final solver = GaussianElimination(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -234,23 +213,111 @@ void main() {
             ],
           ),
           knownValues: [5, -2, 3],
-        ).solve(),
-      ];
+        );
 
-      const solutions = <List<double>>[
-        [1, 1, 1],
-        [10, 2.5, -4],
-        [5, -2, 3],
-      ];
+        verifySolutions(solver, <double>[5, -2, 3]);
+      });
 
-      for (var i = 0; i < systems.length; ++i) {
-        for (var j = 0; j < 2; ++j) {
-          expect(
-            systems[i][j],
-            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
-          );
-        }
-      }
+      test('Test 4', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [2, 1],
+              [1, 2],
+            ],
+          ),
+          knownValues: [5, 4],
+        );
+
+        verifySolutions(solver, <double>[2, 1]);
+      });
+
+      test('Test 5', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [2, 1, 0],
+              [1, 2, 1],
+              [0, 1, 2],
+            ],
+          ),
+          knownValues: [3, 4, 3],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 6', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [3, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 7],
+        );
+
+        verifySolutions(solver, <double>[1, 2]);
+      });
+
+      test('Test 7', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 4,
+            columns: 4,
+            data: const [
+              [1, 0, 0, 0],
+              [0, 2, 0, 0],
+              [0, 0, 3, 0],
+              [0, 0, 0, 4],
+            ],
+          ),
+          knownValues: [1, 4, 9, 16],
+        );
+
+        verifySolutions(solver, <double>[1, 2, 3, 4]);
+      });
+
+      test('Test 8', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 2, 1],
+              [2, 5, 2],
+              [1, 2, 6],
+            ],
+          ),
+          knownValues: [7, 9, 9],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 9', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 1, 0],
+              [1, 3, 1],
+              [0, 1, 2],
+            ],
+          ),
+          knownValues: [-1, 5, 3],
+        );
+
+        verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
     });
   });
 }

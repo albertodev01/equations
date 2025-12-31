@@ -4,9 +4,8 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'JacobiSolver' class.", () {
-    test('Making sure that the jacobi iterative method works properly with a '
-        'well formed matrix.', () {
+  group('JacobiSolver', () {
+    test('Smoke test', () {
       final jacobi = JacobiSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -20,9 +19,6 @@ void main() {
         x0: [1, 1],
       );
 
-      // This is needed because we want to make sure that the "original"
-      // matrix doesn't get side effects from the calculations (i.e. row
-      // swapping).
       final matrix = RealMatrix.fromData(
         rows: 2,
         columns: 2,
@@ -32,7 +28,6 @@ void main() {
         ],
       );
 
-      // Checking the "state" of the object
       expect(jacobi.matrix, equals(matrix));
       expect(jacobi.knownValues, orderedEquals(<double>[11, 13]));
       expect(jacobi.x0, orderedEquals(<double>[1, 1]));
@@ -41,7 +36,6 @@ void main() {
       expect(jacobi.size, equals(2));
       expect(jacobi.hasSolution(), isTrue);
 
-      // Solutions
       expect(jacobi.determinant(), equals(9));
 
       final solutions = jacobi.solve();
@@ -49,7 +43,7 @@ void main() {
       expect(solutions[1], const MoreOrLessEquals(-3.22, precision: 1.0e-2));
     });
 
-    test('Making sure that the string conversion works properly.', () {
+    test('String conversion test', () {
       final solver = JacobiSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -74,8 +68,7 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
-    test('Making sure that the matrix is squared AND the dimension of the '
-        'known values vector also matches the size of the matrix.', () {
+    test('Matrix validation test', () {
       expect(
         () => JacobiSolver(
           matrix: RealMatrix.fromData(
@@ -93,8 +86,7 @@ void main() {
       );
     });
 
-    test('Making sure that an exception is thrown when the length of the '
-        'initial vector is different from the size of the NxN matrix.', () {
+    test('Initial vector validation test', () {
       expect(
         () => JacobiSolver(
           matrix: RealMatrix.fromData(
@@ -112,7 +104,7 @@ void main() {
       );
     });
 
-    test('Making sure that objects comparison works properly.', () {
+    test('Equality test', () {
       final jacobi = JacobiSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -144,62 +136,6 @@ void main() {
       expect(jacobi2, equals(jacobi));
       expect(jacobi2 == jacobi, isTrue);
       expect(jacobi2.hashCode, jacobi.hashCode);
-    });
-
-    test('Batch tests', () {
-      final systems = [
-        JacobiSolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [25, 15, -5],
-              [15, 18, 0],
-              [-5, 0, 11],
-            ],
-          ),
-          knownValues: [35, 33, 6],
-          x0: [3, 1, -1],
-        ).solve(),
-        JacobiSolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [1, 0, 1],
-              [0, 2, 0],
-              [1, 0, 3],
-            ],
-          ),
-          knownValues: [6, 5, -2],
-          x0: [0, 0, 0],
-        ).solve(),
-        JacobiSolver(
-          matrix: RealMatrix.fromData(
-            rows: 3,
-            columns: 3,
-            data: const [
-              [1, 0, 0],
-              [0, 1, 0],
-              [0, 0, 1],
-            ],
-          ),
-          knownValues: [5, -2, 3],
-          x0: [3, 3, 3],
-        ).solve(),
-      ];
-
-      const solutions = <List<double>>[
-        [1, 1, 1],
-        [10, 2.5, -4],
-        [5, -2, 3],
-      ];
-
-      for (var i = 0; i < systems.length; ++i) {
-        for (var j = 0; j < 2; ++j) {
-          expect(systems[i][j].round(), solutions[i][j].round());
-        }
-      }
     });
 
     test('Diagonal dominance check', () {
@@ -250,7 +186,6 @@ void main() {
       final solution = jacobi.solve();
       final residualNorm = jacobi.computeResidualNorm(solution);
 
-      // The residual should be small for a good solution
       expect(residualNorm, lessThan(1e-8));
     });
 
@@ -261,7 +196,7 @@ void main() {
             rows: 2,
             columns: 2,
             data: const [
-              [0, 1], // Zero diagonal element
+              [0, 1],
               [1, 3],
             ],
           ),
@@ -270,6 +205,164 @@ void main() {
         ),
         throwsA(isA<SystemSolverException>()),
       );
+    });
+
+    group('Solver tests', () {
+      void verifySolutions(
+        JacobiSolver solver,
+        List<double> expectedSolutions,
+      ) {
+        final solutions = solver.solve();
+        for (var i = 0; i < solutions.length; ++i) {
+          expect(
+            solutions[i],
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-1),
+          );
+        }
+      }
+
+      test('Test 1', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [25, 15, -5],
+              [15, 18, 0],
+              [-5, 0, 11],
+            ],
+          ),
+          knownValues: [35, 33, 6],
+          x0: [3, 1, -1],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 2', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 1],
+              [0, 2, 0],
+              [1, 0, 3],
+            ],
+          ),
+          knownValues: [6, 5, -2],
+          x0: [0, 0, 0],
+        );
+
+        verifySolutions(solver, <double>[10, 2.5, -4]);
+      });
+
+      test('Test 3', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [1, 0, 0],
+              [0, 1, 0],
+              [0, 0, 1],
+            ],
+          ),
+          knownValues: [5, -2, 3],
+          x0: [3, 3, 3],
+        );
+
+        verifySolutions(solver, <double>[5, -2, 3]);
+      });
+
+      test('Test 4', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [4, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 4],
+          x0: [1, 1],
+        );
+
+        verifySolutions(solver, <double>[1, 1]);
+      });
+
+      test('Test 5', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [5, 1, 0],
+              [1, 5, 1],
+              [0, 1, 5],
+            ],
+          ),
+          knownValues: [6, 7, 6],
+          x0: [0, 0, 0],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 6', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [3, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 7],
+          x0: [0, 0],
+        );
+
+        verifySolutions(solver, <double>[1, 2]);
+      });
+
+      test('Test 7', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [6, 1, 0],
+              [1, 6, 1],
+              [0, 1, 6],
+            ],
+          ),
+          knownValues: [7, 8, 7],
+          x0: [0, 0, 0],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 8', () {
+        final solver = JacobiSolver(
+          matrix: RealMatrix.fromData(
+            rows: 4,
+            columns: 4,
+            data: const [
+              [4, 1, 0, 0],
+              [1, 4, 1, 0],
+              [0, 1, 4, 1],
+              [0, 0, 1, 4],
+            ],
+          ),
+          knownValues: [5, 6, 6, 5],
+          x0: [0, 0, 0, 0],
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1, 1]);
+      });
     });
   });
 }

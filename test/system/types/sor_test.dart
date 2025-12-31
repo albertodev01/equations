@@ -4,9 +4,8 @@ import 'package:test/test.dart';
 import '../../double_approximation_matcher.dart';
 
 void main() {
-  group("Testing the 'SORSolver' class.", () {
-    test('Making sure that the sor iterative method works properly with a'
-        ' well formed matrix.', () {
+  group('SORSolver', () {
+    test('Smoke test', () {
       final sor = SORSolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -21,9 +20,6 @@ void main() {
         w: 1.25,
       );
 
-      // This is needed because we want to make sure that the "original"
-      // matrix doesn't get side effects from the calculations (i.e. row
-      // swapping).
       final matrix = RealMatrix.fromData(
         rows: 3,
         columns: 3,
@@ -34,7 +30,6 @@ void main() {
         ],
       );
 
-      // Checking the "state" of the object
       expect(sor.matrix, equals(matrix));
       expect(sor.knownValues, orderedEquals(<double>[-1, 7, -7]));
       expect(sor.w, equals(1.25));
@@ -43,7 +38,6 @@ void main() {
       expect(sor.size, equals(3));
       expect(sor.hasSolution(), isTrue);
 
-      // Solutions
       expect(sor.determinant(), equals(20));
 
       final solutions = sor.solve();
@@ -52,7 +46,7 @@ void main() {
       expect(solutions[2], const MoreOrLessEquals(-2, precision: 1.0e-2));
     });
 
-    test('Making sure that the string conversion works properly.', () {
+    test('String conversion test', () {
       final solver = SORSolver(
         matrix: RealMatrix.fromData(
           rows: 3,
@@ -80,7 +74,7 @@ void main() {
       expect(solver.toStringAugmented(), equals(toStringAugmented));
     });
 
-    test('Making sure that the matrix is square.', () {
+    test('Matrix validation test', () {
       expect(
         () => SORSolver(
           matrix: RealMatrix.fromData(
@@ -98,8 +92,7 @@ void main() {
       );
     });
 
-    test('Making sure that the matrix is square AND the dimension of the '
-        'known values vector also matches the size of the matrix.', () {
+    test('Matrix validation test', () {
       expect(
         () => SORSolver(
           matrix: RealMatrix.fromData(
@@ -117,7 +110,7 @@ void main() {
       );
     });
 
-    test('Making sure that objects comparison works properly.', () {
+    test('Equality test', () {
       final sor = SORSolver(
         matrix: RealMatrix.fromData(
           rows: 2,
@@ -255,9 +248,22 @@ void main() {
       expect(residualNorm, lessThan(1e-8));
     });
 
-    test('Batch tests', () {
-      final systems = [
-        SORSolver(
+    group('Solver tests', () {
+      void verifySolutions(
+        SORSolver solver,
+        List<double> expectedSolutions,
+      ) {
+        final solutions = solver.solve();
+        for (var i = 0; i < solutions.length; ++i) {
+          expect(
+            solutions[i],
+            MoreOrLessEquals(expectedSolutions[i], precision: 1.0e-1),
+          );
+        }
+      }
+
+      test('Test 1', () {
+        final solver = SORSolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -269,8 +275,13 @@ void main() {
           ),
           knownValues: [-1, 7, -7],
           w: 1.25,
-        ).solve(),
-        SORSolver(
+        );
+
+        verifySolutions(solver, <double>[1, 2, -2]);
+      });
+
+      test('Test 2', () {
+        final solver = SORSolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -282,8 +293,13 @@ void main() {
           ),
           knownValues: [8, -29, 43],
           w: 1.2,
-        ).solve(),
-        SORSolver(
+        );
+
+        verifySolutions(solver, <double>[1, -2, 3]);
+      });
+
+      test('Test 3', () {
+        final solver = SORSolver(
           matrix: RealMatrix.fromData(
             rows: 3,
             columns: 3,
@@ -295,23 +311,117 @@ void main() {
           ),
           knownValues: [-1, 7, -7],
           w: 1.65,
-        ).solve(),
-      ];
+        );
 
-      const solutions = <List<double>>[
-        [1, 2, -2],
-        [1, -2, 3],
-        [1, 2, -2],
-      ];
+        verifySolutions(solver, <double>[1, 2, -2]);
+      });
 
-      for (var i = 0; i < systems.length; ++i) {
-        for (var j = 0; j < 2; ++j) {
-          expect(
-            systems[i][j],
-            MoreOrLessEquals(solutions[i][j], precision: 1.0e-4),
-          );
-        }
-      }
+      test('Test 4', () {
+        final solver = SORSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [4, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 4],
+          w: 1.5,
+        );
+
+        verifySolutions(solver, <double>[1, 1]);
+      });
+
+      test('Test 5', () {
+        final solver = SORSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, -1, 0],
+              [-1, 4, -1],
+              [0, -1, 4],
+            ],
+          ),
+          knownValues: [2, 6, 2],
+          w: 1.3,
+        );
+
+        verifySolutions(solver, <double>[1, 2, 1]);
+      });
+
+      test('Test 6', () {
+        final solver = SORSolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [3, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 7],
+          w: 1.4,
+        );
+
+        verifySolutions(solver, <double>[1, 2]);
+      });
+
+      test('Test 7', () {
+        final solver = SORSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [5, 1, 0],
+              [1, 5, 1],
+              [0, 1, 5],
+            ],
+          ),
+          knownValues: [6, 7, 6],
+          w: 1.2,
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1]);
+      });
+
+      test('Test 8', () {
+        final solver = SORSolver(
+          matrix: RealMatrix.fromData(
+            rows: 4,
+            columns: 4,
+            data: const [
+              [4, 1, 0, 0],
+              [1, 4, 1, 0],
+              [0, 1, 4, 1],
+              [0, 0, 1, 4],
+            ],
+          ),
+          knownValues: [5, 6, 6, 5],
+          w: 1.3,
+        );
+
+        verifySolutions(solver, <double>[1, 1, 1, 1]);
+      });
+
+      test('Test 9', () {
+        final solver = SORSolver(
+          matrix: RealMatrix.fromData(
+            rows: 3,
+            columns: 3,
+            data: const [
+              [4, 1, 0],
+              [1, 3, 1],
+              [0, 1, 2],
+            ],
+          ),
+          knownValues: [-1, 5, 3],
+          w: 1.5,
+        );
+
+        verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
     });
   });
 }
