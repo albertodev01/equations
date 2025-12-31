@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the solutions method from the GenericAlgebraic class, for the Dart programming language.">
+  <title>solutions method - GenericAlgebraic class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/GenericAlgebraic-class.html">GenericAlgebraic</a></li>
+    <li class="self-crumb">solutions method</li>
+  </ol>
+  <div class="self-name">solutions</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;GenericAlgebraic-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">solutions</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/Complex-class.html">Complex</a></span>&gt;</span></span>
+<span class="name ">solutions</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Finds the roots (the solutions) of the associated <em>P(x) = 0</em> equation.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+List&lt;Complex&gt; solutions() {
+  &#47;&#47; In case the polynomial was a constant, just return an empty array because
+  &#47;&#47; there are no solutions.
+  if (coefficients.length &lt;= 1) {
+    return const [];
+  }
+
+  &#47;&#47; Make a copy of the coefficients and scale to make the polynomial monic
+  final leadingCoeff = coefficients.first;
+  if (leadingCoeff.abs() &lt; precision) {
+    throw const AlgebraicException(
+      &#39;Leading coefficient is too close to zero&#39;,
+    );
+  }
+
+  &#47;&#47; Scale all coefficients by dividing by the leading coefficient
+  final scaledCoefficients = coefficients
+      .map((c) =&gt; c &#47; leadingCoeff)
+      .toList();
+  final degree = (scaledCoefficients.length - 1).toDouble();
+
+  &#47;&#47; Initialize roots using Aberth&#39;s method if no initial guesses provided
+  List&lt;Complex&gt; roots;
+
+  if (initialGuess.isNotEmpty) {
+    roots = List&lt;Complex&gt;.from(initialGuess);
+  } else {
+    &#47;&#47; Calculate the center of the roots using the first two coefficients
+    final center = -scaledCoefficients[1] &#47; Complex.fromReal(degree);
+
+    &#47;&#47; Calculate the radius using the Aberth bound
+    var radius = 0.0;
+    for (var i = 1; i &lt; scaledCoefficients.length; i++) {
+      radius = max(radius, scaledCoefficients[i].abs() * (1.0 &#47; i));
+    }
+    radius = 2 * radius; &#47;&#47; Aberth&#39;s method typically uses a factor of 2
+
+    &#47;&#47; Generate initial guesses using Aberth&#39;s method
+    roots = List&lt;Complex&gt;.generate(degree.floor(), (i) {
+      &#47;&#47; Calculate the angle with a small random perturbation
+      final angle = 2 * pi * i &#47; degree + (Random().nextDouble() - 0.5) * 0.1;
+
+      &#47;&#47; Calculate the radius with a small random perturbation
+      final perturbedRadius =
+          radius * (1 + (Random().nextDouble() - 0.5) * 0.1);
+
+      &#47;&#47; Generate the initial guess
+      return center +
+          Complex.fromReal(perturbedRadius) * Complex(cos(angle), sin(angle));
+    });
+
+    &#47;&#47; Ensure minimum distance between initial guesses
+    for (var i = 0; i &lt; roots.length; i++) {
+      for (var j = i + 1; j &lt; roots.length; j++) {
+        final distance = (roots[i] - roots[j]).abs();
+        if (distance &lt; minGuessDistance) {
+          &#47;&#47; Move the second root away from the first
+          final direction =
+              (roots[j] - roots[i]) &#47; Complex.fromReal(distance);
+          roots[j] =
+              roots[i] + direction * Complex.fromReal(minGuessDistance);
+        }
+      }
+    }
+  }
+
+  &#47;&#47; Durand-Kerner iteration
+  var converged = false;
+  var iteration = 0;
+
+  while (!converged &amp;&amp; iteration &lt; maxSteps) {
+    converged = true;
+    final newRoots = List&lt;Complex&gt;.from(roots);
+
+    for (var i = 0; i &lt; degree.floor(); i++) {
+      &#47;&#47; Evaluate polynomial at current root
+      var p = scaledCoefficients[0];
+      for (var j = 1; j &lt; scaledCoefficients.length; j++) {
+        p = p * roots[i] + scaledCoefficients[j];
+      }
+
+      &#47;&#47; Evaluate denominator (product of differences)
+      var denominator = const Complex.fromReal(1);
+      for (var j = 0; j &lt; degree.floor(); j++) {
+        if (j != i) {
+          denominator *= roots[i] - roots[j];
+        }
+      }
+
+      &#47;&#47; Update root using Durand-Kerner formula
+      if (denominator.abs() &gt; precision) {
+        final correction = p &#47; denominator;
+        newRoots[i] = roots[i] - correction;
+
+        &#47;&#47; Check for convergence
+        if (correction.abs() &gt; precision) {
+          converged = false;
+        }
+      }
+    }
+
+    roots = newRoots;
+    iteration++;
+  }
+
+  &#47;&#47; Sort roots by real part for stability
+  roots.sort((a, b) =&gt; a.real.compareTo(b.real));
+
+  return roots;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/GenericAlgebraic-class.html">GenericAlgebraic</a></li>
+    <li class="self-crumb">solutions method</li>
+</ol>
+
+    <h5>GenericAlgebraic class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

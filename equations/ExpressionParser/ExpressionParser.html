@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the ExpressionParser.new constructor from Class ExpressionParser from the equations library, for the Dart programming language.">
+  <title>ExpressionParser.new constructor - ExpressionParser - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/ExpressionParser-class.html">ExpressionParser</a></li>
+    <li class="self-crumb">ExpressionParser.new const constructor</li>
+  </ol>
+  <div class="self-name">ExpressionParser.new</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="equations&#47;ExpressionParser-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">ExpressionParser</span> constructor 
+</h1></div>
+
+    <section class="multi-line-signature">
+      const
+      <span class="name ">ExpressionParser</span>(<wbr>)
+    </section>
+    
+<section class="desc markdown">
+  <p>Parses mathematical expressions with real numbers and the <code>x</code> variable (if
+any). The only allowed variable name is <code>x</code>: any other type of value isn't
+recognized. Some expressions examples are:</p>
+<ul>
+<li><code>"3*x - 6"</code></li>
+<li><code>"5 + 3 * (4^2)"</code></li>
+<li><code>sqrt(x - 3) - log(10)</code></li>
+</ul>
+<p>Note that the multiplication requires the star (*) symbol. Here's a list of
+all the operators supported by the parser:</p>
+<ul>
+<li>
+<ul>
+<li>(sum)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>(difference)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>(product)</li>
+</ul>
+</li>
+<li>/ (division)</li>
+<li>^ (power)</li>
+<li>sqrt(x) (square root of <code>x</code>)</li>
+<li>sin(x) (sine of <code>x</code>)</li>
+<li>cos(x) (cosine of <code>x</code>)</li>
+<li>tan(x) (tangent of <code>x</code>)</li>
+<li>log(x) (natural logarithm of <code>x</code>)</li>
+<li>acos(x) (arc cosine of <code>x</code>)</li>
+<li>asin(x) (arc sine of <code>x</code>)</li>
+<li>atan(x) (arc tangent of <code>x</code>)</li>
+<li>csc(x) (cosecant of <code>x</code>)</li>
+<li>sec(x) (secant of <code>x</code>)</li>
+</ul>
+<p>An exception of type <a href="../../equations/ExpressionParserException-class.html">ExpressionParserException</a> is thrown if the expression
+is malformed. This parser is also able to recognize some constants:</p>
+<ul>
+<li>pi (pi, the ratio of the circumference on the diameter)</li>
+<li>e (Euler's number)</li>
+<li>sqrt2 (the square root of 2)</li>
+<li>sqrt3 (the square root of 3)</li>
+<li>G (Gauss constant)</li>
+</ul>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">const ExpressionParser();</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/ExpressionParser-class.html">ExpressionParser</a></li>
+    <li class="self-crumb">ExpressionParser.new const constructor</li>
+</ol>
+
+    <h5>ExpressionParser class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

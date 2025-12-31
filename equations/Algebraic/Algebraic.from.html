@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Algebraic.from constructor from Class Algebraic from the equations library, for the Dart programming language.">
+  <title>Algebraic.from constructor - Algebraic - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/Algebraic-class.html">Algebraic</a></li>
+    <li class="self-crumb">Algebraic.from factory constructor</li>
+  </ol>
+  <div class="self-name">Algebraic.from</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="equations&#47;Algebraic-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">Algebraic.from</span> constructor 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+      <span class="name ">Algebraic.from</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="from-param-coefficients"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/Complex-class.html">Complex</a></span>&gt;</span></span> <span class="parameter-name">coefficients</span></span></li>
+</ol>)
+    </section>
+    
+<section class="desc markdown">
+  <p>Creates an <a href="../../equations/Algebraic-class.html">Algebraic</a> object according to the length of <code>coefficients</code>.
+In particular:</p>
+<ul>
+<li>if the length is 1, a <a href="../../equations/Constant-class.html">Constant</a> object is returned;</li>
+<li>if the length is 2, a <a href="../../equations/Linear-class.html">Linear</a> object is returned;</li>
+<li>if the length is 3, a <a href="../../equations/Quadratic-class.html">Quadratic</a> object is returned;</li>
+<li>if the length is 4, a <a href="../../equations/Cubic-class.html">Cubic</a> object is returned;</li>
+<li>if the length is 5, a <a href="../../equations/Quartic-class.html">Quartic</a> object is returned;</li>
+<li>if the length is 6 or higher, a <a href="../../equations/GenericAlgebraic-class.html">GenericAlgebraic</a> object is returned.</li>
+</ul>
+<p>For example:</p>
+<pre class="language-dart"><code class="language-dart">final linear = Algebraic.from(const [
+  Complex(1, 3),
+  Complex.i(),
+]);
+</code></pre>
+<p>In this case, <code>linear</code> is of type <a href="../../equations/Linear-class.html">Linear</a> because the given coefficients
+list represents the <code>(1 + 3i)x + i = 0</code> equation.</p>
+<p>Use this method when the coefficients can be complex numbers. If there
+are only real numbers, use the <a href="../../equations/Algebraic/Algebraic.fromReal.html">Algebraic.fromReal</a> constructor which is
+more convenient.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">factory Algebraic.from(List&lt;Complex&gt; coefficients) {
+  switch (coefficients.length) {
+    case 1:
+      return Constant(a: coefficients.first);
+    case 2:
+      return Linear(a: coefficients.first, b: coefficients[1]);
+    case 3:
+      return Quadratic(
+        a: coefficients.first,
+        b: coefficients[1],
+        c: coefficients[2],
+      );
+    case 4:
+      return Cubic(
+        a: coefficients.first,
+        b: coefficients[1],
+        c: coefficients[2],
+        d: coefficients[3],
+      );
+    case 5:
+      return Quartic(
+        a: coefficients.first,
+        b: coefficients[1],
+        c: coefficients[2],
+        d: coefficients[3],
+        e: coefficients[4],
+      );
+    default:
+      return GenericAlgebraic(
+        coefficients: coefficients,
+      );
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/Algebraic-class.html">Algebraic</a></li>
+    <li class="self-crumb">Algebraic.from factory constructor</li>
+</ol>
+
+    <h5>Algebraic class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

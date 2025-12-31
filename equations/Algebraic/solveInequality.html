@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the solveInequality method from the Algebraic class, for the Dart programming language.">
+  <title>solveInequality method - Algebraic class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/Algebraic-class.html">Algebraic</a></li>
+    <li class="self-crumb">solveInequality method</li>
+  </ol>
+  <div class="self-name">solveInequality</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;Algebraic-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">solveInequality</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/AlgebraicInequalitySolution-class.html">AlgebraicInequalitySolution</a></span>&gt;</span></span>
+<span class="name ">solveInequality</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="solveInequality-param-inequalityType"><span>required</span> <span class="type-annotation"><a href="../../equations/AlgebraicInequalityType.html">AlgebraicInequalityType</a></span> <span class="parameter-name">inequalityType</span>, </span></li>
+<li><span class="parameter" id="solveInequality-param-precision"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">precision</span> = <span class="default-value">1e-10</span>, </span></li>
+</ol>})
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Solves the inequality associated with this polynomial.</p>
+<p>The inequality type is specified by the <code>inequalityType</code> parameter, which
+can be one of the following (where P(x) represents this polynomial):</p>
+<ul>
+<li><a href="../../equations/AlgebraicInequalityType.html">AlgebraicInequalityType.lessThan</a>: solves P(x) &lt; 0</li>
+<li><a href="../../equations/AlgebraicInequalityType.html">AlgebraicInequalityType.lessThanOrEqualTo</a>: solves P(x) ≤ 0</li>
+<li><a href="../../equations/AlgebraicInequalityType.html">AlgebraicInequalityType.greaterThan</a>: solves P(x) &gt; 0</li>
+<li><a href="../../equations/AlgebraicInequalityType.html">AlgebraicInequalityType.greaterThanOrEqualTo</a>: solves P(x) ≥ 0</li>
+</ul>
+<p>The <code>precision</code> parameter (defaults to 1e-10) is used to determine if a
+root is real or complex. If the imaginary part of a root is less than
+<code>precision</code>, it is considered real. The precision must be a positive
+number.</p>
+<p>Returns a list of <a href="../../equations/AlgebraicInequalitySolution-class.html">AlgebraicInequalitySolution</a> objects representing the
+intervals where the inequality is satisfied.</p>
+<p>The returned list can be empty if the inequality is not satisfied for any
+real number.</p>
+<p>Throws an <a href="../../equations/AlgebraicException-class.html">AlgebraicException</a> if:</p>
+<ul>
+<li>The polynomial has complex coefficients</li>
+<li>The precision parameter is not positive</li>
+</ul>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">List&lt;AlgebraicInequalitySolution&gt; solveInequality({
+  required AlgebraicInequalityType inequalityType,
+  double precision = 1e-10,
+}) {
+  &#47;&#47; First check the simpler validation
+  if (precision &lt;= 0) {
+    throw const AlgebraicException(
+      &#39;The precision must be a positive number.&#39;,
+    );
+  }
+
+  &#47;&#47; Then check for complex coefficients
+  if (!isRealEquation) {
+    throw const AlgebraicException(
+      &#39;Inequalities are not well-defined in the complex plane.&#39;,
+    );
+  }
+
+  &#47;&#47; Get all roots of the polynomial
+  final roots = solutions();
+
+  &#47;&#47; Filter out complex roots and convert to real numbers
+  final realRoots = roots
+      .where((root) =&gt; root.imaginary.abs() &lt; precision)
+      .map((root) =&gt; root.real)
+      .toList();
+
+  &#47;&#47; If there are no real roots, check if the polynomial is always positive or
+  &#47;&#47; negative
+  if (realRoots.isEmpty) {
+    final testValue = realEvaluateOn(0);
+    final isPositive = testValue.real &gt; 0;
+    final isSatisfied = switch (inequalityType) {
+      AlgebraicInequalityType.lessThan =&gt; !isPositive,
+      AlgebraicInequalityType.lessThanOrEqualTo =&gt; !isPositive,
+      AlgebraicInequalityType.greaterThan =&gt; isPositive,
+      AlgebraicInequalityType.greaterThanOrEqualTo =&gt; isPositive,
+    };
+
+    return isSatisfied ? [const AlgebraicInequalityAllRealNumbers()] : [];
+  }
+
+  &#47;&#47; Sort roots in ascending order
+  realRoots.sort((a, b) =&gt; a.compareTo(b));
+  final inequalitySolutions = &lt;AlgebraicInequalitySolution&gt;[];
+
+  &#47;&#47; Test interval before first root
+  final testBeforeFirst = realEvaluateOn(realRoots.first - 1.0);
+  if (_isInequalitySatisfied(testBeforeFirst, inequalityType)) {
+    inequalitySolutions.add(
+      AlgebraicInequalitySmallerThan(
+        value: realRoots.first,
+        isInclusive:
+            inequalityType == AlgebraicInequalityType.lessThanOrEqualTo,
+      ),
+    );
+  }
+
+  &#47;&#47; Test intervals between consecutive roots
+  for (var i = 0; i &lt; realRoots.length - 1; i++) {
+    final midPoint = (realRoots[i] + realRoots[i + 1]) &#47; 2;
+    final testValue = realEvaluateOn(midPoint);
+
+    if (_isInequalitySatisfied(testValue, inequalityType)) {
+      inequalitySolutions.add(
+        AlgebraicInequalityInterval(
+          start: realRoots[i],
+          end: realRoots[i + 1],
+          isInclusive:
+              inequalityType == AlgebraicInequalityType.lessThanOrEqualTo ||
+              inequalityType == AlgebraicInequalityType.greaterThanOrEqualTo,
+        ),
+      );
+    }
+  }
+
+  &#47;&#47; Test interval after last root
+  final testAfterLast = realEvaluateOn(realRoots.last + 1.0);
+  if (_isInequalitySatisfied(testAfterLast, inequalityType)) {
+    inequalitySolutions.add(
+      AlgebraicInequalityGreaterThan(
+        value: realRoots.last,
+        isInclusive:
+            inequalityType == AlgebraicInequalityType.greaterThanOrEqualTo,
+      ),
+    );
+  }
+
+  return inequalitySolutions;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/Algebraic-class.html">Algebraic</a></li>
+    <li class="self-crumb">solveInequality method</li>
+</ol>
+
+    <h5>Algebraic class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

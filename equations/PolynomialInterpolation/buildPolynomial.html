@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the buildPolynomial method from the PolynomialInterpolation class, for the Dart programming language.">
+  <title>buildPolynomial method - PolynomialInterpolation class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/PolynomialInterpolation-class.html">PolynomialInterpolation</a></li>
+    <li class="self-crumb">buildPolynomial method</li>
+  </ol>
+  <div class="self-name">buildPolynomial</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;PolynomialInterpolation-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">buildPolynomial</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="../../equations/Algebraic-class.html">Algebraic</a></span>
+<span class="name ">buildPolynomial</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Computes the interpolation polynomial and returns it as an <a href="../../equations/Algebraic-class.html">Algebraic</a>
+object.</p>
+<p>This method constructs the interpolating polynomial by solving a system
+of linear equations using the <strong>Vandermonde matrix</strong> approach. The
+Vandermonde matrix is constructed from the x-values of the nodes, and
+the system is solved using LU decomposition to find the polynomial
+coefficients.</p>
+<p>The Vandermonde matrix can be <strong>ill-conditioned</strong> for:</p>
+<ul>
+<li>Large numbers of nodes (&gt; 15-20)</li>
+<li>Nodes that are close together</li>
+<li>Equally-spaced nodes over large intervals</li>
+</ul>
+<p>In such cases, numerical errors may affect the accuracy of the computed
+coefficients. For large datasets, consider using <a href="../../equations/NewtonInterpolation-class.html">NewtonInterpolation</a> or
+<a href="../../equations/SplineInterpolation-class.html">SplineInterpolation</a> instead.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Algebraic buildPolynomial() {
+  _validateNodes();
+  final length = nodes.length * nodes.length;
+  final matrixSource = List&lt;double&gt;.generate(length, (_) =&gt; 0);
+
+  &#47;&#47; Creating the Vandermonde matrix
+  for (var i = 0; i &lt; nodes.length; ++i) {
+    for (var j = 0; j &lt; nodes.length; ++j) {
+      matrixSource[nodes.length * i + j] = pow(nodes[i].x, j) * 1.0;
+    }
+  }
+
+  &#47;&#47; Creating the known values vector
+  final knownValues = nodes.map((node) =&gt; node.y).toList(growable: false);
+
+  &#47;&#47; Finding the coefficients by solving the system
+  final lu = LUSolver(
+    matrix: RealMatrix.fromFlattenedData(
+      rows: nodes.length,
+      columns: nodes.length,
+      data: matrixSource,
+    ),
+    knownValues: knownValues,
+  );
+
+  final coefficients = lu.solve().reversed.toList(growable: false);
+
+  return Algebraic.fromReal(coefficients);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/PolynomialInterpolation-class.html">PolynomialInterpolation</a></li>
+    <li class="self-crumb">buildPolynomial method</li>
+</ol>
+
+    <h5>PolynomialInterpolation class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

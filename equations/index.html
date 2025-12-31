@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="equations library API docs, for the Dart programming language.">
+  <title>equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">equations</a></li>
+    <li class="self-crumb">equations.dart</li>
+  </ol>
+  <div class="self-name">equations</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar=""
+    data-below-sidebar="equations&#47;equations-library-sidebar.html">
+  
+    <div>
+      
+
+      <h1>
+        <span class="kind-library">equations</span>
+        library 
+ 
+
+      </h1>
+    </div>
+
+    
+<section class="desc markdown">
+  <p>The <code>equations</code> package helps you with:</p>
+<ul>
+<li>solving polynomial equations and inequalities;</li>
+<li>solve nonlinear equations;</li>
+<li>solve linear systems of equations.</li>
+</ul>
+<p>In addition, you can also find utilities to work with:</p>
+<ul>
+<li>real and complex matrices;</li>
+<li>complex numbers;</li>
+<li>integral evaluation;</li>
+<li>data interpolation.</li>
+</ul>
+</section>
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+      <dl>
+          <dt id="AdaptiveQuadrature">
+  <span class="name "><a href="../equations/AdaptiveQuadrature-class.html">AdaptiveQuadrature</a></span> 
+
+</dt>
+<dd>
+  The "Adaptive quadrature" is a technique for approximating the value of a
+definite integral that automatically adjusts the step size based on the
+local behavior of the function being integrated.
+</dd>
+
+          <dt id="Algebraic">
+  <span class="name "><a href="../equations/Algebraic-class.html">Algebraic</a></span> 
+
+</dt>
+<dd>
+  An abstract class that represents an <em>algebraic equation</em>, also known as
+a <em>polynomial equation</em>, which has a single variable and a maximum degree.
+</dd>
+
+          <dt id="AlgebraicInequalityAllRealNumbers">
+  <span class="name "><a href="../equations/AlgebraicInequalityAllRealNumbers-class.html">AlgebraicInequalityAllRealNumbers</a></span> 
+
+</dt>
+<dd>
+  A solution of an <a href="../equations/Algebraic-class.html">Algebraic</a> inequality that includes all real numbers.
+</dd>
+
+          <dt id="AlgebraicInequalityGreaterThan">
+  <span class="name "><a href="../equations/AlgebraicInequalityGreaterThan-class.html">AlgebraicInequalityGreaterThan</a></span> 
+
+</dt>
+<dd>
+  A solution of an <a href="../equations/Algebraic-class.html">Algebraic</a> inequality that is greater than <a href="../equations/AlgebraicInequalityGreaterThan/value.html">value</a>.
+</dd>
+
+          <dt id="AlgebraicInequalityInterval">
+  <span class="name "><a href="../equations/AlgebraicInequalityInterval-class.html">AlgebraicInequalityInterval</a></span> 
+
+</dt>
+<dd>
+  A solution of an <a href="../equations/Algebraic-class.html">Algebraic</a> inequality that is an interval between <a href="../equations/AlgebraicInequalityInterval/start.html">start</a>
+and <a href="../equations/AlgebraicInequalityInterval/end.html">end</a> values.
+</dd>
+
+          <dt id="AlgebraicInequalitySmallerThan">
+  <span class="name "><a href="../equations/AlgebraicInequalitySmallerThan-class.html">AlgebraicInequalitySmallerThan</a></span> 
+
+</dt>
+<dd>
+  A solution of an <a href="../equations/Algebraic-class.html">Algebraic</a> inequality that is smaller than <a href="../equations/AlgebraicInequalitySmallerThan/value.html">value</a>.
+</dd>
+
+          <dt id="AlgebraicInequalitySolution">
+  <span class="name "><a href="../equations/AlgebraicInequalitySolution-class.html">AlgebraicInequalitySolution</a></span> 
+
+</dt>
+<dd>
+  A solution of an <a href="../equations/Algebraic-class.html">Algebraic</a> inequality.
+</dd>
+
+          <dt id="Bisection">
+  <span class="name "><a href="../equations/Bisection-class.html">Bisection</a></span> 
+
+</dt>
+<dd>
+  Implements the bisection method to find a root of a given equation.
+</dd>
+
+          <dt id="Brent">
+  <span class="name "><a href="../equations/Brent-class.html">Brent</a></span> 
+
+</dt>
+<dd>
+  Implements Brent's method to find the roots of a given equation.
+</dd>
+
+          <dt id="CholeskySolver">
+  <span class="name "><a href="../equations/CholeskySolver-class.html">CholeskySolver</a></span> 
+
+</dt>
+<dd>
+  Solves a system of linear equations using the Cholesky decomposition method.
+</dd>
+
+          <dt id="Chords">
+  <span class="name "><a href="../equations/Chords-class.html">Chords</a></span> 
+
+</dt>
+<dd>
+  Implements the 'chords' method to find the roots of a given equation.
+</dd>
+
+          <dt id="Complex">
+  <span class="name "><a href="../equations/Complex-class.html">Complex</a></span> 
+
+</dt>
+<dd>
+  A Dart representation of a complex number in the form <code>a + bi</code> where <code>a</code> is
+the real part and <code>bi</code> is the imaginary (or complex) part.
+</dd>
+
+          <dt id="ComplexMatrix">
+  <span class="name "><a href="../equations/ComplexMatrix-class.html">ComplexMatrix</a></span> 
+
+</dt>
+<dd>
+  A simple Dart implementation of an <code>m x n</code> matrix whose data type is
+<a href="../equations/Complex-class.html">Complex</a>.
+</dd>
+
+          <dt id="Constant">
+  <span class="name "><a href="../equations/Constant-class.html">Constant</a></span> 
+
+</dt>
+<dd>
+  Concrete implementation of <a href="../equations/Algebraic-class.html">Algebraic</a> that represents a constant value <code>a</code>.
+It can be either a real or complex number, such as:
+</dd>
+
+          <dt id="Cubic">
+  <span class="name "><a href="../equations/Cubic-class.html">Cubic</a></span> 
+
+</dt>
+<dd>
+  Concrete implementation of <a href="../equations/Algebraic-class.html">Algebraic</a> that represents a third degree
+polynomial equation in the form <code>ax^3 + bx^2 + cx + d = 0</code>.
+</dd>
+
+          <dt id="ExpressionParser">
+  <span class="name "><a href="../equations/ExpressionParser-class.html">ExpressionParser</a></span> 
+
+</dt>
+<dd>
+  Parses mathematical expressions with real numbers and the <code>x</code> variable (if
+any). The only allowed variable name is <code>x</code>: any other type of value isn't
+recognized. Some expressions examples are:
+</dd>
+
+          <dt id="Fraction">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a></span> 
+
+</dt>
+<dd>
+  Dart representation of a fraction having both <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction/numerator.html">numerator</a> and <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction/denominator.html">denominator</a>
+as integers. If the <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction/denominator.html">denominator</a> is zero, a <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/FractionException-class.html">FractionException</a> object is
+thrown.
+</dd>
+
+          <dt id="GaussianElimination">
+  <span class="name "><a href="../equations/GaussianElimination-class.html">GaussianElimination</a></span> 
+
+</dt>
+<dd>
+  Solves a system of linear equations using the Gaussian elimination
+algorithm, also known as row reduction.
+</dd>
+
+          <dt id="GaussSeidelSolver">
+  <span class="name "><a href="../equations/GaussSeidelSolver-class.html">GaussSeidelSolver</a></span> 
+
+</dt>
+<dd>
+  Solves a system of linear equations using the Gauss-Seidel iterative method.
+</dd>
+
+          <dt id="GenericAlgebraic">
+  <span class="name "><a href="../equations/GenericAlgebraic-class.html">GenericAlgebraic</a></span> 
+
+</dt>
+<dd>
+  Concrete implementation of <a href="../equations/Algebraic-class.html">Algebraic</a> that approximates all roots of a
+polynomial of any degree.
+</dd>
+
+          <dt id="Interpolation">
+  <span class="name "><a href="../equations/Interpolation-class.html">Interpolation</a></span> 
+
+</dt>
+<dd>
+  An abstract class that represents an interpolation strategy, used to find
+new data points based on a given discrete set of data points (called nodes).
+The available interpolation algorithms are:
+</dd>
+
+          <dt id="InterpolationNode">
+  <span class="name "><a href="../equations/InterpolationNode-class.html">InterpolationNode</a></span> 
+
+</dt>
+<dd>
+  A point in the cartesian coordinate system used by <a href="../equations/Interpolation-class.html">Interpolation</a> types to
+represent interpolation nodes. This class simply represents the <code>x</code> and <code>y</code>
+coordinates of a point on a cartesian plane.
+</dd>
+
+          <dt id="IntervalsIntegration">
+  <span class="name "><a href="../equations/IntervalsIntegration-class.html">IntervalsIntegration</a></span> 
+
+</dt>
+<dd>
+  This class is extended by classes whose algorithms divide the integration
+bounds into smaller intervals to compute the result. There are currently
+three subclasses of <a href="../equations/IntervalsIntegration-class.html">IntervalsIntegration</a>:
+</dd>
+
+          <dt id="JacobiSolver">
+  <span class="name "><a href="../equations/JacobiSolver-class.html">JacobiSolver</a></span> 
+
+</dt>
+<dd>
+  Solves a system of linear equations using the Jacobi iterative method.
+The given input matrix, representing the system of linear equations, must
+be square.
+</dd>
+
+          <dt id="Linear">
+  <span class="name "><a href="../equations/Linear-class.html">Linear</a></span> 
+
+</dt>
+<dd>
+  Concrete implementation of <a href="../equations/Algebraic-class.html">Algebraic</a> that represents a first degree
+polynomial equation in the form <em>ax + b = 0</em>.
+</dd>
+
+          <dt id="LinearInterpolation">
+  <span class="name "><a href="../equations/LinearInterpolation-class.html">LinearInterpolation</a></span> 
+
+</dt>
+<dd>
+  Linear interpolation is a curve fitting method that uses linear polynomials
+to construct new data points within the range of a discrete set of known
+data points.
+</dd>
+
+          <dt id="LUSolver">
+  <span class="name "><a href="../equations/LUSolver-class.html">LUSolver</a></span> 
+
+</dt>
+<dd>
+  Solves a system of linear equations using the LU decomposition method.
+</dd>
+
+          <dt id="Matrix">
+  <span class="name "><a href="../equations/Matrix-class.html">Matrix</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  A matrix with <a href="../equations/Matrix/rowCount.html">rowCount</a> rows and <a href="../equations/Matrix/columnCount.html">columnCount</a> columns. This abstract type
+allows the implementation of different types of matrices, each with their
+own specific methods and types. This library implements:
+</dd>
+
+          <dt id="MidpointRule">
+  <span class="name "><a href="../equations/MidpointRule-class.html">MidpointRule</a></span> 
+
+</dt>
+<dd>
+  The midpoint rule is a numerical integration technique for approximating
+definite integrals using Riemann sums. Given a definite integral in the
+form ∫<code>[a,b]</code> f(x) dx, the midpoint rule approximates it as:
+</dd>
+
+          <dt id="MixedFraction">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a></span> 
+
+</dt>
+<dd>
+  Dart representation of a 'mixed fraction', which is made up by the whole
+part and a proper fraction. A proper fraction is a fraction in which the
+relation <code>numerator &lt;= denominator</code> is true.
+</dd>
+
+          <dt id="Newton">
+  <span class="name "><a href="../equations/Newton-class.html">Newton</a></span> 
+
+</dt>
+<dd>
+  Implements Newton's method (also known as the Newton-Raphson method) to find
+the roots of a given equation.
+</dd>
+
+          <dt id="NewtonInterpolation">
+  <span class="name "><a href="../equations/NewtonInterpolation-class.html">NewtonInterpolation</a></span> 
+
+</dt>
+<dd>
+  Newton interpolation (also known as Newton's divided difference
+interpolation) is a polynomial interpolation method that constructs an
+interpolation polynomial for a given set of data points using divided
+differences.
+</dd>
+
+          <dt id="NonLinear">
+  <span class="name "><a href="../equations/NonLinear-class.html">NonLinear</a></span> 
+
+</dt>
+<dd>
+  An abstract class that represents a nonlinear equation, which can be solved
+with a particular root-finding algorithm. No complex numbers are allowed.
+</dd>
+
+          <dt id="NumericalIntegration">
+  <span class="name "><a href="../equations/NumericalIntegration-class.html">NumericalIntegration</a></span> 
+
+</dt>
+<dd>
+  When it comes to analysis, the term <strong>numerical integration</strong> indicates a
+group of algorithms for calculating the numerical value of a definite
+integral on an interval.
+</dd>
+
+          <dt id="PolarComplex">
+  <span class="name "><a href="../equations/PolarComplex-class.html">PolarComplex</a></span> 
+
+</dt>
+<dd>
+  A wrapper class, returned by a <a href="../equations/Complex-class.html">Complex</a> object, that represents a complex
+number in polar coordinates.
+</dd>
+
+          <dt id="PolynomialInterpolation">
+  <span class="name "><a href="../equations/PolynomialInterpolation-class.html">PolynomialInterpolation</a></span> 
+
+</dt>
+<dd>
+  Polynomial interpolation using <strong>Lagrange's interpolation formula</strong> to find
+the unique polynomial of degree <code>n-1</code> that passes through <code>n</code> given data
+points.
+</dd>
+
+          <dt id="PolynomialLongDivision">
+  <span class="name "><a href="../equations/PolynomialLongDivision-class.html">PolynomialLongDivision</a></span> 
+
+</dt>
+<dd>
+  Implements the polynomial long division algorithm, which divides one
+polynomial by another polynomial.
+</dd>
+
+          <dt id="Quadratic">
+  <span class="name "><a href="../equations/Quadratic-class.html">Quadratic</a></span> 
+
+</dt>
+<dd>
+  Concrete implementation of <a href="../equations/Algebraic-class.html">Algebraic</a> that represents a second degree
+polynomial equation in the form <em>ax^2 + bx + c = 0</em>.
+</dd>
+
+          <dt id="Quartic">
+  <span class="name "><a href="../equations/Quartic-class.html">Quartic</a></span> 
+
+</dt>
+<dd>
+  Concrete implementation of <a href="../equations/Algebraic-class.html">Algebraic</a> that represents a fourth degree
+polynomial equation in the form <em>ax^4 + bx^3 + cx^2 + dx + e = 0</em>.
+</dd>
+
+          <dt id="Rational">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Rational-class.html">Rational</a></span> 
+
+</dt>
+<dd>
+  Dart representation of a rational number.
+</dd>
+
+          <dt id="RealMatrix">
+  <span class="name "><a href="../equations/RealMatrix-class.html">RealMatrix</a></span> 
+
+</dt>
+<dd>
+  A Dart implementation of an <code>MxM</code> matrix whose data type is <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>.
+</dd>
+
+          <dt id="RegulaFalsi">
+  <span class="name "><a href="../equations/RegulaFalsi-class.html">RegulaFalsi</a></span> 
+
+</dt>
+<dd>
+  Implements the regula falsi method (also known as the "<em>false position
+method</em>") to find the roots of a given equation.
+</dd>
+
+          <dt id="Riddler">
+  <span class="name "><a href="../equations/Riddler-class.html">Riddler</a></span> 
+
+</dt>
+<dd>
+  Implements Riddler's method (also known as the Ridders' method) to find the
+roots of a given equation.
+</dd>
+
+          <dt id="Secant">
+  <span class="name "><a href="../equations/Secant-class.html">Secant</a></span> 
+
+</dt>
+<dd>
+  Implements the secant method to find the roots of a given equation. It is
+similar to <a href="../equations/Newton-class.html">Newton</a>'s method but does not require the computation of
+derivatives.
+</dd>
+
+          <dt id="SimpsonRule">
+  <span class="name "><a href="../equations/SimpsonRule-class.html">SimpsonRule</a></span> 
+
+</dt>
+<dd>
+  Simpson's Rule is a numerical integration technique that approximates the
+value of a definite integral using quadratic polynomials. Given a definite
+integral in the form ∫<code>[a,b]</code> f(x) dx, Simpson's rule approximates it as:
+</dd>
+
+          <dt id="SORSolver">
+  <span class="name "><a href="../equations/SORSolver-class.html">SORSolver</a></span> 
+
+</dt>
+<dd>
+  Solves a system of linear equations using the Successive Over-Relaxation
+(SOR) iterative method.
+</dd>
+
+          <dt id="SplineInterpolation">
+  <span class="name "><a href="../equations/SplineInterpolation-class.html">SplineInterpolation</a></span> 
+
+</dt>
+<dd>
+  Performs spline interpolation given a set of control points. The algorithm
+can compute a "monotone cubic spline" or a "linear spline" based on the
+properties of the control points.
+</dd>
+
+          <dt id="Steffensen">
+  <span class="name "><a href="../equations/Steffensen-class.html">Steffensen</a></span> 
+
+</dt>
+<dd>
+  Implements Steffensen's method to find the roots of a given equation.
+</dd>
+
+          <dt id="SylvesterMatrix">
+  <span class="name "><a href="../equations/SylvesterMatrix-class.html">SylvesterMatrix</a></span> 
+
+</dt>
+<dd>
+  The Sylvester matrix is used to compute the discriminant of a polynomial
+of any degree.
+</dd>
+
+          <dt id="SystemSolver">
+  <span class="name "><a href="../equations/SystemSolver-class.html">SystemSolver</a></span> 
+
+</dt>
+<dd>
+  An abstract class that represents a system of equations, which can be solved
+using various algorithms that manipulate the data of a matrix and a vector.
+</dd>
+
+          <dt id="TrapezoidalRule">
+  <span class="name "><a href="../equations/TrapezoidalRule-class.html">TrapezoidalRule</a></span> 
+
+</dt>
+<dd>
+  The trapezoidal rule is a numerical integration technique for approximating
+definite integrals using linear interpolation. Given a definite integral in
+the form ∫<code>[a,b]</code> f(x) dx, the trapezoidal rule approximates it as:
+</dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="enums">
+      <h2>Enums</h2>
+      <dl>
+          <dt id="AlgebraicInequalityType">
+  <span class="name "><a href="../equations/AlgebraicInequalityType.html">AlgebraicInequalityType</a></span> 
+
+</dt>
+<dd>
+  The kind of <a href="../equations/Algebraic-class.html">Algebraic</a> inequality to solve.
+</dd>
+
+      </dl>
+    </section>
+
+
+
+    <section class="summary offset-anchor" id="extensions">
+      <h2>Extensions</h2>
+      <dl>
+          <dt id="ExpressionParserX">
+  <span class="name "><a href="../equations/ExpressionParserX.html">ExpressionParserX</a></span>
+  on <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>
+  
+
+</dt>
+<dd>
+  Extension method for <a href="../equations/ExpressionParser-class.html">ExpressionParser</a> on <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a> types.
+</dd>
+
+          <dt id="FractionNum">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/FractionNum.html">FractionNum</a></span>
+  on <a href="https://api.flutter.dev/flutter/dart-core/num-class.html">num</a>
+  
+
+</dt>
+<dd>
+  Extension method that adds <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a> functionalities to <a href="https://api.flutter.dev/flutter/dart-core/num-class.html">num</a>.
+</dd>
+
+          <dt id="FractionString">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/FractionString.html">FractionString</a></span>
+  on <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>
+  
+
+</dt>
+<dd>
+  Extension method that adds <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a> functionalities to <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>.
+</dd>
+
+          <dt id="MixedFractionNum">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFractionNum.html">MixedFractionNum</a></span>
+  on <a href="https://api.flutter.dev/flutter/dart-core/num-class.html">num</a>
+  
+
+</dt>
+<dd>
+  Extension method that adds <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a> functionalities to <a href="https://api.flutter.dev/flutter/dart-core/num-class.html">num</a>.
+</dd>
+
+          <dt id="MixedFractionString">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFractionString.html">MixedFractionString</a></span>
+  on <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>
+  
+
+</dt>
+<dd>
+  Extension method that adds <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a> functionalities to <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>.
+</dd>
+
+      </dl>
+    </section>
+
+
+
+
+    <section class="summary offset-anchor" id="typedefs">
+      <h2>Typedefs</h2>
+      <dl>
+          
+  <dt id="AlgebraicDivision" class="">
+  <span class="name"><a href="../equations/AlgebraicDivision.html">AlgebraicDivision</a></span>
+    = (<span class="field">{<span class="type-annotation"><a href="../equations/Algebraic-class.html">Algebraic</a></span> <span class="field-name">quotient</span>, </span><span class="field"><span class="type-annotation"><a href="../equations/Algebraic-class.html">Algebraic</a></span> <span class="field-name">remainder</span>}</span>)
+  </span>
+  
+
+</dt>
+<dd>
+  A record type that holds the quotient and the remainder of a division
+between two polynomials. When you use <code>operator/</code> on two <a href="../equations/Algebraic-class.html">Algebraic</a>
+objects, this type is returned. The quotient represents the result of the
+division, while the remainder represents what's left after the division.
+  
+
+</dd>
+
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="exceptions">
+      <h2>Exceptions / Errors</h2>
+      <dl>
+          <dt id="AlgebraicException">
+  <span class="name "><a href="../equations/AlgebraicException-class.html">AlgebraicException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/Algebraic-class.html">Algebraic</a>.
+</dd>
+
+          <dt id="ComplexException">
+  <span class="name "><a href="../equations/ComplexException-class.html">ComplexException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/Complex-class.html">Complex</a>.
+</dd>
+
+          <dt id="EquationException">
+  <span class="name "><a href="../equations/EquationException-class.html">EquationException</a></span> 
+
+</dt>
+<dd>
+  Base class for exception objects in the equations package.
+</dd>
+
+          <dt id="ExpressionParserException">
+  <span class="name "><a href="../equations/ExpressionParserException-class.html">ExpressionParserException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/ExpressionParser-class.html">ExpressionParser</a>.
+</dd>
+
+          <dt id="FractionException">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/FractionException-class.html">FractionException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by a <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a> object.
+</dd>
+
+          <dt id="InterpolationException">
+  <span class="name "><a href="../equations/InterpolationException-class.html">InterpolationException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/Interpolation-class.html">Interpolation</a>.
+</dd>
+
+          <dt id="MatrixException">
+  <span class="name "><a href="../equations/MatrixException-class.html">MatrixException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/Matrix-class.html">Matrix</a>.
+</dd>
+
+          <dt id="MixedFractionException">
+  <span class="name "><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFractionException-class.html">MixedFractionException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by a <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a> object.
+</dd>
+
+          <dt id="NonlinearException">
+  <span class="name "><a href="../equations/NonlinearException-class.html">NonlinearException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/NonLinear-class.html">NonLinear</a>.
+</dd>
+
+          <dt id="PolynomialLongDivisionException">
+  <span class="name "><a href="../equations/PolynomialLongDivisionException-class.html">PolynomialLongDivisionException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/PolynomialLongDivision-class.html">PolynomialLongDivision</a>.
+</dd>
+
+          <dt id="SystemSolverException">
+  <span class="name "><a href="../equations/SystemSolverException-class.html">SystemSolverException</a></span> 
+
+</dt>
+<dd>
+  Exception object thrown by <a href="../equations/SystemSolver-class.html">SystemSolver</a>.
+</dd>
+
+      </dl>
+    </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">equations</a></li>
+    <li class="self-crumb">equations.dart</li>
+</ol>
+
+    <h5><span class="package-name">equations</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="../equations/">equations</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>equations library</h5>
+  </div><!--/sidebar-offcanvas-right-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

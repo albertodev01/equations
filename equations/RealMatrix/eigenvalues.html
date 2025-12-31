@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the eigenvalues method from the RealMatrix class, for the Dart programming language.">
+  <title>eigenvalues method - RealMatrix class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">eigenvalues method</li>
+  </ol>
+  <div class="self-name">eigenvalues</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;RealMatrix-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">eigenvalues</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/Complex-class.html">Complex</a></span>&gt;</span></span>
+<span class="name ">eigenvalues</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Returns the eigenvalues associated with this matrix.</p>
+<p>Eigenvalues can only be computed if the matrix is <strong>square</strong>, meaning
+that it must have the same number of columns and rows.</p>
+<p>A <a href="../../equations/MatrixException-class.html">MatrixException</a> is thrown if the matrix is not square (i.e., if
+<a href="../../equations/Matrix/rowCount.html">rowCount</a> != <a href="../../equations/Matrix/columnCount.html">columnCount</a>).</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+List&lt;Complex&gt; eigenvalues() {
+  if (!isSquareMatrix) {
+    throw const MatrixException(
+      &#39;Eigenvalues can be computed on square matrices only!&#39;,
+    );
+  }
+
+  if (rowCount == 1 || rowCount == 2) {
+    return characteristicPolynomial().solutions();
+  }
+
+  &#47;&#47; For 3x3 matrices and bigger, use the &quot;eigendecomposition&quot; algorithm.
+  final eigenDecomposition = EigendecompositionReal(matrix: this);
+
+  final decomposition = eigenDecomposition.decompose()[1];
+  final eigenvalues = &lt;Complex&gt;[];
+
+  for (var i = 0; i &lt; decomposition.rowCount; ++i) {
+    &#47;&#47; The real value is ALWAYS in the diagonal.
+    final real = decomposition(i, i);
+
+    if (i &gt; 0 &amp;&amp; i &lt; (decomposition.rowCount - 1)) {
+      &#47;&#47; Values on the left and right of the diagonal.
+      final pre = decomposition(i, i - 1);
+      final post = decomposition(i, i + 1);
+
+      if (pre == 0 &amp;&amp; post == 0) {
+        eigenvalues.add(Complex.fromReal(real));
+      } else {
+        eigenvalues.add(Complex(real, pre == 0 ? post : pre));
+      }
+    } else {
+      if (i == 0) {
+        eigenvalues.add(Complex(real, decomposition(i, i + 1)));
+      } else {
+        eigenvalues.add(Complex(real, decomposition(i, i - 1)));
+      }
+    }
+  }
+
+  return eigenvalues;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">eigenvalues method</li>
+</ol>
+
+    <h5>RealMatrix class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

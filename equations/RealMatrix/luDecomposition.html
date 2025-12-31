@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the luDecomposition method from the RealMatrix class, for the Dart programming language.">
+  <title>luDecomposition method - RealMatrix class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">luDecomposition method</li>
+  </ol>
+  <div class="self-name">luDecomposition</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;RealMatrix-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">luDecomposition</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/RealMatrix-class.html">RealMatrix</a></span>&gt;</span></span>
+<span class="name ">luDecomposition</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Factors the matrix as the product of a lower triangular matrix <code>L</code> and
+an upper triangular matrix <code>U</code>. The matrix <strong>must</strong> be square.</p>
+<p>The returned list contains <code>L</code> at index 0 and <code>U</code> at index 1.</p>
+<p>A <a href="../../equations/MatrixException-class.html">MatrixException</a> is thrown if the matrix is not square (i.e., if
+<a href="../../equations/Matrix/rowCount.html">rowCount</a> != <a href="../../equations/Matrix/columnCount.html">columnCount</a>).</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+List&lt;RealMatrix&gt; luDecomposition() {
+  if (!isSquareMatrix) {
+    throw const MatrixException(
+      &#39;LU decomposition only works with square matrices!&#39;,
+    );
+  }
+
+  final n = rowCount;
+  const precision = 1.0e-10;
+
+  final A = List&lt;double&gt;.generate(
+    n * n,
+    (index) =&gt; this(index ~&#47; n, index % n),
+    growable: false,
+  );
+
+  &#47;&#47; Creating L and U matrices
+  final L = List&lt;double&gt;.generate(
+    n * n,
+    (_) =&gt; 0.0,
+    growable: false,
+  );
+  final U = List&lt;double&gt;.generate(
+    n * n,
+    (_) =&gt; 0.0,
+    growable: false,
+  );
+  final P = List&lt;int&gt;.generate(n, (i) =&gt; i, growable: false);
+
+  for (var i = 0; i &lt; n; ++i) {
+    var maxRow = i;
+    var maxVal = _getDataAt(A, i, i).abs();
+
+    for (var k = i + 1; k &lt; n; k++) {
+      final val = _getDataAt(A, k, i).abs();
+      if (val &gt; maxVal) {
+        maxVal = val;
+        maxRow = k;
+      }
+    }
+
+    if (maxVal &lt;= precision) {
+      throw const MatrixException(&#39;Matrix is singular or nearly singular.&#39;);
+    }
+
+    if (maxRow != i) {
+      for (var j = 0; j &lt; n; j++) {
+        final temp = _getDataAt(A, i, j);
+        _setDataAt(A, i, j, _getDataAt(A, maxRow, j));
+        _setDataAt(A, maxRow, j, temp);
+      }
+
+      for (var j = 0; j &lt; i; j++) {
+        final temp = _getDataAt(L, i, j);
+        _setDataAt(L, i, j, _getDataAt(L, maxRow, j));
+        _setDataAt(L, maxRow, j, temp);
+      }
+
+      final tempP = P[i];
+      P[i] = P[maxRow];
+      P[maxRow] = tempP;
+    }
+
+    &#47;&#47; Compute U[i, k] for k &gt;= i
+    for (var k = i; k &lt; n; k++) {
+      &#47;&#47; Summation of L(i, j) * U(j, k)
+      var sum = 0.0;
+      for (var j = 0; j &lt; i; j++) {
+        sum += _getDataAt(L, i, j) * _getDataAt(U, j, k);
+      }
+
+      _setDataAt(U, i, k, _getDataAt(A, i, k) - sum);
+    }
+
+    &#47;&#47; Compute L[k, i] for k &gt; i
+    for (var k = i; k &lt; n; k++) {
+      if (i == k) {
+        _setDataAt(L, i, i, 1);
+      } else {
+        &#47;&#47; Summation of L(k, j) * U(j, i)
+        var sum = 0.0;
+        for (var j = 0; j &lt; i; j++) {
+          sum += _getDataAt(L, k, j) * _getDataAt(U, j, i);
+        }
+
+        final uii = _getDataAt(U, i, i);
+        if (uii.abs() &lt;= precision) {
+          throw const MatrixException(
+            &#39;Division by zero in LU decomposition. Matrix is singular.&#39;,
+          );
+        }
+        _setDataAt(L, k, i, (_getDataAt(A, k, i) - sum) &#47; uii);
+      }
+    }
+  }
+
+  final pMatrix = List&lt;double&gt;.generate(
+    n * n,
+    (_) =&gt; 0.0,
+    growable: false,
+  );
+  for (var i = 0; i &lt; n; i++) {
+    _setDataAt(pMatrix, i, P[i], 1);
+  }
+
+  return [
+    RealMatrix.fromFlattenedData(rows: n, columns: n, data: L),
+    RealMatrix.fromFlattenedData(rows: n, columns: n, data: U),
+    RealMatrix.fromFlattenedData(rows: n, columns: n, data: pMatrix),
+  ];
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">luDecomposition method</li>
+</ol>
+
+    <h5>RealMatrix class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the SystemSolver.new constructor from Class SystemSolver from the equations library, for the Dart programming language.">
+  <title>SystemSolver.new constructor - SystemSolver - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/SystemSolver-class.html">SystemSolver</a></li>
+    <li class="self-crumb">SystemSolver.new constructor</li>
+  </ol>
+  <div class="self-name">SystemSolver.new</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="equations&#47;SystemSolver-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">SystemSolver</span> constructor 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+      <span class="name ">SystemSolver</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-matrix"><span>required</span> <span class="type-annotation"><a href="../../equations/RealMatrix-class.html">RealMatrix</a></span> <span class="parameter-name">matrix</span>, </span></li>
+<li><span class="parameter" id="-param-knownValues"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span></span> <span class="parameter-name">knownValues</span>, </span></li>
+<li><span class="parameter" id="-param-precision"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">precision</span> = <span class="default-value">1.0e-10</span>, </span></li>
+</ol>})
+    </section>
+    
+<section class="desc markdown">
+  <p>An abstract class that represents a system of equations, which can be solved
+using various algorithms that manipulate the data of a matrix and a vector.</p>
+<p>System solvers of linear equations require the coefficients to be real
+numbers and there <strong>must</strong> be <code>n</code> equations in <code>n</code> unknowns.</p>
+<p>The coefficients of the various equations are put inside a square matrix,
+generally called <code>A</code>. The known values are represented by a vector, usually
+known as <code>b</code>. From this, we get an equation in the form <code>Ax = b</code>.</p>
+<p>The method <a href="../../equations/SystemSolver/solve.html">solve</a> returns the <code>x</code> vector of the <code>Ax = b</code> equation.</p>
+<h2 id="available-solvers">Available Solvers</h2>
+<ul>
+<li><a href="../../equations/GaussianElimination-class.html">GaussianElimination</a>: Direct method using row reduction;</li>
+<li><a href="../../equations/LUSolver-class.html">LUSolver</a>: Direct method using LU decomposition;</li>
+<li><a href="../../equations/CholeskySolver-class.html">CholeskySolver</a>: Direct method for symmetric positive-definite matrices;</li>
+<li><a href="../../equations/JacobiSolver-class.html">JacobiSolver</a>: Iterative method for diagonally dominant systems</li>
+<li><a href="../../equations/GaussSeidelSolver-class.html">GaussSeidelSolver</a>: Iterative method, faster than Jacobi;</li>
+<li><a href="../../equations/SORSolver-class.html">SORSolver</a>: Iterative method with relaxation factor.</li>
+</ul>
+<h2 id="recommendations">Recommendations</h2>
+<ul>
+<li>General-purpose solvers: Use <a href="../../equations/GaussianElimination-class.html">GaussianElimination</a> or <a href="../../equations/LUSolver-class.html">LUSolver</a></li>
+<li>For symmetric positive-definite matrices: Use <a href="../../equations/CholeskySolver-class.html">CholeskySolver</a> (fastest)</li>
+<li>For large sparse systems: Use iterative methods (<a href="../../equations/JacobiSolver-class.html">JacobiSolver</a>,
+<a href="../../equations/GaussSeidelSolver-class.html">GaussSeidelSolver</a>, or <a href="../../equations/SORSolver-class.html">SORSolver</a>)</li>
+<li>For multiple systems with same matrix: Use <a href="../../equations/LUSolver-class.html">LUSolver</a></li>
+</ul>
+<p>Given an equation in the form <code>Ax = b</code>, <code>A</code> is a square matrix containing
+<code>n</code> equations in <code>n</code> unknowns and <code>b</code> is the vector of the known values.
+This class can only be built with square matrices.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>matrix</code> is the matrix with the equations (must be square);</li>
+<li><code>knownValues</code> is the vector with the known values (must match matrix
+size);</li>
+<li><code>precision</code> is the algorithm accuracy (defaults to <code>1.0e-10</code>).</li>
+</ul>
+<p>Throws a <a href="../../equations/SystemSolverException-class.html">SystemSolverException</a> if:</p>
+<ul>
+<li>The matrix is not square, or</li>
+<li>The <code>knownValues</code> vector length doesn't match the matrix size.</li>
+</ul>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">SystemSolver({
+  required this.matrix,
+  required this.knownValues,
+  this.precision = 1.0e-10,
+}) {
+  &#47;&#47; Only square matrices are allowed.
+  if (!matrix.isSquareMatrix) {
+    throw const SystemSolverException(&#39;The matrix must be square&#39;);
+  }
+
+  &#47;&#47; The vector of known values must match the size of the matrix.
+  if (matrix.rowCount != knownValues.length) {
+    throw const SystemSolverException(
+      &#39;The known values vector must have the &#39;
+      &#39;same size as the matrix.&#39;,
+    );
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/SystemSolver-class.html">SystemSolver</a></li>
+    <li class="self-crumb">SystemSolver.new constructor</li>
+</ol>
+
+    <h5>SystemSolver class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

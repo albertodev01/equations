@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the cofactorMatrix method from the RealMatrix class, for the Dart programming language.">
+  <title>cofactorMatrix method - RealMatrix class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">cofactorMatrix method</li>
+  </ol>
+  <div class="self-name">cofactorMatrix</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;RealMatrix-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">cofactorMatrix</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="../../equations/RealMatrix-class.html">RealMatrix</a></span>
+<span class="name ">cofactorMatrix</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>The matrix formed by all of the cofactors of a square matrix is called the
+"cofactor matrix".</p>
+<p>In practice, this matrix is obtained by calling <code>minor(i, j)</code> for all
+combinations of rows and columns of the matrix, then multiplying each
+minor's determinant by (-1)<sup>i+j</sup> to get the cofactor.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+RealMatrix cofactorMatrix() {
+  if (!isSquareMatrix) {
+    throw const MatrixException(&#39;The matrix must be square!&#39;);
+  }
+
+  &#47;&#47; The cofactor matrix of an 1x1 matrix is always 1.
+  if (rowCount == 1) {
+    return RealMatrix.fromFlattenedData(rows: 1, columns: 1, data: [1]);
+  }
+
+  final source = List&lt;List&lt;double&gt;&gt;.generate(
+    rowCount,
+    (_) =&gt; List&lt;double&gt;.generate(columnCount, (_) =&gt; 0.0),
+  );
+
+  &#47;&#47; Computing cofactors.
+  for (var i = 0; i &lt; rowCount; ++i) {
+    for (var j = 0; j &lt; columnCount; ++j) {
+      source[i][j] = pow(-1, i + j) * minor(i, j).determinant();
+    }
+  }
+
+  return RealMatrix.fromData(
+    rows: rowCount,
+    columns: columnCount,
+    data: source,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">cofactorMatrix method</li>
+</ol>
+
+    <h5>RealMatrix class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

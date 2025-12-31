@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the discriminant method from the Quartic class, for the Dart programming language.">
+  <title>discriminant method - Quartic class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/Quartic-class.html">Quartic</a></li>
+    <li class="self-crumb">discriminant method</li>
+  </ol>
+  <div class="self-name">discriminant</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;Quartic-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">discriminant</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="../../equations/Complex-class.html">Complex</a></span>
+<span class="name ">discriminant</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>The polynomial discriminant, if it exists.</p>
+<p>The discriminant is a mathematical expression that provides information
+about the nature of the roots of a polynomial equation. The discriminant
+is well-defined for polynomials up to degree 4. For higher-degrees, it is
+approximated with a numerical method.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+Complex discriminant() {
+  final b2 = b * b;
+  final c2 = c * c;
+  final d2 = d * d;
+  final a2 = a * a;
+  final b3 = b2 * b;
+  final c3 = c2 * c;
+  final d3 = d2 * d;
+
+  final k =
+      (b2 * c2 * d2) -
+      (d3 * b3 * const Complex.fromReal(4)) -
+      (d2 * c3 * a * const Complex.fromReal(4)) +
+      (d3 * c * b * a * const Complex.fromReal(18)) -
+      (d2 * d2 * a2 * const Complex.fromReal(27)) +
+      (e * e * e * a2 * a * const Complex.fromReal(256));
+
+  final p =
+      e *
+      ((c3 * b2 * const Complex.fromReal(-4)) +
+          (b3 * c * d * const Complex.fromReal(18)) +
+          (c2 * c2 * a * const Complex.fromReal(16)) -
+          (d * c2 * b * a * const Complex.fromReal(80)) -
+          (d2 * b2 * a * const Complex.fromReal(6)) +
+          (d2 * a2 * c * const Complex.fromReal(144)));
+
+  final r =
+      (e * e) *
+      (b2 * b2 * const Complex.fromReal(-27) +
+          b2 * c * a * const Complex.fromReal(144) -
+          a2 * c2 * const Complex.fromReal(128) -
+          d * b * a2 * const Complex.fromReal(192));
+
+  return k + p + r;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/Quartic-class.html">Quartic</a></li>
+    <li class="self-crumb">discriminant method</li>
+</ol>
+
+    <h5>Quartic class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Complex class from the equations library, for the Dart programming language.">
+  <title>Complex class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">equations</a></li>
+    <li><a href="../equations/">equations.dart</a></li>
+    <li class="self-crumb">Complex class</li>
+  </ol>
+  <div class="self-name">Complex</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;equations-library-sidebar.html"
+    data-below-sidebar="equations&#47;Complex-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">Complex</span> class 
+    <a href="https://dart.dev/language/class-modifiers#final" class="feature feature-final" title="This class can neither be extended, implemented, nor mixed in.">final</a>
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>A Dart representation of a complex number in the form <code>a + bi</code> where <code>a</code> is
+the real part and <code>bi</code> is the imaginary (or complex) part.</p>
+<p>A <a href="../equations/Complex-class.html">Complex</a> object is <strong>immutable</strong>.</p>
+</section>
+
+
+    <section>
+      <dl class="dl-horizontal">
+        
+
+        
+  <dt>Implemented types</dt>
+  <dd>
+    <ul class="comma-separated clazz-relationships">
+        <li><a href="https://api.flutter.dev/flutter/dart-core/Comparable-class.html">Comparable</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../equations/Complex-class.html">Complex</a></span>&gt;</span></li>
+    </ul>
+  </dd>
+        
+
+
+        
+        
+
+
+      </dl>
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="Complex.new" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.html">Complex</a></span><span class="signature">(<span class="parameter" id="-param-real"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">real</span>, </span><span class="parameter" id="-param-imaginary"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">imaginary</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number with the given real and imaginary parts.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+        <dt id="Complex.fromFraction" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromFraction.html">Complex.fromFraction</a></span><span class="signature">(<span class="parameter" id="fromFraction-param-real"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a></span> <span class="parameter-name">real</span>, </span><span class="parameter" id="fromFraction-param-imaginary"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a></span> <span class="parameter-name">imaginary</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number from <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a> objects.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.fromImaginary" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromImaginary.html">Complex.fromImaginary</a></span><span class="signature">(<span class="parameter" id="fromImaginary-param-imaginary"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">imaginary</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex with only the imaginary part.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+        <dt id="Complex.fromImaginaryFraction" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromImaginaryFraction.html">Complex.fromImaginaryFraction</a></span><span class="signature">(<span class="parameter" id="fromImaginaryFraction-param-imaginary"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a></span> <span class="parameter-name">imaginary</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number having only the imaginary part expressed as a
+<a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a> object.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.fromImaginaryMixedFraction" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromImaginaryMixedFraction.html">Complex.fromImaginaryMixedFraction</a></span><span class="signature">(<span class="parameter" id="fromImaginaryMixedFraction-param-imaginary"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a></span> <span class="parameter-name">imaginary</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number having only the imaginary part expressed as a
+<a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a> object.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.fromMixedFraction" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromMixedFraction.html">Complex.fromMixedFraction</a></span><span class="signature">(<span class="parameter" id="fromMixedFraction-param-real"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a></span> <span class="parameter-name">real</span>, </span><span class="parameter" id="fromMixedFraction-param-imag"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a></span> <span class="parameter-name">imag</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number from <a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a> objects.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.fromPolar" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromPolar.html">Complex.fromPolar</a></span><span class="signature">({<span class="parameter" id="fromPolar-param-r"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">r</span>, </span><span class="parameter" id="fromPolar-param-theta"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">theta</span>, </span><span class="parameter" id="fromPolar-param-angleInRadians"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">angleInRadians</span> = <span class="default-value">true</span></span>})</span>
+        </dt>
+        <dd>
+          Creates a complex number from the given polar coordinates where <code>r</code> is the
+radius and <code>theta</code> is the angle.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.fromReal" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromReal.html">Complex.fromReal</a></span><span class="signature">(<span class="parameter" id="fromReal-param-real"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">real</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex with only the real part.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+        <dt id="Complex.fromRealFraction" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromRealFraction.html">Complex.fromRealFraction</a></span><span class="signature">(<span class="parameter" id="fromRealFraction-param-real"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a></span> <span class="parameter-name">real</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number having only the real part expressed as a
+<a href="https://pub.dev/documentation/fraction/5.0.5/fraction/Fraction-class.html">Fraction</a> object.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.fromRealMixedFraction" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.fromRealMixedFraction.html">Complex.fromRealMixedFraction</a></span><span class="signature">(<span class="parameter" id="fromRealMixedFraction-param-real"><span class="type-annotation"><a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a></span> <span class="parameter-name">real</span></span>)</span>
+        </dt>
+        <dd>
+          Creates a complex number having only the real part expressed as a
+<a href="https://pub.dev/documentation/fraction/5.0.5/fraction/MixedFraction-class.html">MixedFraction</a> object.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+        <dt id="Complex.i" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.i.html">Complex.i</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          This is the same as calling <code>Complex(0, 1)</code>.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+        <dt id="Complex.zero" class="callable">
+          <span class="name"><a href="../equations/Complex/Complex.zero.html">Complex.zero</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          This is the same as calling <code>Complex(0, 0)</code>.
+            <div class="constructor-modifier features">const</div>
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="hashCode" class="property">
+  <span class="name"><a href="../equations/Complex/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="imaginary" class="property">
+  <span class="name"><a href="../equations/Complex/imaginary.html">imaginary</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+  
+
+</dt>
+<dd>
+  The imaginary part of the complex number.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="isZero" class="property">
+  <span class="name"><a href="../equations/Complex/isZero.html">isZero</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Checks whether the complex number is zero.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="negate" class="property">
+  <span class="name"><a href="../equations/Complex/negate.html">negate</a></span>
+  <span class="signature">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  
+
+</dt>
+<dd>
+  The sign of the current object is changed and the result is returned in a
+new <a href="../equations/Complex-class.html">Complex</a> instance.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="real" class="property">
+  <span class="name"><a href="../equations/Complex/real.html">real</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+  
+
+</dt>
+<dd>
+  The real part of the complex number.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="abs" class="callable">
+  <span class="name"><a href="../equations/Complex/abs.html">abs</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Computes the square root of <em>(a<sup>2</sup> + b<sup>2</sup>)</em> where <code>a</code>
+is the real part and <code>b</code> is the imaginary part.
+  
+
+</dd>
+
+        <dt id="compareTo" class="callable">
+  <span class="name"><a href="../equations/Complex/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Compares this object to another object.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="conjugate" class="callable">
+  <span class="name"><a href="../equations/Complex/conjugate.html">conjugate</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The sign of the imaginary part of current object is changed and the result
+is returned in a new <a href="../equations/Complex-class.html">Complex</a> instance.
+  
+
+</dd>
+
+        <dt id="copyWith" class="callable">
+  <span class="name"><a href="../equations/Complex/copyWith.html">copyWith</a></span><span class="signature">(<wbr>{<span class="parameter" id="copyWith-param-real"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">real</span>, </span><span class="parameter" id="copyWith-param-imaginary"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">imaginary</span></span>})
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Creates a <strong>deep</strong> copy of this object and replaces (if non-null) the
+given values with the old ones.
+  
+
+</dd>
+
+        <dt id="cos" class="callable">
+  <span class="name"><a href="../equations/Complex/cos.html">cos</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the cosine of this complex number.
+  
+
+</dd>
+
+        <dt id="cot" class="callable">
+  <span class="name"><a href="../equations/Complex/cot.html">cot</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the cotangent of this complex number.
+  
+
+</dd>
+
+        <dt id="exp" class="callable">
+  <span class="name"><a href="../equations/Complex/exp.html">exp</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the <em>base-e</em> exponential of a complex number z where <em>e</em> is the
+Euler constant.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="nthRoot" class="callable">
+  <span class="name"><a href="../equations/Complex/nthRoot.html">nthRoot</a></span><span class="signature">(<wbr><span class="parameter" id="nthRoot-param-nth"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">nth</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Computes the complex n-th root of this object. The returned root is the
+one with the smallest positive argument.
+  
+
+</dd>
+
+        <dt id="phase" class="callable">
+  <span class="name"><a href="../equations/Complex/phase.html">phase</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Converts rectangular coordinates to polar coordinates by computing an arc
+tangent of y/x in the range from -pi to pi.
+  
+
+</dd>
+
+        <dt id="pow" class="callable">
+  <span class="name"><a href="../equations/Complex/pow.html">pow</a></span><span class="signature">(<wbr><span class="parameter" id="pow-param-x"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/num-class.html">num</a></span> <span class="parameter-name">x</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the power having a complex number as base and a real value as
+exponent. The expression is in the form <em>(a + bi)<sup>x</sup></em>.
+  
+
+</dd>
+
+        <dt id="reciprocal" class="callable">
+  <span class="name"><a href="../equations/Complex/reciprocal.html">reciprocal</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Finds the multiplicative inverse (reciprocal) of the current instance and
+returns the result in a new <a href="../equations/Complex-class.html">Complex</a> object.
+  
+
+</dd>
+
+        <dt id="sin" class="callable">
+  <span class="name"><a href="../equations/Complex/sin.html">sin</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the sine of this complex number.
+  
+
+</dd>
+
+        <dt id="sqrt" class="callable">
+  <span class="name"><a href="../equations/Complex/sqrt.html">sqrt</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the square root of this complex number.
+  
+
+</dd>
+
+        <dt id="tan" class="callable">
+  <span class="name"><a href="../equations/Complex/tan.html">tan</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Calculates the tangent of this complex number.
+  
+
+</dd>
+
+        <dt id="toPolarCoordinates" class="callable">
+  <span class="name"><a href="../equations/Complex/toPolarCoordinates.html">toPolarCoordinates</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/PolarComplex-class.html">PolarComplex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Converts this object into polar coordinates and wraps them in a new
+<a href="../equations/PolarComplex-class.html">PolarComplex</a> object.
+  
+
+</dd>
+
+        <dt id="toString" class="callable">
+  <span class="name"><a href="../equations/Complex/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  A string representation of this object.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="toStringAsFixed" class="callable">
+  <span class="name"><a href="../equations/Complex/toStringAsFixed.html">toStringAsFixed</a></span><span class="signature">(<wbr><span class="parameter" id="toStringAsFixed-param-fractionDigits"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">fractionDigits</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Prints the real and the imaginary parts of this <a href="../equations/Complex-class.html">Complex</a> object with
+<code>fractionDigits</code> decimal digits. The output produced by this method is the
+same that would result in calling <code>toStringAsFixed</code> on a <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>:
+  
+
+</dd>
+
+        <dt id="toStringAsFraction" class="callable">
+  <span class="name"><a href="../equations/Complex/toStringAsFraction.html">toStringAsFraction</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Prints the real and the imaginary parts of the complex number as fractions
+with the best possible approximation.
+  
+
+</dd>
+
+        <dt id="toStringWithParenthesis" class="callable">
+  <span class="name"><a href="../equations/Complex/toStringWithParenthesis.html">toStringWithParenthesis</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Prints the complex number with opening and closing parenthesis in case the
+complex number had both real and imaginary part.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator *" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_multiply.html">operator *</a></span><span class="signature">(<wbr><span class="parameter" id="*-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The products of two complex numbers.
+  
+
+</dd>
+
+        <dt id="operator +" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_plus.html">operator +</a></span><span class="signature">(<wbr><span class="parameter" id="+-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sums two complex numbers.
+  
+
+</dd>
+
+        <dt id="operator -" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_minus.html">operator -</a></span><span class="signature">(<wbr><span class="parameter" id="--param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Subtracts two complex numbers.
+  
+
+</dd>
+
+        <dt id="operator &#47;" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_divide.html">operator /</a></span><span class="signature">(<wbr><span class="parameter" id="/-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Divides two complex numbers.
+  
+
+</dd>
+
+        <dt id="operator &lt;" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  There is no natural linear ordering for complex numbers. In fact, any
+square in an ordered field is &gt;= 0 but in the complex field we have that
+<em>i<sup>2</sup> = -1</em>.
+  
+
+</dd>
+
+        <dt id="operator &lt;=" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  There is no natural linear ordering for complex numbers. In fact, any
+square in an ordered field is &gt;= 0 but in the complex field we have that
+<em>i<sup>2</sup> = -1</em>.
+  
+
+</dd>
+
+        <dt id="operator ==" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  The equality operator.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="operator &gt;" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  There is no natural linear ordering for complex numbers. In fact, any
+square in an ordered field is &gt;= 0 but in the complex field we have that
+<em>i<sup>2</sup> = -1</em>.
+  
+
+</dd>
+
+        <dt id="operator &gt;=" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-other"><span class="type-annotation"><a href="../equations/Complex-class.html">Complex</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  There is no natural linear ordering for complex numbers. In fact, any
+square in an ordered field is &gt;= 0 but in the complex field we have that
+<em>i<sup>2</sup> = -1</em>.
+  
+
+</dd>
+
+        <dt id="operator unary-" class="callable">
+  <span class="name"><a href="../equations/Complex/operator_unary_minus.html">operator unary-</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../equations/Complex-class.html">Complex</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the negation of this complex number.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">equations</a></li>
+    <li><a href="../equations/">equations</a></li>
+    <li class="self-crumb">Complex class</li>
+</ol>
+
+    <h5>equations library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

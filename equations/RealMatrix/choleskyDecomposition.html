@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the choleskyDecomposition method from the RealMatrix class, for the Dart programming language.">
+  <title>choleskyDecomposition method - RealMatrix class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">choleskyDecomposition method</li>
+  </ol>
+  <div class="self-name">choleskyDecomposition</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;RealMatrix-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">choleskyDecomposition</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/RealMatrix-class.html">RealMatrix</a></span>&gt;</span></span>
+<span class="name ">choleskyDecomposition</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Uses the Cholesky decomposition algorithm to factor the matrix into
+the product of a lower triangular matrix and its conjugate transpose. In
+particular, this method returns the <code>L</code> and <code>L</code><sup>T</sup> matrices of the</p>
+<ul>
+<li>A = L × L<sup>T</sup></li>
+</ul>
+<p>relation. The algorithm might fail if the square root of a negative
+number is encountered.</p>
+<p>The returned list contains <code>L</code> at index 0 and <code>L</code><sup>T</sup> at index 1.</p>
+<p>A <a href="../../equations/MatrixException-class.html">MatrixException</a> is thrown if the matrix is not square (i.e., if
+<a href="../../equations/Matrix/rowCount.html">rowCount</a> != <a href="../../equations/Matrix/columnCount.html">columnCount</a>).</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+List&lt;RealMatrix&gt; choleskyDecomposition() {
+  if (!isSquareMatrix) {
+    throw const MatrixException(
+      &#39;LU decomposition only works with square matrices!&#39;,
+    );
+  }
+
+  if (this(0, 0) &lt;= 0) {
+    throw const SystemSolverException(&#39;The matrix is not positive-definite.&#39;);
+  }
+
+  final L = List&lt;double&gt;.generate(
+    rowCount * columnCount,
+    (_) =&gt; 0.0,
+    growable: false,
+  );
+  final transpL = List&lt;double&gt;.generate(
+    rowCount * columnCount,
+    (_) =&gt; 0.0,
+    growable: false,
+  );
+  const blockSize = 32;
+
+  for (var i = 0; i &lt; rowCount; i += blockSize) {
+    final iEnd = (i + blockSize &lt; rowCount) ? i + blockSize : rowCount;
+
+    &#47;&#47; Process diagonal block
+    for (var j = i; j &lt; iEnd; j++) {
+      &#47;&#47; Compute diagonal element
+      var sum = 0.0;
+      for (var k = 0; k &lt; j; k++) {
+        sum += L[columnCount * j + k] * L[columnCount * j + k];
+      }
+      final diag = this(j, j) - sum;
+      if (diag &lt;= 0) {
+        throw const SystemSolverException(
+          &#39;The matrix is not positive-definite.&#39;,
+        );
+      }
+      L[columnCount * j + j] = sqrt(diag);
+
+      &#47;&#47; Compute elements below diagonal
+      for (var k = j + 1; k &lt; iEnd; k++) {
+        sum = 0.0;
+        for (var p = 0; p &lt; j; p++) {
+          sum += L[columnCount * k + p] * L[columnCount * j + p];
+        }
+        L[columnCount * k + j] = (this(k, j) - sum) &#47; L[columnCount * j + j];
+      }
+    }
+
+    &#47;&#47; Process remaining blocks
+    for (var j = iEnd; j &lt; rowCount; j += blockSize) {
+      final jEnd = (j + blockSize &lt; rowCount) ? j + blockSize : rowCount;
+      for (var k = i; k &lt; iEnd; k++) {
+        for (var l = j; l &lt; jEnd; l++) {
+          var sum = 0.0;
+          for (var p = 0; p &lt; k; p++) {
+            sum += L[columnCount * l + p] * L[columnCount * k + p];
+          }
+          L[columnCount * l + k] =
+              (this(l, k) - sum) &#47; L[columnCount * k + k];
+        }
+      }
+    }
+  }
+
+  &#47;&#47; Computing Lt, the transposed version of L
+  for (var i = 0; i &lt; rowCount; i++) {
+    for (var j = 0; j &lt; rowCount; j++) {
+      transpL[columnCount * i + j] = L[columnCount * j + i];
+    }
+  }
+
+  return [
+    RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: L,
+    ),
+    RealMatrix.fromFlattenedData(
+      rows: rowCount,
+      columns: columnCount,
+      data: transpL,
+    ),
+  ];
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/RealMatrix-class.html">RealMatrix</a></li>
+    <li class="self-crumb">choleskyDecomposition method</li>
+</ol>
+
+    <h5>RealMatrix class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

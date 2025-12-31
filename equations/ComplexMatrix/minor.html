@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the minor method from the ComplexMatrix class, for the Dart programming language.">
+  <title>minor method - ComplexMatrix class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/ComplexMatrix-class.html">ComplexMatrix</a></li>
+    <li class="self-crumb">minor method</li>
+  </ol>
+  <div class="self-name">minor</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;ComplexMatrix-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">minor</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="../../equations/ComplexMatrix-class.html">ComplexMatrix</a></span>
+<span class="name ">minor</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="minor-param-row"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">row</span>, </span></li>
+<li><span class="parameter" id="minor-param-col"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">col</span></span></li>
+</ol>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>A minor of a matrix <code>A</code> is the determinant of some smaller square matrix,
+cut down from <code>A</code> by removing one or more of its rows and columns.</p>
+<p>This function only computes the <strong>first minor</strong>, which is the minor
+obtained by removing 1 row and 1 column from the source matrix. This
+is often useful for calculating cofactors.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+ComplexMatrix minor(int row, int col) {
+  if (row &lt; 0 || col &lt; 0) {
+    throw const MatrixException(&#39;The arguments must be positive!&#39;);
+  }
+
+  if (row &gt; rowCount || col &gt; columnCount) {
+    throw const MatrixException(&#39;The given (row; col) pair is invalid.&#39;);
+  }
+
+  if (rowCount == 1 || columnCount == 1) {
+    throw const MatrixException(
+      &#39;Cannot compute minors when &quot;rowCount&quot; or &quot;columnCount&quot; is 1.&#39;,
+    );
+  }
+
+  final source = List&lt;List&lt;Complex&gt;&gt;.generate(
+    rowCount - 1,
+    (_) =&gt;
+        List&lt;Complex&gt;.generate(columnCount - 1, (_) =&gt; const Complex.zero()),
+  );
+
+  for (var i = 0; i &lt; rowCount; ++i) {
+    for (var j = 0; i != row &amp;&amp; j &lt; columnCount; ++j) {
+      if (j != col) {
+        final minorRow = i &lt; row ? i : i - 1;
+        final minorCol = j &lt; col ? j : j - 1;
+
+        source[minorRow][minorCol] = this(i, j);
+      }
+    }
+  }
+
+  return ComplexMatrix.fromData(
+    rows: rowCount - 1,
+    columns: columnCount - 1,
+    data: source,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/ComplexMatrix-class.html">ComplexMatrix</a></li>
+    <li class="self-crumb">minor method</li>
+</ol>
+
+    <h5>ComplexMatrix class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

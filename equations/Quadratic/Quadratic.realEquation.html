@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Quadratic.realEquation constructor from Class Quadratic from the equations library, for the Dart programming language.">
+  <title>Quadratic.realEquation constructor - Quadratic - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/Quadratic-class.html">Quadratic</a></li>
+    <li class="self-crumb">Quadratic.realEquation constructor</li>
+  </ol>
+  <div class="self-name">Quadratic.realEquation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="equations&#47;Quadratic-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">Quadratic.realEquation</span> constructor 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+      <span class="name ">Quadratic.realEquation</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="realEquation-param-a"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">a</span> = <span class="default-value">1</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-b"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">b</span> = <span class="default-value">0</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-c"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">c</span> = <span class="default-value">0</span>, </span></li>
+</ol>})
+    </section>
+    
+<section class="desc markdown">
+  <p>Concrete implementation of <a href="../../equations/Algebraic-class.html">Algebraic</a> that represents a second degree
+polynomial equation in the form <em>ax^2 + bx + c = 0</em>.</p>
+<p>This equation has exactly 2 roots, both real or both complex, depending
+on the value of the discriminant.</p>
+<p>These are examples of quadratic equations, where the coefficient with the
+highest degree goes first:</p>
+<pre class="language-dart"><code class="language-dart">// f(x) = x^2 - 6x + 5
+final eq = Quadratic(
+  a: Complex.fromReal(2),
+  b: Complex.fromReal(-6),
+  c: Complex.fromReal(5),
+);
+
+// f(x) = ix^2 - 3
+final eq = Quadratic(
+  a: Complex.fromImaginary(1),
+  c: Complex.fromReal(-3),
+);
+
+// f(x) = x^2 - 6x + 5
+final eq = Quadratic.realEquation(
+  a: 2,
+  b: -6,
+  c: 5,
+);
+</code></pre>
+<p>If the coefficients of your polynomial contain complex numbers, consider
+using the <a href="../../equations/Quadratic/Quadratic.html">Quadratic.new</a> constructor instead.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Quadratic.realEquation({double a = 1, double b = 0, double c = 0})
+  : super.realEquation([a, b, c]);</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/Quadratic-class.html">Quadratic</a></li>
+    <li class="self-crumb">Quadratic.realEquation constructor</li>
+</ol>
+
+    <h5>Quadratic class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

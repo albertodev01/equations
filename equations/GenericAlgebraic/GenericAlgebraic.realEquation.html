@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the GenericAlgebraic.realEquation constructor from Class GenericAlgebraic from the equations library, for the Dart programming language.">
+  <title>GenericAlgebraic.realEquation constructor - GenericAlgebraic - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/GenericAlgebraic-class.html">GenericAlgebraic</a></li>
+    <li class="self-crumb">GenericAlgebraic.realEquation constructor</li>
+  </ol>
+  <div class="self-name">GenericAlgebraic.realEquation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="equations&#47;GenericAlgebraic-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+<h1><span class="kind-constructor">GenericAlgebraic.realEquation</span> constructor 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+      <span class="name ">GenericAlgebraic.realEquation</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="realEquation-param-coefficients"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span></span> <span class="parameter-name">coefficients</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-initialGuess"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/Complex-class.html">Complex</a></span>&gt;</span></span> <span class="parameter-name">initialGuess</span> = <span class="default-value">const []</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-precision"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">precision</span> = <span class="default-value">1.0e-10</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-maxSteps"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxSteps</span> = <span class="default-value">2000</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-minGuessDistance"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">minGuessDistance</span> = <span class="default-value">1.0e-6</span>, </span></li>
+<li><span class="parameter" id="realEquation-param-stagnationThreshold"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">stagnationThreshold</span> = <span class="default-value">1.0e-10</span>, </span></li>
+</ol>})
+    </section>
+    
+<section class="desc markdown">
+  <p>Concrete implementation of <a href="../../equations/Algebraic-class.html">Algebraic</a> that approximates all roots of a
+polynomial of any degree.</p>
+<p>For finding roots of a polynomial of degree 4 or lower, consider using
+<a href="../../equations/Quartic-class.html">Quartic</a>, <a href="../../equations/Cubic-class.html">Cubic</a>, <a href="../../equations/Quadratic-class.html">Quadratic</a> or <a href="../../equations/Linear-class.html">Linear</a> instead, as they are more
+efficient and numerically stable.</p>
+<p>There is NO direct formula for finding the roots of a polynomial of degree
+5 or higher so this class returns a good approximation of the roots, but not
+the exact ones.</p>
+<p>An initial set of values <a href="../../equations/GenericAlgebraic/initialGuess.html">initialGuess</a> is required to find the roots but it
+is optional. This implementation by default uses the Aberth method to
+generate initial guesses if none are provided. If you are not sure which
+initial values to provide, just leave <a href="../../equations/GenericAlgebraic/initialGuess.html">initialGuess</a> empty.</p>
+<p>Note that this algorithm does <strong>NOT</strong> always converge. In other words, it is
+<strong>NOT</strong> true that for every polynomial, the set of initial vectors that
+eventually converges to roots is open and dense.</p>
+<p>These are examples of generic algebraic equations, where the coefficient
+with the highest degree goes first:</p>
+<pre class="language-dart"><code class="language-dart">// P(x) = -5x^2 + 3x + i
+final genericAlgebraic1 = GenericAlgebraic(
+  coefficients: [
+    Complex.fromReal(-5),
+    Complex.fromReal(3),
+    Complex.i(),
+  ],
+  initialGuess: [
+    Complex(1, -2),
+    Complex.fromReal(3),
+  ],
+);
+
+// P(x) = (3 + 8i)x^4 - 2x^2 + (-1 + 5i)x + 6 + (3 + 4i)
+final genericAlgebraic2 = GenericAlgebraic(
+  coefficients: [
+    Complex(3, 8),
+    Complex.fromReal(-2),
+    Complex(-1, 5),
+    Complex.fromReal(6),
+    Complex(3, 4),
+  ],
+);
+</code></pre>
+<p>If the coefficients of your polynomial contain complex numbers, consider
+using the <a href="../../equations/GenericAlgebraic/GenericAlgebraic.html">GenericAlgebraic.new</a> constructor instead.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">GenericAlgebraic.realEquation({
+  required List&lt;double&gt; coefficients,
+  this.initialGuess = const [],
+  this.precision = 1.0e-10,
+  this.maxSteps = 2000,
+  this.minGuessDistance = 1.0e-6,
+  this.stagnationThreshold = 1.0e-10,
+}) : super.realEquation(coefficients);</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/GenericAlgebraic-class.html">GenericAlgebraic</a></li>
+    <li class="self-crumb">GenericAlgebraic.realEquation constructor</li>
+</ol>
+
+    <h5>GenericAlgebraic class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-left-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      6.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
