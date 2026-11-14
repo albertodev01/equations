@@ -28,7 +28,7 @@ import 'package:equations/src/utils/math_utils.dart';
 final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     with MathUtils {
   /// {@macro svd_class_header}
-  const SVDReal({required super.matrix});
+  const new({required super.matrix});
 
   /// Reduces the source matrix to bidiagonal form using Householder
   /// reflections.

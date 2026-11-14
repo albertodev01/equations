@@ -6,6 +6,13 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 final class PolarComplex implements Comparable<PolarComplex> {
   /// {@macro polar_complex}
+  const new({
+    required this.r,
+    required this.phiRadians,
+    required this.phiDegrees,
+  });
+
+  /// {@macro polar_complex}
   /// The absolute value/modulus of the complex number.
   final double r;
 
@@ -14,13 +21,6 @@ final class PolarComplex implements Comparable<PolarComplex> {
 
   /// The 'phi' angle expressed in degrees.
   final double phiDegrees;
-
-  /// {@macro polar_complex}
-  const PolarComplex({
-    required this.r,
-    required this.phiRadians,
-    required this.phiDegrees,
-  });
 
   @override
   String toString() =>

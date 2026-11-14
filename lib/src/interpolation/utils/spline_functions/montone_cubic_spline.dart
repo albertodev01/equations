@@ -10,13 +10,13 @@ import 'package:equations/src/utils/math_utils.dart';
 /// values will also be monotonic.
 /// {@endtemplate}
 final class MonotoneCubicSpline extends SplineFunction with MathUtils {
-  /// Cached tangents (computed lazily on first use).
-  List<double>? _nodesM;
-
   /// {@macro monotone_cubic_spline}
-  MonotoneCubicSpline({
+  new({
     required super.nodes,
   });
+
+  /// Cached tangents (computed lazily on first use).
+  List<double>? _nodesM;
 
   /// Computes and caches the tangents for the spline.
   List<double> _computeTangents() {

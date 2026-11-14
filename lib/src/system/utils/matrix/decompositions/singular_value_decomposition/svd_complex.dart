@@ -31,6 +31,9 @@ import 'package:equations/src/utils/math_utils.dart';
 /// ```
 final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
     with MathUtils {
+  /// {@macro svd_class_header}
+  const new({required super.matrix});
+
   /// Epsilon value for numerical stability in complex operations.
   static const _epsilon = 1e-10;
 
@@ -39,9 +42,6 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
 
   /// Maximum number of iterations allowed for convergence.
   static const _maxIterations = 1000;
-
-  /// {@macro svd_class_header}
-  const SVDComplex({required super.matrix});
 
   /// Reduces the source matrix to bidiagonal form using Householder
   /// reflections.

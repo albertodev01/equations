@@ -67,7 +67,7 @@ final class GaussianElimination extends SystemSolver with RealMatrixUtils {
   /// The algorithm uses partial pivoting to swap rows/columns and back substitution
   /// to solve the system. Throws a [SystemSolverException] if the matrix is
   /// singular or nearly singular.
-  GaussianElimination({
+  new({
     required super.matrix,
     required super.knownValues,
     super.precision,

@@ -25,6 +25,13 @@ import 'package:equations/equations.dart';
 /// of values that progressively get closer to the real root.
 /// {@endtemplate}
 abstract base class NonLinear {
+  /// {@macro nonlinear}
+  const new({
+    required this.function,
+    required this.tolerance,
+    required this.maxSteps,
+  });
+
   /// The function f(x) for which the algorithm has to find a solution.
   final String function;
 
@@ -33,13 +40,6 @@ abstract base class NonLinear {
 
   /// The maximum number of iterations to be made by the algorithm.
   final int maxSteps;
-
-  /// {@macro nonlinear}
-  const NonLinear({
-    required this.function,
-    required this.tolerance,
-    required this.maxSteps,
-  });
 
   @override
   String toString() => 'f(x) = $function';

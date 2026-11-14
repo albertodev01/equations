@@ -63,15 +63,12 @@ typedef AlgebraicDivision = ({Algebraic quotient, Algebraic remainder});
 /// [coefficients] is zero.
 /// {@endtemplate}
 sealed class Algebraic {
-  /// The polynomial coefficients.
-  final List<Complex> coefficients;
-
   /// {@macro algebraic}
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
   /// values are required, consider using [Algebraic.realEquation] for a less
   /// verbose syntax.
-  Algebraic(this.coefficients) {
+  new(this.coefficients) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!_isValid) {
@@ -83,7 +80,7 @@ sealed class Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, use the
   /// [Algebraic.new] constructor instead.
-  Algebraic.realEquation(List<double> coefficients)
+  new realEquation(List<double> coefficients)
     : this(
         coefficients.map(Complex.fromReal).toList(growable: false),
       );
@@ -115,7 +112,7 @@ sealed class Algebraic {
   /// Use this method when the coefficients can be complex numbers. If there
   /// are only real numbers, use the [Algebraic.fromReal] constructor which is
   /// more convenient.
-  factory Algebraic.from(List<Complex> coefficients) {
+  factory from(List<Complex> coefficients) {
     switch (coefficients.length) {
       case 1:
         return Constant(a: coefficients.first);
@@ -153,9 +150,12 @@ sealed class Algebraic {
   ///
   /// Use this method when the coefficients are all real numbers. If there are
   /// complex numbers as well, use the [Algebraic.from] constructor instead.
-  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
+  factory fromReal(List<double> coefficients) => Algebraic.from(
     coefficients.map(Complex.fromReal).toList(growable: false),
   );
+
+  /// The polynomial coefficients.
+  final List<Complex> coefficients;
 
   @override
   bool operator ==(Object other) {

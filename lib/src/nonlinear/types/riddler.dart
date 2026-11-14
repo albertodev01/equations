@@ -27,20 +27,20 @@ import 'package:equations/equations.dart';
 ///     negative or zero, in which case the algorithm falls back to bisection.
 /// {@endtemplate}
 final class Riddler extends NonLinear {
-  /// The starting point of the interval.
-  final double a;
-
-  /// The ending point of the interval.
-  final double b;
-
   /// {@macro riddler}
-  const Riddler({
+  const new({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
     super.maxSteps = 30,
   });
+
+  /// The starting point of the interval.
+  final double a;
+
+  /// The ending point of the interval.
+  final double b;
 
   @override
   bool operator ==(Object other) {

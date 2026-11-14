@@ -19,6 +19,13 @@ import 'package:equations/equations.dart';
 /// interval.
 /// {@endtemplate}
 abstract base class NumericalIntegration {
+  /// {@macro numerical_integration}
+  const new({
+    required this.function,
+    required this.lowerBound,
+    required this.upperBound,
+  });
+
   /// Internal function evaluator.
   static const _evaluator = ExpressionParser();
 
@@ -30,13 +37,6 @@ abstract base class NumericalIntegration {
 
   /// The upper bound of the integral.
   final double upperBound;
-
-  /// {@macro numerical_integration}
-  const NumericalIntegration({
-    required this.function,
-    required this.lowerBound,
-    required this.upperBound,
-  });
 
   @override
   bool operator ==(Object other) {

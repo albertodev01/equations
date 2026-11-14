@@ -45,7 +45,7 @@ final class Linear extends Algebraic {
   /// Use this constructor if you have complex coefficients. If no [Complex]
   /// values are required, then consider using [Linear.realEquation] for a
   /// less verbose syntax.
-  Linear({
+  new({
     Complex a = const Complex.fromReal(1),
     Complex b = const Complex.zero(),
   }) : super([a, b]);
@@ -56,7 +56,7 @@ final class Linear extends Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, consider
   /// using the [Linear.new] constructor instead.
-  Linear.realEquation({double a = 1, double b = 0})
+  new realEquation({double a = 1, double b = 0})
     : super.realEquation([a, b]);
 
   @override

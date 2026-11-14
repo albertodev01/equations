@@ -21,16 +21,16 @@ import 'package:equations/equations.dart';
 ///     `x_{n+1} = x_n - f(x_n) / f'(x_n)`
 /// {@endtemplate}
 final class Newton extends NonLinear {
-  /// The initial guess x<sub>0</sub>.
-  final double x0;
-
   /// {@macro newton}
-  const Newton({
+  const new({
     required super.function,
     required this.x0,
     super.tolerance = 1.0e-10,
     super.maxSteps = 10,
   });
+
+  /// The initial guess x<sub>0</sub>.
+  final double x0;
 
   @override
   bool operator ==(Object other) {

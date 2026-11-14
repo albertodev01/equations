@@ -21,14 +21,14 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///    eigenvectors
 /// {@endtemplate}
 abstract base class Decomposition<K, T extends Matrix<K>> {
-  /// The matrix to be decomposed.
-  final T matrix;
-
   /// {@macro matrix_decomposition}
   ///
   /// The [matrix] parameter must be a valid matrix that can be decomposed
   /// according to the specific decomposition algorithm being used.
-  const Decomposition({required this.matrix});
+  const new({required this.matrix});
+
+  /// The matrix to be decomposed.
+  final T matrix;
 
   @override
   bool operator ==(Object other) {

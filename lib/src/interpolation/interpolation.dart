@@ -11,13 +11,13 @@ import 'package:equations/equations.dart';
 ///  - [SplineInterpolation].
 /// {@endtemplate}
 abstract base class Interpolation {
-  /// The interpolation nodes.
-  final List<InterpolationNode> nodes;
-
   /// {@macro interpolation}
-  const Interpolation({
+  const new({
     required this.nodes,
   });
+
+  /// The interpolation nodes.
+  final List<InterpolationNode> nodes;
 
   @override
   bool operator ==(Object other) {

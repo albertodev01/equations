@@ -33,25 +33,25 @@ import 'package:equations/src/utils/math_utils.dart';
 /// position `(2, 3)` in the matrix.
 base class RealMatrix extends Matrix<double> with MathUtils {
   /// {@macro matrix_constructor_intro}
-  RealMatrix({required super.rows, required super.columns, super.identity})
+  new({required super.rows, required super.columns, super.identity})
     : super(defaultValue: 0, identityOneValue: 1);
 
   /// {@macro matrix_fromData_constructor}
-  RealMatrix.fromData({
+  new fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
   /// {@macro matrix_fromFlattenedData_constructor}
-  RealMatrix.fromFlattenedData({
+  new fromFlattenedData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromFlattenedData();
 
   /// {@macro matrix_diagonal_constructor}
-  RealMatrix.diagonal({
+  new diagonal({
     required super.rows,
     required super.columns,
     required super.diagonalValue,

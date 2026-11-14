@@ -23,7 +23,7 @@ base class MidpointRule extends IntervalsIntegration {
   /// {@macro midpoint_rule}
   ///
   /// By default, [intervals] is set to `30`.
-  const MidpointRule({
+  const new({
     required super.function,
     required super.lowerBound,
     required super.upperBound,

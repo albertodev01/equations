@@ -33,7 +33,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 /// position `(2, 3)` in the matrix.
 base class ComplexMatrix extends Matrix<Complex> {
   /// {@macro matrix_constructor_intro}
-  ComplexMatrix({
+  new({
     required super.rows,
     required super.columns,
     super.identity = false,
@@ -42,21 +42,21 @@ base class ComplexMatrix extends Matrix<Complex> {
   });
 
   /// {@macro matrix_fromData_constructor}
-  ComplexMatrix.fromData({
+  new fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
   /// {@macro matrix_fromFlattenedData_constructor}
-  ComplexMatrix.fromFlattenedData({
+  new fromFlattenedData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromFlattenedData();
 
   /// {@macro matrix_diagonal_constructor}
-  ComplexMatrix.diagonal({
+  new diagonal({
     required super.rows,
     required super.columns,
     required super.diagonalValue,

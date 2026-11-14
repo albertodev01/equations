@@ -8,15 +8,15 @@ import 'package:test/test.dart';
 /// This matcher makes sure that at least the first [precision] digits of the
 /// tested value are equal.
 class MoreOrLessEquals extends Matcher {
+  const new(
+    this.value, {
+    this.precision = 1.0e-12,
+  }) : assert(precision >= 0, 'The precision must be >= 0');
   /// The value to be tested
   final double value;
 
   /// The accuracy of the test
   final double precision;
-  const MoreOrLessEquals(
-    this.value, {
-    this.precision = 1.0e-12,
-  }) : assert(precision >= 0, 'The precision must be >= 0');
 
   @override
   bool matches(Object? item, Map<Object?, Object?> matchState) {

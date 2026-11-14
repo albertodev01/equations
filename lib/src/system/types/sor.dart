@@ -46,22 +46,6 @@ import 'package:equations/equations.dart';
 /// ```
 /// {@endtemplate}
 final class SORSolver extends SystemSolver {
-  /// The relaxation factor `w` (omega) that controls the convergence rate.
-  ///
-  /// The value must be in the range (0, 2) for convergence:
-  /// - `w = 1`: Equivalent to Gauss-Seidel method
-  /// - `0 < w < 1`: Under-relaxation (slower but more stable)
-  /// - `1 < w < 2`: Over-relaxation (faster when optimal)
-  ///
-  /// The optimal value depends on the spectral radius of the iteration matrix.
-  final double w;
-
-  /// The maximum number of iterations to be made by the algorithm.
-  ///
-  /// If the algorithm doesn't converge within this number of iterations,
-  /// it will return the best approximation found so far.
-  final int maxSteps;
-
   /// {@macro systems_constructor_intro}
   ///
   /// {@macro sor_solver}
@@ -75,7 +59,7 @@ final class SORSolver extends SystemSolver {
   /// The algorithm will stop when either:
   /// - The residual norm is less than [precision], or
   /// - The maximum number of iterations [maxSteps] is reached.
-  SORSolver({
+  new({
     required super.matrix,
     required super.knownValues,
     required this.w,
@@ -99,6 +83,22 @@ final class SORSolver extends SystemSolver {
       }
     }
   }
+
+  /// The relaxation factor `w` (omega) that controls the convergence rate.
+  ///
+  /// The value must be in the range (0, 2) for convergence:
+  /// - `w = 1`: Equivalent to Gauss-Seidel method
+  /// - `0 < w < 1`: Under-relaxation (slower but more stable)
+  /// - `1 < w < 2`: Over-relaxation (faster when optimal)
+  ///
+  /// The optimal value depends on the spectral radius of the iteration matrix.
+  final double w;
+
+  /// The maximum number of iterations to be made by the algorithm.
+  ///
+  /// If the algorithm doesn't converge within this number of iterations,
+  /// it will return the best approximation found so far.
+  final int maxSteps;
 
   /// Returns whether the matrix is diagonally dominant.
   ///

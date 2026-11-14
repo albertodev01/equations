@@ -33,17 +33,17 @@ import 'package:equations/equations.dart';
 /// ```
 /// {@endtemplate}
 class PolynomialLongDivision {
+  /// {@macro polynomial_long_division}
+  const new({
+    required this.polyNumerator,
+    required this.polyDenominator,
+  });
+
   /// The polynomial to be divided (numerator).
   final Algebraic polyNumerator;
 
   /// The polynomial to divide by (denominator).
   final Algebraic polyDenominator;
-
-  /// {@macro polynomial_long_division}
-  const PolynomialLongDivision({
-    required this.polyNumerator,
-    required this.polyDenominator,
-  });
 
   /// Performs polynomial long division of [polyNumerator] by [polyDenominator].
   ///

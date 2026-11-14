@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class MatrixException extends EquationException {
   /// {@macro matrix_exception}
-  const MatrixException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'MatrixException',

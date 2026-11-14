@@ -42,7 +42,7 @@ base class PolynomialInterpolation extends Interpolation {
   /// **Note**: Validation of nodes (checking for duplicates and minimum count)
   /// is performed lazily when [compute] or [buildPolynomial] is called. Invalid
   /// nodes will cause an [InterpolationException] to be thrown at that time.
-  const PolynomialInterpolation({
+  const new({
     required super.nodes,
   });
 

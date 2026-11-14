@@ -27,7 +27,7 @@ abstract base class SingleValueDecomposition<K, T extends Matrix<K>>
   ///
   /// The [matrix] can be any rectangular matrix. SVD always exists for any
   /// matrix, unlike some other decompositions.
-  const SingleValueDecomposition({required super.matrix});
+  const new({required super.matrix});
 
   /// Computes the `E`, `U` and `V` matrices of the SVD algorithm.
   ///

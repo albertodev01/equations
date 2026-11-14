@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import '../double_approximation_matcher.dart';
 
 class Demo with MathUtils {
-  const Demo();
+  const new();
 }
 
 void main() {

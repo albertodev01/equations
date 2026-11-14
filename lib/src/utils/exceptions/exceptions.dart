@@ -2,6 +2,12 @@
 /// Base class for exception objects in the equations package.
 /// {@endtemplate}
 abstract class EquationException implements Exception {
+  /// {@macro equation_exception}
+  const new({
+    required this.message,
+    required this.messagePrefix,
+  });
+
   /// The error message.
   final String message;
 
@@ -16,12 +22,6 @@ abstract class EquationException implements Exception {
   /// In the above example, `SomeException` is defined by this variable and it's
   /// always put before the actual error message.
   final String messagePrefix;
-
-  /// {@macro equation_exception}
-  const EquationException({
-    required this.message,
-    required this.messagePrefix,
-  });
 
   @override
   bool operator ==(Object other) {

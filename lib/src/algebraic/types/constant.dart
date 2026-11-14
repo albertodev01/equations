@@ -14,12 +14,12 @@ final class Constant extends Algebraic {
   /// {@macro constant_algebraic}
   ///
   /// The only coefficient of the polynomial is represented by [a].
-  Constant({Complex a = const Complex.fromReal(1)}) : super([a]);
+  new({Complex a = const Complex.fromReal(1)}) : super([a]);
 
   /// {@macro constant_algebraic}
   ///
   /// The only real coefficient of the polynomial is represented by [a].
-  Constant.realEquation({double a = 1}) : super.realEquation([a]);
+  new realEquation({double a = 1}) : super.realEquation([a]);
 
   @override
   num get degree => a.isZero ? double.negativeInfinity : 0;

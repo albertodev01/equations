@@ -26,7 +26,7 @@ base class SimpsonRule extends IntervalsIntegration {
   ///
   /// By default, [intervals] is set to `32`. For most applications, this
   /// provides a good balance between accuracy and computational cost.
-  const SimpsonRule({
+  const new({
     required super.function,
     required super.lowerBound,
     required super.upperBound,

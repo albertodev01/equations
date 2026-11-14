@@ -6,17 +6,17 @@ import 'package:equations/equations.dart';
 /// coordinates of a point on a cartesian plane.
 /// {@endtemplate}
 final class InterpolationNode {
+  /// Creates an [InterpolationNode] object.
+  const new({
+    required this.x,
+    required this.y,
+  });
+
   /// The x coordinate.
   final double x;
 
   /// The y coordinate.
   final double y;
-
-  /// Creates an [InterpolationNode] object.
-  const InterpolationNode({
-    required this.x,
-    required this.y,
-  });
 
   @override
   bool operator ==(Object other) {

@@ -10,7 +10,7 @@ import 'package:equations/src/interpolation/utils/spline_function.dart';
 /// {@endtemplate}
 base class SplineInterpolation extends Interpolation {
   /// {@macro spline_interpolation}
-  const SplineInterpolation({
+  const new({
     required super.nodes,
   });
 

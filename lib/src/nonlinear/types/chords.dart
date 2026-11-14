@@ -10,20 +10,20 @@ import 'package:equations/equations.dart';
 ///   be at least one root in `[a, b]`. These are 2 required conditions.
 /// {@endtemplate}
 final class Chords extends NonLinear {
-  /// The starting point of the interval.
-  final double a;
-
-  /// The ending point of the interval.
-  final double b;
-
   /// {@macro chords}
-  const Chords({
+  const new({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
     super.maxSteps = 30,
   });
+
+  /// The starting point of the interval.
+  final double a;
+
+  /// The ending point of the interval.
+  final double b;
 
   @override
   bool operator ==(Object other) {

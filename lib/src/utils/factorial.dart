@@ -10,6 +10,9 @@
 /// consider
 /// {@endtemplate}
 final class Factorial {
+  /// {@macro factorial}
+  const new();
+
   /// A cache with the most common factorial values.
   static const _factorialsCache = <int, int>{
     0: 1,
@@ -75,9 +78,6 @@ final class Factorial {
 
   /// Dynamic cache for computed BigInt factorials.
   static final _dynamicBigIntFactorialsCache = <int, BigInt>{};
-
-  /// {@macro factorial}
-  const Factorial();
 
   /// Efficiently computes the factorial of a number with [int] precision.
   ///

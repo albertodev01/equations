@@ -10,7 +10,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 base class LinearInterpolation extends Interpolation {
   /// {@macro linear_interpolation}
-  const LinearInterpolation({
+  const new({
     required super.nodes,
   }) : assert(nodes.length == 2, 'There must exactly be 2 nodes!');
 

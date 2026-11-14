@@ -32,12 +32,6 @@ import 'package:equations/equations.dart';
 /// ```
 /// {@endtemplate}
 final class JacobiSolver extends SystemSolver {
-  /// The initial vector `x`, needed to start the algorithm.
-  final List<double> x0;
-
-  /// The maximum number of iterations to be made by the algorithm.
-  final int maxSteps;
-
   /// {@macro systems_constructor_intro}
   ///
   /// {@macro jacobi_solver}
@@ -47,7 +41,7 @@ final class JacobiSolver extends SystemSolver {
   ///  - [x0] is the initial guess (which is a vector);
   ///  - [precision] tells how accurate the algorithm has to be;
   ///  - [maxSteps] the maximum number of iterations the algorithm.
-  factory JacobiSolver({
+  factory({
     required RealMatrix matrix,
     required List<double> knownValues,
     required List<double> x0,
@@ -82,13 +76,19 @@ final class JacobiSolver extends SystemSolver {
   }
 
   /// Creates a [JacobiSolver] object.
-  JacobiSolver._({
+  new _({
     required super.matrix,
     required super.knownValues,
     required this.x0,
     super.precision,
     this.maxSteps = 30,
   });
+
+  /// The initial vector `x`, needed to start the algorithm.
+  final List<double> x0;
+
+  /// The maximum number of iterations to be made by the algorithm.
+  final int maxSteps;
 
   /// Returns whether the matrix is diagonally dominant.
   ///

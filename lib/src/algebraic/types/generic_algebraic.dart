@@ -53,6 +53,36 @@ part of '../algebraic.dart';
 /// ```
 /// {@endtemplate}
 final class GenericAlgebraic extends Algebraic with MathUtils {
+  /// {@macro generic_algebraic}
+  ///
+  /// {@macro generic_algebraic_example}
+  ///
+  /// If the coefficients of your polynomial contain only real numbers, consider
+  /// using the [GenericAlgebraic.realEquation] constructor instead.
+  new({
+    required List<Complex> coefficients,
+    this.initialGuess = const [],
+    this.precision = 1.0e-10,
+    this.maxSteps = 2000,
+    this.minGuessDistance = 1.0e-6,
+    this.stagnationThreshold = 1.0e-10,
+  }) : super(coefficients);
+
+  /// {@macro generic_algebraic}
+  ///
+  /// {@macro generic_algebraic_example}
+  ///
+  /// If the coefficients of your polynomial contain complex numbers, consider
+  /// using the [GenericAlgebraic.new] constructor instead.
+  new realEquation({
+    required List<double> coefficients,
+    this.initialGuess = const [],
+    this.precision = 1.0e-10,
+    this.maxSteps = 2000,
+    this.minGuessDistance = 1.0e-6,
+    this.stagnationThreshold = 1.0e-10,
+  }) : super.realEquation(coefficients);
+
   /// An initial set of values is required to find the roots but it is optional.
   ///
   /// This class by default uses the Aberth method to generate initial guesses
@@ -71,36 +101,6 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
 
   /// The stagnation threshold for convergence.
   final double stagnationThreshold;
-
-  /// {@macro generic_algebraic}
-  ///
-  /// {@macro generic_algebraic_example}
-  ///
-  /// If the coefficients of your polynomial contain only real numbers, consider
-  /// using the [GenericAlgebraic.realEquation] constructor instead.
-  GenericAlgebraic({
-    required List<Complex> coefficients,
-    this.initialGuess = const [],
-    this.precision = 1.0e-10,
-    this.maxSteps = 2000,
-    this.minGuessDistance = 1.0e-6,
-    this.stagnationThreshold = 1.0e-10,
-  }) : super(coefficients);
-
-  /// {@macro generic_algebraic}
-  ///
-  /// {@macro generic_algebraic_example}
-  ///
-  /// If the coefficients of your polynomial contain complex numbers, consider
-  /// using the [GenericAlgebraic.new] constructor instead.
-  GenericAlgebraic.realEquation({
-    required List<double> coefficients,
-    this.initialGuess = const [],
-    this.precision = 1.0e-10,
-    this.maxSteps = 2000,
-    this.minGuessDistance = 1.0e-6,
-    this.stagnationThreshold = 1.0e-10,
-  }) : super.realEquation(coefficients);
 
   @override
   bool operator ==(Object other) {

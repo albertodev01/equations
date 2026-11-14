@@ -27,14 +27,14 @@ import 'package:equations/src/system/utils/matrix/decompositions/qr_decompositio
 /// ```
 final class QRDecompositionComplex
     extends QRDecomposition<Complex, ComplexMatrix> {
+  /// {@macro qr_decomposition_class_header}
+  const new({required super.matrix});
+
   /// Zero complex number constant.
   static const _zero = Complex.zero();
 
   /// Small value for numerical stability checks.
   static const _epsilon = 1e-10;
-
-  /// {@macro qr_decomposition_class_header}
-  const QRDecompositionComplex({required super.matrix});
 
   @override
   List<ComplexMatrix> decompose() {

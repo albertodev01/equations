@@ -7,13 +7,13 @@ import 'package:equations/equations.dart';
 /// of any degree.
 /// {@endtemplate}
 class SylvesterMatrix {
-  /// The polynomial used to build the Sylvester matrix.
-  final Algebraic polynomial;
-
   /// {@macro sylvester_matrix}
-  const SylvesterMatrix({
+  const new({
     required this.polynomial,
   });
+
+  /// The polynomial used to build the Sylvester matrix.
+  final Algebraic polynomial;
 
   @override
   bool operator ==(Object other) {

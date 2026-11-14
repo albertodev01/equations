@@ -45,6 +45,9 @@ typedef _Evaluator = num Function(num value);
 ///  - G (Gauss constant)
 /// {@endtemplate}
 final class ExpressionParser {
+  /// {@macro expression_parser}
+  const new();
+
   /// Gauss constant.
   static const _g = 0.834626841674;
 
@@ -214,9 +217,6 @@ final class ExpressionParser {
     // Build the parser
     return builder.build().end();
   }();
-
-  /// {@macro expression_parser}
-  const ExpressionParser();
 
   /// Evaluates the mathematical [expression] and returns the result. This
   /// method has to be used to evaluate those expression that do **not** contain

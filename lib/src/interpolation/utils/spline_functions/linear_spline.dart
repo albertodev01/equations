@@ -5,13 +5,13 @@ import 'package:equations/src/interpolation/utils/spline_function.dart';
 /// interpolated curve will be monotonic if the control points are monotonic.
 /// {@endtemplate}
 final class LinearSpline extends SplineFunction {
-  /// Cached slopes (computed lazily on first use).
-  List<double>? _nodesM;
-
   /// {@macro linear_spline}
-  LinearSpline({
+  new({
     required super.nodes,
   });
+
+  /// Cached slopes (computed lazily on first use).
+  List<double>? _nodesM;
 
   /// Computes and caches the slopes for the spline.
   List<double> _computeSlopes() {

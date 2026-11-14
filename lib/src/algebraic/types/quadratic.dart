@@ -42,7 +42,7 @@ final class Quadratic extends Algebraic {
   /// Use this constructor if you have complex coefficients. If no [Complex]
   /// values are required, consider using [Quadratic.realEquation] for a less
   /// verbose syntax.
-  Quadratic({
+  new({
     Complex a = const Complex.fromReal(1),
     Complex b = const Complex.zero(),
     Complex c = const Complex.zero(),
@@ -54,7 +54,7 @@ final class Quadratic extends Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, consider
   /// using the [Quadratic.new] constructor instead.
-  Quadratic.realEquation({double a = 1, double b = 0, double c = 0})
+  new realEquation({double a = 1, double b = 0, double c = 0})
     : super.realEquation([a, b, c]);
 
   @override

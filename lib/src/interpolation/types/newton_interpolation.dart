@@ -43,6 +43,15 @@ import 'package:equations/src/utils/factorial.dart';
 /// ```
 /// {@endtemplate}
 base class NewtonInterpolation extends Interpolation {
+  /// {@macro newton_interpolation}
+  ///
+  /// The [nodes] should be equally spaced for best results. The
+  /// [forwardDifference] parameter determines which difference formula to use.
+  const new({
+    required super.nodes,
+    this.forwardDifference = true,
+  });
+
   /// Required to compute the factorial of a number.
   static const _factorial = Factorial();
 
@@ -55,15 +64,6 @@ base class NewtonInterpolation extends Interpolation {
   ///
   /// By default, this is set to `true`.
   final bool forwardDifference;
-
-  /// {@macro newton_interpolation}
-  ///
-  /// The [nodes] should be equally spaced for best results. The
-  /// [forwardDifference] parameter determines which difference formula to use.
-  const NewtonInterpolation({
-    required super.nodes,
-    this.forwardDifference = true,
-  });
 
   @override
   double compute(double x) {

@@ -28,7 +28,7 @@ abstract base class EigenDecomposition<K, T extends Matrix<K>>
   /// {@macro eigendecomposition_class_header}
   ///
   /// {@macro eigendecomposition_characteristics}
-  const EigenDecomposition({required super.matrix});
+  const new({required super.matrix});
 
   /// Computes the `V`, `D` and `V^-1` matrices of the eigendecomposition
   /// algorithm.

@@ -24,17 +24,17 @@ import 'package:equations/equations.dart';
 /// is smooth.
 /// {@endtemplate}
 abstract base class IntervalsIntegration extends NumericalIntegration {
-  /// The number of parts in which the interval `[lowerBound, upperBound]` has
-  /// to be split by the algorithm.
-  final int intervals;
-
   /// {@macro intervals_integration}
-  const IntervalsIntegration({
+  const new({
     required super.function,
     required super.lowerBound,
     required super.upperBound,
     required this.intervals,
   });
+
+  /// The number of parts in which the interval `[lowerBound, upperBound]` has
+  /// to be split by the algorithm.
+  final int intervals;
 
   @override
   bool operator ==(Object other) {

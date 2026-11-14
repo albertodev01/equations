@@ -37,6 +37,38 @@ import 'package:equations/equations.dart';
 /// This class can only be built with square matrices.
 /// {@endtemplate}
 abstract base class SystemSolver {
+  /// {@macro system_solver}
+  ///
+  /// {@macro systems_constructor_intro}
+  ///
+  /// Parameters:
+  ///   - [matrix] is the matrix with the equations (must be square);
+  ///   - [knownValues] is the vector with the known values (must match matrix
+  ///     size);
+  ///   - [precision] is the algorithm accuracy (defaults to `1.0e-10`).
+  ///
+  /// Throws a [SystemSolverException] if:
+  ///   - The matrix is not square, or
+  ///   - The [knownValues] vector length doesn't match the matrix size.
+  new({
+    required this.matrix,
+    required this.knownValues,
+    this.precision = 1.0e-10,
+  }) {
+    // Only square matrices are allowed.
+    if (!matrix.isSquareMatrix) {
+      throw const SystemSolverException('The matrix must be square');
+    }
+
+    // The vector of known values must match the size of the matrix.
+    if (matrix.rowCount != knownValues.length) {
+      throw const SystemSolverException(
+        'The known values vector must have the '
+        'same size as the matrix.',
+      );
+    }
+  }
+
   /// The equations to be solved.
   ///
   /// This is the coefficient matrix `A` in the equation `Ax = b`. It must be
@@ -59,38 +91,6 @@ abstract base class SystemSolver {
   /// iterations is less than this value. For direct solvers, this value is used
   /// to detect singular or near-singular matrices.
   final double precision;
-
-  /// {@macro system_solver}
-  ///
-  /// {@macro systems_constructor_intro}
-  ///
-  /// Parameters:
-  ///   - [matrix] is the matrix with the equations (must be square);
-  ///   - [knownValues] is the vector with the known values (must match matrix
-  ///     size);
-  ///   - [precision] is the algorithm accuracy (defaults to `1.0e-10`).
-  ///
-  /// Throws a [SystemSolverException] if:
-  ///   - The matrix is not square, or
-  ///   - The [knownValues] vector length doesn't match the matrix size.
-  SystemSolver({
-    required this.matrix,
-    required this.knownValues,
-    this.precision = 1.0e-10,
-  }) {
-    // Only square matrices are allowed.
-    if (!matrix.isSquareMatrix) {
-      throw const SystemSolverException('The matrix must be square');
-    }
-
-    // The vector of known values must match the size of the matrix.
-    if (matrix.rowCount != knownValues.length) {
-      throw const SystemSolverException(
-        'The known values vector must have the '
-        'same size as the matrix.',
-      );
-    }
-  }
 
   @override
   bool operator ==(Object other) {

@@ -71,7 +71,7 @@ final class CholeskySolver extends SystemSolver with RealMatrixUtils {
   /// Throws a [SystemSolverException] if:
   ///   - The matrix is not square, or
   ///   - The matrix is not symmetric positive-definite.
-  CholeskySolver({
+  new({
     required super.matrix,
     required super.knownValues,
     super.precision,

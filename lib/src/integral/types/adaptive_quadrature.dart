@@ -30,7 +30,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 final class AdaptiveQuadrature extends NumericalIntegration {
   /// {@macro adaptive_quadrature}
-  const AdaptiveQuadrature({
+  const new({
     required super.function,
     required super.lowerBound,
     required super.upperBound,

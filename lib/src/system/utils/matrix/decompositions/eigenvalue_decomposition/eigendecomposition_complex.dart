@@ -32,7 +32,7 @@ final class EigendecompositionComplex
     extends EigenDecomposition<Complex, ComplexMatrix>
     with MathUtils {
   /// {@macro eigendecomposition_class_header}
-  const EigendecompositionComplex({required super.matrix});
+  const new({required super.matrix});
 
   @override
   List<ComplexMatrix> decompose() {

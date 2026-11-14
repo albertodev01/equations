@@ -28,20 +28,20 @@ import 'package:equations/equations.dart';
 ///     finite difference quotient.
 /// {@endtemplate}
 final class Secant extends NonLinear {
-  /// The first initial guess x<sub>0</sub>.
-  final double a;
-
-  /// The second initial guess x<sub>1</sub>.
-  final double b;
-
   /// {@macro secant}
-  const Secant({
+  const new({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
     super.maxSteps = 30,
   });
+
+  /// The first initial guess x<sub>0</sub>.
+  final double a;
+
+  /// The second initial guess x<sub>1</sub>.
+  final double b;
 
   @override
   bool operator ==(Object other) {

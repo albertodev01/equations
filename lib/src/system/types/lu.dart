@@ -52,7 +52,7 @@ final class LUSolver extends SystemSolver with RealMatrixUtils {
   ///
   ///  - [matrix] is the matrix containing the equations;
   ///  - [knownValues] is the vector with the known values.
-  LUSolver({required super.matrix, required super.knownValues});
+  new({required super.matrix, required super.knownValues});
 
   @override
   List<double> solve() {

@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class SystemSolverException extends EquationException {
   /// {@macro system_solver_exception}
-  const SystemSolverException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'SystemSolverException',

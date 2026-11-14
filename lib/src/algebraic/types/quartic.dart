@@ -41,21 +41,6 @@ part of '../algebraic.dart';
 /// ```
 /// {@endtemplate}
 final class Quartic extends Algebraic {
-  /// The value used to check if a coefficient is very close to zero. In other
-  /// words, if `|a| < epsilon`, then `a` is considered to be zero.
-  ///
-  /// This value is used to avoid numerical instability when solving the cubic
-  /// equation.
-  static const epsilon = 1e-10;
-
-  /// The maximum value a coefficient can have. If a coefficient is greater
-  /// than this value, an exception will be thrown.
-  static const maxCoefficient = 1e10;
-
-  /// The minimum value a coefficient can have. If a coefficient is less than
-  /// this value, an exception will be thrown.
-  static const minCoefficient = 1e-10;
-
   /// {@macro quartic_algebraic}
   ///
   /// {@macro quartic_algebraic_examples}
@@ -63,7 +48,7 @@ final class Quartic extends Algebraic {
   /// Use this constructor if you have complex coefficients. If no [Complex]
   /// values are required, then consider using [Quartic.realEquation] for a
   /// less verbose syntax.
-  Quartic({
+  new({
     Complex a = const Complex.fromReal(1),
     Complex b = const Complex.zero(),
     Complex c = const Complex.zero(),
@@ -79,7 +64,7 @@ final class Quartic extends Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, consider
   /// using the [Quartic.new] constructor instead.
-  Quartic.realEquation({
+  new realEquation({
     double a = 1,
     double b = 0,
     double c = 0,
@@ -88,6 +73,21 @@ final class Quartic extends Algebraic {
   }) : super.realEquation([a, b, c, d, e]) {
     _validateCoefficients();
   }
+
+  /// The value used to check if a coefficient is very close to zero. In other
+  /// words, if `|a| < epsilon`, then `a` is considered to be zero.
+  ///
+  /// This value is used to avoid numerical instability when solving the cubic
+  /// equation.
+  static const epsilon = 1e-10;
+
+  /// The maximum value a coefficient can have. If a coefficient is greater
+  /// than this value, an exception will be thrown.
+  static const maxCoefficient = 1e10;
+
+  /// The minimum value a coefficient can have. If a coefficient is less than
+  /// this value, an exception will be thrown.
+  static const minCoefficient = 1e-10;
 
   /// Validates the coefficients of the quartic equation
   void _validateCoefficients() {

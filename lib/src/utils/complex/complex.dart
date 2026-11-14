@@ -9,65 +9,59 @@ import 'package:equations/equations.dart';
 /// A [Complex] object is **immutable**.
 /// {@endtemplate}
 final class Complex implements Comparable<Complex> {
-  /// The real part of the complex number.
-  final double real;
-
-  /// The imaginary part of the complex number.
-  final double imaginary;
-
   /// Creates a complex number with the given real and imaginary parts.
-  const Complex(this.real, this.imaginary);
+  const new(this.real, this.imaginary);
 
   /// Creates a complex with only the real part.
   ///
   /// The imaginary part is set to 0i.
-  const Complex.fromReal(this.real) : imaginary = 0;
+  const new fromReal(this.real) : imaginary = 0;
 
   /// Creates a complex with only the imaginary part.
   ///
   /// The real part is set to 0.
-  const Complex.fromImaginary(this.imaginary) : real = 0;
+  const new fromImaginary(this.imaginary) : real = 0;
 
   /// This is the same as calling `Complex(0, 0)`.
-  const Complex.zero() : this(0, 0);
+  const new zero() : this(0, 0);
 
   /// This is the same as calling `Complex(0, 1)`.
-  const Complex.i() : this(0, 1);
+  const new i() : this(0, 1);
 
   /// Creates a complex number from [Fraction] objects.
-  factory Complex.fromFraction(Fraction real, Fraction imaginary) =>
+  factory fromFraction(Fraction real, Fraction imaginary) =>
       Complex(real.toDouble(), imaginary.toDouble());
 
   /// Creates a complex number from [MixedFraction] objects.
-  factory Complex.fromMixedFraction(MixedFraction real, MixedFraction imag) =>
+  factory fromMixedFraction(MixedFraction real, MixedFraction imag) =>
       Complex(real.toDouble(), imag.toDouble());
 
   /// Creates a complex number having only the real part expressed as a
   /// [Fraction] object.
   ///
   /// The imaginary part is set to 0i.
-  factory Complex.fromRealFraction(Fraction real) =>
+  factory fromRealFraction(Fraction real) =>
       Complex(real.toDouble(), 0);
 
   /// Creates a complex number having only the imaginary part expressed as a
   /// [Fraction] object.
   ///
   /// The real part is set to 0.
-  factory Complex.fromImaginaryFraction(Fraction imaginary) =>
+  factory fromImaginaryFraction(Fraction imaginary) =>
       Complex(0, imaginary.toDouble());
 
   /// Creates a complex number having only the real part expressed as a
   /// [MixedFraction] object.
   ///
   /// The imaginary part is set to 0i.
-  factory Complex.fromRealMixedFraction(MixedFraction real) =>
+  factory fromRealMixedFraction(MixedFraction real) =>
       Complex(real.toDouble(), 0);
 
   /// Creates a complex number having only the imaginary part expressed as a
   /// [MixedFraction] object.
   ///
   /// The real part is set to 0.
-  factory Complex.fromImaginaryMixedFraction(MixedFraction imaginary) =>
+  factory fromImaginaryMixedFraction(MixedFraction imaginary) =>
       Complex(0, imaginary.toDouble());
 
   /// Creates a complex number from the given polar coordinates where [r] is the
@@ -75,7 +69,7 @@ final class Complex implements Comparable<Complex> {
   ///
   /// By default, the angle [theta] must be expressed in *radians* but setting
   /// `angleInRadians = false` allows the value to be in degrees.
-  factory Complex.fromPolar({
+  factory fromPolar({
     required double r,
     required double theta,
     bool angleInRadians = true,
@@ -85,6 +79,12 @@ final class Complex implements Comparable<Complex> {
 
     return Complex(real, imaginary);
   }
+
+  /// The real part of the complex number.
+  final double real;
+
+  /// The imaginary part of the complex number.
+  final double imaginary;
 
   @override
   bool operator ==(Object other) {

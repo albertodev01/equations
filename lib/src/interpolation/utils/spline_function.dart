@@ -14,11 +14,8 @@ export 'spline_functions/montone_cubic_spline.dart';
 /// degrees.
 /// {@endtemplate}
 abstract base class SplineFunction {
-  /// The interpolation nodes.
-  final List<InterpolationNode> nodes;
-
   /// {@macro spline_function}
-  const SplineFunction({
+  const new({
     required this.nodes,
   });
 
@@ -34,7 +31,7 @@ abstract base class SplineFunction {
   ///
   /// If the [nodes] doesn't contain values sorted in increasing order, then an
   /// [InterpolationException] object is thrown.
-  factory SplineFunction.generate({
+  factory generate({
     required List<InterpolationNode> nodes,
   }) {
     if (!_isStrictlyIncreasing(nodes)) {
@@ -49,6 +46,9 @@ abstract base class SplineFunction {
       return LinearSpline(nodes: nodes);
     }
   }
+
+  /// The interpolation nodes.
+  final List<InterpolationNode> nodes;
 
   @override
   bool operator ==(Object other) {

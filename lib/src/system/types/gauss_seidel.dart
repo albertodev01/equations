@@ -53,12 +53,6 @@ import 'package:equations/equations.dart';
 /// ```
 /// {@endtemplate}
 final class GaussSeidelSolver extends SystemSolver {
-  /// The maximum number of iterations to be made by the algorithm.
-  ///
-  /// If the algorithm doesn't converge within this number of iterations,
-  /// it will return the best approximation found so far.
-  final int maxSteps;
-
   /// {@macro systems_constructor_intro}
   ///
   /// {@macro gauss_seidel_solver}
@@ -68,12 +62,18 @@ final class GaussSeidelSolver extends SystemSolver {
   ///   - [knownValues] is the vector with the known values;
   ///   - [precision] determines how accurate the algorithm has to be
   ///   - [maxSteps] the maximum number of iterations (defaults to `30`).
-  GaussSeidelSolver({
+  new({
     required super.matrix,
     required super.knownValues,
     super.precision,
     this.maxSteps = 30,
   });
+
+  /// The maximum number of iterations to be made by the algorithm.
+  ///
+  /// If the algorithm doesn't converge within this number of iterations,
+  /// it will return the best approximation found so far.
+  final int maxSteps;
 
   @override
   bool operator ==(Object other) {

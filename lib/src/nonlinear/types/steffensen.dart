@@ -23,16 +23,16 @@ import 'package:equations/equations.dart';
 ///     where `g(x_n) = f(x_n + f(x_n))/f(x_n) - 1` approximates the derivative.
 /// {@endtemplate}
 final class Steffensen extends NonLinear {
-  /// The initial guess x<sub>0</sub>.
-  final double x0;
-
   /// {@macro steffensen}
-  const Steffensen({
+  const new({
     required super.function,
     required this.x0,
     super.tolerance = 1.0e-10,
     super.maxSteps = 30,
   });
+
+  /// The initial guess x<sub>0</sub>.
+  final double x0;
 
   @override
   bool operator ==(Object other) {

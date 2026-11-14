@@ -21,7 +21,7 @@ abstract base class QRDecomposition<K, T extends Matrix<K>>
   ///
   /// The [matrix] can be any rectangular matrix. For best results, the matrix
   /// should have full column rank.
-  const QRDecomposition({required super.matrix});
+  const new({required super.matrix});
 
   /// Computes the `Q` and `R` matrices of the QR decomposition algorithm.
   ///

@@ -22,7 +22,7 @@ enum AlgebraicInequalityType {
 /// {@endtemplate}
 sealed class AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_solution}
-  const AlgebraicInequalitySolution({
+  const new({
     required this.isInclusive,
   });
 
@@ -52,18 +52,18 @@ sealed class AlgebraicInequalitySolution {
 /// and [end] values.
 /// {@endtemplate}
 class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
+  /// {@macro algebraic_inequality_interval}
+  const new({
+    required this.start,
+    required this.end,
+    required super.isInclusive,
+  });
+
   /// The start of the interval.
   final double start;
 
   /// The end of the interval.
   final double end;
-
-  /// {@macro algebraic_inequality_interval}
-  const AlgebraicInequalityInterval({
-    required this.start,
-    required this.end,
-    required super.isInclusive,
-  });
 
   @override
   bool operator ==(Object other) {
@@ -97,14 +97,14 @@ class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
 /// A solution of an [Algebraic] inequality that is smaller than [value].
 /// {@endtemplate}
 class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
-  /// The value.
-  final double value;
-
   /// {@macro algebraic_inequality_smaller_than}
-  const AlgebraicInequalitySmallerThan({
+  const new({
     required this.value,
     required super.isInclusive,
   });
+
+  /// The value.
+  final double value;
 
   @override
   bool operator ==(Object other) {
@@ -135,14 +135,14 @@ class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
 /// A solution of an [Algebraic] inequality that is greater than [value].
 /// {@endtemplate}
 class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
-  /// The value.
-  final double value;
-
   /// {@macro algebraic_inequality_greater_than}
-  const AlgebraicInequalityGreaterThan({
+  const new({
     required this.value,
     required super.isInclusive,
   });
+
+  /// The value.
+  final double value;
 
   @override
   bool operator ==(Object other) {
@@ -174,7 +174,7 @@ class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
 /// {@endtemplate}
 class AlgebraicInequalityAllRealNumbers extends AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_all_real_numbers}
-  const AlgebraicInequalityAllRealNumbers() : super(isInclusive: true);
+  const new() : super(isInclusive: true);
 
   @override
   String toString() => 'AllRealNumbers(isInclusive: $isInclusive)';

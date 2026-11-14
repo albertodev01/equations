@@ -16,15 +16,6 @@ import 'package:equations/equations.dart';
 /// This is a base abstract class.
 /// {@endtemplate}
 abstract base class Matrix<T> {
-  /// The number of rows in the matrix.
-  final int rowCount;
-
-  /// The number of columns in the matrix.
-  final int columnCount;
-
-  /// The internal representation of the matrix.
-  final List<T> _data;
-
   /// {@macro matrix_class_header}
   ///
   /// {@template matrix_constructor_intro}
@@ -36,7 +27,7 @@ abstract base class Matrix<T> {
   ///
   /// A [MatrixException] is thrown if [rows] or [columns] is set to 0.
   /// {@endtemplate}
-  Matrix({
+  new({
     required int rows,
     required int columns,
     required T defaultValue,
@@ -69,7 +60,7 @@ abstract base class Matrix<T> {
   /// A [MatrixException] is thrown if [rows] * [columns] is **not** equal
   /// to the length of [data].
   /// {@endtemplate}
-  Matrix.fromData({
+  new fromData({
     required int rows,
     required int columns,
     required List<List<T>> data,
@@ -91,7 +82,7 @@ abstract base class Matrix<T> {
   /// The source matrix is expressed as an array whose size must **exactly** be
   /// `N` * `M`, otherwise a [MatrixException] is thrown.
   /// {@endtemplate}
-  Matrix.fromFlattenedData({
+  new fromFlattenedData({
     required int rows,
     required int columns,
     required List<T> data,
@@ -114,7 +105,7 @@ abstract base class Matrix<T> {
   ///
   /// A [MatrixException] is thrown if [rows] or [columns] is set to 0.
   /// {@endtemplate}
-  Matrix.diagonal({
+  new diagonal({
     required int rows,
     required int columns,
     required T defaultValue,
@@ -136,6 +127,15 @@ abstract base class Matrix<T> {
       }
     }
   }
+
+  /// The number of rows in the matrix.
+  final int rowCount;
+
+  /// The number of columns in the matrix.
+  final int columnCount;
+
+  /// The internal representation of the matrix.
+  final List<T> _data;
 
   @override
   bool operator ==(Object other) {

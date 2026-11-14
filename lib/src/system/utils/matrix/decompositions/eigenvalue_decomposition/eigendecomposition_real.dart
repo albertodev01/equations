@@ -32,7 +32,7 @@ final class EigendecompositionReal
     extends EigenDecomposition<double, RealMatrix>
     with MathUtils {
   /// {@macro eigendecomposition_class_header}
-  const EigendecompositionReal({required super.matrix});
+  const new({required super.matrix});
 
   @override
   List<RealMatrix> decompose() {

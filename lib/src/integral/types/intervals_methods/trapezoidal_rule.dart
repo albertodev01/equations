@@ -27,7 +27,7 @@ base class TrapezoidalRule extends IntervalsIntegration {
   ///
   /// By default, [intervals] is set to `20`. For most applications, this
   /// provides a good balance between accuracy and computational cost.
-  const TrapezoidalRule({
+  const new({
     required super.function,
     required super.lowerBound,
     required super.upperBound,

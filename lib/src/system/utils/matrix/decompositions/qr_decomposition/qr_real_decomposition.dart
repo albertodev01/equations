@@ -26,11 +26,11 @@ import 'package:equations/src/utils/math_utils.dart';
 /// ```
 final class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
     with MathUtils {
+  /// {@macro qr_decomposition_class_header}
+  const new({required super.matrix});
+
   /// Small value for numerical stability checks.
   static const _epsilon = 1e-10;
-
-  /// {@macro qr_decomposition_class_header}
-  const QRDecompositionReal({required super.matrix});
 
   @override
   List<RealMatrix> decompose() {
