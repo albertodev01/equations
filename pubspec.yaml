@@ -1,6 +1,6 @@
 name: equations
 description: An equation-solving library that supports complex numbers.
-version: 6.0.0
+version: 7.0.0
 repository: https://github.com/albertodev01/equations
 homepage: https://pub.dev/packages/equations
 
@@ -8,7 +8,7 @@ environment:
   sdk: ^3.14.0
 
 dependencies:
-  fraction: ^5.0.5
+  fraction: ^6.0.0
   petitparser: ^7.1.0
 
 dev_dependencies:

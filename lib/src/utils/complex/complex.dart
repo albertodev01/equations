@@ -40,8 +40,7 @@ final class Complex implements Comparable<Complex> {
   /// [Fraction] object.
   ///
   /// The imaginary part is set to 0i.
-  factory fromRealFraction(Fraction real) =>
-      Complex(real.toDouble(), 0);
+  factory fromRealFraction(Fraction real) => Complex(real.toDouble(), 0);
 
   /// Creates a complex number having only the imaginary part expressed as a
   /// [Fraction] object.

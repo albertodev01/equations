@@ -1,27 +1,26 @@
 part of '../algebraic.dart';
 
 /// {@template cubic_algebraic}
-/// Concrete implementation of [Algebraic] that represents a third degree
-/// polynomial equation in the form `ax^3 + bx^2 + cx + d = 0`.
+/// Concrete implementation of [Algebraic] that represents a third-degree
+/// polynomial equation in the form _ax^3 + bx^2 + cx + d = 0_.
 ///
-/// This equation has 3 solutions, which can be combined as follows:
+/// This equation has exactly 3 roots, some of which may coincide. When all the
+/// coefficients are real, the sign of the discriminant tells which of these
+/// cases applies:
 ///
-///  - 3 distinct real roots and 0 complex roots
-///  - 3 real roots (some of them are equal) and 0 complex roots
-///  - 1 real root and 2 complex conjugate roots
+///  - positive: 3 distinct real roots;
+///  - zero: 3 real roots, at least 2 of which are equal;
+///  - negative: 1 real root and 2 complex conjugate roots.
 ///
-/// The above cases depend on the value of the discriminant. Some edge cases:
+/// With complex coefficients, there is no such rule.
 ///
-///  - If [a] is very close to zero, the equation becomes numerically unstable;
-///  - If the discriminant is very close to zero, the roots may be very close to
-///    each other;
-///  - Very large or very small coefficients may cause numerical overflow or
-///    underflow.
+/// The roots are computed with Cardano's formula, so they are subject to
+/// rounding errors. In particular, roots that are very close to each other are
+/// sensitive to small changes in the coefficients, and very large or very small
+/// coefficients may cause overflow or underflow.
 ///
-/// Throws [AlgebraicException] if:
-///
-///  - [a] is zero (which would make it a quadratic equation);
-///  - [a] is very close to zero (less than [epsilon]).
+/// Throws an [AlgebraicException] if [a] is zero, since the equation would not
+/// be cubic.
 /// {@endtemplate}
 ///
 /// {@template cubic_algebraic_examples}
@@ -43,7 +42,7 @@ part of '../algebraic.dart';
 /// );
 ///
 /// // f(x) = 2x^3 + x^2 + 5
-/// final eq = Cubic.fromReal(
+/// final eq = Cubic.realEquation(
 ///   a: 2,
 ///   b: 1,
 ///   d: 5,
@@ -63,9 +62,7 @@ final class Cubic extends Algebraic {
     Complex b = const Complex.zero(),
     Complex c = const Complex.zero(),
     Complex d = const Complex.zero(),
-  }) : super([a, b, c, d]) {
-    _validateCoefficients(a);
-  }
+  }) : super([a, b, c, d]);
 
   /// {@macro cubic_algebraic}
   ///
@@ -75,13 +72,6 @@ final class Cubic extends Algebraic {
   /// using the [Cubic.new] constructor instead.
   new realEquation({double a = 1, double b = 0, double c = 0, double d = 0})
     : super.realEquation([a, b, c, d]);
-
-  /// The value used to check if a coefficient is very close to zero. In other
-  /// words, if `|a| < epsilon`, then `a` is considered to be zero.
-  ///
-  /// This value is used to avoid numerical instability when solving the cubic
-  /// equation.
-  static const epsilon = 1e-10;
 
   @override
   int get degree => 3;
@@ -106,107 +96,107 @@ final class Cubic extends Algebraic {
 
   @override
   List<Complex> solutions() {
-    // Special case: c = d = 0 (equation in form ax^3 + bx^2 = 0)
+    // Special case: c = d = 0, so ax^3 + bx^2 = x^2(ax + b) = 0
     if (c.isZero && d.isZero) {
       return [const Complex.zero(), const Complex.zero(), -b / a];
     }
 
-    // Special case: b = c = 0 (depressed cubic)
+    // Special case: b = c = 0, so ax^3 + d = 0
     if (b.isZero && c.isZero) {
-      return _solveDepressedCubic();
+      return _solvePureCubic();
     }
 
     // General case using Cardano's formula
     return _solveGeneralCubic();
   }
 
-  /// Solves the depressed cubic equation ax³ + d = 0.
-  List<Complex> _solveDepressedCubic() {
-    final solution1 = (d.negate / a).nthRoot(3);
-    final omega = Complex(-1 / 2, sqrt(3) / 2);
+  /// The primitive cube root of unity, _omega = e^(2*pi*i/3)_.
+  static final _omega = Complex(-1 / 2, sqrt(3) / 2);
 
-    return [solution1, solution1 * omega, solution1 * omega.pow(2)];
+  /// The square of [_omega], which is also its conjugate.
+  static final _omegaSquared = Complex(-1 / 2, -sqrt(3) / 2);
+
+  /// The relative tolerance used to decide whether a quantity that is the sum
+  /// of several terms is zero, up to rounding errors.
+  static const _relativeTolerance = 1e-14;
+
+  /// Returns `true` when [value], which was computed as a sum whose terms have
+  /// magnitudes adding up to [scale], is zero up to rounding errors.
+  static bool _isNegligible(Complex value, double scale) =>
+      value.abs() <= _relativeTolerance * scale;
+
+  /// Solves _ax^3 + d = 0_, whose roots are the three cube roots of _-d/a_.
+  List<Complex> _solvePureCubic() {
+    final root = (-d / a).nthRoot(3);
+
+    return [root, root * _omega, root * _omegaSquared];
   }
 
   /// Solves the general cubic equation using Cardano's formula.
   List<Complex> _solveGeneralCubic() {
-    const two = Complex.fromReal(2);
     const three = Complex.fromReal(3);
-    final omega = Complex(-1 / 2, sqrt(3) / 2);
+    const nine = Complex.fromReal(9);
+    const twentySeven = Complex.fromReal(27);
 
-    // Calculate intermediate values
-    final d0 = b * b - a * c * three;
+    final bb = b * b;
+    final ac = a * c;
+    final abc = ac * b;
+    final aad = a * a * d;
+    final d0 = bb - three * ac;
     final d1 =
-        (b.pow(3) * two) -
-        (a * b * c * const Complex.fromReal(9)) +
-        (a * a * d * const Complex.fromReal(27));
+        const Complex.fromReal(2) * bb * b - nine * abc + twentySeven * aad;
 
-    // Calculate discriminant
-    final disc = discriminant();
-
-    // Handle case where discriminant is very close to zero
-    if (disc.abs() < epsilon) {
-      return _handleNearZeroDiscriminant(d0, d1);
+    final isTripleRoot =
+        _isNegligible(
+          d0,
+          bb.abs() + 3 * ac.abs(),
+        ) &&
+        _isNegligible(
+          d1,
+          2 * bb.abs() * b.abs() + 9 * abc.abs() + 27 * aad.abs(),
+        );
+    if (isTripleRoot) {
+      final root = -b / (three * a);
+      return [root, root, root];
     }
 
-    // Calculate C using a more stable formula
-    final sqrtD = (disc * a * a * const Complex.fromReal(-27)).sqrt();
-    final C = _calculateC(d1, sqrtD);
+    // Delta1^2 - 4*Delta0^3 = -27*a^2*Delta, where Delta is the discriminant.
+    // It is computed from Delta0 and Delta1 rather than from discriminant()
+    // because the latter sums larger terms that cancel out, which loses
+    // precision.
+    final d1Squared = d1 * d1;
+    final fourD0Cubed = const Complex.fromReal(4) * d0 * d0 * d0;
+    final radicand = d1Squared - fourD0Cubed;
 
-    // Calculate the constant term
+    if (_isNegligible(radicand, d1Squared.abs() + fourD0Cubed.abs())) {
+      final doubleRoot =
+          (nine * a * d - b * c) / (const Complex.fromReal(2) * d0);
+      final singleRoot =
+          (const Complex.fromReal(4) * abc - nine * aad - bb * b) / (a * d0);
+      return [doubleRoot, doubleRoot, singleRoot];
+    }
+
+    final C = _calculateC(d1, radicand.sqrt());
+
     final constTerm = const Complex.fromReal(-1) / (a * three);
+    final cOmega = C * _omega;
+    final cOmegaSquared = C * _omegaSquared;
 
-    // Return the three solutions
     return <Complex>[
       constTerm * (b + C + (d0 / C)),
-      constTerm * (b + (C * omega) + (d0 / (C * omega))),
-      constTerm * (b + (C * omega.pow(2)) + (d0 / (C * omega.pow(2)))),
+      constTerm * (b + cOmega + (d0 / cOmega)),
+      constTerm * (b + cOmegaSquared + (d0 / cOmegaSquared)),
     ];
   }
 
-  /// Handles the case where the discriminant is very close to zero
-  List<Complex> _handleNearZeroDiscriminant(Complex d0, Complex d1) {
-    // When discriminant is near zero, we have a triple root or a double root
-    final x = -b / (a * const Complex.fromReal(3));
-
-    if (d0.abs() < epsilon) {
-      // Triple root
-      return [x, x, x];
-    } else {
-      // Double root and a single root
-      final doubleRoot = x;
-      final singleRoot = -b / a - const Complex.fromReal(2) * x;
-      return [doubleRoot, doubleRoot, singleRoot];
-    }
-  }
-
-  /// Calculates C in a numerically stable way
+  /// Computes Cardano's _C. The sign is chosen so that the radicand has the
+  /// largest magnitude.
   Complex _calculateC(Complex d1, Complex sqrtD) {
-    // Use a more stable formula for calculating C
     final sum = d1 + sqrtD;
     final diff = d1 - sqrtD;
+    final radicand = sum.abs() > diff.abs() ? sum : diff;
 
-    if (sum.abs() > diff.abs()) {
-      return (sum / const Complex.fromReal(2)).nthRoot(3);
-    } else {
-      return (diff / const Complex.fromReal(2)).nthRoot(3);
-    }
-  }
-
-  /// Validates the coefficients of the cubic equation.
-  void _validateCoefficients(Complex a) {
-    if (a.isZero) {
-      throw const AlgebraicException(
-        'The coefficient of x^3 cannot be zero in a cubic equation.',
-      );
-    }
-
-    // Check if a is very close to zero (for numerical stability)
-    if (a.abs() < epsilon) {
-      throw const AlgebraicException(
-        '"a" is too close to zero, which may cause numerical instability.',
-      );
-    }
+    return (radicand / const Complex.fromReal(2)).nthRoot(3);
   }
 
   /// {@macro algebraic_deep_copy}

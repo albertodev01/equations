@@ -1,12 +1,10 @@
-import 'dart:math' as math;
-
 import 'package:equations/equations.dart';
 
 /// {@template sylvester_matrix}
-/// The Sylvester matrix is used to compute the discriminant of a polynomial
-/// of any degree.
+/// The Sylvester matrix is used to compute the discriminant of a polynomial of
+/// any degree.
 /// {@endtemplate}
-class SylvesterMatrix {
+final class SylvesterMatrix {
   /// {@macro sylvester_matrix}
   const new({
     required this.polynomial,
@@ -21,22 +19,21 @@ class SylvesterMatrix {
       return true;
     }
 
-    if (other is SylvesterMatrix) {
-      return runtimeType == other.runtimeType && polynomial == other.polynomial;
-    } else {
-      return false;
-    }
+    return other is SylvesterMatrix && polynomial == other.polynomial;
   }
 
   @override
   int get hashCode => polynomial.hashCode;
 
-  /// Builds the Sylvester matrix associated to the given polynomial.
+  /// Builds the Sylvester matrix of the polynomial `P` and its derivative `P'`.
+  ///
+  /// When `P` has degree `n`, the matrix is `(2n - 1) x (2n - 1)`. The first
+  /// `n - 1` rows contain the coefficients of `P` and the last `n` rows contain
+  /// the coefficients of `P'`. Each row is shifted one column to the right
+  /// with respect to the previous one of the same kind.
   ComplexMatrix buildMatrix() {
-    // Computing the derivative of the polynomial and the size of the matrix
     final coefficients = polynomial.coefficients;
 
-    // Handle constant polynomial case
     if (coefficients.length <= 1) {
       throw const MatrixException(
         'Cannot build Sylvester matrix for a constant polynomial',
@@ -44,48 +41,29 @@ class SylvesterMatrix {
     }
 
     final derivative = polynomial.derivative().coefficients;
-    final size = (coefficients.length - 1) + (derivative.length - 1);
+    final degree = coefficients.length - 1;
+    final size = 2 * degree - 1;
+    final data = List<Complex>.filled(size * size, const Complex.zero());
 
-    // Building the matrix with FIXED length lists (optimization)
-    final flatData = List<Complex>.generate(
-      size * size,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
-
-    // Pre-calculate positions for better performance
-    final coeffLength = coefficients.length;
-    final derivLength = derivative.length;
-
-    // Place polynomial coefficients
-    for (var i = 0; i < size - coeffLength + 1; ++i) {
-      for (var j = 0; j < coeffLength; ++j) {
-        final value = coefficients[j];
-        // Skip near-zero coefficients for numerical stability
-        if (value.abs() > 1e-10) {
-          flatData[size * i + (j + i)] = value;
-        }
+    // The 'n - 1' rows with the coefficients of P.
+    for (var row = 0; row < degree - 1; ++row) {
+      for (var j = 0; j < coefficients.length; ++j) {
+        data[size * row + row + j] = coefficients[j];
       }
     }
 
-    // Place derivative coefficients
-    var pos = 0;
-    for (var i = size - coeffLength + 1; i < size; ++i) {
-      for (var j = 0; j < derivLength; ++j) {
-        final value = derivative[j];
-        // Skip near-zero coefficients for numerical stability
-        if (value.abs() > 1e-10) {
-          flatData[size * i + (j + pos)] = value;
-        }
+    // The 'n' rows with the coefficients of P'.
+    for (var shift = 0; shift < degree; ++shift) {
+      final row = degree - 1 + shift;
+      for (var j = 0; j < derivative.length; ++j) {
+        data[size * row + shift + j] = derivative[j];
       }
-      ++pos;
     }
 
-    // Returning the Sylvester matrix.
     return ComplexMatrix.fromFlattenedData(
       rows: size,
       columns: size,
-      data: flatData,
+      data: data,
     );
   }
 
@@ -94,44 +72,31 @@ class SylvesterMatrix {
 
   /// The discriminant of a polynomial P(x) is the determinant of the Sylvester
   /// matrix of P and P' (where P' is the derivative of P).
+  ///
+  /// Polynomials of degree 4 or lower use their closed-form discriminant.
   Complex polynomialDiscriminant() {
-    final quarticOrLower =
-        polynomial is Constant ||
-        polynomial is Linear ||
-        polynomial is Quadratic ||
-        polynomial is Cubic ||
-        polynomial is Quartic;
+    final coefficients = polynomial.coefficients;
 
-    if (quarticOrLower) {
-      return polynomial.discriminant();
-    } else {
-      // The determinant of the Sylvester matrix
-      final determinant = matrixDeterminant();
-
-      /*
-      * Once we got the determinant, we need to make the last calculation to
-      * also determine the sign. The formula is the following:
-      *
-      *  Disc(A) = (-1)^(n*(n-1)/2) * 1/A[n] * Res(A, A')
-      *
-      * In the above formula, 'n' is the degree of the polynomial, A(x) is the
-      * polynomial and A'(x) is the derivative of A(x).
-      *
-      * Res(A, A') is the resultant of A(x) and A'(x), which is nothing more
-      * than the determinant of the Sylvester matrix.
-      */
-      final coefficients = polynomial.coefficients;
-      final degree = coefficients.length - 1;
-      final sign = math.pow(-1, degree * (degree - 1) / 2) as double;
-      final denominator = coefficients.first;
-
-      // Check for near-zero denominator
-      if (denominator.abs() < 1e-10) {
-        throw const MatrixException('Leading coefficient is too close to zero');
-      }
-
-      // Returning the determinant with the correct sign
-      return Complex.fromReal(sign) / denominator * determinant;
+    // Closed-form formulas exist up to degree 4. Going through 'Algebraic.from'
+    // guarantees that a low degree 'GenericAlgebraic' (whose discriminant is
+    // computed by this class) does not recurse back here.
+    if (coefficients.length <= 5) {
+      return Algebraic.from(coefficients).discriminant();
     }
+
+    /*
+     * The discriminant is computed from the resultant of P and P', which is
+     * the determinant of the Sylvester matrix:
+     *
+     *  Disc(P) = (-1)^(n*(n-1)/2) * 1/a_n * Res(P, P')
+     *
+     * where 'n' is the degree of P and 'a_n' its leading coefficient. Since
+     * n*(n-1) is always even, the sign only depends on the parity of the
+     * integer n*(n-1)/2.
+     */
+    final degree = coefficients.length - 1;
+    final sign = (degree * (degree - 1) ~/ 2).isEven ? 1.0 : -1.0;
+
+    return Complex.fromReal(sign) / coefficients.first * matrixDeterminant();
   }
 }

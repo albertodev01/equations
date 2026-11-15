@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_decomposition.dart';
 

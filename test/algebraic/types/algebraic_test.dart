@@ -383,20 +383,22 @@ void main() {
         final cubic = Algebraic.fromReal([-2, 2, -35, 7]);
         final factors = cubic.factor();
 
-        expect(factors, hasLength(3));
+        // The leading coefficient comes first
+        expect(factors, hasLength(4));
+        expect(factors.first, equals(Constant.realEquation(a: -2)));
         expect(
-          (factors.first as Linear).b.real,
+          (factors[1] as Linear).b.real,
           const MoreOrLessEquals(-0.3990708079262),
         );
         expect(
-          (factors.first as Linear).b.imaginary,
+          (factors[1] as Linear).b.imaginary,
           const MoreOrLessEquals(-4.144831831735063),
         );
         expect(
-          (factors[1] as Linear).b.real,
+          (factors[2] as Linear).b.real,
           const MoreOrLessEquals(-0.20185838414741988),
         );
-        expect((factors[1] as Linear).b.imaginary.round(), isZero);
+        expect((factors[2] as Linear).b.imaginary.round(), isZero);
         expect(
           (factors.last as Linear).b.real,
           const MoreOrLessEquals(-0.3990708079262891),
@@ -408,24 +410,30 @@ void main() {
       });
 
       test('Test 4', () {
+        // x^4 - x^3 + 8x - 8 = (x - 1)(x + 2)(x^2 - 2x + 4)
         final quartic = Algebraic.fromReal([1, -1, 0, 8, -8]);
         final factors = quartic.factor();
 
         expect(factors, hasLength(4));
-        expect((factors.first as Linear).b.real, equals(2));
-        expect((factors.first as Linear).b.imaginary.round(), isZero);
-        expect((factors[1] as Linear).b.real.round(), equals(-1));
-        expect((factors[1] as Linear).b.imaginary.round(), isZero);
-        expect((factors[2] as Linear).b.real.round(), equals(-1));
-        expect(
-          (factors[2] as Linear).b.imaginary,
-          const MoreOrLessEquals(-1.732050807568),
-        );
-        expect((factors.last as Linear).b.real.round(), equals(-1));
-        expect(
-          (factors.last as Linear).b.imaginary,
-          const MoreOrLessEquals(1.732050807568),
-        );
+        expect(factors, everyElement(isA<Linear>()));
+
+        // Each factor is (x - root), so b = -root. The order of the factors is
+        // not part of the API.
+        final remaining = factors.map((f) => (f as Linear).b).toList();
+        for (final b in const [
+          Complex.fromReal(-1),
+          Complex.fromReal(2),
+          Complex(-1, -1.732050807568),
+          Complex(-1, 1.732050807568),
+        ]) {
+          final index = remaining.indexWhere(
+            (x) =>
+                (x.real - b.real).abs() < 1e-9 &&
+                (x.imaginary - b.imaginary).abs() < 1e-9,
+          );
+          expect(index, isNot(-1), reason: '$b not found in $remaining');
+          remaining.removeAt(index);
+        }
       });
 
       test('Test 5', () {
@@ -444,13 +452,15 @@ void main() {
         ]);
         final factors = quadratic.factor();
 
-        expect(factors, hasLength(2));
+        // The leading coefficient comes first
+        expect(factors, hasLength(3));
+        expect(factors.first, equals(Constant(a: const Complex(-2, 3))));
         expect(
-          (factors.first as Linear).b.real,
+          (factors[1] as Linear).b.real,
           const MoreOrLessEquals(-1.7336396048891685),
         );
         expect(
-          (factors.first as Linear).b.imaginary,
+          (factors[1] as Linear).b.imaginary,
           const MoreOrLessEquals(-0.6351453340137784),
         );
         expect(
@@ -464,13 +474,55 @@ void main() {
       });
 
       test('Test 7', () {
-        // 2x² - 8 = 2(x² - 4) = 2(x - 2)(x + 2)
+        // 2x^2 - 8 = 2(x^2 - 4) = 2(x - 2)(x + 2)
         final quadratic = Algebraic.fromReal([2, 0, -8]);
         final factors = quadratic.factor();
 
-        expect(factors, hasLength(2));
-        expect(factors.first, equals(Linear.realEquation(b: -2)));
+        expect(factors, hasLength(3));
+        expect(factors.first, equals(Constant.realEquation(a: 2)));
+        expect(factors[1], equals(Linear.realEquation(b: -2)));
         expect(factors.last, equals(Linear.realEquation(b: 2)));
+      });
+
+      test('Linear with a non-unit leading coefficient keeps it', () {
+        // 2x + 4 = 2(x + 2)
+        final factors = Linear.realEquation(a: 2, b: 4).factor();
+
+        expect(
+          factors,
+          equals([Constant.realEquation(a: 2), Linear.realEquation(b: 2)]),
+        );
+      });
+
+      test('The product of the factors equals the polynomial', () {
+        final polynomials = [
+          Algebraic.fromReal([2, 0, -8]),
+          Algebraic.fromReal([-3, 6]),
+          Algebraic.fromReal([1, -3, 3, -1]),
+          Algebraic.fromReal([4, -4, -7, 1, 6]),
+        ];
+
+        for (final polynomial in polynomials) {
+          final product = polynomial.factor().reduce((a, b) => a * b);
+
+          expect(
+            product.coefficients.length,
+            polynomial.coefficients.length,
+            reason: '$polynomial',
+          );
+          for (var i = 0; i < product.coefficients.length; ++i) {
+            expect(
+              product[i].real,
+              MoreOrLessEquals(polynomial[i].real, precision: 1.0e-8),
+              reason: '$polynomial, coefficient $i',
+            );
+            expect(
+              product[i].imaginary,
+              const MoreOrLessEquals(0, precision: 1.0e-8),
+              reason: '$polynomial, coefficient $i',
+            );
+          }
+        }
       });
     });
 
@@ -547,7 +599,7 @@ void main() {
               .having(
                 (solution) => solution.isInclusive,
                 'isInclusive',
-                false,
+                true,
               ),
         );
         expect(
@@ -768,6 +820,252 @@ void main() {
             );
 
         expect(solutions.length, isZero);
+      });
+
+      test('Negative leading coefficient, >= includes the root', () {
+        // -x + 1 >= 0  <=>  x <= 1
+        final solutions = Linear.realEquation(a: -1, b: 1).solveInequality(
+          inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
+        );
+
+        expect(solutions, hasLength(1));
+        expect(
+          solutions.first,
+          isA<AlgebraicInequalitySmallerThan>()
+              .having((s) => s.value, 'value', 1)
+              .having((s) => s.isInclusive, 'isInclusive', true),
+        );
+      });
+
+      test('Negative leading coefficient, <= includes the root', () {
+        // -x + 1 <= 0  <=>  x >= 1
+        final solutions = Linear.realEquation(a: -1, b: 1).solveInequality(
+          inequalityType: AlgebraicInequalityType.lessThanOrEqualTo,
+        );
+
+        expect(solutions, hasLength(1));
+        expect(
+          solutions.first,
+          isA<AlgebraicInequalityGreaterThan>()
+              .having((s) => s.value, 'value', 1)
+              .having((s) => s.isInclusive, 'isInclusive', true),
+        );
+      });
+
+      test('Both outer intervals are inclusive for >=', () {
+        // x^2 - 1 >= 0  <=>  x <= -1 or x >= 1
+        final solutions = Quadratic.realEquation(b: 0, c: -1).solveInequality(
+          inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
+        );
+
+        expect(solutions, hasLength(2));
+        expect(
+          solutions.first,
+          isA<AlgebraicInequalitySmallerThan>()
+              .having((s) => s.value, 'value', -1)
+              .having((s) => s.isInclusive, 'isInclusive', true),
+        );
+        expect(
+          solutions.last,
+          isA<AlgebraicInequalityGreaterThan>()
+              .having((s) => s.value, 'value', 1)
+              .having((s) => s.isInclusive, 'isInclusive', true),
+        );
+      });
+
+      test('Both outer intervals are exclusive for >', () {
+        // -x^2 + 1 < 0  <=>  x < -1 or x > 1
+        final solutions = Quadratic.realEquation(
+          a: -1,
+          b: 0,
+          c: 1,
+        ).solveInequality(inequalityType: AlgebraicInequalityType.lessThan);
+
+        expect(solutions, hasLength(2));
+        expect(
+          solutions.first,
+          isA<AlgebraicInequalitySmallerThan>()
+              .having((s) => s.value, 'value', -1)
+              .having((s) => s.isInclusive, 'isInclusive', false),
+        );
+        expect(
+          solutions.last,
+          isA<AlgebraicInequalityGreaterThan>()
+              .having((s) => s.value, 'value', 1)
+              .having((s) => s.isInclusive, 'isInclusive', false),
+        );
+      });
+
+      group('Zero polynomial', () {
+        final zero = Constant(a: const Complex.zero());
+
+        test('0 < 0 has no solutions', () {
+          expect(
+            zero.solveInequality(
+              inequalityType: AlgebraicInequalityType.lessThan,
+            ),
+            isEmpty,
+          );
+        });
+
+        test('0 > 0 has no solutions', () {
+          expect(
+            zero.solveInequality(
+              inequalityType: AlgebraicInequalityType.greaterThan,
+            ),
+            isEmpty,
+          );
+        });
+
+        test('0 <= 0 holds for all real numbers', () {
+          expect(
+            zero.solveInequality(
+              inequalityType: AlgebraicInequalityType.lessThanOrEqualTo,
+            ),
+            [isA<AlgebraicInequalityAllRealNumbers>()],
+          );
+        });
+
+        test('0 >= 0 holds for all real numbers', () {
+          expect(
+            zero.solveInequality(
+              inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
+            ),
+            [isA<AlgebraicInequalityAllRealNumbers>()],
+          );
+        });
+      });
+
+      test('Negative constant is < 0 everywhere and never >= 0', () {
+        final constant = Constant.realEquation(a: -3);
+
+        expect(
+          constant.solveInequality(
+            inequalityType: AlgebraicInequalityType.lessThan,
+          ),
+          [isA<AlgebraicInequalityAllRealNumbers>()],
+        );
+        expect(
+          constant.solveInequality(
+            inequalityType: AlgebraicInequalityType.greaterThanOrEqualTo,
+          ),
+          isEmpty,
+        );
+      });
+    });
+
+    group('Evaluation', () {
+      test('Real polynomial at a positive value is exact', () {
+        // x^2 + 2x + 1 at x = 3
+        final result = Quadratic.realEquation(b: 2, c: 1).realEvaluateOn(3);
+
+        expect(result, equals(const Complex.fromReal(16)));
+      });
+
+      test('Real polynomial at a negative value has no imaginary part', () {
+        // x^2 + 2x + 1 at x = -3
+        final quadratic = Quadratic.realEquation(b: 2, c: 1);
+        expect(quadratic.realEvaluateOn(-3), equals(const Complex.fromReal(4)));
+
+        // x^3 at x = -2
+        final cubic = Cubic.realEquation(b: 0, c: 0, d: 0);
+        expect(cubic.realEvaluateOn(-2), equals(const Complex.fromReal(-8)));
+      });
+
+      test('Evaluation at zero returns the constant term', () {
+        final equation = Algebraic.fromReal([5, -3, 0, 7]);
+
+        expect(equation.realEvaluateOn(0), equals(const Complex.fromReal(7)));
+      });
+
+      test('Complex polynomial at a complex value', () {
+        // (1 + i)x + 2 at x = i  =>  (1 + i)i + 2 = 1 + i
+        final linear = Linear(
+          a: const Complex(1, 1),
+          b: const Complex.fromReal(2),
+        );
+
+        expect(
+          linear.evaluateOn(const Complex.i()),
+          equals(const Complex(1, 1)),
+        );
+      });
+
+      test('Integral over a negative interval has no imaginary part', () {
+        // integral of x^2 dx from -2 to 0 = 8/3
+        final integral = Quadratic.realEquation(
+          b: 0,
+          c: 0,
+        ).evaluateIntegralOn(-2, 0);
+
+        expect(integral.real, const MoreOrLessEquals(8 / 3));
+        expect(integral.imaginary, isZero);
+      });
+
+      test('Integral of an odd function over a symmetric interval', () {
+        // integral of (x^3 - x) dx from -1 to 1 = 0
+        final integral = Cubic.realEquation(
+          b: 0,
+          c: -1,
+          d: 0,
+        ).evaluateIntegralOn(-1, 1);
+
+        expect(integral, equals(const Complex.zero()));
+      });
+    });
+
+    group('Operators regressions', () {
+      test('Sum keeps zero coefficients in the middle', () {
+        // (x^2 + x + 1) + (-x) = x^2 + 1
+        final result =
+            Algebraic.fromReal([1, 1, 1]) + Algebraic.fromReal([-1, 0]);
+
+        expect(result, equals(Algebraic.fromReal([1, 0, 1])));
+      });
+
+      test('Difference keeps zero coefficients in the middle', () {
+        // (x^2 + x + 1) - x = x^2 + 1
+        final result =
+            Algebraic.fromReal([1, 1, 1]) - Algebraic.fromReal([1, 0]);
+
+        expect(result, equals(Algebraic.fromReal([1, 0, 1])));
+      });
+
+      test('Sum lowers the degree when leading coefficients cancel', () {
+        // (x^2 + 2x) + (-x^2 + 3) = 2x + 3
+        final result =
+            Algebraic.fromReal([1, 2, 0]) + Algebraic.fromReal([-1, 0, 3]);
+
+        expect(result, isA<Linear>());
+        expect(result, equals(Algebraic.fromReal([2, 3])));
+      });
+
+      test('p - p is the zero polynomial', () {
+        final p = Algebraic.fromReal([3, -1, 4, 1, 5, 9]);
+
+        expect(p - p, equals(Constant(a: const Complex.zero())));
+      });
+
+      test('p + (-p) is the zero polynomial', () {
+        final p = Algebraic.from(const [Complex(1, 2), Complex(0, -1)]);
+
+        expect(p + (-p), equals(Constant(a: const Complex.zero())));
+      });
+
+      test('Product with the zero polynomial is the zero polynomial', () {
+        final zero = Constant(a: const Complex.zero());
+        final linear = Linear.realEquation(a: 2, b: 1);
+
+        expect(zero * linear, equals(zero));
+        expect(linear * zero, equals(zero));
+      });
+
+      test('Division matches the AlgebraicDivision docs example', () {
+        final result =
+            Algebraic.fromReal([1, -3, 2]) / Algebraic.fromReal([1, 2]);
+
+        expect(result.quotient, equals(Algebraic.fromReal([1, -5])));
+        expect(result.remainder, equals(Algebraic.fromReal([12])));
       });
     });
   });

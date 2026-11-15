@@ -277,7 +277,7 @@ void main() {
           c: const Complex.fromReal(1e-6),
         );
         verifyQuadraticSolutions(equation, const [
-          Complex(-49.99999, 86.60254),
+          Complex(-50, 86.60254),
           Complex(-50, -86.60254),
         ]);
       });
@@ -289,9 +289,51 @@ void main() {
           c: 1000000,
         );
         verifyQuadraticSolutions(equation, const [
-          Complex(-0.00499, 0.00866),
+          Complex(-0.005, 0.00866),
           Complex(-0.005, -0.00866),
         ]);
+      });
+
+      test('Zero constant term with positive b (x^2 + 2x)', () {
+        final equation = Quadratic.realEquation(b: 2);
+        verifyQuadraticSolutions(equation, const [
+          Complex.zero(),
+          Complex.fromReal(-2),
+        ]);
+      });
+
+      test('Zero constant term with imaginary b (x^2 + ix)', () {
+        final equation = Quadratic(b: const Complex.i());
+        verifyQuadraticSolutions(equation, const [
+          Complex.zero(),
+          Complex(0, -1),
+        ]);
+      });
+
+      test('One real and one non-real root ((x - 1)(x - i))', () {
+        final equation = Quadratic(
+          b: const Complex(-1, -1),
+          c: const Complex.i(),
+        );
+        verifyQuadraticSolutions(equation, const [
+          Complex.fromReal(1),
+          Complex.i(),
+        ]);
+      });
+
+      test('No cancellation when b is large and positive', () {
+        final solutions = Quadratic.realEquation(
+          b: 1000000000,
+          c: 1,
+        ).solutions();
+
+        // The roots are about -1e-9 and -1e9. The relative error is checked
+        // because the absolute tolerance of the other tests would also accept
+        // zero for the small root.
+        expect((solutions.first.real + 1e-9).abs() / 1e-9, lessThan(1e-12));
+        expect((solutions[1].real + 1e9).abs() / 1e9, lessThan(1e-12));
+        expect(solutions.first.imaginary, isZero);
+        expect(solutions[1].imaginary, isZero);
       });
     });
   });

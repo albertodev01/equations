@@ -16,6 +16,7 @@ export 'package:fraction/fraction.dart';
 
 export 'src/algebraic/algebraic.dart';
 export 'src/algebraic/utils/algebraic_inequality.dart';
+export 'src/algebraic/utils/algebraic_inequality_solver.dart';
 export 'src/algebraic/utils/polynomial_long_division.dart';
 export 'src/algebraic/utils/sylvester_matrix.dart';
 export 'src/integral/numerical_integration.dart';

@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:equations/equations.dart';
 
 /// {@template matrix_class_header}

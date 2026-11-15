@@ -1,3 +1,30 @@
+## 7.0.0
+ - **BREAKING**: Removed `Cubic.epsilon`. A `Cubic` object no longer throws when the leading coefficient is very small (but not zero), so `Cubic.new` and `Cubic.realEquation` now behave the same, and `Quartic.derivative()` and `Algebraic.from` no longer throw for valid polynomials whose leading coefficient is very small
+ - **BREAKING**: Removed `Quartic.epsilon`, `Quartic.maxCoefficient` and `Quartic.minCoefficient`. A `Quartic` object no longer throws when a coefficient is larger than `1e10`
+ - **BREAKING**: `Quartic.solutions` may return the roots in a different order
+ - **BREAKING**: `Algebraic.factor` now includes the leading coefficient as a `Constant` factor when it is not 1, so the product of the factors always equals the original polynomial
+ - **BREAKING**: Removed `GenericAlgebraic.stagnationThreshold`, which had no effect
+ - **BREAKING**: `GenericAlgebraic.solutions` now throws an `AlgebraicException` when `initialGuess` is not empty and doesn't contain exactly one value per root, or when `minGuessDistance` is not positive. It no longer throws when the leading coefficient is very small (but not zero)
+ - **BREAKING**: `GenericAlgebraic.precision` is now a relative tolerance
+ - **BREAKING**: `SylvesterMatrix` is now a `final` class
+ - **BREAKING**: `Algebraic.solveInequality` now joins intervals that touch (for example, `(x - 1)^2 * (x - 3) <= 0` returns `x <= 3` instead of `x <= 1`, `[1, 1]` and `[1, 3]`), and its `precision` parameter is now the relative tolerance used to decide whether a value is a root, instead of the maximum imaginary part of a real root
+ - **BREAKING**: `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`) no longer throws when the degree of the denominator is higher than the degree of the numerator: it returns a zero quotient and the numerator as remainder
+ - Updated Dart SDK constraints to `^3.14.0`
+ - Fixed the `+` and `-` operators of `Algebraic`, which dropped zero coefficients in the middle of the result (for example, `x^2 + 1` could become `x + 1`)
+ - The `+`, `-` and `*` operators of `Algebraic` now return the zero polynomial when the result is zero (for example, `p - p`), instead of throwing an `AlgebraicException`
+ - Fixed `Algebraic.solveInequality` with non-strict inequalities (`≤` and `≥`), negative leading coefficients, and the zero polynomial
+ - Fixed `Algebraic.solveInequality`, which ignored repeated real roots computed with a small imaginary part (for example, `(x - 2)^5 > 0` had no solutions), returned duplicate intervals for repeated roots, and could drop isolated solutions such as `x = 3` in `(x - 1)(x - 2)^2(x - 3)^2 <= 0`
+ - Added the `AlgebraicInequalitySolver` class, which solves polynomial inequalities and is used by `Algebraic.solveInequality`
+ - `Algebraic.evaluateOn`, `Algebraic.realEvaluateOn` and `Algebraic.evaluateIntegralOn` now use Horner's method, so they're more accurate and real polynomials no longer get a spurious imaginary part at negative values
+ - Fixed `Quadratic.solutions`, which returned `NaN` or inaccurate roots when the roots cancelled out in the quadratic formula (for example, `x^2 + 2x` and `x^2 + ix`)
+ - Fixed `Cubic.solutions`, which returned wrong roots when the equation had a double root, merged distinct small roots into one, and lost precision in Cardano's formula
+ - Fixed `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`), which returned wrong results or threw when the denominator had degree 2 or higher (for example, `x^3 / (x^2 + 1)` returned a remainder of `-1` instead of `-x`), returned `1` for `0 / 0`, and threw a `TypeError` when dividing by the zero polynomial. Dividing by the zero polynomial now always throws a `PolynomialLongDivisionException`, and the division is faster for low-degree denominators
+ - Fixed `GenericAlgebraic.solutions`, which returned wrong roots without error when the starting points were close together (for example, `x^5 - 0.001` and equal values in `initialGuess`), returned `NaN` for `x^n`, and returned different results on each call. The default starting points now use a valid bound for the roots
+ - Fixed `Quartic.solutions`, which treated coefficients smaller than `1e-10` as zero (returning wrong roots, such as four zeros for `x^4 - 1e-12`), dropped small roots of biquadratic equations, and returned inaccurate roots (errors up to about `0.04`) when the equation had repeated roots
+ - Fixed `SylvesterMatrix`, which treated coefficients smaller than `1e-10` as zero (for example, the discriminant of `x^5 + 1e-11x` was `0`) and threw a `MatrixException` when the leading coefficient was very small (but not zero). A `GenericAlgebraic` of degree 4 or lower now uses the closed-form discriminant
+ - Documentation improvements
+ - Dependencies versions update
+
 ## 6.0.0
  - **BREAKING**: Renamed `DurandKerner` class to `GenericPolynomial`
  - **BREAKING**: The `AlgebraicDivision` class is now a `typedef` of an equivalent record type

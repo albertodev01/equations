@@ -4,16 +4,16 @@ import 'package:equations/equations.dart';
 /// The kind of [Algebraic] inequality to solve.
 /// {@endtemplate}
 enum AlgebraicInequalityType {
-  /// The inequality in the form _P(x) < 0_.
+  /// An inequality of the form _P(x) < 0_.
   lessThan,
 
-  /// The inequality in the form _P(x) <= 0_.
+  /// An inequality of the form _P(x) <= 0_.
   lessThanOrEqualTo,
 
-  /// The inequality in the form _P(x) > 0_.
+  /// An inequality of the form _P(x) > 0_.
   greaterThan,
 
-  /// The inequality in the form _P(x) >= 0_.
+  /// An inequality of the form _P(x) >= 0_.
   greaterThanOrEqualTo,
 }
 
@@ -26,7 +26,7 @@ sealed class AlgebraicInequalitySolution {
     required this.isInclusive,
   });
 
-  /// Whether the inequality solution is inclusive of the boundaries or not.
+  /// Whether the boundaries are part of the solution.
   final bool isInclusive;
 
   @override
@@ -48,8 +48,8 @@ sealed class AlgebraicInequalitySolution {
 }
 
 /// {@template algebraic_inequality_interval}
-/// A solution of an [Algebraic] inequality that is an interval between [start]
-/// and [end] values.
+/// A solution of an [Algebraic] inequality that is the interval between
+/// [start] and [end].
 /// {@endtemplate}
 class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_interval}
@@ -94,7 +94,8 @@ class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
 }
 
 /// {@template algebraic_inequality_smaller_than}
-/// A solution of an [Algebraic] inequality that is smaller than [value].
+/// A solution of an [Algebraic] inequality made of the real numbers smaller
+/// than [value].
 /// {@endtemplate}
 class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_smaller_than}
@@ -103,7 +104,7 @@ class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
     required super.isInclusive,
   });
 
-  /// The value.
+  /// The upper bound of the solution.
   final double value;
 
   @override
@@ -132,7 +133,8 @@ class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
 }
 
 /// {@template algebraic_inequality_greater_than}
-/// A solution of an [Algebraic] inequality that is greater than [value].
+/// A solution of an [Algebraic] inequality made of the real numbers greater
+/// than [value].
 /// {@endtemplate}
 class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_greater_than}
@@ -141,7 +143,7 @@ class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
     required super.isInclusive,
   });
 
-  /// The value.
+  /// The lower bound of the solution.
   final double value;
 
   @override

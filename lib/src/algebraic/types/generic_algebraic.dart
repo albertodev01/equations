@@ -2,24 +2,26 @@ part of '../algebraic.dart';
 
 /// {@template generic_algebraic}
 /// Concrete implementation of [Algebraic] that approximates all roots of a
-/// polynomial of any degree.
+/// polynomial of any degree using the Durand-Kerner (Weierstrass) method.
 ///
-/// For finding roots of a polynomial of degree 4 or lower, consider using
-/// [Quartic], [Cubic], [Quadratic] or [Linear] instead, as they are more
-/// efficient and numerically stable.
+/// For polynomials of degree 4 or lower, consider using [Quartic], [Cubic],
+/// [Quadratic] or [Linear] instead, as they compute the roots with closed-form
+/// formulas.
 ///
-/// There is NO direct formula for finding the roots of a polynomial of degree
-/// 5 or higher so this class returns a good approximation of the roots, but not
-/// the exact ones.
+/// By the Abel-Ruffini theorem, there is no general formula in radicals for
+/// the roots of a polynomial of degree 5 or higher, so this class returns
+/// numerical approximations of the roots.
 ///
-/// An initial set of values [initialGuess] is required to find the roots but it
-/// is optional. This implementation by default uses the Aberth method to
-/// generate initial guesses if none are provided. If you are not sure which
-/// initial values to provide, just leave [initialGuess] empty.
+/// The method needs one starting point per root. You can provide them with
+/// [initialGuess], which must then contain exactly [degree] values. If
+/// [initialGuess] is empty, the starting points are placed on a circle around
+/// the centroid of the roots, as suggested by Aberth, whose radius is an upper
+/// bound for the distance of the roots from the centroid. If you are not sure
+/// which starting points to provide, leave [initialGuess] empty.
 ///
-/// Note that this algorithm does **NOT** always converge. In other words, it is
-/// **NOT** true that for every polynomial, the set of initial vectors that
-/// eventually converges to roots is open and dense.
+/// The method converges for almost all starting points in practice, but
+/// convergence is not guaranteed in general. If the roots don't converge
+/// within [maxSteps] iterations, the current approximations are returned.
 /// {@endtemplate}
 ///
 /// {@template generic_algebraic_example}
@@ -27,27 +29,33 @@ part of '../algebraic.dart';
 /// with the highest degree goes first:
 ///
 /// ```dart
-/// // P(x) = -5x^2 + 3x + i
-/// final genericAlgebraic1 = GenericAlgebraic(
-///   coefficients: [
-///     Complex.fromReal(-5),
-///     Complex.fromReal(3),
-///     Complex.i(),
-///   ],
-///   initialGuess: [
-///     Complex(1, -2),
-///     Complex.fromReal(3),
-///   ],
+/// // P(x) = x^5 - 3x^4 + 2x^2 - x + 7
+/// final genericAlgebraic1 = GenericAlgebraic.realEquation(
+///   coefficients: [1, -3, 0, 2, -1, 7],
 /// );
 ///
-/// // P(x) = (3 + 8i)x^4 - 2x^2 + (-1 + 5i)x + 6 + (3 + 4i)
+/// // P(x) = (3 + 8i)x^6 - 2x^5 + (-1 + 5i)x^3 + 6x + i
 /// final genericAlgebraic2 = GenericAlgebraic(
 ///   coefficients: [
 ///     Complex(3, 8),
 ///     Complex.fromReal(-2),
+///     Complex.zero(),
 ///     Complex(-1, 5),
+///     Complex.zero(),
 ///     Complex.fromReal(6),
-///     Complex(3, 4),
+///     Complex.i(),
+///   ],
+/// );
+///
+/// // P(x) = x^5 - 1, starting from custom initial guesses
+/// final genericAlgebraic3 = GenericAlgebraic.realEquation(
+///   coefficients: [1, 0, 0, 0, 0, -1],
+///   initialGuess: [
+///     Complex.fromReal(2),
+///     Complex(1, 1),
+///     Complex(-1, 1),
+///     Complex(-1, -1),
+///     Complex(1, -1),
 ///   ],
 /// );
 /// ```
@@ -65,7 +73,6 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     this.precision = 1.0e-10,
     this.maxSteps = 2000,
     this.minGuessDistance = 1.0e-6,
-    this.stagnationThreshold = 1.0e-10,
   }) : super(coefficients);
 
   /// {@macro generic_algebraic}
@@ -80,27 +87,34 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     this.precision = 1.0e-10,
     this.maxSteps = 2000,
     this.minGuessDistance = 1.0e-6,
-    this.stagnationThreshold = 1.0e-10,
   }) : super.realEquation(coefficients);
 
-  /// An initial set of values is required to find the roots but it is optional.
+  /// The starting points of the iteration, one per root.
   ///
-  /// This class by default uses the Aberth method to generate initial guesses
-  /// if none are provided. If you are not sure which initial values to provide,
-  /// just leave [initialGuess] empty.
+  /// When this list is empty (the default), the starting points are generated
+  /// automatically. Otherwise, it must contain exactly [degree] values or
+  /// [solutions] throws an [AlgebraicException].
   final List<Complex> initialGuess;
 
-  /// The accuracy of the algorithm.
+  /// The relative tolerance used to stop the iteration.
+  ///
+  /// The iteration stops when, for every root `z`, the size of the last
+  /// correction is at most `precision * max(1, |z|)`.
   final double precision;
 
-  /// The maximum steps to be made by the algorithm.
+  /// The maximum number of iterations.
+  ///
+  /// If the roots haven't converged after [maxSteps] iterations, [solutions]
+  /// returns the current approximations.
   final int maxSteps;
 
-  /// The minimum distance between initial guesses.
+  /// The minimum distance between the starting points. It must be positive.
+  ///
+  /// The generated starting points are placed at least this far apart. When
+  /// two approximations coincide during the iteration (for example, because
+  /// two equal values were given in [initialGuess]), one of them is moved by
+  /// about this distance so that the iteration can continue.
   final double minGuessDistance;
-
-  /// The stagnation threshold for convergence.
-  final double stagnationThreshold;
 
   @override
   bool operator ==(Object other) {
@@ -109,7 +123,6 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     }
 
     if (other is GenericAlgebraic) {
-      // Check all fields for equality
       if (coefficients.length != other.coefficients.length) {
         return false;
       }
@@ -119,7 +132,6 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
         }
       }
 
-      // Compare initial guesses
       if (initialGuess.length != other.initialGuess.length) {
         return false;
       }
@@ -129,12 +141,9 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
         }
       }
 
-      // Compare other fields
       return precision == other.precision &&
           maxSteps == other.maxSteps &&
-          minGuessDistance == other.minGuessDistance &&
-          stagnationThreshold == other.stagnationThreshold &&
-          runtimeType == other.runtimeType;
+          minGuessDistance == other.minGuessDistance;
     }
 
     return false;
@@ -147,7 +156,6 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     precision,
     maxSteps,
     minGuessDistance,
-    stagnationThreshold,
   );
 
   @override
@@ -155,8 +163,6 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
 
   @override
   Algebraic derivative() {
-    // Rather than always returning 'GenericAlgebraic', if the degree is <= 4
-    // there is the possibility to return a more convenient object
     switch (coefficients.length) {
       case 1:
         return Constant(
@@ -203,135 +209,139 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
           precision: precision,
           maxSteps: maxSteps,
           minGuessDistance: minGuessDistance,
-          stagnationThreshold: stagnationThreshold,
         );
     }
   }
 
   @override
   Complex discriminant() {
-    // Say that P(x) is the polynomial represented by this instance and
-    // P'(x) is the derivative of P. In order to calculate the discriminant of
-    // a polynomial, we need to first compute the resultant Res(A, A') which
-    // is equivalent to the determinant of the Sylvester matrix.
-    final sylvester = SylvesterMatrix(polynomial: this);
-
-    // Computes Res(A, A') and then determines the sign according with the
-    // degree of the polynomial.
+    final sylvester = SylvesterMatrix(
+      polynomial: this,
+    );
     return sylvester.polynomialDiscriminant();
   }
 
   @override
   List<Complex> solutions() {
-    // In case the polynomial was a constant, just return an empty array because
-    // there are no solutions.
     if (coefficients.length <= 1) {
       return const [];
     }
+    if (minGuessDistance <= 0) {
+      throw const AlgebraicException('minGuessDistance must be positive.');
+    }
 
-    // Make a copy of the coefficients and scale to make the polynomial monic
-    final leadingCoeff = coefficients.first;
-    if (leadingCoeff.abs() < precision) {
-      throw const AlgebraicException(
-        'Leading coefficient is too close to zero',
+    final n = degree;
+    if (initialGuess.isNotEmpty && initialGuess.length != n) {
+      throw AlgebraicException(
+        'initialGuess must contain one value per root ($n in total), but it '
+        'contains ${initialGuess.length}.',
       );
     }
 
-    // Scale all coefficients by dividing by the leading coefficient
-    final scaledCoefficients = coefficients
-        .map((c) => c / leadingCoeff)
-        .toList();
-    final degree = (scaledCoefficients.length - 1).toDouble();
+    // The constructor guarantees that the leading coefficient is not zero.
+    final leadingCoefficient = coefficients.first;
 
-    // Initialize roots using Aberth's method if no initial guesses provided
-    List<Complex> roots;
+    var roots = initialGuess.isNotEmpty
+        ? List<Complex>.of(initialGuess, growable: false)
+        : _startingPoints(
+            coefficients
+                .map((c) => c / leadingCoefficient)
+                .toList(growable: false),
+          );
 
-    if (initialGuess.isNotEmpty) {
-      roots = List<Complex>.from(initialGuess);
-    } else {
-      // Calculate the center of the roots using the first two coefficients
-      final center = -scaledCoefficients[1] / Complex.fromReal(degree);
-
-      // Calculate the radius using the Aberth bound
-      var radius = 0.0;
-      for (var i = 1; i < scaledCoefficients.length; i++) {
-        radius = max(radius, scaledCoefficients[i].abs() * (1.0 / i));
-      }
-      radius = 2 * radius; // Aberth's method typically uses a factor of 2
-
-      // Generate initial guesses using Aberth's method
-      roots = List<Complex>.generate(degree.floor(), (i) {
-        // Calculate the angle with a small random perturbation
-        final angle = 2 * pi * i / degree + (Random().nextDouble() - 0.5) * 0.1;
-
-        // Calculate the radius with a small random perturbation
-        final perturbedRadius =
-            radius * (1 + (Random().nextDouble() - 0.5) * 0.1);
-
-        // Generate the initial guess
-        return center +
-            Complex.fromReal(perturbedRadius) * Complex(cos(angle), sin(angle));
-      });
-
-      // Ensure minimum distance between initial guesses
-      for (var i = 0; i < roots.length; i++) {
-        for (var j = i + 1; j < roots.length; j++) {
-          final distance = (roots[i] - roots[j]).abs();
-          if (distance < minGuessDistance) {
-            // Move the second root away from the first
-            final direction =
-                (roots[j] - roots[i]) / Complex.fromReal(distance);
-            roots[j] =
-                roots[i] + direction * Complex.fromReal(minGuessDistance);
-          }
-        }
-      }
-    }
-
-    // Durand-Kerner iteration
+    // Durand-Kerner iteration:
+    //
+    //   z_i <- z_i - P(z_i) / (a_0 * prod_{j != i} (z_i - z_j))
+    //
+    // where a_0 is the leading coefficient.
     var converged = false;
-    var iteration = 0;
-
-    while (!converged && iteration < maxSteps) {
+    for (var step = 0; step < maxSteps && !converged; ++step) {
       converged = true;
-      final newRoots = List<Complex>.from(roots);
+      final newRoots = List<Complex>.of(roots, growable: false);
 
-      for (var i = 0; i < degree.floor(); i++) {
-        // Evaluate polynomial at current root
-        var p = scaledCoefficients[0];
-        for (var j = 1; j < scaledCoefficients.length; j++) {
-          p = p * roots[i] + scaledCoefficients[j];
-        }
+      for (var i = 0; i < n; ++i) {
+        final z = roots[i];
 
-        // Evaluate denominator (product of differences)
         var denominator = const Complex.fromReal(1);
-        for (var j = 0; j < degree.floor(); j++) {
+        for (var j = 0; j < n; ++j) {
           if (j != i) {
-            denominator *= roots[i] - roots[j];
+            denominator *= z - roots[j];
           }
         }
 
-        // Update root using Durand-Kerner formula
-        if (denominator.abs() > precision) {
-          final correction = p / denominator;
-          newRoots[i] = roots[i] - correction;
+        if (denominator.isZero || !_isFinite(denominator)) {
+          newRoots[i] =
+              z +
+              Complex.fromPolar(
+                r: minGuessDistance * max(1.0, z.abs()),
+                theta: i + 1.0,
+              );
+          converged = false;
+          continue;
+        }
 
-          // Check for convergence
-          if (correction.abs() > precision) {
-            converged = false;
-          }
+        final correction = evaluateOn(z) / (leadingCoefficient * denominator);
+        newRoots[i] = z - correction;
+
+        if (correction.abs() > precision * max(1.0, z.abs())) {
+          converged = false;
         }
       }
 
       roots = newRoots;
-      iteration++;
     }
 
-    // Sort roots by real part for stability
-    roots.sort((a, b) => a.real.compareTo(b.real));
-
-    return roots;
+    // Sort the roots so that the output order doesn't depend on the order of
+    // the starting points.
+    return roots.toList()..sort((a, b) {
+      final byReal = a.real.compareTo(b.real);
+      return byReal != 0 ? byReal : a.imaginary.compareTo(b.imaginary);
+    });
   }
+
+  /// Generates [degree] starting points for the Durand-Kerner iteration using
+  /// the strategy suggested by Aberth.
+  ///
+  /// The points are equally spaced on a circle centered at the centroid of the
+  /// roots, `-a_1 / n`, of the given [monic] polynomial. The radius is the
+  /// Fujiwara bound of the polynomial shifted to the centroid, which is an
+  /// upper bound for the distance of every root from the centroid.
+  List<Complex> _startingPoints(List<Complex> monic) {
+    final n = monic.length - 1;
+    final center = -monic[1] / Complex.fromReal(n.toDouble());
+
+    if (n == 1) {
+      return [center];
+    }
+
+    // Coefficients of q(y) = p(y + center), by repeated synthetic division
+    // (Taylor shift).
+    final shifted = List<Complex>.of(monic, growable: false);
+    for (var i = 0; i < n; ++i) {
+      for (var j = 1; j <= n - i; ++j) {
+        shifted[j] += center * shifted[j - 1];
+      }
+    }
+
+    var bound = 0.0;
+    for (var k = 1; k <= n; ++k) {
+      final value = k == n ? shifted[k].abs() / 2 : shifted[k].abs();
+      bound = max(bound, pow(value, 1 / k).toDouble());
+    }
+    final radius = max(2 * bound, minGuessDistance / (2 * sin(pi / n)));
+
+    return List<Complex>.generate(n, (k) {
+      final polar = Complex.fromPolar(
+        r: radius,
+        theta: 2 * pi * k / n + pi / (2 * n),
+      );
+      return center + polar;
+    }, growable: false);
+  }
+
+  /// Returns `true` if both parts of [value] are finite.
+  static bool _isFinite(Complex value) =>
+      value.real.isFinite && value.imaginary.isFinite;
 
   /// Returns the coefficients of the derivative of a given polynomial.
   List<Complex> _derivativeOf() {
@@ -359,13 +369,11 @@ final class GenericAlgebraic extends Algebraic with MathUtils {
     double? precision,
     int? maxSteps,
     double? minGuessDistance,
-    double? stagnationThreshold,
   }) => GenericAlgebraic(
     coefficients: coefficients ?? List<Complex>.from(this.coefficients),
     initialGuess: initialGuess ?? List<Complex>.from(this.initialGuess),
     precision: precision ?? this.precision,
     maxSteps: maxSteps ?? this.maxSteps,
     minGuessDistance: minGuessDistance ?? this.minGuessDistance,
-    stagnationThreshold: stagnationThreshold ?? this.stagnationThreshold,
   );
 }

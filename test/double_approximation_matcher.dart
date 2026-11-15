@@ -12,6 +12,7 @@ class MoreOrLessEquals extends Matcher {
     this.value, {
     this.precision = 1.0e-12,
   }) : assert(precision >= 0, 'The precision must be >= 0');
+
   /// The value to be tested
   final double value;
 

@@ -1,13 +1,13 @@
 # Examples
 
-Here is a quick overview of the main features of the `equations` package. For more information about solving equations and examples on how to use the classes from this package, see the articles on the repository's Wiki pages:
+Here is a quick overview of the main features of the `equations` package. For more details and examples, see the articles on the repository's Wiki:
 
- - [Algebraic equations](https://github.com/albertodev01/equations/wiki/Algebraic-equations), for solving polynomial equations;
- - [Nonlinear equations](https://github.com/albertodev01/equations/wiki/Nonlinear-equations), for solving nonlinear equations;
- - [Systems of equations](https://github.com/albertodev01/equations/wiki/Systems-of-equations), for solving systems of equations;
- - [Utilities](https://github.com/albertodev01/equations/wiki/Utilities), for working with matrices, evaluating integrals, interpolating data, and more.
+ - [Algebraic equations](https://github.com/albertodev01/equations/wiki/Algebraic-equations), for solving polynomial equations
+ - [Nonlinear equations](https://github.com/albertodev01/equations/wiki/Nonlinear-equations), for solving nonlinear equations
+ - [Systems of equations](https://github.com/albertodev01/equations/wiki/Systems-of-equations), for solving systems of linear equations
+ - [Utilities](https://github.com/albertodev01/equations/wiki/Utilities), for working with matrices, evaluating integrals, interpolating data, and more
 
-## Algebraic (Polynomial) equations
+## Algebraic (polynomial) equations
 
 ```dart
 // f(x) = ix^3 + (-2 + 5i)x + 7
@@ -18,20 +18,20 @@ final equation = Cubic(
 );
 final solutions = equation.solutions();
 
-/// -1.0447245173314328 + 1.7792977920746025i 
-/// 0.3113353509227148 - 2.7574534545940717i
-/// 0.733389166408717 + 0.9781556625194701i
-print(solutions);
+// -1.0447245173314328 + 1.7792977920746025i
+// 0.3113353509227148 - 2.7574534545940717i
+// 0.733389166408717 + 0.9781556625194701i
+solutions.forEach(print);
 ```
 
 ## Nonlinear equations
 
 ```dart
 // f(x) = x^e - cos(x)
-final newtonRaphson = Newton(function: 'x^e-cos(x)', x0: 0.5)
+final newtonRaphson = Newton(function: 'x^e-cos(x)', x0: 0.5);
 final result = newtonRaphson.solve();
 
-// 0.856055...
+// 0.8560552934767535
 print(result.guesses.last);
 ```
 
@@ -58,5 +58,5 @@ final solutions = solver.solve();
 // 10.0
 // 2.5
 // -4.0
-print(solutions);
+solutions.forEach(print);
 ```
