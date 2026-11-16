@@ -54,6 +54,40 @@ final class ExpressionParser {
   /// Square root of 3.
   static const _sqrt3 = 1.7320508075688;
 
+  /// The maximum number of parsed expressions kept in [_cache].
+  static const _cacheSize = 64;
+
+  /// The most recently parsed expressions, mapped to their evaluators. This
+  /// avoids parsing the same expression again when it's evaluated at many
+  /// points (for example, by numerical integration algorithms). Entries are
+  /// kept in least-recently-used order, and the oldest one is removed when
+  /// the cache is full.
+  static final _cache = <String, _Evaluator>{};
+
+  /// Returns the evaluator of [expression], or throws an
+  /// [ExpressionParserException] with the given [message] if [expression]
+  /// cannot be parsed.
+  static _Evaluator _evaluatorOf(String expression, String message) {
+    final cached = _cache.remove(expression);
+
+    if (cached != null) {
+      // Re-inserting the entry marks it as the most recently used one.
+      _cache[expression] = cached;
+      return cached;
+    }
+
+    final result = _parser.parse(expression);
+    if (result is! Success<_Evaluator>) {
+      throw ExpressionParserException(message);
+    }
+
+    if (_cache.length >= _cacheSize) {
+      _cache.remove(_cache.keys.first);
+    }
+
+    return _cache[expression] = result.value;
+  }
+
   /// A "cached" instance of a parser that is used to evaluate expressions.
   static final Parser<_Evaluator> _parser = () {
     final builder = ExpressionBuilder<_Evaluator>()
@@ -228,35 +262,35 @@ final class ExpressionParser {
   /// If you want to evaluate a function with the `x` variable, use [evaluateOn]
   /// instead.
   double evaluate(String expression) {
-    if (expression.contains('x') || (!_parser.accept(expression))) {
-      throw const ExpressionParserException(
+    const message =
         'The given expression cannot be parsed! Make sure that all operators '
         'are supported. Make also sure that the product of two values '
         "explicitly has the '*' symbol.\n\nThere cannot be the 'x' variable in "
-        'the expression because this method only evaluates numbers.',
-      );
+        'the expression because this method only evaluates numbers.';
+
+    if (expression.contains('x')) {
+      throw const ExpressionParserException(message);
     }
 
-    return evaluateOn(expression, 0);
+    // The evaluator returns 'num' so we multiply by 1.0 to convert the result
+    // into a double.
+    return _evaluatorOf(expression, message)(0) * 1.0;
   }
 
   /// Evaluates the mathematical [expression] and replaces the `x` variable with
   /// the value of the given [evaluationPoint].
   ///
   /// If you want to evaluate a simple expression without the `x` variable,
-  /// using [evaluate] instead.
+  /// use [evaluate] instead.
   double evaluateOn(String expression, double evaluationPoint) {
-    if (!_parser.accept(expression)) {
-      throw const ExpressionParserException(
+    const message =
         'The given expression cannot be parsed! Make sure that all operators '
         'are supported. Make also sure that the product of two values '
-        "explicitly has the '*' symbol.",
-      );
-    }
+        "explicitly has the '*' symbol.";
 
     // The evaluator returns 'num' so we multiply by 1.0 to convert the result
     // into a double.
-    return _parser.parse(expression).value(evaluationPoint) * 1.0;
+    return _evaluatorOf(expression, message)(evaluationPoint) * 1.0;
   }
 }
 

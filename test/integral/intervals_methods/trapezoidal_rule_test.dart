@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
-import '../double_approximation_matcher.dart';
+import '../../double_approximation_matcher.dart';
 
 void main() {
   late final TrapezoidalRule trapezoid;
@@ -14,7 +14,7 @@ void main() {
     );
   });
 
-  group('TrapezoidalRule.', () {
+  group('TrapezoidalRule', () {
     test('Smoke test', () {
       expect(trapezoid.lowerBound, equals(1));
       expect(trapezoid.upperBound, equals(3));
@@ -24,7 +24,21 @@ void main() {
       final results = trapezoid.integrate();
 
       expect(results.result, const MoreOrLessEquals(28, precision: 1));
-      expect(results.guesses.length, equals(trapezoid.intervals));
+      expect(results.guesses.length, equals(trapezoid.intervals + 1));
+    });
+
+    test('Guesses values', () {
+      const integral = TrapezoidalRule(
+        function: 'x^2',
+        lowerBound: 0,
+        upperBound: 4,
+        intervals: 4,
+      );
+
+      expect(
+        integral.integrate().guesses,
+        orderedEquals(<double>[0, 1, 4, 9, 16]),
+      );
     });
 
     test('toString()', () {
@@ -32,7 +46,7 @@ void main() {
       expect(trapezoid.toString(), equals(strResult));
     });
 
-    test('Making sure that TrapezoidalRule can be properly compared.', () {
+    test('Object comparison', () {
       const trapezoid2 = TrapezoidalRule(
         function: 'x^3+2*x',
         lowerBound: 1,
@@ -134,6 +148,54 @@ void main() {
       test('Test 7', () {
         verifyTrapezoidalRule('0', -1, 1, 0);
       });
+    });
+
+    test('Throws on invalid intervals', () {
+      expect(
+        () => const TrapezoidalRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: 0,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const TrapezoidalRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: -4,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
+    test('Throws on non-finite bounds', () {
+      expect(
+        () => const TrapezoidalRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: double.infinity,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const TrapezoidalRule(
+          function: 'x',
+          lowerBound: double.negativeInfinity,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const TrapezoidalRule(
+          function: 'x',
+          lowerBound: double.nan,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
     });
   });
 }

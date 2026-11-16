@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
@@ -14,8 +16,8 @@ void main() {
     );
   });
 
-  group('AdaptiveQuadrature.', () {
-    test('Integration of sin(x)-3 on [2, -3].', () {
+  group('AdaptiveQuadrature', () {
+    test('Smoke test', () {
       expect(quadrature.lowerBound, equals(2));
       expect(quadrature.upperBound, equals(-3));
       expect(quadrature.function, equals('sin(x)-3'));
@@ -32,7 +34,7 @@ void main() {
       expect(quadrature.toString(), equals(strResult));
     });
 
-    test('Object comparison.', () {
+    test('Object comparison', () {
       const quadrature2 = AdaptiveQuadrature(
         function: 'sin(x)-3',
         lowerBound: 2,
@@ -141,6 +143,139 @@ void main() {
 
       test('Test 7', () {
         verifyAdaptiveQuadrature('0', -1, 1, 0);
+      });
+    });
+
+    test('Throws on non-finite function', () {
+      // 1/sqrt(x) is infinite at the lower bound
+      expect(
+        () => const AdaptiveQuadrature(
+          function: '1/sqrt(x)',
+          lowerBound: 0,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+
+      // sqrt(x) is NaN on the whole interval
+      expect(
+        () => const AdaptiveQuadrature(
+          function: 'sqrt(x)',
+          lowerBound: -2,
+          upperBound: -1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
+    test('Throws on non-convergence', () {
+      // 1/x is never evaluated at 0, but it isn't integrable around it
+      expect(
+        () => const AdaptiveQuadrature(
+          function: '1/x',
+          lowerBound: -1,
+          upperBound: 2,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
+    test('Guesses add up to the result', () {
+      final results = const AdaptiveQuadrature(
+        function: 'sin(x)*e^x',
+        lowerBound: 2,
+        upperBound: 4,
+      ).integrate();
+
+      expect(
+        results.guesses.fold<double>(0, (sum, value) => sum + value),
+        MoreOrLessEquals(results.result),
+      );
+    });
+
+    test('Throws on non-finite bounds', () {
+      expect(
+        () => const AdaptiveQuadrature(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: double.infinity,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const AdaptiveQuadrature(
+          function: 'x',
+          lowerBound: double.negativeInfinity,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const AdaptiveQuadrature(
+          function: 'x',
+          lowerBound: double.nan,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
+    test('Zero-width interval', () {
+      final results = const AdaptiveQuadrature(
+        function: '1/x',
+        lowerBound: 0,
+        upperBound: 0,
+      ).integrate();
+
+      expect(results.result, isZero);
+      expect(results.guesses, isEmpty);
+    });
+
+    group('Regression tests', () {
+      void verifyRelative(String function, double a, double b, double exact) {
+        final result = AdaptiveQuadrature(
+          function: function,
+          lowerBound: a,
+          upperBound: b,
+        ).integrate().result;
+
+        expect(result, closeTo(exact, exact.abs() * 1.0e-10));
+      }
+
+      test('Zero at evenly spaced points', () {
+        // sin(x)^2 is zero at 0, pi, 2*pi, 3*pi and 4*pi
+        verifyRelative('sin(x)^2', 0, 4 * math.pi, 2 * math.pi);
+
+        // The polynomial is zero at 0, 1, 2, 3 and 4
+        verifyRelative(
+          '(x*(x-1)*(x-2)*(x-3)*(x-4))^2',
+          0,
+          4,
+          10240 / 693,
+        );
+      });
+
+      test('Large values', () {
+        verifyRelative('x^12', 0, 20, math.pow(20.0, 13) / 13);
+        verifyRelative('x^16', 0, 20, math.pow(20.0, 17) / 17);
+        verifyRelative('x^20', 0, 20, math.pow(20.0, 21) / 21);
+      });
+
+      test('Small values', () {
+        verifyRelative(
+          '0.000000000001*sin(x)',
+          0,
+          3,
+          1.0e-12 * (1 - math.cos(3)),
+        );
+      });
+
+      test('Jump discontinuity', () {
+        verifyRelative('abs(x)/x', -1, 2, 1);
+      });
+
+      test('Reversed bounds', () {
+        verifyRelative('x^4', 1, -1, -0.4);
       });
     });
   });

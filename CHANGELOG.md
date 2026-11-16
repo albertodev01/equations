@@ -9,6 +9,11 @@
  - **BREAKING**: `SylvesterMatrix` is now a `final` class
  - **BREAKING**: `Algebraic.solveInequality` now joins intervals that touch (for example, `(x - 1)^2 * (x - 3) <= 0` returns `x <= 3` instead of `x <= 1`, `[1, 1]` and `[1, 3]`), and its `precision` parameter is now the relative tolerance used to decide whether a value is a root, instead of the maximum imaginary part of a real root
  - **BREAKING**: `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`) no longer throws when the degree of the denominator is higher than the degree of the numerator: it returns a zero quotient and the numerator as remainder
+ - **BREAKING**: The `guesses` list returned by `SimpsonRule.integrate` and `TrapezoidalRule.integrate` now has `intervals + 1` elements, the values of the function at every point `x_0, x_1, ..., x_n`. Previously, `TrapezoidalRule` left out the value at the upper bound, and `SimpsonRule` overwrote the value at `x_(n-1)` with the value at the upper bound
+ - **BREAKING**: `MidpointRule.integrate` now throws a `NumericalIntegrationException` when `intervals` is not positive, instead of returning `NaN` or throwing a `RangeError`
+ - **BREAKING**: `AdaptiveQuadrature.integrate` now throws a `NumericalIntegrationException` when the function is not finite on the interval or when the algorithm doesn't converge within `AdaptiveQuadrature.maxDepth` subdivisions, instead of overflowing the stack or never returning (for example, with `1/sqrt(x)` on `[0, 1]` or `sqrt(x)` on `[-2, -1]`)
+ - **BREAKING**: `AdaptiveQuadrature` now uses a tolerance relative to the size of the integral (about `10^-12`) instead of a fixed absolute tolerance of `10^-10`, and starts from subintervals of different widths, so its results and `guesses` are different. This fixes wrong results without errors when the function was zero at the five evenly spaced starting points (for example, `sin(x)^2` on `[0, 4*pi]` returned `0` instead of `2*pi`), failures with large integrands (for example, `x^16` on `[0, 20]` overflowed the stack), and inaccurate results with small integrands. An integral on an interval of zero width now returns `0` with an empty `guesses` list
+ - **BREAKING**: `integrate()` of all `NumericalIntegration` types now throws a `NumericalIntegrationException` when `lowerBound` or `upperBound` is not finite (for example, `TrapezoidalRule` returned `Infinity` for `e^(0-x)` on `[0, infinity]`)
  - Updated Dart SDK constraints to `^3.14.0`
  - Fixed the `+` and `-` operators of `Algebraic`, which dropped zero coefficients in the middle of the result (for example, `x^2 + 1` could become `x + 1`)
  - The `+`, `-` and `*` operators of `Algebraic` now return the zero polynomial when the result is zero (for example, `p - p`), instead of throwing an `AlgebraicException`
@@ -22,6 +27,11 @@
  - Fixed `GenericAlgebraic.solutions`, which returned wrong roots without error when the starting points were close together (for example, `x^5 - 0.001` and equal values in `initialGuess`), returned `NaN` for `x^n`, and returned different results on each call. The default starting points now use a valid bound for the roots
  - Fixed `Quartic.solutions`, which treated coefficients smaller than `1e-10` as zero (returning wrong roots, such as four zeros for `x^4 - 1e-12`), dropped small roots of biquadratic equations, and returned inaccurate roots (errors up to about `0.04`) when the equation had repeated roots
  - Fixed `SylvesterMatrix`, which treated coefficients smaller than `1e-10` as zero (for example, the discriminant of `x^5 + 1e-11x` was `0`) and threw a `MatrixException` when the leading coefficient was very small (but not zero). A `GenericAlgebraic` of degree 4 or lower now uses the closed-form discriminant
+ - Added the `BooleRule` class, which implements Boole's rule (error of O(h^6), exact for polynomials of degree 5 or less)
+ - Added the `GaussLegendreRule` class, which implements the composite Gauss-Legendre rule with 1 to 5 points in each subinterval (error of O(h^(2k)) with k points). It never evaluates the function at the bounds, so it also works when the function isn't finite there
+ - `NumericalIntegrationException` is now exported by `package:equations/equations.dart`
+ - `ExpressionParser` now parses each expression only once and caches the most recently used ones, so `NumericalIntegration` and `NonLinear` types are much faster (numerical integration is about 15 to 45 times faster)
+ - `AdaptiveQuadrature` no longer evaluates the function more than once at the same point
  - Documentation improvements
  - Dependencies versions update
 

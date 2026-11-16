@@ -140,5 +140,34 @@ void main() {
       expect('x'.isNumericalExpression, isFalse);
       expect('2+x'.isNumericalExpression, isFalse);
     });
+
+    test('Evaluates correctly more expressions than the cache size', () {
+      const parser = ExpressionParser();
+      final expressions = List<String>.generate(200, (i) => 'x+$i');
+
+      for (final (i, expression) in expressions.indexed) {
+        expect(parser.evaluateOn(expression, 1), equals(i + 1));
+      }
+
+      // Evaluating the same expressions again, in reverse order, still works
+      for (final (i, expression) in expressions.indexed.toList().reversed) {
+        expect(parser.evaluateOn(expression, 2), equals(i + 2));
+      }
+    });
+
+    test('Invalid expressions throw on every evaluation', () {
+      const parser = ExpressionParser();
+
+      for (var i = 0; i < 3; ++i) {
+        expect(
+          () => parser.evaluateOn('2x', 1),
+          throwsA(isA<ExpressionParserException>()),
+        );
+        expect(
+          () => parser.evaluate('x+1'),
+          throwsA(isA<ExpressionParserException>()),
+        );
+      }
+    });
   });
 }

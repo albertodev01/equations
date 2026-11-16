@@ -2,21 +2,23 @@ import 'package:equations/equations.dart';
 
 /// {@template intervals_integration}
 /// This class is extended by classes whose algorithms divide the integration
-/// bounds into smaller intervals to compute the result. There are currently
-/// three subclasses of [IntervalsIntegration]:
+/// interval into smaller subintervals to compute the result. There are
+/// currently five subclasses of [IntervalsIntegration]:
 ///
 ///  - [TrapezoidalRule]
 ///  - [SimpsonRule]
 ///  - [MidpointRule]
+///  - [BooleRule]
+///  - [GaussLegendreRule]
 ///
 /// For a different approach that doesn't use [intervals], see
 /// [AdaptiveQuadrature].
 ///
 /// ## Details
 ///
-/// Interval-based methods (like the ones in this class) use a fixed number of
-/// equally-sized subintervals to approximate the integral. The accuracy depends
-/// on the number of intervals specified by the user.
+/// Interval-based methods (like the subclasses of this class) use a fixed
+/// number of equally sized subintervals to approximate the integral. The
+/// accuracy depends on the number of intervals specified by the user.
 ///
 /// In contrast, adaptive quadrature methods (see [AdaptiveQuadrature])
 /// automatically adjust the subinterval sizes based on the function's behavior,
@@ -32,8 +34,8 @@ abstract base class IntervalsIntegration extends NumericalIntegration {
     required this.intervals,
   });
 
-  /// The number of parts in which the interval `[lowerBound, upperBound]` has
-  /// to be split by the algorithm.
+  /// The number of subintervals into which the algorithm splits the interval
+  /// `[lowerBound, upperBound]`.
   final int intervals;
 
   @override

@@ -3,7 +3,6 @@ import 'package:test/test.dart';
 
 import '../../double_approximation_matcher.dart';
 
-/// Solves the inequality of the polynomial with the given real [coefficients].
 List<AlgebraicInequalitySolution> solve(
   List<double> coefficients,
   AlgebraicInequalityType inequalityType,
@@ -12,19 +11,30 @@ List<AlgebraicInequalitySolution> solve(
   inequalityType: inequalityType,
 ).solve();
 
-/// Matches an [AlgebraicInequalitySmallerThan] solution.
-Matcher isSmallerThan(double value, {required bool isInclusive}) =>
-    isA<AlgebraicInequalitySmallerThan>()
-        .having((s) => s.value, 'value', MoreOrLessEquals(value))
-        .having((s) => s.isInclusive, 'isInclusive', isInclusive);
+Matcher isSmallerThan(
+  double value, {
+  required bool isInclusive,
+  double precision = 1.0e-12,
+}) => isA<AlgebraicInequalitySmallerThan>()
+    .having(
+      (s) => s.value,
+      'value',
+      MoreOrLessEquals(value, precision: precision),
+    )
+    .having((s) => s.isInclusive, 'isInclusive', isInclusive);
 
-/// Matches an [AlgebraicInequalityGreaterThan] solution.
-Matcher isGreaterThan(double value, {required bool isInclusive}) =>
-    isA<AlgebraicInequalityGreaterThan>()
-        .having((s) => s.value, 'value', MoreOrLessEquals(value))
-        .having((s) => s.isInclusive, 'isInclusive', isInclusive);
+Matcher isGreaterThan(
+  double value, {
+  required bool isInclusive,
+  double precision = 1.0e-12,
+}) => isA<AlgebraicInequalityGreaterThan>()
+    .having(
+      (s) => s.value,
+      'value',
+      MoreOrLessEquals(value, precision: precision),
+    )
+    .having((s) => s.isInclusive, 'isInclusive', isInclusive);
 
-/// Matches an [AlgebraicInequalityInterval] solution.
 Matcher isInterval(
   double start,
   double end, {
@@ -99,6 +109,22 @@ void main() {
             inequalityType: greaterThan,
             precision: 1.0e-8,
           ),
+        ),
+      );
+    });
+
+    test('toString()', () {
+      final solver = AlgebraicInequalitySolver(
+        polynomial: Algebraic.fromReal([1, -1]),
+        inequalityType: greaterThan,
+      );
+
+      expect(
+        solver.toString(),
+        equals(
+          'AlgebraicInequalitySolver(polynomial: f(x) = 1x + -1, '
+          'inequalityType: AlgebraicInequalityType.greaterThan, '
+          'precision: 1e-10)',
         ),
       );
     });
@@ -330,6 +356,186 @@ void main() {
           );
         }
       });
+    });
+
+    group('Inequalities table', () {
+      final cases = <(List<double>, AlgebraicInequalityType, List<Matcher>)>[
+        // Linear
+        ([1, -1], lessThan, [isSmallerThan(1, isInclusive: false)]),
+        ([1, -1], greaterThanOrEqualTo, [isGreaterThan(1, isInclusive: true)]),
+        ([-1, 1], greaterThan, [isSmallerThan(1, isInclusive: false)]),
+        ([-1, 1], lessThanOrEqualTo, [isGreaterThan(1, isInclusive: true)]),
+        ([1e-3, -1e-3], greaterThan, [isGreaterThan(1, isInclusive: false)]),
+        ([1, -1e6], lessThan, [isSmallerThan(1000000, isInclusive: false)]),
+
+        // Quadratic: x^2 - 4 and its opposite
+        ([1, 0, -4], lessThan, [isInterval(-2, 2, isInclusive: false)]),
+        (
+          [1, 0, -4],
+          greaterThanOrEqualTo,
+          [
+            isSmallerThan(-2, isInclusive: true),
+            isGreaterThan(2, isInclusive: true),
+          ],
+        ),
+        ([-1, 0, 4], greaterThan, [isInterval(-2, 2, isInclusive: false)]),
+        (
+          [-1, 0, 4],
+          lessThanOrEqualTo,
+          [
+            isSmallerThan(-2, isInclusive: true),
+            isGreaterThan(2, isInclusive: true),
+          ],
+        ),
+
+        // Quadratic without real roots: x^2 + 1 and -(x^2 + 1)
+        ([1, 0, 1], lessThanOrEqualTo, []),
+        ([1, 0, 1], greaterThan, [isA<AlgebraicInequalityAllRealNumbers>()]),
+        ([-1, 0, -1], lessThan, [isA<AlgebraicInequalityAllRealNumbers>()]),
+        ([-1, 0, -1], greaterThanOrEqualTo, []),
+
+        // Double root at zero: x^2
+        ([1, 0, 0], lessThan, []),
+        ([1, 0, 0], lessThanOrEqualTo, [isInterval(0, 0, isInclusive: true)]),
+        (
+          [1, 0, 0],
+          greaterThan,
+          [
+            isSmallerThan(0, isInclusive: false),
+            isGreaterThan(0, isInclusive: false),
+          ],
+        ),
+        (
+          [1, 0, 0],
+          greaterThanOrEqualTo,
+          [
+            isA<AlgebraicInequalityAllRealNumbers>(),
+          ],
+        ),
+
+        // Triple root at zero: x^3
+        ([1, 0, 0, 0], greaterThan, [isGreaterThan(0, isInclusive: false)]),
+        (
+          [1, 0, 0, 0],
+          lessThanOrEqualTo,
+          [isSmallerThan(0, isInclusive: true)],
+        ),
+
+        // (x - 1)(x - 2)(x - 3)
+        (
+          [1, -6, 11, -6],
+          lessThan,
+          [
+            isSmallerThan(1, isInclusive: false),
+            isInterval(2, 3, isInclusive: false),
+          ],
+        ),
+        (
+          [1, -6, 11, -6],
+          greaterThanOrEqualTo,
+          [
+            isInterval(1, 2, isInclusive: true),
+            isGreaterThan(3, isInclusive: true),
+          ],
+        ),
+
+        // x^3 - x^2 + x - 1 = (x - 1)(x^2 + 1), with two complex roots
+        ([1, -1, 1, -1], lessThan, [isSmallerThan(1, isInclusive: false)]),
+
+        // x^4 - 1
+        (
+          [1, 0, 0, 0, -1],
+          lessThanOrEqualTo,
+          [
+            isInterval(-1, 1, isInclusive: true),
+          ],
+        ),
+        (
+          [1, 0, 0, 0, -1],
+          greaterThan,
+          [
+            isSmallerThan(-1, isInclusive: false),
+            isGreaterThan(1, isInclusive: false),
+          ],
+        ),
+
+        // (x - 1)(x - 2)(x - 3)(x - 4)
+        (
+          [1, -10, 35, -50, 24],
+          greaterThan,
+          [
+            isSmallerThan(1, isInclusive: false),
+            isInterval(2, 3, isInclusive: false),
+            isGreaterThan(4, isInclusive: false),
+          ],
+        ),
+        (
+          [1, -10, 35, -50, 24],
+          lessThanOrEqualTo,
+          [
+            isInterval(1, 2, isInclusive: true),
+            isInterval(3, 4, isInclusive: true),
+          ],
+        ),
+
+        // (x^2 - 1)^2: two double roots
+        (
+          [1, 0, -2, 0, 1],
+          lessThanOrEqualTo,
+          [
+            isInterval(-1, -1, isInclusive: true),
+            isInterval(1, 1, isInclusive: true),
+          ],
+        ),
+        (
+          [1, 0, -2, 0, 1],
+          greaterThan,
+          [
+            isSmallerThan(-1, isInclusive: false),
+            isInterval(-1, 1, isInclusive: false),
+            isGreaterThan(1, isInclusive: false),
+          ],
+        ),
+
+        // (x - 1)(x - 2)(x - 3)(x - 4)(x - 5)
+        (
+          [1, -15, 85, -225, 274, -120],
+          lessThan,
+          [
+            isSmallerThan(1, isInclusive: false, precision: 1e-9),
+            isInterval(2, 3, isInclusive: false, precision: 1e-9),
+            isInterval(4, 5, isInclusive: false, precision: 1e-9),
+          ],
+        ),
+        (
+          [1, -15, 85, -225, 274, -120],
+          greaterThanOrEqualTo,
+          [
+            isInterval(1, 2, isInclusive: true, precision: 1e-9),
+            isInterval(3, 4, isInclusive: true, precision: 1e-9),
+            isGreaterThan(5, isInclusive: true, precision: 1e-9),
+          ],
+        ),
+
+        // Constants
+        ([-2], lessThan, [isA<AlgebraicInequalityAllRealNumbers>()]),
+        ([-2], greaterThanOrEqualTo, []),
+      ];
+
+      const symbols = {
+        lessThan: '<',
+        lessThanOrEqualTo: '<=',
+        greaterThan: '>',
+        greaterThanOrEqualTo: '>=',
+      };
+
+      for (final (coefficients, type, expected) in cases) {
+        final polynomial = Algebraic.fromReal(coefficients);
+
+        test('$polynomial ${symbols[type]} 0', () {
+          expect(solve(coefficients, type), expected);
+        });
+      }
     });
 
     test('Algebraic.solveInequality delegates to this class', () {
