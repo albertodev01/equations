@@ -50,6 +50,23 @@ void main() {
     );
 
     test(
+      'MonotoneCubicSpline returned when nodes are non-increasing.',
+      () {
+        expect(
+          SplineFunction.generate(
+            nodes: const [
+              InterpolationNode(x: 0, y: 3),
+              InterpolationNode(x: 1, y: 2),
+              InterpolationNode(x: 2, y: 2),
+              InterpolationNode(x: 4, y: 0),
+            ],
+          ),
+          isA<MonotoneCubicSpline>(),
+        );
+      },
+    );
+
+    test(
       'LinearSpline returned when nodes are not monotonic.',
       () {
         expect(

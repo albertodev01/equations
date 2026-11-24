@@ -146,9 +146,23 @@ void main() {
           ),
         );
 
+        // The interpolating polynomial is unique, so the backward formula
+        // must give the same value as the forward formula (0.787964)
         expect(
           interpolation.compute(52),
-          const MoreOrLessEquals(0.784, precision: 1.0e-3),
+          const MoreOrLessEquals(0.787964, precision: 1.0e-6),
+        );
+        expect(
+          interpolation.compute(52),
+          MoreOrLessEquals(
+            const NewtonInterpolation(
+              nodes: [
+                InterpolationNode(x: 45, y: 0.7071),
+                InterpolationNode(x: 50, y: 0.766),
+                InterpolationNode(x: 55, y: 0.8192),
+              ],
+            ).compute(52),
+          ),
         );
       },
     );
@@ -354,5 +368,141 @@ void main() {
         expect(forwardDiffTable(0, 4), isZero);
       },
     );
+
+    test(
+      'Forward and backward formulas both reproduce a cubic exactly',
+      () {
+        // The nodes lie on y = x^3 + 2x^2 + 3x + 1
+        const nodes = [
+          InterpolationNode(x: 0, y: 1),
+          InterpolationNode(x: 1, y: 7),
+          InterpolationNode(x: 2, y: 23),
+          InterpolationNode(x: 3, y: 55),
+          InterpolationNode(x: 4, y: 109),
+        ];
+        const forward = NewtonInterpolation(nodes: nodes);
+        const backward = NewtonInterpolation(
+          nodes: nodes,
+          forwardDifference: false,
+        );
+
+        for (final x in const [-1.5, 0.0, 0.5, 2.5, 3.75, 4.0, 6.0]) {
+          final expected = x * x * x + 2 * x * x + 3 * x + 1;
+
+          expect(
+            forward.compute(x),
+            MoreOrLessEquals(expected, precision: 1.0e-9),
+          );
+          expect(
+            backward.compute(x),
+            MoreOrLessEquals(expected, precision: 1.0e-9),
+          );
+        }
+      },
+    );
+
+    test('Works with a negative step size', () {
+      // The nodes lie on y = x^2, listed with decreasing x values
+      const nodes = [
+        InterpolationNode(x: 3, y: 9),
+        InterpolationNode(x: 2, y: 4),
+        InterpolationNode(x: 1, y: 1),
+      ];
+
+      expect(
+        const NewtonInterpolation(nodes: nodes).compute(1.5),
+        const MoreOrLessEquals(2.25),
+      );
+      expect(
+        const NewtonInterpolation(
+          nodes: nodes,
+          forwardDifference: false,
+        ).compute(1.5),
+        const MoreOrLessEquals(2.25),
+      );
+    });
+
+    test('Floating point spacing is accepted as equal spacing', () {
+      // 0.1, 0.2 and 0.3 are not exactly equally spaced in binary
+      const interpolation = NewtonInterpolation(
+        nodes: [
+          InterpolationNode(x: 0.1, y: 1),
+          InterpolationNode(x: 0.2, y: 2),
+          InterpolationNode(x: 0.3, y: 3),
+        ],
+      );
+
+      expect(
+        interpolation.compute(0.25),
+        const MoreOrLessEquals(2.5, precision: 1.0e-9),
+      );
+    });
+
+    test('Exception thrown when nodes are not equally spaced', () {
+      for (final forwardDifference in const [true, false]) {
+        expect(
+          () => NewtonInterpolation(
+            nodes: const [
+              InterpolationNode(x: 0, y: 0),
+              InterpolationNode(x: 1, y: 1),
+              InterpolationNode(x: 3, y: 9),
+            ],
+            forwardDifference: forwardDifference,
+          ).compute(3),
+          throwsA(isA<InterpolationException>()),
+        );
+      }
+    });
+
+    test('Exception thrown when there are fewer than 2 nodes', () {
+      for (final nodes in const [
+        <InterpolationNode>[],
+        [InterpolationNode(x: 1, y: 2)],
+      ]) {
+        expect(
+          () => NewtonInterpolation(nodes: nodes).compute(1),
+          throwsA(isA<InterpolationException>()),
+        );
+        expect(
+          () => NewtonInterpolation(
+            nodes: nodes,
+            forwardDifference: false,
+          ).compute(1),
+          throwsA(isA<InterpolationException>()),
+        );
+      }
+    });
+
+    test('Exception thrown when two consecutive x values are equal', () {
+      expect(
+        () => const NewtonInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 2),
+            InterpolationNode(x: 1, y: 3),
+          ],
+        ).compute(1),
+        throwsA(isA<InterpolationException>()),
+      );
+    });
+
+    test('Object comparison takes the difference direction into account', () {
+      const forward = NewtonInterpolation(
+        nodes: [
+          InterpolationNode(x: 1, y: 3),
+          InterpolationNode(x: 2, y: 5),
+        ],
+      );
+      const backward = NewtonInterpolation(
+        nodes: [
+          InterpolationNode(x: 1, y: 3),
+          InterpolationNode(x: 2, y: 5),
+        ],
+        forwardDifference: false,
+      );
+
+      expect(forward == backward, isFalse);
+      expect(backward == forward, isFalse);
+      expect(forward.hashCode, isNot(equals(backward.hashCode)));
+    });
   });
 }

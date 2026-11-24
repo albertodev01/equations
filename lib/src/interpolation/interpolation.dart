@@ -46,7 +46,7 @@ abstract base class Interpolation {
 
   /// Returns the `y` value of the `y = f(x)` equation.
   ///
-  /// The function `f` is built by interpolating the given [nodes] nodes. The
+  /// The function `f` is built by interpolating the given [nodes]. The
   /// [x] value is the point at which the function has to be evaluated.
   double compute(double x);
 }

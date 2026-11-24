@@ -1,14 +1,14 @@
 import 'package:equations/equations.dart';
 import 'package:equations/src/interpolation/utils/spline_functions/linear_spline.dart';
-import 'package:equations/src/interpolation/utils/spline_functions/montone_cubic_spline.dart';
+import 'package:equations/src/interpolation/utils/spline_functions/monotone_cubic_spline.dart';
 
 export 'spline_functions/linear_spline.dart';
-export 'spline_functions/montone_cubic_spline.dart';
+export 'spline_functions/monotone_cubic_spline.dart';
 
 /// {@template spline_function}
 /// A **spline** is a special function defined piecewise by polynomials.
 ///
-/// In interpolating problems, spline interpolation is often preferred to
+/// In interpolation problems, spline interpolation is often preferred to
 /// polynomial interpolation because it yields similar results, even when using
 /// low-degree polynomials, while avoiding Runge's phenomenon for higher
 /// degrees.
@@ -21,19 +21,24 @@ abstract base class SplineFunction {
 
   /// Creates an appropriate spline based on the properties of the given nodes.
   ///
-  /// If the control points are monotonic then the resulting spline will
+  /// If the control points are monotonic, then the resulting spline will
   /// preserve that. This method can either return:
   ///
-  ///  - [MonotoneCubicSpline] if nodes are monotonic
+  ///  - [MonotoneCubicSpline] if the `y` values of the nodes are monotonic
+  ///    (either non-decreasing or non-increasing);
   ///  - [LinearSpline] otherwise.
   ///
-  /// The control points must all have increasing `x` values.
-  ///
-  /// If the [nodes] doesn't contain values sorted in increasing order, then an
-  /// [InterpolationException] object is thrown.
+  /// An [InterpolationException] is thrown if [nodes] contains fewer than 2
+  /// control points or if their `x` values are not strictly increasing.
   factory generate({
     required List<InterpolationNode> nodes,
   }) {
+    if (nodes.length < 2) {
+      throw const InterpolationException(
+        'There must be at least 2 control points.',
+      );
+    }
+
     if (!_isStrictlyIncreasing(nodes)) {
       throw const InterpolationException(
         'The control points must all have increasing "x" values.',
@@ -78,15 +83,7 @@ abstract base class SplineFunction {
   @override
   String toString() => nodes.join(', ');
 
-  /// Determines whether the `x` coordinates of the control points are
-  /// increasing or not.
   static bool _isStrictlyIncreasing(List<InterpolationNode> nodes) {
-    if (nodes.length < 2) {
-      throw const InterpolationException(
-        'There must be at least 2 control points.',
-      );
-    }
-
     // The "comparison" node.
     var prev = nodes.first.x;
 
@@ -104,23 +101,50 @@ abstract base class SplineFunction {
     return true;
   }
 
-  /// Determines whether the function is monotonic or not.
   static bool _isMonotonic(List<InterpolationNode> nodes) {
-    // The "comparison" node.
-    var prev = nodes.first.y;
+    var nonDecreasing = true;
+    var nonIncreasing = true;
 
-    // Making sure that all of the 'y' coordinates of the nodes are increasing
     for (var i = 1; i < nodes.length; ++i) {
+      final prev = nodes[i - 1].y;
       final curr = nodes[i].y;
 
       if (curr < prev) {
-        return false;
+        nonDecreasing = false;
       }
 
-      prev = curr;
+      if (curr > prev) {
+        nonIncreasing = false;
+      }
+
+      if (!nonDecreasing && !nonIncreasing) {
+        return false;
+      }
     }
 
     return true;
+  }
+
+  /// Finds, using a binary search, the index `i` of the segment containing [x]
+  /// such that `nodes[i].x <= x < nodes[i + 1].x`.
+  ///
+  /// The caller must make sure that `nodes.first.x <= x < nodes.last.x`.
+  int findSegment(double x) {
+    var left = 0;
+    var right = nodes.length - 2;
+
+    while (left <= right) {
+      final mid = (left + right) ~/ 2;
+      if (x < nodes[mid].x) {
+        right = mid - 1;
+      } else if (x >= nodes[mid + 1].x) {
+        left = mid + 1;
+      } else {
+        return mid;
+      }
+    }
+
+    return left;
   }
 
   /// Estimates the `y` value of the `y = f(x)` equation using a spline.
