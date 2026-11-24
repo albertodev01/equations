@@ -1,37 +1,52 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_complex.dart';
 import 'package:test/test.dart';
 
 import '../../../../double_approximation_matcher.dart';
+import '../decomposition_checks.dart';
+
+/// Builds a [ComplexMatrix] whose elements are given row by row.
+ComplexMatrix _matrix(List<List<Complex>> rows) => ComplexMatrix.fromData(
+  rows: rows.length,
+  columns: rows.first.length,
+  data: rows,
+);
+
+/// Builds a [ComplexMatrix] with random elements in the unit square.
+ComplexMatrix _random(int rows, int columns, Random random) =>
+    ComplexMatrix.fromFlattenedData(
+      rows: rows,
+      columns: columns,
+      data: List<Complex>.generate(
+        rows * columns,
+        (_) => Complex(
+          random.nextDouble() * 2 - 1,
+          random.nextDouble() * 2 - 1,
+        ),
+      ),
+    );
 
 void main() {
   group('SVDComplex class', () {
     test('Equality tests', () {
       final svd1 = SVDComplex(
-        matrix: ComplexMatrix.fromData(
-          rows: 1,
-          columns: 1,
-          data: const [
-            [Complex.fromReal(1)],
-          ],
-        ),
+        matrix: _matrix(const [
+          [Complex.fromReal(1)],
+        ]),
       );
-
       final svd2 = SVDComplex(
-        matrix: ComplexMatrix.fromData(
-          rows: 1,
-          columns: 1,
-          data: const [
-            [Complex.fromReal(1)],
-          ],
-        ),
+        matrix: _matrix(const [
+          [Complex.fromReal(1)],
+        ]),
       );
 
       expect(svd1, equals(svd2));
       expect(svd1.hashCode, equals(svd2.hashCode));
     });
 
-    test('Empty matrix throws ArgumentError', () {
+    test('Empty matrices cannot be created', () {
       expect(
         () => SVDComplex(
           matrix: ComplexMatrix.fromData(
@@ -40,511 +55,294 @@ void main() {
             data: const [],
           ),
         ).decompose(),
-        throwsArgumentError,
+        throwsA(isA<MatrixException>()),
       );
     });
 
     test('1x1 matrix decomposition', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 1,
-        columns: 1,
-        data: const [
-          [Complex.fromReal(5)],
-        ],
-      );
+      final matrix = _matrix(const [
+        [Complex.fromReal(5)],
+      ]);
 
       final svd = SVDComplex(matrix: matrix).decompose();
       expect(svd.length, equals(3));
-
-      // E matrix
-      expect(svd[0](0, 0).real, equals(5));
-      expect(svd[0](0, 0).imaginary, equals(0));
-      expect(svd[0].rowCount, equals(1));
-      expect(svd[0].columnCount, equals(1));
-
-      // U matrix
-      expect(svd[1](0, 0).real, equals(1));
-      expect(svd[1](0, 0).imaginary, equals(0));
-      expect(svd[1].rowCount, equals(1));
-      expect(svd[1].columnCount, equals(1));
-
-      // V matrix
-      expect(svd[2](0, 0).real, equals(1));
-      expect(svd[2](0, 0).imaginary, equals(0));
-      expect(svd[2].rowCount, equals(1));
-      expect(svd[2].columnCount, equals(1));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      expect(reconstructed(0, 0).real, equals(5));
-      expect(reconstructed(0, 0).imaginary, equals(0));
+      expect(svd[0](0, 0), equals(const Complex.fromReal(5)));
+      expect(svd[1](0, 0), equals(const Complex.fromReal(1)));
+      expect(svd[2](0, 0), equals(const Complex.fromReal(1)));
     });
 
-    test('2x2 matrix with complex values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [Complex.i(), Complex.fromReal(2)],
-          [Complex(7, 1), Complex.fromReal(6)],
-        ],
-      );
+    test('The singular value of a complex 1x1 matrix is its magnitude', () {
+      final matrix = _matrix(const [
+        [Complex(3, -4)],
+      ]);
 
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      expect(
-        reconstructed(0, 0).real,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
+      final singularValues = expectValidComplexSVD(
+        matrix,
+        SVDComplex(matrix: matrix).decompose(),
       );
-      expect(
-        reconstructed(0, 0).imaginary,
-        const MoreOrLessEquals(1, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).real,
-        const MoreOrLessEquals(2, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).imaginary,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).real,
-        const MoreOrLessEquals(7, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).imaginary,
-        const MoreOrLessEquals(1, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).real,
-        const MoreOrLessEquals(6, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).imaginary,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
-      );
+      expect(singularValues.single, const MoreOrLessEquals(5));
     });
 
-    test('3x2 matrix with complex values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 2,
-        data: const [
-          [Complex(1, 1), Complex(2, -1)],
-          [Complex(3, 2), Complex(4, -2)],
-          [Complex(5, 3), Complex(6, -3)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-
-      // Verify dimensions
-      expect(svd[0].rowCount, equals(3));
-      expect(svd[0].columnCount, equals(2));
-      expect(svd[1].rowCount, equals(3));
-      expect(svd[1].columnCount, equals(3));
-      expect(svd[2].rowCount, equals(2));
-      expect(svd[2].columnCount, equals(2));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      for (var i = 0; i < 3; i++) {
-        for (var j = 0; j < 2; j++) {
-          expect(
-            reconstructed(i, j).real,
-            MoreOrLessEquals(matrix(i, j).real, precision: 1.0e-5),
-          );
-          expect(
-            reconstructed(i, j).imaginary,
-            MoreOrLessEquals(matrix(i, j).imaginary, precision: 1.0e-5),
-          );
-        }
-      }
-    });
-
-    test('Matrix with zero values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [Complex.zero(), Complex.zero()],
-          [Complex.zero(), Complex.zero()],
-        ],
-      );
-
-      expect(matrix.singleValueDecomposition, throwsA(isA<Exception>()));
-    });
-
-    test('Matrix with very small values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [Complex(1e-10, 1e-12), Complex(1e-14, 1e-16)],
-          [Complex(1e-18, 1e-20), Complex(1e-22, 1e-24)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      expect(
-        reconstructed(0, 0).real,
-        const MoreOrLessEquals(1e-10, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 0).imaginary,
-        const MoreOrLessEquals(1e-12, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).real,
-        const MoreOrLessEquals(1e-14, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).imaginary,
-        const MoreOrLessEquals(1e-16, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).real,
-        const MoreOrLessEquals(1e-18, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).imaginary,
-        const MoreOrLessEquals(1e-20, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).real,
-        const MoreOrLessEquals(1e-22, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).imaginary,
-        const MoreOrLessEquals(1e-24, precision: 1.0e-5),
-      );
-    });
-
-    test('Symmetric complex matrix', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [Complex(1, 1), Complex(2, -1), Complex(3, 2)],
-          [Complex(2, -1), Complex(4, 2), Complex(5, -2)],
-          [Complex(3, 2), Complex(5, -2), Complex(6, 3)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      for (var i = 0; i < 3; i++) {
-        for (var j = 0; j < 3; j++) {
-          expect(
-            reconstructed(i, j).real,
-            MoreOrLessEquals(matrix(i, j).real, precision: 1.0e-5),
-          );
-          expect(
-            reconstructed(i, j).imaginary,
-            MoreOrLessEquals(matrix(i, j).imaginary, precision: 1.0e-5),
-          );
-        }
-      }
-    });
-
-    test('Matrix with repeated complex values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 3,
-        data: const [
-          [Complex(1, 1), Complex(1, 1), Complex(1, 1)],
-          [Complex(1, 1), Complex(1, 1), Complex(1, 1)],
-          [Complex(1, 1), Complex(1, 1), Complex(1, 1)],
-        ],
-      );
-
-      expect(matrix.singleValueDecomposition, throwsA(isA<Exception>()));
-    });
-
-    test('Matrix with pure imaginary values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [Complex.i(), Complex(0, 2)],
-          [Complex(0, 3), Complex(0, 4)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      expect(
-        reconstructed(0, 0).real,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 0).imaginary,
-        const MoreOrLessEquals(1, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).real,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).imaginary,
-        const MoreOrLessEquals(2, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).real,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).imaginary,
-        const MoreOrLessEquals(3, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).real,
-        const MoreOrLessEquals(0, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).imaginary,
-        const MoreOrLessEquals(4, precision: 1.0e-5),
-      );
-    });
-
-    test('Matrix with mixed real and imaginary values', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 2,
-        data: const [
-          [Complex(1, 2), Complex(3, 4)],
-          [Complex(5, 6), Complex(7, 8)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      expect(
-        reconstructed(0, 0).real,
-        const MoreOrLessEquals(1, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 0).imaginary,
-        const MoreOrLessEquals(2, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).real,
-        const MoreOrLessEquals(3, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(0, 1).imaginary,
-        const MoreOrLessEquals(4, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).real,
-        const MoreOrLessEquals(5, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 0).imaginary,
-        const MoreOrLessEquals(6, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).real,
-        const MoreOrLessEquals(7, precision: 1.0e-5),
-      );
-      expect(
-        reconstructed(1, 1).imaginary,
-        const MoreOrLessEquals(8, precision: 1.0e-5),
-      );
-    });
-
-    test('Matrix that triggers numerically singular exception', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 3,
-        columns: 4,
-        data: const [
-          [Complex(1, 0), Complex(1, 0), Complex(1e-15, 0), Complex(1e-15, 0)],
-          [Complex(1, 0), Complex(1, 0), Complex(1e-15, 0), Complex(1e-15, 0)],
-          [Complex(1, 0), Complex(1, 0), Complex(1e-15, 0), Complex(1e-15, 0)],
-        ],
-      );
-
-      expect(
-        () => SVDComplex(matrix: matrix).decompose(),
-        throwsA(isA<Exception>()),
-      );
-    });
-
-    test('Matrix with very small singular value', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 4,
-        columns: 4,
-        data: const [
-          [Complex(1, 0), Complex(0, 0), Complex(0, 0), Complex(1e-12, 0)],
-          [Complex(0, 0), Complex(1, 0), Complex(0, 0), Complex(1e-12, 0)],
-          [Complex(0, 0), Complex(0, 0), Complex(1, 0), Complex(1e-12, 0)],
-          [Complex(0, 0), Complex(0, 0), Complex(0, 0), Complex(1e-12, 0)],
-        ],
-      );
-
-      try {
-        final svd = SVDComplex(matrix: matrix).decompose();
-        expect(svd.length, equals(3));
-        final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-        for (var i = 0; i < 4; i++) {
-          for (var j = 0; j < 4; j++) {
-            expect(
-              reconstructed(i, j).real,
-              MoreOrLessEquals(matrix(i, j).real, precision: 1.0e-5),
-            );
-          }
-        }
-      } on Exception catch (e) {
-        expect(e, isA<Exception>());
-      }
-    });
-
-    test('Wide matrix (more columns than rows) to trigger edge cases', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 2,
-        columns: 4,
-        data: const [
-          [Complex(1, 0), Complex(2, 0), Complex(3, 0), Complex(4, 0)],
-          [Complex(5, 0), Complex(6, 0), Complex(7, 0), Complex(8, 0)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-      expect(svd[0].rowCount, equals(2));
-      expect(svd[0].columnCount, equals(4));
-      expect(svd[1].rowCount, equals(2));
-      expect(svd[1].isSquareMatrix, isFalse);
-      expect(svd[2].rowCount, equals(4));
-      expect(svd[2].columnCount, equals(4));
-
-      final uSubmatrix = ComplexMatrix.fromData(
-        rows: svd[1].rowCount,
-        columns: svd[1].rowCount,
-        data: List.generate(
-          svd[1].rowCount,
-          (i) => List.generate(
-            svd[1].rowCount,
-            (j) => svd[1](i, j),
-          ),
-        ),
-      );
-
-      final reconstructed = uSubmatrix * svd[0] * svd[2].transpose();
-      for (var i = 0; i < 2; i++) {
-        for (var j = 0; j < 4; j++) {
-          expect(
-            reconstructed(i, j).real,
-            MoreOrLessEquals(matrix(i, j).real, precision: 1.0e-5),
-          );
-          expect(
-            reconstructed(i, j).imaginary,
-            MoreOrLessEquals(matrix(i, j).imaginary, precision: 1.0e-5),
-          );
-        }
-      }
-    });
-
-    test('Tall matrix (more rows than columns) to trigger edge cases', () {
-      final matrix = ComplexMatrix.fromData(
-        rows: 4,
-        columns: 2,
-        data: const [
-          [Complex(1, 0), Complex(2, 0)],
-          [Complex(3, 0), Complex(4, 0)],
-          [Complex(5, 0), Complex(6, 0)],
-          [Complex(7, 0), Complex(8, 0)],
-        ],
-      );
-
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
-      expect(svd[0].rowCount, equals(4));
-      expect(svd[0].columnCount, equals(2));
-      expect(svd[1].rowCount, equals(4));
-      expect(svd[1].columnCount, equals(4));
-      expect(svd[2].rowCount, equals(2));
-      expect(svd[2].columnCount, equals(2));
-    });
-
-    test('Matrix to trigger case 2 convergence branch', () {
-      final matrix = ComplexMatrix.fromData(
+    final matrices = <String, ComplexMatrix>{
+      '2x2 with complex values': _matrix(const [
+        [Complex.i(), Complex.fromReal(2)],
+        [Complex(7, 1), Complex.fromReal(6)],
+      ]),
+      '3x2 with complex values': _matrix(const [
+        [Complex(1, 1), Complex(2, -1)],
+        [Complex(3, 2), Complex(4, -2)],
+        [Complex(5, 3), Complex(6, -3)],
+      ]),
+      'very small values': _matrix(const [
+        [Complex(1e-10, 1e-12), Complex(1e-14, 1e-16)],
+        [Complex(1e-18, 1e-20), Complex(1e-22, 1e-24)],
+      ]),
+      'symmetric (not Hermitian)': _matrix(const [
+        [Complex(1, 1), Complex(2, -1), Complex(3, 2)],
+        [Complex(2, -1), Complex(4, 2), Complex(5, -2)],
+        [Complex(3, 2), Complex(5, -2), Complex(6, 3)],
+      ]),
+      'pure imaginary values': _matrix(const [
+        [Complex.i(), Complex(0, 2)],
+        [Complex(0, 3), Complex(0, 4)],
+      ]),
+      'mixed real and imaginary values': _matrix(const [
+        [Complex(1, 2), Complex(3, 4)],
+        [Complex(5, 6), Complex(7, 8)],
+      ]),
+      'rank deficient wide matrix': _matrix(const [
+        [Complex(1, 0), Complex(1, 0), Complex(1e-15, 0), Complex(1e-15, 0)],
+        [Complex(1, 0), Complex(1, 0), Complex(1e-15, 0), Complex(1e-15, 0)],
+        [Complex(1, 0), Complex(1, 0), Complex(1e-15, 0), Complex(1e-15, 0)],
+      ]),
+      'very small singular value': _matrix(const [
+        [Complex(1, 0), Complex.zero(), Complex.zero(), Complex(1e-12, 0)],
+        [Complex.zero(), Complex(1, 0), Complex.zero(), Complex(1e-12, 0)],
+        [Complex.zero(), Complex.zero(), Complex(1, 0), Complex(1e-12, 0)],
+        [Complex.zero(), Complex.zero(), Complex.zero(), Complex(1e-12, 0)],
+      ]),
+      'wide matrix': _matrix(const [
+        [Complex(1, 0), Complex(2, 0), Complex(3, 0), Complex(4, 0)],
+        [Complex(5, 0), Complex(6, 0), Complex(7, 0), Complex(8, 0)],
+      ]),
+      'tall matrix': _matrix(const [
+        [Complex(1, 0), Complex(2, 0)],
+        [Complex(3, 0), Complex(4, 0)],
+        [Complex(5, 0), Complex(6, 0)],
+        [Complex(7, 0), Complex(8, 0)],
+      ]),
+      'tridiagonal 5x5': ComplexMatrix.fromFlattenedData(
         rows: 5,
         columns: 5,
-        data: const [
-          [
-            Complex(10, 0),
-            Complex(1, 0),
-            Complex(0, 0),
-            Complex(0, 0),
-            Complex(0, 0),
-          ],
-          [
-            Complex(1, 0),
-            Complex(10, 0),
-            Complex(1, 0),
-            Complex(0, 0),
-            Complex(0, 0),
-          ],
-          [
-            Complex(0, 0),
-            Complex(1, 0),
-            Complex(10, 0),
-            Complex(1, 0),
-            Complex(0, 0),
-          ],
-          [
-            Complex(0, 0),
-            Complex(0, 0),
-            Complex(1, 0),
-            Complex(10, 0),
-            Complex(1, 0),
-          ],
-          [
-            Complex(0, 0),
-            Complex(0, 0),
-            Complex(0, 0),
-            Complex(1, 0),
-            Complex(10, 0),
-          ],
-        ],
+        data: List<Complex>.generate(25, (k) {
+          final distance = (k ~/ 5 - k % 5).abs();
+
+          if (distance == 0) {
+            return const Complex.fromReal(10);
+          }
+
+          return distance == 1
+              ? const Complex.fromReal(1)
+              : const Complex.zero();
+        }),
+      ),
+      'first column with zero complex norm': _matrix(const [
+        [Complex.fromReal(1), Complex.fromReal(2)],
+        [Complex.i(), Complex.fromReal(3)],
+      ]),
+      'diagonal': _matrix(const [
+        [Complex.fromReal(1), Complex.zero(), Complex.zero()],
+        [Complex.zero(), Complex.fromReal(2), Complex.zero()],
+        [Complex.zero(), Complex.zero(), Complex.fromReal(3)],
+      ]),
+    };
+
+    for (final MapEntry(key: name, value: matrix) in matrices.entries) {
+      test('Valid decomposition: $name', () {
+        expectValidComplexSVD(matrix, SVDComplex(matrix: matrix).decompose());
+      });
+    }
+
+    test('Random matrices of different shapes', () {
+      final random = Random(42);
+
+      for (final (rows, columns) in const [(6, 6), (9, 4), (4, 9), (1, 5)]) {
+        final matrix = _random(rows, columns, random);
+        expectValidComplexSVD(matrix, SVDComplex(matrix: matrix).decompose());
+      }
+    });
+
+    test('Known singular values', () {
+      // All the rows are equal to (1 + i, 1 + i, 1 + i): the matrix has rank 1
+      // and its only non-zero singular value is 3 x |1 + i| = 3 sqrt(2).
+      final repeated = ComplexMatrix.fromFlattenedData(
+        rows: 3,
+        columns: 3,
+        data: List<Complex>.filled(9, const Complex(1, 1)),
       );
+      final repeatedValues = expectValidComplexSVD(
+        repeated,
+        SVDComplex(matrix: repeated).decompose(),
+      );
+      expect(repeatedValues.first, MoreOrLessEquals(3 * sqrt(2)));
+      expect(repeatedValues[1], const MoreOrLessEquals(0));
+      expect(repeatedValues[2], const MoreOrLessEquals(0));
 
-      final svd = SVDComplex(matrix: matrix).decompose();
-      expect(svd.length, equals(3));
+      final diagonal = matrices['diagonal']!;
+      final diagonalValues = expectValidComplexSVD(
+        diagonal,
+        diagonal.singleValueDecomposition(),
+      );
+      expect(diagonalValues.first, const MoreOrLessEquals(3));
+      expect(diagonalValues[1], const MoreOrLessEquals(2));
+      expect(diagonalValues[2], const MoreOrLessEquals(1));
+    });
 
-      // Verify U * E * V^T = original matrix
-      final reconstructed = svd[1] * svd[0] * svd[2].transpose();
-      for (var i = 0; i < 5; i++) {
-        for (var j = 0; j < 5; j++) {
+    test('Zero matrix', () {
+      final matrix = ComplexMatrix(rows: 2, columns: 3);
+      final svd = matrix.singleValueDecomposition();
+
+      expect(expectValidComplexSVD(matrix, svd), everyElement(isZero));
+    });
+
+    test('Data with very large and very small magnitudes', () {
+      final random = Random(7);
+
+      for (final scale in const [1e-200, 1e200]) {
+        final unit = _random(4, 3, random);
+        final scaled = ComplexMatrix.fromFlattenedData(
+          rows: 4,
+          columns: 3,
+          data: unit.flattenData
+              .map(
+                (value) => Complex(value.real * scale, value.imaginary * scale),
+              )
+              .toList(),
+        );
+
+        // Comparing the singular values at unit scale avoids overflows.
+        final scaledValues = SVDComplex(matrix: scaled).decompose().first;
+        final unitValues = expectValidComplexSVD(
+          unit,
+          SVDComplex(matrix: unit).decompose(),
+        );
+        for (var i = 0; i < 3; i++) {
           expect(
-            reconstructed(i, j).real,
-            MoreOrLessEquals(matrix(i, j).real, precision: 1.0e-4),
-          );
-          expect(
-            reconstructed(i, j).imaginary,
-            MoreOrLessEquals(matrix(i, j).imaginary, precision: 1.0e-4),
+            scaledValues(i, i).real / scale,
+            MoreOrLessEquals(unitValues[i]),
           );
         }
       }
+    });
+
+    test('NaN and infinite values are rejected', () {
+      for (final value in const [
+        Complex(double.nan, 0),
+        Complex(0, double.infinity),
+      ]) {
+        final matrix = _matrix([
+          [value, const Complex.zero()],
+          [const Complex.zero(), const Complex.fromReal(1)],
+        ]);
+
+        expect(
+          matrix.singleValueDecomposition,
+          throwsA(isA<MatrixException>()),
+        );
+      }
+    });
+  });
+
+  group('SVDComplex edge cases', () {
+    List<double> singularValues(ComplexMatrix matrix) =>
+        expectValidComplexSVD(matrix, SVDComplex(matrix: matrix).decompose());
+
+    test(
+      'Real-valued input gives the same singular values of the real SVD',
+      () {
+        final random = Random(50);
+        final real = RealMatrix.fromFlattenedData(
+          rows: 5,
+          columns: 4,
+          data: List<double>.generate(20, (_) => random.nextDouble() * 2 - 1),
+        );
+        final complexValues = singularValues(
+          ComplexMatrix.fromFlattenedData(
+            rows: 5,
+            columns: 4,
+            data: real.flattenData.map(Complex.fromReal).toList(),
+          ),
+        );
+        final [realE, _, _] = real.singleValueDecomposition();
+
+        for (var i = 0; i < 4; i++) {
+          expect(complexValues[i], MoreOrLessEquals(realE(i, i)));
+        }
+      },
+    );
+
+    test('Singular values are invariant under unitary transformations', () {
+      final random = Random(51);
+      final matrix = _random(4, 3, random);
+      final [unitary, _] = _random(4, 4, random).qrDecomposition();
+
+      final values = singularValues(matrix);
+      final transformedValues = singularValues(unitary * matrix);
+      final unitaryValues = singularValues(unitary);
+
+      for (var i = 0; i < 3; i++) {
+        expect(transformedValues[i], MoreOrLessEquals(values[i]));
+      }
+      for (final value in unitaryValues) {
+        expect(value, const MoreOrLessEquals(1));
+      }
+    });
+
+    test('Norm identities', () {
+      final random = Random(52);
+      final matrix = _random(3, 5, random);
+      final values = singularValues(matrix);
+
+      final frobenius = matrix.flattenData.fold<double>(
+        0,
+        (sum, value) =>
+            sum + value.real * value.real + value.imaginary * value.imaginary,
+      );
+      expect(
+        values.fold<double>(0, (sum, value) => sum + value * value),
+        MoreOrLessEquals(frobenius),
+      );
+
+      // The conjugate transpose and complex multiples (|3 - 4i| = 5)
+      final conjugateValues = singularValues(conjugateTranspose(matrix));
+      final scaledValues = singularValues(
+        ComplexMatrix.fromFlattenedData(
+          rows: 3,
+          columns: 5,
+          data: matrix.flattenData
+              .map((value) => value * const Complex(3, -4))
+              .toList(),
+        ),
+      );
+      for (var i = 0; i < 3; i++) {
+        expect(conjugateValues[i], MoreOrLessEquals(values[i]));
+        expect(scaledValues[i], MoreOrLessEquals(5 * values[i]));
+      }
+    });
+
+    test('The number of non-zero singular values is the rank', () {
+      final random = Random(53);
+
+      for (var rank = 1; rank <= 4; rank++) {
+        final matrix = _random(6, rank, random) * _random(rank, 5, random);
+        final values = singularValues(matrix);
+
+        expect(values.where((value) => value > 1e-12).length, equals(rank));
+      }
+    });
+
+    test('Large square matrix', () {
+      singularValues(_random(30, 30, Random(54)));
     });
   });
 }

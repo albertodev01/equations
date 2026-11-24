@@ -1,50 +1,19 @@
 ## 7.0.0
- - **BREAKING**: Removed `Cubic.epsilon`. A `Cubic` object no longer throws when the leading coefficient is very small (but not zero), so `Cubic.new` and `Cubic.realEquation` now behave the same, and `Quartic.derivative()` and `Algebraic.from` no longer throw for valid polynomials whose leading coefficient is very small
- - **BREAKING**: Removed `Quartic.epsilon`, `Quartic.maxCoefficient` and `Quartic.minCoefficient`. A `Quartic` object no longer throws when a coefficient is larger than `1e10`
+
  - **BREAKING**: `Quartic.solutions` may return the roots in a different order
  - **BREAKING**: `Algebraic.factor` now includes the leading coefficient as a `Constant` factor when it is not 1, so the product of the factors always equals the original polynomial
- - **BREAKING**: Removed `GenericAlgebraic.stagnationThreshold`, which had no effect
  - **BREAKING**: `GenericAlgebraic.solutions` now throws an `AlgebraicException` when `initialGuess` is not empty and doesn't contain exactly one value per root, or when `minGuessDistance` is not positive. It no longer throws when the leading coefficient is very small (but not zero)
- - **BREAKING**: `GenericAlgebraic.precision` is now a relative tolerance
  - **BREAKING**: `SylvesterMatrix` is now a `final` class
  - **BREAKING**: `Algebraic.solveInequality` now joins intervals that touch (for example, `(x - 1)^2 * (x - 3) <= 0` returns `x <= 3` instead of `x <= 1`, `[1, 1]` and `[1, 3]`), and its `precision` parameter is now the relative tolerance used to decide whether a value is a root, instead of the maximum imaginary part of a real root
- - **BREAKING**: `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`) no longer throws when the degree of the denominator is higher than the degree of the numerator: it returns a zero quotient and the numerator as remainder
+ - **BREAKING**: `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`) no longer throws when the degree of the denominator is higher than the degree of the numerator: it returns a zero quotient and the numerator as the remainder
  - **BREAKING**: The `guesses` list returned by `SimpsonRule.integrate` and `TrapezoidalRule.integrate` now has `intervals + 1` elements, the values of the function at every point `x_0, x_1, ..., x_n`. Previously, `TrapezoidalRule` left out the value at the upper bound, and `SimpsonRule` overwrote the value at `x_(n-1)` with the value at the upper bound
  - **BREAKING**: `MidpointRule.integrate` now throws a `NumericalIntegrationException` when `intervals` is not positive, instead of returning `NaN` or throwing a `RangeError`
  - **BREAKING**: `AdaptiveQuadrature.integrate` now throws a `NumericalIntegrationException` when the function is not finite on the interval or when the algorithm doesn't converge within `AdaptiveQuadrature.maxDepth` subdivisions, instead of overflowing the stack or never returning (for example, with `1/sqrt(x)` on `[0, 1]` or `sqrt(x)` on `[-2, -1]`)
- - **BREAKING**: `AdaptiveQuadrature` now uses a tolerance relative to the size of the integral (about `10^-12`) instead of a fixed absolute tolerance of `10^-10`, and starts from subintervals of different widths, so its results and `guesses` are different. This fixes wrong results without errors when the function was zero at the five evenly spaced starting points (for example, `sin(x)^2` on `[0, 4*pi]` returned `0` instead of `2*pi`), failures with large integrands (for example, `x^16` on `[0, 20]` overflowed the stack), and inaccurate results with small integrands. An integral on an interval of zero width now returns `0` with an empty `guesses` list
- - **BREAKING**: `integrate()` of all `NumericalIntegration` types now throws a `NumericalIntegrationException` when `lowerBound` or `upperBound` is not finite (for example, `TrapezoidalRule` returned `Infinity` for `e^(0-x)` on `[0, infinity]`)
  - **BREAKING**: `Riddler` has been renamed to `Ridders`, the correct name of the method. `Riddler` is still available as a deprecated alias
  - **BREAKING**: `Bisection`, `Brent`, `Chords`, `RegulaFalsi` and `Ridders` now return the endpoint as the only guess when `f(a)` or `f(b)` is zero, instead of throwing a `NonlinearException` (`RegulaFalsi` already did this)
- - **BREAKING**: All `NonLinear` types now throw a `NonlinearException` when the function is NaN or infinite at a point they evaluate, instead of continuing with invalid values or returning `NaN` as the root
- - **BREAKING**: The default `maxSteps` of `Newton` is now `30`, like all the other `NonLinear` types (it was `10`)
- - **BREAKING**: The `efficiency` returned by `NonLinear.solve` is now computed with the number of guesses instead of `maxSteps`
  - **BREAKING**: `NonLinear.evaluateOn` and `NonLinear.evaluateDerivativeOn` now return `double` instead of `num`. `evaluateDerivativeOn(0)` now returns the derivative instead of `NaN`, so `Newton` no longer throws when a guess is `0`
- - **BREAKING**: `RegulaFalsi` now implements the Illinois variant, which doesn't stall when one endpoint stays the same for many steps (for example, with `x^10 - 1` on `[0, 1.3]` the plain method was still at `f(x) = -0.03` after 30 steps, now it converges in 14 steps). The guesses are different
- - **BREAKING**: The `guesses` returned by `Chords.solve` now include the first guess (the point where the chord through `(a, f(a))` and `(b, f(b))` crosses the x-axis)
  - Updated Dart SDK constraints to `^3.14.0`
- - Fixed the `+` and `-` operators of `Algebraic`, which dropped zero coefficients in the middle of the result (for example, `x^2 + 1` could become `x + 1`)
- - The `+`, `-` and `*` operators of `Algebraic` now return the zero polynomial when the result is zero (for example, `p - p`), instead of throwing an `AlgebraicException`
- - Fixed `Algebraic.solveInequality` with non-strict inequalities (`≤` and `≥`), negative leading coefficients, and the zero polynomial
- - Fixed `Algebraic.solveInequality`, which ignored repeated real roots computed with a small imaginary part (for example, `(x - 2)^5 > 0` had no solutions), returned duplicate intervals for repeated roots, and could drop isolated solutions such as `x = 3` in `(x - 1)(x - 2)^2(x - 3)^2 <= 0`
- - Added the `AlgebraicInequalitySolver` class, which solves polynomial inequalities and is used by `Algebraic.solveInequality`
- - `Algebraic.evaluateOn`, `Algebraic.realEvaluateOn` and `Algebraic.evaluateIntegralOn` now use Horner's method, so they're more accurate and real polynomials no longer get a spurious imaginary part at negative values
- - Fixed `Quadratic.solutions`, which returned `NaN` or inaccurate roots when the roots cancelled out in the quadratic formula (for example, `x^2 + 2x` and `x^2 + ix`)
- - Fixed `Cubic.solutions`, which returned wrong roots when the equation had a double root, merged distinct small roots into one, and lost precision in Cardano's formula
- - Fixed `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`), which returned wrong results or threw when the denominator had degree 2 or higher (for example, `x^3 / (x^2 + 1)` returned a remainder of `-1` instead of `-x`), returned `1` for `0 / 0`, and threw a `TypeError` when dividing by the zero polynomial. Dividing by the zero polynomial now always throws a `PolynomialLongDivisionException`, and the division is faster for low-degree denominators
- - Fixed `GenericAlgebraic.solutions`, which returned wrong roots without error when the starting points were close together (for example, `x^5 - 0.001` and equal values in `initialGuess`), returned `NaN` for `x^n`, and returned different results on each call. The default starting points now use a valid bound for the roots
- - Fixed `Quartic.solutions`, which treated coefficients smaller than `1e-10` as zero (returning wrong roots, such as four zeros for `x^4 - 1e-12`), dropped small roots of biquadratic equations, and returned inaccurate roots (errors up to about `0.04`) when the equation had repeated roots
- - Fixed `SylvesterMatrix`, which treated coefficients smaller than `1e-10` as zero (for example, the discriminant of `x^5 + 1e-11x` was `0`) and threw a `MatrixException` when the leading coefficient was very small (but not zero). A `GenericAlgebraic` of degree 4 or lower now uses the closed-form discriminant
- - Added the `BooleRule` class, which implements Boole's rule (error of O(h^6), exact for polynomials of degree 5 or less)
- - Added the `GaussLegendreRule` class, which implements the composite Gauss-Legendre rule with 1 to 5 points in each subinterval (error of O(h^(2k)) with k points). It never evaluates the function at the bounds, so it also works when the function isn't finite there
- - `NumericalIntegrationException` is now exported by `package:equations/equations.dart`
- - `ExpressionParser` now parses each expression only once and caches the most recently used ones, so `NumericalIntegration` and `NonLinear` types are much faster (numerical integration is about 15 to 45 times faster)
- - `AdaptiveQuadrature` no longer evaluates the function more than once at the same point
- - Fixed `Ridders` (previously `Riddler`), which lost the root and returned wrong results without errors (for example, `5` for `e^x - 10` on `[0, 5]`), and returned wrong results when `a > b`
- - Fixed `Brent`, which always used bisection (so it was as slow as `Bisection`) because it never went back to interpolation after a bisection step and rejected interpolated points when `b < a`. It now implements the original algorithm (`zeroin`) and evaluates the function once per step instead of four times
- - Fixed `Steffensen`, which added the root twice to `guesses` when it found the exact root
- - Fixed `Bisection`, `Brent`, `Chords` and `Ridders`, which threw a `NonlinearException` when the root was bracketed but `f(a) * f(b)` underflowed to zero (for example, with very small function values)
- - `Chords` and `RegulaFalsi` no longer evaluate the function more than once at the same point
+ - Various bug fixes in `RealMatrix`, `ComplexMatrix` and the decomposition algorithms
  - Documentation improvements
  - Dependencies versions update
 
@@ -57,7 +26,7 @@
  - Added a new `Matrix<T>.isZero` method.
  - Added a new `Factorial.computeBigInt` method to calculate factorials using `BigInt` rather than `int`
  - Improvements to numerical stability of various algorithms
- - Fixed numerical issues on polynonial and nonlinear solvers
+ - Fixed numerical issues in polynomial and nonlinear solvers
  - Documentation improvements
  - Removed demo Dart and Flutter applications from the `example/` folder
  - Dependencies versions update
@@ -73,8 +42,8 @@
  - Dependencies versions update
 
 ## 5.0.0
- - **BREAKING**: Removed the `IntegralResults` type and replaced with an equivalent record
- - **BREAKING**: Removed the `NonlinearResults` type and replaced with an equivalent record
+ - **BREAKING**: Removed the `IntegralResults` type and replaced it with an equivalent record
+ - **BREAKING**: Removed the `NonlinearResults` type and replaced it with an equivalent record
  - **BREAKING**: Added the `base` modifier to `Algebraic`, `NumericalIntegration`, `Interpolation`, `NonLinear`, and `SystemSolver` types
  - Updated Dart SDK constraints to `^3.0.0`
  - Updated the `analysis_options.yaml` file with more rules
@@ -119,7 +88,7 @@
 ## 3.1.2
  - Dependencies versions update
  - Updated the README file with some fixes
- - Added a new root-finding algorithm (`Riddler` which implements the Riddler's method)
+ - Added a new root-finding algorithm (`Riddler`, which implements Riddler's method)
  - Updated the Flutter demo in the `example/` folder
 
 ## 3.1.1
@@ -128,7 +97,7 @@
  - Updated the Flutter demo in the `example/` folder
 
 ## 3.1.0
- - **BREAKING**: Now `NumericalIntegration` requires the function via constructor (previously it was passed to the `integrate()` function)
+ - **BREAKING**: Now `NumericalIntegration` requires the function through the constructor (previously it was passed to the `integrate()` function)
  - Added the `characteristicPolynomial()` method on `Matrix<T>` to compute the characteristic polynomial of a matrix
  - Fixed an issue in the `eigenvalue()` method
  - Fixed an issue in the `rank()` method
@@ -141,7 +110,7 @@
  - **BREAKING**: Replaced the `Laguerre` type with `DurandKerner` (the latter is a more reliable root-finding algorithm for polynomials)
  - **BREAKING**: Removed the `integrateOn` method on `Nonlinear`. Now numerical integration algorithms live on their own in the `src/integral` folder
  - **BREAKING**: Renamed `firstGuess` and `secondGuess` to `a` and `b` respectively in `Secant` (for consistency with other `Nonlinear` types)
- - Created the `Interpolation` type to work with points interpolation
+ - Created the `Interpolation` type to work with point interpolation
  - Moved `NumericalIntegration` into a 'top-level' directory inside `src/`
  - Added the `LinearInterpolation`, `PolynomialInterpolation`, and `NewtonInterpolation` types
  - Added eigenvalues computation on `Matrix<T>` with the `eigenValues()` method
@@ -163,20 +132,20 @@
  - Minor enhancement in the `PolynomialLongDivision` class
  - Added trace computation on matrices
  - Added French localization to the Flutter example app
- 
+
 ## 2.1.2
  - Dependencies versions update
- - Updated example to Flutter 2.2.0 and improved coverage
+ - Updated the example to Flutter 2.2.0 and improved coverage
  - Added `bool hasSolution()` on the `SystemSolver` type to determine whether a system can be solved or not
 
 ## 2.1.1
- - Added QR decomposition to the `RealMatrix` and `ComplexMatrix` type
+ - Added QR decomposition to the `RealMatrix` and `ComplexMatrix` types
  - Dependencies versions update
 
 ## 2.1.0
  - Changes in deep copy logic for lists (now the library uses `List.from()` on immutable objects)
  - Added the `PolynomialLongDivision` class to divide a polynomial by another
- - Now the `Algebraic` type supports `operator/` too so you can divide polynomials to get quotient and remainder
+ - Now the `Algebraic` type supports `operator/` too, so you can divide polynomials to get quotient and remainder
  - Dependencies versions update
 
 ## 2.0.3
@@ -186,12 +155,12 @@
  - New extension method on `String` called `isRealFunction` that determines whether a string represents a real function or not
  - New extension method on `String` called `isNumericalExpression` that determines whether a string represents a numerical expression or not
  - Minor changes to the `ExpressionParser` class
- - Written more tests for the `flutter_example` demo project
+ - Wrote more tests for the `flutter_example` demo project
  - Dependencies versions update
 
 ## 2.0.1
  - New `toStringAsFixed()` method for the `Complex` type
- - Improved static analysis with a more elaborated `analysis_options.yaml` file
+ - Improved static analysis with a more elaborate `analysis_options.yaml` file
  - Dependencies versions update
 
 ## 2.0.0
@@ -205,28 +174,28 @@
 
 ## 2.0.0-nullsafety.4
   - Updated some dependencies versions
-  - Added a new root finding algorithm (`RegulaFalsi`)
-  - Improved the computation of the determinant (now it uses LU decomposition which is way better than the old O(n!) implementation)
+  - Added a new root-finding algorithm (`RegulaFalsi`)
+  - Improved the computation of the determinant (now it uses LU decomposition)
   - Minor documentation improvements
 
 ## 2.0.0-nullsafety.3
-  - Added support for linear systems solving using Jacobi, Gauss-Seidel and SOR
+  - Added support for solving linear systems using Jacobi, Gauss-Seidel and SOR
   - Improved comparison logic for all the classes of the package
   - Added the new `toStringAugmented()` method for systems which prints the augmented matrix
-  - Written more tests for coverage
+  - Wrote more tests for coverage
   - Expanded the README.md file
   - New examples in the `example/` folder
 
 ## 2.0.0-nullsafety.2
   - Created the `RealMatrix` and `ComplexMatrix` types to work with matrices
-  - Added support for linear systems solving using Gauss, LU decomposition and Cholesky decomposition
-  - Added a new static method called `Algebraic.from()` which automatically builds a new polynomial
+  - Added support for solving linear systems using Gauss, LU decomposition and Cholesky decomposition
+  - Added a new static method called `Algebraic.from()`, which automatically builds a new polynomial
     equation according to the number of coefficients
   - Minor documentation fixes
 
 ## 2.0.0-nullsafety.1
-  - Added a new root-finding algorithm (`Brent` which implements Brent's method)
-  - Added `Laguerre` (which implements Laguerre's method for polynomials root finding)
+  - Added a new root-finding algorithm (`Brent`, which implements Brent's method)
+  - Added `Laguerre` (which implements Laguerre's method for polynomial root-finding)
   - Minor improvements on various `Nonlinear` subtypes
   - Documentation fixes
 
@@ -236,7 +205,7 @@
   - Minor fixes on `Algebraic` and `NonLinear`
 
 ## 1.0.1
-  - Health suggestions fixes
+  - Fixed package health suggestions from pub.dev
   - Changed the description of the package
 
 ## 1.0.0

@@ -1,6 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/solver_utils.dart';
 
 /// {@template sor_solver}
 /// Solves a system of linear equations using the Successive Over-Relaxation
@@ -12,7 +11,12 @@ import 'package:equations/equations.dart';
 ///
 /// - For `w = 1`: SOR reduces to the Gauss-Seidel method
 /// - For `0 < w < 1`: Under-relaxation (slower convergence, more stable)
-/// - For `1 < w < 2`: Over-relaxation (faster convergence when optimal)
+/// - For `1 < w < 2`: Over-relaxation (faster convergence when `w` is close to
+///   the optimal value, slower when it's too large)
+///
+/// The method is guaranteed to converge for any `w` in (0, 2) if the matrix is
+/// symmetric positive-definite. The elements on the main diagonal must not be
+/// zero, because every step divides by them.
 ///
 /// ## When to use
 ///
@@ -37,12 +41,13 @@ import 'package:equations/equations.dart';
 /// final sor = SORSolver(
 ///   matrix: matrix,
 ///   knownValues: [1, 5, 0],
-///   w: 1.2, // Optimal relaxation factor for this matrix
+///   w: 1.03, // Close to the optimal relaxation factor for this matrix
 ///   precision: 1.0e-10,
 ///   maxSteps: 50,
 /// );
 ///
 /// final solution = sor.solve();
+/// // Returns: [0.625, 1.5, 0.375] (approximately)
 /// ```
 /// {@endtemplate}
 final class SORSolver extends SystemSolver {
@@ -50,38 +55,42 @@ final class SORSolver extends SystemSolver {
   ///
   /// {@macro sor_solver}
   ///
-  ///  - [matrix] is the matrix containing the equations;
-  ///  - [knownValues] is the vector with the known values;
-  ///  - [precision] determines how accurate the algorithm has to be;
-  ///  - [w] is the relaxation factor (must be in range (0, 2));
-  ///  - [maxSteps] the maximum number of iterations (defaults to 30).
+  /// Parameters:
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values;
+  ///   - [w] is the relaxation factor (must be in the (0, 2) range);
+  ///   - [x0] is the initial guess (defaults to the zero vector);
+  ///   - [precision] determines how accurate the algorithm has to be (defaults
+  ///     to `1.0e-10`);
+  ///   - [maxSteps] is the maximum number of iterations (defaults to `1000`).
   ///
-  /// The algorithm will stop when either:
-  /// - The residual norm is less than [precision], or
-  /// - The maximum number of iterations [maxSteps] is reached.
+  /// The [solve] method stops when the largest change of a component between
+  /// two steps is at most `precision * max(1, m)`, where `m` is the largest
+  /// absolute value of a component. It throws a [SystemSolverException] if
+  /// the method diverges or doesn't converge within [maxSteps] steps.
+  ///
+  /// Throws a [SystemSolverException] if:
+  ///   - The matrix is not square, or
+  ///   - The length of [knownValues] or [x0] doesn't match the matrix size, or
+  ///   - The matrix, [knownValues] or [x0] contain NaN or infinite values, or
+  ///   - [w] is not in the (0, 2) range, or
+  ///   - The matrix has a zero on its main diagonal, or
+  ///   - [maxSteps] is smaller than 1.
   new({
     required super.matrix,
     required super.knownValues,
     required this.w,
+    List<double>? x0,
     super.precision,
-    this.maxSteps = 30,
-  }) {
-    // Validate the relaxation factor
-    if (w <= 0 || w >= 2) {
+    this.maxSteps = 1000,
+  }) : x0 = x0 ?? List<double>.filled(knownValues.length, 0) {
+    if (!(w > 0 && w < 2)) {
       throw const SystemSolverException(
         'The relaxation factor w must be in the range (0, 2) for convergence.',
       );
     }
 
-    // Check for zero diagonal elements which would cause division by zero
-    for (var i = 0; i < matrix.rowCount; ++i) {
-      if (matrix(i, i) == 0) {
-        throw const SystemSolverException(
-          'The matrix has zero diagonal elements, which would cause division '
-          'by zero in SOR.',
-        );
-      }
-    }
+    validateIterativeSolver(matrix: matrix, x0: this.x0, maxSteps: maxSteps);
   }
 
   /// The relaxation factor `w` (omega) that controls the convergence rate.
@@ -89,42 +98,26 @@ final class SORSolver extends SystemSolver {
   /// The value must be in the range (0, 2) for convergence:
   /// - `w = 1`: Equivalent to Gauss-Seidel method
   /// - `0 < w < 1`: Under-relaxation (slower but more stable)
-  /// - `1 < w < 2`: Over-relaxation (faster when optimal)
+  /// - `1 < w < 2`: Over-relaxation (faster when close to the optimal value)
   ///
   /// The optimal value depends on the spectral radius of the iteration matrix.
   final double w;
 
+  /// The initial vector `x`, needed to start the algorithm.
+  final List<double> x0;
+
   /// The maximum number of iterations to be made by the algorithm.
   ///
   /// If the algorithm doesn't converge within this number of iterations,
-  /// it will return the best approximation found so far.
+  /// [solve] throws a [SystemSolverException].
   final int maxSteps;
 
-  /// Returns whether the matrix is diagonally dominant.
+  /// Returns whether the matrix is (weakly) diagonally dominant.
   ///
-  /// This can be useful for users to check if SOR is likely to converge
-  /// for their specific matrix.
+  /// See [SystemSolver.isDiagonallyDominant]. Strict diagonal dominance
+  /// guarantees that SOR converges with `w = 1` (the Gauss-Seidel method), but
+  /// not for every value of [w].
   bool isDiagonallyDominant() => SystemSolver.isDiagonallyDominant(matrix);
-
-  /// Computes the residual norm of the current solution.
-  ///
-  /// The residual is defined as ||Ax - b||, where A is the matrix,
-  /// x is the solution vector, and b is the known values vector.
-  /// A smaller residual indicates a better solution.
-  double computeResidualNorm(List<double> solution) {
-    var residualNorm = 0.0;
-
-    for (var i = 0; i < matrix.rowCount; ++i) {
-      var rowSum = 0.0;
-      for (var j = 0; j < matrix.columnCount; ++j) {
-        rowSum += matrix(i, j) * solution[j];
-      }
-      final residual = rowSum - knownValues[i];
-      residualNorm += residual * residual;
-    }
-
-    return math.sqrt(residualNorm);
-  }
 
   @override
   bool operator ==(Object other) {
@@ -133,65 +126,33 @@ final class SORSolver extends SystemSolver {
     }
 
     if (other is SORSolver) {
-      return super == other && maxSteps == other.maxSteps && w == other.w;
+      return super == other &&
+          maxSteps == other.maxSteps &&
+          w == other.w &&
+          sameValues(x0, other.x0);
     } else {
       return false;
     }
   }
 
   @override
-  int get hashCode =>
-      Object.hash(matrix, Object.hashAll(knownValues), precision, maxSteps, w);
+  int get hashCode => Object.hash(
+    matrix,
+    Object.hashAll(knownValues),
+    precision,
+    maxSteps,
+    w,
+    Object.hashAll(x0),
+  );
 
   @override
-  List<double> solve() {
-    // Exit conditions for the method.
-    var k = 0;
-    var diff = precision + 1;
-
-    // Pre-allocate vectors for better performance
-    final size = knownValues.length;
-    final phi = List<double>.generate(size, (_) => 0);
-    final oldPhi = List<double>.generate(size, (_) => 0);
-
-    // SOR iteration
-    while ((diff >= precision) && (k < maxSteps)) {
-      // Save current solution for convergence check
-      for (var i = 0; i < size; ++i) {
-        oldPhi[i] = phi[i];
-      }
-
-      // Update each component using SOR formula
-      for (var i = 0; i < size; ++i) {
-        var sigma = 0.0;
-
-        // Sum of products with already updated values (forward substitution)
-        for (var j = 0; j < i; ++j) {
-          sigma += matrix(i, j) * phi[j];
-        }
-
-        // Sum of products with old values (backward substitution)
-        for (var j = i + 1; j < size; ++j) {
-          sigma += matrix(i, j) * oldPhi[j];
-        }
-
-        // SOR update formula
-        phi[i] =
-            (1 - w) * oldPhi[i] + (w / matrix(i, i)) * (knownValues[i] - sigma);
-      }
-
-      // Compute convergence criterion: maximum change in any component
-      diff = 0.0;
-      for (var i = 0; i < size; ++i) {
-        final change = (phi[i] - oldPhi[i]).abs();
-        if (change > diff) {
-          diff = change;
-        }
-      }
-
-      ++k;
-    }
-
-    return phi;
-  }
+  List<double> solve() => sorIteration(
+    matrix: matrix,
+    knownValues: knownValues,
+    x0: x0,
+    w: w,
+    precision: precision,
+    maxSteps: maxSteps,
+    methodName: 'SOR method',
+  );
 }

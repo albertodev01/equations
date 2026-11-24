@@ -6,15 +6,13 @@ import 'package:equations/src/utils/math_utils.dart';
 
 /// {@macro svd_class_header}
 ///
-/// This class performs the SVD procedure on [ComplexMatrix] types.
+/// This class performs the SVD procedure on [ComplexMatrix] types. Since the
+/// data is complex, the relation is `A = U x E x V^H` (where `V^H` is the
+/// conjugate transpose of `V`), `U` and `V` are unitary and the singular
+/// values on the diagonal of `E` are real and non-negative.
 ///
-/// The implementation handles complex numbers throughout the decomposition
-/// process. The algorithm uses complex arithmetic for all operations and
-/// properly handles complex singular values and vectors.
-///
-/// The convergence criteria and numerical stability checks are adapted for
-/// complex number operations. The algorithm includes a maximum iteration limit
-/// to prevent infinite loops in pathological cases.
+/// The implementation uses the one-sided Jacobi algorithm, which computes
+/// the singular values with high relative accuracy.
 ///
 /// Example:
 /// ```dart
@@ -34,544 +32,269 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
   /// {@macro svd_class_header}
   const new({required super.matrix});
 
-  /// Epsilon value for numerical stability in complex operations.
-  static const _epsilon = 1e-10;
+  /// The machine epsilon of [double].
+  static const _epsilon = 2.220446049250313e-16;
 
-  /// Tiny value threshold for very small numbers.
-  static const _tiny = 1e-300;
-
-  /// Maximum number of iterations allowed for convergence.
-  static const _maxIterations = 1000;
-
-  /// Reduces the source matrix to bidiagonal form using Householder
-  /// reflections.
-  ///
-  /// This is the first step of the SVD algorithm and is required for the
-  /// computation of `U` and `V`. The bidiagonal form simplifies the
-  /// subsequent iterative refinement of singular values.
-  ///
-  /// The method modifies the input matrices in place and populates the
-  /// arrays with the necessary transformation data.
-  void _bidiagonalForm({
-    required List<List<Complex>> sourceMatrix,
-    required List<List<Complex>> matrixU,
-    required List<List<Complex>> matrixV,
-    required List<Complex> arrayS,
-    required List<Complex> arrayE,
-    required List<Complex> helperArray,
-  }) {
-    final nct = min(matrix.rowCount - 1, matrix.columnCount);
-    final nrt = max(0, min(matrix.columnCount - 2, matrix.rowCount));
-
-    for (var k = 0; k < max(nct, nrt); k++) {
-      if (k < nct) {
-        arrayS[k] = const Complex.zero();
-
-        // Square
-        for (var i = k; i < matrix.rowCount; i++) {
-          arrayS[k] = complexHypot(arrayS[k], sourceMatrix[i][k]);
-        }
-
-        if (arrayS[k].abs() > _epsilon) {
-          // Handle sign based on complex number properties
-          if (sourceMatrix[k][k].real < 0 ||
-              (sourceMatrix[k][k].real == 0 &&
-                  sourceMatrix[k][k].imaginary < 0)) {
-            arrayS[k] = -arrayS[k];
-          }
-
-          // Dividing each by the k-th element of the values array.
-          for (var i = k; i < matrix.rowCount; i++) {
-            sourceMatrix[i][k] /= arrayS[k];
-          }
-          sourceMatrix[k][k] += const Complex.fromReal(1);
-        } else {
-          throw Exception('Matrix is numerically singular');
-        }
-        arrayS[k] = -arrayS[k];
-      }
-
-      for (var j = k + 1; j < matrix.columnCount; j++) {
-        // Applying the transformation making sure that s[k] is NOT zero.
-        if ((k < nct) && (arrayS[k].abs() > _epsilon)) {
-          var t = const Complex.zero();
-          for (var i = k; i < matrix.rowCount; i++) {
-            t += sourceMatrix[i][k] * sourceMatrix[i][j];
-          }
-
-          t = -t / sourceMatrix[k][k];
-          for (var i = k; i < matrix.rowCount; i++) {
-            sourceMatrix[i][j] += t * sourceMatrix[i][k];
-          }
-        }
-
-        // Storing the row at position 'k' in the arrayE's k-th position for the
-        // next row transformation computation step.
-        arrayE[j] = sourceMatrix[k][j];
-      }
-
-      if (k < nct) {
-        // Storing data in U for the next back multipication.
-        for (var i = k; i < matrix.rowCount; i++) {
-          matrixU[i][k] = sourceMatrix[i][k];
-        }
-      }
-
-      if (k < nrt) {
-        arrayE[k] = const Complex.zero();
-
-        // 'complexHypot' computes sqrt(x^2 + y^2) without under/overflow.
-        for (var i = k + 1; i < matrix.columnCount; i++) {
-          arrayE[k] = complexHypot(arrayE[k], arrayE[i]);
-        }
-
-        if (arrayE[k].abs() > _epsilon) {
-          for (var i = k + 1; i < matrix.columnCount; i++) {
-            arrayE[i] /= arrayE[k];
-          }
-          arrayE[k + 1] += const Complex.fromReal(1);
-        } else {
-          throw Exception('Matrix is numerically singular');
-        }
-
-        arrayE[k] = -arrayE[k];
-
-        // Starting the transformation process.
-        if ((k + 1 < matrix.rowCount) && (arrayE[k].abs() > _epsilon)) {
-          for (var i = k + 1; i < matrix.rowCount; i++) {
-            helperArray[i] = const Complex.zero();
-          }
-
-          for (var j = k + 1; j < matrix.columnCount; j++) {
-            for (var i = k + 1; i < matrix.rowCount; i++) {
-              helperArray[i] += arrayE[j] * sourceMatrix[i][j];
-            }
-          }
-
-          for (var j = k + 1; j < matrix.columnCount; j++) {
-            final t = -arrayE[j] / arrayE[k + 1];
-            for (var i = k + 1; i < matrix.rowCount; i++) {
-              sourceMatrix[i][j] += t * helperArray[i];
-            }
-          }
-        }
-
-        // Initialization for the computation of V.
-        for (var i = k + 1; i < matrix.columnCount; i++) {
-          matrixV[i][k] = arrayE[i];
-        }
-      }
-    }
-
-    // Set up the final bidiagonal matrix of order p.
-    final p = min(matrix.columnCount, matrix.rowCount + 1);
-    if (nct < matrix.columnCount) {
-      arrayS[nct] = sourceMatrix[nct][nct];
-    }
-    if (matrix.rowCount < p) {
-      arrayS[p - 1] = const Complex.zero();
-    }
-    if (nrt + 1 < p) {
-      arrayE[nrt] = sourceMatrix[nrt][p - 1];
-    }
-    arrayE[p - 1] = const Complex.zero();
-  }
-
-  /// Generates the `U` matrix from the bidiagonal transformation data.
-  ///
-  /// This method reconstructs the left singular vectors by accumulating the
-  /// Householder transformations applied during bidiagonalization. The
-  /// resulting matrix U is unitary (U^H U = I, where H denotes conjugate
-  /// transpose).
-  void _generateU({
-    required List<List<Complex>> matrixU,
-    required List<Complex> arrayS,
-  }) {
-    final maxRowCol = max(matrix.rowCount, matrix.columnCount);
-    final nct = min(matrix.rowCount - 1, matrix.columnCount);
-
-    // Generation of U based on the previous transformations. Works with square
-    // and rectangular matrices.
-    for (var j = nct; j < maxRowCol; j++) {
-      for (var i = 0; i < matrix.rowCount; i++) {
-        if (i == j) {
-          matrixU[j][j] = const Complex.fromReal(1);
-        } else {
-          matrixU[i][j] = const Complex.zero();
-        }
-      }
-    }
-
-    for (var k = nct - 1; k >= 0; k--) {
-      if (arrayS[k].abs() > _epsilon) {
-        for (var j = k + 1; j < maxRowCol; j++) {
-          var t = const Complex.zero();
-          for (var i = k; i < matrix.rowCount; i++) {
-            t += matrixU[i][k] * matrixU[i][j];
-          }
-          t = -t / matrixU[k][k];
-          for (var i = k; i < matrix.rowCount; i++) {
-            matrixU[i][j] += t * matrixU[i][k];
-          }
-        }
-        for (var i = k; i < matrix.rowCount; i++) {
-          matrixU[i][k] = -matrixU[i][k];
-        }
-        matrixU[k][k] = const Complex.fromReal(1) + matrixU[k][k];
-        for (var i = 0; i < k - 1; i++) {
-          matrixU[i][k] = const Complex.zero();
-        }
-      } else {
-        //coverage:ignore-start
-        for (var i = 0; i < matrix.rowCount; i++) {
-          matrixU[i][k] = const Complex.zero();
-        }
-        matrixU[k][k] = const Complex.fromReal(1);
-        //coverage:ignore-end
-      }
-    }
-  }
-
-  /// Generates the `V` matrix from the bidiagonal transformation data.
-  ///
-  /// This method reconstructs the right singular vectors by accumulating the
-  /// Householder transformations applied during bidiagonalization. The
-  /// resulting matrix V is unitary (V^H V = I, where H denotes conjugate
-  /// transpose).
-  void _generateV({
-    required List<List<Complex>> matrixV,
-    required List<Complex> arrayE,
-  }) {
-    final nrt = max(0, min(matrix.columnCount - 2, matrix.rowCount));
-
-    // Generation of V based on the previous transformations. Works with square
-    // and rectangular matrices.
-    for (var k = matrix.columnCount - 1; k >= 0; k--) {
-      if ((k < nrt) && (arrayE[k].abs() > _epsilon)) {
-        for (var j = k + 1; j < matrixV.first.length; j++) {
-          var t = const Complex.zero();
-          for (var i = k + 1; i < matrix.columnCount; i++) {
-            t += matrixV[i][k] * matrixV[i][j];
-          }
-          t = -t / matrixV[k + 1][k];
-          for (var i = k + 1; i < matrix.columnCount; i++) {
-            matrixV[i][j] += t * matrixV[i][k];
-          }
-        }
-      }
-      for (var i = 0; i < matrix.columnCount; i++) {
-        matrixV[i][k] = const Complex.zero();
-      }
-      matrixV[k][k] = const Complex.fromReal(1);
-    }
-  }
+  /// The maximum number of Jacobi sweeps. Convergence is quadratic, so a few
+  /// sweeps are normally enough.
+  static const _maxSweeps = 100;
 
   @override
   List<ComplexMatrix> decompose() {
-    // Input validation
-    if (matrix.rowCount == 0 || matrix.columnCount == 0) {
-      throw ArgumentError('Matrix dimensions must be positive');
+    if (matrix.flattenData.any(
+      (value) => !value.real.isFinite || !value.imaginary.isFinite,
+    )) {
+      throw const MatrixException(
+        'The SVD cannot be computed on matrices with NaN or infinite values.',
+      );
     }
 
-    // Cache matrix dimensions
-    final rowCount = matrix.rowCount;
-    final columnCount = matrix.columnCount;
-    final maxRowCol = max(rowCount, columnCount);
+    // The algorithm requires at least as many rows as columns. For a wide
+    // matrix, the SVD of the conjugate transpose is computed instead:
+    //
+    //  A^H = U' x E' x V'^H, so A = V' x E'^T x U'^H
+    //
+    // because the singular values in E' are real.
+    if (matrix.rowCount < matrix.columnCount) {
+      final [e, u, v] = SVDComplex(
+        matrix: _conjugateTranspose(matrix),
+      ).decompose();
 
-    // This matrix as a list of lists (to easily alter data)
-    final sourceMatrix = matrix.toListOfList();
-
-    // Arrays for internal storage of U and V.
-    final matrixU = List<List<Complex>>.generate(
-      rowCount,
-      (_) => List<Complex>.generate(maxRowCol, (_) => const Complex.zero()),
-      growable: false,
-    );
-    final matrixV = List<List<Complex>>.generate(
-      columnCount,
-      (_) => List<Complex>.generate(columnCount, (_) => const Complex.zero()),
-      growable: false,
-    );
-
-    // Array for internal storage of the singular values.
-    final arrayS = List<Complex>.generate(
-      min(rowCount + 1, columnCount),
-      (_) => const Complex.zero(),
-      growable: false,
-    );
-    final arrayE = List<Complex>.generate(
-      columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
-    final helperArray = List<Complex>.generate(
-      rowCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
-
-    // Setup 1: bidiagonal form
-    _bidiagonalForm(
-      sourceMatrix: sourceMatrix,
-      matrixU: matrixU,
-      matrixV: matrixV,
-      arrayS: arrayS,
-      arrayE: arrayE,
-      helperArray: helperArray,
-    );
-
-    // Setup 2: generating U
-    _generateU(matrixU: matrixU, arrayS: arrayS);
-
-    // Setup 3: generating V.
-    _generateV(matrixV: matrixV, arrayE: arrayE);
-
-    // === Computing singular values from here. === //
-    var p = min<int>(columnCount, rowCount + 1);
-    final pp = p - 1;
-    var step = 0;
-    var iterationCount = 0;
-
-    // Main iteration loop for the singular values.
-    while (p > 0 && iterationCount < _maxIterations) {
-      iterationCount++;
-
-      // The 'convergenceStatus' variable works along with 'index' to determine
-      // when the iterations should stop. In particular:
-      //
-      //  - 'convergenceStatus' = 1: if s(p) && e[k-1] are small enough && k < p
-      //  - 'convergenceStatus' = 2: if s(k) is small enough and k < p
-      //  - 'convergenceStatus' = 3: if e[k-1] is small enough && k < p && a QR
-      //                             step is required since values in s(*) are
-      //                             NOT small enough
-      //  - 'convergenceStatus' = 4: convergence reached
-      var convergenceStatus = 0;
-      var index = 0;
-
-      for (index = p - 2; index >= -1; index--) {
-        if (index == -1) {
-          break;
-        }
-
-        final upper =
-            _tiny + _epsilon * (arrayS[index].abs() + arrayS[index + 1].abs());
-        if (arrayE[index].abs() <= upper) {
-          arrayE[index] = const Complex.zero();
-          break;
-        }
-      }
-
-      if (index == p - 2) {
-        // Convergence
-        convergenceStatus = 4;
-      } else {
-        var ks = 0;
-        for (ks = p - 1; ks >= index; ks--) {
-          if (ks == index) {
-            break;
-          }
-          final t =
-              (ks != p ? arrayE[ks].abs() : 0) +
-              (ks != index + 1 ? arrayE[ks - 1].abs() : 0);
-          if (arrayS[ks].abs() <= _tiny + _epsilon * t) {
-            arrayS[ks] = const Complex.zero();
-            break;
-          }
-        }
-        if (ks == index) {
-          convergenceStatus = 3;
-        } else if (ks == p - 1) {
-          convergenceStatus = 1;
-        } else {
-          convergenceStatus = 2;
-          index = ks;
-        }
-      }
-
-      index++;
-
-      // Now that the convergence status is updated, we proceed with different
-      // strategies according with the flag.
-      switch (convergenceStatus) {
-        case 1:
-          var f = arrayE[p - 2];
-          arrayE[p - 2] = const Complex.zero();
-          for (var j = p - 2; j >= index; j--) {
-            var t = complexHypot(arrayS[j], f);
-            final cs = arrayS[j] / t;
-            final sn = f / t;
-            arrayS[j] = t;
-            if (j != index) {
-              f = -sn * arrayE[j - 1];
-              arrayE[j - 1] = cs * arrayE[j - 1];
-            }
-            for (var i = 0; i < columnCount; i++) {
-              t = cs * matrixV[i][j] + sn * matrixV[i][p - 1];
-              matrixV[i][p - 1] = -sn * matrixV[i][j] + cs * matrixV[i][p - 1];
-              matrixV[i][j] = t;
-            }
-          }
-
-        //coverage:ignore-start
-        case 2:
-          var f = arrayE[index - 1];
-          arrayE[index - 1] = const Complex.zero();
-          for (var j = index; j < p; j++) {
-            var t = complexHypot(arrayS[j], f);
-            final cs = arrayS[j] / t;
-            final sn = f / t;
-            arrayS[j] = t;
-            f = -sn * arrayE[j];
-            arrayE[j] = cs * arrayE[j];
-            for (var i = 0; i < rowCount; i++) {
-              t = cs * matrixU[i][j] + sn * matrixU[i][index - 1];
-              matrixU[i][index - 1] =
-                  -sn * matrixU[i][j] + cs * matrixU[i][index - 1];
-              matrixU[i][j] = t;
-            }
-          }
-        //coverage:ignore-end
-
-        case 3:
-          // QR step with shifting
-          final scaledValue = max(
-            max(
-              max(
-                max(arrayS[p - 1].abs(), arrayS[p - 2].abs()),
-                arrayE[p - 2].abs(),
-              ),
-              arrayS[index].abs(),
-            ),
-            arrayE[index].abs(),
-          );
-
-          final scale = Complex.fromReal(scaledValue);
-          final sp = arrayS[p - 1] / scale;
-          final spm1 = arrayS[p - 2] / scale;
-          final epm1 = arrayE[p - 2] / scale;
-          final sk = arrayS[index] / scale;
-          final ek = arrayE[index] / scale;
-          final b =
-              ((spm1 + sp) * (spm1 - sp) + epm1 * epm1) /
-              const Complex.fromReal(2);
-          final c = (sp * epm1) * (sp * epm1);
-          var shift = const Complex.zero();
-
-          if ((b.abs() > _epsilon) || (c.abs() > _epsilon)) {
-            shift = (b * b + c).sqrt();
-            shift = c / (b + shift);
-          }
-          var f = (sk + sp) * (sk - sp) + shift;
-          var g = sk * ek;
-
-          // Looking for 0s.
-          for (var j = index; j < p - 1; j++) {
-            var t = complexHypot(f, g);
-            var cs = f / t;
-            var sn = g / t;
-            if (j != index) {
-              arrayE[j - 1] = t;
-            }
-            f = cs * arrayS[j] + sn * arrayE[j];
-            arrayE[j] = cs * arrayE[j] - sn * arrayS[j];
-            g = sn * arrayS[j + 1];
-            arrayS[j + 1] = cs * arrayS[j + 1];
-            for (var i = 0; i < columnCount; i++) {
-              t = cs * matrixV[i][j] + sn * matrixV[i][j + 1];
-              matrixV[i][j + 1] = -sn * matrixV[i][j] + cs * matrixV[i][j + 1];
-              matrixV[i][j] = t;
-            }
-            t = complexHypot(f, g);
-            cs = f / t;
-            sn = g / t;
-            arrayS[j] = t;
-            f = cs * arrayE[j] + sn * arrayS[j + 1];
-            arrayS[j + 1] = -sn * arrayE[j] + cs * arrayS[j + 1];
-            g = sn * arrayE[j + 1];
-            arrayE[j + 1] = cs * arrayE[j + 1];
-            for (var i = 0; i < rowCount; i++) {
-              t = cs * matrixU[i][j] + sn * matrixU[i][j + 1];
-              matrixU[i][j + 1] = -sn * matrixU[i][j] + cs * matrixU[i][j + 1];
-              matrixU[i][j] = t;
-            }
-          }
-
-          arrayE[p - 2] = f;
-          step = step + 1;
-
-        case 4:
-          // Changing sign to singular values to make them positive.
-          if (arrayS[index].abs() <= _epsilon) {
-            arrayS[index] = const Complex.zero();
-            for (var i = 0; i <= pp; i++) {
-              matrixV[i][index] = -matrixV[i][index];
-            }
-          }
-
-          // Before returning E, U and V we need to rearrange the values.
-          while (index < pp) {
-            if (arrayS[index].abs() >= arrayS[index + 1].abs()) {
-              break;
-            }
-            var temp = arrayS[index];
-            arrayS[index] = arrayS[index + 1];
-            arrayS[index + 1] = temp;
-            if (index < columnCount - 1) {
-              for (var i = 0; i < columnCount; i++) {
-                temp = matrixV[i][index + 1];
-                matrixV[i][index + 1] = matrixV[i][index];
-                matrixV[i][index] = temp;
-              }
-            }
-            if (index < rowCount - 1) {
-              for (var i = 0; i < rowCount; i++) {
-                temp = matrixU[i][index + 1];
-                matrixU[i][index + 1] = matrixU[i][index];
-                matrixU[i][index] = temp;
-              }
-            }
-            index++;
-          }
-          step = 0;
-          p--;
-      }
+      return [e.transpose(), v, u];
     }
 
-    if (iterationCount >= _maxIterations) {
-      //coverage:ignore-start
-      throw Exception('SVD did not converge within maximum iterations');
-      //coverage:ignore-end
-    }
+    final m = matrix.rowCount;
+    final n = matrix.columnCount;
 
-    // Building the 'E' rectangular matrix, whose size is rowCount*columnCount.
-    final sAsMatrix = List<List<Complex>>.generate(
-      rowCount,
-      (_) => List<Complex>.generate(columnCount, (_) => const Complex.zero()),
-      growable: false,
+    // Scaling the data so that the largest element has magnitude 1, which
+    // avoids overflows and underflows when squaring the column norms.
+    final scale = matrix.flattenData.fold<double>(
+      0,
+      (current, value) => max(current, hypot(value.real, value.imaginary)),
     );
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        if (i == j) {
-          sAsMatrix[i][j] = arrayS[i];
-        } else {
-          sAsMatrix[i][j] = const Complex.zero();
-        }
-      }
+
+    if (scale == 0) {
+      return [
+        ComplexMatrix(rows: m, columns: n),
+        ComplexMatrix(rows: m, columns: m, identity: true),
+        ComplexMatrix(rows: n, columns: n, identity: true),
+      ];
     }
 
-    // Returning E, U and V.
-    return [
-      ComplexMatrix.fromData(
-        rows: rowCount,
-        columns: columnCount,
-        data: sAsMatrix,
+    // The columns of W = A x V (stored column by column) and of V. At the end,
+    // the columns of W are mutually orthogonal.
+    final w = List<List<Complex>>.generate(n, (j) {
+      return List<Complex>.generate(m, (i) {
+        final value = matrix(i, j);
+
+        return Complex(value.real / scale, value.imaginary / scale);
+      });
+    });
+    final v = List<List<Complex>>.generate(
+      n,
+      (j) => List<Complex>.generate(
+        n,
+        (i) => i == j ? const Complex.fromReal(1) : const Complex.zero(),
       ),
-      ComplexMatrix.fromData(rows: rowCount, columns: maxRowCol, data: matrixU),
-      ComplexMatrix.fromData(
-        rows: columnCount,
-        columns: columnCount,
-        data: matrixV,
+    );
+
+    _orthogonalizeColumns(w, v, tolerance: m * _epsilon);
+
+    // The singular values are the norms of the columns of W, sorted from the
+    // largest to the smallest.
+    final norms = w.map(_norm).toList(growable: false);
+    final order = List<int>.generate(n, (j) => j)
+      ..sort((a, b) => norms[b].compareTo(norms[a]));
+    final singularValues = order.map((j) => norms[j]).toList(growable: false);
+
+    // The columns of U matching (numerically) non-zero singular values are the
+    // normalized columns of W. The others are completed to an orthonormal
+    // basis of the whole space.
+    final threshold = singularValues.first * max(m, n) * _epsilon;
+    final columnsU = List<List<Complex>?>.generate(m, (j) {
+      if (j >= n || singularValues[j] <= threshold) {
+        return null;
+      }
+
+      final factor = Complex.fromReal(1 / singularValues[j]);
+      return w[order[j]].map((value) => value * factor).toList();
+    });
+    _completeBasis(columnsU, m);
+
+    final scaleFactor = Complex.fromReal(scale);
+    final E = List<Complex>.generate(m * n, (k) {
+      final i = k ~/ n;
+      final j = k % n;
+
+      return i == j
+          ? Complex.fromReal(singularValues[i]) * scaleFactor
+          : const Complex.zero();
+    });
+
+    return [
+      ComplexMatrix.fromFlattenedData(rows: m, columns: n, data: E),
+      ComplexMatrix.fromFlattenedData(
+        rows: m,
+        columns: m,
+        data: List<Complex>.generate(m * m, (k) => columnsU[k % m]![k ~/ m]),
+      ),
+      ComplexMatrix.fromFlattenedData(
+        rows: n,
+        columns: n,
+        data: List<Complex>.generate(n * n, (k) => v[order[k % n]][k ~/ n]),
       ),
     ];
   }
+
+  /// Applies Jacobi rotations to pairs of columns of [w] (and the same
+  /// rotations to the columns of [v]) until all the columns of [w] are
+  /// orthogonal, up to the given relative [tolerance].
+  ///
+  /// Throws a [MatrixException] if the algorithm doesn't converge.
+  void _orthogonalizeColumns(
+    List<List<Complex>> w,
+    List<List<Complex>> v, {
+    required double tolerance,
+  }) {
+    final n = w.length;
+
+    for (var sweep = 0; sweep < _maxSweeps; sweep++) {
+      var rotated = false;
+
+      for (var p = 0; p < n - 1; p++) {
+        for (var q = p + 1; q < n; q++) {
+          // The 2x2 Gram matrix of the columns p and q:
+          //
+          //  | alpha       gamma |
+          //  | conj(gamma) beta  |
+          var alpha = 0.0;
+          var beta = 0.0;
+          var gamma = const Complex.zero();
+          for (var i = 0; i < w[p].length; i++) {
+            alpha += _squaredAbs(w[p][i]);
+            beta += _squaredAbs(w[q][i]);
+            gamma += w[p][i].conjugate() * w[q][i];
+          }
+
+          final gammaAbs = gamma.abs();
+          if (gammaAbs <= tolerance * sqrt(alpha * beta)) {
+            continue;
+          }
+
+          rotated = true;
+
+          // The rotation that diagonalizes the Gram matrix. 't' is the
+          // smallest root of t^2 + 2 zeta t - 1 = 0.
+          final zeta = (beta - alpha) / (2 * gammaAbs);
+          final t = (zeta >= 0 ? 1 : -1) / (zeta.abs() + hypot(1, zeta));
+          final c = 1 / sqrt(1 + t * t);
+          final s = c * t;
+          final phase = gamma * Complex.fromReal(1 / gammaAbs);
+
+          _rotate(w[p], w[q], c, s, phase);
+          _rotate(v[p], v[q], c, s, phase);
+        }
+      }
+
+      if (!rotated) {
+        return;
+      }
+    }
+
+    throw const MatrixException('The SVD algorithm did not converge.');
+  }
+
+  /// Replaces the columns [x] and [y] with:
+  ///
+  ///  - x' = c x - s conj(phase) y
+  ///  - y' = s phase x + c y
+  ///
+  /// which is the product of `[x y]` with a unitary 2x2 matrix.
+  static void _rotate(
+    List<Complex> x,
+    List<Complex> y,
+    double c,
+    double s,
+    Complex phase,
+  ) {
+    final cc = Complex.fromReal(c);
+    final sPhase = Complex.fromReal(s) * phase;
+    final sConjugatePhase = Complex.fromReal(s) * phase.conjugate();
+
+    for (var i = 0; i < x.length; i++) {
+      final xi = x[i];
+      final yi = y[i];
+      x[i] = cc * xi - sConjugatePhase * yi;
+      y[i] = sPhase * xi + cc * yi;
+    }
+  }
+
+  /// Replaces each `null` entry of [columns] with a unit vector of size
+  /// [size], orthogonal to all the other columns.
+  ///
+  /// Candidates are taken from the standard basis: at each step, the one with
+  /// the largest component outside of the current span is chosen.
+  void _completeBasis(List<List<Complex>?> columns, int size) {
+    for (var j = 0; j < columns.length; j++) {
+      if (columns[j] != null) {
+        continue;
+      }
+
+      List<Complex>? best;
+      var bestNorm = -1.0;
+
+      for (var candidate = 0; candidate < size; candidate++) {
+        final x = List<Complex>.generate(
+          size,
+          (i) =>
+              i == candidate ? const Complex.fromReal(1) : const Complex.zero(),
+        );
+
+        // Orthogonalizing twice for numerical stability.
+        for (var pass = 0; pass < 2; pass++) {
+          for (final column in columns) {
+            if (column == null) {
+              continue;
+            }
+
+            var dot = const Complex.zero();
+            for (var i = 0; i < size; i++) {
+              dot += column[i].conjugate() * x[i];
+            }
+            for (var i = 0; i < size; i++) {
+              x[i] -= dot * column[i];
+            }
+          }
+        }
+
+        final norm = _norm(x);
+        if (norm > bestNorm) {
+          bestNorm = norm;
+          best = x;
+        }
+      }
+
+      final factor = Complex.fromReal(1 / bestNorm);
+      columns[j] = best!.map((value) => value * factor).toList();
+    }
+  }
+
+  /// The 2-norm of [vector].
+  double _norm(List<Complex> vector) =>
+      vector.fold<double>(0, (norm, value) => hypot(norm, value.abs()));
+
+  /// The squared magnitude of [value].
+  static double _squaredAbs(Complex value) =>
+      value.real * value.real + value.imaginary * value.imaginary;
+
+  /// The conjugate transpose of [source].
+  static ComplexMatrix _conjugateTranspose(ComplexMatrix source) =>
+      ComplexMatrix.fromFlattenedData(
+        rows: source.columnCount,
+        columns: source.rowCount,
+        data: List<Complex>.generate(
+          source.rowCount * source.columnCount,
+          (k) => source(k % source.rowCount, k ~/ source.rowCount).conjugate(),
+        ),
+      );
 }

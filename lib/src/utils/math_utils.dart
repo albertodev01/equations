@@ -6,17 +6,17 @@ import 'package:equations/equations.dart';
 /// the core `dart:math` package.
 mixin MathUtils {
   /// Computes sqrt(x^2 + y^2) without under/overflow.
+  ///
+  /// The larger of the two absolute values is factored out, so that squaring
+  /// the ratio between the two never overflows.
   double hypot(double x, double y) {
-    var first = x.abs();
-    var second = y.abs();
-
-    if (y > x) {
-      first = y.abs();
-      second = x.abs();
-    }
+    final absX = x.abs();
+    final absY = y.abs();
+    final first = max(absX, absY);
+    final second = min(absX, absY);
 
     if (first == 0.0) {
-      return second;
+      return 0;
     }
 
     final t = second / first;
@@ -24,9 +24,12 @@ mixin MathUtils {
     return first * sqrt(1 + t * t);
   }
 
-  /// Computes sqrt(x^2 + y^2) without under/overflow.
+  /// Computes sqrt(x^2 + y^2), where the squares and the square root are
+  /// **complex** operations.
   ///
-  /// Uses the magnitude (modulo) of [x] and [y].
+  /// This is **not** the norm of the vector `(x, y)`: for example, it returns
+  /// zero when `x = 1` and `y = i`. To compute the norm, use [hypot] with the
+  /// magnitudes of [x] and [y] instead.
   Complex complexHypot(Complex x, Complex y) {
     var first = x;
     var second = y;
