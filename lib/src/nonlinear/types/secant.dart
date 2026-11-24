@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/nonlinear/utils/nonlinear_utils.dart';
 
 /// {@template secant}
 /// Implements the secant method to find the roots of a given equation. It is
@@ -26,6 +27,9 @@ import 'package:equations/equations.dart';
 ///     `x_{n+1} = x_n - f(x_n) * (x_n - x_{n-1}) / (f(x_n) - f(x_{n-1}))`
 ///     which approximates Newton's method by replacing the derivative with a
 ///     finite difference quotient.
+///
+///   - The algorithm stops when the size of the last step `|x_{n+1} - x_n|` is
+///     smaller than [tolerance] or when `f(x_n)` is exactly zero.
 /// {@endtemplate}
 final class Secant extends NonLinear {
   /// {@macro secant}
@@ -74,34 +78,25 @@ final class Secant extends NonLinear {
       );
     }
 
-    final guesses = <double>[];
-    var n = 1;
-
     // Initialize with the two initial guesses
     var xPrev = a;
     var xCurr = b;
 
     var fPrev = evaluateOn(xPrev);
     var fCurr = evaluateOn(xCurr);
+    NonLinearUtils.checkFiniteValue(xPrev, fPrev);
+    NonLinearUtils.checkFiniteValue(xCurr, fCurr);
 
     // Check if we've already found the root at one of the initial guesses
     if (fPrev == 0) {
-      guesses.add(xPrev);
-      return (
-        guesses: guesses,
-        convergence: convergence(guesses, maxSteps),
-        efficiency: efficiency(guesses, maxSteps),
-      );
+      return NonLinearUtils.resultOf(this, [xPrev]);
     }
     if (fCurr == 0) {
-      guesses.add(xCurr);
-      return (
-        guesses: guesses,
-        convergence: convergence(guesses, maxSteps),
-        efficiency: efficiency(guesses, maxSteps),
-      );
+      return NonLinearUtils.resultOf(this, [xCurr]);
     }
 
+    final guesses = <double>[];
+    var n = 1;
     var diff = tolerance + 1;
 
     while ((diff >= tolerance) && (n <= maxSteps)) {
@@ -109,10 +104,10 @@ final class Secant extends NonLinear {
       final denominator = fCurr - fPrev;
 
       // Check for invalid denominator values
-      if (denominator == 0 || denominator.isNaN || denominator.isInfinite) {
+      if (denominator == 0 || !denominator.isFinite) {
         throw NonlinearException(
           'Invalid denominator encountered at iteration $n. '
-          'The denominator f($xCurr) - f($xPrev) = $denominator. ',
+          'The denominator f($xCurr) - f($xPrev) = $denominator.',
         );
       }
 
@@ -129,6 +124,7 @@ final class Secant extends NonLinear {
 
       guesses.add(xCurr);
       fCurr = evaluateOn(xCurr);
+      NonLinearUtils.checkFiniteValue(xCurr, fCurr);
 
       // Early exit if we've found the exact root
       if (fCurr == 0) {
@@ -136,10 +132,6 @@ final class Secant extends NonLinear {
       }
     }
 
-    return (
-      guesses: guesses,
-      convergence: convergence(guesses, maxSteps),
-      efficiency: efficiency(guesses, maxSteps),
-    );
+    return NonLinearUtils.resultOf(this, guesses);
   }
 }

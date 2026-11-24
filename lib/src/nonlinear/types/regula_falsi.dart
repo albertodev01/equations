@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/nonlinear/utils/nonlinear_utils.dart';
 
 /// {@template regula_falsi}
 /// Implements the regula falsi method (also known as the "_false position
@@ -7,17 +8,10 @@ import 'package:equations/equations.dart';
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///     continuous function on the interval `[a, b]`.
 ///
-///   - The values of `f(a)` and `f(b)` must have opposite signs (i.e.,
-///     `f(a) * f(b) < 0`), which ensures that at least one root exists in the
-///     interval by the Intermediate Value Theorem.
-///
-///   - The method has linear convergence rate, similar to bisection, but
-///     typically converges faster when the function is well-approximated by a
-///     linear function near the root.
-///
-///   - If the function cannot be well-approximated by a linear function, the
-///     method may converge slower than bisection, especially when one endpoint
-///     of the interval remains fixed for many iterations.
+///   - The values of `f(a)` and `f(b)` must have opposite signs, which ensures
+///     that at least one root exists in the interval by the Intermediate Value
+///     Theorem. If `f(a)` or `f(b)` is zero, that endpoint is returned as the
+///     root.
 ///
 ///   - The algorithm uses the formula:
 ///     `c = (f(a) * b - f(b) * a) / (f(a) - f(b))`
@@ -26,6 +20,16 @@ import 'package:equations/equations.dart';
 ///
 ///   - The interval is repeatedly narrowed by replacing one endpoint with the
 ///     computed intersection point, maintaining the bracketing condition.
+///
+///   - The plain regula falsi method converges slowly when one endpoint stays
+///     the same for many steps (for example, with convex functions such as
+///     `x^10 - 1`). For this reason, this class implements the _Illinois_
+///     variant: when the same endpoint is kept for two steps in a row, its
+///     function value is halved in the formula. This moves the next point
+///     towards the root and makes the convergence superlinear (about 1.44).
+///
+///   - The algorithm stops when `|f(c)|` is smaller than or equal to
+///     [tolerance].
 /// {@endtemplate}
 final class RegulaFalsi extends NonLinear {
   /// {@macro regula_falsi}
@@ -66,31 +70,17 @@ final class RegulaFalsi extends NonLinear {
 
   @override
   ({List<double> guesses, double convergence, double efficiency}) solve() {
-    // Validate that the root is bracketed in the interval
     final evalA = evaluateOn(a);
     final evalB = evaluateOn(b);
 
-    if (evalA * evalB > 0) {
-      throw NonlinearException(
-        'The root is not bracketed in [$a, $b]. '
-        'f(a) and f(b) must have opposite signs.',
-      );
-    }
+    NonLinearUtils.checkBracket(a, evalA, b, evalB);
 
-    // Check if we've already found the root at one of the initial points
+    // One of the endpoints is already a root
     if (evalA == 0) {
-      return (
-        guesses: [a],
-        convergence: convergence([a], maxSteps),
-        efficiency: efficiency([a], maxSteps),
-      );
+      return NonLinearUtils.resultOf(this, [a]);
     }
     if (evalB == 0) {
-      return (
-        guesses: [b],
-        convergence: convergence([b], maxSteps),
-        efficiency: efficiency([b], maxSteps),
-      );
+      return NonLinearUtils.resultOf(this, [b]);
     }
 
     final guesses = <double>[];
@@ -98,54 +88,44 @@ final class RegulaFalsi extends NonLinear {
     var intervalA = a;
     var intervalB = b;
     var fa = evalA;
+    var fb = evalB;
+    var lastReplaced = 0;
 
     while (n <= maxSteps) {
-      // Evaluate function at the current interval endpoints
-      final fb = evaluateOn(intervalB);
-
       // Compute the intersection point using the regula falsi formula:
       // c = (f(a) * b - f(b) * a) / (f(a) - f(b))
       final c = (fa * intervalB - fb * intervalA) / (fa - fb);
       final fc = evaluateOn(c);
+      NonLinearUtils.checkFiniteValue(c, fc);
 
-      // Check for invalid function values
-      if (fc.isNaN || fc.isInfinite) {
-        throw NonlinearException(
-          'Function evaluation resulted in invalid value at iteration $n. '
-          'f($c) = $fc. The function may not be well-defined at this point.',
-        );
-      }
-
-      // Add the guess to the list
       guesses.add(c);
 
-      // Check if we've found the exact root
-      if (fc == 0) {
+      // Check if we've found the root or reached the desired tolerance
+      if (fc == 0 || fc.abs() <= tolerance) {
         break;
       }
 
-      // Check if we've reached the desired tolerance
-      if (fc.abs() <= tolerance) {
-        break;
-      }
-
-      // Shrink the interval while maintaining the bracketing condition
-      if (fa * fc < 0) {
+      if (fa.sign != fc.sign) {
         // Root is in [intervalA, c]
         intervalB = c;
+        fb = fc;
+        if (lastReplaced == 1) {
+          fa /= 2;
+        }
+        lastReplaced = 1;
       } else {
         // Root is in [c, intervalB]
         intervalA = c;
         fa = fc;
+        if (lastReplaced == -1) {
+          fb /= 2;
+        }
+        lastReplaced = -1;
       }
 
       ++n;
     }
 
-    return (
-      guesses: guesses,
-      convergence: convergence(guesses, maxSteps),
-      efficiency: efficiency(guesses, maxSteps),
-    );
+    return NonLinearUtils.resultOf(this, guesses);
   }
 }

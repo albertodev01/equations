@@ -24,7 +24,7 @@ void main() {
       );
       expect(
         solutions.efficiency,
-        const MoreOrLessEquals(1.12, precision: 1.0e-2),
+        const MoreOrLessEquals(1.19, precision: 1.0e-2),
       );
 
       expect(
@@ -54,19 +54,51 @@ void main() {
       );
     });
 
-    test('Derivatives evaluated on 0 return NaN', () {
-      const newton = Newton(function: 'x', x0: 0);
-      expect(newton.evaluateDerivativeOn(0).isNaN, isTrue);
-      expect(newton.solve, throwsA(isA<Exception>()));
+    test('Default maximum number of steps', () {
+      expect(const Newton(function: 'x-1', x0: 3).maxSteps, equals(30));
+    });
 
-      try {
-        newton.solve();
-      } on NonlinearException catch (e) {
-        expect(
-          e.message,
-          equals("Couldn't evaluate f'(0.0). The derivative is NaN"),
-        );
-      }
+    test('Derivatives can be evaluated on 0', () {
+      const newton = Newton(function: 'x-1', x0: 0);
+      expect(
+        newton.evaluateDerivativeOn(0),
+        const MoreOrLessEquals(1, precision: 1.0e-8),
+      );
+      expect(
+        newton.solve().guesses.last,
+        const MoreOrLessEquals(1, precision: 1.0e-10),
+      );
+    });
+
+    test('Returns the initial guess when it is the exact root', () {
+      final solutions = const Newton(function: 'x-1', x0: 1).solve();
+      expect(solutions.guesses, equals([1.0]));
+    });
+
+    test('Throws when the derivative is zero', () {
+      expect(
+        const Newton(function: 'x^2-1', x0: 0).solve,
+        throwsA(
+          isA<NonlinearException>().having(
+            (e) => e.message,
+            'message',
+            equals("Couldn't evaluate f'(0.0). The derivative is zero"),
+          ),
+        ),
+      );
+    });
+
+    test('Throws when the function value is NaN', () {
+      expect(
+        const Newton(function: 'sqrt(x)-3', x0: -5).solve,
+        throwsA(
+          isA<NonlinearException>().having(
+            (e) => e.message,
+            'message',
+            equals("Couldn't evaluate f(-5.0). The function value is NaN."),
+          ),
+        ),
+      );
     });
 
     group('Roots tests', () {
@@ -113,6 +145,50 @@ void main() {
 
       test('Test 8', () {
         verifySolution('x^x-1', 0.5, 1);
+      });
+
+      test('Test 9', () {
+        verifySolution('cos(x)-x', 0.5, 0.739085);
+      });
+
+      test('Test 10', () {
+        verifySolution('log(x)-1', 2, 2.718282);
+      });
+
+      test('Test 11', () {
+        verifySolution('x^3-2*x-5', 2, 2.094551);
+      });
+
+      test('Test 12', () {
+        verifySolution('e^(-x)-x', 0.5, 0.567143);
+      });
+
+      test('Test 13', () {
+        verifySolution('x^3+x+1', -0.5, -0.682328);
+      });
+
+      test('Test 14', () {
+        verifySolution('x^2-1000000', 800, 1000);
+      });
+
+      test('Test 15', () {
+        verifySolution('(x-1)^3', 2, 1);
+      });
+
+      test('Test 16', () {
+        verifySolution('sin(x)', 3, 3.141593);
+      });
+
+      test('Test 17', () {
+        verifySolution('x^5-x-1', 1.5, 1.167304);
+      });
+
+      test('Test 18', () {
+        verifySolution('atan(x)', 0.5, 0);
+      });
+
+      test('Test 19', () {
+        verifySolution('1/x-2', 0.3, 0.5);
       });
     });
   });

@@ -76,6 +76,36 @@ void main() {
       },
     );
 
+    test('Converges faster than bisection', () {
+      // Bisection needs about 34 steps to reach the default tolerance
+      for (final (a, b) in const [(1.0, 2.0), (2.0, 1.0)]) {
+        final solutions = Brent(function: 'x^3-x-2', a: a, b: b).solve();
+        expect(solutions.guesses.length, lessThanOrEqualTo(8));
+        expect(
+          solutions.guesses.last,
+          const MoreOrLessEquals(1.5213797068, precision: 1.0e-10),
+        );
+      }
+
+      final solutions = const Brent(function: 'e^x-10', a: 0, b: 5).solve();
+      expect(solutions.guesses.length, lessThanOrEqualTo(10));
+      expect(
+        solutions.guesses.last,
+        const MoreOrLessEquals(2.302585093, precision: 1.0e-9),
+      );
+    });
+
+    test('Returns the endpoint when it is a root', () {
+      expect(
+        const Brent(function: 'x-1', a: 1, b: 2).solve().guesses,
+        equals([1.0]),
+      );
+      expect(
+        const Brent(function: 'x-2', a: 1, b: 2).solve().guesses,
+        equals([2.0]),
+      );
+    });
+
     group('Roots tests', () {
       void verifySolution(
         String equation,
@@ -121,6 +151,50 @@ void main() {
 
       test('Test 8', () {
         verifySolution('x^x-1', 0.5, 1.1, 1);
+      });
+
+      test('Test 9', () {
+        verifySolution('cos(x)-x', 0, 1, 0.739085);
+      });
+
+      test('Test 10', () {
+        verifySolution('log(x)-1', 1, 4, 2.718282);
+      });
+
+      test('Test 11', () {
+        verifySolution('x^3-2*x-5', 2, 3, 2.094551);
+      });
+
+      test('Test 12', () {
+        verifySolution('e^(-x)-x', 0, 1, 0.567143);
+      });
+
+      test('Test 13', () {
+        verifySolution('x^3+x+1', -1, 0, -0.682328);
+      });
+
+      test('Test 14', () {
+        verifySolution('x^2-1000000', 600, 1500, 1000);
+      });
+
+      test('Test 15', () {
+        verifySolution('(x-1)^3', 0, 2.5, 1);
+      });
+
+      test('Test 16', () {
+        verifySolution('sin(x)', 3, 4, 3.141593);
+      });
+
+      test('Test 17', () {
+        verifySolution('x^5-x-1', 1, 2, 1.167304);
+      });
+
+      test('Test 18', () {
+        verifySolution('atan(x)', -1, 2, 0);
+      });
+
+      test('Test 19', () {
+        verifySolution('1/x-2', 0.2, 1, 0.5);
       });
     });
   });

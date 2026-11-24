@@ -8,7 +8,7 @@ environment:
   sdk: ^3.14.0
 
 dependencies:
-  fraction: ^6.0.0
+  fraction: ^6.0.1
   petitparser: ^7.1.0
 
 dev_dependencies:

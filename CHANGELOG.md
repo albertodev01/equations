@@ -14,6 +14,14 @@
  - **BREAKING**: `AdaptiveQuadrature.integrate` now throws a `NumericalIntegrationException` when the function is not finite on the interval or when the algorithm doesn't converge within `AdaptiveQuadrature.maxDepth` subdivisions, instead of overflowing the stack or never returning (for example, with `1/sqrt(x)` on `[0, 1]` or `sqrt(x)` on `[-2, -1]`)
  - **BREAKING**: `AdaptiveQuadrature` now uses a tolerance relative to the size of the integral (about `10^-12`) instead of a fixed absolute tolerance of `10^-10`, and starts from subintervals of different widths, so its results and `guesses` are different. This fixes wrong results without errors when the function was zero at the five evenly spaced starting points (for example, `sin(x)^2` on `[0, 4*pi]` returned `0` instead of `2*pi`), failures with large integrands (for example, `x^16` on `[0, 20]` overflowed the stack), and inaccurate results with small integrands. An integral on an interval of zero width now returns `0` with an empty `guesses` list
  - **BREAKING**: `integrate()` of all `NumericalIntegration` types now throws a `NumericalIntegrationException` when `lowerBound` or `upperBound` is not finite (for example, `TrapezoidalRule` returned `Infinity` for `e^(0-x)` on `[0, infinity]`)
+ - **BREAKING**: `Riddler` has been renamed to `Ridders`, the correct name of the method. `Riddler` is still available as a deprecated alias
+ - **BREAKING**: `Bisection`, `Brent`, `Chords`, `RegulaFalsi` and `Ridders` now return the endpoint as the only guess when `f(a)` or `f(b)` is zero, instead of throwing a `NonlinearException` (`RegulaFalsi` already did this)
+ - **BREAKING**: All `NonLinear` types now throw a `NonlinearException` when the function is NaN or infinite at a point they evaluate, instead of continuing with invalid values or returning `NaN` as the root
+ - **BREAKING**: The default `maxSteps` of `Newton` is now `30`, like all the other `NonLinear` types (it was `10`)
+ - **BREAKING**: The `efficiency` returned by `NonLinear.solve` is now computed with the number of guesses instead of `maxSteps`
+ - **BREAKING**: `NonLinear.evaluateOn` and `NonLinear.evaluateDerivativeOn` now return `double` instead of `num`. `evaluateDerivativeOn(0)` now returns the derivative instead of `NaN`, so `Newton` no longer throws when a guess is `0`
+ - **BREAKING**: `RegulaFalsi` now implements the Illinois variant, which doesn't stall when one endpoint stays the same for many steps (for example, with `x^10 - 1` on `[0, 1.3]` the plain method was still at `f(x) = -0.03` after 30 steps, now it converges in 14 steps). The guesses are different
+ - **BREAKING**: The `guesses` returned by `Chords.solve` now include the first guess (the point where the chord through `(a, f(a))` and `(b, f(b))` crosses the x-axis)
  - Updated Dart SDK constraints to `^3.14.0`
  - Fixed the `+` and `-` operators of `Algebraic`, which dropped zero coefficients in the middle of the result (for example, `x^2 + 1` could become `x + 1`)
  - The `+`, `-` and `*` operators of `Algebraic` now return the zero polynomial when the result is zero (for example, `p - p`), instead of throwing an `AlgebraicException`
@@ -32,6 +40,11 @@
  - `NumericalIntegrationException` is now exported by `package:equations/equations.dart`
  - `ExpressionParser` now parses each expression only once and caches the most recently used ones, so `NumericalIntegration` and `NonLinear` types are much faster (numerical integration is about 15 to 45 times faster)
  - `AdaptiveQuadrature` no longer evaluates the function more than once at the same point
+ - Fixed `Ridders` (previously `Riddler`), which lost the root and returned wrong results without errors (for example, `5` for `e^x - 10` on `[0, 5]`), and returned wrong results when `a > b`
+ - Fixed `Brent`, which always used bisection (so it was as slow as `Bisection`) because it never went back to interpolation after a bisection step and rejected interpolated points when `b < a`. It now implements the original algorithm (`zeroin`) and evaluates the function once per step instead of four times
+ - Fixed `Steffensen`, which added the root twice to `guesses` when it found the exact root
+ - Fixed `Bisection`, `Brent`, `Chords` and `Ridders`, which threw a `NonlinearException` when the root was bracketed but `f(a) * f(b)` underflowed to zero (for example, with very small function values)
+ - `Chords` and `RegulaFalsi` no longer evaluate the function more than once at the same point
  - Documentation improvements
  - Dependencies versions update
 

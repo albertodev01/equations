@@ -1,14 +1,16 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/nonlinear/utils/nonlinear_utils.dart';
 
 /// {@template steffensen}
 /// Implements Steffensen's method to find the roots of a given equation.
 ///
-///   - The method has quadratic convergence rate when it converges, similar to
-///   [Newton]'s method, making it one of the fastest root-finding algorithms.
+///   - The method has quadratic convergence rate when it converges to a simple
+///   root, similar to [Newton]'s method, making it one of the fastest
+///   root-finding algorithms.
 ///
 ///   - This method does **not** require the derivative _f'(x)_ of the function.
 ///   Instead, it approximates the derivative using the formula:
-///   _g(x) = `[f(x + f(x)) - f(x)]` / f(x) = f(x + f(x))/f(x) - 1_
+///   _g(x) = `f(x + f(x))/f(x) - 1_
 ///
 ///   - The method is extremely powerful but it's not guaranteed to converge to
 ///   a root of `f(x)`. Convergence depends on the choice of the initial guess
@@ -21,6 +23,9 @@ import 'package:equations/equations.dart';
 ///   - Steffensen's method uses the iterative formula:
 ///     `x_{n+1} = x_n - f(x_n) / g(x_n)`
 ///     where `g(x_n) = f(x_n + f(x_n))/f(x_n) - 1` approximates the derivative.
+///
+///   - The algorithm stops when the size of the last step `|x_{n+1} - x_n|` is
+///   smaller than [tolerance] or when `f(x_n)` is exactly zero.
 /// {@endtemplate}
 final class Steffensen extends NonLinear {
   /// {@macro steffensen}
@@ -63,25 +68,21 @@ final class Steffensen extends NonLinear {
 
     while ((diff >= tolerance) && (n <= maxSteps)) {
       final fx = evaluateOn(x);
+      NonLinearUtils.checkFiniteValue(x, fx);
 
-      // If we've found the exact root, we're done
+      // The exact root has been found. It is already the last guess, unless
+      // it's the initial guess.
       if (fx == 0) {
-        guesses.add(x);
+        if (guesses.isEmpty) {
+          guesses.add(x);
+        }
         break;
-      }
-
-      // Check for division by zero when computing gx
-      if (fx.isNaN || fx.isInfinite) {
-        throw NonlinearException(
-          "Couldn't evaluate f($x). "
-          'The function value is ${fx.isNaN ? "NaN" : "infinite"}.',
-        );
       }
 
       final gx = (evaluateOn(x + fx) / fx) - 1;
 
       // Check for division by zero or invalid values when using gx
-      if ((gx == 0) || (gx.isNaN) || (gx.isInfinite)) {
+      if ((gx == 0) || !gx.isFinite) {
         throw NonlinearException(
           "Couldn't compute the next iteration at x = $x. "
           'The value g(x) is not well defined',
@@ -96,10 +97,6 @@ final class Steffensen extends NonLinear {
       ++n;
     }
 
-    return (
-      guesses: guesses,
-      convergence: convergence(guesses, maxSteps),
-      efficiency: efficiency(guesses, maxSteps),
-    );
+    return NonLinearUtils.resultOf(this, guesses);
   }
 }

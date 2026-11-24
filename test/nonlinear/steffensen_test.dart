@@ -77,6 +77,16 @@ void main() {
       expect(steffensen2.solve, throwsA(isA<NonlinearException>()));
     });
 
+    test('The exact root is not added twice', () {
+      final solutions = const Steffensen(function: 'x-1', x0: 3).solve();
+      expect(solutions.guesses, equals([1.0]));
+    });
+
+    test('Returns the initial guess when it is the exact root', () {
+      final solutions = const Steffensen(function: 'x-1', x0: 1).solve();
+      expect(solutions.guesses, equals([1.0]));
+    });
+
     test('Throws when gx is 0, NaN, or infinite', () {
       const steffensen2 = Steffensen(function: 'x^2', x0: -2);
       expect(steffensen2.solve, throwsA(isA<NonlinearException>()));
@@ -136,6 +146,46 @@ void main() {
 
       test('Test 8', () {
         verifySolution('x^x-1', 0.8, 1);
+      });
+
+      test('Test 9', () {
+        verifySolution('cos(x)-x', 0.5, 0.739085);
+      });
+
+      test('Test 10', () {
+        verifySolution('log(x)-1', 2, 2.718282);
+      });
+
+      test('Test 11', () {
+        verifySolution('x^3-2*x-5', 2, 2.094551);
+      });
+
+      test('Test 12', () {
+        verifySolution('e^(-x)-x', 0.5, 0.567143);
+      });
+
+      test('Test 13', () {
+        verifySolution('x^3+x+1', -0.5, -0.682328);
+      });
+
+      test('Test 14', () {
+        verifySolution('(x-1)^3', 2, 1);
+      });
+
+      test('Test 15', () {
+        verifySolution('sin(x)', 3, 3.141593);
+      });
+
+      test('Test 16', () {
+        verifySolution('x^5-x-1', 1.2, 1.167304);
+      });
+
+      test('Test 17', () {
+        verifySolution('atan(x)', 0.5, 0);
+      });
+
+      test('Test 18', () {
+        verifySolution('1/x-2', 0.3, 0.5);
       });
     });
   });
