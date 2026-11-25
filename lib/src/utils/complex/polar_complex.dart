@@ -63,11 +63,9 @@ final class PolarComplex implements Comparable<PolarComplex> {
     if (thisValue > otherValue) {
       return 1;
     }
-
     if (thisValue < otherValue) {
       return -1;
     }
-
     return 0;
   }
 

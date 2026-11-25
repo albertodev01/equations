@@ -27,8 +27,8 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final decomposition = SVDComplex(matrix: matrix);
 /// final [E, U, V] = decomposition.decompose();
 /// ```
-final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
-    with MathUtils {
+final class SVDComplex
+    extends SingleValueDecomposition<Complex, ComplexMatrix> {
   /// {@macro svd_class_header}
   const new({required super.matrix});
 
@@ -176,8 +176,14 @@ final class SVDComplex extends SingleValueDecomposition<Complex, ComplexMatrix>
             gamma += w[p][i].conjugate() * w[q][i];
           }
 
+          // A column whose norm is below 'tolerance' times the norm of the
+          // other one is numerically zero (decompose() gives it a zero
+          // singular value) and its direction is just rounding noise, so
+          // rotations can't make it orthogonal: it is skipped.
           final gammaAbs = gamma.abs();
-          if (gammaAbs <= tolerance * sqrt(alpha * beta)) {
+          final isNegligible =
+              min(alpha, beta) <= tolerance * tolerance * max(alpha, beta);
+          if (isNegligible || gammaAbs <= tolerance * sqrt(alpha * beta)) {
             continue;
           }
 

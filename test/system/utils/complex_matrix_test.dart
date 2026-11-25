@@ -104,9 +104,9 @@ void main() {
       }
 
       const stringRepresentation =
-          '[6 + 2i, 0i, 0i]\n'
-          '[0i, 6 + 2i, 0i]\n'
-          '[0i, 0i, 6 + 2i]';
+          '[6 + 2i, 0, 0]\n'
+          '[0, 6 + 2i, 0]\n'
+          '[0, 0, 6 + 2i]';
 
       expect('$matrix', equals(stringRepresentation));
     });
@@ -129,9 +129,9 @@ void main() {
       }
 
       const stringRepresentation =
-          '[6 + 2i, 0i, 0i, 0i, 0i]\n'
-          '[0i, 6 + 2i, 0i, 0i, 0i]\n'
-          '[0i, 0i, 6 + 2i, 0i, 0i]';
+          '[6 + 2i, 0, 0, 0, 0]\n'
+          '[0, 6 + 2i, 0, 0, 0]\n'
+          '[0, 0, 6 + 2i, 0, 0]';
 
       expect('$matrix', equals(stringRepresentation));
     });
@@ -154,12 +154,12 @@ void main() {
       }
 
       const stringRepresentation =
-          '[6 + 2i, 0i]\n'
-          '[0i, 6 + 2i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]';
+          '[6 + 2i, 0]\n'
+          '[0, 6 + 2i]\n'
+          '[0, 0]\n'
+          '[0, 0]\n'
+          '[0, 0]\n'
+          '[0, 0]';
 
       expect('$matrix', equals(stringRepresentation));
     });
@@ -2447,7 +2447,7 @@ void main() {
             columns: 1,
             data: const [Complex.i(), Complex.zero()],
           ).toString(),
-          equals('[1i]\n[0i]'),
+          equals('[1i]\n[0]'),
         );
       });
     });

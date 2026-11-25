@@ -1,185 +1,104 @@
 /// {@template factorial}
-/// This class efficiently computes the factorial of a number using a cache.
+/// Computes the factorial of a non-negative integer.
 ///
 /// The factorial of a non-negative integer `n`, denoted by `n!`, is the product
-/// of all positive integers less than or equal to `n`. For example:
+/// of all positive integers less than or equal to `n`, and `0! = 1`. For
+/// example:
 ///
 ///  - 5! = 5 * 4 * 3 * 2 * 1 = 120
 ///
-/// If you want to compute the factorial of large values with more precision,
-/// consider
+/// Use [compute] when `n <= 20`, so that the result fits in an [int], and
+/// [computeBigInt] for any `n`.
 /// {@endtemplate}
 final class Factorial {
   /// {@macro factorial}
   const new();
 
-  /// A cache with the most common factorial values.
-  static const _factorialsCache = <int, int>{
-    0: 1,
-    1: 1,
-    2: 2,
-    3: 6,
-    4: 24,
-    5: 120,
-    6: 720,
-    7: 5040,
-    8: 40320,
-    9: 362880,
-    10: 3628800,
-    11: 39916800,
-    12: 479001600,
-    13: 6227020800,
-    14: 87178291200,
-    15: 1307674368000,
-    16: 20922789888000,
-    17: 355687428096000,
-    18: 6402373705728000,
-    19: 121645100408832000,
-    20: 2432902008176640000,
-  };
+  /// The factorials from `0!` to `20!`, which is the largest factorial that
+  /// fits in a 64-bit [int].
+  static const _intFactorials = <int>[
+    1,
+    1,
+    2,
+    6,
+    24,
+    120,
+    720,
+    5040,
+    40320,
+    362880,
+    3628800,
+    39916800,
+    479001600,
+    6227020800,
+    87178291200,
+    1307674368000,
+    20922789888000,
+    355687428096000,
+    6402373705728000,
+    121645100408832000,
+    2432902008176640000,
+  ];
 
-  /// A cache with the most common big int factorial values.
-  static final _bigIntfactorialsCache = <int, BigInt>{
-    0: BigInt.one,
-    1: BigInt.one,
-    2: BigInt.two,
-    3: BigInt.from(6),
-    4: BigInt.from(24),
-    5: BigInt.from(120),
-    6: BigInt.from(720),
-    7: BigInt.from(5040),
-    8: BigInt.from(40320),
-    9: BigInt.from(362880),
-    10: BigInt.from(3628800),
-    11: BigInt.from(39916800),
-    12: BigInt.from(479001600),
-    13: BigInt.from(6227020800),
-    14: BigInt.from(87178291200),
-    15: BigInt.from(1307674368000),
-    16: BigInt.from(20922789888000),
-    17: BigInt.from(355687428096000),
-    18: BigInt.from(6402373705728000),
-    19: BigInt.from(121645100408832000),
-    20: BigInt.from(2432902008176640000),
-    21: BigInt.parse('51090942171709440000'),
-    22: BigInt.parse('1124000727777607680000'),
-    23: BigInt.parse('25852016738884976640000'),
-    24: BigInt.parse('620448401733239439360000'),
-    25: BigInt.parse('15511210043330985984000000'),
-    26: BigInt.parse('403291461126605635584000000'),
-    27: BigInt.parse('10888869450418352160768000000'),
-    28: BigInt.parse('304888344611713860501504000000'),
-    29: BigInt.parse('8841761993739701954543616000000'),
-    30: BigInt.parse('265252859812191058636308480000000'),
-  };
+  /// The largest `n` whose factorial is precomputed in [_bigIntFactorials].
+  static const _maxPrecomputedBigInt = 30;
 
-  /// Dynamic cache for computed int factorials.
-  static final _dynamicFactorialsCache = <int, int>{};
-
-  /// Dynamic cache for computed BigInt factorials.
-  static final _dynamicBigIntFactorialsCache = <int, BigInt>{};
-
-  /// Efficiently computes the factorial of a number with [int] precision.
-  ///
-  ///  - When [n] is greater than `20`, consider using [computeBigInt] if you
-  ///    want more precision.
-  ///
-  ///  - When [n] is less than or equal to `20`, this method executes in O(1)
-  ///    time.
-  ///
-  ///  - Computed values are cached dynamically for efficient repeated calls.
-  int compute(int n) {
-    // Check static cache first
-    if (_factorialsCache.containsKey(n)) {
-      return _factorialsCache[n]!;
+  /// The factorials from `0!` to `30!`, precomputed so that they're returned
+  /// in constant time.
+  static final List<BigInt> _bigIntFactorials = () {
+    final values = [BigInt.one];
+    for (var i = 1; i <= _maxPrecomputedBigInt; ++i) {
+      values.add(values.last * BigInt.from(i));
     }
+    return List<BigInt>.unmodifiable(values);
+  }();
 
-    // Check dynamic cache
-    if (_dynamicFactorialsCache.containsKey(n)) {
-      return _dynamicFactorialsCache[n]!;
-    }
+  /// When a range of [_product] has at most this many integers, they're
+  /// multiplied one by one instead of splitting the range again.
+  static const _productLeafSize = 16;
 
-    // Find the highest cached value (static or dynamic)
-    int? cachedValue;
-    int? cachedKey;
-
-    // Check static cache for highest value <= n
-    for (final key in _factorialsCache.keys) {
-      if (key <= n && (cachedKey == null || key > cachedKey)) {
-        cachedKey = key;
-        cachedValue = _factorialsCache[key];
+  /// Returns the product of all integers from [low] to [high], both included.
+  /// [low] must be less than or equal to [high].
+  ///
+  /// The range is split in two halves whose products are multiplied together.
+  /// This way, the two factors of each multiplication have similar sizes,
+  /// which is much faster than multiplying a huge number by a small integer
+  /// `high - low` times.
+  static BigInt _product(int low, int high) {
+    if (high - low < _productLeafSize) {
+      var result = BigInt.from(low);
+      for (var i = low + 1; i <= high; ++i) {
+        result *= BigInt.from(i);
       }
+      return result;
     }
-
-    // Check dynamic cache for highest value <= n
-    for (final key in _dynamicFactorialsCache.keys) {
-      if (key <= n && (cachedKey == null || key > cachedKey)) {
-        cachedKey = key;
-        cachedValue = _dynamicFactorialsCache[key];
-      }
-    }
-
-    // Start from the highest cached value and compute iteratively
-    var result = cachedValue ?? 1;
-    final start = (cachedKey ?? -1) + 1;
-
-    // Iterative computation (avoids stack overflow)
-    for (var i = start; i <= n; i++) {
-      result *= i;
-      // Cache intermediate values for future use
-      _dynamicFactorialsCache[i] = result;
-    }
-
-    return result;
+    final middle = low + (high - low) ~/ 2;
+    return _product(low, middle) * _product(middle + 1, high);
   }
 
-  /// Efficiently computes the factorial of a number with [BigInt] precision.
+  /// Computes the factorial of [n] with [int] precision, in constant time.
   ///
-  /// When [n] is less than or equal to `30`, this method executes in O(1) time.
+  /// Throws a [RangeError] if [n] is negative or greater than `20`, because
+  /// `21!` doesn't fit in a 64-bit [int]. Use [computeBigInt] for larger
+  /// values.
+  int compute(int n) {
+    RangeError.checkValueInInterval(n, 0, _intFactorials.length - 1, 'n');
+    return _intFactorials[n];
+  }
+
+  /// Computes the factorial of [n] with [BigInt] precision.
   ///
-  /// Computed values are cached dynamically for efficient repeated calls.
+  /// When [n] is less than or equal to `30`, this method executes in O(1)
+  /// time. Larger values are computed by splitting the product into halves,
+  /// which is much faster than multiplying the integers one by one when [n]
+  /// is large.
+  ///
+  /// Throws a [RangeError] if [n] is negative.
   BigInt computeBigInt(int n) {
-    // Check static cache first
-    if (_bigIntfactorialsCache.containsKey(n)) {
-      return _bigIntfactorialsCache[n]!;
+    RangeError.checkNotNegative(n, 'n');
+    if (n <= _maxPrecomputedBigInt) {
+      return _bigIntFactorials[n];
     }
-
-    // Check dynamic cache
-    if (_dynamicBigIntFactorialsCache.containsKey(n)) {
-      return _dynamicBigIntFactorialsCache[n]!;
-    }
-
-    // Find the highest cached value (static or dynamic)
-    BigInt? cachedValue;
-    int? cachedKey;
-
-    // Check static cache for highest value <= n
-    for (final key in _bigIntfactorialsCache.keys) {
-      if (key <= n && (cachedKey == null || key > cachedKey)) {
-        cachedKey = key;
-        cachedValue = _bigIntfactorialsCache[key];
-      }
-    }
-
-    // Check dynamic cache for highest value <= n
-    for (final key in _dynamicBigIntFactorialsCache.keys) {
-      if (key <= n && (cachedKey == null || key > cachedKey)) {
-        cachedKey = key;
-        cachedValue = _dynamicBigIntFactorialsCache[key];
-      }
-    }
-
-    // Start from the highest cached value and compute iteratively
-    final start = (cachedKey ?? -1) + 1;
-    var result = cachedValue ?? BigInt.one; // coverage:ignore-line
-
-    // Iterative computation (avoids stack overflow)
-    for (var i = start; i <= n; i++) {
-      result *= BigInt.from(i);
-      // Cache intermediate values for future use
-      _dynamicBigIntFactorialsCache[i] = result;
-    }
-
-    return result;
+    return _bigIntFactorials.last * _product(_maxPrecomputedBigInt + 1, n);
   }
 }

@@ -253,15 +253,21 @@ void main() {
         final solutions = equation.solutions();
         expect(solutions.length, equals(3));
 
-        for (var i = 0; i < 3; ++i) {
-          expect(
-            solutions[i].real,
-            MoreOrLessEquals(expectedSolutions[i].real, precision: 1.0e-5),
+        // The order in which the roots are returned is not part of the API, so
+        // each expected root is matched with a distinct actual root.
+        final remaining = [...solutions];
+        for (final root in expectedSolutions) {
+          final index = remaining.indexWhere(
+            (x) =>
+                (x.real - root.real).abs() <= 1.0e-5 &&
+                (x.imaginary - root.imaginary).abs() <= 1.0e-5,
           );
           expect(
-            solutions[i].imaginary,
-            MoreOrLessEquals(expectedSolutions[i].imaginary, precision: 1.0e-5),
+            index,
+            isNot(-1),
+            reason: 'Expected root $root not found in $solutions',
           );
+          remaining.removeAt(index);
         }
       }
 

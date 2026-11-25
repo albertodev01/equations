@@ -4,7 +4,6 @@ import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigendecomposition_real.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_real.dart';
-import 'package:equations/src/utils/math_utils.dart';
 
 /// The machine epsilon of [double], which is the difference between 1 and the
 /// smallest [double] greater than 1.
@@ -63,7 +62,7 @@ typedef _LUFactors = ({
 /// Both versions return the same value but the first one is less verbose and
 /// preferred. In the example, `value1` holds the value of the element at
 /// position `(2, 3)` in the matrix.
-base class RealMatrix extends Matrix<double> with MathUtils {
+base class RealMatrix extends Matrix<double> {
   /// {@macro matrix_constructor_intro}
   new({required super.rows, required super.columns, super.identity})
     : super(defaultValue: 0, identityOneValue: 1);

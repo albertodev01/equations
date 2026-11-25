@@ -23,8 +23,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final decomposition = QRDecompositionReal(matrix: matrix);
 /// final [Q, R] = decomposition.decompose();
 /// ```
-final class QRDecompositionReal extends QRDecomposition<double, RealMatrix>
-    with MathUtils {
+final class QRDecompositionReal extends QRDecomposition<double, RealMatrix> {
   /// {@macro qr_decomposition_class_header}
   const new({required super.matrix});
 

@@ -25,8 +25,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final [Q, R] = decomposition.decompose();
 /// ```
 final class QRDecompositionComplex
-    extends QRDecomposition<Complex, ComplexMatrix>
-    with MathUtils {
+    extends QRDecomposition<Complex, ComplexMatrix> {
   /// {@macro qr_decomposition_class_header}
   const new({required super.matrix});
 

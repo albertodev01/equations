@@ -40,8 +40,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final [V, D, VInv] = decomposition.decompose();
 /// ```
 final class EigendecompositionReal
-    extends EigenDecomposition<double, RealMatrix>
-    with MathUtils {
+    extends EigenDecomposition<double, RealMatrix> {
   /// {@macro eigendecomposition_class_header}
   const new({required super.matrix});
 

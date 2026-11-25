@@ -12,6 +12,15 @@
  - **BREAKING**: `Riddler` has been renamed to `Ridders`, the correct name of the method. `Riddler` is still available as a deprecated alias
  - **BREAKING**: `Bisection`, `Brent`, `Chords`, `RegulaFalsi` and `Ridders` now return the endpoint as the only guess when `f(a)` or `f(b)` is zero, instead of throwing a `NonlinearException` (`RegulaFalsi` already did this)
  - **BREAKING**: `NonLinear.evaluateOn` and `NonLinear.evaluateDerivativeOn` now return `double` instead of `num`. `evaluateDerivativeOn(0)` now returns the derivative instead of `NaN`, so `Newton` no longer throws when a guess is `0`
+ - **BREAKING**: `Factorial.compute` now throws a `RangeError` when `n` is negative or greater than `20` (the largest factorial that fits in a 64-bit `int`), instead of returning `1` or an overflowed value. `Factorial.computeBigInt` now throws a `RangeError` when `n` is negative, instead of returning `1`
+ - `Factorial` is now exported by `package:equations/equations.dart`
+ - **BREAKING**: `Complex.nthRoot` now returns the principal root (argument `phase() / n`, so `nthRoot(2)` equals `sqrt()`), instead of the root with the smallest non-negative argument. It throws a `ComplexException` when `nth` is `0` (it returned `1`) or when `nth` is negative and the number is zero (it returned `NaN`). As a consequence, `Cubic.solutions` may return the roots in a different order
+ - **BREAKING**: `Complex.pow` returns `1` for a zero exponent (`0^0` was `NaN`), throws a `ComplexException` when a zero base is raised to a negative power (it returned `Infinity + NaNi`), and computes integer exponents up to 1024 with repeated multiplications, so for example `Complex.i().pow(2)` is exactly `-1`
+ - **BREAKING**: `Complex.toString`, `toStringAsFixed` and `toStringWithParenthesis` print zero as `0` instead of `0i` (this also affects `ComplexMatrix.toString`). `toStringAsFixed` omits a part that is zero after rounding (`Complex(5, 0.04).toStringAsFixed(1)` is `5.0`, it was `5.0 + 0.0i`). Whole numbers above about 9.2e18 are no longer printed as `9223372036854775807`
+ - `Complex.abs`, `Complex.reciprocal` and the `/` operator no longer overflow or underflow with very large or very small parts (`/` uses Smith's algorithm). `Complex.sqrt` uses a formula without cancellation, so `Complex(-4, 0).sqrt()` is exactly `2i`
+ - `Complex.exp`, `sin`, `cos`, `tan` and `cot` no longer return `NaN` parts when an intermediate value overflows (for example, `Complex(1000, 0).exp()` is `Infinity` and `Complex(1, 400).tan()` is `i`), and `sin` and `cos` are accurate when the imaginary part is small
+ - `Complex.compareTo` orders numbers with `NaN` parts after all the others, as `double.compareTo` does
+ - Added `Complex.log` (principal natural logarithm), `Complex.sinh`, `Complex.cosh`, `Complex.tanh` and `Complex.powComplex`, which raises a complex number to a complex exponent
  - Updated Dart SDK constraints to `^3.14.0`
  - Various bug fixes in `RealMatrix`, `ComplexMatrix` and the decomposition algorithms
  - Documentation improvements

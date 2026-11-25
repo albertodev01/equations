@@ -1,8 +1,8 @@
-import 'package:equations/src/utils/factorial.dart';
+import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 void main() {
-  late final Factorial factorial;
+  const factorial = Factorial();
 
   final values = <int, int>{
     0: 1,
@@ -62,9 +62,16 @@ void main() {
     30: BigInt.parse('265252859812191058636308480000000'),
   };
 
-  setUpAll(() {
-    factorial = const Factorial();
-  });
+  /// Computes n! by multiplying the integers one by one.
+  BigInt naiveFactorial(int n) {
+    var result = BigInt.one;
+
+    for (var i = 2; i <= n; ++i) {
+      result *= BigInt.from(i);
+    }
+
+    return result;
+  }
 
   group('Factorial', () {
     test('compute()', () {
@@ -79,83 +86,51 @@ void main() {
       }
     });
 
-    test(
-      'compute() with value bigger than 21 but the result is not exact',
-      () {
-        final value = factorial.compute(21);
+    test('compute() throws when the result does not fit in an int', () {
+      expect(() => factorial.compute(21), throwsRangeError);
+      expect(() => factorial.compute(100), throwsRangeError);
+    });
+
+    test('compute() and computeBigInt() throw with negative values', () {
+      expect(() => factorial.compute(-1), throwsRangeError);
+      expect(() => factorial.computeBigInt(-1), throwsRangeError);
+      expect(() => factorial.computeBigInt(-50), throwsRangeError);
+    });
+
+    test('computeBigInt() with values bigger than 30', () {
+      expect(
+        factorial.computeBigInt(31).toString(),
+        equals('8222838654177922817725562880000000'),
+      );
+      expect(
+        factorial.computeBigInt(100).toString(),
+        equals(
+          '93326215443944152681699238856266700490715968264381621468592963895217'
+          '59999322991560894146397615651828625369792082722375825118521091686400'
+          '0000000000000000000000',
+        ),
+      );
+    });
+
+    test('computeBigInt() agrees with the naive product', () {
+      // Covers both sides of the precomputed table and ranges that are split
+      // into halves several times.
+      for (final n in [31, 32, 46, 47, 48, 63, 64, 65, 200, 1000]) {
         expect(
-          value.toStringAsExponential(),
-          equals('-4.249290049419215e+18'),
+          factorial.computeBigInt(n),
+          equals(naiveFactorial(n)),
+          reason: 'n = $n',
         );
+      }
+    });
 
-        // Check that the value is cached
-        final value2 = factorial.compute(21);
+    test('compute() and computeBigInt() return the same values', () {
+      for (final entry in values.entries) {
         expect(
-          value2.toStringAsExponential(),
-          equals('-4.249290049419215e+18'),
+          factorial.computeBigInt(entry.key),
+          equals(BigInt.from(entry.value)),
         );
-      },
-    );
-
-    test(
-      'computeBigInt() with value bigger than 31',
-      () {
-        final value = factorial.computeBigInt(31);
-        expect(
-          value.toString(),
-          equals('8222838654177922817725562880000000'),
-        );
-
-        // Check that the value is cached
-        final value2 = factorial.computeBigInt(31);
-        expect(
-          value2.toString(),
-          equals('8222838654177922817725562880000000'),
-        );
-      },
-    );
-
-    test(
-      'compute() and computeBigInt() return the same values',
-      () {
-        final bigEntries = bigIntValues.entries.toList();
-        final entries = values.entries.toList();
-
-        for (var i = 0; i < entries.length; ++i) {
-          expect(entries[i].key, equals(bigEntries[i].key));
-          expect(entries[i].value, equals(bigEntries[i].value.toInt()));
-        }
-      },
-    );
-
-    test(
-      'compute() with dynamic cache',
-      () {
-        final value1 = factorial.compute(25);
-        expect(value1, isNotNull);
-
-        final value2 = factorial.compute(25);
-        expect(value2, equals(value1));
-
-        final value3 = factorial.compute(26);
-        expect(value3, isNotNull);
-        expect(value3, equals(value1 * 26));
-      },
-    );
-
-    test(
-      'computeBigInt() with dynamic cache',
-      () {
-        final value1 = factorial.computeBigInt(31);
-        expect(value1, isNotNull);
-
-        final value2 = factorial.computeBigInt(31);
-        expect(value2, equals(value1));
-
-        final value3 = factorial.computeBigInt(32);
-        expect(value3, isNotNull);
-        expect(value3, equals(value1 * BigInt.from(32)));
-      },
-    );
+      }
+    });
   });
 }

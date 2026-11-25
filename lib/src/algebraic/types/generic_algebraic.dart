@@ -60,7 +60,7 @@ part of '../algebraic.dart';
 /// );
 /// ```
 /// {@endtemplate}
-final class GenericAlgebraic extends Algebraic with MathUtils {
+final class GenericAlgebraic extends Algebraic {
   /// {@macro generic_algebraic}
   ///
   /// {@macro generic_algebraic_example}

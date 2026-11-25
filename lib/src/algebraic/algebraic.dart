@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
-import 'package:equations/src/utils/math_utils.dart';
 
 part 'types/constant.dart';
 part 'types/cubic.dart';

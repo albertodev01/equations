@@ -644,12 +644,16 @@ void main() {
           ],
         );
 
+        // These clustered roots are ill-conditioned: a rounding error of
+        // u * sum(|a_k| * 102^k) in P(102), about 4e-5 with u = 1.1e-16, moves
+        // the root by about 1e-5 because |P'(102)| = 4. The roots can't be
+        // expected to be more accurate than that.
         final solutions = equation.solutions();
         expect(solutions.length, equals(5));
         for (var i = 0; i < 5; ++i) {
           expect(
             solutions[i].real,
-            MoreOrLessEquals(100.0 + i, precision: 1.0e-6),
+            MoreOrLessEquals(100.0 + i, precision: 1.0e-5),
           );
           expect(solutions[i].imaginary.abs(), lessThan(1.0e-6));
         }

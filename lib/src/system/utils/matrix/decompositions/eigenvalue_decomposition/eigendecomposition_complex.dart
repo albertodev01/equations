@@ -33,8 +33,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final [V, D, VInv] = decomposition.decompose();
 /// ```
 final class EigendecompositionComplex
-    extends EigenDecomposition<Complex, ComplexMatrix>
-    with MathUtils {
+    extends EigenDecomposition<Complex, ComplexMatrix> {
   /// {@macro eigendecomposition_class_header}
   const new({required super.matrix});
 

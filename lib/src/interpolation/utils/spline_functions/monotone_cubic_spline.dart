@@ -9,7 +9,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// addition, if the control points are monotonic (either non-decreasing or
 /// non-increasing), the interpolated values will also be monotonic.
 /// {@endtemplate}
-final class MonotoneCubicSpline extends SplineFunction with MathUtils {
+final class MonotoneCubicSpline extends SplineFunction {
   /// {@macro monotone_cubic_spline}
   const new({
     required super.nodes,

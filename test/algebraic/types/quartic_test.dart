@@ -404,8 +404,8 @@ void main() {
         verifyQuarticSolutions(Quartic.realEquation(c: 1, e: 1), const [
           Complex(0.5, 0.86602),
           Complex(-0.5, -0.86602),
-          Complex(0.49999, -0.86602),
-          Complex(-0.49999, 0.86602),
+          Complex(0.5, -0.86602),
+          Complex(-0.5, 0.86602),
         ]);
       });
 

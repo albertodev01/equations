@@ -65,3 +65,4 @@ export 'src/utils/exceptions/types/parser_exception.dart';
 export 'src/utils/exceptions/types/poly_long_division_exception.dart';
 export 'src/utils/exceptions/types/system_solver_exception.dart';
 export 'src/utils/expression_parser.dart';
+export 'src/utils/factorial.dart';

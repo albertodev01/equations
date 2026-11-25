@@ -25,8 +25,7 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final decomposition = SVDReal(matrix: matrix);
 /// final [E, U, V] = decomposition.decompose();
 /// ```
-final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
-    with MathUtils {
+final class SVDReal extends SingleValueDecomposition<double, RealMatrix> {
   /// {@macro svd_class_header}
   const new({required super.matrix});
 
