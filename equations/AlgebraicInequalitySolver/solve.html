@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the solve method from the AlgebraicInequalitySolver class, for the Dart programming language.">
+  <title>solve method - AlgebraicInequalitySolver class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/AlgebraicInequalitySolver-class.html">AlgebraicInequalitySolver</a></li>
+    <li class="self-crumb">solve method</li>
+  </ol>
+  <div class="self-name">solve</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;AlgebraicInequalitySolver-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">solve</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../equations/AlgebraicInequalitySolution-class.html">AlgebraicInequalitySolution</a></span>&gt;</span></span>
+<span class="name ">solve</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Solves the inequality.</p>
+<p>Returns the solutions sorted in ascending order. They never overlap or
+touch each other. For <code>&lt;=</code> and <code>&gt;=</code> every solution includes its
+endpoints, while for <code>&lt;</code> and <code>&gt;</code> it excludes them. A root where <em>P(x)</em>
+touches zero without changing sign is returned as the degenerate interval
+<code>[root, root]</code>. The list is empty when no real number satisfies the
+inequality.</p>
+<p>Throws an <a href="../../equations/AlgebraicException-class.html">AlgebraicException</a> if <a href="../../equations/AlgebraicInequalitySolver/polynomial.html">polynomial</a> has complex coefficients
+or <a href="../../equations/AlgebraicInequalitySolver/precision.html">precision</a> is not positive.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">List&lt;AlgebraicInequalitySolution&gt; solve() {
+  if (precision &lt;= 0) {
+    throw const AlgebraicException(
+      &#39;The precision must be a positive number.&#39;,
+    );
+  }
+
+  if (!polynomial.isRealEquation) {
+    throw const AlgebraicException(
+      &#39;Inequalities are not well-defined in the complex plane.&#39;,
+    );
+  }
+
+  final coefficients = polynomial.coefficients
+      .map((c) =&gt; c.real)
+      .toList(growable: false);
+  final roundingTolerance = 4 * (coefficients.length - 1) * _machineEpsilon;
+  final rootTolerance = precision &gt; roundingTolerance
+      ? precision
+      : roundingTolerance;
+
+  &#47;&#47; Step 1: the sorted boundaries, without exact duplicates.
+  final candidates =
+      polynomial
+          .solutions()
+          .map((root) =&gt; root.real)
+          .where((x) =&gt; x.isFinite)
+          .toList()
+        ..sort();
+  final boundaries = candidates.indexed
+      .where((e) =&gt; e.$1 == 0 || e.$2 != candidates[e.$1 - 1])
+      .map((e) =&gt; e.$2)
+      .toList(growable: false);
+
+  &#47;&#47; Step 2: the sign of P(x) on each boundary, where 0 means it&#39;s a root.
+  final boundarySigns = boundaries
+      .map((x) =&gt; _sign(coefficients, x, rootTolerance))
+      .toList(growable: false);
+
+  &#47;&#47; Step 3: the sign of P(x) inside each region. There is one region more
+  &#47;&#47; than the number of boundaries.
+  final regionSigns = _testPoints(boundaries)
+      .map((x) =&gt; _sign(coefficients, x, roundingTolerance))
+      .toList(growable: false);
+  final mergedBoundaries = &lt;double&gt;[];
+  final mergedBoundarySigns = &lt;int&gt;[];
+  final mergedRegionSigns = &lt;int&gt;[regionSigns.first];
+
+  var i = 0;
+  while (i &lt; boundaries.length) {
+    var j = i;
+    while (j + 1 &lt; boundaries.length &amp;&amp;
+        boundarySigns[j] == 0 &amp;&amp;
+        boundarySigns[j + 1] == 0 &amp;&amp;
+        regionSigns[j + 1] == 0) {
+      ++j;
+    }
+
+    final cluster = boundaries.sublist(i, j + 1);
+    mergedBoundaries.add(cluster.reduce((a, b) =&gt; a + b) &#47; cluster.length);
+    mergedBoundarySigns.add(boundarySigns[i]);
+    mergedRegionSigns.add(regionSigns[j + 1]);
+    i = j + 1;
+  }
+
+  &#47;&#47; Step 4: the real line as a sequence of &#39;region, boundary, region, ...,
+  &#47;&#47; boundary, region&#39; elements, where the even indices are regions and the
+  &#47;&#47; odd indices are boundaries.
+  final holds = Iterable&lt;bool&gt;.generate(
+    2 * mergedBoundaries.length + 1,
+    (e) =&gt; _holds(
+      e.isEven ? mergedRegionSigns[e ~&#47; 2] : mergedBoundarySigns[e ~&#47; 2],
+    ),
+  ).toList(growable: false);
+
+  return _joinRuns(holds, mergedBoundaries);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/AlgebraicInequalitySolver-class.html">AlgebraicInequalitySolver</a></li>
+    <li class="self-crumb">solve method</li>
+</ol>
+
+    <h5>AlgebraicInequalitySolver class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      7.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

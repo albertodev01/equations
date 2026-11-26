@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the integrate method from the SimpsonRule class, for the Dart programming language.">
+  <title>integrate method - SimpsonRule class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/SimpsonRule-class.html">SimpsonRule</a></li>
+    <li class="self-crumb">integrate method</li>
+  </ol>
+  <div class="self-name">integrate</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;SimpsonRule-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">integrate</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype">(<span class="field">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span></span> <span class="field-name">guesses</span>, </span><span class="field"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="field-name">result</span>}</span>)</span>
+<span class="name ">integrate</span>(<wbr>)
+
+      <div class="features"><span class="feature">override</span></div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Calculates the numerical value of the definite integral of <a href="../../equations/NumericalIntegration/function.html">function</a>
+between <a href="../../equations/NumericalIntegration/lowerBound.html">lowerBound</a> and <a href="../../equations/NumericalIntegration/upperBound.html">upperBound</a>. Returns a record whose fields are:</p>
+<ul>
+<li>
+<p><code>guesses</code>, the values computed by the algorithm to get the result.
+Their meaning depends on the algorithm: interval-based methods store
+the values of <a href="../../equations/NumericalIntegration/function.html">function</a> at the points they sample, while
+<a href="../../equations/AdaptiveQuadrature-class.html">AdaptiveQuadrature</a> stores the integral of each subinterval it
+accepts;</p>
+</li>
+<li>
+<p><code>result</code>, the approximate value of the integral on the interval
+<code>[lowerBound, upperBound]</code>.</p>
+</li>
+</ul>
+<p>If <a href="../../equations/NumericalIntegration/lowerBound.html">lowerBound</a> is greater than <a href="../../equations/NumericalIntegration/upperBound.html">upperBound</a>, the sign of the result is
+reversed, as in the standard convention for definite integrals.</p>
+<p>Throws a <a href="../../equations/NumericalIntegrationException-class.html">NumericalIntegrationException</a> if <a href="../../equations/NumericalIntegration/lowerBound.html">lowerBound</a> or <a href="../../equations/NumericalIntegration/upperBound.html">upperBound</a>
+is not finite.</p>
+<p>The <code>guesses</code> list contains the values of <a href="../../equations/NumericalIntegration/function.html">function</a> at the points
+<code>x_i = lowerBound + i * h</code>, for <code>i = 0, 1, ..., intervals</code>, so it has
+<code>intervals + 1</code> elements.</p>
+<p>Also throws a <a href="../../equations/NumericalIntegrationException-class.html">NumericalIntegrationException</a> if <a href="../../equations/IntervalsIntegration/intervals.html">intervals</a> is not
+positive or odd.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+({List&lt;double&gt; guesses, double result}) integrate() {
+  if (!lowerBound.isFinite || !upperBound.isFinite) {
+    throw const NumericalIntegrationException(
+      &#39;The integration bounds must be finite.&#39;,
+    );
+  }
+  if (intervals &lt;= 0) {
+    throw const NumericalIntegrationException(
+      &#39;The number of intervals must be positive.&#39;,
+    );
+  }
+  if (intervals % 2 != 0) {
+    throw const NumericalIntegrationException(
+      &#39;The number of intervals must be even.&#39;,
+    );
+  }
+
+  final h = (upperBound - lowerBound) &#47; intervals;
+
+  &#47;&#47; Initialize sums for the Simpson&#39;s Rule formula
+  &#47;&#47; oddSum: sum of f(x) at odd-indexed points (multiplied by 4)
+  &#47;&#47; evenSum: sum of f(x) at even-indexed points (multiplied by 2)
+  var oddSum = 0.0;
+  var evenSum = 0.0;
+  final guesses = List&lt;double&gt;.filled(intervals + 1, 0);
+
+  for (var i = 1; i &lt; intervals; i += 2) {
+    final x = lowerBound + i * h;
+    final fx = evaluateFunction(x);
+    oddSum += fx;
+    guesses[i] = fx;
+  }
+
+  for (var i = 2; i &lt; intervals - 1; i += 2) {
+    final x = lowerBound + i * h;
+    final fx = evaluateFunction(x);
+    evenSum += fx;
+    guesses[i] = fx;
+  }
+
+  final fLower = evaluateFunction(lowerBound);
+  final fUpper = evaluateFunction(upperBound);
+  guesses[0] = fLower;
+  guesses[intervals] = fUpper;
+
+  return (
+    guesses: guesses,
+    result: (fLower + 4 * oddSum + 2 * evenSum + fUpper) * h &#47; 3,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/SimpsonRule-class.html">SimpsonRule</a></li>
+    <li class="self-crumb">integrate method</li>
+</ol>
+
+    <h5>SimpsonRule class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      7.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

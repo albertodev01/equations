@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the log method from the Complex class, for the Dart programming language.">
+  <title>log method - Complex class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/Complex-class.html">Complex</a></li>
+    <li class="self-crumb">log method</li>
+  </ol>
+  <div class="self-name">log</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;Complex-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">log</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="../../equations/Complex-class.html">Complex</a></span>
+<span class="name ">log</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Calculates the principal natural logarithm of this complex number, which
+is <code>log(abs()) + i * phase()</code>. The imaginary part is in the range
+<code>(-pi, pi]</code> (see <a href="../../equations/Complex/phase.html">phase</a>).</p>
+<p>The real part is accurate even when the modulus is close to 1 (for
+example, the real part of <code>log(1 + 1e-10i)</code> is <code>5e-21</code>) and doesn't
+overflow when the modulus is out of the <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a> range.</p>
+<p>Throws a <a href="../../equations/ComplexException-class.html">ComplexException</a> if this number is zero.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Complex log() {
+  if (isZero) {
+    throw const ComplexException(&#39;The logarithm of zero is undefined.&#39;);
+  }
+
+  final x = real.abs();
+  final y = imaginary.abs();
+  final big = math.max(x, y);
+  final small = math.min(x, y);
+
+  if (big.isInfinite) {
+    return Complex(double.infinity, phase());
+  }
+
+  final double logModulus;
+
+  if (big &gt;= 0.5 &amp;&amp; big &lt;= 2) {
+    &#47;&#47; log|z| = log(|z|^2) &#47; 2 = log1p(|z|^2 - 1) &#47; 2. Here &#39;big - 1&#39; is
+    &#47;&#47; exact, so |z|^2 - 1 = (big - 1)(big + 1) + small^2 has no
+    &#47;&#47; cancellation unless |z| is close to 1, where the result is tiny anyway.
+    logModulus = _log1p((big - 1) * (big + 1) + small * small) &#47; 2;
+  } else {
+    &#47;&#47; log|z| = log(big) + log(1 + (small &#47; big)^2) &#47; 2, which can&#39;t
+    &#47;&#47; overflow. Here |log(big)| &gt; log(2), which is more than twice the
+    &#47;&#47; second term, so there&#39;s no cancellation.
+    final ratio = small &#47; big;
+    logModulus = math.log(big) + _log1p(ratio * ratio) &#47; 2;
+  }
+
+  return Complex(logModulus, phase());
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/Complex-class.html">Complex</a></li>
+    <li class="self-crumb">log method</li>
+</ol>
+
+    <h5>Complex class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      7.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

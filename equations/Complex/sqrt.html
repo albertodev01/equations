@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the sqrt method from the Complex class, for the Dart programming language.">
+  <title>sqrt method - Complex class - equations library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations.dart</a></li>
+    <li><a href="../../equations/Complex-class.html">Complex</a></li>
+    <li class="self-crumb">sqrt method</li>
+  </ol>
+  <div class="self-name">sqrt</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="equations&#47;Complex-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">sqrt</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="../../equations/Complex-class.html">Complex</a></span>
+<span class="name ">sqrt</span>(<wbr>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Calculates the principal square root of this complex number, which is the
+root with a non-negative real part.</p>
+<p>The imaginary part of the result has the same sign as the imaginary part
+of this number (<code>-0.0</code> included), so <code>Complex(-4, 0).sqrt()</code> is <code>2i</code> while
+<code>Complex(-4, -0.0).sqrt()</code> is <code>-2i</code>.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Complex sqrt() {
+  final a = real;
+  final b = imaginary;
+
+  if (b.isInfinite) {
+    return Complex(double.infinity, b);
+  }
+
+  &#47;&#47; On the real axis the result is exact.
+  if (b == 0) {
+    if (a &gt;= 0) {
+      return Complex(math.sqrt(a), b);
+    }
+
+    final root = math.sqrt(-a);
+    return Complex(0, b.isNegative ? -root : root);
+  }
+
+  &#47;&#47; The formula t = sqrt((|z| + |a|) &#47; 2) never subtracts two numbers with
+  &#47;&#47; the same sign, so there is no cancellation. Halving each term before the
+  &#47;&#47; sum avoids overflow for very large values.
+  final modulus = abs();
+  final t = modulus &gt; 1e300
+      ? math.sqrt(modulus &#47; 2 + a.abs() &#47; 2)
+      : math.sqrt((modulus + a.abs()) &#47; 2);
+
+  if (a &gt;= 0) {
+    return Complex(t, b &#47; (2 * t));
+  }
+
+  return Complex(b.abs() &#47; (2 * t), b &lt; 0 ? -t : t);
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">equations</a></li>
+    <li><a href="../../equations/">equations</a></li>
+    <li><a href="../../equations/Complex-class.html">Complex</a></li>
+    <li class="self-crumb">sqrt method</li>
+</ol>
+
+    <h5>Complex class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    equations
+      7.0.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
