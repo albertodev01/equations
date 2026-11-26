@@ -88,6 +88,20 @@ void main() {
       );
     });
 
+    test('Throws when the derivative is NaN', () {
+      // f(0) = 1 is finite, but f(-h) is NaN in the central difference
+      expect(
+        const Newton(function: 'sqrt(x)+1', x0: 0).solve,
+        throwsA(
+          isA<NonlinearException>().having(
+            (e) => e.message,
+            'message',
+            equals("Couldn't evaluate f'(0.0). The derivative is NaN"),
+          ),
+        ),
+      );
+    });
+
     test('Throws when the function value is NaN', () {
       expect(
         const Newton(function: 'sqrt(x)-3', x0: -5).solve,

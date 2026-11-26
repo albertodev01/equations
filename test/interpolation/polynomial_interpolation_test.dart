@@ -192,6 +192,27 @@ void main() {
       );
     });
 
+    test('Exception thrown for non-finite x-values', () {
+      expect(
+        () => const PolynomialInterpolation(
+          nodes: [
+            InterpolationNode(x: double.nan, y: 3),
+            InterpolationNode(x: 1, y: 5),
+          ],
+        ).compute(0),
+        throwsA(isA<InterpolationException>()),
+      );
+      expect(
+        () => const PolynomialInterpolation(
+          nodes: [
+            InterpolationNode(x: 1, y: 3),
+            InterpolationNode(x: double.infinity, y: 5),
+          ],
+        ).compute(0),
+        throwsA(isA<InterpolationException>()),
+      );
+    });
+
     test('Exception thrown for duplicate x-values', () {
       expect(
         () => const PolynomialInterpolation(

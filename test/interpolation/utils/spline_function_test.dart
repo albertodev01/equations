@@ -81,5 +81,24 @@ void main() {
         );
       },
     );
+
+    test('Object comparison', () {
+      final nodes = [
+        const InterpolationNode(x: 3, y: -2),
+        const InterpolationNode(x: 4, y: 1),
+      ];
+      final linear = LinearSpline(nodes: nodes);
+
+      expect(linear == LinearSpline(nodes: [...nodes]), isTrue);
+      expect(linear == MonotoneCubicSpline(nodes: nodes), isFalse);
+      expect(
+        linear ==
+            LinearSpline(
+              nodes: [nodes.first, const InterpolationNode(x: 4, y: 2)],
+            ),
+        isFalse,
+      );
+      expect(linear == LinearSpline(nodes: [nodes.first]), isFalse);
+    });
   });
 }

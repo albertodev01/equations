@@ -168,6 +168,29 @@ void main() {
       );
     });
 
+    test('Throws when the function is not finite inside a subinterval', () {
+      // The function is finite at the initial partition points, but NaN on
+      // (0.035, 0.055), which contains the midpoint of the first subinterval
+      expect(
+        () => const AdaptiveQuadrature(
+          function: 'sqrt((x-0.045)^2-0.0001)',
+          lowerBound: 0,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+
+      // Every value is finite, but the Simpson sums overflow
+      expect(
+        () => const AdaptiveQuadrature(
+          function: '10^308',
+          lowerBound: 0,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
     test('Throws on non-convergence', () {
       // 1/x is never evaluated at 0, but it isn't integrable around it
       expect(

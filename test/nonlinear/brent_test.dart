@@ -40,6 +40,13 @@ void main() {
       expect(brent.solve, throwsA(isA<ExpressionParserException>()));
     });
 
+    test('Interval already smaller than the tolerance', () {
+      // The interval is narrower than the tolerance (1e-10), so no iteration
+      // is done and the only guess is the upper bound
+      final solutions = const Brent(function: 'x', a: -1e-11, b: 1e-11).solve();
+      expect(solutions.guesses, equals([1e-11]));
+    });
+
     test('Object comparison', () {
       const brent = Brent(function: 'x-10', a: 8, b: 12);
 

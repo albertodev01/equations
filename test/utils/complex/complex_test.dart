@@ -569,6 +569,18 @@ void main() {
       );
     });
 
+    test('sin() and cos() with a non-zero real part', () {
+      // sin(a + bi) = sin(a) cosh(b) + i cos(a) sinh(b)
+      final sin = const Complex(1, 2).sin();
+      expect(sin.real, const MoreOrLessEquals(3.165778513216168));
+      expect(sin.imaginary, const MoreOrLessEquals(1.959601041421606));
+
+      // cos(a + bi) = cos(a) cosh(b) - i sin(a) sinh(b)
+      final cos = const Complex(1, 2).cos();
+      expect(cos.real, const MoreOrLessEquals(2.032723007019665));
+      expect(cos.imaginary, const MoreOrLessEquals(-3.051897799151800));
+    });
+
     test('tan() and cot() with large imaginary parts', () {
       final tan = const Complex(1, 400).tan();
       expect(tan.real, const MoreOrLessEquals(0));
@@ -600,6 +612,17 @@ void main() {
       final large = const Complex(-1e308, 1e308).sqrt();
       expect(large.real.isFinite && large.imaginary.isFinite, isTrue);
       expect(large.real, greaterThan(0));
+
+      // An infinite imaginary part gives an infinite real part and keeps the
+      // sign of the imaginary part
+      expect(
+        const Complex(3, double.infinity).sqrt(),
+        equals(const Complex(double.infinity, double.infinity)),
+      );
+      expect(
+        const Complex(3, double.negativeInfinity).sqrt(),
+        equals(const Complex(double.infinity, double.negativeInfinity)),
+      );
     });
 
     test('nthRoot() returns the principal root', () {
