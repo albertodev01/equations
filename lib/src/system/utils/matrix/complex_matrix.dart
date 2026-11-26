@@ -5,13 +5,44 @@ import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_deco
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_complex.dart';
 
-/// A simple Dart implementation of an `m x n` matrix whose data type is
-/// [Complex].
+/// The machine epsilon of [double], which is the difference between 1 and the
+/// smallest [double] greater than 1.
+const _epsilon = 2.220446049250313e-16;
+
+/// Thrown when an operation requires a square matrix.
+const _notSquareError = MatrixException('The matrix must be square.');
+
+/// Thrown when an element-wise operation is applied to matrices with
+/// different shapes.
+const _shapeMismatchError = MatrixException(
+  'The two matrices must have the same number of rows and columns.',
+);
+
+/// Thrown when an operation requires an invertible matrix.
+const _singularMatrixError = MatrixException('The matrix is singular.');
+
+/// The compact result of the LU factorization with partial pivoting of a
+/// square `n x n` matrix `A`, such that `P x A = L x U`.
+///
+///  - `lu`: a flattened `n x n` matrix in row-major order. The elements above
+///    and on the main diagonal belong to `U`, while the elements below the
+///    main diagonal are the multipliers of `L` (whose diagonal is made of
+///    ones and is not stored).
+///  - `permutation`: row `i` of `P x A` is row `permutation[i]` of `A`.
+///  - `isOddPermutation`: whether an odd number of row swaps was performed,
+///    in which case `det(P) = -1`.
+typedef _LUFactors = ({
+  List<Complex> lu,
+  List<int> permutation,
+  bool isOddPermutation,
+});
+
+/// A Dart implementation of an `NxM` matrix whose data type is [Complex].
 ///
 /// ```dart
 /// final matrix = ComplexMatrix(
-///   rowCount: 3,
-///   columnCount: 4,
+///   rows: 3,
+///   columns: 4,
 /// );
 /// ```
 ///
@@ -20,20 +51,20 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///
 /// ```dart
 /// final matrix = ComplexMatrix(
-///   rowCount: 6,
-///   columnCount: 6,
+///   rows: 6,
+///   columns: 6,
 /// );
 ///
-/// final value = matrix(2, 3);
-/// final value = matrix.itemAt(2, 3);
+/// final value1 = matrix(2, 3);
+/// final value2 = matrix.itemAt(2, 3);
 /// ```
 ///
 /// Both versions return the same value but the first one is less verbose and
-/// preferred. In the example, `value` holds the value of the element at
+/// preferred. In the example, `value1` holds the value of the element at
 /// position `(2, 3)` in the matrix.
 base class ComplexMatrix extends Matrix<Complex> {
   /// {@macro matrix_constructor_intro}
-  ComplexMatrix({
+  new({
     required super.rows,
     required super.columns,
     super.identity = false,
@@ -42,98 +73,61 @@ base class ComplexMatrix extends Matrix<Complex> {
   });
 
   /// {@macro matrix_fromData_constructor}
-  ComplexMatrix.fromData({
+  new fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
   /// {@macro matrix_fromFlattenedData_constructor}
-  ComplexMatrix.fromFlattenedData({
+  new fromFlattenedData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromFlattenedData();
 
   /// {@macro matrix_diagonal_constructor}
-  ComplexMatrix.diagonal({
+  new diagonal({
     required super.rows,
     required super.columns,
     required super.diagonalValue,
   }) : super.diagonal(defaultValue: const Complex.zero());
 
-  void _setDataAt(List<Complex> flatMatrix, int row, int col, Complex value) =>
-      flatMatrix[columnCount * row + col] = value;
-
-  Complex _getDataAt(List<Complex> source, int row, int col) =>
-      source[columnCount * row + col];
-
   @override
-  Matrix<Complex> operator +(Matrix<Complex> other) {
-    if (rowCount != other.rowCount || columnCount != other.columnCount) {
-      throw const MatrixException('The two matrices must have the same size!');
-    }
+  ComplexMatrix operator +(Matrix<Complex> other) {
+    _checkSameShape(other);
 
-    // Performing the sum
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
+    final a = flattenData;
+    final b = other.flattenData;
 
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        _setDataAt(flatMatrix, i, j, this(i, j) + other(i, j));
-      }
-    }
-
-    // Building the new matrix
     return ComplexMatrix.fromFlattenedData(
       rows: rowCount,
       columns: columnCount,
-      data: flatMatrix,
+      data: List<Complex>.generate(a.length, (i) => a[i] + b[i]),
     );
   }
 
   @override
-  Matrix<Complex> operator -(Matrix<Complex> other) {
-    if (rowCount != other.rowCount || columnCount != other.columnCount) {
-      throw const MatrixException('The two matrices must have the same size!');
-    }
+  ComplexMatrix operator -(Matrix<Complex> other) {
+    _checkSameShape(other);
 
-    // Performing the difference
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
+    final a = flattenData;
+    final b = other.flattenData;
 
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        _setDataAt(flatMatrix, i, j, this(i, j) - other(i, j));
-      }
-    }
-
-    // Building the new matrix
     return ComplexMatrix.fromFlattenedData(
       rows: rowCount,
       columns: columnCount,
-      data: flatMatrix,
+      data: List<Complex>.generate(a.length, (i) => a[i] - b[i]),
     );
   }
 
   @override
-  Matrix<Complex> operator *(Matrix<Complex> other) {
+  ComplexMatrix operator *(Matrix<Complex> other) {
     if (columnCount != other.rowCount) {
       throw const MatrixException(
-        'Matrices shapes mismatch! The column count '
-        'of the source matrix must match the row count of the other.',
+        'The column count of this matrix must match the row count of the '
+        'other matrix.',
       );
-    }
-
-    // Special case: zero matrix multiplication
-    if (isZero() || other.isZero()) {
-      return ComplexMatrix(rows: rowCount, columns: other.columnCount);
     }
 
     // Cache dimensions and data for better performance
@@ -142,16 +136,10 @@ base class ComplexMatrix extends Matrix<Complex> {
     final p = other.columnCount;
     final a = flattenData;
     final b = other.flattenData;
-
-    // Performing the product with block multiplication
-    final flatMatrix = List<Complex>.generate(
-      n * p,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
+    final flatMatrix = List<Complex>.filled(n * p, const Complex.zero());
 
     // Block multiplication for better cache locality
-    const blockSize = 16; // Smaller block size for complex numbers
+    const blockSize = 16;
     for (var ii = 0; ii < n; ii += blockSize) {
       final iEnd = (ii + blockSize < n) ? ii + blockSize : n;
       for (var jj = 0; jj < p; jj += blockSize) {
@@ -159,24 +147,21 @@ base class ComplexMatrix extends Matrix<Complex> {
         for (var kk = 0; kk < m; kk += blockSize) {
           final kEnd = (kk + blockSize < m) ? kk + blockSize : m;
 
-          // Multiply blocks
           for (var i = ii; i < iEnd; i++) {
             for (var j = jj; j < jEnd; j++) {
-              var sum = const Complex.zero();
+              var real = 0.0;
+              var imaginary = 0.0;
               for (var k = kk; k < kEnd; k++) {
                 final aik = a[m * i + k];
                 final bkj = b[p * k + j];
-                // Optimize complex multiplication by avoiding temporary objects
-                sum = Complex(
-                  sum.real +
-                      aik.real * bkj.real -
-                      aik.imaginary * bkj.imaginary,
-                  sum.imaginary +
-                      aik.real * bkj.imaginary +
-                      aik.imaginary * bkj.real,
-                );
+                real =
+                    real + aik.real * bkj.real - aik.imaginary * bkj.imaginary;
+                imaginary =
+                    imaginary +
+                    aik.real * bkj.imaginary +
+                    aik.imaginary * bkj.real;
               }
-              flatMatrix[p * i + j] += sum;
+              flatMatrix[p * i + j] += Complex(real, imaginary);
             }
           }
         }
@@ -191,103 +176,69 @@ base class ComplexMatrix extends Matrix<Complex> {
   }
 
   @override
-  Matrix<Complex> operator /(Matrix<Complex> other) {
-    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException(
-        'Matrices shapes mismatch! The column count '
-        'of the source matrix must match the row count of the other.',
-      );
-    }
+  ComplexMatrix operator /(Matrix<Complex> other) {
+    _checkSameShape(other);
 
-    // Performing the division
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
+    final a = flattenData;
+    final b = other.flattenData;
 
-    // Performing the division
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        _setDataAt(flatMatrix, i, j, this(i, j) / other(i, j));
-      }
-    }
-
-    // Building the new matrix
     return ComplexMatrix.fromFlattenedData(
       rows: rowCount,
       columns: columnCount,
-      data: flatMatrix,
+      data: List<Complex>.generate(a.length, (i) => a[i] / b[i]),
     );
   }
 
   @override
   ComplexMatrix transpose() {
-    final source = List<Complex>.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-    );
-
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        source[rowCount * j + i] = this(i, j);
-      }
-    }
+    final a = flattenData;
 
     return ComplexMatrix.fromFlattenedData(
       rows: columnCount,
       columns: rowCount,
-      data: source,
+      data: List<Complex>.generate(a.length, (k) {
+        final r = k ~/ rowCount;
+        final c = k % rowCount;
+
+        return a[columnCount * c + r];
+      }),
     );
   }
 
   @override
   ComplexMatrix minor(int row, int col) {
-    if (row < 0 || col < 0) {
-      throw const MatrixException('The arguments must be positive!');
-    }
-
-    if (row > rowCount || col > columnCount) {
-      throw const MatrixException('The given (row; col) pair is invalid.');
-    }
-
     if (rowCount == 1 || columnCount == 1) {
       throw const MatrixException(
         'Cannot compute minors when "rowCount" or "columnCount" is 1.',
       );
     }
 
-    final source = List<List<Complex>>.generate(
-      rowCount - 1,
-      (_) =>
-          List<Complex>.generate(columnCount - 1, (_) => const Complex.zero()),
-    );
-
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; i != row && j < columnCount; ++j) {
-        if (j != col) {
-          final minorRow = i < row ? i : i - 1;
-          final minorCol = j < col ? j : j - 1;
-
-          source[minorRow][minorCol] = this(i, j);
-        }
-      }
+    if (row < 0 || row >= rowCount || col < 0 || col >= columnCount) {
+      throw MatrixException('The ($row, $col) position is out of bounds.');
     }
 
-    return ComplexMatrix.fromData(
+    final a = flattenData;
+    final minorColumns = columnCount - 1;
+
+    return ComplexMatrix.fromFlattenedData(
       rows: rowCount - 1,
-      columns: columnCount - 1,
-      data: source,
+      columns: minorColumns,
+      data: List<Complex>.generate((rowCount - 1) * minorColumns, (k) {
+        final i = k ~/ minorColumns;
+        final j = k % minorColumns;
+        final sourceRow = i < row ? i : i + 1;
+        final sourceCol = j < col ? j : j + 1;
+        return a[columnCount * sourceRow + sourceCol];
+      }),
     );
   }
 
   @override
   ComplexMatrix cofactorMatrix() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix must be square!');
+      throw _notSquareError;
     }
 
-    // The cofactor matrix of an 1x1 matrix is always 1
     if (rowCount == 1) {
       return ComplexMatrix.fromFlattenedData(
         rows: 1,
@@ -296,96 +247,126 @@ base class ComplexMatrix extends Matrix<Complex> {
       );
     }
 
-    final source = List<List<Complex>>.generate(
-      rowCount,
-      (_) => List<Complex>.generate(columnCount, (_) => const Complex.zero()),
-    );
-
-    // Computing cofactors
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        final sign = Complex.fromReal(pow(-1, i + j).toDouble());
-        source[i][j] = sign * minor(i, j).determinant();
-      }
-    }
-
-    return ComplexMatrix.fromData(
-      rows: rowCount,
-      columns: columnCount,
-      data: source,
+    final n = rowCount;
+    return ComplexMatrix.fromFlattenedData(
+      rows: n,
+      columns: n,
+      data: List<Complex>.generate(n * n, (k) {
+        final i = k ~/ n;
+        final j = k % n;
+        final minorDeterminant = minor(i, j).determinant();
+        return (i + j).isEven ? minorDeterminant : -minorDeterminant;
+      }),
     );
   }
 
   @override
   ComplexMatrix inverse() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix must be square!');
+      throw _notSquareError;
     }
 
     // The inverse of an 1x1 matrix "A" is simply "1/A(0,0)"
     if (rowCount == 1) {
+      final value = flattenData.first;
+      if (value == const Complex.zero()) {
+        throw _singularMatrixError;
+      }
+
       return ComplexMatrix.fromFlattenedData(
         rows: 1,
         columns: 1,
-        data: [const Complex.fromReal(1) / this(0, 0)],
+        data: [const Complex.fromReal(1) / value],
       );
     }
 
-    // In case of 2x2 matrix, we can directly compute it and save computational
-    // time. Note that, from here, we're sure that this matrix is square so no
-    // need to check both the row count and the col count.
     if (rowCount == 2) {
-      final multiplier =
-          const Complex(1, 0) /
-          (this(0, 0) * this(1, 1) - this(0, 1) * this(1, 0));
+      final scale = _powerOfTwoNear(
+        flattenData.fold<double>(
+          0,
+          (m, value) => max(m, max(value.real.abs(), value.imaginary.abs())),
+        ),
+      );
+      if (scale == 0) {
+        throw _singularMatrixError;
+      }
+
+      final a = flattenData
+          .map((value) => Complex(value.real / scale, value.imaginary / scale))
+          .toList(growable: false);
+      final maxAbs = a.fold<double>(0, (m, value) => max(m, value.abs()));
+      final determinant = a.first * a[3] - a[1] * a[2];
+
+      if (determinant.abs() <= 2 * maxAbs * _epsilon * maxAbs) {
+        throw _singularMatrixError;
+      }
+
+      final multiplier = const Complex.fromReal(1) / determinant;
+      Complex element(Complex value) {
+        final product = multiplier * value;
+
+        return Complex(product.real / scale, product.imaginary / scale);
+      }
 
       return ComplexMatrix.fromFlattenedData(
         rows: 2,
         columns: 2,
-        data: [
-          multiplier * this(1, 1),
-          -multiplier * this(0, 1),
-          -multiplier * this(1, 0),
-          multiplier * this(0, 0),
-        ],
+        data: [element(a[3]), element(-a[1]), element(-a[2]), element(a.first)],
       );
     }
 
-    // If the matrix to be inverted is 3x3 or greater, let's use the cofactor
-    // method to compute the inverse. The inverse of a matrix can be computed
-    // like so:
-    //
-    //   A^(-1) = 1 / det(A) * cof(A)^(T)
-    //
-    // where 'det(A)' is the determinant of A and 'cof(A)^T' is the transposed
-    // matrix of the cofactor matrix.
-    final transpose = cofactorMatrix().transpose();
+    // For 3x3 matrices and bigger, use the LU factorization: P x A = L x U.
+    final tolerance = _pivotTolerance();
+    final factors = _factorize();
+    final n = rowCount;
+    final lu = factors.lu;
+    final permutation = factors.permutation;
 
-    // Multiplying each number by 1/det(A)
-    final multiplier = const Complex(1, 0) / determinant();
-    final inverse = transpose.flattenData
-        .map((value) => multiplier * value)
-        .toList(growable: false);
+    for (var i = 0; i < n; ++i) {
+      if (lu[n * i + i].abs() <= tolerance) {
+        throw _singularMatrixError;
+      }
+    }
 
-    return ComplexMatrix.fromFlattenedData(
-      rows: rowCount,
-      columns: columnCount,
-      data: inverse,
-    );
+    final inverse = List<Complex>.filled(n * n, const Complex.zero());
+    final column = List<Complex>.filled(n, const Complex.zero());
+
+    for (var j = 0; j < n; ++j) {
+      for (var i = 0; i < n; ++i) {
+        var sum = permutation[i] == j
+            ? const Complex.fromReal(1)
+            : const Complex.zero();
+        for (var k = 0; k < i; ++k) {
+          sum -= lu[n * i + k] * column[k];
+        }
+        column[i] = sum;
+      }
+      for (var i = n - 1; i >= 0; --i) {
+        var sum = column[i];
+        for (var k = i + 1; k < n; ++k) {
+          sum -= lu[n * i + k] * column[k];
+        }
+        column[i] = sum / lu[n * i + i];
+      }
+
+      for (var i = 0; i < n; ++i) {
+        inverse[n * i + j] = column[i];
+      }
+    }
+
+    return ComplexMatrix.fromFlattenedData(rows: n, columns: n, data: inverse);
   }
 
   @override
   Complex trace() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix is not square!');
+      throw _notSquareError;
     }
 
-    // The trace value
+    final a = flattenData;
     var trace = const Complex.zero();
-
-    // Computing the trace
-    for (var i = 0; i < columnCount; ++i) {
-      trace += this(i, i);
+    for (var i = 0; i < rowCount; ++i) {
+      trace += a[columnCount * i + i];
     }
 
     return trace;
@@ -393,11 +374,12 @@ base class ComplexMatrix extends Matrix<Complex> {
 
   @override
   bool isDiagonal() {
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        if ((i != j) && (this(i, j) != const Complex.zero())) {
-          return false;
-        }
+    final a = flattenData;
+
+    for (var k = 0; k < a.length; ++k) {
+      if ((k ~/ columnCount != k % columnCount) &&
+          (a[k] != const Complex.zero())) {
+        return false;
       }
     }
 
@@ -407,18 +389,16 @@ base class ComplexMatrix extends Matrix<Complex> {
   @override
   bool isIdentity() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix is not square!');
+      return false;
     }
 
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        if ((i != j) && (this(i, j) != const Complex.zero())) {
-          return false;
-        }
-
-        if ((i == j) && (this(i, j) != const Complex.fromReal(1))) {
-          return false;
-        }
+    final a = flattenData;
+    for (var k = 0; k < a.length; ++k) {
+      final expected = (k ~/ columnCount == k % columnCount)
+          ? const Complex.fromReal(1)
+          : const Complex.zero();
+      if (a[k] != expected) {
+        return false;
       }
     }
 
@@ -427,94 +407,86 @@ base class ComplexMatrix extends Matrix<Complex> {
 
   @override
   int rank() {
-    if (isSquareMatrix && rowCount == 1) {
-      return this(0, 0) == const Complex.zero() ? 0 : 1;
-    }
-
-    // If it's a square matrix, we can use the LU decomposition which is faster
-    if (isSquareMatrix) {
-      final lower = luDecomposition().first;
-
-      // Linearly independent columns
-      var independentCols = 0;
-
-      for (var i = 0; i < lower.rowCount; ++i) {
-        for (var j = 0; j < lower.columnCount; ++j) {
-          if ((i == j) && (lower(i, j) != const Complex.zero())) {
-            ++independentCols;
-          }
-        }
-      }
-
-      return independentCols;
-    }
-
-    // If the matrix is rectangular and it's not 1x1, then use the "traditional"
-    // algorithm
+    final tolerance = _pivotTolerance();
+    final m = rowCount;
+    final n = columnCount;
+    final a = toList();
     var rank = 0;
-    final matrix = toListOfList();
 
-    const precision = 1.0e-12;
-    final selectedRow = List<bool>.generate(rowCount, (_) => false);
-
-    for (var i = 0; i < columnCount; ++i) {
-      var j = 0;
-      for (j = 0; j < rowCount; ++j) {
-        if (!selectedRow[j] && matrix[j][i].abs() > precision) {
-          break;
+    for (var col = 0; col < n && rank < m; ++col) {
+      var pivotRow = rank;
+      for (var i = rank + 1; i < m; ++i) {
+        if (a[n * i + col].abs() > a[n * pivotRow + col].abs()) {
+          pivotRow = i;
         }
       }
 
-      if (j != rowCount) {
-        ++rank;
-        selectedRow[j] = true;
+      // The whole column (from 'rank' onwards) is zero
+      if (a[n * pivotRow + col].abs() <= tolerance) {
+        continue;
+      }
 
-        for (var p = i + 1; p < columnCount; ++p) {
-          matrix[j][p] /= matrix[j][i];
-        }
-
-        for (var k = 0; k < rowCount; ++k) {
-          if (k != j && matrix[k][i].abs() > precision) {
-            for (var p = i + 1; p < columnCount; ++p) {
-              matrix[k][p] -= matrix[j][p] * matrix[k][i];
-            }
-          }
+      _swapRows(a, n, rank, pivotRow);
+      final pivot = a[n * rank + col];
+      for (var i = rank + 1; i < m; ++i) {
+        final factor = a[n * i + col] / pivot;
+        for (var j = col; j < n; ++j) {
+          a[n * i + j] -= factor * a[n * rank + j];
         }
       }
+
+      ++rank;
     }
 
     return rank;
   }
 
   @override
-  Complex determinant() => _computeDeterminant(this);
+  Complex determinant() {
+    if (!isSquareMatrix) {
+      throw _notSquareError;
+    }
+
+    final a = flattenData;
+    switch (rowCount) {
+      case 1:
+        return a.first;
+      case 2:
+        return a.first * a[3] - a[1] * a[2];
+      case 3:
+        return _compute3x3Determinant(a);
+      case 4:
+        return _compute4x4Determinant(a);
+    }
+
+    // For 5x5 matrices and bigger, LU factorization
+    final factors = _factorize();
+    final n = rowCount;
+    var determinant = Complex.fromReal(factors.isOddPermutation ? -1 : 1);
+    for (var i = 0; i < n; ++i) {
+      determinant *= factors.lu[n * i + i];
+    }
+
+    return determinant;
+  }
 
   @override
   Algebraic characteristicPolynomial() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'Eigenvalues can be computed on square matrices only!',
-      );
+      throw _notSquareError;
     }
 
-    // For 1x1 matrices, directly compute it
     if (rowCount == 1) {
-      return Linear(b: -this(0, 0));
+      return Linear(b: -flattenData.first);
     }
-
-    // For 2x2 matrices, use a direct formula which is faster
     if (rowCount == 2) {
       return Quadratic(b: -trace(), c: determinant());
     }
 
-    // For 3x3 matrices and bigger, use the Faddeev–LeVerrier algorithm
+    // For 3x3 matrices and bigger, Faddeev-LeVerrier algorithm
     var supportMatrix = this;
     var oldTrace = supportMatrix.trace();
-
-    // The coefficients of the characteristic polynomial. The coefficient of the
-    // highest degree is always 1.
-    final coefficients = <Complex>[const Complex.fromReal(1), -trace()];
+    final coefficients = <Complex>[const Complex.fromReal(1), -oldTrace];
 
     for (var i = 1; i < rowCount; ++i) {
       final diagonal = ComplexMatrix.diagonal(
@@ -523,7 +495,7 @@ base class ComplexMatrix extends Matrix<Complex> {
         diagonalValue: Complex.fromReal(1 / i) * oldTrace,
       );
 
-      supportMatrix = this * (supportMatrix - diagonal) as ComplexMatrix;
+      supportMatrix = this * (supportMatrix - diagonal);
       oldTrace = supportMatrix.trace();
 
       coefficients.add(Complex.fromReal(-1 / (i + 1)) * oldTrace);
@@ -535,194 +507,117 @@ base class ComplexMatrix extends Matrix<Complex> {
   @override
   List<Complex> eigenvalues() {
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'Eigenvalues can be computed on square matrices only!',
-      );
+      throw _notSquareError;
     }
-
-    // From now on, we're sure that the matrix is square. If it's 1x1 or 2x2,
-    // computing the roots of the characteristic polynomial is faster and more
-    // precise.
     if (rowCount == 1 || rowCount == 2) {
       return characteristicPolynomial().solutions();
     }
 
     // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
     final eigenDecomposition = EigendecompositionComplex(matrix: this);
-
-    // The 'D' matrix contains real and complex coefficients of the eigenvalues
-    // so we can ignore the other 2.
     final decomposition = eigenDecomposition.decompose()[1];
-    final eigenvalues = <Complex>[];
 
-    for (var i = 0; i < decomposition.rowCount; ++i) {
-      eigenvalues.add(decomposition(i, i));
-    }
-
-    return eigenvalues;
+    return List<Complex>.generate(
+      decomposition.rowCount,
+      (i) => decomposition(i, i),
+    );
   }
 
   @override
   List<ComplexMatrix> luDecomposition() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'LU decomposition only works with square matrices!',
-      );
+      throw _notSquareError;
     }
 
-    // Creating L and U matrices
-    final L = List<Complex>.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
+    final factors = _factorize();
+    final n = rowCount;
+    final lu = factors.lu;
+
+    // L has ones on the diagonal and the multipliers below it.
+    final L = List<Complex>.generate(n * n, (k) {
+      final i = k ~/ n;
+      final j = k % n;
+
+      if (i == j) {
+        return const Complex.fromReal(1);
+      }
+
+      return i > j ? lu[k] : const Complex.zero();
+    }, growable: false);
+
+    // U is the upper triangular part (diagonal included) of the factors.
     final U = List<Complex>.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
+      n * n,
+      (k) => (k ~/ n <= k % n) ? lu[k] : const Complex.zero(),
       growable: false,
     );
 
-    // Computing L and U
-    for (var i = 0; i < rowCount; ++i) {
-      for (var k = i; k < rowCount; k++) {
-        // Summation of L(i, j) * U(j, k)
-        var sum = const Complex.zero();
-        for (var j = 0; j < i; j++) {
-          sum += _getDataAt(L, i, j) * _getDataAt(U, j, k);
-        }
-
-        // Evaluating U(i, k)
-        _setDataAt(U, i, k, this(i, k) - sum);
-      }
-
-      // Lower Triangular
-      for (var k = i; k < rowCount; k++) {
-        if (i == k) {
-          _setDataAt(L, i, i, const Complex.fromReal(1));
-        } else {
-          // Summation of L(k, j) * U(j, i)
-          var sum = const Complex.zero();
-          for (var j = 0; j < i; j++) {
-            sum += _getDataAt(L, k, j) * _getDataAt(U, j, i);
-          }
-
-          // Evaluating L(k, i)
-          _setDataAt(L, k, i, (this(k, i) - sum) / _getDataAt(U, i, i));
-        }
-      }
-    }
+    // Row i of P has a 1 in column permutation[i].
+    final P = List<Complex>.generate(
+      n * n,
+      (k) => factors.permutation[k ~/ n] == k % n
+          ? const Complex.fromReal(1)
+          : const Complex.zero(),
+      growable: false,
+    );
 
     return [
-      ComplexMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: rowCount,
-        data: L,
-      ),
-      ComplexMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: rowCount,
-        data: U,
-      ),
+      ComplexMatrix.fromFlattenedData(rows: n, columns: n, data: L),
+      ComplexMatrix.fromFlattenedData(rows: n, columns: n, data: U),
+      ComplexMatrix.fromFlattenedData(rows: n, columns: n, data: P),
     ];
   }
 
   @override
   List<ComplexMatrix> choleskyDecomposition() {
-    // Making sure that the matrix is squared
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'Cholesky decomposition only works with square matrices!',
-      );
+      throw _notSquareError;
     }
 
-    final firstDiag = this(0, 0);
-    if (firstDiag.imaginary.abs() > 1.0e-12 || firstDiag.real <= 0) {
-      throw const SystemSolverException('The matrix is not positive-definite.');
-    }
+    final n = rowCount;
+    final a = flattenData;
+    final L = List<Complex>.filled(n * n, const Complex.zero());
 
-    final L = List<Complex>.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
-    final transpL = List<Complex>.generate(
-      rowCount * columnCount,
-      (_) => const Complex.zero(),
-      growable: false,
-    );
-
-    const blockSize = 16;
-    for (var i = 0; i < rowCount; i += blockSize) {
-      final iEnd = (i + blockSize < rowCount) ? i + blockSize : rowCount;
-
-      for (var j = i; j < iEnd; j++) {
-        var sum = const Complex.zero();
-        for (var k = 0; k < j; k++) {
-          final ljk = _getDataAt(L, j, k);
-          sum += ljk * ljk;
-        }
-        final diag = this(j, j) - sum;
-        if (diag.imaginary.abs() > 1.0e-12 || diag.real <= 0) {
-          throw const SystemSolverException(
-            'The matrix is not positive-definite.',
-          );
-        }
-        _setDataAt(L, j, j, diag.sqrt());
-
-        // Compute elements below diagonal
-        for (var k = j + 1; k < iEnd; k++) {
-          sum = const Complex.zero();
-          for (var p = 0; p < j; p++) {
-            sum += _getDataAt(L, k, p) * _getDataAt(L, j, p);
+    for (var i = 0; i < n; ++i) {
+      for (var j = 0; j <= i; ++j) {
+        if (i == j) {
+          final element = a[n * i + i];
+          var diagonal = element.real;
+          for (var k = 0; k < j; ++k) {
+            final lik = L[n * i + k];
+            diagonal -= lik.real * lik.real + lik.imaginary * lik.imaginary;
           }
-          final ljj = _getDataAt(L, j, j);
-          if (ljj == const Complex.zero()) {
+
+          if (element.imaginary.abs() > 1.0e-12 || diagonal <= 0) {
             throw const SystemSolverException(
-              'Division by zero in Cholesky decomposition. Matrix is singular.',
+              'The matrix is not positive-definite.',
             );
           }
-          _setDataAt(L, k, j, (this(k, j) - sum) / ljj);
-        }
-      }
 
-      // Process remaining blocks
-      for (var j = iEnd; j < rowCount; j += blockSize) {
-        final jEnd = (j + blockSize < rowCount) ? j + blockSize : rowCount;
-        for (var k = i; k < iEnd; k++) {
-          for (var l = j; l < jEnd; l++) {
-            var sum = const Complex.zero();
-            for (var p = 0; p < k; p++) {
-              sum += _getDataAt(L, l, p) * _getDataAt(L, k, p);
-            }
-            final lkk = _getDataAt(L, k, k);
-            if (lkk == const Complex.zero()) {
-              throw const SystemSolverException(
-                'Division by 0 in Cholesky decomposition. Matrix is singular.',
-              );
-            }
-            _setDataAt(L, l, k, (this(l, k) - sum) / lkk);
+          L[n * i + i] = Complex.fromReal(sqrt(diagonal));
+        } else {
+          var sum = const Complex.zero();
+          for (var k = 0; k < j; ++k) {
+            sum += L[n * i + k] * L[n * j + k].conjugate();
           }
+
+          L[n * i + j] = (a[n * i + j] - sum) / L[n * j + j];
         }
       }
     }
 
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < rowCount; j++) {
-        _setDataAt(transpL, i, j, _getDataAt(L, j, i));
-      }
-    }
+    // The conjugate transpose of L
+    final conjugateTransposeL = List<Complex>.generate(
+      n * n,
+      (k) => L[n * (k % n) + k ~/ n].conjugate(),
+    );
 
     return [
+      ComplexMatrix.fromFlattenedData(rows: n, columns: n, data: L),
       ComplexMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: columnCount,
-        data: L,
-      ),
-      ComplexMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: columnCount,
-        data: transpL,
+        rows: n,
+        columns: n,
+        data: conjugateTransposeL,
       ),
     ];
   }
@@ -739,130 +634,136 @@ base class ComplexMatrix extends Matrix<Complex> {
   List<ComplexMatrix> eigenDecomposition() =>
       EigendecompositionComplex(matrix: this).decompose();
 
-  /// Computes the determinant of a 2x2 matrix
-  Complex _compute2x2Determinant(ComplexMatrix source) =>
-      source.flattenData.first * source.flattenData[3] -
-      source.flattenData[1] * source.flattenData[2];
+  @override
+  bool isZero() => flattenData.every((x) => x == const Complex.zero());
 
-  /// Computes the determinant of a 3x3 matrix
-  Complex _compute3x3Determinant(ComplexMatrix source) {
-    final x =
-        source.flattenData.first *
-        ((source.flattenData[4] * source.flattenData[8]) -
-            (source.flattenData[5] * source.flattenData[7]));
-    final y =
-        source.flattenData[1] *
-        ((source.flattenData[3] * source.flattenData[8]) -
-            (source.flattenData[5] * source.flattenData[6]));
-    final z =
-        source.flattenData[2] *
-        ((source.flattenData[3] * source.flattenData[7]) -
-            (source.flattenData[4] * source.flattenData[6]));
+  /// Throws a [MatrixException] if [other] doesn't have the same number of
+  /// rows and columns of this matrix.
+  void _checkSameShape(Matrix<Complex> other) {
+    if (rowCount != other.rowCount || columnCount != other.columnCount) {
+      throw _shapeMismatchError;
+    }
+  }
+
+  /// The threshold at or below which a pivot is considered to be zero.
+  ///
+  /// It is relative to the magnitude of the matrix elements and to its size,
+  /// so that the result doesn't depend on the scale of the data.
+  double _pivotTolerance() => max(rowCount, columnCount) * _maxAbs() * _epsilon;
+
+  /// The power of two closest to [value] from below, or zero if [value] is
+  /// zero.
+  static double _powerOfTwoNear(double value) =>
+      value == 0 ? 0 : pow(2.0, (log(value) / ln2).floor()).toDouble();
+
+  /// The largest absolute value among the elements of the matrix.
+  double _maxAbs() => flattenData.fold<double>(
+    0,
+    (current, value) => max(current, value.abs()),
+  );
+
+  /// Swaps rows [first] and [second] of the flattened [data], whose rows have
+  /// [columns] elements each.
+  static void _swapRows(
+    List<Complex> data,
+    int columns,
+    int first,
+    int second,
+  ) {
+    if (first == second) {
+      return;
+    }
+
+    for (var j = 0; j < columns; ++j) {
+      final temp = data[columns * first + j];
+      data[columns * first + j] = data[columns * second + j];
+      data[columns * second + j] = temp;
+    }
+  }
+
+  /// Computes the LU factorization with partial pivoting of this square
+  /// matrix (see [_LUFactors]).
+  ///
+  /// The factorization always succeeds. If the matrix is singular, at least
+  /// one element on the diagonal of `U` is zero (or negligible).
+  _LUFactors _factorize() {
+    final n = rowCount;
+    final lu = toList();
+    final permutation = List<int>.generate(n, (i) => i, growable: false);
+    var isOddPermutation = false;
+
+    for (var k = 0; k < n; ++k) {
+      // The pivot is the largest element (in absolute value) of the partially
+      // reduced column 'k', from row 'k' onwards.
+      var pivotRow = k;
+      for (var i = k + 1; i < n; ++i) {
+        if (lu[n * i + k].abs() > lu[n * pivotRow + k].abs()) {
+          pivotRow = i;
+        }
+      }
+
+      // The column is already zero below the diagonal: nothing to eliminate.
+      final pivot = lu[n * pivotRow + k];
+      if (pivot == const Complex.zero()) {
+        continue;
+      }
+
+      // Swapping whole rows keeps the multipliers of L in the right place.
+      if (pivotRow != k) {
+        _swapRows(lu, n, k, pivotRow);
+
+        final temp = permutation[k];
+        permutation[k] = permutation[pivotRow];
+        permutation[pivotRow] = temp;
+
+        isOddPermutation = !isOddPermutation;
+      }
+
+      for (var i = k + 1; i < n; ++i) {
+        final factor = lu[n * i + k] / pivot;
+        lu[n * i + k] = factor;
+
+        for (var j = k + 1; j < n; ++j) {
+          lu[n * i + j] -= factor * lu[n * k + j];
+        }
+      }
+    }
+
+    return (
+      lu: lu,
+      permutation: permutation,
+      isOddPermutation: isOddPermutation,
+    );
+  }
+
+  /// Computes the determinant of a 3x3 matrix, given its flattened [a] data.
+  static Complex _compute3x3Determinant(List<Complex> a) {
+    final x = a[0] * (a[4] * a[8] - a[5] * a[7]);
+    final y = a[1] * (a[3] * a[8] - a[5] * a[6]);
+    final z = a[2] * (a[3] * a[7] - a[4] * a[6]);
 
     return x - y + z;
   }
 
-  /// Computes the determinant of a 4x4 matrix
-  Complex _compute4x4Determinant(ComplexMatrix source) {
-    final det2_01_01 =
-        source.flattenData.first * source.flattenData[5] -
-        source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 =
-        source.flattenData.first * source.flattenData[6] -
-        source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 =
-        source.flattenData.first * source.flattenData[7] -
-        source.flattenData[3] * source.flattenData[4];
-    final det2_01_12 =
-        source.flattenData[1] * source.flattenData[6] -
-        source.flattenData[2] * source.flattenData[5];
-    final det2_01_13 =
-        source.flattenData[1] * source.flattenData[7] -
-        source.flattenData[3] * source.flattenData[5];
-    final det2_01_23 =
-        source.flattenData[2] * source.flattenData[7] -
-        source.flattenData[3] * source.flattenData[6];
+  /// Computes the determinant of a 4x4 matrix, given its flattened [a] data.
+  ///
+  /// The determinant is computed with a Laplace expansion along the last row,
+  /// reusing the 2x2 minors of the first two rows.
+  static Complex _compute4x4Determinant(List<Complex> a) {
+    // 2x2 minors of rows 0 and 1 (the suffix lists the columns).
+    final m01 = a[0] * a[5] - a[1] * a[4];
+    final m02 = a[0] * a[6] - a[2] * a[4];
+    final m03 = a[0] * a[7] - a[3] * a[4];
+    final m12 = a[1] * a[6] - a[2] * a[5];
+    final m13 = a[1] * a[7] - a[3] * a[5];
+    final m23 = a[2] * a[7] - a[3] * a[6];
 
-    final det3_201_012 =
-        source.flattenData[8] * det2_01_12 -
-        source.flattenData[9] * det2_01_02 +
-        source.flattenData[10] * det2_01_01;
-    final det3_201_013 =
-        source.flattenData[8] * det2_01_13 -
-        source.flattenData[9] * det2_01_03 +
-        source.flattenData[11] * det2_01_01;
-    final det3_201_023 =
-        source.flattenData[8] * det2_01_23 -
-        source.flattenData[10] * det2_01_03 +
-        source.flattenData[11] * det2_01_02;
-    final det3_201_123 =
-        source.flattenData[9] * det2_01_23 -
-        source.flattenData[10] * det2_01_13 +
-        source.flattenData[11] * det2_01_12;
+    // 3x3 minors of rows 0, 1 and 2 (the suffix lists the columns).
+    final m012 = a[8] * m12 - a[9] * m02 + a[10] * m01;
+    final m013 = a[8] * m13 - a[9] * m03 + a[11] * m01;
+    final m023 = a[8] * m23 - a[10] * m03 + a[11] * m02;
+    final m123 = a[9] * m23 - a[10] * m13 + a[11] * m12;
 
-    return -det3_201_123 * source.flattenData[12] +
-        det3_201_023 * source.flattenData[13] -
-        det3_201_013 * source.flattenData[14] +
-        det3_201_012 * source.flattenData[15];
+    return -a[12] * m123 + a[13] * m023 - a[14] * m013 + a[15] * m012;
   }
-
-  /// Computes the determinant of a matrix. In case of 1x1, 2x2, 3x3 and 4x4
-  /// matrices, a direct formula is used for a more efficient computation.
-  Complex _computeDeterminant(ComplexMatrix source) {
-    // Computing the determinant only if the matrix is square
-    if (source.rowCount != source.columnCount) {
-      throw const MatrixException(
-        "Can't compute the determinant of this "
-        "matrix because it's not square.",
-      );
-    }
-
-    // In case there were an 1x1 matrix, just return the value
-    if (source.rowCount * source.columnCount == 1) {
-      return source.flattenData.first;
-    }
-
-    // For efficiency, manually computing a 2x2 matrix
-    if (source.rowCount * source.columnCount == 4) {
-      return _compute2x2Determinant(source);
-    }
-
-    // For efficiency, manually computing a 3x3 matrix
-    if (source.rowCount * source.columnCount == 9) {
-      return _compute3x3Determinant(source);
-    }
-
-    // For efficiency, manually computing a 4x4 matrix
-    if (source.rowCount * source.columnCount == 16) {
-      return _compute4x4Determinant(source);
-    }
-
-    // In all the other cases, so when a matrix is 5x5 or bigger, the default
-    // determinant computation happens via LU decomposition. Look at this well
-    // known relation:
-    //
-    //  det(A) = det(L x U) = det(L) x det(U)
-    //
-    // In particular, the determinant of a lower triangular and an upper
-    // triangular matrix is the product of the items in the diagonal.
-    //
-    // For this reason, the computation of the determinant is O(n^3) which is
-    // way better than O(n!) from the Leibniz formula or the Laplace
-    // transformation!
-    final lu = luDecomposition();
-
-    var prodL = const Complex(1, 0);
-    var prodU = const Complex(1, 0);
-
-    // The determinant of L and U is the product of the elements on the diagonal
-    for (var i = 0; i < rowCount; ++i) {
-      prodL *= lu.first(i, i);
-      prodU *= lu[1](i, i);
-    }
-
-    return prodL * prodU;
-  }
-
-  @override
-  bool isZero() => flattenData.every((x) => x == const Complex.zero());
 }

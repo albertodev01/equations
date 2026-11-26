@@ -1,4 +1,5 @@
 import 'package:equations/equations.dart';
+import 'package:equations/src/nonlinear/utils/nonlinear_utils.dart';
 
 /// {@template chords}
 /// Implements the 'chords' method to find the roots of a given equation.
@@ -6,24 +7,36 @@ import 'package:equations/equations.dart';
 ///   - The method is guaranteed to converge to a root of `f(x)` if `f(x)` is a
 ///   continuous function on the interval `[a, b]`.
 ///
-///   - The values of `f(a)` and `f(b)` must have opposite signs AND there must
-///   be at least one root in `[a, b]`. These are 2 required conditions.
+///   - The values of `f(a)` and `f(b)` must have opposite signs, which ensures
+///   that at least one root exists in the interval by the Intermediate Value
+///   Theorem. If `f(a)` or `f(b)` is zero, that endpoint is returned as the
+///   root.
+///
+///   - The first guess is the point where the chord through `(a, f(a))` and
+///   `(b, f(b))` crosses the x-axis. Every next guess is the point where the
+///   chord through the current guess `(x, f(x))` and one of the two original
+///   endpoints crosses the x-axis. The endpoint is chosen so that the root is
+///   between it and `x`. Unlike [RegulaFalsi], the endpoints `a` and `b` never
+///   change.
+///
+///   - The method has linear convergence rate and stops when
+///   `|f(x)| < [tolerance]`.
 /// {@endtemplate}
 final class Chords extends NonLinear {
-  /// The starting point of the interval.
-  final double a;
-
-  /// The ending point of the interval.
-  final double b;
-
   /// {@macro chords}
-  const Chords({
+  const new({
     required super.function,
     required this.a,
     required this.b,
     super.tolerance = 1.0e-10,
     super.maxSteps = 30,
   });
+
+  /// The starting point of the interval.
+  final double a;
+
+  /// The ending point of the interval.
+  final double b;
 
   @override
   bool operator ==(Object other) {
@@ -48,52 +61,38 @@ final class Chords extends NonLinear {
 
   @override
   ({List<double> guesses, double convergence, double efficiency}) solve() {
-    final guesses = <double>[];
-    var n = 1;
+    final fa = evaluateOn(a);
+    final fb = evaluateOn(b);
+    NonLinearUtils.checkBracket(a, fa, b, fb);
 
-    final evalA = evaluateOn(a);
-    final evalB = evaluateOn(b);
-
-    if (evalA * evalB >= 0) {
-      throw NonlinearException(
-        'The root is not bracketed in [$a, $b]. '
-        'f(a) and f(b) must have opposite signs.',
-      );
+    // One of the endpoints is already a root
+    if (fa == 0) {
+      return NonLinearUtils.resultOf(this, [a]);
+    }
+    if (fb == 0) {
+      return NonLinearUtils.resultOf(this, [b]);
     }
 
-    var x0 = (a * evalB - b * evalA) / (evalB - evalA);
-    var diff = evaluateOn(x0).abs();
+    // The first guess is where the chord through (a, f(a)) and (b, f(b))
+    // crosses the x-axis
+    var x = (a * fb - b * fa) / (fb - fa);
+    var fx = evaluateOn(x);
+    NonLinearUtils.checkFiniteValue(x, fx);
 
-    // If the initial guess already satisfies the tolerance, add it and return
-    if (diff < tolerance) {
-      guesses.add(x0);
-      return (
-        guesses: guesses,
-        convergence: convergence(guesses, maxSteps),
-        efficiency: efficiency(guesses, maxSteps),
-      );
+    final guesses = [x];
+
+    while (fx != 0 && fx.abs() >= tolerance && guesses.length < maxSteps) {
+      // The chord goes through the endpoint whose function value has the
+      // opposite sign of f(x), so that the root is between it and x
+      x = fa.sign != fx.sign
+          ? (x * fa - a * fx) / (fa - fx)
+          : (x * fb - b * fx) / (fb - fx);
+      fx = evaluateOn(x);
+      NonLinearUtils.checkFiniteValue(x, fx);
+
+      guesses.add(x);
     }
 
-    while ((diff >= tolerance) && (n <= maxSteps)) {
-      final fa = evaluateOn(a);
-      final fx = evaluateOn(x0);
-
-      if (fa * fx < 0) {
-        x0 = (x0 * fa - a * fx) / (fa - fx);
-      } else {
-        final fb = evaluateOn(b);
-        x0 = (x0 * fb - b * fx) / (fb - fx);
-      }
-
-      guesses.add(x0);
-      diff = evaluateOn(x0).abs();
-      ++n;
-    }
-
-    return (
-      guesses: guesses,
-      convergence: convergence(guesses, maxSteps),
-      efficiency: efficiency(guesses, maxSteps),
-    );
+    return NonLinearUtils.resultOf(this, guesses);
   }
 }

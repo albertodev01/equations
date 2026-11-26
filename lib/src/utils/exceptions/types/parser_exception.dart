@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class ExpressionParserException extends EquationException {
   /// {@macro expression_parser_exception}
-  const ExpressionParserException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'ExpressionParserException',

@@ -4,14 +4,45 @@ import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigendecomposition_real.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_real_decomposition.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/singular_value_decomposition/svd_real.dart';
-import 'package:equations/src/utils/math_utils.dart';
 
-/// A Dart implementation of an `MxM` matrix whose data type is [double].
+/// The machine epsilon of [double], which is the difference between 1 and the
+/// smallest [double] greater than 1.
+const _epsilon = 2.220446049250313e-16;
+
+/// Thrown when an operation requires a square matrix.
+const _notSquareError = MatrixException('The matrix must be square.');
+
+/// Thrown when an element-wise operation is applied to matrices with
+/// different shapes.
+const _shapeMismatchError = MatrixException(
+  'The two matrices must have the same number of rows and columns.',
+);
+
+/// Thrown when an operation requires an invertible matrix.
+const _singularMatrixError = MatrixException('The matrix is singular.');
+
+/// The compact result of the LU factorization with partial pivoting of a
+/// square `n x n` matrix `A`, such that `P x A = L x U`.
+///
+///  - `lu`: a flattened `n x n` matrix in row-major order. The elements above
+///    and on the main diagonal belong to `U`, while the elements below the
+///    main diagonal are the multipliers of `L` (whose diagonal is made of
+///    ones and is not stored).
+///  - `permutation`: row `i` of `P x A` is row `permutation[i]` of `A`.
+///  - `isOddPermutation`: whether an odd number of row swaps was performed,
+///    in which case `det(P) = -1`.
+typedef _LUFactors = ({
+  List<double> lu,
+  List<int> permutation,
+  bool isOddPermutation,
+});
+
+/// A Dart implementation of an `NxM` matrix whose data type is [double].
 ///
 /// ```dart
 /// final matrix = RealMatrix(
-///   rowCount: 3,
-///   columnCount: 4,
+///   rows: 3,
+///   columns: 4,
 /// );
 /// ```
 ///
@@ -20,8 +51,8 @@ import 'package:equations/src/utils/math_utils.dart';
 ///
 /// ```dart
 /// final matrix = RealMatrix(
-///   rowCount: 6,
-///   columnCount: 6,
+///   rows: 6,
+///   columns: 6,
 /// );
 ///
 /// final value1 = matrix(2, 3);
@@ -31,109 +62,70 @@ import 'package:equations/src/utils/math_utils.dart';
 /// Both versions return the same value but the first one is less verbose and
 /// preferred. In the example, `value1` holds the value of the element at
 /// position `(2, 3)` in the matrix.
-base class RealMatrix extends Matrix<double> with MathUtils {
+base class RealMatrix extends Matrix<double> {
   /// {@macro matrix_constructor_intro}
-  RealMatrix({required super.rows, required super.columns, super.identity})
+  new({required super.rows, required super.columns, super.identity})
     : super(defaultValue: 0, identityOneValue: 1);
 
   /// {@macro matrix_fromData_constructor}
-  RealMatrix.fromData({
+  new fromData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromData();
 
   /// {@macro matrix_fromFlattenedData_constructor}
-  RealMatrix.fromFlattenedData({
+  new fromFlattenedData({
     required super.rows,
     required super.columns,
     required super.data,
   }) : super.fromFlattenedData();
 
   /// {@macro matrix_diagonal_constructor}
-  RealMatrix.diagonal({
+  new diagonal({
     required super.rows,
     required super.columns,
     required super.diagonalValue,
   }) : super.diagonal(defaultValue: 0);
 
-  void _setDataAt(List<double> flatMatrix, int row, int col, double value) =>
-      flatMatrix[columnCount * row + col] = value;
-
-  double _getDataAt(List<double> source, int row, int col) =>
-      source[columnCount * row + col];
-
   @override
-  Matrix<double> operator +(Matrix<double> other) {
-    if (rowCount != other.rowCount || columnCount != other.columnCount) {
-      throw const MatrixException('The two matrices must have the same size!');
-    }
+  RealMatrix operator +(Matrix<double> other) {
+    _checkSameShape(other);
 
-    // Performing the sum
-    final flatMatrix = List<double>.generate(
-      rowCount * columnCount,
-      (_) => 0.0,
-      growable: false,
-    );
+    final a = flattenData;
+    final b = other.flattenData;
 
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        _setDataAt(flatMatrix, i, j, this(i, j) + other(i, j));
-      }
-    }
-
-    // Building the new matrix
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
       columns: columnCount,
-      data: flatMatrix,
+      data: List<double>.generate(a.length, (i) => a[i] + b[i]),
     );
   }
 
   @override
-  Matrix<double> operator -(Matrix<double> other) {
-    if (rowCount != other.rowCount || columnCount != other.columnCount) {
-      throw const MatrixException('The two matrices must have the same size!');
-    }
+  RealMatrix operator -(Matrix<double> other) {
+    _checkSameShape(other);
 
-    // Performing the difference
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
-      (_) => 0.0,
-      growable: false,
-    );
+    final a = flattenData;
+    final b = other.flattenData;
 
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        _setDataAt(flatMatrix, i, j, this(i, j) - other(i, j));
-      }
-    }
-
-    // Building the new matrix
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
       columns: columnCount,
-      data: flatMatrix,
+      data: List<double>.generate(a.length, (i) => a[i] - b[i]),
     );
   }
 
   @override
-  Matrix<double> operator *(Matrix<double> other) {
+  RealMatrix operator *(Matrix<double> other) {
     if (columnCount != other.rowCount) {
       throw const MatrixException(
-        'Matrices shapes mismatch! The column count '
-        'of the source matrix must match the row count of the other.',
+        'The column count of this matrix must match the row count of the '
+        'other matrix.',
       );
     }
 
-    // Performing the product
-    final flatMatrix = List<double>.generate(
-      rowCount * other.columnCount,
-      (_) => 0.0,
-      growable: false,
-    );
-
-    // Cache dimensions and data for better performance
+    final flatMatrix = List<double>.filled(rowCount * other.columnCount, 0);
     final n = rowCount;
     final m = columnCount;
     final p = other.columnCount;
@@ -141,7 +133,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
     final b = other.flattenData;
 
     // Block multiplication for better cache locality
-    const blockSize = 32; // Adjust based on cache line size
+    const blockSize = 32;
     for (var ii = 0; ii < n; ii += blockSize) {
       final iEnd = (ii + blockSize < n) ? ii + blockSize : n;
       for (var jj = 0; jj < p; jj += blockSize) {
@@ -171,219 +163,217 @@ base class RealMatrix extends Matrix<double> with MathUtils {
   }
 
   @override
-  Matrix<double> operator /(Matrix<double> other) {
-    if ((rowCount != other.rowCount) || (columnCount != other.columnCount)) {
-      throw const MatrixException(
-        'Matrices shapes mismatch! The column count '
-        'of the source matrix must match the row count of the other.',
-      );
-    }
+  RealMatrix operator /(Matrix<double> other) {
+    _checkSameShape(other);
 
-    // Performing the division
-    final flatMatrix = List.generate(
-      rowCount * columnCount,
-      (_) => 0.0,
-      growable: false,
-    );
+    final a = flattenData;
+    final b = other.flattenData;
 
-    // Performing the division
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        _setDataAt(flatMatrix, i, j, this(i, j) / other(i, j));
-      }
-    }
-
-    // Building the new matrix
     return RealMatrix.fromFlattenedData(
       rows: rowCount,
       columns: columnCount,
-      data: flatMatrix,
+      data: List<double>.generate(a.length, (i) => a[i] / b[i]),
     );
   }
 
   @override
   RealMatrix transpose() {
-    final source = List<double>.generate(rowCount * columnCount, (_) => 0);
-
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        source[rowCount * j + i] = this(i, j);
-      }
-    }
+    final a = flattenData;
 
     return RealMatrix.fromFlattenedData(
       rows: columnCount,
       columns: rowCount,
-      data: source,
+      data: List<double>.generate(a.length, (k) {
+        final r = k ~/ rowCount;
+        final c = k % rowCount;
+
+        return a[columnCount * c + r];
+      }),
     );
   }
 
   @override
   RealMatrix minor(int row, int col) {
-    if (row < 0 || col < 0) {
-      throw const MatrixException('The arguments must be positive!');
-    }
-
-    if (row > rowCount || col > columnCount) {
-      throw const MatrixException('The given (row; col) pair is invalid.');
-    }
-
     if (rowCount == 1 || columnCount == 1) {
       throw const MatrixException(
         'Cannot compute minors when "rowCount" or "columnCount" is 1.',
       );
     }
 
-    final source = List<List<double>>.generate(
-      rowCount - 1,
-      (_) => List<double>.generate(columnCount - 1, (_) => 0.0),
-    );
-
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; i != row && j < columnCount; ++j) {
-        if (j != col) {
-          final minorRow = i < row ? i : i - 1;
-          final minorCol = j < col ? j : j - 1;
-
-          source[minorRow][minorCol] = this(i, j);
-        }
-      }
+    if (row < 0 || row >= rowCount || col < 0 || col >= columnCount) {
+      throw MatrixException('The ($row, $col) position is out of bounds.');
     }
 
-    return RealMatrix.fromData(
+    final a = flattenData;
+    final minorColumns = columnCount - 1;
+
+    return RealMatrix.fromFlattenedData(
       rows: rowCount - 1,
-      columns: columnCount - 1,
-      data: source,
+      columns: minorColumns,
+      data: List<double>.generate((rowCount - 1) * minorColumns, (k) {
+        final i = k ~/ minorColumns;
+        final j = k % minorColumns;
+        final sourceRow = i < row ? i : i + 1;
+        final sourceCol = j < col ? j : j + 1;
+
+        return a[columnCount * sourceRow + sourceCol];
+      }),
     );
   }
 
   @override
   RealMatrix cofactorMatrix() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix must be square!');
+      throw _notSquareError;
     }
 
-    // The cofactor matrix of an 1x1 matrix is always 1.
+    // By convention, the cofactor matrix of an 1x1 matrix is [1].
     if (rowCount == 1) {
       return RealMatrix.fromFlattenedData(rows: 1, columns: 1, data: [1]);
     }
 
-    final source = List<List<double>>.generate(
-      rowCount,
-      (_) => List<double>.generate(columnCount, (_) => 0.0),
-    );
+    final n = rowCount;
+    return RealMatrix.fromFlattenedData(
+      rows: n,
+      columns: n,
+      data: List<double>.generate(n * n, (k) {
+        final i = k ~/ n;
+        final j = k % n;
+        final minorDeterminant = minor(i, j).determinant();
 
-    // Computing cofactors.
-    for (var i = 0; i < rowCount; ++i) {
-      for (var j = 0; j < columnCount; ++j) {
-        source[i][j] = pow(-1, i + j) * minor(i, j).determinant();
-      }
-    }
-
-    return RealMatrix.fromData(
-      rows: rowCount,
-      columns: columnCount,
-      data: source,
+        return (i + j).isEven ? minorDeterminant : -minorDeterminant;
+      }, growable: false),
     );
   }
 
   @override
   RealMatrix inverse() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix must be square!');
+      throw _notSquareError;
     }
 
     // The inverse of an 1x1 matrix "A" is simply "1/A(0,0)"
     if (rowCount == 1) {
+      final value = flattenData.first;
+      if (value == 0) {
+        throw _singularMatrixError;
+      }
+
       return RealMatrix.fromFlattenedData(
         rows: 1,
         columns: 1,
-        data: [1 / this(0, 0)],
+        data: [1 / value],
       );
     }
 
     // In case of 2x2 matrix, we can directly compute it and save computational
-    // time. Note that, from here, we're sure that this matrix is square so no
-    // need to check both the row count and the col count.
+    // time. The matrix is considered singular when its determinant is
+    // negligible compared to the elements.
     if (rowCount == 2) {
-      final mult = 1 / (this(0, 0) * this(1, 1) - this(0, 1) * this(1, 0));
+      final scale = _powerOfTwoNear(_maxAbs());
+      if (scale == 0) {
+        throw _singularMatrixError;
+      }
+
+      final a = flattenData
+          .map((value) => value / scale)
+          .toList(growable: false);
+      final maxAbs = a.fold<double>(0, (m, value) => max(m, value.abs()));
+      final determinant = a.first * a[3] - a[1] * a[2];
+
+      if (determinant.abs() <= 2 * maxAbs * _epsilon * maxAbs) {
+        throw _singularMatrixError;
+      }
+
+      final mult = 1 / (determinant * scale);
 
       return RealMatrix.fromFlattenedData(
         rows: 2,
         columns: 2,
-        data: [
-          mult * this(1, 1),
-          -mult * this(0, 1),
-          -mult * this(1, 0),
-          mult * this(0, 0),
-        ],
+        data: [mult * a[3], -mult * a[1], -mult * a[2], mult * a.first],
       );
     }
 
-    // If the matrix to be inverted is 3x3 or greater, let's use the cofactor
-    // method to compute the inverse. The inverse of a matrix can be computed
-    // like so:
-    //
-    //   A^(-1) = 1 / det(A) * cof(A)^(T)
-    //
-    // where 'det(A)' is the determinant of A and 'cof(A)^T' is the transposed
-    // matrix of the cofactor matrix.
-    final transpose = cofactorMatrix().transpose();
+    // For 3x3 matrices and bigger, use the LU factorization: P x A = L x U.
+    // The j-th column of the inverse is the solution of A x = e_j, which is
+    // found by solving L y = P e_j (forward) and then U x = y (backward). The
+    // matrix is considered singular when a pivot is negligible compared to
+    // the elements.
+    final tolerance = _pivotTolerance();
+    final factors = _factorize();
+    final n = rowCount;
+    final lu = factors.lu;
+    final permutation = factors.permutation;
 
-    // Multiplying each number by 1/det(A)
-    final multiplier = 1 / determinant();
-    final inverse = transpose.flattenData
-        .map((value) => multiplier * value)
-        .toList(growable: false);
+    for (var i = 0; i < n; ++i) {
+      if (lu[n * i + i].abs() <= tolerance) {
+        throw _singularMatrixError;
+      }
+    }
 
-    return RealMatrix.fromFlattenedData(
-      rows: rowCount,
-      columns: columnCount,
-      data: inverse,
-    );
+    final inverse = List<double>.filled(n * n, 0);
+    final column = List<double>.filled(n, 0);
+
+    for (var j = 0; j < n; ++j) {
+      for (var i = 0; i < n; ++i) {
+        var sum = permutation[i] == j ? 1.0 : 0.0;
+        for (var k = 0; k < i; ++k) {
+          sum -= lu[n * i + k] * column[k];
+        }
+        column[i] = sum;
+      }
+      for (var i = n - 1; i >= 0; --i) {
+        var sum = column[i];
+        for (var k = i + 1; k < n; ++k) {
+          sum -= lu[n * i + k] * column[k];
+        }
+        column[i] = sum / lu[n * i + i];
+      }
+
+      for (var i = 0; i < n; ++i) {
+        inverse[n * i + j] = column[i];
+      }
+    }
+
+    return RealMatrix.fromFlattenedData(rows: n, columns: n, data: inverse);
   }
 
   @override
   double trace() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix is not square!');
+      throw _notSquareError;
     }
 
+    final a = flattenData;
     var trace = 0.0;
-    for (var i = 0; i < columnCount; ++i) {
-      trace += this(i, i);
+    for (var i = 0; i < rowCount; ++i) {
+      trace += a[columnCount * i + i];
     }
+
     return trace;
   }
 
   @override
   bool isDiagonal() {
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        if ((i != j) && (this(i, j) != 0)) {
-          return false;
-        }
+    final a = flattenData;
+    for (var k = 0; k < a.length; ++k) {
+      if ((k ~/ columnCount != k % columnCount) && (a[k] != 0)) {
+        return false;
       }
     }
-
     return true;
   }
 
   @override
   bool isIdentity() {
     if (!isSquareMatrix) {
-      throw const MatrixException('The matrix is not square!');
+      return false;
     }
 
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < columnCount; j++) {
-        if ((i != j) && (this(i, j) != 0)) {
-          return false;
-        }
-
-        if ((i == j) && (this(i, j) != 1)) {
-          return false;
-        }
+    for (var k = 0; k < flattenData.length; ++k) {
+      final expected = (k ~/ columnCount == k % columnCount) ? 1.0 : 0.0;
+      if (flattenData[k] != expected) {
+        return false;
       }
     }
 
@@ -392,84 +382,86 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
   @override
   int rank() {
-    if (isSquareMatrix && rowCount == 1) {
-      return this(0, 0) == 0 ? 0 : 1;
-    }
-
-    // If it's a square matrix, we can use the LU decomposition which is faster
-    if (isSquareMatrix) {
-      final lower = luDecomposition().first;
-      var independentCols = 0;
-
-      for (var i = 0; i < lower.rowCount; ++i) {
-        for (var j = 0; j < lower.columnCount; ++j) {
-          if ((i == j) && (lower(i, j) != 0)) {
-            ++independentCols;
-          }
-        }
-      }
-
-      return independentCols;
-    }
-
+    final tolerance = _pivotTolerance();
+    final m = rowCount;
+    final n = columnCount;
+    final a = toList();
     var rank = 0;
-    final matrix = toListOfList();
 
-    const precision = 1.0e-12;
-    final selectedRow = List<bool>.generate(rowCount, (_) => false);
-
-    for (var i = 0; i < columnCount; ++i) {
-      var j = 0;
-      for (j = 0; j < rowCount; ++j) {
-        if (!selectedRow[j] && matrix[j][i].abs() > precision) {
-          break;
+    for (var col = 0; col < n && rank < m; ++col) {
+      var pivotRow = rank;
+      for (var i = rank + 1; i < m; ++i) {
+        if (a[n * i + col].abs() > a[n * pivotRow + col].abs()) {
+          pivotRow = i;
         }
       }
 
-      if (j != rowCount) {
-        ++rank;
-        selectedRow[j] = true;
+      if (a[n * pivotRow + col].abs() <= tolerance) {
+        continue;
+      }
 
-        for (var p = i + 1; p < columnCount; ++p) {
-          matrix[j][p] /= matrix[j][i];
-        }
-
-        for (var k = 0; k < rowCount; ++k) {
-          if (k != j && matrix[k][i].abs() > precision) {
-            for (var p = i + 1; p < columnCount; ++p) {
-              matrix[k][p] -= matrix[j][p] * matrix[k][i];
-            }
-          }
+      _swapRows(a, n, rank, pivotRow);
+      final pivot = a[n * rank + col];
+      for (var i = rank + 1; i < m; ++i) {
+        final factor = a[n * i + col] / pivot;
+        for (var j = col; j < n; ++j) {
+          a[n * i + j] -= factor * a[n * rank + j];
         }
       }
+
+      ++rank;
     }
 
     return rank;
   }
 
   @override
-  double determinant() => _computeDeterminant(this);
+  double determinant() {
+    if (!isSquareMatrix) {
+      throw _notSquareError;
+    }
+
+    final a = flattenData;
+    switch (rowCount) {
+      case 1:
+        return a.first;
+      case 2:
+        return a.first * a[3] - a[1] * a[2];
+      case 3:
+        return _compute3x3Determinant(a);
+      case 4:
+        return _compute4x4Determinant(a);
+    }
+
+    // For 5x5 matrices and bigger, LU factorization
+    final factors = _factorize();
+    final n = rowCount;
+    var determinant = factors.isOddPermutation ? -1.0 : 1.0;
+    for (var i = 0; i < n; ++i) {
+      determinant *= factors.lu[n * i + i];
+    }
+
+    return determinant;
+  }
 
   @override
   Algebraic characteristicPolynomial() {
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'Eigenvalues can be computed on square matrices only!',
-      );
+      throw _notSquareError;
     }
 
     if (rowCount == 1) {
-      return Linear.realEquation(b: -this(0, 0));
+      return Linear.realEquation(b: -flattenData.first);
     }
 
     if (rowCount == 2) {
       return Quadratic.realEquation(b: -trace(), c: determinant());
     }
 
-    // For 3x3 matrices and bigger, use the Faddeev–LeVerrier algorithm
+    // For 3x3 matrices and bigger, Faddeev-LeVerrier algorithm
     var supportMatrix = this;
     var oldTrace = supportMatrix.trace();
-    final coefficients = <double>[1, -trace()];
+    final coefficients = <double>[1, -oldTrace];
 
     for (var i = 1; i < rowCount; ++i) {
       final diagonal = RealMatrix.diagonal(
@@ -477,10 +469,8 @@ base class RealMatrix extends Matrix<double> with MathUtils {
         columns: columnCount,
         diagonalValue: (1 / i) * oldTrace,
       );
-
-      supportMatrix = this * (supportMatrix - diagonal) as RealMatrix;
+      supportMatrix = this * (supportMatrix - diagonal);
       oldTrace = supportMatrix.trace();
-
       coefficients.add((-1 / (i + 1)) * oldTrace);
     }
 
@@ -490,9 +480,7 @@ base class RealMatrix extends Matrix<double> with MathUtils {
   @override
   List<Complex> eigenvalues() {
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'Eigenvalues can be computed on square matrices only!',
-      );
+      throw _notSquareError;
     }
 
     if (rowCount == 1 || rowCount == 2) {
@@ -501,19 +489,14 @@ base class RealMatrix extends Matrix<double> with MathUtils {
 
     // For 3x3 matrices and bigger, use the "eigendecomposition" algorithm.
     final eigenDecomposition = EigendecompositionReal(matrix: this);
-
     final decomposition = eigenDecomposition.decompose()[1];
     final eigenvalues = <Complex>[];
 
     for (var i = 0; i < decomposition.rowCount; ++i) {
-      // The real value is ALWAYS in the diagonal.
       final real = decomposition(i, i);
-
       if (i > 0 && i < (decomposition.rowCount - 1)) {
-        // Values on the left and right of the diagonal.
         final pre = decomposition(i, i - 1);
         final post = decomposition(i, i + 1);
-
         if (pre == 0 && post == 0) {
           eigenvalues.add(Complex.fromReal(real));
         } else {
@@ -534,203 +517,78 @@ base class RealMatrix extends Matrix<double> with MathUtils {
   @override
   List<RealMatrix> luDecomposition() {
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'LU decomposition only works with square matrices!',
-      );
+      throw _notSquareError;
     }
 
+    final factors = _factorize();
     final n = rowCount;
-    const precision = 1.0e-10;
+    final lu = factors.lu;
 
-    final A = List<double>.generate(
-      n * n,
-      (index) => this(index ~/ n, index % n),
-      growable: false,
-    );
+    final L = List<double>.generate(n * n, (k) {
+      final i = k ~/ n;
+      final j = k % n;
+      if (i == j) {
+        return 1;
+      }
 
-    // Creating L and U matrices
-    final L = List<double>.generate(
-      n * n,
-      (_) => 0.0,
-      growable: false,
-    );
+      return i > j ? lu[k] : 0;
+    }, growable: false);
+
     final U = List<double>.generate(
       n * n,
-      (_) => 0.0,
+      (k) => (k ~/ n <= k % n) ? lu[k] : 0,
       growable: false,
     );
-    final P = List<int>.generate(n, (i) => i, growable: false);
-
-    for (var i = 0; i < n; ++i) {
-      var maxRow = i;
-      var maxVal = _getDataAt(A, i, i).abs();
-
-      for (var k = i + 1; k < n; k++) {
-        final val = _getDataAt(A, k, i).abs();
-        if (val > maxVal) {
-          maxVal = val;
-          maxRow = k;
-        }
-      }
-
-      if (maxVal <= precision) {
-        throw const MatrixException('Matrix is singular or nearly singular.');
-      }
-
-      if (maxRow != i) {
-        for (var j = 0; j < n; j++) {
-          final temp = _getDataAt(A, i, j);
-          _setDataAt(A, i, j, _getDataAt(A, maxRow, j));
-          _setDataAt(A, maxRow, j, temp);
-        }
-
-        for (var j = 0; j < i; j++) {
-          final temp = _getDataAt(L, i, j);
-          _setDataAt(L, i, j, _getDataAt(L, maxRow, j));
-          _setDataAt(L, maxRow, j, temp);
-        }
-
-        final tempP = P[i];
-        P[i] = P[maxRow];
-        P[maxRow] = tempP;
-      }
-
-      // Compute U[i, k] for k >= i
-      for (var k = i; k < n; k++) {
-        // Summation of L(i, j) * U(j, k)
-        var sum = 0.0;
-        for (var j = 0; j < i; j++) {
-          sum += _getDataAt(L, i, j) * _getDataAt(U, j, k);
-        }
-
-        _setDataAt(U, i, k, _getDataAt(A, i, k) - sum);
-      }
-
-      // Compute L[k, i] for k > i
-      for (var k = i; k < n; k++) {
-        if (i == k) {
-          _setDataAt(L, i, i, 1);
-        } else {
-          // Summation of L(k, j) * U(j, i)
-          var sum = 0.0;
-          for (var j = 0; j < i; j++) {
-            sum += _getDataAt(L, k, j) * _getDataAt(U, j, i);
-          }
-
-          final uii = _getDataAt(U, i, i);
-          if (uii.abs() <= precision) {
-            throw const MatrixException(
-              'Division by zero in LU decomposition. Matrix is singular.',
-            );
-          }
-          _setDataAt(L, k, i, (_getDataAt(A, k, i) - sum) / uii);
-        }
-      }
-    }
-
-    final pMatrix = List<double>.generate(
+    final P = List<double>.generate(
       n * n,
-      (_) => 0.0,
+      (k) => factors.permutation[k ~/ n] == k % n ? 1 : 0,
       growable: false,
     );
-    for (var i = 0; i < n; i++) {
-      _setDataAt(pMatrix, i, P[i], 1);
-    }
 
     return [
       RealMatrix.fromFlattenedData(rows: n, columns: n, data: L),
       RealMatrix.fromFlattenedData(rows: n, columns: n, data: U),
-      RealMatrix.fromFlattenedData(rows: n, columns: n, data: pMatrix),
+      RealMatrix.fromFlattenedData(rows: n, columns: n, data: P),
     ];
   }
 
   @override
   List<RealMatrix> choleskyDecomposition() {
     if (!isSquareMatrix) {
-      throw const MatrixException(
-        'LU decomposition only works with square matrices!',
-      );
+      throw _notSquareError;
     }
 
-    if (this(0, 0) <= 0) {
-      throw const SystemSolverException('The matrix is not positive-definite.');
-    }
+    final n = rowCount;
+    final a = flattenData;
+    final L = List<double>.filled(n * n, 0);
 
-    final L = List<double>.generate(
-      rowCount * columnCount,
-      (_) => 0.0,
-      growable: false,
-    );
-    final transpL = List<double>.generate(
-      rowCount * columnCount,
-      (_) => 0.0,
-      growable: false,
-    );
-    const blockSize = 32;
-
-    for (var i = 0; i < rowCount; i += blockSize) {
-      final iEnd = (i + blockSize < rowCount) ? i + blockSize : rowCount;
-
-      // Process diagonal block
-      for (var j = i; j < iEnd; j++) {
-        // Compute diagonal element
+    // Cholesky-Banachiewicz algorithm: L is computed row by row. Only the
+    // lower triangular part of the source matrix is read.
+    for (var i = 0; i < n; ++i) {
+      for (var j = 0; j <= i; ++j) {
         var sum = 0.0;
-        for (var k = 0; k < j; k++) {
-          sum += L[columnCount * j + k] * L[columnCount * j + k];
+        for (var k = 0; k < j; ++k) {
+          sum += L[n * i + k] * L[n * j + k];
         }
-        final diag = this(j, j) - sum;
-        if (diag <= 0) {
-          throw const SystemSolverException(
-            'The matrix is not positive-definite.',
-          );
-        }
-        L[columnCount * j + j] = sqrt(diag);
 
-        // Compute elements below diagonal
-        for (var k = j + 1; k < iEnd; k++) {
-          sum = 0.0;
-          for (var p = 0; p < j; p++) {
-            sum += L[columnCount * k + p] * L[columnCount * j + p];
+        if (i == j) {
+          final diagonal = a[n * i + i] - sum;
+          if (diagonal <= 0) {
+            throw const SystemSolverException(
+              'The matrix is not positive-definite.',
+            );
           }
-          L[columnCount * k + j] = (this(k, j) - sum) / L[columnCount * j + j];
-        }
-      }
 
-      // Process remaining blocks
-      for (var j = iEnd; j < rowCount; j += blockSize) {
-        final jEnd = (j + blockSize < rowCount) ? j + blockSize : rowCount;
-        for (var k = i; k < iEnd; k++) {
-          for (var l = j; l < jEnd; l++) {
-            var sum = 0.0;
-            for (var p = 0; p < k; p++) {
-              sum += L[columnCount * l + p] * L[columnCount * k + p];
-            }
-            L[columnCount * l + k] =
-                (this(l, k) - sum) / L[columnCount * k + k];
-          }
+          L[n * i + i] = sqrt(diagonal);
+        } else {
+          L[n * i + j] = (a[n * i + j] - sum) / L[n * j + j];
         }
       }
     }
 
-    // Computing Lt, the transposed version of L
-    for (var i = 0; i < rowCount; i++) {
-      for (var j = 0; j < rowCount; j++) {
-        transpL[columnCount * i + j] = L[columnCount * j + i];
-      }
-    }
+    final lower = RealMatrix.fromFlattenedData(rows: n, columns: n, data: L);
 
-    return [
-      RealMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: columnCount,
-        data: L,
-      ),
-      RealMatrix.fromFlattenedData(
-        rows: rowCount,
-        columns: columnCount,
-        data: transpL,
-      ),
-    ];
+    return [lower, lower.transpose()];
   }
 
   @override
@@ -745,169 +603,127 @@ base class RealMatrix extends Matrix<double> with MathUtils {
   List<RealMatrix> eigenDecomposition() =>
       EigendecompositionReal(matrix: this).decompose();
 
-  /// Computes the determinant of a 2x2 matrix.
-  double _compute2x2Determinant(RealMatrix source) =>
-      source.flattenData.first * source.flattenData[3] -
-      source.flattenData[1] * source.flattenData[2];
+  @override
+  bool isZero() => flattenData.every((value) => value == 0);
 
-  /// Computes the determinant of a 3x3 matrix.
-  double _compute3x3Determinant(RealMatrix source) {
-    final x =
-        source.flattenData.first *
-        ((source.flattenData[4] * source.flattenData[8]) -
-            (source.flattenData[5] * source.flattenData[7]));
-    final y =
-        source.flattenData[1] *
-        ((source.flattenData[3] * source.flattenData[8]) -
-            (source.flattenData[5] * source.flattenData[6]));
-    final z =
-        source.flattenData[2] *
-        ((source.flattenData[3] * source.flattenData[7]) -
-            (source.flattenData[4] * source.flattenData[6]));
+  /// Throws a [MatrixException] if [other] doesn't have the same number of
+  /// rows and columns of this matrix.
+  void _checkSameShape(Matrix<double> other) {
+    if (rowCount != other.rowCount || columnCount != other.columnCount) {
+      throw _shapeMismatchError;
+    }
+  }
+
+  /// The threshold at or below which a pivot is considered to be zero.
+  ///
+  /// It is relative to the magnitude of the matrix elements and to its size,
+  /// so that the result doesn't depend on the scale of the data.
+  double _pivotTolerance() => max(rowCount, columnCount) * _maxAbs() * _epsilon;
+
+  /// The power of two closest to [value] from below, or zero if [value] is
+  /// zero.
+  static double _powerOfTwoNear(double value) =>
+      value == 0 ? 0 : pow(2.0, (log(value) / ln2).floor()).toDouble();
+
+  /// The largest absolute value among the elements of the matrix.
+  double _maxAbs() => flattenData.fold<double>(
+    0,
+    (current, value) => max(current, value.abs()),
+  );
+
+  /// Swaps rows [first] and [second] of the flattened [data], whose rows have
+  /// [columns] elements each.
+  static void _swapRows(List<double> data, int columns, int first, int second) {
+    if (first == second) {
+      return;
+    }
+
+    for (var j = 0; j < columns; ++j) {
+      final temp = data[columns * first + j];
+      data[columns * first + j] = data[columns * second + j];
+      data[columns * second + j] = temp;
+    }
+  }
+
+  /// Computes the LU factorization with partial pivoting of this square
+  /// matrix (see [_LUFactors]).
+  ///
+  /// The factorization always succeeds. If the matrix is singular, at least
+  /// one element on the diagonal of `U` is zero (or negligible).
+  _LUFactors _factorize() {
+    final n = rowCount;
+    final lu = toList();
+    final permutation = List<int>.generate(n, (i) => i, growable: false);
+    var isOddPermutation = false;
+
+    for (var k = 0; k < n; ++k) {
+      var pivotRow = k;
+      for (var i = k + 1; i < n; ++i) {
+        if (lu[n * i + k].abs() > lu[n * pivotRow + k].abs()) {
+          pivotRow = i;
+        }
+      }
+
+      final pivot = lu[n * pivotRow + k];
+      if (pivot == 0) {
+        continue;
+      }
+
+      if (pivotRow != k) {
+        _swapRows(lu, n, k, pivotRow);
+
+        final temp = permutation[k];
+        permutation[k] = permutation[pivotRow];
+        permutation[pivotRow] = temp;
+
+        isOddPermutation = !isOddPermutation;
+      }
+
+      for (var i = k + 1; i < n; ++i) {
+        final factor = lu[n * i + k] / pivot;
+        lu[n * i + k] = factor;
+
+        for (var j = k + 1; j < n; ++j) {
+          lu[n * i + j] -= factor * lu[n * k + j];
+        }
+      }
+    }
+
+    return (
+      lu: lu,
+      permutation: permutation,
+      isOddPermutation: isOddPermutation,
+    );
+  }
+
+  /// Computes the determinant of a 3x3 matrix, given its flattened [a] data.
+  static double _compute3x3Determinant(List<double> a) {
+    final x = a[0] * (a[4] * a[8] - a[5] * a[7]);
+    final y = a[1] * (a[3] * a[8] - a[5] * a[6]);
+    final z = a[2] * (a[3] * a[7] - a[4] * a[6]);
 
     return x - y + z;
   }
 
-  /// Computes the determinant of a 4x4 matrix.
-  double _compute4x4Determinant(RealMatrix source) {
-    final det2_01_01 =
-        source.flattenData.first * source.flattenData[5] -
-        source.flattenData[1] * source.flattenData[4];
-    final det2_01_02 =
-        source.flattenData.first * source.flattenData[6] -
-        source.flattenData[2] * source.flattenData[4];
-    final det2_01_03 =
-        source.flattenData.first * source.flattenData[7] -
-        source.flattenData[3] * source.flattenData[4];
-    final det2_01_12 =
-        source.flattenData[1] * source.flattenData[6] -
-        source.flattenData[2] * source.flattenData[5];
-    final det2_01_13 =
-        source.flattenData[1] * source.flattenData[7] -
-        source.flattenData[3] * source.flattenData[5];
-    final det2_01_23 =
-        source.flattenData[2] * source.flattenData[7] -
-        source.flattenData[3] * source.flattenData[6];
+  /// Computes the determinant of a 4x4 matrix, given its flattened [a] data.
+  ///
+  /// The determinant is computed with a Laplace expansion along the last row,
+  /// reusing the 2x2 minors of the first two rows.
+  static double _compute4x4Determinant(List<double> a) {
+    // 2x2 minors of rows 0 and 1 (the suffix lists the columns).
+    final m01 = a[0] * a[5] - a[1] * a[4];
+    final m02 = a[0] * a[6] - a[2] * a[4];
+    final m03 = a[0] * a[7] - a[3] * a[4];
+    final m12 = a[1] * a[6] - a[2] * a[5];
+    final m13 = a[1] * a[7] - a[3] * a[5];
+    final m23 = a[2] * a[7] - a[3] * a[6];
 
-    final det3_201_012 =
-        source.flattenData[8] * det2_01_12 -
-        source.flattenData[9] * det2_01_02 +
-        source.flattenData[10] * det2_01_01;
-    final det3_201_013 =
-        source.flattenData[8] * det2_01_13 -
-        source.flattenData[9] * det2_01_03 +
-        source.flattenData[11] * det2_01_01;
-    final det3_201_023 =
-        source.flattenData[8] * det2_01_23 -
-        source.flattenData[10] * det2_01_03 +
-        source.flattenData[11] * det2_01_02;
-    final det3_201_123 =
-        source.flattenData[9] * det2_01_23 -
-        source.flattenData[10] * det2_01_13 +
-        source.flattenData[11] * det2_01_12;
+    // 3x3 minors of rows 0, 1 and 2 (the suffix lists the columns).
+    final m012 = a[8] * m12 - a[9] * m02 + a[10] * m01;
+    final m013 = a[8] * m13 - a[9] * m03 + a[11] * m01;
+    final m023 = a[8] * m23 - a[10] * m03 + a[11] * m02;
+    final m123 = a[9] * m23 - a[10] * m13 + a[11] * m12;
 
-    return -det3_201_123 * source.flattenData[12] +
-        det3_201_023 * source.flattenData[13] -
-        det3_201_013 * source.flattenData[14] +
-        det3_201_012 * source.flattenData[15];
+    return -a[12] * m123 + a[13] * m023 - a[14] * m013 + a[15] * m012;
   }
-
-  /// Computes the determinant of a matrix. In case of 1x1, 2x2, 3x3 and 4x4
-  /// matrices, a direct formula is used for a more efficient computation.
-  double _computeDeterminant(RealMatrix source) {
-    // Computing the determinant only if the matrix is square
-    if (!isSquareMatrix) {
-      throw const MatrixException(
-        'Cannot compute the determinant because the matrix is not square.',
-      );
-    }
-
-    // In case there were an 1x1 matrix, just return the value
-    if (source.rowCount * source.columnCount == 1) {
-      return source.flattenData.first;
-    }
-
-    // For efficiency, manually computing a 2x2 matrix
-    if (source.rowCount * source.columnCount == 4) {
-      return _compute2x2Determinant(source);
-    }
-
-    // For efficiency, manually computing a 3x3 matrix
-    if (source.rowCount * source.columnCount == 9) {
-      return _compute3x3Determinant(source);
-    }
-
-    // For efficiency, manually computing a 4x4 matrix
-    if (source.rowCount * source.columnCount == 16) {
-      return _compute4x4Determinant(source);
-    }
-
-    // In all the other cases, so when a matrix is 5x5 or bigger, the default
-    // determinant computation happens via LU decomposition. Look at this well
-    // known relation:
-    //
-    //  PA = LU, so det(A) = det(P)^(-1) * det(L) * det(U)
-    //  where det(P) = (-1)^number_of_swaps
-    //
-    // In particular, the determinant of a lower triangular and an upper
-    // triangular matrix is the product of the items in the diagonal.
-    //
-    // For this reason, the computation of the determinant is O(n^3) which is
-    // way better than O(n!) from the Leibniz formula or the Laplace
-    // transformation!
-    final lu = luDecomposition();
-
-    var prodL = 1.0;
-    var prodU = 1.0;
-
-    // The determinant of L and U is the product of the elements on the diagonal
-    for (var i = 0; i < rowCount; ++i) {
-      prodL *= lu.first(i, i);
-      prodU *= lu[1](i, i);
-    }
-
-    // Compute determinant of permutation matrix P
-    // det(P) = sign of permutation = (-1)^number_of_swaps
-    // For a permutation matrix, we can compute the sign by finding cycles
-    final P = lu[2];
-
-    // Find the permutation vector: for each row i, find which column has 1
-    final perm = List<int>.generate(rowCount, (i) {
-      for (var j = 0; j < rowCount; j++) {
-        if (P(i, j) == 1.0) {
-          return j;
-        }
-      }
-      return i; // fallback (shouldn't happen)
-    });
-
-    // Compute sign of permutation by counting inversions
-    // or by decomposing into cycles (simpler: count cycles of even length)
-    final visited = List<bool>.generate(rowCount, (_) => false);
-    var sign = 1;
-    for (var i = 0; i < rowCount; i++) {
-      if (!visited[i] && perm[i] != i) {
-        // Found a cycle, count its length
-        var cycleLength = 0;
-        var j = i;
-        while (!visited[j]) {
-          visited[j] = true;
-          cycleLength++;
-          j = perm[j];
-        }
-        // A cycle of length k has sign (-1)^(k-1)
-        if (cycleLength.isEven) {
-          sign = -sign;
-        }
-      }
-    }
-    final detP = sign.toDouble();
-
-    // det(A) = det(P)^(-1) * det(L) * det(U) = det(P) * det(L) * det(U)
-    // since det(P) = ±1, det(P)^(-1) = det(P)
-    return detP * prodL * prodU;
-  }
-
-  @override
-  bool isZero() => flattenData.every((value) => value == 0);
 }

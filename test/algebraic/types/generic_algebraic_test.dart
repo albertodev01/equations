@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
@@ -283,8 +285,8 @@ void main() {
       }
     });
 
-    test('Numerical stability', () {
-      // Test polynomial with very small coefficients
+    test('Small but non-zero leading coefficient', () {
+      // Same roots as x^2 + 0.1x + 1
       final equation = GenericAlgebraic(
         coefficients: const [
           Complex.fromReal(1.0e-12),
@@ -293,7 +295,64 @@ void main() {
         ],
       );
 
-      expect(equation.solutions, throwsA(isA<AlgebraicException>()));
+      final solutions = equation.solutions();
+      expect(solutions.length, equals(2));
+      expect(solutions.first.real, const MoreOrLessEquals(-0.05));
+      expect(
+        solutions.first.imaginary,
+        const MoreOrLessEquals(-0.998749217771909, precision: 1.0e-10),
+      );
+      expect(solutions[1].real, const MoreOrLessEquals(-0.05));
+      expect(
+        solutions[1].imaginary,
+        const MoreOrLessEquals(0.998749217771909, precision: 1.0e-10),
+      );
+    });
+
+    test('Wrong number of initial guesses throws', () {
+      expect(
+        GenericAlgebraic.realEquation(
+          coefficients: [1, 0, 0, 0, 0, -1],
+          initialGuess: const [Complex.fromReal(1)],
+        ).solutions,
+        throwsA(isA<AlgebraicException>()),
+      );
+      expect(
+        GenericAlgebraic.realEquation(
+          coefficients: [1, -1],
+          initialGuess: const [Complex.fromReal(5), Complex.fromReal(99)],
+        ).solutions,
+        throwsA(isA<AlgebraicException>()),
+      );
+    });
+
+    test('Non-positive minGuessDistance throws', () {
+      expect(
+        GenericAlgebraic.realEquation(
+          coefficients: [1, 0, -1],
+          minGuessDistance: 0,
+        ).solutions,
+        throwsA(isA<AlgebraicException>()),
+      );
+    });
+
+    test('Solutions are deterministic', () {
+      final equation = GenericAlgebraic.realEquation(
+        coefficients: [1, 0, 0, 0, 0, 0, 0, -1],
+      );
+
+      expect(equation.solutions(), equals(equation.solutions()));
+    });
+
+    test('Solutions are sorted by real part, then by imaginary part', () {
+      final solutions = GenericAlgebraic.realEquation(
+        coefficients: [1, 0, 1],
+      ).solutions();
+
+      expect(solutions.first.real, const MoreOrLessEquals(0));
+      expect(solutions.first.imaginary, const MoreOrLessEquals(-1));
+      expect(solutions[1].real, const MoreOrLessEquals(0));
+      expect(solutions[1].imaginary, const MoreOrLessEquals(1));
     });
 
     test('Custom initial guesses', () {
@@ -504,6 +563,100 @@ void main() {
 
         final solutions = equation.solutions();
         expect(solutions.length, equals(3));
+      });
+
+      test('Test 10: x^5 (all roots are zero) does not return NaN', () {
+        final solutions = GenericAlgebraic.realEquation(
+          coefficients: [1, 0, 0, 0, 0, 0],
+        ).solutions();
+
+        expect(solutions.length, equals(5));
+        for (final solution in solutions) {
+          expect(solution.real.isNaN, isFalse);
+          expect(solution.imaginary.isNaN, isFalse);
+          expect(solution.abs(), lessThan(1.0e-8));
+        }
+      });
+
+      test('Test 11: roots much smaller than the coefficients', () {
+        // The roots of x^5 - 0.001 are the fifth roots of 0.001, whose modulus
+        // is about 0.2512
+        final equation = GenericAlgebraic.realEquation(
+          coefficients: [1, 0, 0, 0, 0, -1.0e-3],
+        );
+        final r = pow(1.0e-3, 1 / 5).toDouble();
+
+        verifyGenericAlgebraicSolutions(
+          equation,
+          List<Complex>.generate(
+            5,
+            (k) => Complex.fromPolar(r: r, theta: 2 * pi * k / 5),
+          ),
+        );
+      });
+
+      test('Test 12: equal initial guesses are separated', () {
+        final equation = GenericAlgebraic.realEquation(
+          coefficients: [1, 0, -1],
+          initialGuess: const [Complex.fromReal(3), Complex.fromReal(3)],
+        );
+
+        verifyGenericAlgebraicSolutions(equation, const [
+          Complex.fromReal(-1),
+          Complex.fromReal(1),
+        ]);
+      });
+
+      test('Test 13: roots with a large magnitude', () {
+        // (x - 1e6)(x - 2e6)(x - 3e6)(x - 4e6)(x - 5e6)
+        final equation = GenericAlgebraic.realEquation(
+          coefficients: [
+            1,
+            -1.5e7,
+            8.5e13,
+            -2.25e20,
+            2.74e26,
+            -1.2e32,
+          ],
+        );
+
+        final solutions = equation.solutions();
+        expect(solutions.length, equals(5));
+        for (var i = 0; i < 5; ++i) {
+          expect(
+            solutions[i].real,
+            MoreOrLessEquals((i + 1) * 1.0e6, precision: 1.0e-3),
+          );
+          expect(solutions[i].imaginary.abs(), lessThan(1.0e-3));
+        }
+      });
+
+      test('Test 14: roots far from the origin', () {
+        // (x - 100)(x - 101)(x - 102)(x - 103)(x - 104)
+        final equation = GenericAlgebraic.realEquation(
+          coefficients: [
+            1,
+            -510,
+            104035,
+            -10610550,
+            541060024,
+            -11035502400,
+          ],
+        );
+
+        // These clustered roots are ill-conditioned: a rounding error of
+        // u * sum(|a_k| * 102^k) in P(102), about 4e-5 with u = 1.1e-16, moves
+        // the root by about 1e-5 because |P'(102)| = 4. The roots can't be
+        // expected to be more accurate than that.
+        final solutions = equation.solutions();
+        expect(solutions.length, equals(5));
+        for (var i = 0; i < 5; ++i) {
+          expect(
+            solutions[i].real,
+            MoreOrLessEquals(100.0 + i, precision: 1.0e-5),
+          );
+          expect(solutions[i].imaginary.abs(), lessThan(1.0e-6));
+        }
       });
 
       test(

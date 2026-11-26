@@ -27,11 +27,11 @@ void main() {
       expect(solutions.guesses.last, const MoreOrLessEquals(5, precision: 1));
       expect(
         solutions.convergence,
-        const MoreOrLessEquals(0.5, precision: 1),
+        const MoreOrLessEquals(1.18, precision: 1.0e-2),
       );
       expect(
         solutions.efficiency,
-        const MoreOrLessEquals(0.8, precision: 1.0e-1),
+        const MoreOrLessEquals(1.03, precision: 1.0e-2),
       );
     });
 
@@ -81,6 +81,23 @@ void main() {
       },
     );
 
+    test('The first guess is included', () {
+      // The first chord of a linear function goes through the root
+      final solutions = const Chords(function: 'x-1', a: 0, b: 3).solve();
+      expect(solutions.guesses, equals([1.0]));
+    });
+
+    test('Returns the endpoint when it is a root', () {
+      expect(
+        const Chords(function: 'x-1', a: 1, b: 3).solve().guesses,
+        equals([1.0]),
+      );
+      expect(
+        const Chords(function: 'x-3', a: 1, b: 3).solve().guesses,
+        equals([3.0]),
+      );
+    });
+
     group('Roots tests', () {
       void verifySolution(
         String equation,
@@ -126,6 +143,46 @@ void main() {
 
       test('Test 8', () {
         verifySolution('x^x-1', 0.5, 1.1, 1);
+      });
+
+      test('Test 9', () {
+        verifySolution('cos(x)-x', 0, 1, 0.739085);
+      });
+
+      test('Test 10', () {
+        verifySolution('log(x)-1', 1, 4, 2.718282);
+      });
+
+      test('Test 11', () {
+        verifySolution('x^3-2*x-5', 2, 3, 2.094551);
+      });
+
+      test('Test 12', () {
+        verifySolution('e^(-x)-x', 0, 1, 0.567143);
+      });
+
+      test('Test 13', () {
+        verifySolution('x^3+x+1', -1, 0, -0.682328);
+      });
+
+      test('Test 14', () {
+        verifySolution('x^2-1000000', 600, 1500, 1000);
+      });
+
+      test('Test 15', () {
+        verifySolution('sin(x)', 3, 4, 3.141593);
+      });
+
+      test('Test 16', () {
+        verifySolution('x^5-x-1', 1, 2, 1.167304);
+      });
+
+      test('Test 17', () {
+        verifySolution('atan(x)', -1, 2, 0);
+      });
+
+      test('Test 18', () {
+        verifySolution('1/x-2', 0.2, 1, 0.5);
       });
     });
   });

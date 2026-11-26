@@ -9,11 +9,11 @@ void main() {
     test(
       'Smoke test',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: 3, y: -6),
-            const InterpolationNode(x: 4, y: -2),
-            const InterpolationNode(x: 5, y: 1),
+            InterpolationNode(x: 3, y: -6),
+            InterpolationNode(x: 4, y: -2),
+            InterpolationNode(x: 5, y: 1),
           ],
         );
 
@@ -36,13 +36,13 @@ void main() {
     test(
       'Smoke test 2',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: -2, y: 0),
-            const InterpolationNode(x: 3, y: 2),
-            const InterpolationNode(x: 4, y: 6),
-            const InterpolationNode(x: 6, y: 7),
-            const InterpolationNode(x: 10, y: 15),
+            InterpolationNode(x: -2, y: 0),
+            InterpolationNode(x: 3, y: 2),
+            InterpolationNode(x: 4, y: 6),
+            InterpolationNode(x: 6, y: 7),
+            InterpolationNode(x: 10, y: 15),
           ],
         );
 
@@ -86,11 +86,11 @@ void main() {
     test(
       'Smoke test 3',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: 3, y: -6),
-            const InterpolationNode(x: 4, y: -2),
-            const InterpolationNode(x: 5, y: 1),
+            InterpolationNode(x: 3, y: -6),
+            InterpolationNode(x: 4, y: -2),
+            InterpolationNode(x: 5, y: 1),
           ],
         );
 
@@ -110,13 +110,13 @@ void main() {
     test(
       'Smoke test 4',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: -2, y: 0),
-            const InterpolationNode(x: 3, y: 2),
-            const InterpolationNode(x: 4, y: 6),
-            const InterpolationNode(x: 6, y: 7),
-            const InterpolationNode(x: 10, y: 15),
+            InterpolationNode(x: -2, y: 0),
+            InterpolationNode(x: 3, y: 2),
+            InterpolationNode(x: 4, y: 6),
+            InterpolationNode(x: 6, y: 7),
+            InterpolationNode(x: 10, y: 15),
           ],
         );
 
@@ -151,11 +151,11 @@ void main() {
       'Smoke test 5',
 
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: 0, y: 0),
-            const InterpolationNode(x: 1, y: 1),
-            const InterpolationNode(x: 2, y: 6),
+            InterpolationNode(x: 0, y: 0),
+            InterpolationNode(x: 1, y: 1),
+            InterpolationNode(x: 2, y: 6),
           ],
         );
 
@@ -164,11 +164,11 @@ void main() {
     );
 
     test('Hermite spline interpolation correctly works.', () {
-      final cubic = MonotoneCubicSpline(
+      const cubic = MonotoneCubicSpline(
         nodes: [
-          const InterpolationNode(x: 1, y: -1),
-          const InterpolationNode(x: 5, y: 6),
-          const InterpolationNode(x: 13, y: 12),
+          InterpolationNode(x: 1, y: -1),
+          InterpolationNode(x: 5, y: 6),
+          InterpolationNode(x: 13, y: 12),
         ],
       );
 
@@ -184,11 +184,11 @@ void main() {
     test(
       'When 2 nodes have same y value, nodesM array sets values to 0',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: -2, y: 0),
-            const InterpolationNode(x: 3, y: 2),
-            const InterpolationNode(x: 4, y: 2),
+            InterpolationNode(x: -2, y: 0),
+            InterpolationNode(x: 3, y: 2),
+            InterpolationNode(x: 4, y: 2),
           ],
         );
 
@@ -202,11 +202,11 @@ void main() {
     test(
       'Exception thrown if control points do not have increasing x values',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: -2, y: 0),
-            const InterpolationNode(x: -10, y: 2),
-            const InterpolationNode(x: 0, y: 6),
+            InterpolationNode(x: -2, y: 0),
+            InterpolationNode(x: -10, y: 2),
+            InterpolationNode(x: 0, y: 6),
           ],
         );
 
@@ -220,11 +220,11 @@ void main() {
     test(
       'Exception thrown if control points do not have increasing y values',
       () {
-        final cubic = MonotoneCubicSpline(
+        const cubic = MonotoneCubicSpline(
           nodes: [
-            const InterpolationNode(x: -2, y: -6),
-            const InterpolationNode(x: 1, y: -1),
-            const InterpolationNode(x: 4, y: -2),
+            InterpolationNode(x: -2, y: -6),
+            InterpolationNode(x: 1, y: -1),
+            InterpolationNode(x: 4, y: -2),
           ],
         );
 
@@ -236,26 +236,26 @@ void main() {
     );
 
     test('Object comparison.', () {
-      final cubicInterpolation = MonotoneCubicSpline(
+      const cubicInterpolation = MonotoneCubicSpline(
         nodes: [
-          const InterpolationNode(x: -2, y: 0),
-          const InterpolationNode(x: 3, y: 2),
-          const InterpolationNode(x: 4, y: 6),
-          const InterpolationNode(x: 6, y: 7),
-          const InterpolationNode(x: 10, y: 15),
+          InterpolationNode(x: -2, y: 0),
+          InterpolationNode(x: 3, y: 2),
+          InterpolationNode(x: 4, y: 6),
+          InterpolationNode(x: 6, y: 7),
+          InterpolationNode(x: 10, y: 15),
         ],
       );
 
       expect(
         cubicInterpolation,
         equals(
-          MonotoneCubicSpline(
+          const MonotoneCubicSpline(
             nodes: [
-              const InterpolationNode(x: -2, y: 0),
-              const InterpolationNode(x: 3, y: 2),
-              const InterpolationNode(x: 4, y: 6),
-              const InterpolationNode(x: 6, y: 7),
-              const InterpolationNode(x: 10, y: 15),
+              InterpolationNode(x: -2, y: 0),
+              InterpolationNode(x: 3, y: 2),
+              InterpolationNode(x: 4, y: 6),
+              InterpolationNode(x: 6, y: 7),
+              InterpolationNode(x: 10, y: 15),
             ],
           ),
         ),
@@ -263,13 +263,13 @@ void main() {
 
       expect(
         cubicInterpolation ==
-            MonotoneCubicSpline(
+            const MonotoneCubicSpline(
               nodes: [
-                const InterpolationNode(x: -2, y: 0),
-                const InterpolationNode(x: 3, y: 2),
-                const InterpolationNode(x: 4, y: 6),
-                const InterpolationNode(x: 6, y: 7),
-                const InterpolationNode(x: 10, y: 15),
+                InterpolationNode(x: -2, y: 0),
+                InterpolationNode(x: 3, y: 2),
+                InterpolationNode(x: 4, y: 6),
+                InterpolationNode(x: 6, y: 7),
+                InterpolationNode(x: 10, y: 15),
               ],
             ),
         isTrue,
@@ -277,13 +277,13 @@ void main() {
 
       expect(
         cubicInterpolation ==
-            MonotoneCubicSpline(
+            const MonotoneCubicSpline(
               nodes: [
-                const InterpolationNode(x: 2, y: 0),
-                const InterpolationNode(x: 3, y: 2),
-                const InterpolationNode(x: 4, y: 6),
-                const InterpolationNode(x: 6, y: 7),
-                const InterpolationNode(x: -10, y: -15),
+                InterpolationNode(x: 2, y: 0),
+                InterpolationNode(x: 3, y: 2),
+                InterpolationNode(x: 4, y: 6),
+                InterpolationNode(x: 6, y: 7),
+                InterpolationNode(x: -10, y: -15),
               ],
             ),
         isFalse,
@@ -291,13 +291,13 @@ void main() {
 
       expect(
         cubicInterpolation ==
-            MonotoneCubicSpline(
+            const MonotoneCubicSpline(
               nodes: [
-                const InterpolationNode(x: 2, y: 0),
-                const InterpolationNode(x: 3, y: 2),
-                const InterpolationNode(x: 4, y: 6),
-                const InterpolationNode(x: 6, y: 7),
-                const InterpolationNode(x: 10, y: 15),
+                InterpolationNode(x: 2, y: 0),
+                InterpolationNode(x: 3, y: 2),
+                InterpolationNode(x: 4, y: 6),
+                InterpolationNode(x: 6, y: 7),
+                InterpolationNode(x: 10, y: 15),
               ],
             ),
         isFalse,
@@ -311,13 +311,13 @@ void main() {
       expect(
         cubicInterpolation.hashCode,
         equals(
-          MonotoneCubicSpline(
+          const MonotoneCubicSpline(
             nodes: [
-              const InterpolationNode(x: -2, y: 0),
-              const InterpolationNode(x: 3, y: 2),
-              const InterpolationNode(x: 4, y: 6),
-              const InterpolationNode(x: 6, y: 7),
-              const InterpolationNode(x: 10, y: 15),
+              InterpolationNode(x: -2, y: 0),
+              InterpolationNode(x: 3, y: 2),
+              InterpolationNode(x: 4, y: 6),
+              InterpolationNode(x: 6, y: 7),
+              InterpolationNode(x: 10, y: 15),
             ],
           ).hashCode,
         ),

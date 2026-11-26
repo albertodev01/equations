@@ -1,18 +1,27 @@
 import 'dart:math' as math;
 
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/solver_utils.dart';
 
 /// {@template jacobi_solver}
 /// Solves a system of linear equations using the Jacobi iterative method.
 /// The given input matrix, representing the system of linear equations, must
 /// be square.
 ///
-/// The [matrix] `A` must be strictly diagonally dominant for guaranteed
-/// convergence. The method will check for zero diagonal elements and throw
-/// an exception if found, as this would cause division by zero.
+/// At each step, every component of the solution is computed from the
+/// components of the previous step only.
 ///
-/// For non-diagonally dominant matrices, convergence is not guaranteed,
-/// but the method will still attempt to solve the system.
+/// ## Convergence
+///
+/// The method is guaranteed to converge if the [matrix] `A` is strictly
+/// diagonally dominant. This is a sufficient condition, not a necessary one:
+/// the method may converge for other matrices too. The elements on the main
+/// diagonal must not be zero, because every step divides by them.
+///
+/// The [solve] method stops when the largest change of a component between
+/// two steps is at most `precision * max(1, m)`, where `m` is the largest
+/// absolute value of a component. It throws a [SystemSolverException] if the
+/// method diverges or doesn't converge within [maxSteps] steps.
 ///
 /// Example:
 ///
@@ -21,100 +30,59 @@ import 'package:equations/equations.dart';
 ///   matrix: RealMatrix.fromData(
 ///     rows: 2,
 ///     columns: 2,
-///     data: [[4, 1], [1, 3]], // Diagonally dominant
+///     data: [[4, 1], [1, 3]], // Strictly diagonally dominant
 ///   ),
 ///   knownValues: [5, 4],
 ///   x0: [0, 0],
 /// );
 ///
 /// final solution = solver.solve();
-/// print('Solution: $solution');
+/// // Returns: [1, 1] (approximately)
 /// ```
 /// {@endtemplate}
 final class JacobiSolver extends SystemSolver {
-  /// The initial vector `x`, needed to start the algorithm.
-  final List<double> x0;
-
-  /// The maximum number of iterations to be made by the algorithm.
-  final int maxSteps;
-
   /// {@macro systems_constructor_intro}
   ///
   /// {@macro jacobi_solver}
   ///
-  ///  - [matrix] is the matrix containing the equations;
-  ///  - [knownValues] is the vector with the known values;
-  ///  - [x0] is the initial guess (which is a vector);
-  ///  - [precision] tells how accurate the algorithm has to be;
-  ///  - [maxSteps] the maximum number of iterations the algorithm.
-  factory JacobiSolver({
-    required RealMatrix matrix,
-    required List<double> knownValues,
-    required List<double> x0,
-    int maxSteps = 30,
-    double precision = 1.0e-10,
-  }) {
-    // Validate that the initial guess vector has the correct size
-    if (x0.length != knownValues.length) {
-      throw const SystemSolverException(
-        'The length of the guesses vector '
-        'must match the size of the square matrix.',
-      );
-    }
-
-    // Check for zero diagonal elements which would cause division by zero
-    for (var i = 0; i < matrix.rowCount; ++i) {
-      if (matrix(i, i) == 0) {
-        throw const SystemSolverException(
-          'The matrix has zero diagonal elements, which would cause division '
-          'by zero in Jacobi method.',
-        );
-      }
-    }
-
-    return JacobiSolver._(
-      matrix: matrix,
-      knownValues: knownValues,
-      x0: x0,
-      maxSteps: maxSteps,
-      precision: precision,
-    );
-  }
-
-  /// Creates a [JacobiSolver] object.
-  JacobiSolver._({
+  /// Parameters:
+  ///   - [matrix] is the matrix containing the equations;
+  ///   - [knownValues] is the vector with the known values;
+  ///   - [x0] is the initial guess (defaults to the zero vector);
+  ///   - [precision] determines how accurate the algorithm has to be (defaults
+  ///     to `1.0e-10`);
+  ///   - [maxSteps] is the maximum number of iterations (defaults to `1000`).
+  ///
+  /// Throws a [SystemSolverException] if:
+  ///   - The matrix is not square, or
+  ///   - The length of [knownValues] or [x0] doesn't match the matrix size, or
+  ///   - The matrix, [knownValues] or [x0] contain NaN or infinite values, or
+  ///   - The matrix has a zero on its main diagonal, or
+  ///   - [maxSteps] is smaller than 1.
+  new({
     required super.matrix,
     required super.knownValues,
-    required this.x0,
+    List<double>? x0,
     super.precision,
-    this.maxSteps = 30,
-  });
-
-  /// Returns whether the matrix is diagonally dominant.
-  ///
-  /// This can be useful for users to check if Jacobi is likely to converge
-  /// for their specific matrix.
-  bool isDiagonallyDominant() => SystemSolver.isDiagonallyDominant(matrix);
-
-  /// Computes the residual norm of the current solution.
-  ///
-  /// The residual is defined as ||Ax - b||, where A is the matrix,
-  /// x is the solution vector, and b is the known values vector.
-  /// A smaller residual indicates a better solution.
-  double computeResidualNorm(List<double> solution) {
-    var residualNorm = 0.0;
-
-    for (var i = 0; i < matrix.rowCount; ++i) {
-      var rowSum = 0.0;
-      for (var j = 0; j < matrix.columnCount; ++j) {
-        rowSum += matrix(i, j) * solution[j];
-      }
-      final residual = rowSum - knownValues[i];
-      residualNorm += residual * residual;
-    }
-
-    return math.sqrt(residualNorm);
+    this.maxSteps = 1000,
+  }) : x0 = x0 ?? List<double>.filled(knownValues.length, 0) {
+    validateIterativeSolver(matrix: matrix, x0: this.x0, maxSteps: maxSteps);
   }
+
+  /// The initial vector `x`, needed to start the algorithm.
+  final List<double> x0;
+
+  /// The maximum number of iterations to be made by the algorithm.
+  ///
+  /// If the algorithm doesn't converge within this number of iterations,
+  /// [solve] throws a [SystemSolverException].
+  final int maxSteps;
+
+  /// Returns whether the matrix is (weakly) diagonally dominant.
+  ///
+  /// See [SystemSolver.isDiagonallyDominant]. Only strict diagonal dominance
+  /// guarantees that the Jacobi method converges.
+  bool isDiagonallyDominant() => SystemSolver.isDiagonallyDominant(matrix);
 
   @override
   bool operator ==(Object other) {
@@ -123,15 +91,9 @@ final class JacobiSolver extends SystemSolver {
     }
 
     if (other is JacobiSolver) {
-      if (x0.length != other.x0.length) {
-        return false;
-      }
-      for (var i = 0; i < x0.length; ++i) {
-        if (x0[i] != other.x0[i]) {
-          return false;
-        }
-      }
-      return super == other && maxSteps == other.maxSteps;
+      return super == other &&
+          maxSteps == other.maxSteps &&
+          sameValues(x0, other.x0);
     } else {
       return false;
     }
@@ -148,49 +110,48 @@ final class JacobiSolver extends SystemSolver {
 
   @override
   List<double> solve() {
-    // Exit conditions for the method.
-    var k = 0;
-    var diff = precision + 1;
+    const methodName = 'Jacobi method';
+    final n = size;
+    final a = matrix.flattenData;
 
-    // Pre-allocate vectors for better performance
-    final size = knownValues.length;
-    final solutions = List<double>.from(x0);
-    final oldSolutions = List<double>.generate(size, (_) => 0);
+    // Two buffers, swapped after each step: the new components are computed
+    // from the previous ones only.
+    var current = List<double>.of(x0, growable: false);
+    var next = List<double>.filled(n, 0);
 
-    // Jacobi iteration
-    while ((diff >= precision) && (k < maxSteps)) {
-      // Save current solution for convergence check
-      for (var i = 0; i < size; ++i) {
-        oldSolutions[i] = solutions[i];
-      }
+    for (var step = 0; step < maxSteps; ++step) {
+      var maxChange = 0.0;
+      var maxValue = 0.0;
 
-      // Update each component using Jacobi formula
-      for (var i = 0; i < size; ++i) {
+      for (var i = 0; i < n; ++i) {
+        final row = n * i;
         var sigma = 0.0;
-
-        // Sum of products with old values
-        for (var j = 0; j < size; ++j) {
-          if (i != j) {
-            sigma += matrix(i, j) * oldSolutions[j];
+        for (var j = 0; j < n; ++j) {
+          if (j != i) {
+            sigma += a[row + j] * current[j];
           }
         }
 
-        // Jacobi update formula
-        solutions[i] = (knownValues[i] - sigma) / matrix(i, i);
+        final updated = (knownValues[i] - sigma) / a[row + i];
+        maxChange = math.max(maxChange, (updated - current[i]).abs());
+        maxValue = math.max(maxValue, updated.abs());
+        next[i] = updated;
       }
 
-      // Compute convergence criterion: maximum change in any component
-      diff = 0.0;
-      for (var i = 0; i < size; ++i) {
-        final change = (solutions[i] - oldSolutions[i]).abs();
-        if (change > diff) {
-          diff = change;
-        }
-      }
+      final previous = current;
+      current = next;
+      next = previous;
 
-      ++k;
+      if (hasConverged(
+        maxChange: maxChange,
+        maxValue: maxValue,
+        precision: precision,
+        methodName: methodName,
+      )) {
+        return current;
+      }
     }
 
-    return solutions;
+    throw notConvergedException(methodName, maxSteps);
   }
 }

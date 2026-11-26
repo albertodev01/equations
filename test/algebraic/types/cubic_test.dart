@@ -160,16 +160,29 @@ void main() {
 
       expect(cubic.first, equals(const Complex(1, 0)));
       expect(cubic[1], equals(Complex(-1 / 2, sqrt(3) / 2)));
-      expect(cubic.last, equals(Complex(-0.4999999999999995, -sqrt(3) / 2)));
+      expect(cubic.last, equals(Complex(-1 / 2, -sqrt(3) / 2)));
+    });
+
+    test('A very small leading coefficient is valid', () {
+      // 1e-11 * (x^3 - 8) = 0
+      final cubic = Cubic(
+        a: const Complex.fromReal(1e-11),
+        d: const Complex.fromReal(-8e-11),
+      );
+      expect(cubic.solutions().first.real, closeTo(2, 1e-10));
+
+      final realCubic = Cubic.realEquation(a: 1e-11, d: -8e-11);
+      expect(realCubic.solutions().first.real, closeTo(2, 1e-10));
+
+      // Objects that build a cubic internally must not throw either
+      expect(
+        Quartic.realEquation(a: 2e-11).derivative(),
+        isA<Cubic>(),
+      );
+      expect(Algebraic.fromReal([1e-11, 0, 0, 1]), isA<Cubic>());
     });
 
     test('Edge cases and numerical stability', () {
-      // Test very small coefficient
-      expect(
-        () => Cubic(a: const Complex.fromReal(1e-11)),
-        throwsA(isA<AlgebraicException>()),
-      );
-
       // Test zero coefficient
       expect(
         () => Cubic(a: const Complex.zero()),
@@ -187,15 +200,20 @@ void main() {
       expect(tripleRootSolutions[0], tripleRootSolutions[1]);
       expect(tripleRootSolutions[1], tripleRootSolutions[2]);
 
-      // Test double root case
-      final doubleRoot = Cubic(
+      // Near-triple root: (x - 1)^3 = 0.0001 has 3 distinct roots, which are
+      // 1 + cbrt(0.0001) and two complex conjugates.
+      final nearTripleRoot = Cubic(
         b: const Complex.fromReal(-3),
         c: const Complex.fromReal(3),
         d: const Complex.fromReal(-1.0001),
       );
-      final doubleRootSolutions = doubleRoot.solutions();
-      expect(doubleRootSolutions.length, 3);
-      expect(doubleRootSolutions[0], isNot(doubleRootSolutions[2]));
+      final nearTripleRootSolutions = nearTripleRoot.solutions();
+      expect(nearTripleRootSolutions.length, 3);
+      expect(nearTripleRootSolutions[0], isNot(nearTripleRootSolutions[2]));
+      expect(
+        nearTripleRootSolutions.map((x) => x.real).reduce(max),
+        closeTo(1 + pow(0.0001, 1 / 3), 1e-10),
+      );
     });
 
     test('Depressed cubic case', () {
@@ -235,15 +253,21 @@ void main() {
         final solutions = equation.solutions();
         expect(solutions.length, equals(3));
 
-        for (var i = 0; i < 3; ++i) {
-          expect(
-            solutions[i].real,
-            MoreOrLessEquals(expectedSolutions[i].real, precision: 1.0e-5),
+        // The order in which the roots are returned is not part of the API, so
+        // each expected root is matched with a distinct actual root.
+        final remaining = [...solutions];
+        for (final root in expectedSolutions) {
+          final index = remaining.indexWhere(
+            (x) =>
+                (x.real - root.real).abs() <= 1.0e-5 &&
+                (x.imaginary - root.imaginary).abs() <= 1.0e-5,
           );
           expect(
-            solutions[i].imaginary,
-            MoreOrLessEquals(expectedSolutions[i].imaginary, precision: 1.0e-5),
+            index,
+            isNot(-1),
+            reason: 'Expected root $root not found in $solutions',
           );
+          remaining.removeAt(index);
         }
       }
 
@@ -352,18 +376,53 @@ void main() {
         ]);
       });
 
-      test('Test 11: Double root case (d0.abs() >= epsilon)', () {
-        final equation = Cubic.realEquation(
-          b: -4,
-          c: 5,
-          d: -2,
-        );
-        final solutions = equation.solutions();
-        expect(solutions.length, equals(3));
+      test('Test 11: Double root ((x - 1)^2(x - 2))', () {
+        final equation = Cubic.realEquation(b: -4, c: 5, d: -2);
+        verifyCubicSolutions(equation, const [
+          Complex.fromReal(1),
+          Complex.fromReal(1),
+          Complex.fromReal(2),
+        ]);
+      });
 
-        final allSame =
-            solutions[0] == solutions[1] && solutions[1] == solutions[2];
-        expect(allSame, isFalse, reason: 'Should not be a triple root');
+      test('Test 12: Double root with no x^2 term ((x - 1)^2(x + 2))', () {
+        final equation = Cubic.realEquation(c: -3, d: 2);
+        verifyCubicSolutions(equation, const [
+          Complex.fromReal(1),
+          Complex.fromReal(1),
+          Complex.fromReal(-2),
+        ]);
+      });
+
+      test('Test 13: Double complex root ((x - i)^2(x - 1))', () {
+        final equation = Cubic(
+          b: const Complex(-1, -2),
+          c: const Complex(-1, 2),
+          d: const Complex.fromReal(1),
+        );
+        verifyCubicSolutions(equation, const [
+          Complex.i(),
+          Complex.i(),
+          Complex.fromReal(1),
+        ]);
+      });
+
+      test('Test 14: Small distinct roots are not merged', () {
+        // (x - 0.001)(x - 0.002)(x - 0.003): the discriminant is about 4e-18,
+        // which is tiny in absolute terms even though the roots are distinct.
+        final solutions = Cubic.realEquation(
+          b: -0.006,
+          c: 0.000011,
+          d: -0.000000006,
+        ).solutions();
+
+        final realParts = solutions.map((x) => x.real).toList()..sort();
+        expect(realParts[0], closeTo(0.001, 1e-12));
+        expect(realParts[1], closeTo(0.002, 1e-12));
+        expect(realParts[2], closeTo(0.003, 1e-12));
+        for (final solution in solutions) {
+          expect(solution.imaginary, closeTo(0, 1e-12));
+        }
       });
     });
   });

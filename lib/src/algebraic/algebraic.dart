@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:equations/equations.dart';
-import 'package:equations/src/utils/math_utils.dart';
 
 part 'types/constant.dart';
 part 'types/cubic.dart';
@@ -31,8 +30,8 @@ To create a valid polynomial equation (except for constant values), the coeffici
 ///
 /// final res = numerator / denominator;
 ///
-/// print(res.quotient); // Algebraic.fromReal([1, -5, 7])
-/// print(res.remainder); // Algebraic.fromReal([-11, 24])
+/// print(res.quotient); // f(x) = 1x + -5 (that is, x - 5)
+/// print(res.remainder); // f(x) = 12
 /// ```
 typedef AlgebraicDivision = ({Algebraic quotient, Algebraic remainder});
 
@@ -43,35 +42,33 @@ typedef AlgebraicDivision = ({Algebraic quotient, Algebraic remainder});
 /// The coefficients of the algebraic equations can be real numbers or complex
 /// numbers. These are examples of algebraic equations of third degree:
 ///
-/// • x³ + 5x + 2 = 0
-/// • 2x³ + (6+i)x + 8i = 0
+/// - x^3 + 5x + 2 = 0
+/// - 2x^3 + (6+i)x + 8i = 0
 ///
 /// This class stores the coefficients list starting from the one with the
-/// **highest** degree. For example, the equation `x³ + 5x² + 3x - 2 = 0`
+/// **highest** degree. For example, the equation `x^3 + 5x^2 + 3x - 2 = 0`
 /// would require a subclass of [Algebraic] to call the following:
 ///
 /// ```dart
 /// super([
-///   Complex.fromReal(1), // x³
-///   Complex.fromReal(5), // x²
+///   Complex.fromReal(1), // x^3
+///   Complex.fromReal(5), // x^2
 ///   Complex.fromReal(3), // x
 ///   Complex.fromReal(-2), // constant value
 /// ]);
 /// ```
 ///
-/// The constructor throws an [AlgebraicException] if the first element of
-/// [coefficients] is zero.
+/// The constructor throws an [AlgebraicException] if [coefficients] is empty
+/// or if its first element is zero. The only exception is [Constant], whose
+/// single coefficient can be zero (the zero polynomial).
 /// {@endtemplate}
 sealed class Algebraic {
-  /// The polynomial coefficients.
-  final List<Complex> coefficients;
-
   /// {@macro algebraic}
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
   /// values are required, consider using [Algebraic.realEquation] for a less
   /// verbose syntax.
-  Algebraic(this.coefficients) {
+  new(this.coefficients) {
     // Unless this is a constant value, the coefficient with the highest degree
     // cannot be zero.
     if (!_isValid) {
@@ -83,7 +80,7 @@ sealed class Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, use the
   /// [Algebraic.new] constructor instead.
-  Algebraic.realEquation(List<double> coefficients)
+  new realEquation(List<double> coefficients)
     : this(
         coefficients.map(Complex.fromReal).toList(growable: false),
       );
@@ -115,7 +112,7 @@ sealed class Algebraic {
   /// Use this method when the coefficients can be complex numbers. If there
   /// are only real numbers, use the [Algebraic.fromReal] constructor which is
   /// more convenient.
-  factory Algebraic.from(List<Complex> coefficients) {
+  factory from(List<Complex> coefficients) {
     switch (coefficients.length) {
       case 1:
         return Constant(a: coefficients.first);
@@ -153,9 +150,12 @@ sealed class Algebraic {
   ///
   /// Use this method when the coefficients are all real numbers. If there are
   /// complex numbers as well, use the [Algebraic.from] constructor instead.
-  factory Algebraic.fromReal(List<double> coefficients) => Algebraic.from(
+  factory fromReal(List<double> coefficients) => Algebraic.from(
     coefficients.map(Complex.fromReal).toList(growable: false),
   );
+
+  /// The polynomial coefficients.
+  final List<Complex> coefficients;
 
   @override
   bool operator ==(Object other) {
@@ -275,27 +275,23 @@ sealed class Algebraic {
   /// Evaluates the polynomial at the given complex value [x].
   ///
   /// This method computes P(x) where P is this polynomial and x is the given
-  /// complex number. The evaluation is performed using Horner's method for
-  /// numerical stability.
+  /// complex number. The evaluation is performed using Horner's method, which
+  /// only needs additions and multiplications. This keeps the result exact
+  /// whenever the intermediate values are representable, and avoids spurious
+  /// imaginary parts when a real polynomial is evaluated at a negative value.
   ///
   /// Example:
   /// ```dart
-  /// final poly = Quadratic.realEquation(a: 1, b: 2, c: 1); // x² + 2x + 1
+  /// final poly = Quadratic.realEquation(a: 1, b: 2, c: 1); // x^2 + 2x + 1
   /// final result = poly.evaluateOn(Complex.fromReal(3));
-  /// // result = Complex(16, 0) because 3² + 2(3) + 1 = 9 + 6 + 1 = 16
+  /// // result = Complex(16, 0) because 3^2 + 2(3) + 1 = 9 + 6 + 1 = 16
   /// ```
   Complex evaluateOn(Complex x) {
     var value = const Complex.zero();
-    var power = coefficients.length - 1;
 
-    // Actual valuation
+    // Horner's method: ((a*x + b)*x + c)*x + ...
     for (final c in coefficients) {
-      if (power != 0) {
-        value += x.pow(power) * c;
-      } else {
-        value += c;
-      }
-      power--;
+      value = value * x + c;
     }
 
     return value;
@@ -313,34 +309,42 @@ sealed class Algebraic {
   /// final poly = Linear.realEquation(a: 2, b: 3); // 2x + 3
   /// final result = poly.realEvaluateOn(5);
   /// // result = Complex(13, 0) because 2(5) + 3 = 13
-
+  /// ```
   Complex realEvaluateOn(double x) => evaluateOn(Complex.fromReal(x));
 
   /// Evaluates the definite integral of the polynomial from [lower] to [upper].
   ///
-  /// This method computes ∫`[lower, upper]` P(x)dx where P is this polynomial.
-  /// The integral is computed analytically using the power rule for
-  /// integration. For example:
+  /// This method computes the integral of P(x)dx over `[lower, upper]`, where
+  /// P is this polynomial. The integral is computed analytically: the
+  /// antiderivative F(x) is built with the power rule and then
+  /// F(upper) - F(lower) is evaluated using Horner's method. For example:
   ///
   /// ```dart
   /// final poly = Linear.realEquation(a: 2, b: 3); // 2x + 3
   /// final integral = poly.evaluateIntegralOn(0, 2);
-  /// // integral = Complex(10, 0) because ∫(2x+3)dx from 0 to 2 = 10
+  /// // integral = Complex(10, 0) because the integral of (2x + 3)dx from 0
+  /// // to 2 is 10
   /// ```
   ///
   /// The method works with both real and complex coefficients, returning
   /// complex results when necessary.
   Complex evaluateIntegralOn(double lower, double upper) {
+    final upperValue = Complex.fromReal(upper);
+    final lowerValue = Complex.fromReal(lower);
     var upperSum = const Complex.zero();
     var lowerSum = const Complex.zero();
 
-    // The actual integration
-    for (var n = coefficients.length - 1; n >= 0; --n) {
-      final coeff = coefficient(n) ?? const Complex.zero();
-      final denominator = Complex.fromReal(n + 1);
+    // The coefficient of degree 'n' becomes c / (n + 1) in the antiderivative,
+    // with degree 'n + 1'. The constant of integration is omitted because it
+    // cancels out in F(upper) - F(lower). F is evaluated with Horner's method:
+    // the last multiplication by x accounts for the missing constant term.
+    for (var i = 0; i < coefficients.length; ++i) {
+      final newPower = coefficients.length - i;
+      final antiderivativeCoeff =
+          coefficients[i] / Complex.fromReal(newPower.toDouble());
 
-      upperSum += coeff * Complex.fromReal(upper).pow(n + 1) / denominator;
-      lowerSum += coeff * Complex.fromReal(lower).pow(n + 1) / denominator;
+      upperSum = (upperSum + antiderivativeCoeff) * upperValue;
+      lowerSum = (lowerSum + antiderivativeCoeff) * lowerValue;
     }
 
     return upperSum - lowerSum;
@@ -361,9 +365,9 @@ sealed class Algebraic {
   ///   c: Complex.fromReal(5),
   /// );
   ///
-  /// final a = quadratic[0] // a = Complex(2, 0)
-  /// final b = quadratic[1] // b = Complex(-6, 0)
-  /// final c = quadratic[2] // c = Complex(5, 0)
+  /// final a = quadratic[0]; // a = Complex(2, 0)
+  /// final b = quadratic[1]; // b = Complex(-6, 0)
+  /// final c = quadratic[2]; // c = Complex(5, 0)
   /// ```
   ///
   /// An exception is thrown if the [index] is negative or if it doesn't
@@ -380,9 +384,9 @@ sealed class Algebraic {
   ///   c: Complex.fromReal(5),
   /// );
   ///
-  /// final degreeZero = quadratic.coefficient(0) // Complex(5, 0)
-  /// final degreeOne = quadratic.coefficient(1) // Complex(-6, 0)
-  /// final degreeTwo = quadratic.coefficient(2) // Complex(2, 0)
+  /// final degreeZero = quadratic.coefficient(0); // Complex(5, 0)
+  /// final degreeOne = quadratic.coefficient(1); // Complex(-6, 0)
+  /// final degreeTwo = quadratic.coefficient(2); // Complex(2, 0)
   /// ```
   ///
   /// This method returns `null` if no coefficient of the given [degree] is
@@ -402,25 +406,20 @@ sealed class Algebraic {
   ///
   /// The degrees of the two polynomials don't need to be the same. For example,
   /// you can sum a [Cubic] with a [Linear].
+  ///
+  /// If the leading coefficients cancel out, the degree of the result is
+  /// lowered accordingly. If every coefficient cancels out, the zero
+  /// polynomial (a [Constant] with value 0) is returned.
   Algebraic operator +(Algebraic other) {
-    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
-    final newCoefficients = <Complex>[];
+    final maxDeg = max<int>(coefficients.length, other.coefficients.length) - 1;
+    final coeffs = Iterable<int>.generate(maxDeg + 1, (i) => maxDeg - i).map(
+      (degree) {
+        return (coefficient(degree) ?? const Complex.zero()) +
+            (other.coefficient(degree) ?? const Complex.zero());
+      },
+    );
 
-    // The sum of two polynomials is the sum of the coefficients with the same
-    // degree
-    for (var degree = maxDegree; degree >= 0; --degree) {
-      final thisCoefficient = coefficient(degree) ?? const Complex.zero();
-      final otherCoefficient =
-          other.coefficient(degree) ?? const Complex.zero();
-      final sum = thisCoefficient + otherCoefficient;
-
-      if (!sum.isZero) {
-        newCoefficients.add(sum);
-      }
-    }
-
-    // Returning a new instance
-    return Algebraic.from(newCoefficients);
+    return Algebraic.from(_trimLeadingZeros(coeffs));
   }
 
   /// The difference of two polynomials is performed by subtracting the
@@ -428,32 +427,29 @@ sealed class Algebraic {
   ///
   /// The degrees of the two polynomials don't need to be the same. For example,
   /// you can subtract a [Quadratic] from a [Quartic].
+  ///
+  /// If the leading coefficients cancel out, the degree of the result is
+  /// lowered accordingly. If every coefficient cancels out (for example,
+  /// `p - p`), the zero polynomial (a [Constant] with value 0) is returned.
   Algebraic operator -(Algebraic other) {
-    final maxDegree = max<int>(coefficients.length, other.coefficients.length);
-    final newCoefficients = <Complex>[];
+    final maxDeg = max<int>(coefficients.length, other.coefficients.length) - 1;
+    final coeffs = Iterable<int>.generate(maxDeg + 1, (i) => maxDeg - i).map(
+      (degree) {
+        return (coefficient(degree) ?? const Complex.zero()) -
+            (other.coefficient(degree) ?? const Complex.zero());
+      },
+    );
 
-    // The difference of two polynomials is the difference of the coefficients
-    // with the same degree
-    for (var degree = maxDegree; degree >= 0; --degree) {
-      final thisCoefficient = coefficient(degree) ?? const Complex.zero();
-      final otherCoefficient =
-          other.coefficient(degree) ?? const Complex.zero();
-      final diff = thisCoefficient - otherCoefficient;
-
-      if (!diff.isZero) {
-        newCoefficients.add(diff);
-      }
-    }
-
-    // Returning a new instance
-    return Algebraic.from(newCoefficients);
+    return Algebraic.from(_trimLeadingZeros(coeffs));
   }
 
-  /// The product of two polynomials is performed by multiplying the
-  /// corresponding coefficients of the polynomials.
+  /// The product of two polynomials. Each coefficient of this polynomial is
+  /// multiplied by each coefficient of [other], and the products with the same
+  /// resulting degree are summed together (a discrete convolution).
   ///
   /// The degrees of the two polynomials don't need to be the same. For example,
-  /// you can multiply a [Constant] with a [GenericAlgebraic].
+  /// you can multiply a [Constant] with a [GenericAlgebraic]. Multiplying by
+  /// the zero polynomial returns the zero polynomial.
   Algebraic operator *(Algebraic other) {
     // Generating the new list of coefficients
     final newLength = coefficients.length + other.coefficients.length - 1;
@@ -469,8 +465,21 @@ sealed class Algebraic {
       }
     }
 
-    // Returning a new instance
-    return Algebraic.from(newCoefficients);
+    return Algebraic.from(_trimLeadingZeros(newCoefficients));
+  }
+
+  /// Removes the leading zero coefficients (the ones with the highest degree)
+  /// from [coefficients]. Zeros in any other position are kept because they
+  /// hold the place of their degree.
+  ///
+  /// If every coefficient is zero, a single zero is returned so that the
+  /// result represents the zero polynomial.
+  static List<Complex> _trimLeadingZeros(Iterable<Complex> coefficients) {
+    final trimmed = coefficients
+        .skipWhile((c) => c.isZero)
+        .toList(growable: false);
+
+    return trimmed.isEmpty ? const [Complex.zero()] : trimmed;
   }
 
   /// This operator divides a polynomial by another polynomial using the
@@ -479,14 +488,19 @@ sealed class Algebraic {
   /// division.
   ///
   /// The algorithm used to divide polynomials is implemented by the
-  /// [PolynomialLongDivision] class.
+  /// [PolynomialLongDivision] class. If the degree of [other] is higher than
+  /// the degree of this polynomial, the quotient is 0 and the remainder is
+  /// this polynomial.
+  ///
+  /// Throws a [PolynomialLongDivisionException] if [other] is the zero
+  /// polynomial.
   AlgebraicDivision operator /(Algebraic other) {
-    final polyLongDivison = PolynomialLongDivision(
+    final polyLongDivision = PolynomialLongDivision(
       polyNumerator: this,
       polyDenominator: other,
     );
 
-    return polyLongDivison.divide();
+    return polyLongDivision.divide();
   }
 
   /// The unary minus operator changes the sign of every coefficient of the
@@ -499,66 +513,55 @@ sealed class Algebraic {
   Algebraic operator -() =>
       Algebraic.from(coefficients.map((c) => -c).toList(growable: false));
 
-  /// Factors the polynomial into irreducible factors.
+  /// Factors the polynomial over the complex numbers.
   ///
-  /// This method decomposes the polynomial into a product of irreducible
-  /// factors. For example:
+  /// Every non-constant polynomial with complex coefficients can be written as
+  /// `a(x - r1)(x - r2)...(x - rn)`, where `a` is the leading coefficient and
+  /// `r1, ..., rn` are the roots. This method returns those factors:
+  ///
+  ///  - a [Constant] holding the leading coefficient `a`, as the first element,
+  ///    but only when `a` is not 1;
+  ///  - one monic [Linear] factor `(x - ri)` for each root, in the order
+  ///    returned by [solutions]. A root with multiplicity `k` appears `k`
+  ///    times.
+  ///
+  /// The product of the returned factors is always equal to this polynomial
+  /// (up to the precision of [solutions]). For example:
   ///
   /// ```dart
-  /// final poly1 = Quadratic.realEquation(b: 0, c: -4); // x² - 4
+  /// final poly1 = Algebraic.fromReal([1, 0, -4]); // x^2 - 4
   /// final factors1 = poly1.factor();
-  /// // Returns [Linear(b: -2), Linear(b: 2)]
-  /// // Which represents (x - 2)(x + 2)
+  /// // [x - 2, x + 2]
   ///
-  /// final poly2 = Quadratic.realEquation(b: 0, c: 4); // x² + 4
+  /// final poly2 = Algebraic.fromReal([2, 0, -8]); // 2x^2 - 8
   /// final factors2 = poly2.factor();
-  /// // Returns [Linear(b: -2i), Linear(b: 2i)]
-  /// // Which represents (x - 2i)(x + 2i)
+  /// // [2, x - 2, x + 2]
+  ///
+  /// final poly3 = Algebraic.fromReal([1, 0, 4]); // x^2 + 4
+  /// final factors3 = poly3.factor();
+  /// // [x - 2i, x + 2i]
   /// ```
   ///
-  /// Edge cases:
+  /// If the polynomial is a [Constant], it has no roots and a list containing
+  /// only this polynomial is returned.
   ///
-  /// - If the polynomial has no roots, returns a list containing only this
-  ///   polynomial (indicating it is already irreducible)
-  ///
-  /// - If the polynomial is constant (degree 0), returns a list containing
-  ///   only this polynomial
-  ///
-  /// - Repeated roots are handled correctly, with factors appearing multiple
-  ///   times according to their multiplicity
-  ///
-  /// The factorization is not guaranteed to be unique, especially for
-  /// polynomials with complex coefficients.
+  /// For polynomials of degree 5 or higher, the roots are computed with a
+  /// numerical method, so the linear factors are approximations.
   List<Algebraic> factor() {
     final roots = solutions();
 
-    // If the polynomial has no roots, it is already factored.
+    // Only constants have no roots (fundamental theorem of algebra).
     if (roots.isEmpty) {
       return [this];
     }
 
-    // Group roots by their value (to handle repeated roots)
-    final rootGroups = <Complex, int>{};
-    for (final root in roots) {
-      rootGroups[root] = (rootGroups[root] ?? 0) + 1;
-    }
+    final leadingCoefficient = coefficients.first;
 
-    // Convert each root into a linear factor
-    final factors = <Algebraic>[];
-    for (final entry in rootGroups.entries) {
-      final root = entry.key;
-      final multiplicity = entry.value;
-
-      // Create a linear factor (x - root)
-      final factor = Linear(b: -root);
-
-      // Add the factor as many times as its multiplicity
-      for (var i = 0; i < multiplicity; i++) {
-        factors.add(factor);
-      }
-    }
-
-    return factors;
+    return [
+      if (leadingCoefficient != const Complex.fromReal(1))
+        Constant(a: leadingCoefficient),
+      ...roots.map((root) => Linear(b: -root)),
+    ];
   }
 
   /// Solves the inequality associated with this polynomial.
@@ -567,20 +570,24 @@ sealed class Algebraic {
   /// can be one of the following (where P(x) represents this polynomial):
   ///
   ///  - [AlgebraicInequalityType.lessThan]: solves P(x) < 0
-  ///  - [AlgebraicInequalityType.lessThanOrEqualTo]: solves P(x) ≤ 0
+  ///  - [AlgebraicInequalityType.lessThanOrEqualTo]: solves P(x) <= 0
   ///  - [AlgebraicInequalityType.greaterThan]: solves P(x) > 0
-  ///  - [AlgebraicInequalityType.greaterThanOrEqualTo]: solves P(x) ≥ 0
+  ///  - [AlgebraicInequalityType.greaterThanOrEqualTo]: solves P(x) >= 0
   ///
-  /// The [precision] parameter (defaults to 1e-10) is used to determine if a
-  /// root is real or complex. If the imaginary part of a root is less than
-  /// [precision], it is considered real. The precision must be a positive
-  /// number.
+  /// The [precision] parameter (defaults to 1e-10) is the relative tolerance
+  /// used to decide whether a value of x is a root: x is a root when
+  /// `|P(x)| <= precision * S(x)`, where `S(x)` is the sum of the absolute
+  /// values of the terms of P(x). The precision must be a positive number.
   ///
   /// Returns a list of [AlgebraicInequalitySolution] objects representing the
-  /// intervals where the inequality is satisfied.
+  /// intervals where the inequality is satisfied, sorted in ascending order.
+  /// For `<=` and `>=` every returned interval includes its endpoints, while
+  /// for `<` and `>` it excludes them. The returned list can be empty if the
+  /// inequality is not satisfied for any real number.
   ///
-  /// The returned list can be empty if the inequality is not satisfied for any
-  /// real number.
+  /// The roots are computed with [solutions], so for polynomials of degree 5
+  /// or higher the endpoints of the intervals are approximations. See
+  /// [AlgebraicInequalitySolver] for more details.
   ///
   /// Throws an [AlgebraicException] if:
   ///  - The polynomial has complex coefficients
@@ -588,109 +595,22 @@ sealed class Algebraic {
   List<AlgebraicInequalitySolution> solveInequality({
     required AlgebraicInequalityType inequalityType,
     double precision = 1e-10,
-  }) {
-    // First check the simpler validation
-    if (precision <= 0) {
-      throw const AlgebraicException(
-        'The precision must be a positive number.',
-      );
-    }
+  }) => AlgebraicInequalitySolver(
+    polynomial: this,
+    inequalityType: inequalityType,
+    precision: precision,
+  ).solve();
 
-    // Then check for complex coefficients
-    if (!isRealEquation) {
-      throw const AlgebraicException(
-        'Inequalities are not well-defined in the complex plane.',
-      );
-    }
-
-    // Get all roots of the polynomial
-    final roots = solutions();
-
-    // Filter out complex roots and convert to real numbers
-    final realRoots = roots
-        .where((root) => root.imaginary.abs() < precision)
-        .map((root) => root.real)
-        .toList();
-
-    // If there are no real roots, check if the polynomial is always positive or
-    // negative
-    if (realRoots.isEmpty) {
-      final testValue = realEvaluateOn(0);
-      final isPositive = testValue.real > 0;
-      final isSatisfied = switch (inequalityType) {
-        AlgebraicInequalityType.lessThan => !isPositive,
-        AlgebraicInequalityType.lessThanOrEqualTo => !isPositive,
-        AlgebraicInequalityType.greaterThan => isPositive,
-        AlgebraicInequalityType.greaterThanOrEqualTo => isPositive,
-      };
-
-      return isSatisfied ? [const AlgebraicInequalityAllRealNumbers()] : [];
-    }
-
-    // Sort roots in ascending order
-    realRoots.sort((a, b) => a.compareTo(b));
-    final inequalitySolutions = <AlgebraicInequalitySolution>[];
-
-    // Test interval before first root
-    final testBeforeFirst = realEvaluateOn(realRoots.first - 1.0);
-    if (_isInequalitySatisfied(testBeforeFirst, inequalityType)) {
-      inequalitySolutions.add(
-        AlgebraicInequalitySmallerThan(
-          value: realRoots.first,
-          isInclusive:
-              inequalityType == AlgebraicInequalityType.lessThanOrEqualTo,
-        ),
-      );
-    }
-
-    // Test intervals between consecutive roots
-    for (var i = 0; i < realRoots.length - 1; i++) {
-      final midPoint = (realRoots[i] + realRoots[i + 1]) / 2;
-      final testValue = realEvaluateOn(midPoint);
-
-      if (_isInequalitySatisfied(testValue, inequalityType)) {
-        inequalitySolutions.add(
-          AlgebraicInequalityInterval(
-            start: realRoots[i],
-            end: realRoots[i + 1],
-            isInclusive:
-                inequalityType == AlgebraicInequalityType.lessThanOrEqualTo ||
-                inequalityType == AlgebraicInequalityType.greaterThanOrEqualTo,
-          ),
-        );
-      }
-    }
-
-    // Test interval after last root
-    final testAfterLast = realEvaluateOn(realRoots.last + 1.0);
-    if (_isInequalitySatisfied(testAfterLast, inequalityType)) {
-      inequalitySolutions.add(
-        AlgebraicInequalityGreaterThan(
-          value: realRoots.last,
-          isInclusive:
-              inequalityType == AlgebraicInequalityType.greaterThanOrEqualTo,
-        ),
-      );
-    }
-
-    return inequalitySolutions;
-  }
-
-  /// Helper method to check if a value satisfies the inequality
-  bool _isInequalitySatisfied(Complex value, AlgebraicInequalityType type) =>
-      switch (type) {
-        AlgebraicInequalityType.lessThan => value.real < 0,
-        AlgebraicInequalityType.lessThanOrEqualTo => value.real <= 0,
-        AlgebraicInequalityType.greaterThan => value.real > 0,
-        AlgebraicInequalityType.greaterThanOrEqualTo => value.real >= 0,
-      };
-
-  /// The polynomial discriminant, if it exists.
+  /// The polynomial discriminant.
   ///
   /// The discriminant is a mathematical expression that provides information
-  /// about the nature of the roots of a polynomial equation. The discriminant
-  /// is well-defined for polynomials up to degree 4. For higher-degrees, it is
-  /// approximated with a numerical method.
+  /// about the nature of the roots of a polynomial equation. Up to degree 4 it
+  /// is computed with the closed-form formulas. For higher degrees, it is
+  /// computed from the resultant of the polynomial and its derivative (the
+  /// determinant of their Sylvester matrix).
+  ///
+  /// The discriminant is not defined for a [Constant], which returns a
+  /// [Complex] whose real and imaginary parts are both `NaN`.
   Complex discriminant();
 
   /// Finds the roots (the solutions) of the associated _P(x) = 0_ equation.

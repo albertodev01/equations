@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/eigenvalue_decomposition/eigendecomposition_complex.dart';
 import 'package:equations/src/system/utils/matrix/decompositions/qr_decomposition/qr_complex_decomposition.dart';
@@ -5,6 +7,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 import 'package:test/test.dart';
 
 import '../../double_approximation_matcher.dart';
+import 'decompositions/decomposition_checks.dart';
 
 void main() {
   group('ComplexMatrix', () {
@@ -101,9 +104,9 @@ void main() {
       }
 
       const stringRepresentation =
-          '[6 + 2i, 0i, 0i]\n'
-          '[0i, 6 + 2i, 0i]\n'
-          '[0i, 0i, 6 + 2i]';
+          '[6 + 2i, 0, 0]\n'
+          '[0, 6 + 2i, 0]\n'
+          '[0, 0, 6 + 2i]';
 
       expect('$matrix', equals(stringRepresentation));
     });
@@ -126,9 +129,9 @@ void main() {
       }
 
       const stringRepresentation =
-          '[6 + 2i, 0i, 0i, 0i, 0i]\n'
-          '[0i, 6 + 2i, 0i, 0i, 0i]\n'
-          '[0i, 0i, 6 + 2i, 0i, 0i]';
+          '[6 + 2i, 0, 0, 0, 0]\n'
+          '[0, 6 + 2i, 0, 0, 0]\n'
+          '[0, 0, 6 + 2i, 0, 0]';
 
       expect('$matrix', equals(stringRepresentation));
     });
@@ -151,12 +154,12 @@ void main() {
       }
 
       const stringRepresentation =
-          '[6 + 2i, 0i]\n'
-          '[0i, 6 + 2i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]\n'
-          '[0i, 0i]';
+          '[6 + 2i, 0]\n'
+          '[0, 6 + 2i]\n'
+          '[0, 0]\n'
+          '[0, 0]\n'
+          '[0, 0]\n'
+          '[0, 0]';
 
       expect('$matrix', equals(stringRepresentation));
     });
@@ -651,47 +654,57 @@ void main() {
 
       // Decomposition
       final lu = matrix.luDecomposition();
-      expect(lu.length, equals(2));
+      expect(lu.length, equals(3));
 
-      // Checking L
       final L = lu.first;
-      expect(L.rowCount, equals(matrix.rowCount));
-      expect(L.columnCount, equals(matrix.columnCount));
-      expect(L.isSquareMatrix, isTrue);
+      final U = lu[1];
+      final P = lu[2];
+
+      for (final m in lu) {
+        expect(m.rowCount, equals(matrix.rowCount));
+        expect(m.columnCount, equals(matrix.columnCount));
+      }
+
+      // L is lower triangular with ones on the diagonal, U is upper triangular
+      for (var i = 0; i < 3; i++) {
+        expect(L(i, i), equals(const Complex.fromReal(1)));
+        for (var j = i + 1; j < 3; j++) {
+          expect(L(i, j), equals(const Complex.zero()));
+          expect(U(j, i), equals(const Complex.zero()));
+        }
+      }
+
+      // Partial pivoting selects the row with the largest pivot first
       expect(
-        L.flattenData,
+        P.flattenData,
         orderedEquals(const <Complex>[
+          Complex.zero(),
+          Complex.zero(),
+          Complex.fromReal(1),
           Complex.fromReal(1),
           Complex.zero(),
           Complex.zero(),
-          Complex.fromReal(4),
+          Complex.zero(),
           Complex.fromReal(1),
           Complex.zero(),
-          Complex.fromReal(7),
-          Complex.fromReal(2),
-          Complex.fromReal(1),
         ]),
       );
 
-      // Checking U
-      final U = lu[1];
-      expect(U.rowCount, equals(matrix.rowCount));
-      expect(U.columnCount, equals(matrix.columnCount));
-      expect(U.isSquareMatrix, isTrue);
-      expect(
-        U.flattenData,
-        orderedEquals(const <Complex>[
-          Complex.fromReal(1),
-          Complex.fromReal(2),
-          Complex.fromReal(3),
-          Complex.zero(),
-          Complex.fromReal(-3),
-          Complex.fromReal(-6),
-          Complex.zero(),
-          Complex.zero(),
-          Complex.zero(),
-        ]),
-      );
+      // P x A = L x U
+      final pA = P * matrix;
+      final luMatrix = L * U;
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          expect(
+            pA(i, j).real,
+            MoreOrLessEquals(luMatrix(i, j).real, precision: 1.0e-10),
+          );
+          expect(
+            pA(i, j).imaginary,
+            MoreOrLessEquals(luMatrix(i, j).imaginary, precision: 1.0e-10),
+          );
+        }
+      }
     });
 
     test('LU decomposition fails on non-square matrix', () {
@@ -1278,7 +1291,7 @@ void main() {
       expect(notDiagonal.isIdentity(), isFalse);
     });
 
-    test('Identity matrix only computed when square', () {
+    test('Non-square matrices are never the identity', () {
       final identity = ComplexMatrix.fromData(
         rows: 2,
         columns: 3,
@@ -1288,7 +1301,7 @@ void main() {
         ],
       );
 
-      expect(identity.isIdentity, throwsA(isA<MatrixException>()));
+      expect(identity.isIdentity(), isFalse);
     });
 
     test('rank', () {
@@ -1417,27 +1430,32 @@ void main() {
         ],
       );
 
-      final eigenvalues = matrix.eigenvalues();
+      // The order of the eigenvalues is not specified
+      final eigenvalues = matrix.eigenvalues()
+        ..sort((a, b) => a.real.compareTo(b.real));
 
       expect(eigenvalues.length, equals(3));
       expect(
         eigenvalues.first.real,
-        const MoreOrLessEquals(2.4328, precision: 1.0e-4),
+        const MoreOrLessEquals(-2.4328, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].real,
-        const MoreOrLessEquals(-2.4328, precision: 1.0e-4),
+        const MoreOrLessEquals(2.4328, precision: 1.0e-4),
       );
       expect(eigenvalues[2].real, const MoreOrLessEquals(3, precision: 1.0e-4));
       expect(
         eigenvalues.first.imaginary,
-        const MoreOrLessEquals(0.0889, precision: 1.0e-4),
+        const MoreOrLessEquals(0.911, precision: 1.0e-4),
       );
       expect(
         eigenvalues[1].imaginary,
-        const MoreOrLessEquals(0.911, precision: 1.0e-4),
+        const MoreOrLessEquals(0.0889, precision: 1.0e-4),
       );
-      expect(eigenvalues[2].imaginary, isZero);
+      expect(
+        eigenvalues[2].imaginary,
+        const MoreOrLessEquals(0, precision: 1.0e-10),
+      );
     });
 
     test('minors', () {
@@ -1990,18 +2008,1028 @@ void main() {
         ],
       ];
 
+      // The order of the eigenvalues is not specified
+      int byRealPart(Complex a, Complex b) => a.real.compareTo(b.real);
+      for (final values in eigenvalues) {
+        values.sort(byRealPart);
+      }
+      final sortedExpected = expected
+          .map((values) => [...values]..sort(byRealPart))
+          .toList();
+
       for (var i = 0; i < eigenvalues.length; ++i) {
         for (var j = 0; j < expected[i].length; ++j) {
           expect(
             eigenvalues[i][j].real,
-            MoreOrLessEquals(expected[i][j].real, precision: 1.0e-4),
+            MoreOrLessEquals(sortedExpected[i][j].real, precision: 1.0e-4),
           );
           expect(
             eigenvalues[i][j].imaginary,
-            MoreOrLessEquals(expected[i][j].imaginary, precision: 1.0e-4),
+            MoreOrLessEquals(sortedExpected[i][j].imaginary, precision: 1.0e-4),
           );
         }
       }
+    });
+  });
+
+  group('Regressions', () {
+    ComplexMatrix fromRealRows(List<List<double>> rows) =>
+        ComplexMatrix.fromData(
+          rows: rows.length,
+          columns: rows.first.length,
+          data: rows.map((row) => row.map(Complex.fromReal).toList()).toList(),
+        );
+
+    void expectClose(Complex actual, Complex expected) {
+      expect(actual.real, MoreOrLessEquals(expected.real, precision: 1.0e-10));
+      expect(
+        actual.imaginary,
+        MoreOrLessEquals(expected.imaginary, precision: 1.0e-10),
+      );
+    }
+
+    void expectSameMatrix(ComplexMatrix actual, ComplexMatrix expected) {
+      for (var i = 0; i < expected.rowCount; i++) {
+        for (var j = 0; j < expected.columnCount; j++) {
+          expectClose(actual(i, j), expected(i, j));
+        }
+      }
+    }
+
+    // A permutation matrix with a single swap: det = -1 and a zero in the
+    // top-left corner, which requires pivoting.
+    final swapped5x5 = fromRealRows(const [
+      [0, 1, 0, 0, 0],
+      [1, 0, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
+    ]);
+
+    final complex5x5 = ComplexMatrix.fromFlattenedData(
+      rows: 5,
+      columns: 5,
+      data: List<Complex>.generate(25, (k) {
+        final i = k ~/ 5;
+        final j = k % 5;
+
+        return i == j ? Complex(4, i.toDouble()) : Complex(1, (i - j) / 2);
+      }),
+    );
+
+    test('Operators return a ComplexMatrix', () {
+      final matrix = fromRealRows(const [
+        [1, 2],
+        [3, 4],
+      ]);
+
+      expect(matrix + matrix, isA<ComplexMatrix>());
+      expect(matrix - matrix, isA<ComplexMatrix>());
+      expect(matrix * matrix, isA<ComplexMatrix>());
+      expect(matrix / matrix, isA<ComplexMatrix>());
+    });
+
+    test('Determinant of 5x5 matrices requires pivoting', () {
+      expectClose(swapped5x5.determinant(), const Complex.fromReal(-1));
+    });
+
+    test('Determinant via LU matches the cofactor expansion', () {
+      // Laplace expansion along the first row, using the 4x4 closed form
+      var expected = const Complex.zero();
+      for (var j = 0; j < 5; j++) {
+        final term = complex5x5(0, j) * complex5x5.minor(0, j).determinant();
+        expected = j.isEven ? expected + term : expected - term;
+      }
+
+      expectClose(complex5x5.determinant(), expected);
+    });
+
+    test('LU decomposition returns L, U and P', () {
+      for (final matrix in [swapped5x5, complex5x5]) {
+        final lu = matrix.luDecomposition();
+        expect(lu.length, equals(3));
+        expectSameMatrix(lu.first * lu[1], lu[2] * matrix);
+      }
+    });
+
+    test('Inverse of big matrices', () {
+      final identity = ComplexMatrix(rows: 5, columns: 5, identity: true);
+
+      expectSameMatrix(complex5x5 * complex5x5.inverse(), identity);
+      expectSameMatrix(swapped5x5 * swapped5x5.inverse(), identity);
+    });
+
+    test('Inverse of singular matrices throws', () {
+      final singular2x2 = fromRealRows(const [
+        [1, 2],
+        [2, 4],
+      ]);
+      final singular3x3 = fromRealRows(const [
+        [1, 2, 3],
+        [2, 4, 6],
+        [1, 1, 1],
+      ]);
+
+      expect(singular2x2.inverse, throwsA(isA<MatrixException>()));
+      expect(singular3x3.inverse, throwsA(isA<MatrixException>()));
+    });
+
+    test('Rank of square matrices', () {
+      final singular = fromRealRows(const [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ]);
+
+      expect(singular.rank(), equals(2));
+      expect(swapped5x5.rank(), equals(5));
+      expect(complex5x5.rank(), equals(5));
+    });
+
+    test('Minor bounds are validated', () {
+      final matrix = fromRealRows(const [
+        [1, 2],
+        [3, 4],
+      ]);
+
+      expect(() => matrix.minor(2, 0), throwsA(isA<MatrixException>()));
+      expect(() => matrix.minor(0, 2), throwsA(isA<MatrixException>()));
+    });
+
+    test('Cholesky decomposition of a Hermitian matrix', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 3,
+        columns: 3,
+        data: const [
+          [Complex.fromReal(4), Complex(1, -2), Complex(0, 1)],
+          [Complex(1, 2), Complex.fromReal(6), Complex(2, -1)],
+          [Complex(0, -1), Complex(2, 1), Complex.fromReal(5)],
+        ],
+      );
+
+      final cholesky = matrix.choleskyDecomposition();
+      final L = cholesky.first;
+      final conjugateTransposeL = cholesky[1];
+
+      // The second factor is the conjugate transpose of the first one
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          expect(conjugateTransposeL(i, j), equals(L(j, i).conjugate()));
+        }
+      }
+
+      expectSameMatrix(L * conjugateTransposeL, matrix);
+    });
+
+    test('Cholesky decomposition rejects non-Hermitian diagonals', () {
+      final matrix = ComplexMatrix.fromData(
+        rows: 2,
+        columns: 2,
+        data: const [
+          [Complex(4, 1), Complex.zero()],
+          [Complex.zero(), Complex.fromReal(4)],
+        ],
+      );
+
+      expect(
+        matrix.choleskyDecomposition,
+        throwsA(isA<SystemSolverException>()),
+      );
+    });
+  });
+
+  group('Edge cases', () {
+    /// A matrix with random elements in the square [-1, 1] x [-1, 1].
+    ComplexMatrix randomMatrix(int rows, int columns, Random random) =>
+        ComplexMatrix.fromFlattenedData(
+          rows: rows,
+          columns: columns,
+          data: List<Complex>.generate(
+            rows * columns,
+            (_) => Complex(
+              random.nextDouble() * 2 - 1,
+              random.nextDouble() * 2 - 1,
+            ),
+          ),
+        );
+
+    /// A random, diagonally dominant (hence invertible) matrix.
+    ComplexMatrix invertibleMatrix(int n, Random random) =>
+        randomMatrix(n, n, random) +
+        ComplexMatrix.diagonal(
+          rows: n,
+          columns: n,
+          diagonalValue: Complex.fromReal(2.0 * n),
+        );
+
+    /// The [matrix] with every element multiplied by the real [factor].
+    ComplexMatrix scaled(ComplexMatrix matrix, double factor) =>
+        ComplexMatrix.fromFlattenedData(
+          rows: matrix.rowCount,
+          columns: matrix.columnCount,
+          data: matrix.flattenData
+              .map(
+                (value) =>
+                    Complex(value.real * factor, value.imaginary * factor),
+              )
+              .toList(),
+        );
+
+    /// Expects [actual] to be close to [expected], relative to its magnitude.
+    void expectClose(
+      Complex actual,
+      Complex expected, [
+      double tolerance = 1e-9,
+    ]) {
+      final precision = tolerance * max(1, expected.abs());
+      expect(
+        actual.real,
+        MoreOrLessEquals(expected.real, precision: precision),
+      );
+      expect(
+        actual.imaginary,
+        MoreOrLessEquals(expected.imaginary, precision: precision),
+      );
+    }
+
+    ComplexMatrix identity(int n) =>
+        ComplexMatrix(rows: n, columns: n, identity: true);
+
+    group('Data integrity', () {
+      test('Constructors copy the source data', () {
+        final flat = <Complex>[
+          const Complex(1, 1),
+          const Complex(2, 2),
+          const Complex(3, 3),
+          const Complex(4, 4),
+        ];
+        final rows = <List<Complex>>[
+          [const Complex(1, 1), const Complex(2, 2)],
+          [const Complex(3, 3), const Complex(4, 4)],
+        ];
+        final fromFlat = ComplexMatrix.fromFlattenedData(
+          rows: 2,
+          columns: 2,
+          data: flat,
+        );
+        final fromRows = ComplexMatrix.fromData(
+          rows: 2,
+          columns: 2,
+          data: rows,
+        );
+
+        flat[0] = const Complex.zero();
+        rows.first[0] = const Complex.zero();
+
+        expect(fromFlat(0, 0), equals(const Complex(1, 1)));
+        expect(fromRows(0, 0), equals(const Complex(1, 1)));
+      });
+
+      test('The flattened data is read-only', () {
+        final matrix = ComplexMatrix(rows: 2, columns: 2);
+
+        expect(
+          () => matrix.flattenData[0] = const Complex(1, 1),
+          throwsUnsupportedError,
+        );
+      });
+
+      test('Rows of different lengths are rejected', () {
+        expect(
+          () => ComplexMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [Complex(1, 1), Complex(2, 2), Complex(3, 3)],
+              [Complex(4, 4)],
+            ],
+          ),
+          throwsA(isA<MatrixException>()),
+        );
+      });
+
+      test('Operators do not modify the operands', () {
+        final random = Random(1);
+        final a = invertibleMatrix(3, random);
+        final b = invertibleMatrix(3, random);
+        final copyA = ComplexMatrix.fromFlattenedData(
+          rows: 3,
+          columns: 3,
+          data: a.toList(),
+        );
+        final copyB = ComplexMatrix.fromFlattenedData(
+          rows: 3,
+          columns: 3,
+          data: b.toList(),
+        );
+
+        final results = <Object>[
+          a + b,
+          a - b,
+          a * b,
+          a / b,
+          a.transpose(),
+          a.inverse(),
+          a.luDecomposition(),
+          a.rank(),
+          a.determinant(),
+        ];
+
+        expect(results, hasLength(9));
+        expect(a, equals(copyA));
+        expect(b, equals(copyB));
+      });
+    });
+
+    group('Equality and hashing', () {
+      test('Same data with a different shape is not equal', () {
+        const data = <Complex>[
+          Complex(1, 1),
+          Complex(2, 2),
+          Complex(3, 3),
+          Complex(4, 4),
+        ];
+        final wide = ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 4,
+          data: data,
+        );
+        final square = ComplexMatrix.fromFlattenedData(
+          rows: 2,
+          columns: 2,
+          data: data,
+        );
+
+        expect(wide, isNot(equals(square)));
+        expect(wide.transpose(), isNot(equals(wide)));
+      });
+
+      test('Negative zeros are equal to positive zeros', () {
+        // The sign of zero is what is being tested: this can't be an integer
+        // literal, which would turn into a positive zero.
+        const negativeZero = -0.0;
+
+        final negative = ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 2,
+          data: const [
+            Complex(negativeZero, negativeZero),
+            Complex(1, negativeZero),
+          ],
+        );
+        final positive = ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 2,
+          data: const [Complex.zero(), Complex.fromReal(1)],
+        );
+
+        expect(negative, equals(positive));
+        expect(negative.hashCode, equals(positive.hashCode));
+        expect(negative.isZero(), isFalse);
+        expect(
+          ComplexMatrix.fromFlattenedData(
+            rows: 1,
+            columns: 1,
+            data: const [Complex(negativeZero, negativeZero)],
+          ).isZero(),
+          isTrue,
+        );
+      });
+
+      test('Matrices containing NaN are only equal to themselves', () {
+        // A constant NaN would be canonicalized into a single instance, which
+        // is always identical (hence equal) to itself.
+        ComplexMatrix nanMatrix() => ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 1,
+          data: [Complex(0, double.parse('NaN'))],
+        );
+        final matrix = nanMatrix();
+
+        expect(matrix, equals(matrix));
+        expect(matrix, isNot(equals(nanMatrix())));
+      });
+    });
+
+    group('Indexing and formatting', () {
+      test('Out of bounds indices throw', () {
+        final matrix = ComplexMatrix(rows: 2, columns: 3);
+        const invalid = [(-1, 0), (0, -1), (2, 0), (0, 3)];
+
+        for (final (row, col) in invalid) {
+          expect(() => matrix(row, col), throwsA(isA<MatrixException>()));
+          expect(
+            () => matrix.itemAt(row, col),
+            throwsA(isA<MatrixException>()),
+          );
+        }
+
+        // transposedValue(row, col) reads the element at (col, row)
+        expect(matrix.transposedValue(2, 1), equals(const Complex.zero()));
+        expect(
+          () => matrix.transposedValue(1, 2),
+          throwsA(isA<MatrixException>()),
+        );
+      });
+
+      test('Single row and single column matrices', () {
+        expect(
+          ComplexMatrix.fromFlattenedData(
+            rows: 1,
+            columns: 2,
+            data: const [Complex(3, -4), Complex.fromReal(5)],
+          ).toString(),
+          equals('[3 - 4i, 5]'),
+        );
+        expect(
+          ComplexMatrix.fromFlattenedData(
+            rows: 2,
+            columns: 1,
+            data: const [Complex.i(), Complex.zero()],
+          ).toString(),
+          equals('[1i]\n[0]'),
+        );
+      });
+    });
+
+    group('Arithmetic', () {
+      test('Block multiplication matches the naive product', () {
+        final random = Random(2);
+
+        // The block size is 16: these shapes cross the block boundaries
+        for (final (n, m, p) in const [
+          (17, 18, 19),
+          (33, 16, 40),
+          (1, 20, 33),
+        ]) {
+          final a = randomMatrix(n, m, random);
+          final b = randomMatrix(m, p, random);
+
+          final expected = List<Complex>.generate(n * p, (index) {
+            final i = index ~/ p;
+            final j = index % p;
+            var sum = const Complex.zero();
+            for (var k = 0; k < m; k++) {
+              sum += a(i, k) * b(k, j);
+            }
+
+            return sum;
+          });
+
+          expectComplexMatrixClose(
+            a * b,
+            ComplexMatrix.fromFlattenedData(
+              rows: n,
+              columns: p,
+              data: expected,
+            ),
+          );
+        }
+      });
+
+      test('Products with the identity, the zero matrix and vectors', () {
+        final random = Random(3);
+        final a = randomMatrix(3, 3, random);
+
+        expect(a * identity(3), equals(a));
+        expect(identity(3) * a, equals(a));
+        expect((a * ComplexMatrix(rows: 3, columns: 2)).isZero(), isTrue);
+
+        final row = ComplexMatrix.fromFlattenedData(
+          rows: 1,
+          columns: 2,
+          data: const [Complex(1, 1), Complex.fromReal(2)],
+        );
+        final column = ComplexMatrix.fromFlattenedData(
+          rows: 2,
+          columns: 1,
+          data: const [Complex(1, -1), Complex.i()],
+        );
+
+        // (1 + i)(1 - i) + 2i = 2 + 2i
+        expect((row * column).flattenData.single, equals(const Complex(2, 2)));
+      });
+
+      test('Algebraic properties of the operators', () {
+        final random = Random(4);
+        final a = randomMatrix(3, 4, random);
+        final b = randomMatrix(4, 2, random);
+        final c = randomMatrix(2, 5, random);
+        final d = randomMatrix(4, 2, random);
+
+        expect((a - a).isZero(), isTrue);
+        expectComplexMatrixClose((a * b) * c, a * (b * c));
+        expectComplexMatrixClose(a * (b + d), a * b + a * d);
+        expectComplexMatrixClose(
+          (a * b).transpose(),
+          b.transpose() * a.transpose(),
+        );
+        expectComplexMatrixClose(
+          conjugateTranspose(a * b),
+          conjugateTranspose(b) * conjugateTranspose(a),
+        );
+      });
+
+      test('Element-wise division by zero gives NaN', () {
+        final quotient =
+            ComplexMatrix.fromFlattenedData(
+              rows: 1,
+              columns: 2,
+              data: const [Complex(1, 2), Complex.zero()],
+            ) /
+            ComplexMatrix(rows: 1, columns: 2);
+
+        for (final value in quotient.flattenData) {
+          expect(value.real.isNaN, isTrue);
+          expect(value.imaginary.isNaN, isTrue);
+        }
+      });
+    });
+
+    group('Determinant', () {
+      test('The determinant is multiplicative', () {
+        final random = Random(5);
+
+        for (var n = 1; n <= 7; n++) {
+          final a = randomMatrix(n, n, random);
+          final b = randomMatrix(n, n, random);
+
+          expectClose(
+            (a * b).determinant(),
+            a.determinant() * b.determinant(),
+          );
+        }
+      });
+
+      test('Transposing, conjugating, scaling and swapping rows', () {
+        final random = Random(6);
+
+        for (var n = 1; n <= 7; n++) {
+          final a = randomMatrix(n, n, random);
+          final determinant = a.determinant();
+
+          expectClose(a.transpose().determinant(), determinant);
+          expectClose(
+            conjugateTranspose(a).determinant(),
+            determinant.conjugate(),
+          );
+
+          // det(i A) = i^n det(A)
+          final rotated = ComplexMatrix.fromFlattenedData(
+            rows: n,
+            columns: n,
+            data: a.flattenData
+                .map((value) => value * const Complex.i())
+                .toList(),
+          );
+          var power = const Complex.fromReal(1);
+          for (var i = 0; i < n; i++) {
+            power *= const Complex.i();
+          }
+          expectClose(rotated.determinant(), power * determinant);
+
+          if (n > 1) {
+            // Swapping the first two rows flips the sign
+            final rows = a.toListOfList();
+            final first = rows.first;
+            rows[0] = rows[1];
+            rows[1] = first;
+
+            expectClose(
+              ComplexMatrix.fromData(
+                rows: n,
+                columns: n,
+                data: rows,
+              ).determinant(),
+              -determinant,
+            );
+          }
+        }
+      });
+
+      test('Triangular and Hermitian matrices', () {
+        final random = Random(7);
+
+        for (var n = 1; n <= 7; n++) {
+          final triangular = ComplexMatrix.fromFlattenedData(
+            rows: n,
+            columns: n,
+            data: List<Complex>.generate(
+              n * n,
+              (k) => k ~/ n <= k % n
+                  ? Complex(random.nextDouble() + 0.5, random.nextDouble())
+                  : const Complex.zero(),
+            ),
+          );
+
+          var diagonalProduct = const Complex.fromReal(1);
+          for (var i = 0; i < n; i++) {
+            diagonalProduct *= triangular(i, i);
+          }
+
+          expectClose(triangular.determinant(), diagonalProduct);
+
+          // The determinant of a Hermitian matrix is real
+          final b = randomMatrix(n, n, random);
+          final hermitian = b + conjugateTranspose(b);
+          expect(
+            hermitian.determinant().imaginary,
+            MoreOrLessEquals(
+              0,
+              precision: 1e-9 * max(1, hermitian.determinant().abs()),
+            ),
+          );
+        }
+      });
+
+      test('The 4x4 formula agrees with the Laplace expansion', () {
+        final a = randomMatrix(4, 4, Random(8));
+        var expansion = const Complex.zero();
+        for (var j = 0; j < 4; j++) {
+          final term = a(0, j) * a.minor(0, j).determinant();
+          expansion = j.isEven ? expansion + term : expansion - term;
+        }
+
+        expectClose(a.determinant(), expansion);
+      });
+    });
+
+    group('Inverse', () {
+      test('Round trip for every algorithm (1x1, 2x2 and LU)', () {
+        final random = Random(9);
+
+        for (var n = 1; n <= 8; n++) {
+          final a = invertibleMatrix(n, random);
+          final inverse = a.inverse();
+
+          expectComplexMatrixClose(a * inverse, identity(n));
+          expectComplexMatrixClose(inverse * a, identity(n));
+          expectComplexMatrixClose(inverse.inverse(), a);
+        }
+      });
+
+      test('The inverse of a unitary matrix is its conjugate transpose', () {
+        // A diagonal matrix of unit phases, followed by a permutation
+        final phases = ComplexMatrix.fromFlattenedData(
+          rows: 3,
+          columns: 3,
+          data: [
+            const Complex.i(),
+            const Complex.zero(),
+            const Complex.zero(),
+            const Complex.zero(),
+            const Complex.fromReal(-1),
+            const Complex.zero(),
+            const Complex.zero(),
+            const Complex.zero(),
+            const Complex(sqrt1_2, sqrt1_2),
+          ],
+        );
+        final permutation = ComplexMatrix.fromFlattenedData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            Complex.zero(),
+            Complex.fromReal(1),
+            Complex.zero(),
+            Complex.zero(),
+            Complex.zero(),
+            Complex.fromReal(1),
+            Complex.fromReal(1),
+            Complex.zero(),
+            Complex.zero(),
+          ],
+        );
+        final unitary = permutation * phases;
+
+        expect(identity(3).inverse(), equals(identity(3)));
+        expectComplexMatrixClose(
+          unitary.inverse(),
+          conjugateTranspose(unitary),
+        );
+      });
+
+      test('The 2x2 inverse does not depend on the scale of the data', () {
+        final a = invertibleMatrix(2, Random(10));
+        final expected = a.inverse();
+
+        for (final factor in const [1e-200, 1e200]) {
+          expectComplexMatrixClose(
+            scaled(scaled(a, factor).inverse(), factor),
+            expected,
+          );
+        }
+      });
+
+      test('Numerically singular matrices are rejected', () {
+        final matrices = [
+          ComplexMatrix.fromFlattenedData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              Complex(0.1, 0.1),
+              Complex(0.2, 0.2),
+              Complex(0.2, 0.2),
+              Complex(0.4, 0.4),
+            ],
+          ),
+          ComplexMatrix(rows: 1, columns: 1),
+          ComplexMatrix(rows: 2, columns: 2),
+          ComplexMatrix(rows: 4, columns: 4),
+        ];
+
+        for (final matrix in matrices) {
+          expect(matrix.inverse, throwsA(isA<MatrixException>()));
+        }
+      });
+
+      test('A x adj(A) = det(A) x I', () {
+        final random = Random(11);
+
+        for (var n = 2; n <= 6; n++) {
+          final a = randomMatrix(n, n, random);
+          final adjugate = a.cofactorMatrix().transpose();
+
+          expectComplexMatrixClose(
+            a * adjugate,
+            ComplexMatrix.diagonal(
+              rows: n,
+              columns: n,
+              diagonalValue: a.determinant(),
+            ),
+          );
+        }
+      });
+    });
+
+    group('Trace and rank', () {
+      test('Trace identities', () {
+        final random = Random(12);
+        final a = randomMatrix(3, 5, random);
+        final b = randomMatrix(5, 3, random);
+        final c = randomMatrix(3, 3, random);
+
+        expectClose((a * b).trace(), (b * a).trace());
+        expect(c.transpose().trace(), equals(c.trace()));
+        expectClose(
+          conjugateTranspose(c).trace(),
+          c.trace().conjugate(),
+        );
+      });
+
+      test('Rank of products and rectangular matrices', () {
+        final random = Random(13);
+        final rankTwo = randomMatrix(5, 2, random) * randomMatrix(2, 6, random);
+        final rankOne = randomMatrix(4, 1, random) * randomMatrix(1, 4, random);
+
+        expect(rankTwo.rank(), equals(2));
+        expect(conjugateTranspose(rankTwo).rank(), equals(2));
+        expect(rankOne.rank(), equals(1));
+        expect(randomMatrix(4, 6, random).rank(), equals(4));
+        expect(randomMatrix(6, 4, random).rank(), equals(4));
+        expect(ComplexMatrix(rows: 3, columns: 4).rank(), isZero);
+        expect(identity(5).rank(), equals(5));
+      });
+
+      test('The rank does not depend on the scale of the data', () {
+        final random = Random(14);
+        final rankTwo = randomMatrix(4, 2, random) * randomMatrix(2, 4, random);
+
+        for (final factor in const <double>[1e-100, 1, 1e100]) {
+          expect(scaled(rankTwo, factor).rank(), equals(2));
+        }
+      });
+    });
+
+    group('Predicates', () {
+      test('Symmetric is not the same as Hermitian', () {
+        // Hermitian, but not symmetric
+        final hermitian = ComplexMatrix.fromFlattenedData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            Complex.fromReal(1),
+            Complex.i(),
+            Complex(0, -1),
+            Complex.fromReal(1),
+          ],
+        );
+
+        // Symmetric, but not Hermitian
+        final symmetric = ComplexMatrix.fromFlattenedData(
+          rows: 2,
+          columns: 2,
+          data: const [
+            Complex.fromReal(1),
+            Complex.i(),
+            Complex.i(),
+            Complex.fromReal(1),
+          ],
+        );
+
+        expect(hermitian.isSymmetric(), isFalse);
+        expect(hermitian, equals(conjugateTranspose(hermitian)));
+        expect(symmetric.isSymmetric(), isTrue);
+      });
+
+      test('Rectangular matrices', () {
+        final diagonal = ComplexMatrix.diagonal(
+          rows: 3,
+          columns: 2,
+          diagonalValue: const Complex(1, 1),
+        );
+
+        expect(diagonal.isDiagonal(), isTrue);
+        expect(diagonal.isSymmetric(), isFalse);
+        expect(diagonal.isIdentity(), isFalse);
+        expect(
+          ComplexMatrix.diagonal(
+            rows: 2,
+            columns: 2,
+            diagonalValue: const Complex(1, 1),
+          ).isIdentity(),
+          isFalse,
+        );
+      });
+    });
+
+    group('Characteristic polynomial and eigenvalues', () {
+      test('Coefficients are related to the trace and the determinant', () {
+        final random = Random(15);
+
+        for (var n = 1; n <= 6; n++) {
+          final a = randomMatrix(n, n, random);
+          final coefficients = a.characteristicPolynomial().coefficients;
+          final sign = Complex.fromReal(n.isEven ? 1 : -1);
+
+          expect(coefficients.length, equals(n + 1));
+          expect(coefficients.first, equals(const Complex.fromReal(1)));
+          expectClose(coefficients[1], -a.trace());
+          expectClose(coefficients.last, sign * a.determinant());
+        }
+      });
+
+      test('Eigenvalues sum to the trace and multiply to the determinant', () {
+        final random = Random(16);
+
+        for (var n = 1; n <= 6; n++) {
+          final a = randomMatrix(n, n, random);
+          final eigenvalues = a.eigenvalues();
+
+          expect(eigenvalues.length, equals(n));
+          expectClose(
+            eigenvalues.fold<Complex>(
+              const Complex.zero(),
+              (total, value) => total + value,
+            ),
+            a.trace(),
+          );
+          expectClose(
+            eigenvalues.fold<Complex>(
+              const Complex.fromReal(1),
+              (total, value) => total * value,
+            ),
+            a.determinant(),
+          );
+        }
+      });
+
+      test('Hermitian matrices have real eigenvalues', () {
+        final random = Random(17);
+
+        for (var n = 1; n <= 6; n++) {
+          final b = randomMatrix(n, n, random);
+          final hermitian = b + conjugateTranspose(b);
+
+          for (final eigenvalue in hermitian.eigenvalues()) {
+            expect(
+              eigenvalue.imaginary,
+              const MoreOrLessEquals(0, precision: 1e-9),
+            );
+          }
+        }
+      });
+
+      test('Square-only methods reject non-square matrices', () {
+        final matrix = ComplexMatrix(rows: 3, columns: 2);
+        final methods = <Object? Function()>[
+          matrix.determinant,
+          matrix.characteristicPolynomial,
+          matrix.eigenvalues,
+          matrix.luDecomposition,
+          matrix.choleskyDecomposition,
+          matrix.inverse,
+          matrix.trace,
+          matrix.cofactorMatrix,
+        ];
+
+        for (final method in methods) {
+          expect(method, throwsA(isA<MatrixException>()));
+        }
+      });
+    });
+
+    group('LU and Cholesky decompositions', () {
+      test('LU of identity and permutation matrices', () {
+        final [l, u, p] = identity(3).luDecomposition();
+        expect(l, equals(identity(3)));
+        expect(u, equals(identity(3)));
+        expect(p, equals(identity(3)));
+
+        final permutation = ComplexMatrix.fromFlattenedData(
+          rows: 3,
+          columns: 3,
+          data: const [
+            Complex.zero(),
+            Complex.zero(),
+            Complex.fromReal(1),
+            Complex.fromReal(1),
+            Complex.zero(),
+            Complex.zero(),
+            Complex.zero(),
+            Complex.fromReal(1),
+            Complex.zero(),
+          ],
+        );
+        final [pl, pu, pp] = permutation.luDecomposition();
+        expect(pl, equals(identity(3)));
+        expect(pu, equals(identity(3)));
+        expect(pp * permutation, equals(identity(3)));
+      });
+
+      test('LU factors have the right structure', () {
+        final random = Random(18);
+
+        for (var n = 1; n <= 7; n++) {
+          final a = randomMatrix(n, n, random);
+          final [l, u, p] = a.luDecomposition();
+
+          for (var i = 0; i < n; i++) {
+            expect(l(i, i), equals(const Complex.fromReal(1)));
+
+            // Partial pivoting keeps the multipliers inside the unit circle
+            for (var j = 0; j < i; j++) {
+              expect(l(i, j).abs(), lessThanOrEqualTo(1 + 1e-12));
+              expect(u(i, j), equals(const Complex.zero()));
+            }
+            for (var j = i + 1; j < n; j++) {
+              expect(l(i, j), equals(const Complex.zero()));
+            }
+          }
+
+          expectComplexMatrixClose(p * p.transpose(), identity(n));
+          expectComplexMatrixClose(p * a, l * u);
+        }
+      });
+
+      test('Cholesky rejects matrices that are not positive-definite', () {
+        final matrices = [
+          // Hermitian but indefinite: the eigenvalues are 3 and -1
+          ComplexMatrix.fromFlattenedData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              Complex.fromReal(1),
+              Complex(0, 2),
+              Complex(0, -2),
+              Complex.fromReal(1),
+            ],
+          ),
+          ComplexMatrix(rows: 3, columns: 3),
+          ComplexMatrix.fromFlattenedData(
+            rows: 1,
+            columns: 1,
+            data: const [Complex.fromReal(-4)],
+          ),
+        ];
+
+        for (final matrix in matrices) {
+          expect(
+            matrix.choleskyDecomposition,
+            throwsA(isA<SystemSolverException>()),
+          );
+        }
+      });
+
+      test('Cholesky of random Hermitian positive-definite matrices', () {
+        final random = Random(19);
+
+        for (var n = 1; n <= 6; n++) {
+          final b = randomMatrix(n, n, random);
+          final a = conjugateTranspose(b) * b + identity(n);
+          final [l, lh] = a.choleskyDecomposition();
+
+          expect(lh, equals(conjugateTranspose(l)));
+          for (var i = 0; i < n; i++) {
+            expect(l(i, i).imaginary, isZero);
+            expect(l(i, i).real, greaterThan(0));
+            for (var j = i + 1; j < n; j++) {
+              expect(l(i, j), equals(const Complex.zero()));
+            }
+          }
+          expectComplexMatrixClose(l * lh, a);
+        }
+      });
     });
   });
 }

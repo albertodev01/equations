@@ -1,22 +1,22 @@
 import 'package:equations/equations.dart';
 
 /// {@template interpolation_node}
-/// A point in the cartesian coordinate system used by [Interpolation] types to
+/// A point in the Cartesian coordinate system used by [Interpolation] types to
 /// represent interpolation nodes. This class simply represents the `x` and `y`
-/// coordinates of a point on a cartesian plane.
+/// coordinates of a point on a Cartesian plane.
 /// {@endtemplate}
 final class InterpolationNode {
+  /// {@macro interpolation_node}
+  const new({
+    required this.x,
+    required this.y,
+  });
+
   /// The x coordinate.
   final double x;
 
   /// The y coordinate.
   final double y;
-
-  /// Creates an [InterpolationNode] object.
-  const InterpolationNode({
-    required this.x,
-    required this.y,
-  });
 
   @override
   bool operator ==(Object other) {
@@ -38,9 +38,8 @@ final class InterpolationNode {
   String toString() => '($x; $y)';
 
   /// Prints the [x] and [y] values of this [InterpolationNode] instance with
-  /// [fractionDigits] decimal digits. The output produced by this method is the
-  /// same that would result in calling `toStringAsFixed` on a [double]. For
-  /// example:
+  /// [fractionDigits] decimal digits. Each coordinate is formatted the same way
+  /// as calling `toStringAsFixed` on a [double]. For example:
   ///
   /// ```dart
   /// const example = InterpolationNode(
@@ -55,7 +54,7 @@ final class InterpolationNode {
   /// final x = example.x.toStringAsFixed(1);
   /// final y = example.y.toStringAsFixed(1);
   ///
-  /// print("$x, $y"); // (5.1, 8.1)
+  /// print('($x, $y)'); // (5.1, 8.1)
   /// ```
   String toStringAsFixed(int fractionDigits) {
     final xValue = x.toStringAsFixed(fractionDigits);

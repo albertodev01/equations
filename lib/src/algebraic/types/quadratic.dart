@@ -1,11 +1,14 @@
 part of '../algebraic.dart';
 
 /// {@template quadratic_algebraic}
-/// Concrete implementation of [Algebraic] that represents a second degree
+/// Concrete implementation of [Algebraic] that represents a second-degree
 /// polynomial equation in the form _ax^2 + bx + c = 0_.
 ///
-/// This equation has exactly 2 roots, both real or both complex, depending
-/// on the value of the discriminant.
+/// This equation has exactly 2 roots, which may coincide. When all the
+/// coefficients are real, the sign of the discriminant tells whether the roots
+/// are two distinct real numbers, a repeated real number, or a pair of complex
+/// conjugates. With complex coefficients, there is no such rule: for example,
+/// one root can be real while the other is not.
 /// {@endtemplate}
 ///
 /// {@template quadratic_algebraic_examples}
@@ -13,7 +16,7 @@ part of '../algebraic.dart';
 /// highest degree goes first:
 ///
 /// ```dart
-/// // f(x) = x^2 - 6x + 5
+/// // f(x) = 2x^2 - 6x + 5
 /// final eq = Quadratic(
 ///   a: Complex.fromReal(2),
 ///   b: Complex.fromReal(-6),
@@ -26,7 +29,7 @@ part of '../algebraic.dart';
 ///   c: Complex.fromReal(-3),
 /// );
 ///
-/// // f(x) = x^2 - 6x + 5
+/// // f(x) = 2x^2 - 6x + 5
 /// final eq = Quadratic.realEquation(
 ///   a: 2,
 ///   b: -6,
@@ -42,7 +45,7 @@ final class Quadratic extends Algebraic {
   /// Use this constructor if you have complex coefficients. If no [Complex]
   /// values are required, consider using [Quadratic.realEquation] for a less
   /// verbose syntax.
-  Quadratic({
+  new({
     Complex a = const Complex.fromReal(1),
     Complex b = const Complex.zero(),
     Complex c = const Complex.zero(),
@@ -54,7 +57,7 @@ final class Quadratic extends Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, consider
   /// using the [Quadratic.new] constructor instead.
-  Quadratic.realEquation({double a = 1, double b = 0, double c = 0})
+  new realEquation({double a = 1, double b = 0, double c = 0})
     : super.realEquation([a, b, c]);
 
   @override
@@ -71,28 +74,23 @@ final class Quadratic extends Algebraic {
 
   @override
   List<Complex> solutions() {
-    final twoA = const Complex.fromReal(2) * a;
-
-    // For better numerical stability, we use a different approach based on the
-    // value of b
+    // Special case when b = 0 -> x = +/- sqrt(-c/a)
     if (b.isZero) {
-      // Special case when b = 0 -> x = +/- sqrt(-c/a)
       final sqrtTerm = (-c / a).sqrt();
       return <Complex>[sqrtTerm, -sqrtTerm];
     }
 
-    // Use the more stable form of the quadratic formula:
-    //
-    // x = (-b/2a) ± sqrt((b/2a)^2 - c/a)
-    final halfBOverA = b / twoA;
-    final sqrtTerm = (halfBOverA * halfBOverA - c / a).sqrt();
-    final root1 = -halfBOverA + sqrtTerm;
-
-    // Use Vieta's formulas to compute the other root more accurately
+    // The roots are x = -h +/- s, where h = b/2a and s = sqrt(h^2 - c/a).
+    final h = b / (const Complex.fromReal(2) * a);
     final product = c / a;
-    final betterRoot2 = product / root1;
+    final s = (h * h - product).sqrt();
 
-    return [root1, betterRoot2];
+    final sameDirection = h.real * s.real + h.imaginary * s.imaginary >= 0;
+    final largest = sameDirection ? -h - s : -h + s;
+    final smallest = product / largest;
+
+    // Return the roots in the -h + s, -h - s order.
+    return sameDirection ? [smallest, largest] : [largest, smallest];
   }
 
   /// {@macro algebraic_deep_copy}

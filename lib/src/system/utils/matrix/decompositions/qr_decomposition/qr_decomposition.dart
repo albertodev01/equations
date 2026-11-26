@@ -3,25 +3,30 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 
 /// {@template qr_decomposition_class_header}
 /// QR decomposition, also known as a QR factorization or QU factorization, is
-/// a decomposition of a matrix A into a product `A = QR` of:
+/// a decomposition of an `m x n` matrix A into a product `A = QR`. With
+/// `k = min(m, n)`, this library computes the **reduced** QR decomposition:
 ///
-///  - an orthogonal matrix Q (where Q^T Q = I);
-///  - an upper triangular matrix R.
+///  - `Q` is an `m x k` matrix with orthonormal columns (`Q^H x Q = I`, which
+///    is `Q^T x Q = I` for real matrices). When `m <= n`, `Q` is square and
+///    unitary (orthogonal, for real matrices);
+///  - `R` is a `k x n` upper triangular (upper trapezoidal, when `k < n`)
+///    matrix.
 ///
 /// QR decomposition is widely used for solving linear systems, least squares
-/// problems, and computing eigenvalues. The decomposition is unique if the
-/// matrix has full column rank and R has positive diagonal entries.
+/// problems, and computing eigenvalues. The decomposition exists for any
+/// matrix, including singular ones (in that case, some diagonal elements of
+/// `R` are zero).
 ///
 /// The algorithm uses Householder reflections to compute the decomposition,
-/// which provides good numerical stability.
+/// which provides good numerical stability. The diagonal elements of `R` are
+/// not normalized to be positive.
 /// {@endtemplate}
 abstract base class QRDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
   /// {@macro qr_decomposition_class_header}
   ///
-  /// The [matrix] can be any rectangular matrix. For best results, the matrix
-  /// should have full column rank.
-  const QRDecomposition({required super.matrix});
+  /// The [matrix] can be any rectangular matrix.
+  const new({required super.matrix});
 
   /// Computes the `Q` and `R` matrices of the QR decomposition algorithm.
   ///
@@ -29,18 +34,15 @@ abstract base class QRDecomposition<K, T extends Matrix<K>>
   ///
   ///  - A = Q x R
   ///
-  /// where:
-  /// - Q is an orthogonal matrix (Q^T Q = I)
-  /// - R is an upper triangular matrix
+  /// where, with `k = min(rowCount, columnCount)`:
+  /// - `Q` is a `rowCount x k` matrix with orthonormal columns
+  /// - `R` is a `k x columnCount` upper triangular matrix
   ///
   /// The returned list contains:
   /// - `Q` at index 0
   /// - `R` at index 1
   ///
-  /// Returns a list of two matrices that satisfy the QR decomposition.
-  ///
-  /// Throws a [MatrixException] if the matrix is numerically singular or if
-  /// numerical issues occur during the decomposition.
+  /// Throws a [MatrixException] if the matrix contains NaN or infinite values.
   @override
   List<T> decompose();
 }

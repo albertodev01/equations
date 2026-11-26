@@ -87,6 +87,40 @@ void main() {
       }
     });
 
+    test('Returns the endpoint when it is a root', () {
+      expect(
+        const Bisection(function: 'x-1', a: 1, b: 2).solve().guesses,
+        equals([1.0]),
+      );
+      expect(
+        const Bisection(function: 'x-2', a: 1, b: 2).solve().guesses,
+        equals([2.0]),
+      );
+    });
+
+    test('Works with very small function values', () {
+      // f(a) * f(b) underflows to zero, but the root is bracketed
+      final solutions = Bisection(
+        function: '0.${'0' * 199}1*(x-1.5)',
+        a: 1,
+        b: 2,
+      ).solve();
+      expect(solutions.guesses.last, equals(1.5));
+    });
+
+    test('Throws when the function is not finite at an endpoint', () {
+      expect(
+        const Bisection(function: 'sqrt(x)-1', a: -1, b: 2).solve,
+        throwsA(
+          isA<NonlinearException>().having(
+            (e) => e.message,
+            'message',
+            equals("Couldn't evaluate f(-1.0). The function value is NaN."),
+          ),
+        ),
+      );
+    });
+
     group('Roots tests', () {
       void verifySolution(
         String equation,
@@ -132,6 +166,50 @@ void main() {
 
       test('Test 8', () {
         verifySolution('x^x-1', 0.5, 1.1, 1);
+      });
+
+      test('Test 9', () {
+        verifySolution('cos(x)-x', 0, 1, 0.739085);
+      });
+
+      test('Test 10', () {
+        verifySolution('log(x)-1', 1, 4, 2.718282);
+      });
+
+      test('Test 11', () {
+        verifySolution('x^3-2*x-5', 2, 3, 2.094551);
+      });
+
+      test('Test 12', () {
+        verifySolution('e^(-x)-x', 0, 1, 0.567143);
+      });
+
+      test('Test 13', () {
+        verifySolution('x^3+x+1', -1, 0, -0.682328);
+      });
+
+      test('Test 14', () {
+        verifySolution('x^2-1000000', 600, 1500, 1000);
+      });
+
+      test('Test 15', () {
+        verifySolution('(x-1)^3', 0, 2.5, 1);
+      });
+
+      test('Test 16', () {
+        verifySolution('sin(x)', 3, 4, 3.141593);
+      });
+
+      test('Test 17', () {
+        verifySolution('x^5-x-1', 1, 2, 1.167304);
+      });
+
+      test('Test 18', () {
+        verifySolution('atan(x)', -1, 2, 0);
+      });
+
+      test('Test 19', () {
+        verifySolution('1/x-2', 0.2, 1, 0.5);
       });
     });
   });

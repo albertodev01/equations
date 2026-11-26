@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class PolynomialLongDivisionException extends EquationException {
   /// {@macro polynomial_long_division_exception}
-  const PolynomialLongDivisionException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'PolynomialLongDivisionException',

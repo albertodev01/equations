@@ -13,26 +13,24 @@ on:
 jobs:
   verify_equation_package:
     name: Equations package action
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dart-lang/setup-dart@v1
 
-      - name: Installing dependencies
+      - name: Install dependencies
         run: dart pub get
 
-      - name: Making sure the package is formatted
+      - name: Verify code foramt
         run: dart format --set-exit-if-changed lib test
 
-      - name: Making sure that there are no analysis warnings or errors
+      - name: Verify analyzer errors
         run: dart analyze --fatal-infos --fatal-warnings lib test
 
-      - name: Runing unit tests
+      - name: Run unit tests
         run: |
           dart pub global activate coverage
           dart pub global run coverage:test_with_coverage
 
-      - name: Making sure that code coverage is 100
-        uses: VeryGoodOpenSource/very_good_coverage@v3
-        with:
-          min_coverage: 100
+      - name: Check Code Coverage
+        run: dart pub global activate coverde && dart pub global run coverde check 100

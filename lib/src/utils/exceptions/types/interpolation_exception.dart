@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class InterpolationException extends EquationException {
   /// {@macro interpolation_exception}
-  const InterpolationException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'InterpolationException',

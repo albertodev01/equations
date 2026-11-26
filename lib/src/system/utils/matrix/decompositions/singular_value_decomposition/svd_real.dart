@@ -25,10 +25,9 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final decomposition = SVDReal(matrix: matrix);
 /// final [E, U, V] = decomposition.decompose();
 /// ```
-final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
-    with MathUtils {
+final class SVDReal extends SingleValueDecomposition<double, RealMatrix> {
   /// {@macro svd_class_header}
-  const SVDReal({required super.matrix});
+  const new({required super.matrix});
 
   /// Reduces the source matrix to bidiagonal form using Householder
   /// reflections.
@@ -152,9 +151,6 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     if (nct < matrix.columnCount) {
       arrayS[nct] = sourceMatrix[nct][nct];
     }
-    if (matrix.rowCount < p) {
-      arrayS[p - 1] = 0.0;
-    }
     if (nrt + 1 < p) {
       arrayE[nrt] = sourceMatrix[nrt][p - 1];
     }
@@ -248,9 +244,20 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
 
   @override
   List<RealMatrix> decompose() {
-    // Input validation
-    if (matrix.rowCount == 0 || matrix.columnCount == 0) {
-      throw ArgumentError('Matrix dimensions must be positive');
+    if (matrix.flattenData.any((value) => !value.isFinite)) {
+      throw const MatrixException(
+        'The SVD cannot be computed on matrices with NaN or infinite values.',
+      );
+    }
+
+    // The algorithm requires at least as many rows as columns. For a wide
+    // matrix, the SVD of the transpose is computed instead:
+    //
+    //  A^T = U' x E' x V'^T, so A = V' x E'^T x U'^T
+    if (matrix.rowCount < matrix.columnCount) {
+      final [e, u, v] = SVDReal(matrix: matrix.transpose()).decompose();
+
+      return [e.transpose(), v, u];
     }
 
     // This matrix as a list of lists (to easily alter data)
@@ -291,10 +298,10 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
     // Setup 3: generating V.
     _generateV(matrixV: matrixV, arrayE: arrayE);
 
-    // === Computing singular values from here. === //
     var p = min<int>(matrix.columnCount, matrix.rowCount + 1);
     final pp = p - 1;
-    var step = 0;
+    final maxIterations = 75 * maxRowCol;
+    var iterations = 0;
 
     // Precision.
     final eps = pow(2.0, -52.0) as double;
@@ -302,6 +309,10 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
 
     // Main iteration loop for the singular values.
     while (p > 0) {
+      if (++iterations > maxIterations) {
+        throw const MatrixException('The SVD algorithm did not converge.');
+      }
+
       // The 'convergenceStatus' variable works along with 'index' to determine
       // when the iterations should stop. In particular:
       //
@@ -320,7 +331,7 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
         }
 
         final upper =
-            tiny + eps * (arrayS[index].abs() + arrayS[index + 1]).abs();
+            tiny + eps * (arrayS[index].abs() + arrayS[index + 1].abs());
         if (arrayE[index].abs() <= upper) {
           arrayE[index] = 0.0;
           break;
@@ -463,7 +474,6 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
           }
 
           arrayE[p - 2] = f;
-          step = step + 1;
 
         case 4:
           // Changing sign to singular values to make them positive.
@@ -499,7 +509,6 @@ final class SVDReal extends SingleValueDecomposition<double, RealMatrix>
             index++;
           }
 
-          step = 0;
           p--;
       }
     }

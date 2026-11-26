@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class AlgebraicException extends EquationException {
   /// {@macro algebraic_exception}
-  const AlgebraicException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'AlgebraicException',

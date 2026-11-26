@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
@@ -317,6 +319,97 @@ void main() {
         );
 
         verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
+    });
+
+    group('Edge cases', () {
+      test('Solves well-conditioned systems with tiny or huge entries', () {
+        final tiny = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [1e-12, 0],
+              [0, 1e-12],
+            ],
+          ),
+          knownValues: [1e-12, 2e-12],
+        );
+        final huge = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [2e15, 1e15],
+              [1e15, 3e15],
+            ],
+          ),
+          knownValues: [5e15, 7e15],
+        );
+
+        final tinySolution = tiny.solve();
+        expect(tinySolution.first, const MoreOrLessEquals(1));
+        expect(tinySolution[1], const MoreOrLessEquals(2));
+
+        final hugeSolution = huge.solve();
+        expect(hugeSolution.first, const MoreOrLessEquals(1.6));
+        expect(hugeSolution[1], const MoreOrLessEquals(1.8));
+      });
+
+      test('Throws when the matrix is nearly singular', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [1e6, 2e6],
+              [2e6, 4e6 + 1e-6],
+            ],
+          ),
+          knownValues: [1, 2],
+        );
+
+        expect(solver.solve, throwsA(isA<SystemSolverException>()));
+      });
+
+      test('Throws when the precision is negative or NaN', () {
+        for (final precision in [-1.0, double.nan]) {
+          expect(
+            () => GaussianElimination(
+              matrix: RealMatrix.fromData(
+                rows: 1,
+                columns: 1,
+                data: const [
+                  [1],
+                ],
+              ),
+              knownValues: [1],
+              precision: precision,
+            ),
+            throwsA(isA<SystemSolverException>()),
+          );
+        }
+      });
+
+      test('Computes the residual norm', () {
+        final solver = GaussianElimination(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [2, 1],
+              [1, 3],
+            ],
+          ),
+          knownValues: [5, 7],
+        );
+
+        expect(solver.computeResidualNorm(solver.solve()), lessThan(1e-12));
+        expect(solver.computeResidualNorm([0, 0]), MoreOrLessEquals(sqrt(74)));
+        expect(
+          () => solver.computeResidualNorm([1]),
+          throwsA(isA<SystemSolverException>()),
+        );
       });
     });
   });

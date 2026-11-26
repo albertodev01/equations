@@ -4,16 +4,16 @@ import 'package:equations/equations.dart';
 /// The kind of [Algebraic] inequality to solve.
 /// {@endtemplate}
 enum AlgebraicInequalityType {
-  /// The inequality in the form _P(x) < 0_.
+  /// An inequality of the form _P(x) < 0_.
   lessThan,
 
-  /// The inequality in the form _P(x) <= 0_.
+  /// An inequality of the form _P(x) <= 0_.
   lessThanOrEqualTo,
 
-  /// The inequality in the form _P(x) > 0_.
+  /// An inequality of the form _P(x) > 0_.
   greaterThan,
 
-  /// The inequality in the form _P(x) >= 0_.
+  /// An inequality of the form _P(x) >= 0_.
   greaterThanOrEqualTo,
 }
 
@@ -22,11 +22,11 @@ enum AlgebraicInequalityType {
 /// {@endtemplate}
 sealed class AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_solution}
-  const AlgebraicInequalitySolution({
+  const new({
     required this.isInclusive,
   });
 
-  /// Whether the inequality solution is inclusive of the boundaries or not.
+  /// Whether the boundaries are part of the solution.
   final bool isInclusive;
 
   @override
@@ -48,22 +48,22 @@ sealed class AlgebraicInequalitySolution {
 }
 
 /// {@template algebraic_inequality_interval}
-/// A solution of an [Algebraic] inequality that is an interval between [start]
-/// and [end] values.
+/// A solution of an [Algebraic] inequality that is the interval between
+/// [start] and [end].
 /// {@endtemplate}
 class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
+  /// {@macro algebraic_inequality_interval}
+  const new({
+    required this.start,
+    required this.end,
+    required super.isInclusive,
+  });
+
   /// The start of the interval.
   final double start;
 
   /// The end of the interval.
   final double end;
-
-  /// {@macro algebraic_inequality_interval}
-  const AlgebraicInequalityInterval({
-    required this.start,
-    required this.end,
-    required super.isInclusive,
-  });
 
   @override
   bool operator ==(Object other) {
@@ -94,17 +94,18 @@ class AlgebraicInequalityInterval extends AlgebraicInequalitySolution {
 }
 
 /// {@template algebraic_inequality_smaller_than}
-/// A solution of an [Algebraic] inequality that is smaller than [value].
+/// A solution of an [Algebraic] inequality made of the real numbers smaller
+/// than [value].
 /// {@endtemplate}
 class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
-  /// The value.
-  final double value;
-
   /// {@macro algebraic_inequality_smaller_than}
-  const AlgebraicInequalitySmallerThan({
+  const new({
     required this.value,
     required super.isInclusive,
   });
+
+  /// The upper bound of the solution.
+  final double value;
 
   @override
   bool operator ==(Object other) {
@@ -132,17 +133,18 @@ class AlgebraicInequalitySmallerThan extends AlgebraicInequalitySolution {
 }
 
 /// {@template algebraic_inequality_greater_than}
-/// A solution of an [Algebraic] inequality that is greater than [value].
+/// A solution of an [Algebraic] inequality made of the real numbers greater
+/// than [value].
 /// {@endtemplate}
 class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
-  /// The value.
-  final double value;
-
   /// {@macro algebraic_inequality_greater_than}
-  const AlgebraicInequalityGreaterThan({
+  const new({
     required this.value,
     required super.isInclusive,
   });
+
+  /// The lower bound of the solution.
+  final double value;
 
   @override
   bool operator ==(Object other) {
@@ -174,7 +176,7 @@ class AlgebraicInequalityGreaterThan extends AlgebraicInequalitySolution {
 /// {@endtemplate}
 class AlgebraicInequalityAllRealNumbers extends AlgebraicInequalitySolution {
   /// {@macro algebraic_inequality_all_real_numbers}
-  const AlgebraicInequalityAllRealNumbers() : super(isInclusive: true);
+  const new() : super(isInclusive: true);
 
   @override
   String toString() => 'AllRealNumbers(isInclusive: $isInclusive)';

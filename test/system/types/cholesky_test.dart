@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
 import '../../double_approximation_matcher.dart';
+import 'solver_checks.dart';
 
 void main() {
   group('CholeskySolver', () {
@@ -12,7 +15,7 @@ void main() {
           columns: 3,
           data: [
             [6, 15, 55],
-            [15, 55, 255],
+            [15, 55, 225],
             [55, 225, 979],
           ],
         ),
@@ -27,7 +30,7 @@ void main() {
         columns: 3,
         data: const [
           [6, 15, 55],
-          [15, 55, 255],
+          [15, 55, 225],
           [55, 225, 979],
         ],
       );
@@ -56,7 +59,7 @@ void main() {
           columns: 3,
           data: const [
             [-6, 15, 55],
-            [15, 55, 255],
+            [15, 55, 225],
             [55, 225, 979],
           ],
         ),
@@ -65,11 +68,11 @@ void main() {
 
       const toString =
           '[-6.0, 15.0, 55.0]\n'
-          '[15.0, 55.0, 255.0]\n'
+          '[15.0, 55.0, 225.0]\n'
           '[55.0, 225.0, 979.0]';
       const toStringAugmented =
           '[-6.0, 15.0, 55.0 | 76.0]\n'
-          '[15.0, 55.0, 255.0 | 295.0]\n'
+          '[15.0, 55.0, 225.0 | 295.0]\n'
           '[55.0, 225.0, 979.0 | 1259.0]';
 
       expect(solver.toString(), equals(toString));
@@ -83,7 +86,7 @@ void main() {
           columns: 3,
           data: const [
             [-6, 15, 55],
-            [15, 55, 255],
+            [15, 55, 225],
             [55, 225, 979],
           ],
         ),
@@ -134,7 +137,7 @@ void main() {
           columns: 2,
           data: const [
             [1, 2],
-            [3, 4],
+            [2, 4],
           ],
         ),
         knownValues: [0, -6],
@@ -146,7 +149,7 @@ void main() {
           columns: 2,
           data: const [
             [1, 2],
-            [3, 4],
+            [2, 4],
           ],
         ),
         knownValues: [0, -6],
@@ -158,7 +161,7 @@ void main() {
           columns: 2,
           data: const [
             [1, -2],
-            [3, 4],
+            [-2, 4],
           ],
         ),
         knownValues: [0, -6],
@@ -304,6 +307,173 @@ void main() {
         );
 
         verifySolutions(solver, <double>[-0.67, 1.67, 0.67]);
+      });
+    });
+
+    group('Edge cases', () {
+      test('Throws when the matrix is not symmetric', () {
+        expect(
+          () => CholeskySolver(
+            matrix: RealMatrix.fromData(
+              rows: 2,
+              columns: 2,
+              data: const [
+                [4, 100],
+                [2, 3],
+              ],
+            ),
+            knownValues: [1, 2],
+          ),
+          throwsA(isA<SystemSolverException>()),
+        );
+      });
+
+      test('Accepts matrices that are symmetric up to rounding', () {
+        final solver = CholeskySolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [4, 2 + 1e-14],
+              [2, 3],
+            ],
+          ),
+          knownValues: [6, 5],
+        );
+
+        final solution = solver.solve();
+        expect(solution.first, const MoreOrLessEquals(1, precision: 1e-10));
+        expect(solution[1], const MoreOrLessEquals(1, precision: 1e-10));
+      });
+
+      test('Throws when the matrix is nearly singular', () {
+        final solver = CholeskySolver(
+          matrix: RealMatrix.fromData(
+            rows: 2,
+            columns: 2,
+            data: const [
+              [1, 1],
+              [1, 1 + 1e-12],
+            ],
+          ),
+          knownValues: [1, 2],
+        );
+
+        expect(solver.solve, throwsA(isA<SystemSolverException>()));
+      });
+    });
+
+    group('Matrix requirements', () {
+      test('Throws when the matrix is not positive-definite', () {
+        final notPositiveDefinite = [
+          // Negative 1x1
+          matrixOf([
+            [-4],
+          ]),
+          // Negative definite
+          matrixOf([
+            [-2, 0],
+            [0, -3],
+          ]),
+          // Indefinite (eigenvalues 3 and -1)
+          matrixOf([
+            [1, 2],
+            [2, 1],
+          ]),
+          // Positive semi-definite (eigenvalues 2 and 0)
+          matrixOf([
+            [1, 1],
+            [1, 1],
+          ]),
+          // Positive diagonal, but indefinite
+          matrixOf([
+            [1, 2, 0],
+            [2, 1, 0],
+            [0, 0, 5],
+          ]),
+        ];
+
+        for (final matrix in notPositiveDefinite) {
+          final solver = CholeskySolver(
+            matrix: matrix,
+            knownValues: List<double>.filled(matrix.rowCount, 1),
+          );
+
+          expect(solver.solve, throwsSolverException());
+        }
+      });
+
+      test('The precision sets the symmetry tolerance', () {
+        final matrix = matrixOf([
+          [4, 2 + 1e-6],
+          [2, 3],
+        ]);
+
+        expect(
+          () => CholeskySolver(matrix: matrix, knownValues: [6, 5]),
+          throwsSolverException('symmetric'),
+        );
+
+        final solver = CholeskySolver(
+          matrix: matrix,
+          knownValues: [6, 5],
+          precision: 1e-5,
+        );
+
+        // Only the lower triangle is used
+        expectVectorClose(solver.solve(), [1, 1], tolerance: 1e-12);
+      });
+
+      test('Solves diagonal systems', () {
+        final solver = CholeskySolver(
+          matrix: matrixOf([
+            [4, 0, 0],
+            [0, 9, 0],
+            [0, 0, 0.25],
+          ]),
+          knownValues: [8, -9, 1],
+        );
+
+        expectVectorClose(solver.solve(), [2, -1, 4], tolerance: 1e-14);
+      });
+    });
+
+    group('Accuracy', () {
+      test('Solves random symmetric positive-definite systems', () {
+        final random = Random(5);
+
+        for (var n = 1; n <= 12; ++n) {
+          final matrix = randomSpdMatrix(n, random);
+          final knownValues = randomVector(n, random);
+          final solver = CholeskySolver(
+            matrix: matrix,
+            knownValues: knownValues,
+          );
+
+          final solution = solver.solve();
+          expectSmallResidual(solver, solution);
+          expectVectorClose(
+            solution,
+            GaussianElimination(
+              matrix: matrix,
+              knownValues: knownValues,
+            ).solve(),
+            tolerance: 1e-6,
+          );
+        }
+      });
+
+      test('Is backward stable with ill-conditioned matrices', () {
+        final matrix = hilbertMatrix(6);
+        final x = List<double>.filled(6, 1);
+        final solver = CholeskySolver(
+          matrix: matrix,
+          knownValues: multiply(matrix, x),
+        );
+
+        final solution = solver.solve();
+        expectSmallResidual(solver, solution);
+        expectVectorClose(solution, x, tolerance: 1e-6);
       });
     });
   });

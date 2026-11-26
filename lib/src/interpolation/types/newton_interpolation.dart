@@ -1,28 +1,28 @@
 import 'package:equations/equations.dart';
-import 'package:equations/src/utils/factorial.dart';
 
 /// {@template newton_interpolation}
-/// Newton interpolation (also known as Newton's divided difference
-/// interpolation) is a polynomial interpolation method that constructs an
-/// interpolation polynomial for a given set of data points using divided
-/// differences.
+/// Newton interpolation based on **finite differences**. It builds the unique
+/// polynomial of degree `n-1` that passes through `n` equally spaced nodes,
+/// using either Newton's forward difference formula or Newton's backward
+/// difference formula.
 ///
-/// This implementation supports both **forward differences** and **backward
-/// differences**:
+/// - **Forward differences**: best used when interpolating near the beginning
+///   of the data set (that is, when `x` is close to the first node's x value).
 ///
-/// - **Forward differences**: Best used when interpolating near the beginning
-///   of the data set (i.e., when `x` is close to the first node's x-value).
-///   The formula uses Newton's forward difference formula.
+/// - **Backward differences**: best used when interpolating near the end of
+///   the data set (that is, when `x` is close to the last node's x value).
 ///
-/// - **Backward differences**: Best used when interpolating near the end of
-///   the data set (i.e., when `x` is close to the last node's x-value).
-///   The formula uses Newton's backward difference formula.
+/// In exact arithmetic both formulas produce the same polynomial; they only
+/// differ in how rounding errors accumulate.
 ///
 /// ## Requirements
 ///
-/// The interpolation nodes should be **equally spaced** for optimal accuracy.
-/// While the algorithm will work with unequally spaced nodes, the results may
-/// be less accurate.
+/// - **At least 2 nodes** are required.
+/// - The nodes must be **equally spaced**: `x(i+1) - x(i)` must be the same
+///   non-zero value `h` for every `i`. Finite difference formulas are not valid
+///   for unequally spaced nodes, so an [InterpolationException] is thrown by
+///   [compute] in that case. Use [PolynomialInterpolation] when the nodes are
+///   not equally spaced.
 ///
 /// ## Example
 ///
@@ -43,8 +43,20 @@ import 'package:equations/src/utils/factorial.dart';
 /// ```
 /// {@endtemplate}
 base class NewtonInterpolation extends Interpolation {
-  /// Required to compute the factorial of a number.
-  static const _factorial = Factorial();
+  /// {@macro newton_interpolation}
+  ///
+  /// The [nodes] must be equally spaced. The [forwardDifference] parameter
+  /// determines which difference formula is used.
+  ///
+  /// **Note**: Validation of nodes (minimum count and equal spacing) is
+  /// performed lazily when [compute] is called.
+  const new({
+    required super.nodes,
+    this.forwardDifference = true,
+  });
+
+  /// Relative tolerance used to decide whether the nodes are equally spaced.
+  static const _spacingTolerance = 1.0e-9;
 
   /// When true, the algorithm uses forward differences.
   /// When false, the algorithm uses backward differences.
@@ -56,95 +68,104 @@ base class NewtonInterpolation extends Interpolation {
   /// By default, this is set to `true`.
   final bool forwardDifference;
 
-  /// {@macro newton_interpolation}
-  ///
-  /// The [nodes] should be equally spaced for best results. The
-  /// [forwardDifference] parameter determines which difference formula to use.
-  const NewtonInterpolation({
-    required super.nodes,
-    this.forwardDifference = true,
-  });
+  @override
+  bool operator ==(Object other) =>
+      super == other &&
+      other is NewtonInterpolation &&
+      forwardDifference == other.forwardDifference;
+
+  @override
+  int get hashCode => Object.hash(super.hashCode, forwardDifference);
 
   @override
   double compute(double x) {
+    final stepSize = _validateNodes();
+
     if (forwardDifference) {
-      return _forwardEvaluation(forwardDifferenceTable(), x);
+      return _evaluate(
+        forwardDifferenceTable(),
+        0,
+        (x - nodes.first.x) / stepSize,
+        rising: false,
+      );
     }
 
-    return _backwardEvaluation(backwardDifferenceTable(), x);
+    return _evaluate(
+      backwardDifferenceTable(),
+      nodes.length - 1,
+      (x - nodes.last.x) / stepSize,
+      rising: true,
+    );
   }
 
-  /// Computes the product `u(u-1)(u-2)...(u-(n-1))` used in Newton's
-  /// interpolation formulas.
+  /// Makes sure that there are at least 2 nodes and that they are equally
+  /// spaced. Returns the common step size `h = x(i+1) - x(i)`.
   ///
-  /// This method computes the falling factorial `u(u-1)(u-2)...(u-(n-1))` which
-  /// is used in both forward and backward difference formulas:
+  /// Throws an [InterpolationException] if:
+  /// - There are fewer than 2 nodes
+  /// - The step size is zero or not a finite number
+  /// - The nodes are not equally spaced
+  double _validateNodes() {
+    if (nodes.length < 2) {
+      throw const InterpolationException(
+        'At least 2 nodes are required for Newton interpolation.',
+      );
+    }
+
+    final stepSize = nodes[1].x - nodes.first.x;
+
+    if (stepSize == 0 || !stepSize.isFinite) {
+      throw const InterpolationException(
+        'The x values of the nodes must be distinct and finite.',
+      );
+    }
+
+    final tolerance = _spacingTolerance * stepSize.abs();
+
+    for (var i = 2; i < nodes.length; i++) {
+      final currentStep = nodes[i].x - nodes[i - 1].x;
+
+      // Written as a negated '<=' so that NaN values are rejected as well.
+      if (!((currentStep - stepSize).abs() <= tolerance)) {
+        throw const InterpolationException(
+          'The nodes must be equally spaced for Newton interpolation.',
+        );
+      }
+    }
+
+    return stepSize;
+  }
+
+  /// Evaluates Newton's forward or backward difference formula.
   ///
-  /// - **Forward differences**: Directly uses `u(u-1)(u-2)...` where `u ≥ 0`
-  ///   (when `x ≥ x₀`).
-  ///
-  /// - **Backward differences**: Uses the same formula, but since `u` is
-  ///   typically negative (when `x < xₙ`), the pattern `u(u-1)(u-2)...` with
-  ///   negative `u` produces the correct alternating signs needed for the
-  ///   backward difference formula.
+  /// The [row] of the [differencesTable] holds the differences used by the
+  /// formula: `f(x0), Delta f(x0), Delta^2 f(x0), ...` for the forward formula
+  /// and `f(xn), Nabla f(xn), Nabla^2 f(xn), ...` for the backward formula.
   ///
   /// The parameter [u] is the normalized value:
-  /// - For forward differences: `u = (x - x₀)/h`
-  /// - For backward differences: `u = (x - xₙ)/h`
+  /// - For forward differences: `u = (x - x0) / h`
+  /// - For backward differences: `u = (x - xn) / h`
   ///
-  /// where `h` is the step size between nodes.
+  /// where `h` is the step size between nodes and `x0`, `xn` are the first and
+  /// the last node respectively. The result is:
   ///
-  /// The parameter [n] represents the order of the difference being computed
-  /// (1 for first-order, 2 for second-order, etc.).
-  double _computeU(double u, int n) {
-    var temp = u;
-    for (var i = 1; i < n; i++) {
-      temp = temp * (u - i);
-    }
+  /// - forward: `f(x0) + u * Delta f(x0) / 1! + u(u-1) * Delta^2 f(x0) / 2!
+  ///   + ...`
+  /// - backward: `f(xn) + u * Nabla f(xn) / 1! + u(u+1) * Nabla^2 f(xn) / 2!
+  ///   + ...`
+  double _evaluate(
+    RealMatrix differencesTable,
+    int row,
+    double u, {
+    required bool rising,
+  }) {
+    final direction = rising ? 1 : -1;
+    var sum = differencesTable(row, 0);
+    var coefficient = 1.0;
 
-    return temp;
-  }
-
-  /// Evaluates the interpolation polynomial at point [x] using Newton's forward
-  /// difference formula.
-  double _forwardEvaluation(RealMatrix differencesTable, double x) {
-    // Start with f(x₀), the first value in the difference table
-    var sum = differencesTable(0, 0);
-
-    // Compute normalized x-value: u = (x - x₀) / h
-    // where h is the step size between consecutive nodes
-    final stepSize = nodes[1].x - nodes.first.x;
-    final u = (x - nodes.first.x) / stepSize;
-
-    // Add terms: u·Δf(x₀)/1! + u(u-1)·Δ²f(x₀)/2! + ...
-    for (var i = 1; i < differencesTable.rowCount; i++) {
-      final fact = _factorial.compute(i);
-      sum += (_computeU(u, i) * differencesTable(0, i)) / fact;
-    }
-
-    return sum;
-  }
-
-  /// Evaluates the interpolation polynomial at point [x] using Newton's
-  /// backward difference formula.
-  double _backwardEvaluation(RealMatrix differencesTable, double x) {
-    final size = nodes.length - 1;
-
-    // Start with f(xₙ), the last value in the difference table
-    var sum = differencesTable(size, 0);
-
-    // Compute normalized x-value: u = (x - xₙ) / h
-    // where h is the step size between consecutive nodes
-    // For backward differences, use the spacing between the last two nodes
-    final stepSize = nodes[size].x - nodes[size - 1].x;
-    final u = (x - nodes[size].x) / stepSize;
-
-    // Add terms: u·∇f(xₙ)/1! + u(u+1)·∇²f(xₙ)/2! + ...
-    // Note: Since u is typically negative (x < xₙ), _computeU(u, i) with
-    // negative u effectively computes u(u+1)(u+2)... for backward differences
-    for (var i = 1; i < differencesTable.rowCount; i++) {
-      final fact = _factorial.compute(i);
-      sum += (_computeU(u, i) * differencesTable(size, i)) / fact;
+    for (var k = 1; k < differencesTable.columnCount; k++) {
+      coefficient *= (u + direction * (k - 1)) / k;
+      sum += coefficient * differencesTable(row, k);
     }
 
     return sum;
@@ -154,9 +175,8 @@ base class NewtonInterpolation extends Interpolation {
   /// [RealMatrix] object.
   ///
   /// The first row (row 0) contains the differences used in Newton's forward
-  /// difference formula.
-  ///
-  /// Returns a square matrix of size `n × n` where `n` is the number of nodes.
+  /// difference formula. Returns a square matrix of size `n x n` where `n` is
+  /// the number of nodes.
   RealMatrix forwardDifferenceTable() {
     final size = nodes.length;
     final table = List<List<double>>.generate(
@@ -165,13 +185,14 @@ base class NewtonInterpolation extends Interpolation {
       growable: false,
     );
 
-    // Initialize the first column with the function values f(xᵢ)
+    // Initialize the first column with the function values f(x(i))
     var index = 0;
     for (final node in nodes) {
       table[index++].first = node.y;
     }
 
-    // Compute forward differences: Δᵏf(xᵢ) = Δᵏ⁻¹f(xᵢ₊₁) - Δᵏ⁻¹f(xᵢ)
+    // Forward differences:
+    // Delta^k f(x(i)) = Delta^(k-1) f(x(i+1)) - Delta^(k-1) f(x(i))
     for (var i = 1; i < size; i++) {
       for (var j = 0; j < size - i; j++) {
         table[j][i] = table[j + 1][i - 1] - table[j][i - 1];
@@ -189,9 +210,8 @@ base class NewtonInterpolation extends Interpolation {
   /// [RealMatrix] object.
   ///
   /// The last row (row `n-1`) contains the differences used in Newton's
-  /// backward difference formula.
-  ///
-  /// Returns a square matrix of size `n × n` where `n` is the number of nodes.
+  /// backward difference formula. Returns a square matrix of size `n x n`
+  /// where `n` is the number of nodes.
   RealMatrix backwardDifferenceTable() {
     final size = nodes.length;
     final table = List<List<double>>.generate(
@@ -200,14 +220,14 @@ base class NewtonInterpolation extends Interpolation {
       growable: false,
     );
 
-    // Initialize the first column with the function values f(xᵢ)
+    // Initialize the first column with the function values f(x(i))
     var index = 0;
     for (final node in nodes) {
       table[index++].first = node.y;
     }
 
-    // Compute backward differences: ∇ᵏf(xᵢ) = ∇ᵏ⁻¹f(xᵢ) - ∇ᵏ⁻¹f(xᵢ₋₁)
-    // Process from bottom to top to ensure dependencies are computed first
+    // Backward differences:
+    // Nabla^k f(x(i)) = Nabla^(k-1) f(x(i)) - Nabla^(k-1) f(x(i-1))
     for (var i = 1; i < size; i++) {
       for (var j = size - 1; j >= i; j--) {
         table[j][i] = table[j][i - 1] - table[j - 1][i - 1];

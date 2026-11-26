@@ -53,6 +53,18 @@ void main() {
       );
     });
 
+    test('Exception thrown when the 2 nodes have the same x value', () {
+      expect(
+        () => LinearInterpolation(
+          nodes: const [
+            InterpolationNode(x: 2, y: 3),
+            InterpolationNode(x: 2, y: 4),
+          ],
+        ).compute(5),
+        throwsA(isA<InterpolationException>()),
+      );
+    });
+
     test('Object comparison.', () {
       final interpolation = LinearInterpolation(
         nodes: const [

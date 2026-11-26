@@ -27,16 +27,32 @@ void main() {
       );
       expect(
         parser.evaluate('G'),
-        const MoreOrLessEquals(0.8346268416, precision: 1.0e-10),
+        const MoreOrLessEquals(0.8346268416740732, precision: 1.0e-15),
       );
       expect(
         parser.evaluate('sqrt2'),
         const MoreOrLessEquals(1.41421356237, precision: 1.0e-10),
       );
-      expect(
-        parser.evaluate('sqrt3'),
-        const MoreOrLessEquals(1.7320508075688, precision: 1.0e-10),
-      );
+      expect(parser.evaluate('sqrt3'), equals(math.sqrt(3)));
+    });
+
+    test('Products and powers of integers do not overflow', () {
+      const parser = ExpressionParser();
+
+      expect(parser.evaluate('10^20'), equals(1.0e20));
+      expect(parser.evaluate('3000000000*4000000000'), equals(1.2e19));
+      expect(parser.evaluateOn('x*10^19', 2), equals(2.0e19));
+    });
+
+    test('Negation binds more tightly than the power', () {
+      const parser = ExpressionParser();
+
+      expect(parser.evaluate('-2^2'), equals(4));
+      expect(parser.evaluate('-(2^2)'), equals(-4));
+      expect(parser.evaluate('0 - 2^2'), equals(-4));
+      expect(parser.evaluateOn('-x^2', 3), equals(9));
+      expect(parser.evaluate('2^-1'), equals(0.5));
+      expect(parser.evaluate('2^3^2'), equals(512));
     });
 
     test(
@@ -139,6 +155,50 @@ void main() {
       expect(''.isRealFunction, isFalse);
       expect('x'.isNumericalExpression, isFalse);
       expect('2+x'.isNumericalExpression, isFalse);
+      expect(''.isNumericalExpression, isFalse);
+      expect('sqrt(x'.isRealFunction, isFalse);
+    });
+
+    test('Validity checks agree with evaluation', () {
+      const parser = ExpressionParser();
+      for (var i = 0; i < 2; ++i) {
+        expect('x^2 + abs(x)'.isRealFunction, isTrue);
+        expect(parser.evaluateOn('x^2 + abs(x)', -3), equals(12));
+        expect('2*x+'.isRealFunction, isFalse);
+        expect(
+          () => parser.evaluateOn('2*x+', 1),
+          throwsA(isA<ExpressionParserException>()),
+        );
+      }
+    });
+
+    test('Evaluates correctly more expressions than the cache size', () {
+      const parser = ExpressionParser();
+      final expressions = List<String>.generate(200, (i) => 'x+$i');
+
+      for (final (i, expression) in expressions.indexed) {
+        expect(parser.evaluateOn(expression, 1), equals(i + 1));
+      }
+
+      // Evaluating the same expressions again, in reverse order, still works
+      for (final (i, expression) in expressions.indexed.toList().reversed) {
+        expect(parser.evaluateOn(expression, 2), equals(i + 2));
+      }
+    });
+
+    test('Invalid expressions throw on every evaluation', () {
+      const parser = ExpressionParser();
+
+      for (var i = 0; i < 3; ++i) {
+        expect(
+          () => parser.evaluateOn('2x', 1),
+          throwsA(isA<ExpressionParserException>()),
+        );
+        expect(
+          () => parser.evaluate('x+1'),
+          throwsA(isA<ExpressionParserException>()),
+        );
+      }
     });
   });
 }

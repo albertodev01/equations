@@ -7,15 +7,15 @@ import 'package:equations/equations.dart';
 /// the unique polynomial of degree `n-1` that passes through `n` given data
 /// points.
 ///
-/// This implementation uses the Lagrange basis polynomial approach, which
-/// directly constructs the interpolating polynomial without solving a system
+/// The [compute] method uses the barycentric form of Lagrange's formula, which
+/// evaluates the interpolating polynomial directly without solving a system
 /// of equations.
 ///
 /// ## Requirements
 ///
 /// - **At least 2 nodes** are required for interpolation
-/// - **All x-values must be distinct** (duplicate x-values will cause division
-///   by zero and throw an [InterpolationException])
+/// - **All x-values must be finite and distinct** (otherwise an
+///   [InterpolationException] is thrown)
 /// - Nodes can be in any order (sorting is not required)
 ///
 /// ## Limitations
@@ -24,9 +24,9 @@ import 'package:equations/equations.dart';
 ///   interpolating polynomial may oscillate wildly between nodes, especially
 ///   near the edges of the interval. Consider using [SplineInterpolation] for
 ///   large datasets.
-/// - **Numerical stability**: The Vandermonde matrix approach used in
-///   [buildPolynomial] can be ill-conditioned for large datasets or when nodes
-///   are close together.
+/// - **Numerical stability**: The coefficients returned by [buildPolynomial]
+///   can be very sensitive to rounding errors for large datasets or when
+///   nodes are close together.
 ///
 /// ## When to Use
 ///
@@ -34,7 +34,7 @@ import 'package:equations/equations.dart';
 /// - When you need the exact polynomial expression
 /// - When nodes are not equally spaced
 /// - When you need to evaluate at many different points (the polynomial can be
-///   built once and reused)
+///   built once with [buildPolynomial] and reused)
 /// {@endtemplate}
 base class PolynomialInterpolation extends Interpolation {
   /// {@macro polynomial_interpolation}
@@ -42,15 +42,20 @@ base class PolynomialInterpolation extends Interpolation {
   /// **Note**: Validation of nodes (checking for duplicates and minimum count)
   /// is performed lazily when [compute] or [buildPolynomial] is called. Invalid
   /// nodes will cause an [InterpolationException] to be thrown at that time.
-  const PolynomialInterpolation({
+  const new({
     required super.nodes,
   });
+
+  /// Relative tolerance used by [buildPolynomial] to discard negligible
+  /// leading coefficients.
+  static const _trimTolerance = 1.0e-12;
 
   /// Validates that the nodes meet the requirements for polynomial
   /// interpolation.
   ///
   /// Throws an [InterpolationException] if:
   /// - There are fewer than 2 nodes
+  /// - There are x values that are NaN or infinite
   /// - There are duplicate x-values in the nodes
   void _validateNodes() {
     if (nodes.length < 2) {
@@ -59,116 +64,145 @@ base class PolynomialInterpolation extends Interpolation {
       );
     }
 
-    // Check for duplicate x-values
     final xValues = <double>{};
     for (final node in nodes) {
-      if (xValues.contains(node.x)) {
+      if (!node.x.isFinite) {
+        throw InterpolationException(
+          'Invalid x value found: ${node.x}. All x values must be finite '
+          'numbers.',
+        );
+      }
+
+      // 'add' returns false when the value is already in the set
+      if (!xValues.add(node.x)) {
         throw InterpolationException(
           'Duplicate x-value found: ${node.x}. All x-values must be distinct '
           'for polynomial interpolation.',
         );
       }
-      xValues.add(node.x);
     }
   }
 
   /// Evaluates the Lagrange interpolation polynomial at the given point [x].
   ///
-  /// This method uses the Lagrange basis polynomial formula to compute the
-  /// interpolated value. For each node `(xi, yi)`, it computes the Lagrange
-  /// basis polynomial `L(x)` and multiplies it by `yi`, then sums all terms.
+  /// This method uses the **barycentric form** of Lagrange's formula, which
+  /// is numerically more stable than evaluating each Lagrange basis polynomial
+  /// `L_i(x)` separately:
   ///
-  /// The algorithm optimizes by computing denominators once per call and
-  /// reusing them within the evaluation loop, avoiding repeated division
-  /// operations.
+  /// ```txt
+  /// w_i  = 1 / ((x_i - x_0) * ... * (x_i - x_(n-1)))   (skipping j = i)
+  /// p(x) = sum(w_i * y_i / (x - x_i)) / sum(w_i / (x - x_i))
+  /// ```
+  ///
+  /// Each call costs `O(n^2)` operations, where `n` is the number of nodes. To
+  /// evaluate the same interpolation at many points, consider calling
+  /// [buildPolynomial] once and evaluating the returned [Algebraic] instead.
   @override
   double compute(double x) {
     _validateNodes();
 
-    // Early return: if x exactly matches a node's x-value, return its y-value
-    for (var i = 0; i < nodes.length; i++) {
-      if (x == nodes[i].x) {
-        return nodes[i].y;
+    for (final node in nodes) {
+      if (x == node.x) {
+        return node.y;
       }
     }
 
-    // Precompute denominators once for this evaluation call
-    // denominators[i][j] stores 1 / (nodes[i].x - nodes[j].x) for i != j
-    final n = nodes.length;
-    final denominators = List.generate(
-      n,
-      (i) => List.generate(n, (j) => 0.0, growable: false),
-      growable: false,
-    );
-
-    for (var i = 0; i < n; i++) {
-      for (var j = 0; j < n; j++) {
-        if (i != j) {
-          denominators[i][j] = 1.0 / (nodes[i].x - nodes[j].x);
-        }
-      }
-    }
-
-    // Compute using Lagrange interpolation formula
-    var result = 0.0;
+    var numerator = 0.0;
+    var denominator = 0.0;
 
     for (var i = 0; i < nodes.length; i++) {
-      var term = nodes[i].y;
+      var weight = 1.0;
       for (var j = 0; j < nodes.length; j++) {
         if (i != j) {
-          term *= (x - nodes[j].x) * denominators[i][j];
+          weight /= nodes[i].x - nodes[j].x;
         }
       }
-      result += term;
+
+      final term = weight / (x - nodes[i].x);
+      numerator += term * nodes[i].y;
+      denominator += term;
     }
 
-    return result;
+    return numerator / denominator;
   }
 
   /// Computes the interpolation polynomial and returns it as an [Algebraic]
   /// object.
   ///
-  /// This method constructs the interpolating polynomial by solving a system
-  /// of linear equations using the **Vandermonde matrix** approach. The
-  /// Vandermonde matrix is constructed from the x-values of the nodes, and
-  /// the system is solved using LU decomposition to find the polynomial
-  /// coefficients.
+  /// The polynomial is built in two steps, both costing `O(n^2)` operations
+  /// and `O(n)` memory, where `n` is the number of nodes:
   ///
-  /// The Vandermonde matrix can be **ill-conditioned** for:
-  /// - Large numbers of nodes (> 15-20)
-  /// - Nodes that are close together
-  /// - Equally-spaced nodes over large intervals
+  /// 1. The **divided differences** `c_k = f[x_0, ..., x_k]` are computed, so
+  ///    that the polynomial in Newton form is
+  ///    `p(x) = c_0 + (x - x_0)(c_1 + (x - x_1)(c_2 + ...))`.
+  /// 2. The Newton form is expanded from the innermost term outwards, which
+  ///    gives the coefficients of `x^0, x^1, ..., x^(n-1)`.
   ///
-  /// In such cases, numerical errors may affect the accuracy of the computed
-  /// coefficients. For large datasets, consider using [NewtonInterpolation] or
-  /// [SplineInterpolation] instead.
+  /// No linear system is solved, which is both faster and more accurate than
+  /// solving the Vandermonde system with a general purpose solver.
+  ///
+  /// Even so, representing a polynomial by its coefficients becomes
+  /// **ill-conditioned** for large numbers of nodes (more than 15-20): small
+  /// changes in the data can produce large changes in the coefficients. For
+  /// large datasets, consider using [SplineInterpolation] instead.
   Algebraic buildPolynomial() {
     _validateNodes();
-    final length = nodes.length * nodes.length;
-    final matrixSource = List<double>.generate(length, (_) => 0);
+    final n = nodes.length;
 
-    // Creating the Vandermonde matrix
-    for (var i = 0; i < nodes.length; ++i) {
-      for (var j = 0; j < nodes.length; ++j) {
-        matrixSource[nodes.length * i + j] = pow(nodes[i].x, j) * 1.0;
+    // Divided differences, computed in place: c[k] = f[x_0, ..., x_k]
+    final c = nodes.map((node) => node.y).toList(growable: false);
+    for (var k = 1; k < n; k++) {
+      for (var i = n - 1; i >= k; i--) {
+        c[i] = (c[i] - c[i - 1]) / (nodes[i].x - nodes[i - k].x);
       }
     }
 
-    // Creating the known values vector
-    final knownValues = nodes.map((node) => node.y).toList(growable: false);
+    // Expanding the Newton form from the innermost term outwards. At each
+    // step q(x) becomes q(x) * (x - x_k) + c[k]. The value a[j] is the
+    // coefficient of x^j.
+    final a = List<double>.filled(n, 0)..first = c.last;
+    for (var k = n - 2; k >= 0; k--) {
+      final xk = nodes[k].x;
+      for (var j = n - 1 - k; j >= 1; j--) {
+        a[j] = a[j - 1] - xk * a[j];
+      }
+      a.first = c[k] - xk * a.first;
+    }
 
-    // Finding the coefficients by solving the system
-    final lu = LUSolver(
-      matrix: RealMatrix.fromFlattenedData(
-        rows: nodes.length,
-        columns: nodes.length,
-        data: matrixSource,
-      ),
-      knownValues: knownValues,
-    );
+    // Algebraic expects the coefficients from the highest degree to the lowest
+    final coefficients = a.reversed.toList(growable: false);
 
-    final coefficients = lu.solve().reversed.toList(growable: false);
+    return Algebraic.fromReal(_trimLeadingCoefficients(coefficients));
+  }
 
-    return Algebraic.fromReal(coefficients);
+  /// Removes the leading coefficients of [coefficients] (sorted from the
+  /// highest degree to the lowest) that are negligible.
+  ///
+  /// The coefficient `c` of `x^k` is negligible when its largest contribution
+  /// over the nodes, `|c| * max(|x(i)|)^k`, is at most [_trimTolerance] times
+  /// the largest absolute y value. This removes both exact zeros (which would
+  /// make [Algebraic.fromReal] throw) and the rounding noise that can appear
+  /// when the nodes lie on a polynomial of lower degree.
+  ///
+  /// At least one coefficient is always kept, so the zero polynomial is
+  /// returned as `[0]`.
+  List<double> _trimLeadingCoefficients(List<double> coefficients) {
+    final maxX = nodes.map((node) => node.x.abs()).reduce(max);
+    final maxY = nodes.map((node) => node.y.abs()).reduce(max);
+    final threshold = _trimTolerance * maxY;
+
+    var start = 0;
+    while (start < coefficients.length - 1) {
+      final degree = coefficients.length - 1 - start;
+      final contribution = coefficients[start].abs() * pow(maxX, degree);
+
+      if (contribution > threshold) {
+        break;
+      }
+
+      start++;
+    }
+
+    return coefficients.sublist(start);
   }
 }

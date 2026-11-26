@@ -21,14 +21,14 @@ import 'package:equations/src/system/utils/matrix/decompositions/singular_value_
 ///    eigenvectors
 /// {@endtemplate}
 abstract base class Decomposition<K, T extends Matrix<K>> {
-  /// The matrix to be decomposed.
-  final T matrix;
-
   /// {@macro matrix_decomposition}
   ///
   /// The [matrix] parameter must be a valid matrix that can be decomposed
   /// according to the specific decomposition algorithm being used.
-  const Decomposition({required this.matrix});
+  const new({required this.matrix});
+
+  /// The matrix to be decomposed.
+  final T matrix;
 
   @override
   bool operator ==(Object other) {
@@ -46,22 +46,18 @@ abstract base class Decomposition<K, T extends Matrix<K>> {
   @override
   int get hashCode => matrix.hashCode;
 
-  /// Factorizes [matrix] and returns a list of matrices that, when multiplied
-  /// together in order, reconstruct the original matrix.
+  /// Factorizes [matrix] and returns the list of matrices of the
+  /// factorization.
   ///
-  /// The exact number and meaning of the returned matrices depends on the
-  /// specific decomposition algorithm. For example:
+  /// The exact number, order and meaning of the returned matrices depends on
+  /// the specific decomposition algorithm:
   ///
-  /// - QR decomposition returns [Q, R] where Q is orthogonal and R is upper
-  ///   triangular
-  /// - SVD returns [E, U, V] where E contains singular values, U and V are
-  ///   unitary matrices
-  /// - Eigendecomposition returns [V, D, V^-1] where V contains eigenvectors
-  ///   and D is a diagonal matrix of eigenvalues
+  /// - QR decomposition returns `[Q, R]`, where `A = Q x R`;
+  /// - SVD returns `[E, U, V]`, where `A = U x E x V^H`;
+  /// - Eigendecomposition returns `[V, D, V^-1]`, where `A = V x D x V^-1`.
   ///
-  /// Returns a list of matrices that satisfy the decomposition equation.
-  ///
-  /// Throws a [MatrixException] if the matrix cannot be decomposed (e.g., if
-  /// it is singular or does not meet the requirements of the decomposition).
+  /// Throws a [MatrixException] if the matrix cannot be decomposed (for
+  /// example, if it contains NaN or infinite values, or if it does not meet
+  /// the requirements of the decomposition).
   List<T> decompose();
 }

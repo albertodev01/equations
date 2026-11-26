@@ -11,9 +11,20 @@ import 'package:equations/src/utils/math_utils.dart';
 ///
 /// {@macro eigendecomposition_characteristics}
 ///
-/// For real matrices, eigenvalues and eigenvectors may be complex even if the
-/// input matrix is real. This implementation handles such cases by storing
-/// complex values appropriately.
+/// The eigenvalues and eigenvectors of a real matrix may be complex. Since
+/// [RealMatrix] can only hold real values, a pair of complex conjugate
+/// eigenvalues `a +/- bi` is stored in `D` as the 2x2 block
+///
+/// ```txt
+/// | a  b |
+/// | -b a |
+/// ```
+///
+/// and the two matching columns of `V` hold the real and the imaginary parts
+/// of the eigenvector of `a + bi`. The relation `A x V = V x D` still holds,
+/// but `D` is block diagonal rather than diagonal. Use
+/// [RealMatrix.eigenvalues] to directly get the (possibly complex)
+/// eigenvalues.
 ///
 /// Example:
 /// ```dart
@@ -29,13 +40,34 @@ import 'package:equations/src/utils/math_utils.dart';
 /// final [V, D, VInv] = decomposition.decompose();
 /// ```
 final class EigendecompositionReal
-    extends EigenDecomposition<double, RealMatrix>
-    with MathUtils {
+    extends EigenDecomposition<double, RealMatrix> {
   /// {@macro eigendecomposition_class_header}
-  const EigendecompositionReal({required super.matrix});
+  const new({required super.matrix});
+
+  /// The largest acceptable error (relative to the elements of the matrix
+  /// and to its size) of `V x D x V^-1`. It's the square root of the machine
+  /// epsilon: larger errors mean that the matrix is (numerically) defective.
+  static const _defectiveTolerance = 1.4901161193847656e-8;
+
+  /// Thrown when the matrix doesn't have a basis of eigenvectors.
+  static const _notDiagonalizableError = MatrixException(
+    'The matrix is not diagonalizable: its eigenvectors are not linearly '
+    'independent.',
+  );
 
   @override
   List<RealMatrix> decompose() {
+    if (!matrix.isSquareMatrix) {
+      throw const MatrixException('The matrix must be square.');
+    }
+
+    if (matrix.flattenData.any((value) => !value.isFinite)) {
+      throw const MatrixException(
+        'The eigendecomposition cannot be computed on matrices with NaN or '
+        'infinite values.',
+      );
+    }
+
     // Variables setup
     final realEigenvalues = List<double>.generate(matrix.rowCount, (_) => 0.0);
     final complexEigenvalues = List<double>.generate(
@@ -111,8 +143,32 @@ final class EigendecompositionReal
       data: eigenVectors,
     );
 
-    // Returning the results.
-    return [V, D, V.inverse()];
+    // When the matrix is defective (it doesn't have n linearly independent
+    // eigenvectors), V is singular and the decomposition doesn't exist.
+    final RealMatrix inverseV;
+    try {
+      inverseV = V.inverse();
+    } on MatrixException {
+      throw _notDiagonalizableError;
+    }
+
+    // A nearly defective matrix can have a V that is invertible in floating
+    // point arithmetic, but so ill-conditioned that V x D x V^-1 is far from
+    // the original matrix.
+    final n = matrix.rowCount;
+    final scale = matrix.flattenData.fold<double>(
+      0,
+      (m, value) => math.max(m, value.abs()),
+    );
+    final residual = (V * D * inverseV - matrix).flattenData.fold<double>(
+      0,
+      (m, value) => math.max(m, value.abs()),
+    );
+    if (!(residual <= n * _defectiveTolerance * scale)) {
+      throw _notDiagonalizableError;
+    }
+
+    return [V, D, inverseV];
   }
 
   /// Uses Householder reduction to transform a symmetric matrix to tridiagonal

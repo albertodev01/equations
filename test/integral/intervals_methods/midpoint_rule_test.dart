@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
-import '../double_approximation_matcher.dart';
+import '../../double_approximation_matcher.dart';
 
 void main() {
   late final MidpointRule midpoint;
@@ -14,7 +14,7 @@ void main() {
     );
   });
 
-  group('MidpointRule.', () {
+  group('MidpointRule', () {
     test('Smoke test', () {
       expect(midpoint.lowerBound, equals(2));
       expect(midpoint.upperBound, equals(-3));
@@ -32,7 +32,7 @@ void main() {
       expect(midpoint.toString(), equals(strResult));
     });
 
-    test('Making sure that MidpointRule can be properly compared.', () {
+    test('Object comparison', () {
       const midpoint2 = MidpointRule(
         function: 'sin(x)-3',
         lowerBound: 2,
@@ -144,6 +144,54 @@ void main() {
       test('Test 7', () {
         verifyMidpointRule('0', -1, 1, 0);
       });
+    });
+
+    test('Throws on invalid intervals', () {
+      expect(
+        () => const MidpointRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: 0,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const MidpointRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: -4,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
+    test('Throws on non-finite bounds', () {
+      expect(
+        () => const MidpointRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: double.infinity,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const MidpointRule(
+          function: 'x',
+          lowerBound: double.negativeInfinity,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const MidpointRule(
+          function: 'x',
+          lowerBound: double.nan,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
     });
   });
 }

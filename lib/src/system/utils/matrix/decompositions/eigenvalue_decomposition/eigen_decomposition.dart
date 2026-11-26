@@ -10,9 +10,9 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 ///    eigenvalues of A;
 ///  - V^-1 is the inverse of V.
 ///
-/// Eigendecomposition is only possible for diagonalizable matrices. For
-/// symmetric matrices, the eigenvectors are orthogonal and the decomposition
-/// is particularly stable.
+/// Eigendecomposition is only possible for diagonalizable (non-defective)
+/// matrices. For symmetric (Hermitian, if complex) matrices, the eigenvectors
+/// are orthogonal and the decomposition is particularly stable.
 /// {@endtemplate}
 ///
 /// {@template eigendecomposition_characteristics}
@@ -26,9 +26,7 @@ import 'package:equations/src/system/utils/matrix/decompositions/decomposition.d
 abstract base class EigenDecomposition<K, T extends Matrix<K>>
     extends Decomposition<K, T> {
   /// {@macro eigendecomposition_class_header}
-  ///
-  /// {@macro eigendecomposition_characteristics}
-  const EigenDecomposition({required super.matrix});
+  const new({required super.matrix});
 
   /// Computes the `V`, `D` and `V^-1` matrices of the eigendecomposition
   /// algorithm.
@@ -47,10 +45,12 @@ abstract base class EigenDecomposition<K, T extends Matrix<K>>
   /// - `D` at index 1
   /// - `V^-1` at index 2
   ///
-  /// Returns a list of three matrices that satisfy the eigendecomposition.
-  ///
-  /// Throws a [MatrixException] if the matrix is not diagonalizable or if
-  /// numerical issues occur during the decomposition.
+  /// Throws a [MatrixException] if the matrix is not square, if it contains
+  /// NaN or infinite values, or if it is not diagonalizable. A matrix is
+  /// considered not diagonalizable when `V` is singular or so ill-conditioned
+  /// that `V x D x V^-1` doesn't reconstruct the matrix accurately (relative
+  /// error above about `1e-8`), which happens with (nearly) defective
+  /// matrices.
   @override
   List<T> decompose();
 }

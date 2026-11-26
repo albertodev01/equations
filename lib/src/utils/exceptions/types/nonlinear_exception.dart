@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class NonlinearException extends EquationException {
   /// {@macro nonlinear_exception}
-  const NonlinearException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'NonlinearException',

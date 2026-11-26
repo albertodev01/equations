@@ -1,4 +1,7 @@
+import 'dart:math' as math;
+
 import 'package:equations/equations.dart';
+import 'package:equations/src/system/utils/solver_utils.dart';
 
 /// {@template system_solver}
 /// An abstract class that represents a system of equations, which can be solved
@@ -18,8 +21,8 @@ import 'package:equations/equations.dart';
 /// - [GaussianElimination]: Direct method using row reduction;
 /// - [LUSolver]: Direct method using LU decomposition;
 /// - [CholeskySolver]: Direct method for symmetric positive-definite matrices;
-/// - [JacobiSolver]: Iterative method for diagonally dominant systems
-/// - [GaussSeidelSolver]: Iterative method, faster than Jacobi;
+/// - [JacobiSolver]: Iterative method for diagonally dominant systems;
+/// - [GaussSeidelSolver]: Iterative method, usually faster than Jacobi;
 /// - [SORSolver]: Iterative method with relaxation factor.
 ///
 /// ## Recommendations
@@ -28,7 +31,7 @@ import 'package:equations/equations.dart';
 /// - For symmetric positive-definite matrices: Use [CholeskySolver] (fastest)
 /// - For large sparse systems: Use iterative methods ([JacobiSolver],
 ///   [GaussSeidelSolver], or [SORSolver])
-/// - For multiple systems with same matrix: Use [LUSolver]
+/// - For multiple systems with the same matrix: Use [LUSolver.solveFor]
 /// {@endtemplate}
 ///
 /// {@template systems_constructor_intro}
@@ -37,6 +40,60 @@ import 'package:equations/equations.dart';
 /// This class can only be built with square matrices.
 /// {@endtemplate}
 abstract base class SystemSolver {
+  /// {@macro system_solver}
+  ///
+  /// {@macro systems_constructor_intro}
+  ///
+  /// Parameters:
+  ///   - [matrix] is the matrix with the equations (must be square);
+  ///   - [knownValues] is the vector with the known values (must match matrix
+  ///     size);
+  ///   - [precision] is the algorithm accuracy (defaults to `1.0e-10`).
+  ///
+  /// Throws a [SystemSolverException] if:
+  ///   - The matrix is not square, or
+  ///   - The [knownValues] vector length doesn't match the matrix size, or
+  ///   - The [matrix] or [knownValues] contain NaN or infinite values, or
+  ///   - The [precision] is negative, NaN or infinite.
+  new({
+    required this.matrix,
+    required this.knownValues,
+    this.precision = 1.0e-10,
+  }) {
+    // Only square matrices are allowed.
+    if (!matrix.isSquareMatrix) {
+      throw const SystemSolverException('The matrix must be square');
+    }
+
+    // The vector of known values must match the size of the matrix.
+    if (matrix.rowCount != knownValues.length) {
+      throw const SystemSolverException(
+        'The known values vector must have the '
+        'same size as the matrix.',
+      );
+    }
+
+    // NaN and infinite values would silently propagate to the solution.
+    if (!matrix.flattenData.every((value) => value.isFinite)) {
+      throw const SystemSolverException(
+        'The matrix must contain only finite values.',
+      );
+    }
+
+    if (!knownValues.every((value) => value.isFinite)) {
+      throw const SystemSolverException(
+        'The known values vector must contain only finite values.',
+      );
+    }
+
+    // The precision must be a valid tolerance.
+    if (!(precision.isFinite && precision >= 0)) {
+      throw const SystemSolverException(
+        'The precision must be a finite, non-negative number.',
+      );
+    }
+  }
+
   /// The equations to be solved.
   ///
   /// This is the coefficient matrix `A` in the equation `Ax = b`. It must be
@@ -55,42 +112,13 @@ abstract base class SystemSolver {
   /// methods, or the tolerance used for numerical checks in direct methods.
   /// Defaults to `1.0e-10`.
   ///
-  /// For iterative solvers, the algorithm stops when the change between
-  /// iterations is less than this value. For direct solvers, this value is used
-  /// to detect singular or near-singular matrices.
+  /// For iterative solvers, the algorithm stops when the largest change of a
+  /// component between two iterations is at most `precision * max(1, m)`,
+  /// where `m` is the largest absolute value of a component. For direct
+  /// solvers, a pivot is considered zero (so the matrix is singular or nearly
+  /// singular) when its absolute value is at most `precision` times the
+  /// largest absolute value in the matrix.
   final double precision;
-
-  /// {@macro system_solver}
-  ///
-  /// {@macro systems_constructor_intro}
-  ///
-  /// Parameters:
-  ///   - [matrix] is the matrix with the equations (must be square);
-  ///   - [knownValues] is the vector with the known values (must match matrix
-  ///     size);
-  ///   - [precision] is the algorithm accuracy (defaults to `1.0e-10`).
-  ///
-  /// Throws a [SystemSolverException] if:
-  ///   - The matrix is not square, or
-  ///   - The [knownValues] vector length doesn't match the matrix size.
-  SystemSolver({
-    required this.matrix,
-    required this.knownValues,
-    this.precision = 1.0e-10,
-  }) {
-    // Only square matrices are allowed.
-    if (!matrix.isSquareMatrix) {
-      throw const SystemSolverException('The matrix must be square');
-    }
-
-    // The vector of known values must match the size of the matrix.
-    if (matrix.rowCount != knownValues.length) {
-      throw const SystemSolverException(
-        'The known values vector must have the '
-        'same size as the matrix.',
-      );
-    }
-  }
 
   @override
   bool operator ==(Object other) {
@@ -194,9 +222,11 @@ abstract base class SystemSolver {
   ///
   /// Returns `true` if the system has a unique solution, `false` otherwise.
   ///
-  /// Note: Some solvers (like [GaussianElimination] and [LUSolver]) will throw
-  /// a [SystemSolverException] if the system has no solution when [solve] is
-  /// called, even if this method returns `false`.
+  /// The determinant is compared with zero exactly. Because of rounding, a
+  /// nearly singular matrix may have a tiny non-zero determinant, and the
+  /// determinant of a large matrix with small entries may underflow to zero.
+  /// The direct solvers don't use this method: their [solve] method throws a
+  /// [SystemSolverException] when a pivot is negligible (see [precision]).
   bool hasSolution() => matrix.determinant() != 0;
 
   /// The dimension of the system (N equations in N unknowns).
@@ -226,9 +256,9 @@ abstract base class SystemSolver {
   /// Returns a list of [double] values representing the solution vector `x`.
   ///
   /// Throws a [SystemSolverException] if:
-  ///   - The system has no solution (singular matrix), or
-  ///   - The algorithm fails to converge (for iterative methods), or
-  ///   - Numerical instability is detected during computation.
+  ///   - The matrix is singular or nearly singular (direct methods), or
+  ///   - The algorithm diverges or doesn't converge within its maximum number
+  ///     of steps (iterative methods).
   ///
   /// Example:
   /// ```dart
@@ -246,10 +276,57 @@ abstract base class SystemSolver {
   /// ```
   List<double> solve();
 
-  /// Checks if the matrix is diagonally dominant.
+  /// Computes the residual norm of [solution].
   ///
-  /// A matrix A is diagonally dominant if for each row i:
-  ///   |a_{ii}| ≥ Σ_{j≠i} |a_{ij}|
+  /// The residual is defined as `||Ax - b||` (the Euclidean norm), where `A` is
+  /// the [matrix], `x` is [solution] and `b` is the [knownValues] vector. A
+  /// smaller residual indicates a better solution.
+  ///
+  /// Throws a [SystemSolverException] if the length of [solution] is not
+  /// [size].
+  double computeResidualNorm(List<double> solution) {
+    if (solution.length != size) {
+      throw const SystemSolverException(
+        'The solution vector must have the same size as the matrix.',
+      );
+    }
+
+    final a = matrix.flattenData;
+    final n = size;
+    final residuals = List<double>.generate(n, (i) {
+      var residual = -knownValues[i];
+      for (var j = 0; j < n; ++j) {
+        residual += a[n * i + j] * solution[j];
+      }
+
+      return residual;
+    }, growable: false);
+
+    // Scaling by the largest residual avoids overflow and underflow when
+    // squaring (for example, residuals of about 1e200 or 1e-200).
+    final scale = maxAbsValue(residuals);
+    if (scale == 0 || !scale.isFinite) {
+      return scale;
+    }
+
+    final squaredNorm = residuals.fold<double>(0, (sum, residual) {
+      final scaled = residual / scale;
+      return sum + scaled * scaled;
+    });
+
+    return scale * math.sqrt(squaredNorm);
+  }
+
+  /// Checks if the matrix is (weakly) diagonally dominant.
+  ///
+  /// A matrix `A` is diagonally dominant if, for each row `i`:
+  ///
+  ///   `|a(i, i)| >= sum of |a(i, j)| for every j != i`
+  ///
+  /// Strict diagonal dominance (`>` in every row) guarantees that the Jacobi
+  /// and Gauss-Seidel methods converge. Weak dominance alone doesn't: for
+  /// example, the matrix `[[1, 1], [1, 1]]` is weakly diagonally dominant but
+  /// singular.
   static bool isDiagonallyDominant(RealMatrix matrix) {
     for (var i = 0; i < matrix.rowCount; ++i) {
       var rowSum = 0.0;

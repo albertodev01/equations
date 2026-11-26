@@ -1,7 +1,7 @@
 import 'package:equations/equations.dart';
 import 'package:test/test.dart';
 
-import '../double_approximation_matcher.dart';
+import '../../double_approximation_matcher.dart';
 
 void main() {
   late final SimpsonRule simpson;
@@ -24,7 +24,21 @@ void main() {
       final results = simpson.integrate();
 
       expect(results.result, const MoreOrLessEquals(-7.713, precision: 1.0e-4));
-      expect(results.guesses.length, equals(simpson.intervals));
+      expect(results.guesses.length, equals(simpson.intervals + 1));
+    });
+
+    test('Guesses values', () {
+      const integral = SimpsonRule(
+        function: 'x^2',
+        lowerBound: 0,
+        upperBound: 4,
+        intervals: 4,
+      );
+
+      expect(
+        integral.integrate().guesses,
+        orderedEquals(<double>[0, 1, 4, 9, 16]),
+      );
     });
 
     test('toString()', () {
@@ -32,7 +46,7 @@ void main() {
       expect(simpson.toString(), equals(strResult));
     });
 
-    test('Object comparison.', () {
+    test('Object comparison', () {
       const simpson2 = SimpsonRule(
         function: 'sin(x)*e^x',
         lowerBound: 2,
@@ -134,6 +148,72 @@ void main() {
       test('Test 7', () {
         verifySimpsonRule('0', -1, 1, 0);
       });
+    });
+
+    test('Throws on invalid intervals', () {
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: 0,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: -4,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: -3,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: 1,
+          intervals: 5,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+    });
+
+    test('Throws on non-finite bounds', () {
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: 0,
+          upperBound: double.infinity,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: double.negativeInfinity,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
+      expect(
+        () => const SimpsonRule(
+          function: 'x',
+          lowerBound: double.nan,
+          upperBound: 1,
+        ).integrate(),
+        throwsA(isA<NumericalIntegrationException>()),
+      );
     });
   });
 }

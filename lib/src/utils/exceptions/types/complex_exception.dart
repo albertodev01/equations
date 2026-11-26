@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class ComplexException extends EquationException {
   /// {@macro complex_exception}
-  const ComplexException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'ComplexException',

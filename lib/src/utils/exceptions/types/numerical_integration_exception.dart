@@ -5,7 +5,7 @@ import 'package:equations/equations.dart';
 /// {@endtemplate}
 class NumericalIntegrationException extends EquationException {
   /// {@macro numerical_integration_exception}
-  const NumericalIntegrationException(String message)
+  const new(String message)
     : super(
         message: message,
         messagePrefix: 'NumericalIntegrationException',

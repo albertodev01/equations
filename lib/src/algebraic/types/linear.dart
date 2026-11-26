@@ -1,7 +1,7 @@
 part of '../algebraic.dart';
 
 /// {@template linear_algebraic}
-/// Concrete implementation of [Algebraic] that represents a first degree
+/// Concrete implementation of [Algebraic] that represents a first-degree
 /// polynomial equation in the form _ax + b = 0_.
 ///
 /// This equation has exactly 1 solution, which can be real or complex.
@@ -43,9 +43,9 @@ final class Linear extends Algebraic {
   /// {@macro linear_algebraic_examples}
   ///
   /// Use this constructor if you have complex coefficients. If no [Complex]
-  /// values are required, then consider using [Linear.realEquation] for a
-  /// less verbose syntax.
-  Linear({
+  /// values are required, consider using [Linear.realEquation] for a less
+  /// verbose syntax.
+  new({
     Complex a = const Complex.fromReal(1),
     Complex b = const Complex.zero(),
   }) : super([a, b]);
@@ -56,8 +56,7 @@ final class Linear extends Algebraic {
   ///
   /// If the coefficients of your polynomial contain complex numbers, consider
   /// using the [Linear.new] constructor instead.
-  Linear.realEquation({double a = 1, double b = 0})
-    : super.realEquation([a, b]);
+  new realEquation({double a = 1, double b = 0}) : super.realEquation([a, b]);
 
   @override
   int get degree => 1;
