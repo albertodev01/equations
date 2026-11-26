@@ -1,28 +1,21 @@
 ## 7.0.0
 
- - **BREAKING**: `Quartic.solutions` may return the roots in a different order
  - **BREAKING**: `Algebraic.factor` now includes the leading coefficient as a `Constant` factor when it is not 1, so the product of the factors always equals the original polynomial
  - **BREAKING**: `GenericAlgebraic.solutions` now throws an `AlgebraicException` when `initialGuess` is not empty and doesn't contain exactly one value per root, or when `minGuessDistance` is not positive. It no longer throws when the leading coefficient is very small (but not zero)
  - **BREAKING**: `SylvesterMatrix` is now a `final` class
- - **BREAKING**: `Algebraic.solveInequality` now joins intervals that touch (for example, `(x - 1)^2 * (x - 3) <= 0` returns `x <= 3` instead of `x <= 1`, `[1, 1]` and `[1, 3]`), and its `precision` parameter is now the relative tolerance used to decide whether a value is a root, instead of the maximum imaginary part of a real root
  - **BREAKING**: `PolynomialLongDivision.divide` (and the `/` operator of `Algebraic`) no longer throws when the degree of the denominator is higher than the degree of the numerator: it returns a zero quotient and the numerator as the remainder
  - **BREAKING**: The `guesses` list returned by `SimpsonRule.integrate` and `TrapezoidalRule.integrate` now has `intervals + 1` elements, the values of the function at every point `x_0, x_1, ..., x_n`. Previously, `TrapezoidalRule` left out the value at the upper bound, and `SimpsonRule` overwrote the value at `x_(n-1)` with the value at the upper bound
- - **BREAKING**: `MidpointRule.integrate` now throws a `NumericalIntegrationException` when `intervals` is not positive, instead of returning `NaN` or throwing a `RangeError`
- - **BREAKING**: `AdaptiveQuadrature.integrate` now throws a `NumericalIntegrationException` when the function is not finite on the interval or when the algorithm doesn't converge within `AdaptiveQuadrature.maxDepth` subdivisions, instead of overflowing the stack or never returning (for example, with `1/sqrt(x)` on `[0, 1]` or `sqrt(x)` on `[-2, -1]`)
- - **BREAKING**: `Riddler` has been renamed to `Ridders`, the correct name of the method. `Riddler` is still available as a deprecated alias
+ - **BREAKING**: `AdaptiveQuadrature.integrate` now throws a `NumericalIntegrationException` when the function is not finite on the interval or when the algorithm doesn't converge within `AdaptiveQuadrature.maxDepth` subdivisions, instead of overflowing the stack or never returning (example: `sqrt(x)` on `[-2, -1]`)
+ - **BREAKING**: `Riddler` has been renamed to `Ridders`, the correct name of the method.
  - **BREAKING**: `Bisection`, `Brent`, `Chords`, `RegulaFalsi` and `Ridders` now return the endpoint as the only guess when `f(a)` or `f(b)` is zero, instead of throwing a `NonlinearException` (`RegulaFalsi` already did this)
- - **BREAKING**: `NonLinear.evaluateOn` and `NonLinear.evaluateDerivativeOn` now return `double` instead of `num`. `evaluateDerivativeOn(0)` now returns the derivative instead of `NaN`, so `Newton` no longer throws when a guess is `0`
  - **BREAKING**: `Factorial.compute` now throws a `RangeError` when `n` is negative or greater than `20` (the largest factorial that fits in a 64-bit `int`), instead of returning `1` or an overflowed value. `Factorial.computeBigInt` now throws a `RangeError` when `n` is negative, instead of returning `1`
- - `Factorial` is now exported by `package:equations/equations.dart`
  - **BREAKING**: `Complex.nthRoot` now returns the principal root (argument `phase() / n`, so `nthRoot(2)` equals `sqrt()`), instead of the root with the smallest non-negative argument. It throws a `ComplexException` when `nth` is `0` (it returned `1`) or when `nth` is negative and the number is zero (it returned `NaN`). As a consequence, `Cubic.solutions` may return the roots in a different order
  - **BREAKING**: `Complex.pow` returns `1` for a zero exponent (`0^0` was `NaN`), throws a `ComplexException` when a zero base is raised to a negative power (it returned `Infinity + NaNi`), and computes integer exponents up to 1024 with repeated multiplications, so for example `Complex.i().pow(2)` is exactly `-1`
  - **BREAKING**: `Complex.toString`, `toStringAsFixed` and `toStringWithParenthesis` print zero as `0` instead of `0i` (this also affects `ComplexMatrix.toString`). `toStringAsFixed` omits a part that is zero after rounding (`Complex(5, 0.04).toStringAsFixed(1)` is `5.0`, it was `5.0 + 0.0i`). Whole numbers above about 9.2e18 are no longer printed as `9223372036854775807`
- - `Complex.abs`, `Complex.reciprocal` and the `/` operator no longer overflow or underflow with very large or very small parts (`/` uses Smith's algorithm). `Complex.sqrt` uses a formula without cancellation, so `Complex(-4, 0).sqrt()` is exactly `2i`
- - `Complex.exp`, `sin`, `cos`, `tan` and `cot` no longer return `NaN` parts when an intermediate value overflows (for example, `Complex(1000, 0).exp()` is `Infinity` and `Complex(1, 400).tan()` is `i`), and `sin` and `cos` are accurate when the imaginary part is small
  - `Complex.compareTo` orders numbers with `NaN` parts after all the others, as `double.compareTo` does
  - Added `Complex.log` (principal natural logarithm), `Complex.sinh`, `Complex.cosh`, `Complex.tanh` and `Complex.powComplex`, which raises a complex number to a complex exponent
- - Updated Dart SDK constraints to `^3.14.0`
  - Various bug fixes in `RealMatrix`, `ComplexMatrix` and the decomposition algorithms
+ - Updated Dart SDK constraints to `^3.14.0`
  - Documentation improvements
  - Dependencies versions update
 
